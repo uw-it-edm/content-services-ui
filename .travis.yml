@@ -1,8 +1,12 @@
 language: node_js
 node_js: lts/*
-
 addons:
   chrome: stable
 before_install:
-  - # start your web application and listen on `localhost`
-  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+- 
+- google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost
+  &
+notifications:
+  hipchat:
+    rooms:
+      secure: 0A+iTvvZVvchTR6zEaSeCyhQo8fQ1NHTzaNomi4zifSrUIfdl4t4rf1SEqkuHgJINYnrUWtqjP120okhW4s+qDKgNeI/aYHC2pm1BfMx+F0+++pMPfU4kQ8Hzokgb3lfVNAidncTANZJhUbzJvR/HD57kFAd2fZLin9Clvf2/bbEuvvZZKVAdu+UIaudzSXk6CxuLOXOB/oPfX0JAPQpr+15Maj62EY8IzGom4XUIcOs1oNZwipQkz3x30qB3Oeil4M6/uAr2v6973G/1x29pOx5smFOeRFOYVYxAg3SS6ELkfdjIWkCNKjHiQKSYOmu9h652tkZ9CSiOS5NyUEvhtnLsUOXSrBXUy4qWJlrqIJEkc5ZER4/Gy5NfNMRLaWPdDq5am52C94FU9ngnS0OjqXL1xTrQQOxKDO5TUEUoK9gHqlpoZC+quoTX40C6DYocHs4ylCYtFRVdtMxdu1gqKlc9/lPMKds1zoq3cQqKB9PpLBeAOCDYtB9b/nddLE4Oy3yZiqcb3WO/SSje9gv/Jh5ktOXO2K4hO4HiFtQQ3LQ8tuoJgY8TBK9Mj0DKeRJ9JuwmeQdocunre7lxPBR8MIY14Vo+TNrFIzTeIdU1oUeUQF9UUT20OWGcLblbB84awdKkS5fhyAF+rrsPPAnIYXVyWNXTp1dFdUYPh+DTdY=
