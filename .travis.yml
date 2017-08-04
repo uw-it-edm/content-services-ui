@@ -3,13 +3,18 @@ node_js: lts/*
 
 addons:
   chrome: stable
+  sonarcloud:
+    organization: "uw-it-edm"
+    branches:
+      - develop
 
 before_install:
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
-script: 
+script:
   - yarn test
   - yarn e2e
+  - sonar-scanner
 
 notifications:
   email: false
