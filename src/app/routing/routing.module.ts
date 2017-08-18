@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { CommonModule } from '@angular/common';
@@ -17,11 +17,15 @@ import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { environment } from '../../environments/environment';
+import { HeaderComponent } from '../widgets/header/header.component';
+import { AppComponent } from '../app.component';
+import { GlobalEventsManagerService } from '../services/global-events-manager.service';
 
 let ENABLE_ROUTER_TRACING = true;
 if (environment.production) {
   ENABLE_ROUTER_TRACING = false;
 }
+
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -60,20 +64,25 @@ const appRoutes: Routes = [
     MaterialConfigModule
   ],
   declarations: [
+    AppComponent,
     LoginComponent,
     PageNotFoundComponent,
     TenantComponent,
     GenericPageComponent,
+    HeaderComponent
   ],
   exports: [
     RouterModule
   ],
   providers: [
-    ConfigResolver,
     ConfigService,
+    ConfigResolver,
     AuthGardService,
     UserService,
+    GlobalEventsManagerService
   ]
 })
+
+
 export class RoutingModule {
 }

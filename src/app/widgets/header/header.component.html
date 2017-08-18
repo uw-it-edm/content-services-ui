@@ -1,0 +1,16 @@
+<p>
+  header works<span *ngIf="tenant"> , tenant is {{tenant}}</span>!
+  <span *ngIf="promiseUser | async as user "> user is :{{user.username}}</span>
+</p>
+<md-menu #tenantsMenu="mdMenu">
+  <button md-menu-item
+          *ngFor="let availableTenant of availableTenants | async"
+          routerLink="/{{availableTenant}}/"
+          routerLinkActive="active">
+    <span>{{availableTenant}} tenant</span>
+  </button>
+</md-menu>
+<button md-icon-button [mdMenuTriggerFor]="tenantsMenu">
+  <md-icon>more_vert</md-icon>
+</button>
+
