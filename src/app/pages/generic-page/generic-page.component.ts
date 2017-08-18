@@ -27,7 +27,6 @@ export class GenericPageComponent implements OnInit {
             .subscribe((data: { config: Config }) => {
                 this.config = data.config;
                 this.pageConfig = data.config.pages[this.page.toLowerCase()];
-                console.log(JSON.stringify(this.config));
                 this.titleService.setTitle(this.pageConfig.pageName);
               }
             );

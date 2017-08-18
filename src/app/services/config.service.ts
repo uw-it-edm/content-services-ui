@@ -6,7 +6,11 @@ export class ConfigService {
   configs: Map<string, Config>;
 
   constructor() {
+    this.load();
+  }
 
+  load() {
+    console.log('init config ');
     const facilitiesConfig: Config = JSON.parse(`
     {
       "tenant": "Facilities",
@@ -46,4 +50,9 @@ export class ConfigService {
 
     return Promise.resolve(this.configs.get(tenant));
   }
+
+  getTenantList(): Promise<string[]> {
+    return Promise.resolve(Array.from(this.configs.keys()));
+  }
+
 }

@@ -7,6 +7,7 @@ import { MaterialConfigModule } from '../../routing/material-config.module';
 import { ActivatedRouteStub } from '../../../testing/router-stubs';
 import { Title } from '@angular/platform-browser';
 import { Config } from '../../model/config';
+import { GlobalEventsManagerService } from '../../services/global-events-manager.service';
 
 let activatedRoute: ActivatedRouteStub;
 let component: TenantComponent;
@@ -25,6 +26,7 @@ describe('TenantComponent', () => {
       providers: [
         {provide: ActivatedRoute, useValue: activatedRoute},
         Title,
+        GlobalEventsManagerService
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })
