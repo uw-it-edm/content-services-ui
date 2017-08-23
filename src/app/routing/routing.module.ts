@@ -20,6 +20,10 @@ import { environment } from '../../environments/environment';
 import { HeaderComponent } from '../widgets/header/header.component';
 import { AppComponent } from '../app.component';
 import { GlobalEventsManagerService } from '../services/global-events-manager.service';
+import { SearchResultsComponent } from '../widgets/search-results/search-results.component';
+import { SearchService } from '../services/search.service';
+import { Http, HttpModule } from '@angular/http';
+import { SearchBoxComponent } from '../widgets/search-box/search-box.component';
 
 let ENABLE_ROUTER_TRACING = true;
 if (environment.production) {
@@ -61,7 +65,8 @@ const appRoutes: Routes = [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
-    MaterialConfigModule
+    MaterialConfigModule,
+    HttpModule
   ],
   declarations: [
     AppComponent,
@@ -69,7 +74,9 @@ const appRoutes: Routes = [
     PageNotFoundComponent,
     TenantComponent,
     GenericPageComponent,
-    HeaderComponent
+    HeaderComponent,
+    SearchResultsComponent,
+    SearchBoxComponent
   ],
   exports: [
     RouterModule
@@ -79,7 +86,8 @@ const appRoutes: Routes = [
     ConfigResolver,
     AuthGardService,
     UserService,
-    GlobalEventsManagerService
+    GlobalEventsManagerService,
+    SearchService,
   ]
 })
 

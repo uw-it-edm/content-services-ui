@@ -4,6 +4,8 @@ import { User } from './user';
 @Injectable()
 export class UserService {
 
+  private _loggedUser;
+
   constructor() {
   }
 

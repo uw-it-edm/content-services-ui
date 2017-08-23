@@ -3,6 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { Config } from '../../model/config';
 import { PageConfig } from '../../model/page-config';
 import { Title } from '@angular/platform-browser';
+import { SearchModel } from '../../model/search-model';
+import { SearchResults } from '../../model/search-result';
+import { SearchService } from '../../services/search.service';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'app-generic-page',
@@ -15,13 +19,38 @@ export class GenericPageComponent implements OnInit {
   pageConfig: PageConfig;
   page: string;
 
-  constructor(private route: ActivatedRoute, private titleService: Title) {
+  searchModel$ = new Subject<SearchModel>();
+  searchResults: SearchResults;
+
+
+  constructor(private route: ActivatedRoute,
+              private titleService: Title,
+              private searchService: SearchService) {
+
   }
 
   ngOnInit() {
+    /*   this.router.events.subscribe((val) => {
+         // see also
+         if (val instanceof NavigationEnd) {
+           this.searchModel$.next(new SearchModel());
+           this.searchResults = new SearchResults();
+         }
+       });*/
+
+    console.log('init generic page component');
+    this.searchResults = new SearchResults();
+
+    this.searchService.search(this.searchModel$)
+      .subscribe(searchResult => {
+        console.log('subscribed ' + JSON.stringify(searchResult));
+        this.searchResults = searchResult;
+      });
+
     this.route.paramMap
       .subscribe(
         params => {
+
           this.page = params.get('page');
           this.route.data
             .subscribe((data: { config: Config }) => {
@@ -30,9 +59,19 @@ export class GenericPageComponent implements OnInit {
                 this.titleService.setTitle(this.pageConfig.pageName);
               }
             );
+
+          this.searchModel$.next(new SearchModel());
+          this.searchResults = new SearchResults();
         }
       );
 
+
+  }
+
+  search(searchModel: SearchModel) {
+    console.log('search in generic page component');
+
+    this.searchModel$.next(Object.assign(new SearchModel(), searchModel));
 
   }
 

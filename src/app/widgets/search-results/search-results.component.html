@@ -1,0 +1,20 @@
+<div>
+  search-results works!
+
+
+</div>
+<div>
+  <ul *ngIf="searchResults">
+    <li *ngFor="let result of searchResults.results | slice:0:9">
+
+      <a href="{{ result.metadata.latest }}" target="_blank">
+        {{ result.metadata.name }} ---
+      </a>
+      <span *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
+        {{ result.metadata[fieldToDisplay]}} -
+      </span>
+    </li>
+  </ul>
+</div>
+
+
