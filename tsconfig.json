@@ -9,10 +9,8 @@
       "dom"
     ],
     "moduleResolution": "node",
-    "noImplicitAny": true,
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
-    "suppressImplicitAnyIndexErrors": true,
     "target": "es5",
     "typeRoots": [
       "node_modules/@types"
