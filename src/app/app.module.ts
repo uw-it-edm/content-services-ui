@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { RoutingModule } from './routing/routing.module';
+import { APP_BASE_HREF } from '@angular/common';
+import { environment } from '../environments/environment';
 
 
 @NgModule({
@@ -12,7 +14,7 @@ import { RoutingModule } from './routing/routing.module';
     RoutingModule,
   ],
   exports: [],
-  providers: [],
+  providers: [{provide: APP_BASE_HREF, useValue: environment.baseHref}],
   bootstrap: [AppComponent]
 })
 export class AppModule {
