@@ -6,5 +6,5 @@
     RewriteRule ^ - [L]
 
     # If the requested resource doesn't exist, use index.html
-    RewriteRule ^ /index.html
+    RewriteRule ^ index.html
 </ifModule>

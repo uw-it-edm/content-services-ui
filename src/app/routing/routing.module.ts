@@ -1,8 +1,7 @@
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { CommonModule } from '@angular/common';
-
 
 import { TenantComponent } from '../pages/tenant/tenant.component';
 import { GenericPageComponent } from '../pages/generic-page/generic-page.component';
@@ -22,7 +21,7 @@ import { AppComponent } from '../app.component';
 import { GlobalEventsManagerService } from '../services/global-events-manager.service';
 import { SearchResultsComponent } from '../widgets/search-results/search-results.component';
 import { SearchService } from '../services/search.service';
-import { Http, HttpModule } from '@angular/http';
+import { HttpModule } from '@angular/http';
 import { SearchBoxComponent } from '../widgets/search-box/search-box.component';
 
 let enableRouterTracing = true;
@@ -30,11 +29,11 @@ if (environment.production) {
   enableRouterTracing = false;
 }
 
-
 const appRoutes: Routes = [
-  {path: 'login', component: LoginComponent},
+  { path: 'login', component: LoginComponent },
   {
-    path: ':tenant', component: TenantComponent,
+    path: ':tenant',
+    component: TenantComponent,
     canActivate: [AuthGardService],
     canActivateChild: [AuthGardService],
     resolve: {
@@ -42,25 +41,27 @@ const appRoutes: Routes = [
     },
     children: [
       {
-        path: ':page', component: GenericPageComponent,
+        path: ':page',
+        component: GenericPageComponent,
         resolve: {
           config: ConfigResolver
-        },
-      },
+        }
+      }
     ]
   },
   {
-    path: '**', pathMatch: 'full', component: PageNotFoundComponent
+    path: '**',
+    pathMatch: 'full',
+    component: PageNotFoundComponent
   }
 ];
-
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule.forRoot(
       appRoutes,
-      {enableTracing: enableRouterTracing} // <-- debugging purposes only
+      { enableTracing: enableRouterTracing } // <-- debugging purposes only
     ),
     BrowserModule,
     BrowserAnimationsModule,
@@ -78,19 +79,7 @@ const appRoutes: Routes = [
     SearchResultsComponent,
     SearchBoxComponent
   ],
-  exports: [
-    RouterModule
-  ],
-  providers: [
-    ConfigService,
-    ConfigResolver,
-    AuthGardService,
-    UserService,
-    GlobalEventsManagerService,
-    SearchService,
-  ]
+  exports: [RouterModule],
+  providers: [ConfigService, ConfigResolver, AuthGardService, UserService, GlobalEventsManagerService, SearchService]
 })
-
-
-export class RoutingModule {
-}
+export class RoutingModule {}
