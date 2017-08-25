@@ -30,13 +30,6 @@ export class GenericPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    /*   this.router.events.subscribe((val) => {
-         // see also
-         if (val instanceof NavigationEnd) {
-           this.searchModel$.next(new SearchModel());
-           this.searchResults = new SearchResults();
-         }
-       });*/
 
     console.log('init generic page component');
     this.searchResults = new SearchResults();
@@ -68,7 +61,7 @@ export class GenericPageComponent implements OnInit {
 
   }
 
-  search(searchModel: SearchModel) {
+  onSearch(searchModel: SearchModel) {
     console.log('search in generic page component');
 
     this.searchModel$.next(Object.assign(new SearchModel(), searchModel));

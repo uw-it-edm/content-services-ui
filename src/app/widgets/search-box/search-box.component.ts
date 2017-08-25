@@ -14,7 +14,7 @@ export class SearchBoxComponent implements OnInit {
 
   @Input() searchModel$: Observable<SearchModel>;
   @Input() pageConfig: PageConfig;
-  @Output() onSearch = new EventEmitter<SearchModel>();
+  @Output() search = new EventEmitter<SearchModel>();
 
   constructor() { }
 
@@ -24,8 +24,8 @@ export class SearchBoxComponent implements OnInit {
     });
   }
 
-  search() {
+  updateSearch() {
     console.log('search in component with ' + JSON.stringify(this.searchModel));
-    this.onSearch.emit(this.searchModel);
+    this.search.emit(this.searchModel);
   }
 }

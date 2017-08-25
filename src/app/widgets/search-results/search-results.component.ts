@@ -16,7 +16,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   @Input() searchModel$: Observable<SearchModel>;
   @Input() searchResults: SearchResults;
   @Input() pageConfig: PageConfig;
-  @Output() onSearch = new EventEmitter<SearchModel>();
+  @Output() search = new EventEmitter<SearchModel>();
 
   ngOnDestroy(): void {
     console.log('destroy search component');

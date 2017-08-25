@@ -5,19 +5,19 @@
   <app-search-box
     [searchModel$]="searchModel$"
     [pageConfig]="pageConfig"
-    (onSearch)="search($event)"
+    (search)="onSearch($event)"
   >
   </app-search-box>
   <app-search-results
     [searchModel$]="searchModel$"
     [searchResults]="searchResults"
     [pageConfig]="pageConfig"
-    (onSearch)="search($event)"
+    (search)="onSearch($event)"
   ></app-search-results>
   <app-search-box *ngIf="pageConfig.secondSearchBox"
     [searchModel$]="searchModel$"
     [pageConfig]="pageConfig"
-    (onSearch)="search($event)"
+    (search)="onSearch($event)"
   >
   </app-search-box>
 </p>
