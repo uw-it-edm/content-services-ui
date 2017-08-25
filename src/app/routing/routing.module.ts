@@ -20,10 +20,14 @@ import { environment } from '../../environments/environment';
 import { HeaderComponent } from '../widgets/header/header.component';
 import { AppComponent } from '../app.component';
 import { GlobalEventsManagerService } from '../services/global-events-manager.service';
+import { SearchResultsComponent } from '../widgets/search-results/search-results.component';
+import { SearchService } from '../services/search.service';
+import { Http, HttpModule } from '@angular/http';
+import { SearchBoxComponent } from '../widgets/search-box/search-box.component';
 
-let ENABLE_ROUTER_TRACING = true;
+let enableRouterTracing = true;
 if (environment.production) {
-  ENABLE_ROUTER_TRACING = false;
+  enableRouterTracing = false;
 }
 
 
@@ -56,12 +60,13 @@ const appRoutes: Routes = [
     CommonModule,
     RouterModule.forRoot(
       appRoutes,
-      {enableTracing: ENABLE_ROUTER_TRACING} // <-- debugging purposes only
+      {enableTracing: enableRouterTracing} // <-- debugging purposes only
     ),
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
-    MaterialConfigModule
+    MaterialConfigModule,
+    HttpModule
   ],
   declarations: [
     AppComponent,
@@ -69,7 +74,9 @@ const appRoutes: Routes = [
     PageNotFoundComponent,
     TenantComponent,
     GenericPageComponent,
-    HeaderComponent
+    HeaderComponent,
+    SearchResultsComponent,
+    SearchBoxComponent
   ],
   exports: [
     RouterModule
@@ -79,7 +86,8 @@ const appRoutes: Routes = [
     ConfigResolver,
     AuthGardService,
     UserService,
-    GlobalEventsManagerService
+    GlobalEventsManagerService,
+    SearchService,
   ]
 })
 

@@ -28,10 +28,14 @@ export class ConfigService {
       "appName": "My demo app",
       "pages": {
         "google-search": {
-          "pageName": "google search page"
+          "pageName": "google search page",
+          "fieldsToDisplay" : ["name","latest"],
+           "secondSearchBox": true
         },
         "tab-search": {
-          "pageName": "tab search page"
+          "pageName": "tab search page",
+          "fieldsToDisplay" : ["latest","name"],
+          "secondSearchBox": false
         }
       }
     }`);
