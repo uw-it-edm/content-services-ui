@@ -8,9 +8,14 @@ addons:
 before_install:
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
-script:
-  - yarn test
-  - yarn e2e
+jobs:
+  include:
+    - stage: test
+      script: yarn test
+    - stage: test
+      script: yarn e2e
+    - stage: test
+      script: yarn build -- --prod --env=travis
 
 notifications:
   email: false
