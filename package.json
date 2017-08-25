@@ -7,8 +7,11 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test --watch=false",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "lint": "ng lint --type-check",
+    "e2e": "ng e2e",
+    "validate": "npm-run-all --parallel test lint",
+    "prepush": "npm run validate",
+    "precommit": "npm run lint"
   },
   "private": true,
   "dependencies": {
@@ -25,6 +28,7 @@
     "@angular/router": "^4.0.0",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.4.1",
+    "karma-spec-reporter": "^0.0.31",
     "rxjs": "^5.4.1",
     "web-animations-js": "^2.3.1",
     "zone.js": "^0.8.14"
@@ -37,6 +41,7 @@
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "~6.0.60",
     "codelyzer": "~3.0.1",
+    "husky": "^0.14.3",
     "jasmine-core": "~2.6.2",
     "jasmine-spec-reporter": "~4.1.0",
     "karma": "~1.7.0",
@@ -45,6 +50,7 @@
     "karma-coverage-istanbul-reporter": "^1.2.1",
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "npm-run-all": "^4.0.2",
     "protractor": "~5.1.2",
     "ts-node": "~3.0.4",
     "tslint": "~5.3.2",
