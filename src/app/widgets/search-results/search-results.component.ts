@@ -9,26 +9,24 @@ import { Observable } from 'rxjs/Observable';
   templateUrl: './search-results.component.html',
   styleUrls: ['./search-results.component.css']
 })
-export class SearchResultsComponent implements OnInit,OnDestroy {
-  ngOnDestroy(): void {
-    console.log('destroy search component');
-  }
+export class SearchResultsComponent implements OnInit, OnDestroy {
 
-  searchModel: SearchModel= new SearchModel();
+  searchModel: SearchModel = new SearchModel();
 
   @Input() searchModel$: Observable<SearchModel>;
   @Input() searchResults: SearchResults;
   @Input() pageConfig: PageConfig;
   @Output() onSearch = new EventEmitter<SearchModel>();
 
+  ngOnDestroy(): void {
+    console.log('destroy search component');
+  }
 
   ngOnInit(): void {
     this.searchModel$.subscribe(searchModel => {
       this.searchModel = searchModel;
     });
   }
-
-
 
 
 }
