@@ -11,7 +11,15 @@
     "e2e": "ng e2e",
     "validate": "npm-run-all --parallel test lint",
     "prepush": "npm run validate",
-    "precommit": "npm run lint"
+    "precommit": "lint-staged",
+    "pretty": "prettier --parser typescript --single-quote --print-width=120 --write"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "npm run pretty",
+      "npm run lint",
+      "git add"
+    ]
   },
   "private": true,
   "dependencies": {
@@ -28,6 +36,7 @@
     "@angular/router": "^4.0.0",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.4.1",
+    "lint-staged": "^4.0.4",
     "rxjs": "^5.4.1",
     "web-animations-js": "^2.3.1",
     "zone.js": "^0.8.14"
@@ -51,6 +60,7 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "karma-spec-reporter": "^0.0.31",
     "npm-run-all": "^4.0.2",
+    "prettier": "^1.5.3",
     "protractor": "~5.1.2",
     "ts-node": "~3.0.4",
     "tslint": "~5.3.2",
