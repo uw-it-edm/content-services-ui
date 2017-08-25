@@ -1,19 +1,19 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TenantComponent } from "./tenant.component";
-import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { MaterialConfigModule } from "../../routing/material-config.module";
-import { ActivatedRouteStub } from "../../../testing/router-stubs";
-import { Title } from "@angular/platform-browser";
-import { Config } from "../../model/config";
-import { GlobalEventsManagerService } from "../../services/global-events-manager.service";
+import { TenantComponent } from './tenant.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { MaterialConfigModule } from '../../routing/material-config.module';
+import { ActivatedRouteStub } from '../../../testing/router-stubs';
+import { Title } from '@angular/platform-browser';
+import { Config } from '../../model/config';
+import { GlobalEventsManagerService } from '../../services/global-events-manager.service';
 
 let activatedRoute: ActivatedRouteStub;
 let component: TenantComponent;
 let fixture: ComponentFixture<TenantComponent>;
 
-describe("TenantComponent", () => {
+describe('TenantComponent', () => {
   beforeEach(() => {
     activatedRoute = new ActivatedRouteStub();
   });
@@ -35,9 +35,9 @@ describe("TenantComponent", () => {
 
   beforeEach(
     async(() => {
-      activatedRoute.testParamMap = { tenant: "test-tenant" };
+      activatedRoute.testParamMap = { tenant: 'test-tenant' };
       const config = new Config();
-      config.tenant = "test-tenant";
+      config.tenant = 'test-tenant';
       activatedRoute.testData = { config: config };
     })
   );
@@ -48,22 +48,22 @@ describe("TenantComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should be created", () => {
+  it('should be created', () => {
     expect(component).toBeTruthy();
   });
 
-  it("should get a tenant", () => {
+  it('should get a tenant', () => {
     const app = fixture.debugElement.componentInstance;
-    expect(app.tenant).toEqual("test-tenant");
+    expect(app.tenant).toEqual('test-tenant');
   });
 
-  it("should get a config", () => {
+  it('should get a config', () => {
     const app = fixture.debugElement.componentInstance;
     expect(app.config).toBeDefined();
   });
 
-  it("should have the title set to the name of the tenant", () => {
+  it('should have the title set to the name of the tenant', () => {
     const title = fixture.debugElement.injector.get(Title);
-    expect(title.getTitle()).toBe("test-tenant");
+    expect(title.getTitle()).toBe('test-tenant');
   });
 });

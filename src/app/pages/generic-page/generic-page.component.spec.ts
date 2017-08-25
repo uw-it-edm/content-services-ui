@@ -1,18 +1,18 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GenericPageComponent } from "./generic-page.component";
-import { MaterialConfigModule } from "../../routing/material-config.module";
-import { ActivatedRoute } from "@angular/router";
-import { Title } from "@angular/platform-browser";
-import { ActivatedRouteStub } from "../../../testing/router-stubs";
-import { Config } from "../../model/config";
-import { PageConfig } from "../../model/page-config";
+import { GenericPageComponent } from './generic-page.component';
+import { MaterialConfigModule } from '../../routing/material-config.module';
+import { ActivatedRoute } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { ActivatedRouteStub } from '../../../testing/router-stubs';
+import { Config } from '../../model/config';
+import { PageConfig } from '../../model/page-config';
 
 let activatedRoute: ActivatedRouteStub;
 let component: GenericPageComponent;
 let fixture: ComponentFixture<GenericPageComponent>;
 
-describe("GenericPageComponent", () => {
+describe('GenericPageComponent', () => {
   beforeEach(() => {
     activatedRoute = new ActivatedRouteStub();
   });
@@ -32,14 +32,14 @@ describe("GenericPageComponent", () => {
 
   beforeEach(
     async(() => {
-      activatedRoute.testParamMap = { page: "test-page" };
+      activatedRoute.testParamMap = { page: 'test-page' };
 
       const pageConfig = new PageConfig();
-      pageConfig.pageName = "test-page";
+      pageConfig.pageName = 'test-page';
 
       const config = new Config();
-      config.tenant = "test-tenant";
-      config.pages["test-page"] = pageConfig;
+      config.tenant = 'test-tenant';
+      config.pages['test-page'] = pageConfig;
 
       console.log(JSON.stringify(config));
       activatedRoute.testData = { config: config };
@@ -52,22 +52,22 @@ describe("GenericPageComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should be created", () => {
+  it('should be created', () => {
     expect(component).toBeTruthy();
   });
 
-  it("should get a page config", () => {
+  it('should get a page config', () => {
     const app = fixture.debugElement.componentInstance;
     expect(app.pageConfig).toBeDefined();
   });
 
-  it("should get a config", () => {
+  it('should get a config', () => {
     const app = fixture.debugElement.componentInstance;
     expect(app.config).toBeDefined();
   });
 
-  it("should have the title set to the page name", () => {
+  it('should have the title set to the page name', () => {
     const title = fixture.debugElement.injector.get(Title);
-    expect(title.getTitle()).toBe("test-page");
+    expect(title.getTitle()).toBe('test-page');
   });
 });
