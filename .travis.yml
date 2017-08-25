@@ -15,7 +15,7 @@ jobs:
     - stage: test
       script: yarn e2e
     - stage: test
-      script: yarn build -- --prod
+      script: yarn build -- --prod --env=travis
 
 notifications:
   email: false

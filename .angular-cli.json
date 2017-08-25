@@ -23,10 +23,11 @@
         "styles.css"
       ],
       "scripts": [],
-      "environmentSource": "src/environments/environment.ts",
+      "environmentSource": "environments/environment.ts",
       "environments": {
-        "dev": "src/environments/environment.ts",
-        "prod": "src/environments/environment.prod.ts"
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.prod.ts",
+        "travis": "environments/environment.travis.ts"
       }
     }
   ],
