@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Config } from '../../model/config';
-import { PageConfig } from '../../model/page-config';
+import { Config } from '../../model/config/config';
+import { PageConfig } from '../../model/config/page-config';
 import { Title } from '@angular/platform-browser';
-import { SearchModel } from '../../model/search-model';
+import { SearchModel } from '../../model/search/search-model';
 import { SearchResults } from '../../model/search-result';
 import { SearchService } from '../../services/search.service';
 import { Subject } from 'rxjs/Subject';
@@ -14,7 +14,6 @@ import { Subject } from 'rxjs/Subject';
   styleUrls: ['./generic-page.component.css']
 })
 export class GenericPageComponent implements OnInit {
-
   config: Config;
   pageConfig: PageConfig;
   page: string;
@@ -22,50 +21,31 @@ export class GenericPageComponent implements OnInit {
   searchModel$ = new Subject<SearchModel>();
   searchResults: SearchResults;
 
-
-  constructor(private route: ActivatedRoute,
-              private titleService: Title,
-              private searchService: SearchService) {
-
-  }
+  constructor(private route: ActivatedRoute, private titleService: Title, private searchService: SearchService) {}
 
   ngOnInit() {
-
     console.log('init generic page component');
     this.searchResults = new SearchResults();
 
-    this.searchService.search(this.searchModel$)
-      .subscribe(searchResult => {
-        console.log('subscribed ' + JSON.stringify(searchResult));
-        this.searchResults = searchResult;
+    this.route.paramMap.subscribe(params => {
+      this.page = params.get('page');
+      this.route.data.subscribe((data: { config: Config }) => {
+        this.config = data.config;
+        this.pageConfig = data.config.pages[this.page.toLowerCase()];
+        this.titleService.setTitle(this.pageConfig.pageName);
+
+        this.searchService.search(this.searchModel$, this.pageConfig).subscribe(searchResult => {
+          this.searchResults = searchResult;
+        });
       });
 
-    this.route.paramMap
-      .subscribe(
-        params => {
-
-          this.page = params.get('page');
-          this.route.data
-            .subscribe((data: { config: Config }) => {
-                this.config = data.config;
-                this.pageConfig = data.config.pages[this.page.toLowerCase()];
-                this.titleService.setTitle(this.pageConfig.pageName);
-              }
-            );
-
-          this.searchModel$.next(new SearchModel());
-          this.searchResults = new SearchResults();
-        }
-      );
-
-
+      this.searchModel$.next(new SearchModel());
+      this.searchResults = new SearchResults();
+    });
   }
 
   onSearch(searchModel: SearchModel) {
     console.log('search in generic page component');
-
     this.searchModel$.next(Object.assign(new SearchModel(), searchModel));
-
   }
-
 }

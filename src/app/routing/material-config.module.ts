@@ -5,7 +5,6 @@ import {
   MdCardModule,
   MdCheckboxModule,
   MdChipsModule,
-  MdCoreModule,
   MdDatepickerModule,
   MdDialogModule,
   MdExpansionModule,
@@ -29,21 +28,20 @@ import {
   MdTableModule,
   MdTabsModule,
   MdToolbarModule,
-  MdTooltipModule,
+  MdTooltipModule
 } from '@angular/material';
-import {CdkTableModule} from '@angular/cdk';
 import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   exports: [
-    CdkTableModule,
+    MdTableModule,
     MdAutocompleteModule,
     MdButtonModule,
     MdButtonToggleModule,
     MdCardModule,
     MdCheckboxModule,
     MdChipsModule,
-    MdCoreModule,
     MdDatepickerModule,
     MdDialogModule,
     MdExpansionModule,
@@ -68,6 +66,7 @@ import { NgModule } from '@angular/core';
     MdTabsModule,
     MdToolbarModule,
     MdTooltipModule,
+    FlexLayoutModule
   ]
 })
 export class MaterialConfigModule {}

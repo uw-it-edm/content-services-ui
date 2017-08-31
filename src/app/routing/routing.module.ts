@@ -23,6 +23,7 @@ import { SearchResultsComponent } from '../widgets/search-results/search-results
 import { SearchService } from '../services/search.service';
 import { HttpModule } from '@angular/http';
 import { SearchBoxComponent } from '../widgets/search-box/search-box.component';
+import { FacetsBoxComponent } from '../widgets/facets-box/facets-box.component';
 import { EditPageComponent } from '../pages/edit-page/edit-page.component';
 
 let enableRouterTracing = true;
@@ -85,7 +86,8 @@ const appRoutes: Routes = [
     GenericPageComponent,
     HeaderComponent,
     SearchResultsComponent,
-    SearchBoxComponent
+    SearchBoxComponent,
+    FacetsBoxComponent
   ],
   exports: [RouterModule],
   providers: [ConfigService, ConfigResolver, AuthGardService, UserService, GlobalEventsManagerService, SearchService]

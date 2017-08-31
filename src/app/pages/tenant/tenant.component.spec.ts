@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MaterialConfigModule } from '../../routing/material-config.module';
 import { ActivatedRouteStub } from '../../../testing/router-stubs';
 import { Title } from '@angular/platform-browser';
-import { Config } from '../../model/config';
+import { Config } from '../../model/config/config';
 import { GlobalEventsManagerService } from '../../services/global-events-manager.service';
 
 let activatedRoute: ActivatedRouteStub;
@@ -14,33 +14,27 @@ let component: TenantComponent;
 let fixture: ComponentFixture<TenantComponent>;
 
 describe('TenantComponent', () => {
+  beforeEach(
+    async(() => {
+      activatedRoute = new ActivatedRouteStub();
 
-  beforeEach(async(() => {
-    activatedRoute = new ActivatedRouteStub();
-
-    TestBed.configureTestingModule({
-      imports: [MaterialConfigModule],
-      declarations: [TenantComponent],
-      providers: [
-        {provide: ActivatedRoute, useValue: activatedRoute},
-        Title,
-        GlobalEventsManagerService
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
-
+      TestBed.configureTestingModule({
+        imports: [MaterialConfigModule],
+        declarations: [TenantComponent],
+        providers: [{ provide: ActivatedRoute, useValue: activatedRoute }, Title, GlobalEventsManagerService],
+        schemas: [NO_ERRORS_SCHEMA]
+      }).compileComponents();
 
       activatedRoute.testParamMap = { tenant: 'test-tenant' };
       const config = new Config();
       config.tenant = 'test-tenant';
       activatedRoute.testData = { config: config };
 
-
-    fixture = TestBed.createComponent(TenantComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+      fixture = TestBed.createComponent(TenantComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    })
+  );
 
   it('should be created', () => {
     expect(component).toBeTruthy();
@@ -61,4 +55,3 @@ describe('TenantComponent', () => {
     expect(title.getTitle()).toBe('test-tenant');
   });
 });
-

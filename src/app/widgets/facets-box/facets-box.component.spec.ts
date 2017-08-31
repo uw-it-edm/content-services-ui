@@ -1,28 +1,28 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SearchBoxComponent } from './search-box.component';
 import { FormsModule } from '@angular/forms';
 import { MaterialConfigModule } from '../../routing/material-config.module';
 import { Observable } from 'rxjs/Observable';
 import { SearchModel } from '../../model/search/search-model';
 import 'rxjs/add/observable/of';
+import { FacetsBoxComponent } from './facets-box.component';
 import { PageConfig } from '../../model/config/page-config';
 
-describe('SearchBoxComponent', () => {
-  let component: SearchBoxComponent;
-  let fixture: ComponentFixture<SearchBoxComponent>;
+describe('FacetsBoxComponent', () => {
+  let component: FacetsBoxComponent;
+  let fixture: ComponentFixture<FacetsBoxComponent>;
 
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
         imports: [FormsModule, MaterialConfigModule],
-        declarations: [SearchBoxComponent]
+        declarations: [FacetsBoxComponent]
       }).compileComponents();
     })
   );
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SearchBoxComponent);
+    fixture = TestBed.createComponent(FacetsBoxComponent);
     component = fixture.componentInstance;
     const searchModel = new SearchModel();
     searchModel.stringQuery = 'iSearch';

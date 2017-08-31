@@ -1,0 +1,43 @@
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { SearchModel } from '../../model/search/search-model';
+import { PageConfig } from '../../model/config/page-config';
+import { Observable } from 'rxjs/Observable';
+import { SearchResults } from '../../model/search-result';
+import { SearchFilter } from '../../model/search/search-filter';
+
+@Component({
+  selector: 'app-facets-box',
+  templateUrl: './facets-box.component.html',
+  styleUrls: ['./facets-box.component.css']
+})
+export class FacetsBoxComponent implements OnInit {
+  searchModel: SearchModel = new SearchModel();
+
+  @Input() searchModel$: Observable<SearchModel>;
+  @Input() searchResults: SearchResults;
+  @Input() pageConfig: PageConfig;
+  @Output() facetFilterAdded = new EventEmitter<SearchModel>();
+
+  constructor() {}
+
+  ngOnInit() {
+    this.searchModel$.subscribe(searchModel => {
+      this.searchModel = searchModel;
+    });
+  }
+
+  getFacetsConfig() {
+    return Object.keys(this.pageConfig.facetsConfig.facets).map(key => {
+      return this.pageConfig.facetsConfig.facets[key];
+    });
+  }
+
+  addFacetFilter(key: string, value: string) {
+    const searchFilter = new SearchFilter(key, value);
+    console.log('adding new facet : ' + JSON.stringify(searchFilter));
+
+    this.searchModel.filters.push(searchFilter);
+
+    this.facetFilterAdded.emit(this.searchModel);
+  }
+}

@@ -1,24 +1,44 @@
 <p>
   generic-page display page : <strong>{{pageConfig.pageName}} - {{page}}</strong>!
   {{pageConfig |json}}
-
-  <app-search-box
-    [searchModel$]="searchModel$"
-    [pageConfig]="pageConfig"
-    (search)="onSearch($event)"
-  >
-  </app-search-box>
-  <app-search-results
-    [searchModel$]="searchModel$"
-    [searchResults]="searchResults"
-    [pageConfig]="pageConfig"
-    (search)="onSearch($event)"
-  ></app-search-results>
-  <app-search-box *ngIf="pageConfig.secondSearchBox"
-    [searchModel$]="searchModel$"
-    [pageConfig]="pageConfig"
-    (search)="onSearch($event)"
-  >
-  </app-search-box>
 </p>
 
+<div class="container">
+  <div fxLayout="row">
+    <div fxFlex="20">
+
+    </div>
+    <div fxFlex>
+      <app-search-box
+        [searchModel$]="searchModel$"
+        [pageConfig]="pageConfig"
+        (search)="onSearch($event)"
+      >
+      </app-search-box>
+    </div>
+  </div>
+
+  <hr/>
+  <div fxLayout="row">
+    <div fxFlex="20">
+      <app-facets-box
+        *ngIf="pageConfig.facetsConfig && pageConfig.facetsConfig.active"
+        [searchModel$]="searchModel$"
+        [searchResults]="searchResults"
+        [pageConfig]="pageConfig"
+        (facetFilterAdded)="onSearch($event)"
+      >
+      </app-facets-box>
+    </div>
+    <div fxFlex>
+      <app-search-results
+        [searchModel$]="searchModel$"
+        [searchResults]="searchResults"
+        [pageConfig]="pageConfig"
+        (search)="onSearch($event)"
+      ></app-search-results>
+
+
+    </div>
+  </div>
+</div>

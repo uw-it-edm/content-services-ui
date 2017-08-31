@@ -8,7 +8,15 @@
 </div>
 
 
-<app-content-metadata [contentItem]="contentItem" [pageConfig]="pageConfig"></app-content-metadata>
 
-<app-content-view *ngIf="pageConfig.viewPanel && contentItem"
-                  [item]="contentItem"></app-content-view>
+  <app-content-metadata
+    [contentItem]="contentItem"
+    [pageConfig]="pageConfig"
+  >
+  </app-content-metadata>
+  <app-content-view
+    *ngIf="pageConfig.viewPanel && contentItem"
+    [item]="contentItem"
+  >
+  </app-content-view>
+

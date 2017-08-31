@@ -1,16 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ConfigService } from '../services/config.service';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
-import { Config } from '../model/config';
+import { Config } from '../model/config/config';
 
 @Injectable()
 export class ConfigResolver implements Resolve<Config> {
-
-  constructor(private configService: ConfigService, private router: Router) {
-  }
+  constructor(private configService: ConfigService, private router: Router) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<Config> {
-
     let tenant: string = route.params.tenant;
 
     if (!tenant) {
@@ -29,7 +26,8 @@ export class ConfigResolver implements Resolve<Config> {
       if (config) {
         console.log('returning ' + config);
         return config;
-      } else { // config not found
+      } else {
+        // config not found
         this.router.navigate(['/']);
         return null;
       }

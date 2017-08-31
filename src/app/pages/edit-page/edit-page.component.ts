@@ -1,9 +1,10 @@
 import { Component, OnInit, Output } from '@angular/core';
 import { EditPageConfig } from '../../model/edit-page-config';
 import { ActivatedRoute } from '@angular/router';
-import { Config } from '../../model/config';
+
 import { ContentService } from '../../services/content.service';
 import { ContentResult } from '../../model/content-result';
+import { Config } from '../../model/config/config';
 
 @Component({
   selector: 'app-edit-page',
