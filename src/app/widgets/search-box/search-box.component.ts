@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { SearchModel } from '../../model/search-model';
-import { PageConfig } from '../../model/page-config';
+import { SearchModel } from '../../model/search/search-model';
+import { PageConfig } from '../../model/config/page-config';
 import { Observable } from 'rxjs/Observable';
+import { SearchFilter } from '../../model/search/search-filter';
 
 @Component({
   selector: 'app-search-box',
@@ -9,19 +10,25 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['./search-box.component.css']
 })
 export class SearchBoxComponent implements OnInit {
-
-  searchModel: SearchModel= new SearchModel();
+  searchModel: SearchModel = new SearchModel();
 
   @Input() searchModel$: Observable<SearchModel>;
   @Input() pageConfig: PageConfig;
   @Output() search = new EventEmitter<SearchModel>();
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
     this.searchModel$.subscribe(searchModel => {
       this.searchModel = searchModel;
     });
+  }
+
+  removeFilter(filter: SearchFilter) {
+    console.log('removing filter for ' + filter.key);
+    this.searchModel.filters = this.searchModel.filters.filter(oldFilter => oldFilter !== filter);
+
+    this.updateSearch();
   }
 
   updateSearch() {

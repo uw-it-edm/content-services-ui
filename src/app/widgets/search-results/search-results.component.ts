@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { SearchModel } from '../../model/search-model';
+import { SearchModel } from '../../model/search/search-model';
 import { SearchResults } from '../../model/search-result';
-import { PageConfig } from '../../model/page-config';
+import { PageConfig } from '../../model/config/page-config';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -10,8 +10,9 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['./search-results.component.css']
 })
 export class SearchResultsComponent implements OnInit, OnDestroy {
-
   searchModel: SearchModel = new SearchModel();
+
+  displayedColumns = ['id'];
 
   @Input() searchModel$: Observable<SearchModel>;
   @Input() searchResults: SearchResults;
@@ -27,6 +28,4 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
       this.searchModel = searchModel;
     });
   }
-
-
 }

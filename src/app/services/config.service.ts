@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Config } from '../model/config';
+import { Config } from '../model/config/config';
 
 @Injectable()
 export class ConfigService {
@@ -22,23 +22,43 @@ export class ConfigService {
       }
     }`);
 
-    const demoConfig: Config = JSON.parse(`
+    const demoConfig: Config = Object.assign(
+      new Config(),
+      JSON.parse(`
     {
       "tenant": "Demo",
       "appName": "My demo app",
       "pages": {
         "google-search": {
           "pageName": "google search page",
-          "fieldsToDisplay" : ["name","latest"],
-           "secondSearchBox": true
+          "fieldsToDisplay" : ["LastModifier", "MimeType"],
+           "secondSearchBox": true,
+           "facetsConfig":{
+             "active": true,
+             "facets": {
+                "metadata.DocumentType.label.raw": {
+                   "key" : "metadata.DocumentType.label.raw",
+                   "label" : "Document Type",
+                   "order": "desc",
+                   "size":5
+                 },
+                "metadata.DocumentYear": {
+                   "key" : "metadata.DocumentYear",
+                   "label" : "Document Year",
+                   "order": "desc",
+                   "size":10
+                }
+             }
+           }
         },
         "tab-search": {
           "pageName": "tab search page",
-          "fieldsToDisplay" : ["latest","name"],
+          "fieldsToDisplay" : ["LastModifier"],
           "secondSearchBox": false
         }
       }
-    }`);
+    }`)
+    );
 
     const configs = new Map<string, Config>();
 
@@ -51,12 +71,10 @@ export class ConfigService {
   getConfigForTenant(tenant: string): Promise<Config> {
     console.log('loading for ' + tenant);
 
-
     return Promise.resolve(this.configs.get(tenant));
   }
 
   getTenantList(): Promise<string[]> {
     return Promise.resolve(Array.from(this.configs.keys()));
   }
-
 }
