@@ -30,7 +30,11 @@ export class ConfigService {
         "google-search": {
           "pageName": "google search page",
           "fieldsToDisplay" : ["name","latest"],
-           "secondSearchBox": true
+           "secondSearchBox": true,
+           "editPageConfig": {
+              "fieldsToDisplay" : ["CategoryId","ProfileId","OriginalFileName","PublishStatus"],
+              "viewPanel": true
+           }
         },
         "tab-search": {
           "pageName": "tab search page",
@@ -51,12 +55,10 @@ export class ConfigService {
   getConfigForTenant(tenant: string): Promise<Config> {
     console.log('loading for ' + tenant);
 
-
     return Promise.resolve(this.configs.get(tenant));
   }
 
   getTenantList(): Promise<string[]> {
     return Promise.resolve(Array.from(this.configs.keys()));
   }
-
 }

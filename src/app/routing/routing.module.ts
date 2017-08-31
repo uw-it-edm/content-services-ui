@@ -23,6 +23,7 @@ import { SearchResultsComponent } from '../widgets/search-results/search-results
 import { SearchService } from '../services/search.service';
 import { HttpModule } from '@angular/http';
 import { SearchBoxComponent } from '../widgets/search-box/search-box.component';
+import { EditPageComponent } from '../pages/edit-page/edit-page.component';
 
 let enableRouterTracing = true;
 if (environment.production) {
@@ -43,6 +44,13 @@ const appRoutes: Routes = [
       {
         path: ':page',
         component: GenericPageComponent,
+        resolve: {
+          config: ConfigResolver
+        }
+      },
+      {
+        path: ':page/edit/:id',
+        component: EditPageComponent,
         resolve: {
           config: ConfigResolver
         }

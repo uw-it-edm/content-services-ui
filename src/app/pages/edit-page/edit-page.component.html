@@ -1,0 +1,14 @@
+<p>
+  edit-page works!
+</p>
+<div *ngIf="contentItem">
+
+  <label>ID:</label> {{contentItem.id}}
+  <label>LABEL:</label> {{contentItem.label}}
+</div>
+
+
+<app-content-metadata [contentItem]="contentItem" [pageConfig]="pageConfig"></app-content-metadata>
+
+<app-content-view *ngIf="pageConfig.viewPanel && contentItem"
+                  [item]="contentItem"></app-content-view>
