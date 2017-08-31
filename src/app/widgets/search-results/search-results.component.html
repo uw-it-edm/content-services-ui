@@ -6,6 +6,7 @@
 
 <div>
   <ul *ngIf="searchResults">
+    Number of Results : {{searchResults.total}}
     <li *ngFor="let result of searchResults.results | slice:0:9">
 
       <a href="{{ result.id }}" target="_blank">

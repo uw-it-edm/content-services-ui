@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http, RequestOptions } from '@angular/http';
+import { Headers, Http, RequestOptions, RequestOptionsArgs } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { SearchModel } from '../model/search/search-model';
 import 'rxjs/add/operator/debounceTime';
@@ -25,34 +25,32 @@ export class SearchService {
       .debounceTime(400)
       .distinctUntilChanged()
       .switchMap(term => {
-        console.log('received search request');
+        console.log('processing search request');
         return this.searchEntries(term, pageConfig);
       });
   }
 
-  searchEntries(term: SearchModel, pageConfig: PageConfig): Observable<SearchResults> {
+  private searchEntries(term: SearchModel, pageConfig: PageConfig): Observable<SearchResults> {
     const searchPayload = this.buildSearchPayload(term, pageConfig);
-
-    const user = this.userService.getUser();
-
-    const authenticationHeaders = new Headers();
-    authenticationHeaders.append(environment.search_api.authenticationHeader, user.actAs);
-
-    const options = new RequestOptions({ headers: authenticationHeaders });
+    const options = this.buildRequestOptions();
 
     console.log('searching with ' + JSON.stringify(searchPayload));
-    return this.http.post(this.baseUrl + 'documents-facilities', searchPayload, options).map(res => {
-      const results = new SearchResults();
-      const apiResult = res.json();
-
-      results.total = apiResult['totalCount'];
-      if (apiResult['searchResults']) {
-        results.results = apiResult['searchResults'];
-      }
-      this.addFacetToSearchResults(results, apiResult);
-
-      return results;
+    return this.http.post(this.baseUrl + 'documents-facilities', searchPayload, options).map(response => {
+      return this.convertSearchApiResultsToSearchResults(response.json());
     });
+  }
+
+  private buildRequestOptions() {
+    const requestOptionsArgs = <RequestOptionsArgs>{};
+    if (environment.search_api.authenticationHeader) {
+      const user = this.userService.getUser();
+
+      const authenticationHeaders = new Headers();
+      authenticationHeaders.append(environment.search_api.authenticationHeader, user.actAs);
+
+      requestOptionsArgs.headers = authenticationHeaders;
+    }
+    return new RequestOptions(requestOptionsArgs);
   }
 
   private buildSearchPayload(term: SearchModel, pageConfig: PageConfig) {
@@ -65,8 +63,25 @@ export class SearchService {
     return searchPayload;
   }
 
+  convertSearchApiResultsToSearchResults(apiResult: any) {
+    const results = new SearchResults();
+
+    if (apiResult !== null) {
+      if ('totalCount' in apiResult) {
+        results.total = apiResult['totalCount'];
+      }
+
+      if ('searchResults' in apiResult) {
+        results.results = apiResult['searchResults'];
+      }
+
+      this.addFacetToSearchResults(results, apiResult);
+    }
+    return results;
+  }
+
   private addFacetToSearchResults(results: SearchResults, apiResult: any) {
-    if (apiResult['facets']) {
+    if ('facets' in apiResult) {
       apiResult['facets'].forEach(facet => {
         results.facets.set(facet['name'], facet);
       });
