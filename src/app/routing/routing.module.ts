@@ -25,6 +25,9 @@ import { HttpModule } from '@angular/http';
 import { SearchBoxComponent } from '../widgets/search-box/search-box.component';
 import { FacetsBoxComponent } from '../widgets/facets-box/facets-box.component';
 import { EditPageComponent } from '../pages/edit-page/edit-page.component';
+import { ContentViewComponent } from '../widgets/content-view/content-view.component';
+import { ContentMetadataComponent } from '../widgets/content-metadata/content-metadata.component';
+import { ContentService } from '../services/content.service';
 
 let enableRouterTracing = true;
 if (environment.production) {
@@ -87,9 +90,20 @@ const appRoutes: Routes = [
     HeaderComponent,
     SearchResultsComponent,
     SearchBoxComponent,
-    FacetsBoxComponent
+    FacetsBoxComponent,
+    EditPageComponent,
+    ContentMetadataComponent,
+    ContentViewComponent
   ],
   exports: [RouterModule],
-  providers: [ConfigService, ConfigResolver, AuthGardService, UserService, GlobalEventsManagerService, SearchService]
+  providers: [
+    ConfigService,
+    ConfigResolver,
+    AuthGardService,
+    UserService,
+    GlobalEventsManagerService,
+    SearchService,
+    ContentService
+  ]
 })
 export class RoutingModule {}

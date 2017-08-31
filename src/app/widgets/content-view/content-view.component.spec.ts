@@ -17,10 +17,15 @@ describe('ContentViewComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ContentViewComponent);
     component = fixture.componentInstance;
+    component.inputUrl = 'testUrl';
     fixture.detectChanges();
   });
 
   it('should be created', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have an initialized inputUrl', () => {
+    expect((component.inputUrl = 'testUrl'));
   });
 });

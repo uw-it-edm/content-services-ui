@@ -1,22 +1,31 @@
 <p>
   edit-page works!
 </p>
+
+
 <div *ngIf="contentItem">
 
-  <label>ID:</label> {{contentItem.id}}
+  <label>ID:</label> {{contentItem.id}} <br/>
   <label>LABEL:</label> {{contentItem.label}}
+
+
+
+  <div class="container">
+    <div fxLayout="row">
+      <div fxFlex="30">
+        <app-content-metadata
+          [contentItem]="contentItem"
+          [pageConfig]="pageConfig"
+        >
+        </app-content-metadata>
+      </div>
+      <div fxFlex="70">
+        <app-content-view
+          *ngIf="pageConfig.viewPanel && contentItem"
+          [inputUrl]="viewFileUrl"
+        >
+        </app-content-view>
+      </div>
+    </div>
+  </div>
 </div>
-
-
-
-  <app-content-metadata
-    [contentItem]="contentItem"
-    [pageConfig]="pageConfig"
-  >
-  </app-content-metadata>
-  <app-content-view
-    *ngIf="pageConfig.viewPanel && contentItem"
-    [item]="contentItem"
-  >
-  </app-content-view>
-

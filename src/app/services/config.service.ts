@@ -51,6 +51,7 @@ export class ConfigService {
              }
            },
            "editPageConfig": {
+              "pageName": "Edit Content Item",
               "fieldsToDisplay" : ["CategoryId","ProfileId","OriginalFileName","PublishStatus"],
               "viewPanel": true
            }

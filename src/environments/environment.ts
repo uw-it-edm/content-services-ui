@@ -10,5 +10,10 @@ export const environment = {
     context: '/search',
     method: 'POST',
     authenticationHeader: 'auth'
+  },
+  content_api: {
+    url: 'content-api.dev',
+    context: '/content/v3',
+    authenticationHeader: 'auth'
   }
 };
