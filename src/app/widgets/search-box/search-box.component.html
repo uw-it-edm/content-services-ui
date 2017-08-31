@@ -5,10 +5,6 @@
 <div class="selected-facets" *ngIf="pageConfig.facetsConfig && pageConfig.facetsConfig.active">
   <md-chip-list>
     <md-chip *ngFor="let filter of searchModel.filters">
-
-    <!--  {{filter.key | facetLabel}}
-      {{filter.key | label}}
-      {{facetLabel(filter.key}}-->
       {{pageConfig.facetsConfig.facets[filter.key].label}}:{{filter.value}}
       <md-icon (click)="removeFilter(filter)" class="md-18">clear</md-icon>
 
