@@ -11,12 +11,9 @@ export class ContentViewComponent implements OnInit {
 
   @Input() inputUrl: string;
 
-  constructor(private sanitizer: DomSanitizer) {
-    // TODO: read more about DomSantitizer
-  }
+  constructor(private sanitizer: DomSanitizer) {}
 
   ngOnInit() {
-    // '282639'; // TODO: example id
     console.log('Working url: ', this.inputUrl);
     this.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.inputUrl);
   }

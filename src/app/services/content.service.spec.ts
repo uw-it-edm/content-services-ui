@@ -74,7 +74,7 @@ describe('ContentService', () => {
     'should to get the file url',
     inject([ContentService, Http], (service: ContentService) => {
       expect(service.getFileUrl('123', true)).toEqual(
-        'content-api.dev/content/v3/file/123?rendition=Web&x-uw-act-as=test'
+        'http://content-api.dev/content/v3/file/123?rendition=Web&x-uw-act-as=test'
       );
     })
   );
