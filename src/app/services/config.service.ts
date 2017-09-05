@@ -55,7 +55,7 @@ export class ConfigService {
               "fieldsToDisplay" : ["CategoryId","ProfileId","OriginalFileName","PublishStatus"],
               "viewPanel": true
            }
-        },
+         },
         "tab-search": {
           "pageName": "tab search page",
           "fieldsToDisplay" : ["LastModifier"],
