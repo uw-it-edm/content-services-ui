@@ -1,9 +1,9 @@
-import { inject, TestBed } from '@angular/core/testing';
-
 import { ContentService } from './content.service';
-import { Http, HttpModule } from '@angular/http';
+import { Http, HttpModule, Response, ResponseOptions } from '@angular/http';
 import { UserService } from '../user/user.service';
 import { User } from '../user/user';
+import { Observable } from 'rxjs/Observable';
+import { inject, TestBed } from '@angular/core/testing';
 
 describe('ContentService', () => {
   class UserServiceMock extends UserService {
@@ -15,14 +15,46 @@ describe('ContentService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpModule],
-      providers: [ContentService, { provide: UserService, useValue: new UserServiceMock() }]
+      providers: [
+        ContentService,
+        { provide: UserService, useValue: new UserServiceMock() },
+        { provide: Http, useValue: new Http(null, null) }
+      ]
     });
   });
 
-  it(
-    'should be created',
+  it('should be created', () =>
     inject([ContentService, Http], (service: ContentService) => {
       expect(service).toBeTruthy();
+    }));
+
+  it(
+    'should read from the content api',
+    inject([ContentService, Http], (service: ContentService, http: Http) => {
+      const httpSpy = spyOn(http, 'get').and.callFake(function(_url, _options) {
+        return Observable.of(
+          new Response(
+            new ResponseOptions({
+              body: JSON.stringify({
+                id: '123',
+                label: 'test.pdf',
+                metadata: {
+                  ProfileId: 'test'
+                }
+              }),
+              status: 200
+            })
+          )
+        );
+      });
+
+      service.read('123').subscribe(result => {
+        expect(httpSpy).toHaveBeenCalledTimes(1);
+
+        expect(result.id).toBe('123');
+        expect(result.label).toBe('test.pdf');
+        expect(result.metadata['ProfileId']).toBe('test');
+      });
     })
   );
 

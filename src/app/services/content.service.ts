@@ -24,8 +24,8 @@ export class ContentService {
       console.log('content response: ' + JSON.stringify(response));
       const contentResult: ContentResult = response.json();
       return contentResult;
-    }); // TODO: look more into what this should be doing, with the subscribe
-    // TODO: handle failure?
+    });
+    // TODO: handle failure
   }
 
   public getFileUrl(itemId: string, webViewable: boolean): string {
