@@ -8,6 +8,7 @@ import { RoutingModule } from './routing/routing.module';
   declarations: [],
   imports: [BrowserModule, RoutingModule],
   exports: [],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

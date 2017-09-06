@@ -49,8 +49,13 @@ export class ConfigService {
                    "size":10
                 }
              }
+           },
+           "editPageConfig": {
+              "pageName": "Edit Content Item",
+              "fieldsToDisplay" : ["CategoryId","ProfileId","OriginalFileName","PublishStatus"],
+              "viewPanel": true
            }
-        },
+         },
         "tab-search": {
           "pageName": "tab search page",
           "fieldsToDisplay" : ["LastModifier"],
