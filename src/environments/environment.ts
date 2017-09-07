@@ -13,7 +13,7 @@ export const environment = {
   },
   content_api: {
     url: 'http://content-api.dev',
-    context: '/content/v3',
+    context: '/content/sso/v3',
     authenticationHeader: 'auth'
   }
 };
