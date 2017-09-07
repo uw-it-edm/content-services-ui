@@ -30,7 +30,7 @@ export class EditPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     console.log('init edit page component');
 
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.takeUntil(this.componentDestroyed).subscribe(params => {
       this.page = params.get('page');
       this.id = params.get('id');
 
