@@ -6,7 +6,8 @@ import { ContentService } from '../../services/content.service';
 import { ContentResult } from '../../model/content-result';
 import { Config } from '../../model/config/config';
 import { Title } from '@angular/platform-browser';
-import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/takeUntil';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'app-edit-page',
@@ -22,7 +23,7 @@ export class EditPageComponent implements OnInit, OnDestroy {
   contentItem: ContentResult;
   viewFileUrl: string;
 
-  private readSubscription: Subscription;
+  private componentDestroyed = new Subject();
 
   constructor(private route: ActivatedRoute, private titleService: Title, private contentService: ContentService) {}
 
@@ -38,8 +39,9 @@ export class EditPageComponent implements OnInit, OnDestroy {
         this.pageConfig = data.config.pages[this.page.toLowerCase()].editPageConfig;
         this.titleService.setTitle(this.pageConfig.pageName);
 
-        this.readSubscription = this.contentService
+        this.contentService
           .read(this.id)
+          .takeUntil(this.componentDestroyed)
           .subscribe(contentItem => (this.contentItem = contentItem));
         this.viewFileUrl = this.contentService.getFileUrl(this.id, true);
       });
@@ -47,8 +49,9 @@ export class EditPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('unsubscribe edit page - read subscription');
     // prevent memory leak when component destroyed
-    this.readSubscription.unsubscribe();
+    console.log('unsubscribe edit page');
+    this.componentDestroyed.next();
+    this.componentDestroyed.complete();
   }
 }
