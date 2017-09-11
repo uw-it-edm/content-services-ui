@@ -46,11 +46,11 @@ export class ContentService {
   // TODO: copied from SearchSerice
   private buildRequestOptions() {
     const requestOptionsArgs = <RequestOptionsArgs>{};
-    if (environment.search_api.authenticationHeader) {
+    if (environment.content_api.authenticationHeader) {
       const user = this.userService.getUser();
 
       const authenticationHeaders = new Headers();
-      authenticationHeaders.append(environment.search_api.authenticationHeader, user.actAs);
+      authenticationHeaders.append(environment.content_api.authenticationHeader, user.actAs);
 
       requestOptionsArgs.headers = authenticationHeaders;
     }
