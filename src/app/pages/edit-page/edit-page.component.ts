@@ -3,7 +3,7 @@ import { EditPageConfig } from '../../model/config/edit-page-config';
 import { ActivatedRoute } from '@angular/router';
 
 import { ContentService } from '../../services/content.service';
-import { ContentResult } from '../../model/content-result';
+import { ContentItem } from '../../model/content-item';
 import { Config } from '../../model/config/config';
 import { Title } from '@angular/platform-browser';
 import 'rxjs/add/operator/takeUntil';
@@ -20,7 +20,7 @@ export class EditPageComponent implements OnInit, OnDestroy {
   page: string;
   id: string;
 
-  contentItem: ContentResult;
+  contentItem: ContentItem;
   viewFileUrl: string;
 
   private componentDestroyed = new Subject();

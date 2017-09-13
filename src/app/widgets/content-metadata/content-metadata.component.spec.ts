@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ContentMetadataComponent } from './content-metadata.component';
 import { EditPageConfig } from '../../model/config/edit-page-config';
-import { ContentResult } from '../../model/content-result';
+import { ContentItem } from '../../model/content-item';
 
 describe('ContentMetadataComponent', () => {
   let component: ContentMetadataComponent;
@@ -25,7 +25,7 @@ describe('ContentMetadataComponent', () => {
     editPageConfig.fieldsToDisplay = ['1', '2', '3', 'a'];
     component.pageConfig = editPageConfig;
 
-    const contentItem = new ContentResult();
+    const contentItem = new ContentItem();
     contentItem.id = '1a';
     contentItem.label = 'test label';
     contentItem.metadata = new Map();

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptions, RequestOptionsArgs } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { ContentResult } from '../model/content-result';
+import { ContentItem } from '../model/content-item';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
 import { UserService } from '../user/user.service';
@@ -15,14 +15,14 @@ export class ContentService {
 
   constructor(private http: Http, private userService: UserService) {}
 
-  public read(itemId: string): Observable<ContentResult> {
+  public read(itemId: string): Observable<ContentItem> {
     const url = this.baseUrl + this.itemPathFragment + itemId;
     const options = this.buildRequestOptions();
 
     console.log('Reading content URL:', url);
     return this.http.get(url, options).map(response => {
       console.log('content response: ' + JSON.stringify(response));
-      const contentResult: ContentResult = response.json();
+      const contentResult: ContentItem = response.json();
       return contentResult;
     });
     // TODO: handle failure
