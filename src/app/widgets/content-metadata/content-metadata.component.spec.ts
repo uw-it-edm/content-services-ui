@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ContentMetadataComponent } from './content-metadata.component';
 import { EditPageConfig } from '../../model/config/edit-page-config';
 import { ContentItem } from '../../model/content-item';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('ContentMetadataComponent', () => {
   let component: ContentMetadataComponent;
@@ -11,6 +12,7 @@ describe('ContentMetadataComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
+        imports: [ReactiveFormsModule],
         declarations: [ContentMetadataComponent]
       }).compileComponents();
     })
@@ -47,11 +49,11 @@ describe('ContentMetadataComponent', () => {
     'should contain the defined fields in the proper order',
     async(() => {
       const input = fixture.debugElement.nativeElement.querySelectorAll('input');
-
-      expect(input[0].name).toBe('1');
-      expect(input[1].name).toBe('2');
-      expect(input[2].name).toBe('3');
-      expect(input[3].name).toBe('a');
+      expect(input[0].name).toBe('label');
+      expect(input[1].name).toBe('1');
+      expect(input[2].name).toBe('2');
+      expect(input[3].name).toBe('3');
+      expect(input[4].name).toBe('a');
     })
   );
 });

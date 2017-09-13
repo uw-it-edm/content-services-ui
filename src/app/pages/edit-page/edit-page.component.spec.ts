@@ -14,6 +14,7 @@ import { Title } from '@angular/platform-browser';
 import { EditPageConfig } from '../../model/config/edit-page-config';
 import { Config } from '../../model/config/config';
 import { PageConfig } from '../../model/config/page-config';
+import { FormBuilder } from '@angular/forms';
 
 class MockContentService {
   read(itemId: string): Observable<ContentItem> {
@@ -44,7 +45,8 @@ describe('EditPageComponent', () => {
         providers: [
           { provide: ActivatedRoute, useValue: activatedRoute },
           { provide: ContentService, useValue: contentServiceSpy },
-          Title
+          Title,
+          FormBuilder
         ],
         schemas: [NO_ERRORS_SCHEMA]
       }).compileComponents();
