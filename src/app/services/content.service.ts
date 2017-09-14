@@ -24,8 +24,22 @@ export class ContentService {
       console.log('content response: ' + JSON.stringify(response));
       const contentResult: ContentItem = response.json();
       return contentResult;
-    });
-    // TODO: handle failure
+    }); // TODO: handle failure
+  }
+
+  public update(contentItem: ContentItem) {
+    console.log('Updating: ' + JSON.stringify(contentItem));
+    const url = this.baseUrl + this.itemPathFragment + contentItem.id;
+    const options = this.buildRequestOptions();
+
+    const formData = new FormData();
+    const blob = new Blob([JSON.stringify(contentItem)], { type: 'application/json' });
+    formData.append('document', blob);
+
+    return this.http.post(url, formData, options).map(response => {
+      console.log('content update response: ' + JSON.stringify(response));
+      return response;
+    }); // TODO: handle failure
   }
 
   public getFileUrl(itemId: string, webViewable: boolean): string {

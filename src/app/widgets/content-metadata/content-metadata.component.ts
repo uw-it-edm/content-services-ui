@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ContentItem } from '../../model/content-item';
 import { EditPageConfig } from '../../model/config/edit-page-config';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -12,27 +12,45 @@ export class ContentMetadataComponent implements OnInit {
   @Input() pageConfig: EditPageConfig;
   @Input() contentItem: ContentItem;
 
-  testForm: FormGroup;
+  @Output() save = new EventEmitter<ContentItem>();
+
+  editContentItemForm: FormGroup;
 
   constructor(private fb: FormBuilder) {}
 
-  private createForm() {
-    this.testForm = this.fb.group({
-      label: [this.contentItem.label, Validators.required],
-      metadata: this.generateMetadataGroup()
-    });
+  ngOnInit() {
+    this.createForm();
   }
 
-  private generateMetadataGroup(): FormGroup {
+  private createForm() {
+    this.editContentItemForm = this.fb.group({
+      label: [this.contentItem.label, Validators.required],
+      metadata: this.generateDisplayedMetadataGroup()
+    });
+    this.editContentItemForm.get('label').disable();
+  }
+
+  private generateDisplayedMetadataGroup(): FormGroup {
     const group: any = {};
     this.pageConfig.fieldsToDisplay.map(field => {
-      console.log(field + ': ' + (this.contentItem.metadata[field] || ''));
       group[field] = new FormControl(this.contentItem.metadata[field] || '');
     });
     return new FormGroup(group);
   }
 
-  ngOnInit() {
-    this.createForm();
+  onSubmit() {
+    this.contentItem = this.prepareSaveContentItem();
+    this.save.emit(this.contentItem);
+  }
+
+  private prepareSaveContentItem(): ContentItem {
+    const formModel = this.editContentItemForm.value;
+    const updatedContentItem = new ContentItem(this.contentItem);
+
+    // copy formModel updates into contentItem
+    for (const key of Object.keys(formModel.metadata)) {
+      updatedContentItem.metadata[key] = formModel.metadata[key];
+    }
+    return updatedContentItem;
   }
 }

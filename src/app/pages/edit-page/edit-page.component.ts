@@ -48,6 +48,13 @@ export class EditPageComponent implements OnInit, OnDestroy {
     });
   }
 
+  onSave(savedItem: ContentItem) {
+    this.contentService
+      .update(savedItem)
+      .takeUntil(this.componentDestroyed)
+      .subscribe(); // TODO: handle response
+  }
+
   ngOnDestroy(): void {
     // prevent memory leak when component destroyed
     console.log('unsubscribe edit page');

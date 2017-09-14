@@ -2,7 +2,7 @@
   content-metadata works!
 </p>
 <div>
-  <form [formGroup]="testForm" novalidate>
+  <form [formGroup]="editContentItemForm" (ngSubmit)="onSubmit()" novalidate>
     <label class="center-block">Label:
       <input class="form-control" name="label" formControlName="label">
     </label>
@@ -20,7 +20,13 @@
       </div>
     </div>
 
+    <div style="margin-bottom: 1em">
+      <button type="submit"
+              [disabled]="editContentItemForm.pristine" class="btn btn-success">Save</button>
+    </div>
+
   </form>
-  <p>Form value: {{ testForm.value | json }}</p>
-  <p>Form status: {{ testForm.status | json }}</p>
+  <p>Form value: {{ editContentItemForm.value | json }}</p>
+  <p>Form status: {{ editContentItemForm.status | json }}</p>
+
 </div>
