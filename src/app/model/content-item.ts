@@ -3,7 +3,7 @@ import { isNullOrUndefined } from 'util';
 export class ContentItem {
   public id: string;
   public label: string;
-  public metadata: Map<string, any>;
+  public metadata: Map<string, any> = new Map();
 
   constructor(contentItem?: ContentItem) {
     if (!isNullOrUndefined(contentItem)) {

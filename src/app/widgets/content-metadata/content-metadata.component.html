@@ -13,7 +13,7 @@
         <div *ngIf="pageConfig.fieldsToDisplay && contentItem">
           <div *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
             <label class="center-block">{{fieldToDisplay}}:
-              <input class="form-control" name="{{fieldToDisplay}}" formControlName="{{ fieldToDisplay}}">
+              <input class="form-control" [name]="fieldToDisplay" [formControlName]="fieldToDisplay">
             </label>
           </div>
         </div>
