@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ContentMetadataComponent } from './content-metadata.component';
 import { EditPageConfig } from '../../model/config/edit-page-config';
 import { ContentItem } from '../../model/content-item';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('ContentMetadataComponent', () => {
