@@ -1,14 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { ContentItem } from '../../model/content-item';
 import { EditPageConfig } from '../../model/config/edit-page-config';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-content-metadata',
   templateUrl: './content-metadata.component.html',
   styleUrls: ['./content-metadata.component.css']
 })
-export class ContentMetadataComponent implements OnInit {
+export class ContentMetadataComponent implements OnInit, OnChanges {
   @Input() pageConfig: EditPageConfig;
   @Input() contentItem: ContentItem;
 
@@ -20,20 +21,25 @@ export class ContentMetadataComponent implements OnInit {
 
   ngOnInit() {
     this.createForm();
+    this.ngOnChanges();
   }
 
   private createForm() {
     this.editContentItemForm = this.fb.group({
-      label: [this.contentItem.label, Validators.required],
+      label: ['', Validators.required],
       metadata: this.generateDisplayedMetadataGroup()
     });
     this.editContentItemForm.get('label').disable();
   }
 
-  private generateDisplayedMetadataGroup(): FormGroup {
+  private generateDisplayedMetadataGroup(metadata?: Map<string, any>): FormGroup {
     const group: any = {};
     this.pageConfig.fieldsToDisplay.map(field => {
-      group[field] = new FormControl(this.contentItem.metadata[field] || '');
+      if (!isNullOrUndefined(metadata)) {
+        group[field] = new FormControl(metadata[field]);
+      } else {
+        group[field] = new FormControl('');
+      }
     });
     return new FormGroup(group);
   }
@@ -52,5 +58,14 @@ export class ContentMetadataComponent implements OnInit {
       updatedContentItem.metadata[key] = formModel.metadata[key];
     }
     return updatedContentItem;
+  }
+
+  ngOnChanges() {
+    if (this.editContentItemForm) {
+      this.editContentItemForm.reset({
+        label: this.contentItem.label
+      });
+      this.editContentItemForm.setControl('metadata', this.generateDisplayedMetadataGroup(this.contentItem.metadata));
+    }
   }
 }
