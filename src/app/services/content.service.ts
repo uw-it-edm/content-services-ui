@@ -22,12 +22,11 @@ export class ContentService {
     console.log('Reading content URL:', url);
     return this.http.get(url, options).map(response => {
       console.log('content response: ' + JSON.stringify(response));
-      const contentResult: ContentItem = response.json();
-      return contentResult;
+      return response.json();
     }); // TODO: handle failure
   }
 
-  public update(contentItem: ContentItem) {
+  public update(contentItem: ContentItem): Observable<ContentItem> {
     console.log('Updating: ' + JSON.stringify(contentItem));
     const url = this.baseUrl + this.itemPathFragment + contentItem.id;
     const options = this.buildRequestOptions();
@@ -38,7 +37,7 @@ export class ContentService {
 
     return this.http.post(url, formData, options).map(response => {
       console.log('content update response: ' + JSON.stringify(response));
-      return response;
+      return response.json();
     }); // TODO: handle failure
   }
 

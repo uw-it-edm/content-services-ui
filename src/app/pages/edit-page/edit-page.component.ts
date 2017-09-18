@@ -8,6 +8,7 @@ import { Config } from '../../model/config/config';
 import { Title } from '@angular/platform-browser';
 import 'rxjs/add/operator/takeUntil';
 import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-edit-page',
@@ -42,7 +43,9 @@ export class EditPageComponent implements OnInit, OnDestroy {
         this.contentService
           .read(this.id)
           .takeUntil(this.componentDestroyed)
-          .subscribe(contentItem => (this.contentItem = contentItem));
+          .subscribe(contentItem => {
+            this.contentItem = contentItem;
+          });
         this.viewFileUrl = this.contentService.getFileUrl(this.id, true);
       });
     });
@@ -52,7 +55,7 @@ export class EditPageComponent implements OnInit, OnDestroy {
     this.contentService
       .update(savedItem)
       .takeUntil(this.componentDestroyed)
-      .subscribe(); // TODO: handle response
+      .subscribe(updatedContentItem => (this.contentItem = updatedContentItem));
   }
 
   ngOnDestroy(): void {

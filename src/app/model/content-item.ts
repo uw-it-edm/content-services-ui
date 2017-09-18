@@ -1,4 +1,5 @@
 import { isNullOrUndefined } from 'util';
+import * as _ from 'lodash';
 
 export class ContentItem {
   public id: string;
@@ -9,7 +10,7 @@ export class ContentItem {
     if (!isNullOrUndefined(contentItem)) {
       this.id = contentItem.id;
       this.label = contentItem.label;
-      this.metadata = Object.assign({}, contentItem.metadata); // deep copy metadata
+      this.metadata = _.cloneDeep(contentItem.metadata); // deep copy nested metadata
     }
   }
 }
