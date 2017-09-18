@@ -2,10 +2,31 @@
   content-metadata works!
 </p>
 <div>
-  <ul *ngIf="pageConfig.fieldsToDisplay && contentItem">
-    <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
-      <label for="{{fieldToDisplay}}">{{fieldToDisplay}}</label> <br/>
-      <input name="{{fieldToDisplay}}" value="{{ contentItem.metadata[fieldToDisplay] }}"/>
-    </li>
-  </ul>
+  <form [formGroup]="editContentItemForm" (ngSubmit)="onSubmit()" novalidate>
+    <label class="center-block">Label:
+      <input class="form-control" name="label" formControlName="label">
+    </label>
+
+    <div formGroupName="metadata" class="well well-lg">
+      <h4>Metadata</h4>
+      <div class="form-group">
+        <div *ngIf="pageConfig.fieldsToDisplay && contentItem">
+          <div *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
+            <label class="center-block">{{fieldToDisplay}}:
+              <input class="form-control" [name]="fieldToDisplay" [formControlName]="fieldToDisplay">
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 1em">
+      <button type="submit"
+              [disabled]="editContentItemForm.pristine" class="btn btn-success">Save</button>
+    </div>
+
+  </form>
+  <p>Form value: {{ editContentItemForm.value | json }}</p>
+  <p>Form status: {{ editContentItemForm.status | json }}</p>
+
 </div>

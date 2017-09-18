@@ -52,7 +52,7 @@ export class ConfigService {
            },
            "editPageConfig": {
               "pageName": "Edit Content Item",
-              "fieldsToDisplay" : ["CategoryId","ProfileId","OriginalFileName","PublishStatus"],
+              "fieldsToDisplay" : ["CategoryId","ProfileId","OriginalFileName","PublishStatus","LastModifiedDate"],
               "viewPanel": true
            }
          },

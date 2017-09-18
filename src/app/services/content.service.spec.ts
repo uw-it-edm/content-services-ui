@@ -4,6 +4,7 @@ import { UserService } from '../user/user.service';
 import { User } from '../user/user';
 import { Observable } from 'rxjs/Observable';
 import { inject, TestBed } from '@angular/core/testing';
+import { ContentItem } from '../model/content-item';
 
 describe('ContentService', () => {
   class UserServiceMock extends UserService {
@@ -76,6 +77,33 @@ describe('ContentService', () => {
       expect(service.getFileUrl('123', true)).toEqual(
         'http://content-api.dev/content/v3/file/123?rendition=Web&x-uw-act-as=test'
       );
+    })
+  );
+
+  it(
+    'should update the content api',
+    inject([ContentService, Http], (service: ContentService, http: Http) => {
+      const httpSpy = spyOn(http, 'post').and.callFake(function(_url, _options) {
+        return Observable.of(
+          new Response(
+            new ResponseOptions({
+              body: JSON.stringify({
+                id: '123',
+                label: 'test.pdf',
+                metadata: {
+                  ProfileId: 'test'
+                }
+              }),
+              status: 200
+            })
+          )
+        );
+      });
+      const contentItem = new ContentItem();
+
+      service.update(contentItem).subscribe(result => {
+        expect(httpSpy).toHaveBeenCalledTimes(1);
+      });
     })
   );
 });

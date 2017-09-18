@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptions, RequestOptionsArgs } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { ContentResult } from '../model/content-result';
+import { ContentItem } from '../model/content-item';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
 import { UserService } from '../user/user.service';
@@ -15,17 +15,30 @@ export class ContentService {
 
   constructor(private http: Http, private userService: UserService) {}
 
-  public read(itemId: string): Observable<ContentResult> {
+  public read(itemId: string): Observable<ContentItem> {
     const url = this.baseUrl + this.itemPathFragment + itemId;
     const options = this.buildRequestOptions();
 
     console.log('Reading content URL:', url);
     return this.http.get(url, options).map(response => {
       console.log('content response: ' + JSON.stringify(response));
-      const contentResult: ContentResult = response.json();
-      return contentResult;
-    });
-    // TODO: handle failure
+      return response.json();
+    }); // TODO: handle failure
+  }
+
+  public update(contentItem: ContentItem): Observable<ContentItem> {
+    console.log('Updating: ' + JSON.stringify(contentItem));
+    const url = this.baseUrl + this.itemPathFragment + contentItem.id;
+    const options = this.buildRequestOptions();
+
+    const formData = new FormData();
+    const blob = new Blob([JSON.stringify(contentItem)], { type: 'application/json' });
+    formData.append('document', blob);
+
+    return this.http.post(url, formData, options).map(response => {
+      console.log('content update response: ' + JSON.stringify(response));
+      return response.json();
+    }); // TODO: handle failure
   }
 
   public getFileUrl(itemId: string, webViewable: boolean): string {

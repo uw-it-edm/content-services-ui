@@ -8,16 +8,17 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ContentService } from '../../services/content.service';
 import { HttpModule } from '@angular/http';
 import { ActivatedRouteStub } from '../../../testing/router-stubs';
-import { ContentResult } from '../../model/content-result';
+import { ContentItem } from '../../model/content-item';
 import { Observable } from 'rxjs/Observable';
-import { By, Title } from '@angular/platform-browser';
+import { Title } from '@angular/platform-browser';
 import { EditPageConfig } from '../../model/config/edit-page-config';
 import { Config } from '../../model/config/config';
 import { PageConfig } from '../../model/config/page-config';
+import { FormBuilder } from '@angular/forms';
 
 class MockContentService {
-  read(itemId: string): Observable<ContentResult> {
-    return Observable.of(new ContentResult());
+  read(itemId: string): Observable<ContentItem> {
+    return Observable.of(new ContentItem());
   }
 
   getFileUrl(itemId: string, webViewable: boolean): string {
@@ -44,7 +45,8 @@ describe('EditPageComponent', () => {
         providers: [
           { provide: ActivatedRoute, useValue: activatedRoute },
           { provide: ContentService, useValue: contentServiceSpy },
-          Title
+          Title,
+          FormBuilder
         ],
         schemas: [NO_ERRORS_SCHEMA]
       }).compileComponents();

@@ -5,7 +5,7 @@
 
 <div *ngIf="contentItem">
 
-  <label>ID:</label> {{contentItem.id}} <br/>
+  <label>ID:</label> {{contentItem.id}}  <br/>
   <label>LABEL:</label> {{contentItem.label}}
 
 
@@ -16,6 +16,7 @@
         <app-content-metadata
           [contentItem]="contentItem"
           [pageConfig]="pageConfig"
+          (save)="onSave($event)"
         >
         </app-content-metadata>
       </div>

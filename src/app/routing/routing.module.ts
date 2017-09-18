@@ -12,7 +12,7 @@ import { UserService } from '../user/user.service';
 import { AuthGardService } from './auth-gard.service';
 import { LoginComponent } from '../pages/login/login.component';
 import { MaterialConfigModule } from './material-config.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { environment } from '../../environments/environment';
@@ -79,7 +79,8 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     FormsModule,
     MaterialConfigModule,
-    HttpModule
+    HttpModule,
+    ReactiveFormsModule
   ],
   declarations: [
     AppComponent,
