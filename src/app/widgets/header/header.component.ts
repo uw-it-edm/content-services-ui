@@ -11,14 +11,15 @@ import { User } from '../../user/user';
 })
 export class HeaderComponent implements OnInit {
   tenant: string;
+  title: string;
   promiseUser: Promise<User>;
   availableTenants: Promise<string[]>;
 
-  constructor(private eventsManager: GlobalEventsManagerService,
-              private configService: ConfigService,
-              private userService: UserService) {
-  }
-
+  constructor(
+    private eventsManager: GlobalEventsManagerService,
+    private configService: ConfigService,
+    private userService: UserService
+  ) {}
 
   ngOnInit() {
     this.promiseUser = this.userService.getAuthenticatedUser();
@@ -26,6 +27,6 @@ export class HeaderComponent implements OnInit {
     this.eventsManager.tenantEmitter.subscribe(tenant => {
       this.tenant = tenant;
     });
+    this.title = 'Content Services';
   }
-
 }

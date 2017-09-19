@@ -9,12 +9,16 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 export class ContentViewComponent implements OnInit {
   url: SafeUrl;
 
+  @Input() item: any;
   @Input() inputUrl: string;
+
+  pageNumber: number;
 
   constructor(private sanitizer: DomSanitizer) {}
 
   ngOnInit() {
     console.log('Working url: ', this.inputUrl);
     this.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.inputUrl);
+    this.pageNumber = 1;
   }
 }

@@ -1,11 +1,12 @@
-<p>
-  content-metadata works!
-</p>
-<div>
-  <ul *ngIf="pageConfig.fieldsToDisplay && contentItem">
+<form class="cs-content-metadata">
+  <ul *ngIf="pageConfig.fieldsToDisplay && contentItem" class="fields">
     <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
-      <label for="{{fieldToDisplay}}">{{fieldToDisplay}}</label> <br/>
-      <input name="{{fieldToDisplay}}" value="{{ contentItem.metadata[fieldToDisplay] }}"/>
+      <md-form-field>
+        <input mdInput placeholder="{{fieldToDisplay}}" value="{{ contentItem.metadata[fieldToDisplay] }}">
+      </md-form-field>
+
+      <!--<label for="{{fieldToDisplay}}">{{fieldToDisplay}}</label> <br/>-->
+      <!--<input name="{{fieldToDisplay}}" value="{{ contentItem.metadata[fieldToDisplay] }}"/>-->
     </li>
   </ul>
-</div>
+</form>

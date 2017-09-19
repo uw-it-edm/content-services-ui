@@ -1,12 +1,11 @@
-<p>
-  generic-page display page : <strong>{{pageConfig.pageName}} - {{page}}</strong>!
-  {{pageConfig |json}}
-</p>
-
-<div class="container">
-  <div fxLayout="row">
+<!--<p>-->
+  <!--generic-page display page : <strong>{{pageConfig.pageName}} - {{page}}</strong>!-->
+  <!--{{pageConfig |json}}-->
+<!--</p>-->
+                               
+<div [ngClass]="pageConfig?.theme" class="xcontainer">
+  <div fxLayout="row" class="cs-generic-header">
     <div fxFlex="20">
-
     </div>
     <div fxFlex>
       <app-search-box
@@ -18,13 +17,13 @@
     </div>
   </div>
 
-  <hr/>
-  <div fxLayout="row">
+  <!--<hr/>-->
+  <div fxLayout="row" class="cs-generic-body">
     <div fxFlex="20">
       <app-facets-box
         *ngIf="pageConfig.facetsConfig && pageConfig.facetsConfig.active"
         [searchModel$]="searchModel$"
-        [searchResults]="searchResults"
+        [searchResults$]="searchResults$"
         [pageConfig]="pageConfig"
         (facetFilterAdded)="onSearch($event)"
       >
@@ -33,12 +32,10 @@
     <div fxFlex>
       <app-search-results
         [searchModel$]="searchModel$"
-        [searchResults]="searchResults"
+        [searchResults$]="searchResults$"
         [pageConfig]="pageConfig"
         (search)="onSearch($event)"
       ></app-search-results>
-
-
     </div>
   </div>
 </div>

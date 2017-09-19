@@ -43,6 +43,7 @@ export class EditPageComponent implements OnInit, OnDestroy {
           .read(this.id)
           .takeUntil(this.componentDestroyed)
           .subscribe(contentItem => (this.contentItem = contentItem));
+
         this.viewFileUrl = this.contentService.getFileUrl(this.id, true);
       });
     });
@@ -53,5 +54,17 @@ export class EditPageComponent implements OnInit, OnDestroy {
     console.log('unsubscribe edit page');
     this.componentDestroyed.next();
     this.componentDestroyed.complete();
+  }
+
+  buttonPress(button) {
+    this[button.command]();
+  }
+
+  deleteItem() {
+    alert('Delete');
+  }
+
+  publishItem() {
+    alert('Publish!');
   }
 }

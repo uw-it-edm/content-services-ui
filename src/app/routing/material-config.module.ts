@@ -32,9 +32,11 @@ import {
 } from '@angular/material';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { CdkTableModule } from '@angular/cdk/table';
 
 @NgModule({
   exports: [
+    CdkTableModule,
     MdTableModule,
     MdAutocompleteModule,
     MdButtonModule,

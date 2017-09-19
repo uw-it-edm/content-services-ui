@@ -29,6 +29,9 @@ import { ContentViewComponent } from '../widgets/content-view/content-view.compo
 import { ContentMetadataComponent } from '../widgets/content-metadata/content-metadata.component';
 import { ContentService } from '../services/content.service';
 
+import { PdfViewerComponent } from 'ng2-pdf-viewer';
+import { SafeUrlPipe } from '../util/safe-url.pipe';
+
 let enableRouterTracing = true;
 if (environment.production) {
   enableRouterTracing = false;
@@ -85,6 +88,7 @@ const appRoutes: Routes = [
     AppComponent,
     LoginComponent,
     PageNotFoundComponent,
+    PdfViewerComponent,
     TenantComponent,
     GenericPageComponent,
     HeaderComponent,
@@ -93,7 +97,8 @@ const appRoutes: Routes = [
     FacetsBoxComponent,
     EditPageComponent,
     ContentMetadataComponent,
-    ContentViewComponent
+    ContentViewComponent,
+    SafeUrlPipe
   ],
   exports: [RouterModule],
   providers: [

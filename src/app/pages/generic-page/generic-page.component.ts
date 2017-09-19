@@ -7,6 +7,7 @@ import { SearchModel } from '../../model/search/search-model';
 import { SearchResults } from '../../model/search-result';
 import { SearchService } from '../../services/search.service';
 import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-generic-page',
@@ -19,13 +20,12 @@ export class GenericPageComponent implements OnInit {
   page: string;
 
   searchModel$ = new Subject<SearchModel>();
-  searchResults: SearchResults;
+  searchResults$: Observable<SearchResults>;
 
   constructor(private route: ActivatedRoute, private titleService: Title, private searchService: SearchService) {}
 
   ngOnInit() {
     console.log('init generic page component');
-    this.searchResults = new SearchResults();
 
     this.route.paramMap.subscribe(params => {
       this.page = params.get('page');
@@ -33,14 +33,10 @@ export class GenericPageComponent implements OnInit {
         this.config = data.config;
         this.pageConfig = data.config.pages[this.page.toLowerCase()];
         this.titleService.setTitle(this.pageConfig.pageName);
-
-        this.searchService.search(this.searchModel$, this.pageConfig).subscribe(searchResult => {
-          this.searchResults = searchResult;
-        });
+        this.searchResults$ = this.searchService.search(this.searchModel$, this.pageConfig);
       });
 
       this.searchModel$.next(new SearchModel());
-      this.searchResults = new SearchResults();
     });
   }
 

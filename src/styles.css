@@ -54,16 +54,133 @@
 }
 
 .uwit-cs-appbar .cs-spacer {
-    flex: 1 1 auto;
+    flex: 1 1 auto;                                                                              
 }
 
-.uwit-cs-appbar .cs-title {
+.uwit-cs-appbar a.cs-title {
+    color: white;
     font-weight: 300;
 }
 
 .uw-body {
     margin: 2rem 4rem;
 }
+
+.uw-default {
+
+}
+
+.uw-default .cs-content-metadata ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.uw-default .cs-content-view .ng2-pdf-viewer-container {
+    border: 1px solid #aaaaaa;
+    margin: 0 4rem;
+    width: 100%;
+}
+
+.uw-default .cs-content-view iframe {
+    border: 1px solid #aaaaaa;
+    height: 600px;
+    margin: 0 4rem;
+    width: 100%;
+}
+
+.uw-default .cs-edit-page {
+    padding: 0rem 2rem;
+}
+
+.uw-default .cs-edit-page .mat-raised-button.mat-primary {
+    margin-right: 1rem;
+}
+
+.uw-default .cs-edit-page .mat-form-field {
+    width: 100%;
+    padding-right: 3rem;
+}
+
+.uw-default .cs-edit-page .secondary-toolbar.mat-toolbar {
+    background-color: transparent;
+    font-size: 1.5rem;
+    padding: 0;
+}
+
+.uw-default .cs-edit-page .secondary-toolbar.mat-toolbar .mat-toolbar-row {
+    height: 1.5rem;
+}
+
+.uw-default .cs-facet-box .mat-card {
+    margin: 0;
+}
+
+.uw-default .cs-facet-box .mat-list .mat-list-option .mat-list-text,
+.uw-default .cs-facet-box .mat-nav-list .mat-list-option .mat-list-text,
+.uw-default .cs-facet-box .mat-selection-list .mat-list-option .mat-list-text {
+    padding: 0;
+}
+
+.uw-default .cs-facet-box .mat-selection-list .mat-list-option {
+    font-size: 1.25rem;
+    padding: 0;
+}
+
+.uw-default .cs-facet-box .mat-list[dense] .mat-list-item .mat-list-item-content {
+    height: 2.5rem;
+    line-height: 1.25rem;
+}
+
+.uw-default .cs-facet-box .mat-card:not([class*=mat-elevation-z]) {
+    box-shadow: none;
+}
+
+.uw-default .cs-search-box {
+    background-color: rgba(0,0,0,.02);
+    padding: 10px 20px;
+    /*border-radius: 4px;*/
+}
+
+.uw-default .cs-generic-body {
+    margin-top: 0;
+}
+
+.uw-default .cs-search-box .search-form-group .mat-form-field {
+    font-size: 1.75rem;
+    width: 450px;
+}
+
+.uw-default .cs-search-box .search-form-group .mat-form-field-prefix {
+    font-size: 1rem;
+    margin-right: 2rem;
+}
+
+.uw-default .cs-search-box .search-form-group .mat-input-container {
+
+}
+
+.uw-default .cs-search-box .selected-facets {
+    margin-top: 2rem;
+}
+
+.uw-default .cs-search-box .selected-facets .mat-chip:not(.mat-basic-chip) {
+    border-radius: 0px;
+    padding: 0px 0px 0px 10px;
+}
+
+.uw-default .cs-search-box .selected-facets .mat-chip:not(.mat-basic-chip) .mat-icon {
+    font-size: 12pt;
+}
+
+.uw-default .cs-search-box .selected-facets .mat-chip:not(.mat-basic-chip) .mat-icon-button {
+    height: 2.4rem;
+    line-height: 1rem;
+}
+
+.cs-fill-remaining-space {
+    flex: 1 1 auto;
+}
+
 
 /* Rules for sizing the icon. */
 .material-icons.md-18 { font-size: 18px; }

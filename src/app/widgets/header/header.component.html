@@ -4,7 +4,7 @@
       <a class="uw-patch" href="http://uw.edu" title="University of Washington Home">University of Washington</a>
       <!--<a aria-hidden="true" class="uw-wordmark" href="http://uw.edu" tabindex="-1" title="UW Content Services">Content Services</a>-->
     </span>
-    <span class="cs-title">Content Services</span>
+    <span><a routerLink="/" class="cs-title">{{title}}</a></span>
     <span class="cs-spacer"></span>
     <button md-icon-button [mdMenuTriggerFor]="accountMenu"><md-icon class="cs-icon">apps</md-icon></button>
     <md-menu #accountMenu="mdMenu" xPosition="before" yPosition="below">
