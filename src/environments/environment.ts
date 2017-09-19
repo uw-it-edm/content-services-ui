@@ -4,5 +4,16 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  search_api: {
+    url: 'search-api.dev',
+    context: '/search',
+    method: 'POST',
+    authenticationHeader: 'auth'
+  },
+  content_api: {
+    url: 'http://content-api.dev',
+    context: '/content/v3',
+    authenticationHeader: 'auth'
+  }
 };

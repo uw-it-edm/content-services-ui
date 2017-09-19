@@ -1,0 +1,22 @@
+<div>
+  search-results works!
+
+
+</div>
+
+<div>
+  <ul *ngIf="searchResults">
+    Number of Results : {{searchResults.total}}
+    <li *ngFor="let result of searchResults.results | slice:0:9">
+
+      <a href="{{ result.id }}" target="_blank">
+        {{ result.id }} - {{ result.label }} -
+      </a>
+      <span *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
+        {{ result.metadata[fieldToDisplay]}} -
+      </span>
+    </li>
+  </ul>
+</div>
+
+

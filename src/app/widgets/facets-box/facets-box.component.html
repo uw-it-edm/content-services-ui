@@ -1,0 +1,16 @@
+<div>
+  <label>facets : </label>
+  <div *ngFor="let facetConfig of getFacetsConfig()">
+    <ul *ngIf="searchResults.facets.get(facetConfig.key)">
+      {{facetConfig.label}}:
+      <li
+
+        *ngFor="let facetResult of searchResults.facets.get(facetConfig.key).buckets">
+        <a (click)="addFacetFilter(facetConfig.key,facetResult.key)">
+          {{facetResult.key}} ({{facetResult.count}})
+        </a>
+      </li>
+
+    </ul>
+  </div>
+</div>

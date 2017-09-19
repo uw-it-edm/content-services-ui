@@ -1,5 +1,6 @@
 language: node_js
 node_js: lts/*
+cache: yarn
 
 addons:
   chrome: stable
@@ -7,9 +8,14 @@ addons:
 before_install:
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
-script:
-  - yarn run test-cover
-  - yarn e2e
+jobs:
+  include:
+    - stage: test
+      script: yarn run test-cover
+    - stage: test
+      script: yarn e2e
+    - stage: test
+      script: yarn build -- --prod --env=travis
 
 after_success:
   - yarn run coveralls

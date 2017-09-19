@@ -1,0 +1,13 @@
+<div>
+  <label>search : </label>
+  <input [(ngModel)]="searchModel.stringQuery" (ngModelChange)="updateSearch()">
+</div>
+<div class="selected-facets" *ngIf="pageConfig.facetsConfig && pageConfig.facetsConfig.active">
+  <md-chip-list>
+    <md-chip *ngFor="let filter of searchModel.filters">
+      {{pageConfig.facetsConfig.facets[filter.key].label}}:{{filter.value}}
+      <md-icon (click)="removeFilter(filter)" class="md-18">clear</md-icon>
+
+    </md-chip>
+  </md-chip-list>
+</div>
