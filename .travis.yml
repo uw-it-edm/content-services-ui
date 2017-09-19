@@ -8,8 +8,11 @@ before_install:
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
 script:
-  - yarn test
+  - yarn run test-cover
   - yarn e2e
+
+after_success:
+  - yarn run coveralls
 
 notifications:
   email: false

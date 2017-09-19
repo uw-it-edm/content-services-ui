@@ -6,7 +6,9 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "test": "ng test --watch=false",
+    "test": "ng test --no-watch",
+    "test-cover": "rm -rf ./coverage && ng test --no-watch --code-coverage",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
@@ -22,6 +24,7 @@
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@angular/router": "^4.0.0",
     "core-js": "^2.4.1",
+    "coveralls": "^2.13.1",
     "rxjs": "^5.4.1",
     "zone.js": "^0.8.14"
   },
