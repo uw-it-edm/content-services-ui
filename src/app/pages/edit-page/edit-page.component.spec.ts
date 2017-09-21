@@ -14,6 +14,7 @@ import { By, Title } from '@angular/platform-browser';
 import { EditPageConfig } from '../../model/config/edit-page-config';
 import { Config } from '../../model/config/config';
 import { PageConfig } from '../../model/config/page-config';
+import { SafeUrlPipe } from '../../util/safe-url.pipe';
 
 class MockContentService {
   read(itemId: string): Observable<ContentResult> {
@@ -40,7 +41,7 @@ describe('EditPageComponent', () => {
     async(() => {
       TestBed.configureTestingModule({
         imports: [HttpModule],
-        declarations: [EditPageComponent, ContentMetadataComponent, ContentViewComponent],
+        declarations: [EditPageComponent, ContentMetadataComponent, ContentViewComponent, SafeUrlPipe],
         providers: [
           { provide: ActivatedRoute, useValue: activatedRoute },
           { provide: ContentService, useValue: contentServiceSpy },

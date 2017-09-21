@@ -2,7 +2,7 @@
   <ul *ngIf="pageConfig.fieldsToDisplay && contentItem" class="fields">
     <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
       <md-form-field>
-        <input mdInput placeholder="{{fieldToDisplay}}" value="{{ contentItem.metadata[fieldToDisplay] }}">
+        <input mdInput name="{{fieldToDisplay}}" placeholder="{{fieldToDisplay}}" value="{{ contentItem.metadata[fieldToDisplay] }}">
       </md-form-field>
 
       <!--<label for="{{fieldToDisplay}}">{{fieldToDisplay}}</label> <br/>-->

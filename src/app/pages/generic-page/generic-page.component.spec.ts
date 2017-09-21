@@ -15,6 +15,7 @@ import { Observable } from 'rxjs/Observable';
 import { SearchResults } from '../../model/search-result';
 import { HttpModule } from '@angular/http';
 import { SearchModel } from '../../model/search/search-model';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 let activatedRoute: ActivatedRouteStub;
 let searchServiceSpy: MockSearchService;
@@ -36,7 +37,7 @@ describe('GenericPageComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [MaterialConfigModule, HttpModule],
+        imports: [NoopAnimationsModule, MaterialConfigModule, HttpModule],
         declarations: [GenericPageComponent, SearchBoxComponent, SearchResultsComponent],
         providers: [
           { provide: ActivatedRoute, useValue: activatedRoute },

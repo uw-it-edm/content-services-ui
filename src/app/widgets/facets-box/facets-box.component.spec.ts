@@ -7,6 +7,7 @@ import { SearchModel } from '../../model/search/search-model';
 import 'rxjs/add/observable/of';
 import { FacetsBoxComponent } from './facets-box.component';
 import { PageConfig } from '../../model/config/page-config';
+import { SearchResults } from '../../model/search-result';
 
 describe('FacetsBoxComponent', () => {
   let component: FacetsBoxComponent;
@@ -28,6 +29,10 @@ describe('FacetsBoxComponent', () => {
     searchModel.stringQuery = 'iSearch';
     component.searchModel$ = Observable.of(searchModel);
     component.pageConfig = new PageConfig();
+
+    const searchResults = new SearchResults();
+    component.searchResults$ = Observable.of(searchResults);
+
     fixture.detectChanges();
   });
 

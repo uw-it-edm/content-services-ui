@@ -6,7 +6,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "test": "ng test --watch=false",
+    "test": "ng test --watch=false --sourcemaps=false",
     "lint": "ng lint --type-check",
     "e2e": "ng e2e",
     "validate": "npm-run-all --parallel test lint",

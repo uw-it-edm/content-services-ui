@@ -3,6 +3,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ContentMetadataComponent } from './content-metadata.component';
 import { EditPageConfig } from '../../model/config/edit-page-config';
 import { ContentResult } from '../../model/content-result';
+import { MdFormFieldModule, MdInputModule } from '@angular/material';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ContentMetadataComponent', () => {
   let component: ContentMetadataComponent;
@@ -11,6 +13,7 @@ describe('ContentMetadataComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
+        imports: [NoopAnimationsModule, MdFormFieldModule, MdInputModule],
         declarations: [ContentMetadataComponent]
       }).compileComponents();
     })
