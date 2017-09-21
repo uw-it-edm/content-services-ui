@@ -2,12 +2,17 @@
   edit-page works!
 </p>
 
+<div class="form-group col-sm-3">
+  <label for="">Upload file</label>
+  <input type="file" (change)="fileChange($event)">
+</div>
 
-<div *ngIf="contentItem">
 
-  <label>ID:</label> {{contentItem.id}}  <br/>
-  <label>LABEL:</label> {{contentItem.label}}
-
+<div>
+  <div *ngIf="contentItem">
+    <label>ID:</label> {{contentItem.id }} <br/>
+    <label>LABEL:</label> {{contentItem.label}}
+  </div>
 
 
   <div class="container">
@@ -22,8 +27,11 @@
       </div>
       <div fxFlex="70">
         <app-content-view
-          *ngIf="pageConfig.viewPanel && contentItem"
-          [inputUrl]="viewFileUrl"
+          *ngIf="pageConfig.viewPanel"
+          [contentItemUrl]="contentItemUrl"
+          [pdfPreviewConfig]="pdfPreviewConfig"
+          [displayType]="displayType"
+          [imagePreviewUrl]="imagePreviewUrl"
         >
         </app-content-view>
       </div>

@@ -61,7 +61,7 @@ export class ContentMetadataComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.editContentItemForm) {
+    if (this.editContentItemForm && this.contentItem) {
       this.editContentItemForm.reset({
         label: this.contentItem.label
       });

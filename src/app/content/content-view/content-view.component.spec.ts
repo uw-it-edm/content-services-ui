@@ -17,7 +17,7 @@ describe('ContentViewComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ContentViewComponent);
     component = fixture.componentInstance;
-    component.inputUrl = 'testUrl';
+    component.contentItemUrl = 'testUrl';
     fixture.detectChanges();
   });
 
@@ -25,7 +25,7 @@ describe('ContentViewComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have an initialized inputUrl', () => {
-    expect((component.inputUrl = 'testUrl'));
+  it('should have an initialized contentItemUrl', () => {
+    expect((component.contentItemUrl = 'testUrl'));
   });
 });
