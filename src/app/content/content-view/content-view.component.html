@@ -2,35 +2,4 @@
   content-view works!
 </p>
 
-<div [ngSwitch]="displayType">
-  <div *ngSwitchCase="'pdfPreview'" class="container">
-    <p>pdf loaded!</p>
-    <div class="row">
-      <div class="col-md-5">
-        <div class="thumbnail" style="width: 150px;height: 200px;">
-          <pdf-viewer [src]="pdfPreviewConfig.source"
-                      [page]="pdfPreviewConfig.pageNumber"
-                      [original-size]="pdfPreviewConfig.originalSize"
-                      style="display: block;"
-          ></pdf-viewer>
-        </div>
-        <br>
-      </div>
-    </div>
-  </div>
-  <div *ngSwitchCase="'image'">
-    <p>displaying image</p>
-    <img [src]="imagePreviewUrl">
-  </div>
-  <div *ngSwitchCase="'unknown'">
-    <p>unknown file-type unable to show preview</p>
-  </div>
-  <div *ngSwitchCase="'content-item'">
-    <p>displaying content-item</p>
-    <iframe width="100%" height="300" [src]="url"></iframe>
-  </div>
-
-</div>
-
-
-
+<iframe width="100%" height="300" [src]="url"></iframe>

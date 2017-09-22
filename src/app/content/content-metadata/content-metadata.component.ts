@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { ContentItem } from '../shared/model/content-item';
 import { EditPageConfig } from '../../core/shared/model/edit-page-config';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { isNullOrUndefined } from 'util';
 
 @Component({
@@ -12,12 +12,9 @@ import { isNullOrUndefined } from 'util';
 export class ContentMetadataComponent implements OnInit, OnChanges {
   @Input() pageConfig: EditPageConfig;
   @Input() contentItem: ContentItem;
+  @Input() editContentItemForm: FormGroup;
 
-  @Output() save = new EventEmitter<ContentItem>();
-
-  editContentItemForm: FormGroup;
-
-  constructor(private fb: FormBuilder) {}
+  constructor() {}
 
   ngOnInit() {
     this.createForm();
@@ -25,10 +22,8 @@ export class ContentMetadataComponent implements OnInit, OnChanges {
   }
 
   private createForm() {
-    this.editContentItemForm = this.fb.group({
-      label: ['', Validators.required],
-      metadata: this.generateDisplayedMetadataGroup()
-    });
+    this.editContentItemForm.setControl('metadata', this.generateDisplayedMetadataGroup());
+    this.editContentItemForm.setControl('label', new FormControl('', Validators.required));
     this.editContentItemForm.get('label').disable();
   }
 
@@ -44,27 +39,9 @@ export class ContentMetadataComponent implements OnInit, OnChanges {
     return new FormGroup(group);
   }
 
-  onSubmit() {
-    this.contentItem = this.prepareSaveContentItem();
-    this.save.emit(this.contentItem);
-  }
-
-  private prepareSaveContentItem(): ContentItem {
-    const formModel = this.editContentItemForm.value;
-    const updatedContentItem = new ContentItem(this.contentItem);
-
-    // copy formModel updates into contentItem
-    for (const key of Object.keys(formModel.metadata)) {
-      updatedContentItem.metadata[key] = formModel.metadata[key];
-    }
-    return updatedContentItem;
-  }
-
   ngOnChanges() {
     if (this.editContentItemForm && this.contentItem) {
-      this.editContentItemForm.reset({
-        label: this.contentItem.label
-      });
+      this.editContentItemForm.setControl('label', new FormControl(this.contentItem.label, Validators.required));
       this.editContentItemForm.setControl('metadata', this.generateDisplayedMetadataGroup(this.contentItem.metadata));
     }
   }

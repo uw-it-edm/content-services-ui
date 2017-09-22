@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { PdfPreviewConfig } from '../shared/model/pdf-preview-config';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-content-view',
@@ -10,15 +10,14 @@ import { PdfPreviewConfig } from '../shared/model/pdf-preview-config';
 export class ContentViewComponent implements OnInit {
   url: SafeUrl;
 
-  @Input() pdfPreviewConfig: PdfPreviewConfig;
-  @Input() contentItemUrl: string;
-  @Input() displayType: string;
-  @Input() imagePreviewUrl: string;
+  @Input() inputUrl: Observable<string>;
 
   constructor(private sanitizer: DomSanitizer) {}
 
   ngOnInit() {
-    console.log('Working url: ', this.contentItemUrl);
-    this.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.contentItemUrl);
+    console.log('Working url: ', this.inputUrl);
+    this.inputUrl.subscribe(inputUrl => {
+      this.url = this.sanitizer.bypassSecurityTrustResourceUrl(inputUrl);
+    });
   }
 }

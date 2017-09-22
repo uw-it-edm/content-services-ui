@@ -1,21 +1,22 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { EditPageConfig } from '../../core/shared/model/edit-page-config';
 import { ActivatedRoute } from '@angular/router';
 
 import { ContentService } from '../shared/content.service';
 import { Config } from '../../core/shared/model/config';
-import { Title } from '@angular/platform-browser';
+import { DomSanitizer, Title } from '@angular/platform-browser';
 import 'rxjs/add/operator/takeUntil';
 import { Subject } from 'rxjs/Subject';
 import { ContentItem } from '../shared/model/content-item';
-import { PdfPreviewConfig } from '../shared/model/pdf-preview-config';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import 'rxjs/add/observable/of';
 
 @Component({
   selector: 'app-edit-page',
   templateUrl: './edit-page.component.html',
   styleUrls: ['./edit-page.component.css']
 })
-export class EditPageComponent implements OnInit, OnDestroy {
+export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
   config: Config;
   pageConfig: EditPageConfig;
   page: string;
@@ -23,15 +24,18 @@ export class EditPageComponent implements OnInit, OnDestroy {
 
   contentItem: ContentItem;
   contentItemUrl: string;
-  displayType: string;
-  pdfPreviewConfig: PdfPreviewConfig;
-  imagePreviewUrl: string;
-
+  displayUrl$: Subject<string> = new Subject(); // TODO: urlTo be displayed
   private componentDestroyed = new Subject();
 
-  constructor(private route: ActivatedRoute, private titleService: Title, private contentService: ContentService) {}
+  editContentItemForm: FormGroup;
 
-  /////////
+  constructor(
+    private route: ActivatedRoute,
+    private titleService: Title,
+    private contentService: ContentService,
+    private fb: FormBuilder,
+    private sanitizer: DomSanitizer
+  ) {}
 
   file: File; // TODO: should i use this?
   // TODO: confirm that we're looking at the local file
@@ -57,57 +61,29 @@ export class EditPageComponent implements OnInit, OnDestroy {
 
   _handleReaderLoaded(e) {
     const reader = e.target;
-
-    const fileType = this.determineFileType();
-    if (fileType === 'pdf') {
-      this.pdfPreviewConfig.source = reader.result;
-      this.pdfPreviewConfig.isLoaded = true;
-    } else if (fileType === 'image') {
-      this.imagePreviewUrl = reader.result;
-    }
-    this.updateDisplayType();
+    this.displayUrl$.next(reader.result);
+    // const fileType = this.determineFileType();
+    // if (this.file.type === 'application/pdf') {
+    //   this.displayUrl$.next(reader.result);
+    // } else if (this.file.type.match('image*')) { // TODO: don't like this hack
+    //   // TODO: Hack: this is not really valid we want to Detect the file type of a Buffer/Uint8Array
+    //   this.displayUrl$.next(reader.result);
+    // } else {
+    //   this.displayUrl$.next(reader.result); // TODO what should go here?
+    // }
   }
 
   private clearPreview() {
-    this.imagePreviewUrl = undefined;
-    this.pdfPreviewConfig.isLoaded = false;
-    this.updateDisplayType();
+    this.displayUrl$.next(this.contentItemUrl);
   }
 
-  // TODO: detect filetype (if pdf, or image , or text or? )
-  // TODO: try using https://github.com/sindresorhus/image-type
-  private determineFileType(): string {
-    let fileType;
-    if (this.file) {
-      if (this.file.type === 'application/pdf') {
-        fileType = 'pdf';
-      } else if (this.file.type.match('image*')) {
-        // TODO: Hack: this is not really valid we want to Detect the file type of a Buffer/Uint8Array
-        fileType = 'image';
-      } else {
-        fileType = 'unknown';
-      }
-    }
-    return fileType;
-  }
-
-  private updateDisplayType() {
-    const fileType = this.determineFileType(); // TODO: i don't like calling this so much
-    if (this.pdfPreviewConfig.isLoaded) {
-      this.displayType = 'pdfPreview';
-    } else if (this.imagePreviewUrl) {
-      this.displayType = 'image';
-    } else if (fileType === 'unknown') {
-      this.displayType = 'unknown';
-    } else {
-      this.displayType = 'content-item';
-    }
-  }
-
-  ///
   ngOnInit() {
     console.log('init edit page component');
-    this.pdfPreviewConfig = new PdfPreviewConfig();
+
+    // form
+    this.createForm();
+
+    // content-item
     this.route.paramMap.takeUntil(this.componentDestroyed).subscribe(params => {
       this.page = params.get('page');
       this.id = params.get('id');
@@ -121,13 +97,19 @@ export class EditPageComponent implements OnInit, OnDestroy {
           .read(this.id)
           .takeUntil(this.componentDestroyed)
           .subscribe(
-            contentItem => (this.contentItem = contentItem),
+            contentItem => {
+              this.contentItem = contentItem;
+              this.contentItemUrl = this.contentService.getFileUrl(this.id, true);
+              this.displayUrl$.next(this.contentItemUrl); // TODO: initialize? should this be here?
+            },
             err => console.error('There was an error reading the content-item:', err) // TODO: Handle error
           );
-        this.contentItemUrl = this.contentService.getFileUrl(this.id, true);
       });
     });
-    this.updateDisplayType();
+  }
+
+  private createForm() {
+    this.editContentItemForm = this.fb.group({}); // initialize empty form
   }
 
   onSave(savedItem: ContentItem) {
@@ -137,10 +119,33 @@ export class EditPageComponent implements OnInit, OnDestroy {
       .subscribe(updatedContentItem => (this.contentItem = updatedContentItem));
   }
 
+  onSubmit() {
+    this.contentItem = this.prepareSaveContentItem();
+    this.onSave(this.contentItem);
+  }
+
+  private prepareSaveContentItem(): ContentItem {
+    const formModel = this.editContentItemForm.value;
+    const updatedContentItem = new ContentItem(this.contentItem);
+
+    // copy formModel updates into contentItem
+    for (const key of Object.keys(formModel.metadata)) {
+      updatedContentItem.metadata[key] = formModel.metadata[key];
+    }
+
+    return updatedContentItem;
+  }
+
   ngOnDestroy(): void {
     // prevent memory leak when component destroyed
     console.log('unsubscribe edit page');
     this.componentDestroyed.next();
     this.componentDestroyed.complete();
+  }
+
+  ngOnChanges() {
+    if (this.editContentItemForm && this.contentItem) {
+      this.editContentItemForm.reset();
+    }
   }
 }

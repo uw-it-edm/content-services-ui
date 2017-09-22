@@ -199,10 +199,6 @@
   version "6.0.88"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.88.tgz#f618f11a944f6a18d92b5c472028728a3e3d4b66"
 
-"@types/pdf@0.0.31":
-  version "0.0.31"
-  resolved "https://registry.yarnpkg.com/@types/pdf/-/pdf-0.0.31.tgz#c0b210ce752fd59ad8331be5d4b55cf369141b93"
-
 "@types/q@^0.0.32":
   version "0.0.32"
   resolved "https://registry.yarnpkg.com/@types/q/-/q-0.0.32.tgz#bd284e57c84f1325da702babfc82a5328190c0c5"
@@ -3678,13 +3674,6 @@ negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
 
-ng2-pdf-viewer@^1.2.6:
-  version "1.2.6"
-  resolved "https://registry.yarnpkg.com/ng2-pdf-viewer/-/ng2-pdf-viewer-1.2.6.tgz#e41c6c9bef273b293aaa300508cd66eddfb85960"
-  dependencies:
-    "@types/pdf" "0.0.31"
-    pdfjs-dist "^1.9.524"
-
 no-case@^2.2.0:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/no-case/-/no-case-2.3.1.tgz#7aeba1c73a52184265554b7dc03baf720df80081"
@@ -4166,7 +4155,7 @@ pbkdf2@^3.0.3:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-pdfjs-dist@^1.9.524:
+pdfjs-dist@^1.9.583:
   version "1.9.583"
   resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-1.9.583.tgz#3b7a81bbf4ef4337b487f3d2a189af8336de424b"
   dependencies:
