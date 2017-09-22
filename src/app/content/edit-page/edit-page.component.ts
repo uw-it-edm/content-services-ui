@@ -4,11 +4,11 @@ import { ActivatedRoute } from '@angular/router';
 
 import { ContentService } from '../shared/content.service';
 import { Config } from '../../core/shared/model/config';
-import { DomSanitizer, Title } from '@angular/platform-browser';
+import { Title } from '@angular/platform-browser';
 import 'rxjs/add/operator/takeUntil';
 import { Subject } from 'rxjs/Subject';
 import { ContentItem } from '../shared/model/content-item';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import 'rxjs/add/observable/of';
 
 @Component({
@@ -33,8 +33,7 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
     private route: ActivatedRoute,
     private titleService: Title,
     private contentService: ContentService,
-    private fb: FormBuilder,
-    private sanitizer: DomSanitizer
+    private fb: FormBuilder
   ) {}
 
   file: File; // TODO: should i use this?
@@ -44,7 +43,10 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
     this.clearPreview();
 
     if (fileList.length > 0) {
+      this.editContentItemForm.get('uploadFile').markAsDirty();
       this.handleInputChange(event);
+    } else {
+      this.editContentItemForm.get('uploadFile').markAsPristine();
     }
   }
 
@@ -62,15 +64,6 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
   _handleReaderLoaded(e) {
     const reader = e.target;
     this.displayUrl$.next(reader.result);
-    // const fileType = this.determineFileType();
-    // if (this.file.type === 'application/pdf') {
-    //   this.displayUrl$.next(reader.result);
-    // } else if (this.file.type.match('image*')) { // TODO: don't like this hack
-    //   // TODO: Hack: this is not really valid we want to Detect the file type of a Buffer/Uint8Array
-    //   this.displayUrl$.next(reader.result);
-    // } else {
-    //   this.displayUrl$.next(reader.result); // TODO what should go here?
-    // }
   }
 
   private clearPreview() {
@@ -109,19 +102,20 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private createForm() {
-    this.editContentItemForm = this.fb.group({}); // initialize empty form
+    this.editContentItemForm = this.fb.group({ uploadFile: new FormControl('') });
+    // initialize empty form
   }
 
-  onSave(savedItem: ContentItem) {
+  onSave(savedItem: ContentItem, file?: File) {
     this.contentService
-      .update(savedItem)
+      .update(savedItem, file)
       .takeUntil(this.componentDestroyed)
       .subscribe(updatedContentItem => (this.contentItem = updatedContentItem));
   }
 
   onSubmit() {
     this.contentItem = this.prepareSaveContentItem();
-    this.onSave(this.contentItem);
+    this.onSave(this.contentItem, this.file);
   }
 
   private prepareSaveContentItem(): ContentItem {

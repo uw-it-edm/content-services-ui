@@ -15,10 +15,9 @@
 
       <div fxLayout="row">
         <div fxFlex="100">
-
           <label for="uploadFile">Upload file</label>
-          <input name="uploadFile" type="file" (change)="fileChange($event)">
-
+          <input name="uploadFile" type="file" (change)="fileChange($event)"
+                 formControlName="uploadFile">
         </div>
       </div>
       <div fxLayout="row">

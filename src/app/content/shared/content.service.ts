@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { environment } from '../../../environments/environment';
 import { UserService } from '../../user/shared/user.service';
 import { UrlUtilities } from '../../core/util/url-utilities';
+import { isNullOrUndefined } from 'util';
 
 @Injectable()
 export class ContentService {
@@ -16,8 +17,8 @@ export class ContentService {
   constructor(private http: Http, private userService: UserService) {}
 
   public read(itemId: string): Observable<ContentItem> {
-    const url = this.baseUrl + this.itemPathFragment + itemId;
-    const options = this.buildRequestOptions();
+    const url: string = this.baseUrl + this.itemPathFragment + itemId;
+    const options: RequestOptions = this.buildRequestOptions();
 
     console.log('Reading content URL:', url);
     return this.http.get(url, options).map(response => {
@@ -26,13 +27,21 @@ export class ContentService {
     }); // TODO: handle failure
   }
 
-  public update(contentItem: ContentItem): Observable<ContentItem> {
+  public update(contentItem: ContentItem, file: File): Observable<ContentItem> {
     console.log('Updating: ' + JSON.stringify(contentItem));
-    const url = this.baseUrl + this.itemPathFragment + contentItem.id;
-    const options = this.buildRequestOptions();
+    const url: string = this.baseUrl + this.itemPathFragment + contentItem.id;
+    const options: RequestOptions = this.buildRequestOptions();
 
-    const formData = new FormData();
-    const blob = new Blob([JSON.stringify(contentItem)], { type: 'application/json' });
+    const formData: FormData = new FormData();
+    if (!isNullOrUndefined(file)) {
+      formData.append('attachment', file);
+
+      // TODO Updating revisionId
+      let revisionId: number = contentItem.metadata['RevisionId'];
+      revisionId += 1;
+      contentItem.metadata['RevisionId'] = revisionId;
+    }
+    const blob: Blob = new Blob([JSON.stringify(contentItem)], { type: 'application/json' });
     formData.append('document', blob);
 
     return this.http.post(url, formData, options).map(response => {
