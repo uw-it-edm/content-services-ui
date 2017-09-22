@@ -1,0 +1,55 @@
+<form [formGroup]="editContentItemForm" (ngSubmit)="onSubmit()" novalidate class="cs-content-metadata">
+  <ul *ngIf="pageConfig?.fieldsToDisplay && contentItem" class="fields">
+    <li>
+      <md-form-field>
+        <input mdInput formControlName="label" name="label" placeholder="label" [value]="contentItem.label">
+      </md-form-field>
+    </li>
+    <div formGroupName="metadata">
+      <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
+        <md-form-field>
+          <input mdInput [formControlName]="fieldToDisplay" [name]="fieldToDisplay" [placeholder]="fieldToDisplay"
+                 value="{{ contentItem.metadata[fieldToDisplay] }}">
+        </md-form-field>
+      </li>
+    </div>
+  </ul>
+  <div *ngIf="pageConfig?.buttons" class="button-row" style="margin-bottom: 1em">
+    <button *ngFor="let button of pageConfig?.buttons" md-raised-button (click)="buttonPress(button)" [color]="button.color">{{button.label}}</button>
+  </div>
+</form>
+
+<!--
+<p>
+  content-metadata works!
+</p>
+<div>
+  <form [formGroup]="editContentItemForm" (ngSubmit)="onSubmit()" novalidate>
+    <label class="center-block">Label:
+      <input class="form-control" name="label" formControlName="label">
+    </label>
+
+    <div formGroupName="metadata" class="well well-lg">
+      <h4>Metadata</h4>
+      <div class="form-group">
+        <div *ngIf="pageConfig.fieldsToDisplay && contentItem">
+          <div *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
+            <label class="center-block">{{fieldToDisplay}}:
+              <input class="form-control" [name]="fieldToDisplay" [formControlName]="fieldToDisplay">
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 1em">
+      <button type="submit"
+              [disabled]="editContentItemForm.pristine" class="btn btn-success">Save</button>
+    </div>
+
+  </form>
+  <p>Form value: {{ editContentItemForm.value | json }}</p>
+  <p>Form status: {{ editContentItemForm.status | json }}</p>
+
+</div>
+-->

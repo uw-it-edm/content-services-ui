@@ -3,34 +3,24 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { CommonModule } from '@angular/common';
 
-import { TenantComponent } from '../pages/tenant/tenant.component';
-import { GenericPageComponent } from '../pages/generic-page/generic-page.component';
-import { PageNotFoundComponent } from '../pages/page-not-found-component';
-import { ConfigResolver } from './config-resolver.service';
-import { ConfigService } from '../services/config.service';
-import { UserService } from '../user/user.service';
-import { AuthGardService } from './auth-gard.service';
-import { LoginComponent } from '../pages/login/login.component';
+import { TenantComponent } from '../user/tenant/tenant.component';
+import { SearchPageComponent } from '../search/search-page/search-page.component';
+import { PageNotFoundComponent } from './page-not-found-component';
+import { ConfigResolver } from './shared/config-resolver.service';
+import { UserService } from '../user/shared/user.service';
+import { AuthGardService } from './shared/auth-gard.service';
+import { LoginComponent } from '../user/login/login.component';
 import { MaterialConfigModule } from './material-config.module';
-import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { environment } from '../../environments/environment';
-import { HeaderComponent } from '../widgets/header/header.component';
 import { AppComponent } from '../app.component';
-import { GlobalEventsManagerService } from '../services/global-events-manager.service';
-import { SearchResultsComponent } from '../widgets/search-results/search-results.component';
-import { SearchService } from '../services/search.service';
 import { HttpModule } from '@angular/http';
-import { SearchBoxComponent } from '../widgets/search-box/search-box.component';
-import { FacetsBoxComponent } from '../widgets/facets-box/facets-box.component';
-import { EditPageComponent } from '../pages/edit-page/edit-page.component';
-import { ContentViewComponent } from '../widgets/content-view/content-view.component';
-import { ContentMetadataComponent } from '../widgets/content-metadata/content-metadata.component';
-import { ContentService } from '../services/content.service';
-
-import { PdfViewerComponent } from 'ng2-pdf-viewer';
-import { SafeUrlPipe } from '../util/safe-url.pipe';
+import { EditPageComponent } from '../content/edit-page/edit-page.component';
+import { SearchModule } from '../search/search.module';
+import { ContentModule } from '../content/content.module';
+import { SharedModule } from '../shared/shared.module';
+import { UserModule } from '../user/user.module';
 
 let enableRouterTracing = true;
 if (environment.production) {
@@ -50,7 +40,7 @@ const appRoutes: Routes = [
     children: [
       {
         path: ':page',
-        component: GenericPageComponent,
+        component: SearchPageComponent,
         resolve: {
           config: ConfigResolver
         }
@@ -80,35 +70,15 @@ const appRoutes: Routes = [
     ),
     BrowserModule,
     BrowserAnimationsModule,
-    FormsModule,
     MaterialConfigModule,
-    HttpModule
+    HttpModule,
+    SearchModule,
+    ContentModule,
+    SharedModule,
+    UserModule
   ],
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    PageNotFoundComponent,
-    PdfViewerComponent,
-    TenantComponent,
-    GenericPageComponent,
-    HeaderComponent,
-    SearchResultsComponent,
-    SearchBoxComponent,
-    FacetsBoxComponent,
-    EditPageComponent,
-    ContentMetadataComponent,
-    ContentViewComponent,
-    SafeUrlPipe
-  ],
+  declarations: [AppComponent, PageNotFoundComponent],
   exports: [RouterModule],
-  providers: [
-    ConfigService,
-    ConfigResolver,
-    AuthGardService,
-    UserService,
-    GlobalEventsManagerService,
-    SearchService,
-    ContentService
-  ]
+  providers: [ConfigResolver, AuthGardService, UserService]
 })
 export class RoutingModule {}

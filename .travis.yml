@@ -11,11 +11,14 @@ before_install:
 jobs:
   include:
     - stage: test
-      script: yarn test
+      script: yarn run test-cover
     - stage: test
       script: yarn e2e
     - stage: test
       script: yarn build -- --prod --env=travis
+
+after_success:
+  - yarn run coveralls
 
 notifications:
   email: false
