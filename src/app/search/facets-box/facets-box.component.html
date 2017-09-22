@@ -9,12 +9,6 @@
         <md-list dense>
           <md-list-item *ngFor="let facetResult of searchResults?.facets.get(facetConfig.key).buckets"><a (click)="addFacetFilter(facetConfig.key,facetResult.key)">{{facetResult.key}} ({{facetResult.count}})</a></md-list-item>
         </md-list>
-
-        <!--md-selection-list dense>
-          <md-list-option *ngFor="let facetResult of searchResults?.facets.get(facetConfig.key).buckets" (selectChange)="select($event)">
-            {{facetResult.key}} ({{facetResult.count}})
-          </md-list-option>
-        </md-selection-list-->
       </md-card-content>
     </md-card>
   </div>

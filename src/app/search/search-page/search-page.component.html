@@ -1,13 +1,8 @@
-<!--<p>-->
-  <!--generic-page display page : <strong>{{pageConfig.pageName}} - {{page}}</strong>!-->
-  <!--{{pageConfig |json}}-->
-<!--</p>-->
-                               
-<div [ngClass]="pageConfig?.theme" class="xcontainer">
+<div [ngClass]="pageConfig?.theme">
   <div fxLayout="row" class="cs-generic-header">
     <div fxFlex="20">
     </div>
-    <div fxFlex>
+    <div fxFlex="70">
       <app-search-box
         [searchModel$]="searchModel$"
         [pageConfig]="pageConfig"
@@ -15,9 +10,13 @@
       >
       </app-search-box>
     </div>
+    <div fxFlex="10" style="text-align: right">
+      <button md-button>
+          <span>Upload</span>&nbsp;<md-icon>backup</md-icon>
+      </button>
+    </div>
   </div>
 
-  <!--<hr/>-->
   <div fxLayout="row" class="cs-generic-body">
     <div fxFlex="20">
       <app-facets-box

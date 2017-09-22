@@ -6,15 +6,8 @@ import { SearchResults } from './search-result';
 import { ResultRow } from './result-row';
 import { MdPaginator } from '@angular/material';
 
-export interface Element {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
 export class SearchDataSource extends DataSource<ResultRow> {
-  constructor(private searchResults$: Observable<SearchResults>, private paginator: MdPaginator) {
+  constructor(private searchResults$: Observable<SearchResults>, private paginators: Array<MdPaginator>) {
     super();
   }
 

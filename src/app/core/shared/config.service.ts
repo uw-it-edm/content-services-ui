@@ -31,6 +31,7 @@ export class ConfigService {
       "pages": {
         "google-search": {
           "pageName": "google search page",
+          "theme": "uw-default",
           "fieldsToDisplay" : ["LastModifier", "MimeType"],
            "secondSearchBox": true,
            "facetsConfig":{
@@ -52,6 +53,7 @@ export class ConfigService {
            },
            "editPageConfig": {
               "pageName": "Edit Content Item",
+              "theme": "uw-default",
               "fieldsToDisplay" : ["CategoryId","ProfileId","OriginalFileName","PublishStatus","LastModifiedDate"],
               "viewPanel": true
            }

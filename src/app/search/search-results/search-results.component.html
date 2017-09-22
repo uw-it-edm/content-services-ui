@@ -1,47 +1,37 @@
-<!--
 <div>
-  <ul *ngIf="searchResults">
-    Number of Results : {{searchResults.total}}
-    <li *ngFor="let result of searchResults.results | slice:0:9">
+  <md-paginator #topPaginator
+                [pageIndex]="0"
+                [pageSize]="25"
+                [pageSizeOptions]="[5, 10, 25, 100]">
+  </md-paginator>
 
-      <a href="{{ result.id }}" target="_blank">
-        {{ result.id }} - {{ result.label }} -
-      </a>
-      <span *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
-        {{ result.metadata[fieldToDisplay]}} -
-      </span>
-    </li>
-  </ul>
+  <md-table #table [dataSource]="dataSource" mdSort>
+
+    <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+
+    <ng-container mdColumnDef="id">
+      <md-header-cell *mdHeaderCellDef md-sort-header> Id </md-header-cell>
+      <md-cell *mdCellDef="let element">{{element.id}}</md-cell>
+    </ng-container>
+
+    <ng-container mdColumnDef="label">
+      <md-header-cell *mdHeaderCellDef md-sort-header> Name </md-header-cell>
+      <md-cell *mdCellDef="let element"><a routerLink="edit/{{element.id}}">{{element.label}}</a></md-cell>
+    </ng-container>
+
+    <ng-container *ngFor="let col of pageConfig.fieldsToDisplay" mdColumnDef={{col}}>
+      <md-header-cell  *mdHeaderCellDef md-sort-header>{{ col }}</md-header-cell>
+      <md-cell *mdCellDef="let element">{{element.metadata[col]}}</md-cell>
+    </ng-container>
+
+    <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+    <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
+  </md-table>
+
+  <md-paginator #bottomPaginator
+                [pageIndex]="0"
+                [pageSize]="25"
+                [pageSizeOptions]="[5, 10, 25, 100]">
+  </md-paginator>
 </div>
--->
-
-<md-table #table [dataSource]="dataSource" mdSort>
-
-  <!--- Note that these columns can be defined in any order.
-      The actual rendered columns are set as a property on the row definition" -->
-  
-  <ng-container mdColumnDef="id">
-    <md-header-cell *mdHeaderCellDef md-sort-header> Id </md-header-cell>
-    <md-cell *mdCellDef="let element">{{element.id}}</md-cell>
-  </ng-container>
-
-  <ng-container mdColumnDef="label">
-    <md-header-cell *mdHeaderCellDef md-sort-header> Name </md-header-cell>
-    <md-cell *mdCellDef="let element"><a routerLink="edit/{{element.id}}">{{element.label}}</a></md-cell>
-  </ng-container>
-
-  <ng-container *ngFor="let col of pageConfig.fieldsToDisplay" mdColumnDef={{col}}>
-    <md-header-cell  *mdHeaderCellDef md-sort-header>{{ col }}</md-header-cell>
-    <md-cell *mdCellDef="let element">{{element.metadata[col]}}</md-cell>
-  </ng-container>
-
-  <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
-  <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
-</md-table>
-
-<md-paginator #paginator
-              [pageIndex]="0"
-              [pageSize]="25"
-              [pageSizeOptions]="[5, 10, 25, 100]">
-</md-paginator>
-

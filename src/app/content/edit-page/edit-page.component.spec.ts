@@ -33,6 +33,7 @@ describe('EditPageComponent', () => {
   let fixture: ComponentFixture<EditPageComponent>;
   let activatedRoute: ActivatedRouteStub;
   let contentServiceSpy: MockContentService;
+  const editPageConfig = new EditPageConfig();
 
   beforeEach(() => {
     activatedRoute = new ActivatedRouteStub();
@@ -59,8 +60,8 @@ describe('EditPageComponent', () => {
     async(() => {
       activatedRoute.testParamMap = { page: 'test-page' };
 
-      const editPageConfig = new EditPageConfig();
       editPageConfig.pageName = 'test-edit-page';
+      editPageConfig.viewPanel = true;
 
       const searchPageConfig = new PageConfig();
       searchPageConfig.pageName = 'test-page';
@@ -100,5 +101,22 @@ describe('EditPageComponent', () => {
   it('should have the title set to the page name', () => {
     const title = fixture.debugElement.injector.get(Title);
     expect(title.getTitle()).toBe('test-edit-page');
+  });
+
+  it('should display the content metadata component when a content item exists', () => {
+    const contentArea = fixture.debugElement.nativeElement.querySelectorAll('app-content-metadata');
+    expect(contentArea.length).toBe(1);
+  });
+
+  it('should display the content view component when a content item exists and view panel is true', () => {
+    editPageConfig.viewPanel = true;
+    const contentArea = fixture.debugElement.nativeElement.querySelectorAll('app-content-view');
+    expect(contentArea.length).toBe(1);
+  });
+
+  it('should not display the content view component when view panel is false', () => {
+    editPageConfig.viewPanel = false;
+    const contentArea = fixture.debugElement.nativeElement.querySelectorAll('app-content-view');
+    expect(contentArea.length).toBe(1);
   });
 });
