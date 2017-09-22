@@ -4,7 +4,7 @@ import { SearchConfig } from './search-config';
 
 export class PageConfig {
   pageName: string;
-
+  theme: string;
   fieldsToDisplay: Array<string> = [];
 
   facetsConfig: FacetsConfig = new FacetsConfig();
