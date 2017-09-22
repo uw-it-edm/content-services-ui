@@ -199,6 +199,10 @@
   version "6.0.88"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.88.tgz#f618f11a944f6a18d92b5c472028728a3e3d4b66"
 
+"@types/pdf@0.0.31":
+  version "0.0.31"
+  resolved "https://registry.yarnpkg.com/@types/pdf/-/pdf-0.0.31.tgz#c0b210ce752fd59ad8331be5d4b55cf369141b93"
+
 "@types/q@^0.0.32":
   version "0.0.32"
   resolved "https://registry.yarnpkg.com/@types/q/-/q-0.0.32.tgz#bd284e57c84f1325da702babfc82a5328190c0c5"
@@ -3674,11 +3678,22 @@ negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
 
+ng2-pdf-viewer@^1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/ng2-pdf-viewer/-/ng2-pdf-viewer-1.2.5.tgz#2a96b997546cd007d4121162842444bfa7ea42d1"
+  dependencies:
+    "@types/pdf" "0.0.31"
+    pdfjs-dist "^1.9.524"
+
 no-case@^2.2.0:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/no-case/-/no-case-2.3.1.tgz#7aeba1c73a52184265554b7dc03baf720df80081"
   dependencies:
     lower-case "^1.1.1"
+
+node-ensure@^0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/node-ensure/-/node-ensure-0.0.0.tgz#ecae764150de99861ec5c810fd5d096b183932a7"
 
 node-forge@0.6.33:
   version "0.6.33"
@@ -4150,6 +4165,20 @@ pbkdf2@^3.0.3:
     ripemd160 "^2.0.1"
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
+
+pdfjs-dist@^1.9.524:
+  version "1.9.560"
+  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-1.9.560.tgz#0604933e519024d3686a523ba262bedc33952e05"
+  dependencies:
+    node-ensure "^0.0.0"
+    worker-loader "^0.8.0"
+
+pdfjs-dist@^1.9.575:
+  version "1.9.575"
+  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-1.9.575.tgz#983cab659876f02f4f6bc67251c7385528c735e2"
+  dependencies:
+    node-ensure "^0.0.0"
+    worker-loader "^0.8.0"
 
 performance-now@^0.2.0:
   version "0.2.0"
@@ -6058,6 +6087,13 @@ wordwrap@0.0.2:
 wordwrap@~0.0.2:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-0.0.3.tgz#a3d5da6cd5c0bc0008d37234bbaf1bed63059107"
+
+worker-loader@^0.8.0:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/worker-loader/-/worker-loader-0.8.1.tgz#e8e995331ea34df5bf68296824bfb7f0ad578d43"
+  dependencies:
+    loader-utils "^1.0.2"
+    schema-utils "^0.3.0"
 
 wrap-ansi@^2.0.0:
   version "2.1.0"

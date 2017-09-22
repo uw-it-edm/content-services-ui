@@ -68,4 +68,20 @@ export class ContentMetadataComponent implements OnInit, OnChanges {
       this.editContentItemForm.setControl('metadata', this.generateDisplayedMetadataGroup(this.contentItem.metadata));
     }
   }
+
+  buttonPress(button) {
+    this[button.command]();
+  }
+
+  deleteItem() {
+    alert('Delete');
+  }
+
+  publishItem() {
+    alert('Publish!');
+  }
+
+  saveItem() {
+    this.onSubmit();
+  }
 }

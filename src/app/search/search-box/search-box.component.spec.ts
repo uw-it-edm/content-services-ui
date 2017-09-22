@@ -6,6 +6,7 @@ import { MaterialConfigModule } from '../../routing/material-config.module';
 import { Observable } from 'rxjs/Observable';
 import { SearchModel } from '../shared/model/search-model';
 import 'rxjs/add/observable/of';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { PageConfig } from '../../core/shared/model/page-config';
 
 describe('SearchBoxComponent', () => {
@@ -15,7 +16,7 @@ describe('SearchBoxComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [FormsModule, MaterialConfigModule],
+        imports: [FormsModule, MaterialConfigModule, NoopAnimationsModule],
         declarations: [SearchBoxComponent]
       }).compileComponents();
     })

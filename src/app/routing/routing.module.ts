@@ -51,12 +51,15 @@ const appRoutes: Routes = [
         resolve: {
           config: ConfigResolver
         }
+      },
+      {
+        path: '**',
+        redirectTo: 'tab-search'
       }
     ]
   },
   {
     path: '**',
-    pathMatch: 'full',
     component: PageNotFoundComponent
   }
 ];

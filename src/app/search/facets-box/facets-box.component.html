@@ -1,16 +1,16 @@
-<div>
-  <label>facets : </label>
+<div class="cs-facet-box">
+
   <div *ngFor="let facetConfig of getFacetsConfig()">
-    <ul *ngIf="searchResults.facets.get(facetConfig.key)">
-      {{facetConfig.label}}:
-      <li
-
-        *ngFor="let facetResult of searchResults.facets.get(facetConfig.key).buckets">
-        <a (click)="addFacetFilter(facetConfig.key,facetResult.key)">
-          {{facetResult.key}} ({{facetResult.count}})
-        </a>
-      </li>
-
-    </ul>
+    <md-card *ngIf="searchResults?.facets.get(facetConfig.key)" class="facet-card">
+      <md-card-header>
+        <md-card-title>{{facetConfig.label}}</md-card-title>
+      </md-card-header>
+      <md-card-content>
+        <md-list dense>
+          <md-list-item *ngFor="let facetResult of searchResults?.facets.get(facetConfig.key).buckets"><a (click)="addFacetFilter(facetConfig.key,facetResult.key)">{{facetResult.key}} ({{facetResult.count}})</a></md-list-item>
+        </md-list>
+      </md-card-content>
+    </md-card>
   </div>
+  
 </div>

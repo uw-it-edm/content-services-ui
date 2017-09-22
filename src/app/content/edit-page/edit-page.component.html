@@ -1,31 +1,41 @@
-<p>
-  edit-page works!
-</p>
+<div [ngClass]="pageConfig?.theme" *ngIf="contentItem">
+  <div class="cs-edit-page">
+    <md-toolbar class="secondary-toolbar">
+      <a routerLink="/{{config.tenant}}/{{page}}">Return to Results</a>
+      <span class="cs-fill-remaining-space"></span>
+      <span class="button-row">
+        <button md-button>
+          <md-icon class="md-24" aria-label="Previous item">keyboard_arrow_up</md-icon> Previous
+        </button>
+        <span>
+          <!-- FIXME: This is a placeholder -->
+          1 of 1
+          <!-- END FIXME -->
+        </span>
+        <button md-button>
+          Next <md-icon class="md-24" aria-label="Next item">keyboard_arrow_down</md-icon>
+        </button>
+      </span>
+    </md-toolbar>
 
-
-<div *ngIf="contentItem">
-
-  <label>ID:</label> {{contentItem.id}}  <br/>
-  <label>LABEL:</label> {{contentItem.label}}
-
-
-
-  <div class="container">
-    <div fxLayout="row">
-      <div fxFlex="30">
-        <app-content-metadata
-          [contentItem]="contentItem"
-          [pageConfig]="pageConfig"
-          (save)="onSave($event)"
-        >
-        </app-content-metadata>
-      </div>
-      <div fxFlex="70">
-        <app-content-view
-          *ngIf="pageConfig.viewPanel && contentItem"
-          [inputUrl]="viewFileUrl"
-        >
-        </app-content-view>
+    <div *ngIf="contentItem" class="content-area">
+      <div fxLayout="row">
+        <div fxFlex="30">
+          <app-content-metadata
+            [contentItem]="contentItem"
+            [pageConfig]="pageConfig"
+            (save)="onSave($event)"
+          >
+          </app-content-metadata>
+        </div>
+        <div fxFlex="70">
+          <app-content-view
+            *ngIf="pageConfig.viewPanel && contentItem"
+            [item]="contentItem"
+            [(inputUrl)]="viewFileUrl"
+          >
+          </app-content-view>
+        </div>
       </div>
     </div>
   </div>

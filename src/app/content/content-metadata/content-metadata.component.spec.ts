@@ -4,6 +4,9 @@ import { ContentMetadataComponent } from './content-metadata.component';
 import { EditPageConfig } from '../../core/shared/model/edit-page-config';
 import { ContentItem } from '../shared/model/content-item';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MdButtonModule, MdFormFieldModule, MdInputModule } from '@angular/material';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ButtonConfig } from '../../core/shared/model/button-config';
 
 describe('ContentMetadataComponent', () => {
   let component: ContentMetadataComponent;
@@ -12,7 +15,7 @@ describe('ContentMetadataComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [ReactiveFormsModule],
+        imports: [NoopAnimationsModule, MdFormFieldModule, MdInputModule, MdButtonModule, ReactiveFormsModule],
         declarations: [ContentMetadataComponent]
       })
         .compileComponents()
@@ -24,9 +27,18 @@ describe('ContentMetadataComponent', () => {
   );
 
   beforeEach(() => {
+    const deleteButton = new ButtonConfig();
+    deleteButton.command = 'deleteItem';
+    deleteButton.label = 'Delete';
+
+    const saveButton = new ButtonConfig();
+    saveButton.command = 'saveItem';
+    saveButton.label = 'Save';
+
     const editPageConfig = new EditPageConfig();
     editPageConfig.pageName = 'test-edit-page';
     editPageConfig.fieldsToDisplay = ['1', '2', '3', 'a'];
+    editPageConfig.buttons = [deleteButton, saveButton];
     component.pageConfig = editPageConfig;
 
     defaultContentItem = new ContentItem();
@@ -59,6 +71,15 @@ describe('ContentMetadataComponent', () => {
     })
   );
 
+  it(
+    'should contain buttons to save and delete items in the proper order',
+    async(() => {
+      const button = fixture.debugElement.nativeElement.querySelectorAll('button');
+      expect(button[0].id).toBe('deleteItem');
+      expect(button[1].id).toBe('saveItem');
+    })
+  );
+
   it('should contain the default values', () => {
     const label = component.editContentItemForm.controls['label'];
     expect(label.value).toBe('test label');
@@ -66,11 +87,27 @@ describe('ContentMetadataComponent', () => {
     expect(metataDataGroup.value).toEqual({ '1': 'one', '2': 'two', '3': 'three', a: 'a' });
   });
 
-  it('should update values on save', () => {
+  it('should update values on form submit', () => {
     const metataDataGroup = component.editContentItemForm.controls['metadata'];
     metataDataGroup.patchValue({ '1': 'a spec title' });
 
     component.onSubmit();
+
+    const expectedMetadata = Object.assign({}, defaultContentItem.metadata);
+    expectedMetadata['1'] = 'a spec title';
+
+    expect(component.contentItem.metadata['1']).toEqual(expectedMetadata['1']);
+    expect(component.contentItem.metadata['2']).toEqual(expectedMetadata['2']);
+    expect(component.contentItem.metadata['3']).toEqual(expectedMetadata['3']);
+    expect(component.contentItem.metadata['a']).toEqual(expectedMetadata['a']);
+    expect(component.contentItem.metadata['b']).toEqual(expectedMetadata['b']); // test a field that was not displayed
+  });
+
+  it('should update values on save', () => {
+    const metataDataGroup = component.editContentItemForm.controls['metadata'];
+    metataDataGroup.patchValue({ '1': 'a spec title' });
+
+    component.saveItem();
 
     const expectedMetadata = Object.assign({}, defaultContentItem.metadata);
     expectedMetadata['1'] = 'a spec title';

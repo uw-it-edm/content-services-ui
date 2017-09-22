@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [CommonModule, MaterialConfigModule, RouterModule],
-  exports: [CommonModule, HeaderComponent, MaterialConfigModule],
+  exports: [CommonModule, HeaderComponent, MaterialConfigModule, RouterModule],
   declarations: [HeaderComponent],
   providers: []
 })

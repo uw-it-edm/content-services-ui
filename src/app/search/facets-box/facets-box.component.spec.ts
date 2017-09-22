@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { SearchModel } from '../shared/model/search-model';
 import 'rxjs/add/observable/of';
 import { FacetsBoxComponent } from './facets-box.component';
+import { SearchResults } from '../shared/model/search-result';
 import { PageConfig } from '../../core/shared/model/page-config';
 import { SearchFilter } from '../shared/model/search-filter';
 
@@ -29,6 +30,10 @@ describe('FacetsBoxComponent', () => {
     searchModel.stringQuery = 'iSearch';
     component.searchModel$ = Observable.of(searchModel);
     component.pageConfig = new PageConfig();
+
+    const searchResults = new SearchResults();
+    component.searchResults$ = Observable.of(searchResults);
+
     fixture.detectChanges();
   });
 

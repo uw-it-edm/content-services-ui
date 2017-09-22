@@ -1,13 +1,21 @@
-<div>
-  <label>search : </label>
-  <input [(ngModel)]="searchModel.stringQuery" (ngModelChange)="updateSearch()">
-</div>
-<div class="selected-facets" *ngIf="pageConfig.facetsConfig && pageConfig.facetsConfig.active">
-  <md-chip-list>
-    <md-chip *ngFor="let filter of searchModel.filters">
-      {{pageConfig.facetsConfig.facets[filter.key].label}}:{{filter.value}}
-      <md-icon (click)="removeFilter(filter)" class="md-18">clear</md-icon>
+<div class="cs-search-box">
+    <div class="search-form-group">
+        <label *ngIf="pageConfig?.searchConfig?.label">{{pageConfig.searchConfig.label}}</label>
+        <md-form-field>
+            <input mdInput [(ngModel)]="searchModel.stringQuery" (ngModelChange)="updateSearch()" placeholder="{{pageConfig?.searchConfig?.placeholder}}" type="search">
+            <!--<md-icon mdSuffix>search</md-icon>-->
 
-    </md-chip>
-  </md-chip-list>
+            <md-hint *ngIf="pageConfig?.searchConfig?.directions" align="start">{{pageConfig?.searchConfig?.directions}}</md-hint>
+        </md-form-field>
+    </div>
+    <div class="selected-facets-form-group selected-facets" *ngIf="pageConfig?.facetsConfig?.active">
+        <md-chip-list>
+            <md-chip *ngFor="let filter of searchModel.filters">
+                {{pageConfig.facetsConfig.facets[filter.key].label}}: {{filter.value}}
+                <button (click)="removeFilter(filter)" md-icon-button aria-label="Remove filter">
+                    <md-icon>clear</md-icon>
+                </button>
+            </md-chip>
+        </md-chip-list>
+    </div>
 </div>
