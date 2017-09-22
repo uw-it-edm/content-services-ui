@@ -3,4 +3,9 @@ export class ButtonConfig {
   color: string;
   command: string;
   args: Array<string>;
+  type: string;
+
+  constructor() {
+    this.type = 'button';
+  }
 }
