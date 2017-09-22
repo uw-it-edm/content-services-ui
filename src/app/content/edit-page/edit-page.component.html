@@ -2,8 +2,6 @@
   edit-page works!
 </p>
 <form [formGroup]="editContentItemForm" (ngSubmit)="onSubmit()" novalidate>
-
-
   <div>
     <div *ngIf="contentItem">
       <label>ID:</label> {{contentItem.id }} <br/>
@@ -15,9 +13,15 @@
 
       <div fxLayout="row">
         <div fxFlex="100">
-          <label for="uploadFile">Upload file</label>
-          <input name="uploadFile" type="file" (change)="fileChange($event)"
-                 formControlName="uploadFile">
+          <app-file-upload
+            [fieldName]="'updateFile'"
+            (fileChange)="clearPreview($event)"
+            (fileSelected)="updateFile($event)"
+            [(formGroup)]="editContentItemForm"
+            [(previewUrl$)]="displayUrl$"
+          >
+          </app-file-upload>
+
         </div>
       </div>
       <div fxLayout="row">

@@ -8,7 +8,7 @@ import { Title } from '@angular/platform-browser';
 import 'rxjs/add/operator/takeUntil';
 import { Subject } from 'rxjs/Subject';
 import { ContentItem } from '../shared/model/content-item';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import 'rxjs/add/observable/of';
 
 @Component({
@@ -37,37 +37,14 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
   ) {}
 
   file: File; // TODO: should i use this?
-  // TODO: confirm that we're looking at the local file
-  fileChange(event) {
-    const fileList: FileList = event.target.files;
-    this.clearPreview();
 
-    if (fileList.length > 0) {
-      this.editContentItemForm.get('uploadFile').markAsDirty();
-      this.handleInputChange(event);
-    } else {
-      this.editContentItemForm.get('uploadFile').markAsPristine();
-    }
-  }
-
-  // TODO: can this stuff be abstracted out?
-  // TODO: what if not pdf?
-  handleInputChange(e) {
-    this.file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
-
-    const reader = new FileReader();
-
-    reader.onload = this._handleReaderLoaded.bind(this);
-    reader.readAsDataURL(this.file);
-  }
-
-  _handleReaderLoaded(e) {
-    const reader = e.target;
-    this.displayUrl$.next(reader.result);
-  }
-
-  private clearPreview() {
+  clearPreview(eventText?: string) {
+    console.log(eventText);
     this.displayUrl$.next(this.contentItemUrl);
+  }
+
+  updateFile(event) {
+    this.file = event;
   }
 
   ngOnInit() {
@@ -102,7 +79,7 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private createForm() {
-    this.editContentItemForm = this.fb.group({ uploadFile: new FormControl('') });
+    this.editContentItemForm = this.fb.group({});
     // initialize empty form
   }
 
