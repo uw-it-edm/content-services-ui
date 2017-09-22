@@ -6,9 +6,9 @@ import { SearchModel } from '../shared/model/search-model';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import { RouterModule } from '@angular/router';
-import { PageConfig } from '../../model/config/page-config';
-import { SearchResults } from '../../model/search-result';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { PageConfig } from '../../core/shared/model/page-config';
+import { SearchResults } from '../shared/model/search-result';
 
 describe('SearchResultsComponent', () => {
   let component: SearchResultsComponent;

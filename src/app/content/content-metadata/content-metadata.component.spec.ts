@@ -4,7 +4,7 @@ import { ContentMetadataComponent } from './content-metadata.component';
 import { EditPageConfig } from '../../core/shared/model/edit-page-config';
 import { ContentItem } from '../shared/model/content-item';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MdFormFieldModule, MdInputModule } from '@angular/material';
+import { MdButtonModule, MdFormFieldModule, MdInputModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ContentMetadataComponent', () => {
@@ -14,7 +14,7 @@ describe('ContentMetadataComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [NoopAnimationsModule, MdFormFieldModule, MdInputModule, ReactiveFormsModule],
+        imports: [NoopAnimationsModule, MdFormFieldModule, MdInputModule, MdButtonModule, ReactiveFormsModule],
         declarations: [ContentMetadataComponent]
       })
         .compileComponents()
