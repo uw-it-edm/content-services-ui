@@ -19,7 +19,6 @@ export class FileUploadComponent implements OnInit {
   @Input() formGroup: FormGroup;
   private file: File;
 
-  @Output() fileChanged: EventEmitter<string> = new EventEmitter(); // TODO: What should this be called?
   @Output() fileSelected: EventEmitter<File> = new EventEmitter(); // TODO: What should this be called?
 
   constructor() {}
@@ -29,13 +28,13 @@ export class FileUploadComponent implements OnInit {
   }
 
   fileChange(event) {
-    this.fileChanged.emit('fileChanged for: ' + this.fieldName);
     const fileList: FileList = event.target.files;
 
     if (fileList.length > 0) {
       this.formGroup.get(this.fieldName).markAsDirty();
       this.handleInputChange(event);
     } else {
+      this.fileSelected.emit(null);
       this.formGroup.get(this.fieldName).markAsPristine();
     }
   }

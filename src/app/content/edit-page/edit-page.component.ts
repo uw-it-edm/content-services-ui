@@ -10,6 +10,8 @@ import { Subject } from 'rxjs/Subject';
 import { ContentItem } from '../shared/model/content-item';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import 'rxjs/add/observable/of';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-edit-page',
@@ -17,17 +19,20 @@ import 'rxjs/add/observable/of';
   styleUrls: ['./edit-page.component.css']
 })
 export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
+  private componentDestroyed = new Subject();
+
   config: Config;
   pageConfig: EditPageConfig;
   page: string;
   id: string;
+  editContentItemForm: FormGroup;
 
   contentItem: ContentItem;
   contentItemUrl: string;
-  displayUrl$: Subject<string> = new Subject(); // TODO: urlTo be displayed
-  private componentDestroyed = new Subject();
 
-  editContentItemForm: FormGroup;
+  displayUrl$: Subject<string> = new ReplaySubject(); // TODO: urlTo be displayed
+  displayItem$: Subject<ContentItem> = new ReplaySubject();
+  file: File;
 
   constructor(
     private route: ActivatedRoute,
@@ -35,17 +40,6 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
     private contentService: ContentService,
     private fb: FormBuilder
   ) {}
-
-  file: File; // TODO: should i use this?
-
-  clearPreview(eventText?: string) {
-    console.log(eventText);
-    this.displayUrl$.next(this.contentItemUrl);
-  }
-
-  updateFile(event) {
-    this.file = event;
-  }
 
   ngOnInit() {
     console.log('init edit page component');
@@ -70,7 +64,7 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
             contentItem => {
               this.contentItem = contentItem;
               this.contentItemUrl = this.contentService.getFileUrl(this.id, true);
-              this.displayUrl$.next(this.contentItemUrl); // TODO: initialize? should this be here?
+              this.displayUrl$.next(this.contentItemUrl);
             },
             err => console.error('There was an error reading the content-item:', err) // TODO: Handle error
           );
@@ -83,16 +77,22 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
     // initialize empty form
   }
 
-  onSave(savedItem: ContentItem, file?: File) {
-    this.contentService
-      .update(savedItem, file)
-      .takeUntil(this.componentDestroyed)
-      .subscribe(updatedContentItem => (this.contentItem = updatedContentItem));
+  fileSelected(event) {
+    this.displayItem$.next();
+    if (isNullOrUndefined(event)) {
+      // revert preview back to initial contentItem
+      this.displayUrl$.next(this.contentItemUrl);
+      this.displayItem$.next(this.contentItem);
+    }
+    this.file = event;
   }
 
-  onSubmit() {
+  saveItem() {
     this.contentItem = this.prepareSaveContentItem();
-    this.onSave(this.contentItem, this.file);
+    this.contentService
+      .update(this.contentItem, this.file)
+      .takeUntil(this.componentDestroyed)
+      .subscribe(updatedContentItem => (this.contentItem = updatedContentItem));
   }
 
   private prepareSaveContentItem(): ContentItem {
@@ -118,5 +118,17 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
     if (this.editContentItemForm && this.contentItem) {
       this.editContentItemForm.reset();
     }
+  }
+
+  buttonPress(button) {
+    this[button.command]();
+  }
+
+  deleteItem() {
+    alert('Delete');
+  }
+
+  publishItem() {
+    alert('Publish!');
   }
 }

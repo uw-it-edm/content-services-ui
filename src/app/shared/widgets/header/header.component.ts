@@ -11,6 +11,7 @@ import { User } from '../../../user/shared/user';
 })
 export class HeaderComponent implements OnInit {
   tenant: string;
+  title: string;
   promiseUser: Promise<User>;
   availableTenants: Promise<string[]>;
 
@@ -26,5 +27,6 @@ export class HeaderComponent implements OnInit {
     this.eventsManager.tenantEmitter.subscribe(tenant => {
       this.tenant = tenant;
     });
+    this.title = 'Content Services';
   }
 }

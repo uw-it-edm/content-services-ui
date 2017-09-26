@@ -31,6 +31,7 @@ export class ConfigService {
       "pages": {
         "google-search": {
           "pageName": "google search page",
+          "theme": "uw-default",
           "fieldsToDisplay" : ["LastModifier", "MimeType"],
            "secondSearchBox": true,
            "facetsConfig":{
@@ -52,14 +53,73 @@ export class ConfigService {
            },
            "editPageConfig": {
               "pageName": "Edit Content Item",
+              "theme": "uw-default",
               "fieldsToDisplay" : ["CategoryId","ProfileId","OriginalFileName","PublishStatus","LastModifiedDate"],
-              "viewPanel": true
+              "viewPanel": true,
+              "buttons": [
+                {
+                  "label": "Delete",
+                  "command": "deleteItem"
+                },
+                {
+                  "label": "Publish",
+                  "command": "publishItem"
+                },
+                {
+                  "label": "Save",
+                  "color": "primary",
+                  "command": "saveItem"
+                }
+              ]
            }
          },
         "tab-search": {
-          "pageName": "tab search page",
+          "pageName": "Demonstration Search",
+          "theme": "uw-default",
           "fieldsToDisplay" : ["LastModifier"],
-          "secondSearchBox": false
+          "editPageConfig": {
+              "theme": "uw-default",
+              "pageName": "Edit Content Item",
+              "fieldsToDisplay" : ["CategoryId","ProfileId","OriginalFileName","PublishStatus"],
+              "buttons": [
+                {
+                  "label": "Delete",
+                  "command": "deleteItem"
+                },
+                {
+                  "label": "Publish",
+                  "command": "publishItem"
+                },
+                {
+                  "label": "Save",
+                  "color": "primary",
+                  "command": "saveItem"
+                }
+              ],
+              "viewPanel": true
+          },
+          "searchConfig": {
+              "directions": "Type a budget number, vendor name, amount, or other info",
+              "label": "",
+              "placeholder": "Search for documents"
+          },
+          "facetsConfig": {
+             "active": true,
+             "facets": {
+                "metadata.DocumentType.label.raw": {
+                   "key" : "metadata.DocumentType.label.raw",
+                   "label" : "Document Type",
+                   "order": "desc",
+                   "size":5
+                 },
+                "metadata.DocumentYear": {
+                   "key" : "metadata.DocumentYear",
+                   "label" : "Document Year",
+                   "order": "desc",
+                   "size":10
+                }
+             }
+          }
         }
       }
     }`)

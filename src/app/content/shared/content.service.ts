@@ -27,7 +27,7 @@ export class ContentService {
     }); // TODO: handle failure
   }
 
-  public update(contentItem: ContentItem, file: File): Observable<ContentItem> {
+  public update(contentItem: ContentItem, file?: File): Observable<ContentItem> {
     console.log('Updating: ' + JSON.stringify(contentItem));
     const url: string = this.baseUrl + this.itemPathFragment + contentItem.id;
     const options: RequestOptions = this.buildRequestOptions();
@@ -36,8 +36,8 @@ export class ContentService {
     if (!isNullOrUndefined(file)) {
       formData.append('attachment', file);
 
-      // TODO Updating revisionId
-      let revisionId: number = contentItem.metadata['RevisionId'];
+      // update revisionId
+      let revisionId: number = Number(contentItem.metadata['RevisionId']);
       revisionId += 1;
       contentItem.metadata['RevisionId'] = revisionId;
     }

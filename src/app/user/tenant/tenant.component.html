@@ -1,23 +1,4 @@
 <div class="uw-body">
-  <section>
-    <p>
-      page-list works for <strong>{{config.tenant}} {{config.appName}}</strong>!
-    </p>
-    <p>{{config | json}}</p>
-
-      <md-menu #pageMenu="mdMenu">
-        <button md-menu-item
-          *ngFor="let page of getPageList()"
-                routerLink="/{{config.tenant}}/{{page}}"
-                routerLinkActive="active">
-          <span>{{page}}</span>
-        </button>
-      </md-menu>
-      <button md-icon-button [mdMenuTriggerFor]="pageMenu">
-        <md-icon>more_vert</md-icon>
-      </button>
-  </section>
-
   <router-outlet></router-outlet>
 </div>
 

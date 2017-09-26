@@ -1,22 +1,28 @@
-<p>
-  edit-page works!
-</p>
-<form [formGroup]="editContentItemForm" (ngSubmit)="onSubmit()" novalidate>
-  <div>
-    <div *ngIf="contentItem">
-      <label>ID:</label> {{contentItem.id }} <br/>
-      <label>LABEL:</label> {{contentItem.label}}
-    </div>
-
-
-    <div class="container">
-
+<div [ngClass]="pageConfig?.theme" *ngIf="contentItem">
+  <div class="cs-edit-page">
+    <md-toolbar class="secondary-toolbar">
+      <a routerLink="/{{config.tenant}}/{{page}}">Return to Results</a>
+      <span class="cs-fill-remaining-space"></span>
+      <span class="button-row">
+        <button md-button>
+          <md-icon class="md-24" aria-label="Previous item">keyboard_arrow_up</md-icon> Previous
+        </button>
+        <span>
+          <!-- FIXME: This is a placeholder -->
+          1 of 1
+          <!-- END FIXME -->
+        </span>
+        <button md-button>
+          Next <md-icon class="md-24" aria-label="Next item">keyboard_arrow_down</md-icon>
+        </button>
+      </span>
+    </md-toolbar>
+    <form [formGroup]="editContentItemForm">
       <div fxLayout="row">
-        <div fxFlex="100">
+        <div fxFlex="30">
           <app-file-upload
             [fieldName]="'updateFile'"
-            (fileChange)="clearPreview($event)"
-            (fileSelected)="updateFile($event)"
+            (fileSelected)="fileSelected($event)"
             [(formGroup)]="editContentItemForm"
             [(previewUrl$)]="displayUrl$"
           >
@@ -24,32 +30,33 @@
 
         </div>
       </div>
-      <div fxLayout="row">
-        <div fxFlex="30">
-          <app-content-metadata
-            [contentItem]="contentItem"
-            [pageConfig]="pageConfig"
-            [(editContentItemForm)]="editContentItemForm"
-          >
-          </app-content-metadata>
-        </div>
-        <div fxFlex="70">
-          <app-content-view
-            *ngIf="pageConfig.viewPanel"
-            [inputUrl]="displayUrl$"
-          >
-          </app-content-view>
+
+      <div *ngIf="contentItem" class="content-area">
+        <div fxLayout="row">
+          <div fxFlex="30">
+            <app-content-metadata
+              [formGroup]="editContentItemForm"
+              [contentItem]="contentItem"
+              [pageConfig]="pageConfig"
+              (save)="onSave($event)"
+            >
+            </app-content-metadata>
+          </div>
+          <div fxFlex="70">
+            <app-content-view
+              *ngIf="pageConfig.viewPanel"
+              [item$]="displayItem$"
+              [(url$)]="displayUrl$"
+            >
+            </app-content-view>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+      <div *ngIf="pageConfig?.buttons" class="button-row" style="margin-bottom: 1em">
+        <button *ngFor="let button of pageConfig?.buttons" md-raised-button (click)="buttonPress(button)" [color]="button.color" [disabled]="editContentItemForm.pristine" [id]="button.command" [type]="button.type">{{button.label}}</button>
+      </div>
+    </form>
 
-  <div style="margin-bottom: 1em">
-    <button type="submit"
-            [disabled]="editContentItemForm.pristine" class="btn btn-success">Save
-    </button>
   </div>
+</div>
 
-  <p>Form value: {{ editContentItemForm.value | json }}</p>
-  <p>Form status: {{ editContentItemForm.status | json }}</p>
-</form>

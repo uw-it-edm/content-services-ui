@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { ContentItem } from '../shared/model/content-item';
 import { EditPageConfig } from '../../core/shared/model/edit-page-config';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -12,7 +12,7 @@ import { isNullOrUndefined } from 'util';
 export class ContentMetadataComponent implements OnInit, OnChanges {
   @Input() pageConfig: EditPageConfig;
   @Input() contentItem: ContentItem;
-  @Input() editContentItemForm: FormGroup;
+  @Input() formGroup: FormGroup;
 
   constructor() {}
 
@@ -22,9 +22,9 @@ export class ContentMetadataComponent implements OnInit, OnChanges {
   }
 
   private createForm() {
-    this.editContentItemForm.setControl('metadata', this.generateDisplayedMetadataGroup());
-    this.editContentItemForm.setControl('label', new FormControl('', Validators.required));
-    this.editContentItemForm.get('label').disable();
+    this.formGroup.setControl('metadata', this.generateDisplayedMetadataGroup());
+    this.formGroup.setControl('label', new FormControl('', Validators.required));
+    this.formGroup.get('label').disable();
   }
 
   private generateDisplayedMetadataGroup(metadata?: Map<string, any>): FormGroup {
@@ -40,9 +40,9 @@ export class ContentMetadataComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.editContentItemForm && this.contentItem) {
-      this.editContentItemForm.setControl('label', new FormControl(this.contentItem.label, Validators.required));
-      this.editContentItemForm.setControl('metadata', this.generateDisplayedMetadataGroup(this.contentItem.metadata));
+    if (this.formGroup && this.contentItem) {
+      this.formGroup.setControl('label', new FormControl(this.contentItem.label, Validators.required));
+      this.formGroup.setControl('metadata', this.generateDisplayedMetadataGroup(this.contentItem.metadata));
     }
   }
 }

@@ -14,15 +14,20 @@ export class FacetsBoxComponent implements OnInit {
   searchModel: SearchModel = new SearchModel();
 
   @Input() searchModel$: Observable<SearchModel>;
-  @Input() searchResults: SearchResults;
+  @Input() searchResults$: Observable<SearchResults>;
   @Input() pageConfig: PageConfig;
   @Output() facetFilterAdded = new EventEmitter<SearchModel>();
+
+  searchResults: SearchResults;
 
   constructor() {}
 
   ngOnInit() {
     this.searchModel$.subscribe(searchModel => {
       this.searchModel = searchModel;
+    });
+    this.searchResults$.subscribe(searchResults => {
+      this.searchResults = searchResults;
     });
   }
 
@@ -39,5 +44,9 @@ export class FacetsBoxComponent implements OnInit {
     this.searchModel.filters.push(searchFilter);
 
     this.facetFilterAdded.emit(this.searchModel);
+  }
+
+  select(event) {
+    alert(JSON.stringify(event));
   }
 }

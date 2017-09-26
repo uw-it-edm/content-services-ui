@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { SafeUrl } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
+import { ContentItem } from '../shared/model/content-item';
 
 @Component({
   selector: 'app-content-view',
@@ -9,15 +10,21 @@ import { Observable } from 'rxjs/Observable';
 })
 export class ContentViewComponent implements OnInit {
   url: SafeUrl;
+  item: ContentItem;
+  @Input() item$: Observable<ContentItem>;
+  @Input() url$: Observable<string>;
 
-  @Input() inputUrl: Observable<string>;
+  pageNumber: number;
 
-  constructor(private sanitizer: DomSanitizer) {}
+  constructor() {}
 
   ngOnInit() {
-    console.log('Working url: ', this.inputUrl);
-    this.inputUrl.subscribe(inputUrl => {
-      this.url = this.sanitizer.bypassSecurityTrustResourceUrl(inputUrl);
+    this.pageNumber = 1;
+    this.url$.subscribe(inputUrl => {
+      this.url = inputUrl;
+    });
+    this.item$.subscribe(inputItem => {
+      this.item = inputItem;
     });
   }
 }
