@@ -1,0 +1,8 @@
+<div [formGroup]="formGroup">
+  <label [for]="fieldName">Upload file</label>
+  <input class="form-control"
+         [name]="fieldName"
+         type="file"
+         (change)="fileChange($event)"
+         [formControlName]="fieldName">
+</div>

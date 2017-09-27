@@ -1,18 +1,13 @@
 <div class="cs-content-view">
-    <div *ngIf="item?.metadata?.WebExtension != 'pdf'">
-        <iframe [src]="inputUrl | safeUrl"></iframe>
+    <div *ngIf="!isPdf">
+        <iframe [src]="url | safeUrl"></iframe>
     </div>
 
-    <div *ngIf="item?.metadata?.WebExtension == 'pdf'">
+    <div *ngIf="isPdf">
         <pdf-viewer
-                [src]="inputUrl"
+                [src]="url"
                 [page]="pageNumber"
                 style="display: block;"
         ></pdf-viewer>
     </div>
-
 </div>
-
-<!--<object [data]="inputUrl | safeUrl" type="application/pdf" width="100%" height="300">-->
-    <!--<a [href]="url">{{url}}</a>-->
-<!--</object>-->

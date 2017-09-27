@@ -1,20 +1,17 @@
-<form [formGroup]="editContentItemForm" (ngSubmit)="onSubmit()" novalidate class="cs-content-metadata">
+<div [formGroup]="formGroup">
   <ul *ngIf="pageConfig?.fieldsToDisplay && contentItem" class="fields">
     <li>
       <md-form-field>
-        <input mdInput formControlName="label" name="label" placeholder="label" [value]="contentItem.label">
+        <input mdInput formControlName="label" name="label" placeholder="label">
       </md-form-field>
     </li>
     <div formGroupName="metadata">
       <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
         <md-form-field>
-          <input mdInput [formControlName]="fieldToDisplay" [name]="fieldToDisplay" [placeholder]="fieldToDisplay"
-                 value="{{ contentItem.metadata[fieldToDisplay] }}">
+          <input mdInput [formControlName]="fieldToDisplay" [name]="fieldToDisplay"
+                 [placeholder]="fieldToDisplay">
         </md-form-field>
       </li>
     </div>
   </ul>
-  <div *ngIf="pageConfig?.buttons" class="button-row" style="margin-bottom: 1em">
-    <button *ngFor="let button of pageConfig?.buttons" md-raised-button (click)="buttonPress(button)" [color]="button.color" [disabled]="editContentItemForm.pristine" [id]="button.command" [type]="button.type">{{button.label}}</button>
-  </div>
-</form>
+</div>

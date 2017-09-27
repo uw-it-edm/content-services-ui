@@ -55,7 +55,22 @@ export class ConfigService {
               "pageName": "Edit Content Item",
               "theme": "uw-default",
               "fieldsToDisplay" : ["CategoryId","ProfileId","OriginalFileName","PublishStatus","LastModifiedDate"],
-              "viewPanel": true
+              "viewPanel": true,
+              "buttons": [
+                {
+                  "label": "Delete",
+                  "command": "deleteItem"
+                },
+                {
+                  "label": "Publish",
+                  "command": "publishItem"
+                },
+                {
+                  "label": "Save",
+                  "color": "primary",
+                  "command": "saveItem"
+                }
+              ]
            }
          },
         "tab-search": {

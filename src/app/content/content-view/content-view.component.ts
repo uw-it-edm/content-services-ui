@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { SafeUrl } from '@angular/platform-browser';
+import { Observable } from 'rxjs/Observable';
+import { ContentItem } from '../shared/model/content-item';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-content-view',
@@ -8,17 +11,32 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 })
 export class ContentViewComponent implements OnInit {
   url: SafeUrl;
-
-  @Input() item: any;
-  @Input() inputUrl: string;
+  item: ContentItem;
+  isPdf = false;
+  @Input() item$: Observable<ContentItem>;
+  @Input() url$: Observable<string>;
 
   pageNumber: number;
 
-  constructor(private sanitizer: DomSanitizer) {}
+  constructor() {}
 
   ngOnInit() {
-    console.log('Working url: ', this.inputUrl);
-    this.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.inputUrl);
     this.pageNumber = 1;
+    this.url$.subscribe(inputUrl => {
+      this.url = inputUrl;
+    });
+    this.item$.subscribe(inputItem => {
+      this.item = inputItem;
+      this.isPdf = this.isPdfItem(this.item);
+    });
+  }
+
+  private isPdfItem(item: ContentItem) {
+    let isPdfItem = false;
+    if (!isNullOrUndefined(item)) {
+      const webExtension = item.metadata['WebExtension'];
+      isPdfItem = webExtension && webExtension === 'pdf';
+    }
+    return isPdfItem;
   }
 }
