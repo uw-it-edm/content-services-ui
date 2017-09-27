@@ -12,10 +12,16 @@ jobs:
   include:
     - stage: test
       script: yarn run test-cover
+      env:
+        job=yarn run test-cover
     - stage: test
       script: yarn e2e
+      env:
+        job=yarn e2e
     - stage: test
       script: yarn build -- --prod --env=travis
+      env:
+        job=yarn build -- --prod --env=travis
 
 after_success:
   - yarn run coveralls
