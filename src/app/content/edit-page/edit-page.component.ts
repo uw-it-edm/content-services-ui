@@ -62,14 +62,19 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
           .takeUntil(this.componentDestroyed)
           .subscribe(
             contentItem => {
-              this.contentItem = contentItem;
-              this.contentItemUrl = this.contentService.getFileUrl(this.id, true);
-              this.displayUrl$.next(this.contentItemUrl);
+              this.updateContentItem(contentItem);
             },
             err => console.error('There was an error reading the content-item:', err) // TODO: Handle error
           );
       });
     });
+  }
+
+  private updateContentItem(contentItem: ContentItem): void {
+    this.contentItem = contentItem;
+    this.contentItemUrl = this.contentService.getFileUrl(this.id, true);
+    this.displayUrl$.next(this.contentItemUrl);
+    this.displayItem$.next(this.contentItem);
   }
 
   private createForm() {
@@ -92,7 +97,7 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
     this.contentService
       .update(this.contentItem, this.file)
       .takeUntil(this.componentDestroyed)
-      .subscribe(updatedContentItem => (this.contentItem = updatedContentItem));
+      .subscribe(updatedContentItem => this.updateContentItem(updatedContentItem));
   }
 
   private prepareSaveContentItem(): ContentItem {

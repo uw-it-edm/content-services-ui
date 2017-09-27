@@ -8,18 +8,12 @@ import { Subject } from 'rxjs/Subject';
   styleUrls: ['./file-upload.component.css']
 })
 export class FileUploadComponent implements OnInit {
-  /*
-  *
-  * TODO: is this overly complex to configure?
-  * - too many inputs & confusing output
-  * */
-
   @Input() fieldName: string;
   @Input() previewUrl$: Subject<string>;
   @Input() formGroup: FormGroup;
   private file: File;
 
-  @Output() fileSelected: EventEmitter<File> = new EventEmitter(); // TODO: What should this be called?
+  @Output() fileSelected: EventEmitter<File> = new EventEmitter();
 
   constructor() {}
 

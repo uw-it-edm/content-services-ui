@@ -1,9 +1,9 @@
 <div class="cs-content-view">
-    <div *ngIf="item?.metadata?.WebExtension != 'pdf' ">
+    <div *ngIf="!isPdf">
         <iframe [src]="url | safeUrl"></iframe>
     </div>
 
-    <div *ngIf="item?.metadata?.WebExtension == 'pdf'">
+    <div *ngIf="isPdf">
         <pdf-viewer
                 [src]="url"
                 [page]="pageNumber"
