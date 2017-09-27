@@ -3678,12 +3678,12 @@ negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
 
-ng2-pdf-viewer@^1.2.5:
-  version "1.2.5"
-  resolved "https://registry.yarnpkg.com/ng2-pdf-viewer/-/ng2-pdf-viewer-1.2.5.tgz#2a96b997546cd007d4121162842444bfa7ea42d1"
+ng2-pdf-viewer@^1.2.7:
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/ng2-pdf-viewer/-/ng2-pdf-viewer-1.2.7.tgz#2d2324708b38b0e3b5bb570cfee975e57a74d297"
   dependencies:
     "@types/pdf" "0.0.31"
-    pdfjs-dist "^1.9.524"
+    pdfjs-dist "^1.9.602"
 
 no-case@^2.2.0:
   version "2.3.1"
@@ -4166,16 +4166,16 @@ pbkdf2@^3.0.3:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-pdfjs-dist@^1.9.524:
-  version "1.9.560"
-  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-1.9.560.tgz#0604933e519024d3686a523ba262bedc33952e05"
+pdfjs-dist@^1.9.583:
+  version "1.9.600"
+  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-1.9.600.tgz#4e1597054cab7a7a260759d7753ee0f0d499b4a6"
   dependencies:
     node-ensure "^0.0.0"
     worker-loader "^0.8.0"
 
-pdfjs-dist@^1.9.583:
-  version "1.9.600"
-  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-1.9.600.tgz#4e1597054cab7a7a260759d7753ee0f0d499b4a6"
+pdfjs-dist@^1.9.602:
+  version "1.9.602"
+  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-1.9.602.tgz#78c91c3157710ae11dbc15e7b409e32c9273dae0"
   dependencies:
     node-ensure "^0.0.0"
     worker-loader "^0.8.0"
