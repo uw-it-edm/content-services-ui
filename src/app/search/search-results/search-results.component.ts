@@ -4,8 +4,9 @@ import { SearchResults } from '../shared/model/search-result';
 import { PageConfig } from '../../core/shared/model/page-config';
 import { Observable } from 'rxjs/Observable';
 import { SearchDataSource } from '../shared/model/search-datasource.model';
-import { MdPaginator } from '@angular/material';
+import { MdPaginator, PageEvent } from '@angular/material';
 import { isNullOrUndefined } from 'util';
+import { PaginatorConfig } from '../shared/model/paginator-config';
 
 @Component({
   selector: 'app-search-results',
@@ -14,6 +15,7 @@ import { isNullOrUndefined } from 'util';
 })
 export class SearchResultsComponent implements OnInit, OnDestroy {
   searchModel: SearchModel = new SearchModel();
+  paginatorConfig: PaginatorConfig = new PaginatorConfig();
 
   dataSource: SearchDataSource;
   displayedColumns = ['id', 'label'];
@@ -38,9 +40,19 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     this.dataSource = new SearchDataSource(this.searchResults$, [this.topPaginator, this.bottomPaginator]);
     this.searchResults$.subscribe(results => {
       this.hasResults = !isNullOrUndefined(results) && results.total > 0;
+      if (this.hasResults) {
+        this.paginatorConfig.numberOfResults = results.total;
+      }
     });
     for (const field of this.pageConfig.fieldsToDisplay) {
       this.displayedColumns.push(field);
     }
+  }
+
+  onPageEvent(pageEvent: PageEvent) {
+    this.paginatorConfig.pageSize = pageEvent.pageSize;
+    this.paginatorConfig.pageIndex = pageEvent.pageIndex;
+    this.searchModel.pagination = this.paginatorConfig;
+    this.search.emit(this.searchModel);
   }
 }

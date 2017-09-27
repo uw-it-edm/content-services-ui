@@ -1,7 +1,6 @@
 import { DataSource } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
-import { SearchModel } from './search-model';
 import { SearchResults } from './search-result';
 import { ResultRow } from './result-row';
 import { MdPaginator } from '@angular/material';
