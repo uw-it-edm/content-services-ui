@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Config } from '../../core/shared/model/config';
 import { PageConfig } from '../../core/shared/model/page-config';
@@ -14,7 +14,8 @@ import { Observable } from 'rxjs/Observable';
   templateUrl: './search-page.component.html',
   styleUrls: ['./search-page.component.css']
 })
-export class SearchPageComponent implements OnInit {
+export class SearchPageComponent implements OnInit, OnDestroy {
+  private componentDestroyed = new Subject();
   config: Config;
   pageConfig: PageConfig;
   page: string;
@@ -27,9 +28,9 @@ export class SearchPageComponent implements OnInit {
   ngOnInit() {
     console.log('init generic page component');
 
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.takeUntil(this.componentDestroyed).subscribe(params => {
       this.page = params.get('page');
-      this.route.data.subscribe((data: { config: Config }) => {
+      this.route.data.takeUntil(this.componentDestroyed).subscribe((data: { config: Config }) => {
         this.config = data.config;
         this.pageConfig = data.config.pages[this.page.toLowerCase()];
         this.titleService.setTitle(this.pageConfig.pageName);
@@ -43,5 +44,10 @@ export class SearchPageComponent implements OnInit {
   onSearch(searchModel: SearchModel) {
     console.log('search in generic page component');
     this.searchModel$.next(Object.assign(new SearchModel(), searchModel));
+  }
+
+  ngOnDestroy(): void {
+    this.componentDestroyed.next();
+    this.componentDestroyed.complete();
   }
 }

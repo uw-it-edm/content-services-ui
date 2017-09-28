@@ -29,6 +29,7 @@ describe('ContentMetadataComponent', () => {
     const editPageConfig = new EditPageConfig();
     editPageConfig.pageName = 'test-edit-page';
     editPageConfig.fieldsToDisplay = ['1', '2', '3', 'a'];
+    editPageConfig.viewPanel = false;
     component.pageConfig = editPageConfig;
 
     defaultContentItem = new ContentItem();

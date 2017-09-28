@@ -1,15 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { SearchModel } from '../shared/model/search-model';
 import { PageConfig } from '../../core/shared/model/page-config';
 import { Observable } from 'rxjs/Observable';
 import { SearchFilter } from '../shared/model/search-filter';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'app-search-box',
   templateUrl: './search-box.component.html',
   styleUrls: ['./search-box.component.css']
 })
-export class SearchBoxComponent implements OnInit {
+export class SearchBoxComponent implements OnInit, OnDestroy {
+  private componentDestroyed = new Subject();
   searchModel: SearchModel = new SearchModel();
 
   @Input() searchModel$: Observable<SearchModel>;
@@ -19,7 +21,7 @@ export class SearchBoxComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.searchModel$.subscribe(searchModel => {
+    this.searchModel$.takeUntil(this.componentDestroyed).subscribe(searchModel => {
       this.searchModel = searchModel;
     });
   }
@@ -34,5 +36,10 @@ export class SearchBoxComponent implements OnInit {
   updateSearch() {
     console.log('search in component with ' + JSON.stringify(this.searchModel));
     this.search.emit(this.searchModel);
+  }
+
+  ngOnDestroy(): void {
+    this.componentDestroyed.next();
+    this.componentDestroyed.complete();
   }
 }

@@ -36,7 +36,6 @@ export class FileUploadComponent implements OnInit {
   // TODO: what if not webviewable?
   handleInputChange(e) {
     this.file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
-    console.log('attaching file: ' + this.file);
     this.fileSelected.emit(this.file);
 
     const reader = new FileReader();

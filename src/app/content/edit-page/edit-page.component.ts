@@ -30,7 +30,7 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
   contentItem: ContentItem;
   contentItemUrl: string;
 
-  displayUrl$: Subject<string> = new ReplaySubject(); // TODO: urlTo be displayed
+  displayUrl$: Subject<string> = new ReplaySubject();
   displayItem$: Subject<ContentItem> = new ReplaySubject();
   file: File;
 
@@ -42,8 +42,6 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
   ) {}
 
   ngOnInit() {
-    console.log('init edit page component');
-
     // form
     this.createForm();
 
@@ -113,8 +111,6 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy(): void {
-    // prevent memory leak when component destroyed
-    console.log('unsubscribe edit page');
     this.componentDestroyed.next();
     this.componentDestroyed.complete();
   }

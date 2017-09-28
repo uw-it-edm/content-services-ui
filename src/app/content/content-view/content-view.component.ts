@@ -1,15 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
 import { ContentItem } from '../shared/model/content-item';
 import { isNullOrUndefined } from 'util';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'app-content-view',
   templateUrl: './content-view.component.html',
   styleUrls: ['./content-view.component.css']
 })
-export class ContentViewComponent implements OnInit {
+export class ContentViewComponent implements OnInit, OnDestroy {
+  private componentDestroyed = new Subject();
   url: SafeUrl;
   item: ContentItem;
   isPdf = false;
@@ -22,10 +24,10 @@ export class ContentViewComponent implements OnInit {
 
   ngOnInit() {
     this.pageNumber = 1;
-    this.url$.subscribe(inputUrl => {
+    this.url$.takeUntil(this.componentDestroyed).subscribe(inputUrl => {
       this.url = inputUrl;
     });
-    this.item$.subscribe(inputItem => {
+    this.item$.takeUntil(this.componentDestroyed).subscribe(inputItem => {
       this.item = inputItem;
       this.isPdf = this.isPdfItem(this.item);
     });
@@ -38,5 +40,10 @@ export class ContentViewComponent implements OnInit {
       isPdfItem = webExtension && webExtension === 'pdf';
     }
     return isPdfItem;
+  }
+
+  ngOnDestroy(): void {
+    this.componentDestroyed.next();
+    this.componentDestroyed.complete();
   }
 }

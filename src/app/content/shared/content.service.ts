@@ -20,9 +20,7 @@ export class ContentService {
     const url: string = this.baseUrl + this.itemPathFragment + itemId;
     const options: RequestOptions = this.buildRequestOptions();
 
-    console.log('Reading content URL:', url);
     return this.http.get(url, options).map(response => {
-      console.log('content response: ' + JSON.stringify(response));
       return response.json();
     }); // TODO: handle failure
   }
@@ -45,7 +43,6 @@ export class ContentService {
     formData.append('document', blob);
 
     return this.http.post(url, formData, options).map(response => {
-      console.log('content update response: ' + JSON.stringify(response));
       return response.json();
     }); // TODO: handle failure
   }
@@ -60,7 +57,6 @@ export class ContentService {
       urlParameters.push('x-uw-act-as=' + user.actAs);
     }
     const url = this.baseUrl + this.filePathFragment + itemId + UrlUtilities.generateUrlParameterString(urlParameters);
-    console.log('file url: ', url);
 
     return url;
   }
