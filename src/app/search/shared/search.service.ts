@@ -60,6 +60,7 @@ export class SearchService {
 
     this.addFacetsToSearchPayload(searchPayload, pageConfig);
     this.addFiltersToSearchPayload(searchPayload, term);
+    this.addPaginationToSearchPayload(searchPayload, term);
     return searchPayload;
   }
 
@@ -99,6 +100,12 @@ export class SearchService {
     });
 
     searchPayload['filters'] = filters;
+  }
+
+  private addPaginationToSearchPayload(searchPayload: any, term: SearchModel) {
+    searchPayload['from'] = term.pagination.pageSize * term.pagination.pageIndex;
+    searchPayload['page'] = term.pagination.pageIndex;
+    searchPayload['pageSize'] = term.pagination.pageSize;
   }
 
   private addFacetsToSearchPayload(searchPayload: any, pageConfig: PageConfig) {

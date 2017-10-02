@@ -51,6 +51,9 @@ describe('SearchService', () => {
                 }
               ],
               facets: [],
+              from: 0,
+              page: 0,
+              pageSize: 10,
               totalCount: 155249,
               timeTaken: '13.0'
             }),
@@ -65,7 +68,9 @@ describe('SearchService', () => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
 
       // args[1] is the payload
-      expect(JSON.stringify(httpSpy.calls.first().args[1])).toBe('{"query":"iSearch","facets":[],"filters":[]}');
+      expect(JSON.stringify(httpSpy.calls.first().args[1])).toBe(
+        '{"query":"iSearch","facets":[],"filters":[],"from":0,"page":0,"pageSize":10}'
+      );
       expect(result.results.length).toBe(2);
       expect(result.results[1].metadata['id']).toBe('2');
       expect(result.results[1].metadata['label']).toBe('myLabel2');
@@ -128,6 +133,25 @@ describe('SearchService', () => {
       expect(payload['filters'][0].term).toBe('value');
       expect(payload['filters'][1].field).toBe('my-second-filter');
       expect(payload['filters'][1].term).toBe('value2');
+    });
+  });
+
+  it('should add pagination to the query payload', () => {
+    const searchModel = new SearchModel();
+    searchModel.stringQuery = 'iSearch';
+    searchModel.pagination.pageSize = 25;
+    searchModel.pagination.pageIndex = 2;
+
+    httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(new Response(new ResponseOptions())));
+
+    searchService.search(Observable.of(searchModel), new PageConfig()).subscribe(result => {
+      expect(httpSpy).toHaveBeenCalledTimes(1);
+      // args[1] is the payload
+      const payload = httpSpy.calls.first().args[1];
+      expect(payload['query']).toBe('iSearch');
+      expect(payload.pageSize).toEqual(25);
+      expect(payload.page).toEqual(2);
+      expect(payload.from).toEqual(50);
     });
   });
 });

@@ -90,7 +90,7 @@ describe('EditPageComponent', () => {
     editPageConfig.buttons = [deleteButton, saveButton];
 
     editPageConfig.pageName = 'test-edit-page';
-    editPageConfig.viewPanel = true;
+    editPageConfig.viewPanel = false;
 
     const searchPageConfig = new PageConfig();
     searchPageConfig.pageName = 'test-page';
@@ -100,7 +100,6 @@ describe('EditPageComponent', () => {
     config.tenant = 'test-tenant';
     config.pages['test-page'] = searchPageConfig;
 
-    console.log(JSON.stringify(config));
     activatedRoute.testData = { config: config };
 
     component.ngOnInit();
@@ -123,30 +122,31 @@ describe('EditPageComponent', () => {
 
   it('should have the title set to the page name', () => {
     const title = fixture.debugElement.injector.get(Title);
-    expect(title.getTitle()).toBe('test-edit-page');
+    expect(title.getTitle()).toEqual('test-edit-page');
   });
 
   it('should display the content metadata component when a content item exists', () => {
     const contentArea = fixture.debugElement.nativeElement.querySelectorAll('app-content-metadata');
-    expect(contentArea.length).toBe(1);
+    expect(contentArea.length).toEqual(1);
   });
 
   it('should display the content view component when a content item exists and view panel is true', () => {
     editPageConfig.viewPanel = true;
+    fixture.detectChanges();
     const contentArea = fixture.debugElement.nativeElement.querySelectorAll('app-content-view');
-    expect(contentArea.length).toBe(1);
+    expect(contentArea.length).toEqual(1);
   });
 
   it('should not display the content view component when view panel is false', () => {
-    editPageConfig.viewPanel = false;
+    // editPageConfig.viewPanel = false;
     const contentArea = fixture.debugElement.nativeElement.querySelectorAll('app-content-view');
-    expect(contentArea.length).toBe(1);
+    expect(contentArea.length).toEqual(0);
   });
 
   it('should contain buttons to save and delete items in the proper order', () => {
     const button = fixture.debugElement.nativeElement.querySelectorAll('button');
-    expect(button[2].id).toBe('deleteItem');
-    expect(button[3].id).toBe('saveItem');
+    expect(button[2].id).toEqual('deleteItem');
+    expect(button[3].id).toEqual('saveItem');
   });
 
   it('should update values on save', () => {

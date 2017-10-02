@@ -1,16 +1,18 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { SearchModel } from '../shared/model/search-model';
 import { PageConfig } from '../../core/shared/model/page-config';
 import { Observable } from 'rxjs/Observable';
 import { SearchResults } from '../shared/model/search-result';
 import { SearchFilter } from '../shared/model/search-filter';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'app-facets-box',
   templateUrl: './facets-box.component.html',
   styleUrls: ['./facets-box.component.css']
 })
-export class FacetsBoxComponent implements OnInit {
+export class FacetsBoxComponent implements OnInit, OnDestroy {
+  private componentDestroyed = new Subject();
   searchModel: SearchModel = new SearchModel();
 
   @Input() searchModel$: Observable<SearchModel>;
@@ -23,10 +25,10 @@ export class FacetsBoxComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.searchModel$.subscribe(searchModel => {
+    this.searchModel$.takeUntil(this.componentDestroyed).subscribe(searchModel => {
       this.searchModel = searchModel;
     });
-    this.searchResults$.subscribe(searchResults => {
+    this.searchResults$.takeUntil(this.componentDestroyed).subscribe(searchResults => {
       this.searchResults = searchResults;
     });
   }
@@ -48,5 +50,10 @@ export class FacetsBoxComponent implements OnInit {
 
   select(event) {
     alert(JSON.stringify(event));
+  }
+
+  ngOnDestroy(): void {
+    this.componentDestroyed.next();
+    this.componentDestroyed.complete();
   }
 }

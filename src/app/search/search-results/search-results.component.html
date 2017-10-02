@@ -1,8 +1,10 @@
 <div>
   <md-paginator #topPaginator
-                [pageIndex]="0"
-                [pageSize]="25"
-                [pageSizeOptions]="[5, 10, 25, 100]">
+                [pageIndex]="paginatorConfig.pageIndex"
+                [pageSize]="paginatorConfig.pageSize"
+                [pageSizeOptions]="paginatorConfig.pageSizeOptions"
+                [length]="paginatorConfig.numberOfResults"
+                (page)="onPageEvent($event)">
   </md-paginator>
 
   <md-table #table [dataSource]="dataSource" mdSort>
@@ -11,17 +13,18 @@
         The actual rendered columns are set as a property on the row definition" -->
 
     <ng-container mdColumnDef="id">
-      <md-header-cell *mdHeaderCellDef md-sort-header> Id </md-header-cell>
+      <md-header-cell *mdHeaderCellDef md-sort-header> Id</md-header-cell>
       <md-cell *mdCellDef="let element">{{element.id}}</md-cell>
     </ng-container>
 
     <ng-container mdColumnDef="label">
-      <md-header-cell *mdHeaderCellDef md-sort-header> Name </md-header-cell>
-      <md-cell *mdCellDef="let element"><a routerLink="edit/{{element.id}}">{{element.label}}</a></md-cell>
+      <md-header-cell *mdHeaderCellDef md-sort-header> Name</md-header-cell>
+      <md-cell *mdCellDef="let element"><a routerLink="edit/{{element.id}}">{{element.label}}</a>
+      </md-cell>
     </ng-container>
 
     <ng-container *ngFor="let col of pageConfig.fieldsToDisplay" mdColumnDef={{col}}>
-      <md-header-cell  *mdHeaderCellDef md-sort-header>{{ col }}</md-header-cell>
+      <md-header-cell *mdHeaderCellDef md-sort-header>{{ col }}</md-header-cell>
       <md-cell *mdCellDef="let element">{{element.metadata[col]}}</md-cell>
     </ng-container>
 
@@ -30,8 +33,10 @@
   </md-table>
 
   <md-paginator #bottomPaginator
-                [pageIndex]="0"
-                [pageSize]="25"
-                [pageSizeOptions]="[5, 10, 25, 100]">
+                [pageIndex]="paginatorConfig.pageIndex"
+                [pageSize]="paginatorConfig.pageSize"
+                [pageSizeOptions]="paginatorConfig.pageSizeOptions"
+                [length]="paginatorConfig.numberOfResults"
+                (page)="onPageEvent($event)">
   </md-paginator>
 </div>
