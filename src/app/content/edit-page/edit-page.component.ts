@@ -25,6 +25,7 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
   pageConfig: EditPageConfig;
   page: string;
   id: string;
+
   editContentItemForm: FormGroup;
 
   contentItem: ContentItem;
@@ -50,7 +51,7 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
       this.page = params.get('page');
       this.id = params.get('id');
 
-      this.route.data.subscribe((data: { config: Config }) => {
+      this.route.data.takeUntil(this.componentDestroyed).subscribe((data: { config: Config }) => {
         this.config = data.config;
         this.pageConfig = data.config.pages[this.page.toLowerCase()].editPageConfig;
         this.titleService.setTitle(this.pageConfig.pageName);
