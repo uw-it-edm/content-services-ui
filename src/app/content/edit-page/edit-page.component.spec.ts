@@ -145,8 +145,8 @@ describe('EditPageComponent', () => {
 
   it('should contain buttons to save and delete items in the proper order', () => {
     const button = fixture.debugElement.nativeElement.querySelectorAll('button');
-    expect(button[2].id).toEqual('deleteItem');
-    expect(button[3].id).toEqual('saveItem');
+    expect(button[0].id).toEqual('deleteItem');
+    expect(button[1].id).toEqual('saveItem');
   });
 
   it('should update values on save', () => {

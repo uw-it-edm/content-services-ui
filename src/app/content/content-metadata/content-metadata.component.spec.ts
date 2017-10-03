@@ -6,6 +6,7 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MdButtonModule, MdFormFieldModule, MdInputModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { EditPageConfig } from '../../core/shared/model/edit-page-config';
+import { Observable } from 'rxjs/Observable';
 
 describe('ContentMetadataComponent', () => {
   let component: ContentMetadataComponent;
@@ -40,7 +41,7 @@ describe('ContentMetadataComponent', () => {
     defaultContentItem.metadata['3'] = 'three';
     defaultContentItem.metadata['a'] = 'a';
     defaultContentItem.metadata['b'] = 'asdf';
-    component.contentItem = defaultContentItem;
+    component.contentItem$ = Observable.of(defaultContentItem);
     component.formGroup = new FormGroup({});
 
     fixture.detectChanges();

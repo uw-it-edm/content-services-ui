@@ -26,10 +26,11 @@ export class ContentViewComponent implements OnInit, OnDestroy {
     this.pageNumber = 1;
     this.url$.takeUntil(this.componentDestroyed).subscribe(inputUrl => {
       this.url = inputUrl;
+      this.isPdf = false; // TODO: pdf detection needs to be improved
     });
     this.item$.takeUntil(this.componentDestroyed).subscribe(inputItem => {
       this.item = inputItem;
-      this.isPdf = this.isPdfItem(this.item);
+      this.isPdf = this.isPdfItem(this.item); // TODO: pdf detection needs to be improved
     });
   }
 
