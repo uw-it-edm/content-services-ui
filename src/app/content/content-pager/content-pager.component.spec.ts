@@ -55,4 +55,42 @@ describe('ContentPagerComponent', () => {
     component.navigate(2);
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/test/edit/456'], { queryParamsHandling: 'merge' });
   });
+
+  it('should contain buttons to page previous or next', () => {
+    const button = fixture.debugElement.nativeElement.querySelectorAll('button');
+    expect(button[0].id).toEqual('previousItem');
+    expect(button[0].disabled).toBe(false);
+    expect(button[1].id).toEqual('nextItem');
+    expect(button[1].disabled).toBe(false);
+  });
+
+  it('should contain disabled buttons if no currentPosition', () => {
+    component.currentPosition = undefined;
+    fixture.detectChanges();
+    const button = fixture.debugElement.nativeElement.querySelectorAll('button');
+    expect(button[0].id).toEqual('previousItem');
+    expect(button[0].disabled).toBe(true);
+    expect(button[1].id).toEqual('nextItem');
+    expect(button[1].disabled).toBe(true);
+  });
+
+  it('should contain disabled previous previous, if in first position', () => {
+    component.currentPosition = 0;
+    fixture.detectChanges();
+    const button = fixture.debugElement.nativeElement.querySelectorAll('button');
+    expect(button[0].id).toEqual('previousItem');
+    expect(button[0].disabled).toBe(true);
+    expect(button[1].id).toEqual('nextItem');
+    expect(button[1].disabled).toBe(false);
+  });
+
+  it('should contain disabled next button, if in last position', () => {
+    component.currentPosition = 2;
+    fixture.detectChanges();
+    const button = fixture.debugElement.nativeElement.querySelectorAll('button');
+    expect(button[0].id).toEqual('previousItem');
+    expect(button[0].disabled).toBe(false);
+    expect(button[1].id).toEqual('nextItem');
+    expect(button[1].disabled).toBe(true);
+  });
 });
