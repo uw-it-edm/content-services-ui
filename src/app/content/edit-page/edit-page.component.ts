@@ -82,7 +82,6 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   fileSelected(event) {
-    this.displayItem$.next();
     if (isNullOrUndefined(event)) {
       // revert preview back to initial contentItem
       this.displayUrl$.next(this.contentItemUrl);
