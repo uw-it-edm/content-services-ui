@@ -16,7 +16,7 @@
             [fieldName]="'updateFile'"
             (fileSelected)="fileSelected($event)"
             [(formGroup)]="editContentItemForm"
-            [(previewUrl$)]="displayUrl$"
+            [(previewData$)]="previewData$"
           >
           </app-file-upload>
 
@@ -38,7 +38,7 @@
             <app-content-view
               *ngIf="pageConfig.viewPanel"
               [item$]="displayItem$"
-              [(url$)]="displayUrl$"
+              [(data$)]="previewData$"
             >
             </app-content-view>
           </div>

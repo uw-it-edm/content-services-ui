@@ -14,9 +14,11 @@ export class ContentViewComponent implements OnInit, OnDestroy {
   private componentDestroyed = new Subject();
   url: SafeUrl;
   item: ContentItem;
-  isPdf = false;
+  dataType: string;
+  srcObj: Object;
+
   @Input() item$: Observable<ContentItem>;
-  @Input() url$: Observable<string>;
+  @Input() data$: Observable<any>;
 
   pageNumber: number;
 
@@ -24,23 +26,51 @@ export class ContentViewComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.pageNumber = 1;
-    this.url$.takeUntil(this.componentDestroyed).subscribe(inputUrl => {
-      this.url = inputUrl;
-      this.isPdf = false; // TODO: pdf detection needs to be improved
-    });
+
     this.item$.takeUntil(this.componentDestroyed).subscribe(inputItem => {
       this.item = inputItem;
-      this.isPdf = this.isPdfItem(this.item); // TODO: pdf detection needs to be improved
+      this.determineItemType();
+    });
+    this.data$.takeUntil(this.componentDestroyed).subscribe(data => {
+      if (data instanceof ArrayBuffer) {
+        this.srcObj = { data: data };
+        this.dataType = 'pdfData';
+      } else {
+        this.url = data;
+        this.determineUrlType();
+      }
     });
   }
 
-  private isPdfItem(item: ContentItem) {
-    let isPdfItem = false;
-    if (!isNullOrUndefined(item)) {
-      const webExtension = item.metadata['WebExtension'];
-      isPdfItem = webExtension && webExtension === 'pdf';
+  // TODO: type detection should be improved
+  private determineItemType(): void {
+    if (!isNullOrUndefined(this.item)) {
+      // const webExtension = this.item.metadata['WebExtension'];
+      const mimeType = this.item.metadata['MimeType'];
+      if (mimeType && mimeType === 'application/pdf') {
+        this.dataType = 'pdfUrl';
+      } else if (mimeType && mimeType.startsWith('image')) {
+        this.dataType = 'image';
+      } else {
+        this.dataType = 'unknown';
+      }
+    } else {
+      this.dataType = 'unknown';
     }
-    return isPdfItem;
+  }
+
+  // TODO: type detection should be improved
+  private determineUrlType(): void {
+    const url = this.url.toString();
+    if (url.startsWith('http')) {
+      this.determineItemType();
+    } else if (url.startsWith('data:image')) {
+      this.dataType = 'image';
+    } else if (url.startsWith('data:application/pdf')) {
+      this.dataType = 'pdf';
+    } else {
+      this.dataType = 'unknown';
+    }
   }
 
   ngOnDestroy(): void {

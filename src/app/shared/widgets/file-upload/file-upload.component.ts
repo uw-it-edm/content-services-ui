@@ -9,8 +9,9 @@ import { Subject } from 'rxjs/Subject';
 })
 export class FileUploadComponent implements OnInit {
   @Input() fieldName: string;
-  @Input() previewUrl$: Subject<string>;
+  @Input() previewData$: Subject<any>; // may be string or array buffer
   @Input() formGroup: FormGroup;
+
   private file: File;
 
   @Output() fileSelected: EventEmitter<File> = new EventEmitter();
@@ -33,19 +34,24 @@ export class FileUploadComponent implements OnInit {
     }
   }
 
-  // TODO: what if not webviewable?
   handleInputChange(e) {
     this.file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
     this.fileSelected.emit(this.file);
 
+    const mimeType = this.file.type;
     const reader = new FileReader();
-
     reader.onload = this._handleReaderLoaded.bind(this);
-    reader.readAsDataURL(this.file);
+
+    // TODO: improve mime-type handline
+    if (mimeType === 'application/pdf') {
+      reader.readAsArrayBuffer(this.file);
+    } else {
+      reader.readAsDataURL(this.file);
+    }
   }
 
-  _handleReaderLoaded(e) {
+  private _handleReaderLoaded(e) {
     const reader = e.target;
-    this.previewUrl$.next(reader.result);
+    this.previewData$.next(reader.result);
   }
 }

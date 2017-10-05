@@ -31,7 +31,7 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
   contentItem: ContentItem;
   contentItemUrl: string;
 
-  displayUrl$: Subject<string> = new ReplaySubject();
+  previewData$: Subject<any> = new ReplaySubject(); // string or arrayBuffer
   displayItem$: Subject<ContentItem> = new ReplaySubject();
   file: File;
 
@@ -72,7 +72,7 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
   private updateContentItem(contentItem: ContentItem): void {
     this.contentItem = contentItem;
     this.contentItemUrl = this.contentService.getFileUrl(this.id, true);
-    this.displayUrl$.next(this.contentItemUrl);
+    this.previewData$.next(this.contentItemUrl);
     this.displayItem$.next(this.contentItem);
   }
 
@@ -84,7 +84,7 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
   fileSelected(event) {
     if (isNullOrUndefined(event)) {
       // revert preview back to initial contentItem
-      this.displayUrl$.next(this.contentItemUrl);
+      this.previewData$.next(this.contentItemUrl);
       this.displayItem$.next(this.contentItem);
     }
     this.file = event;
