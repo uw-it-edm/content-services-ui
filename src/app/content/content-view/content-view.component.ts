@@ -96,7 +96,7 @@ export class ContentViewComponent implements OnInit, OnDestroy {
   }
 
   // TODO: type detection should be improved
-  private determineUrlType(): void {
+  determineUrlType(): void {
     const url = this.url.toString();
     if (!isNullOrUndefined(this.pdfDataSource)) {
       this.dataType = 'pdfData';

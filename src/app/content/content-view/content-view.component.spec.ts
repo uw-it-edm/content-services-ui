@@ -6,6 +6,8 @@ import { PdfViewerComponent } from 'ng2-pdf-viewer';
 import { ContentItem } from '../shared/model/content-item';
 import { Observable } from 'rxjs/Observable';
 import { ContentService } from '../shared/content.service';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
 
 class MockContentService {
   getFileUrl(itemId: string, webViewable: boolean): string {
@@ -17,6 +19,7 @@ describe('ContentViewComponent', () => {
   let component: ContentViewComponent;
   let fixture: ComponentFixture<ContentViewComponent>;
   let defaultContentItem: ContentItem;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
@@ -80,6 +83,27 @@ describe('ContentViewComponent', () => {
     component.item$ = Observable.of(contentItem2);
     fixture.detectChanges();
     component.ngOnInit();
+    expect(component.dataType).toEqual('unknown');
+  });
+
+  it('should have an identify pdf dataType from dataURI', () => {
+    component.url = 'data:application/pdf:asdfasdfasdfasdfsad';
+    component.determineUrlType();
+    expect(component.dataType).toEqual('pdf');
+  });
+  it('should have an identify image dataType from dataURI', () => {
+    component.url = 'data:image/jpeg:asdfasdfasdfasdfsad';
+    component.determineUrlType();
+    expect(component.dataType).toEqual('image');
+  });
+  it('should have an identify pdfUrl dataType from url', () => {
+    component.url = 'http://asdfasdfasdfasdfsad';
+    component.determineUrlType();
+    expect(component.dataType).toEqual('pdfUrl');
+  });
+  it('should have an identify unkown dataType from dataURI', () => {
+    component.url = 'data:application/unknown;asdfasdfasdfasdfsad';
+    component.determineUrlType();
     expect(component.dataType).toEqual('unknown');
   });
 });
