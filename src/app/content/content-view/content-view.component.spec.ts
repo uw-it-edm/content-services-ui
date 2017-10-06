@@ -63,4 +63,23 @@ describe('ContentViewComponent', () => {
     component.ngOnInit();
     expect(component.dataType).toEqual('image');
   });
+  it('should have an initialized unknown dataType', () => {
+    const contentItem2 = new ContentItem();
+    contentItem2.id = '2';
+    contentItem2.label = 'test label 2';
+    contentItem2.metadata['MimeType'] = 'application/yml';
+    component.item$ = Observable.of(contentItem2);
+    fixture.detectChanges();
+    component.ngOnInit();
+    expect(component.dataType).toEqual('unknown');
+  });
+  it('should have an initialized unknown dataType when no MimeType is specified', () => {
+    const contentItem2 = new ContentItem();
+    contentItem2.id = '2';
+    contentItem2.label = 'test label 2';
+    component.item$ = Observable.of(contentItem2);
+    fixture.detectChanges();
+    component.ngOnInit();
+    expect(component.dataType).toEqual('unknown');
+  });
 });
