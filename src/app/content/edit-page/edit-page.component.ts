@@ -12,6 +12,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import 'rxjs/add/observable/of';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { isNullOrUndefined } from 'util';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Component({
   selector: 'app-edit-page',
@@ -29,11 +30,10 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
   editContentItemForm: FormGroup;
 
   contentItem: ContentItem;
-  contentItemUrl: string;
+  contentItem$: Subject<ContentItem> = new ReplaySubject();
 
-  displayUrl$: Subject<string> = new ReplaySubject();
-  displayItem$: Subject<ContentItem> = new ReplaySubject();
   file: File;
+  file$: Subject<File> = new BehaviorSubject(null);
 
   constructor(
     private route: ActivatedRoute,
@@ -71,23 +71,16 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
 
   private updateContentItem(contentItem: ContentItem): void {
     this.contentItem = contentItem;
-    this.contentItemUrl = this.contentService.getFileUrl(this.id, true);
-    this.displayUrl$.next(this.contentItemUrl);
-    this.displayItem$.next(this.contentItem);
+    this.contentItem$.next(this.contentItem);
   }
 
   private createForm() {
     this.editContentItemForm = this.fb.group({});
-    // initialize empty form
   }
 
   fileSelected(event) {
-    if (isNullOrUndefined(event)) {
-      // revert preview back to initial contentItem
-      this.displayUrl$.next(this.contentItemUrl);
-      this.displayItem$.next(this.contentItem);
-    }
     this.file = event;
+    this.file$.next(event); // share with content-view
   }
 
   saveItem() {

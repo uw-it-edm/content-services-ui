@@ -21,7 +21,6 @@ describe('FileUploadComponent', () => {
     fixture = TestBed.createComponent(FileUploadComponent);
     component = fixture.componentInstance;
     component.fieldName = 'upload';
-    component.previewUrl$ = new Subject<string>();
     component.formGroup = new FormGroup({});
     fixture.detectChanges();
   });

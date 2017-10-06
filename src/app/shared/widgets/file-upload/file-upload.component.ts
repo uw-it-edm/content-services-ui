@@ -9,9 +9,9 @@ import { Subject } from 'rxjs/Subject';
 })
 export class FileUploadComponent implements OnInit {
   @Input() fieldName: string;
-  @Input() previewUrl$: Subject<string>;
   @Input() formGroup: FormGroup;
-  private file: File;
+
+  // private file: File;
 
   @Output() fileSelected: EventEmitter<File> = new EventEmitter();
 
@@ -26,26 +26,11 @@ export class FileUploadComponent implements OnInit {
 
     if (fileList.length > 0) {
       this.formGroup.get(this.fieldName).markAsDirty();
-      this.handleInputChange(event);
+      const file = event.dataTransfer ? event.dataTransfer.files[0] : fileList[0];
+      this.fileSelected.emit(file);
     } else {
       this.fileSelected.emit(null);
       this.formGroup.get(this.fieldName).markAsPristine();
     }
-  }
-
-  // TODO: what if not webviewable?
-  handleInputChange(e) {
-    this.file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
-    this.fileSelected.emit(this.file);
-
-    const reader = new FileReader();
-
-    reader.onload = this._handleReaderLoaded.bind(this);
-    reader.readAsDataURL(this.file);
-  }
-
-  _handleReaderLoaded(e) {
-    const reader = e.target;
-    this.previewUrl$.next(reader.result);
   }
 }
