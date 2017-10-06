@@ -6,14 +6,14 @@
       <pdf-viewer [src]="pdfDataSource"
                   [page]="pageNumber"
                   [render-text]="true"
-                  style="display: block;"></pdf-viewer>
+                  ></pdf-viewer>
     </div>
 
     <div *ngSwitchCase="'pdfUrl'">
       <pdf-viewer [src]="url"
                   [page]="pageNumber"
                   [render-text]="true"
-                  style="display: block;"></pdf-viewer>
+                  ></pdf-viewer>
     </div>
 
     <div *ngSwitchCase="'image'">
