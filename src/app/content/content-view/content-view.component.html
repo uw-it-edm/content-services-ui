@@ -3,7 +3,7 @@
   <div [ngSwitch]="dataType">
 
     <div *ngSwitchCase="'pdfData'">
-      <pdf-viewer [src]="srcObj"
+      <pdf-viewer [src]="pdfDataSource"
                   [page]="pageNumber"
                   [render-text]="true"
                   style="display: block;"></pdf-viewer>

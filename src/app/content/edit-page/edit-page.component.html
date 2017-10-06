@@ -6,7 +6,7 @@
       <span class="button-row">
         <app-content-pager
           [nextBaseUrl]=" config.tenant + '/' + page + '/edit/'"
-          [contentItem$]="displayItem$"></app-content-pager>
+          [contentItem$]="contentItem$"></app-content-pager>
       </span>
     </md-toolbar>
     <form [formGroup]="editContentItemForm">
@@ -16,7 +16,6 @@
             [fieldName]="'updateFile'"
             (fileSelected)="fileSelected($event)"
             [(formGroup)]="editContentItemForm"
-            [(previewData$)]="previewData$"
           >
           </app-file-upload>
 
@@ -28,7 +27,7 @@
           <div fxFlex="30">
             <app-content-metadata
               [formGroup]="editContentItemForm"
-              [contentItem$]="displayItem$"
+              [contentItem$]="contentItem$"
               [pageConfig]="pageConfig"
               (save)="saveItem($event)"
             >
@@ -37,8 +36,8 @@
           <div fxFlex="70">
             <app-content-view
               *ngIf="pageConfig.viewPanel"
-              [item$]="displayItem$"
-              [(data$)]="previewData$"
+              [item$]="contentItem$"
+              [file$]="file$"
             >
             </app-content-view>
           </div>
