@@ -6,8 +6,6 @@ import { PdfViewerComponent } from 'ng2-pdf-viewer';
 import { ContentItem } from '../shared/model/content-item';
 import { Observable } from 'rxjs/Observable';
 import { ContentService } from '../shared/content.service';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subject } from 'rxjs/Subject';
 
 class MockContentService {
   getFileUrl(itemId: string, webViewable: boolean): string {
