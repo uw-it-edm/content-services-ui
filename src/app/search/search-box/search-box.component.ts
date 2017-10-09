@@ -16,7 +16,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   @Input() searchModel$: Observable<SearchModel>;
   @Input() pageConfig: PageConfig;
-  @Output() search = new EventEmitter<SearchModel>();
+  @Output() searchEvent = new EventEmitter<SearchModel>();
 
   constructor() {}
 
@@ -35,7 +35,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   updateSearch() {
     console.log('search in component with ' + JSON.stringify(this.searchModel));
-    this.search.emit(this.searchModel);
+    this.searchEvent.emit(this.searchModel);
   }
 
   ngOnDestroy(): void {
