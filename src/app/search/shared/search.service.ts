@@ -31,11 +31,12 @@ export class SearchService {
   }
 
   private searchEntries(term: SearchModel, pageConfig: PageConfig): Observable<SearchResults> {
+    const indexName = pageConfig.searchConfig.indexName;
     const searchPayload = this.buildSearchPayload(term, pageConfig);
     const options = this.buildRequestOptions();
 
-    console.log('searching with ' + JSON.stringify(searchPayload));
-    return this.http.post(this.baseUrl + 'documents-facilities', searchPayload, options).map(response => {
+    console.log('searching "' + indexName + '" with ' + JSON.stringify(searchPayload));
+    return this.http.post(this.baseUrl + indexName, searchPayload, options).map(response => {
       return this.convertSearchApiResultsToSearchResults(response.json());
     });
   }
