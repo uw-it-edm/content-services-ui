@@ -6,6 +6,7 @@ import { User } from '../../../user/shared/user';
 import { Observable } from 'rxjs/Observable';
 import { ConfigResolver } from '../../../routing/shared/config-resolver.service';
 import { MdMenu } from '@angular/material';
+import { TenantConfigInfo } from '../../../core/shared/model/tenant-config-info';
 
 @Component({
   selector: 'app-header',
@@ -16,16 +17,17 @@ export class HeaderComponent implements OnInit {
   tenant: string;
   title: string;
   promiseUser: Promise<User>;
-  availableTenants$: Observable<any[]>;
+  availableTenants$: Observable<TenantConfigInfo[]>;
 
   @ViewChild(MdMenu) accountMenu: MdMenu;
   @ViewChild(MdMenu) userMenu: MdMenu;
 
-  constructor(private configResolver: ConfigResolver,
-              private eventsManager: GlobalEventsManagerService,
-              private configService: ConfigService,
-              private userService: UserService) {
-  }
+  constructor(
+    private configResolver: ConfigResolver,
+    private eventsManager: GlobalEventsManagerService,
+    private configService: ConfigService,
+    private userService: UserService
+  ) {}
 
   ngOnInit() {
     console.log('init header');

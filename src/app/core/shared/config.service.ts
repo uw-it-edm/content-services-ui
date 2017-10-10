@@ -11,16 +11,15 @@ import 'rxjs/add/operator/publishReplay';
 import 'rxjs/add/operator/toPromise';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { TenantConfigInfo } from './model/tenant-config-info';
 
 @Injectable()
 export class ConfigService {
   private configs: Map<string, Config> = new Map();
   private tenantsConfig = null;
-  private listTenantsUrl = 'https://api.github.com/repos/uw-it-edm/content-services-ui-config/contents/' +
-    environment.config_environment;
+  private listTenantsUrl = 'https://api.github.com/repos' + environment.tenantConfigGithubPath;
 
-  constructor(private http: Http, private httpclient: HttpClient) {
-  }
+  constructor(private http: Http, private httpclient: HttpClient) {}
 
   getConfigForTenant(requestedTenant: string): Promise<Config> {
     return this.getTenantList()
@@ -45,7 +44,7 @@ export class ConfigService {
       });
   }
 
-  getTenantList(): Observable<any[]> {
+  getTenantList(): Observable<TenantConfigInfo[]> {
     if (this.tenantsConfig !== null) {
       console.log('getTenantList from cache');
       return Observable.of(this.tenantsConfig);
@@ -58,10 +57,10 @@ export class ConfigService {
           const tenants = [];
 
           result.forEach(entry => {
-            tenants.push({
-              tenantName: entry['name'].replace('.json', ''),
-              downloadUrl: entry['download_url']
-            });
+            const tenantName = entry['name'].replace('.json', '');
+            const tenantConfigInfo = new TenantConfigInfo(tenantName, entry['download_url']);
+
+            tenants.push(tenantConfigInfo);
           });
 
           return tenants;
