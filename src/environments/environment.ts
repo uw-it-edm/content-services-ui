@@ -4,6 +4,7 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
+  config_environment: 'dev',
   production: false,
   search_api: {
     url: 'search-api.dev',

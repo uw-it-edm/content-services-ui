@@ -3,8 +3,7 @@ import { GlobalEventsManagerService } from '../../../core/shared/global-events-m
 import { ConfigService } from '../../../core/shared/config.service';
 import { UserService } from '../../../user/shared/user.service';
 import { User } from '../../../user/shared/user';
-import { isNullOrUndefined } from 'util';
-import { Title } from '@angular/platform-browser';
+import { Observable } from 'rxjs/Observable';
 import { ConfigResolver } from '../../../routing/shared/config-resolver.service';
 import { MdMenu } from '@angular/material';
 
@@ -17,21 +16,23 @@ export class HeaderComponent implements OnInit {
   tenant: string;
   title: string;
   promiseUser: Promise<User>;
-  availableTenants: Promise<string[]>;
+  availableTenants$: Observable<any[]>;
 
   @ViewChild(MdMenu) accountMenu: MdMenu;
   @ViewChild(MdMenu) userMenu: MdMenu;
 
-  constructor(
-    private configResolver: ConfigResolver,
-    private eventsManager: GlobalEventsManagerService,
-    private configService: ConfigService,
-    private userService: UserService
-  ) {}
+  constructor(private configResolver: ConfigResolver,
+              private eventsManager: GlobalEventsManagerService,
+              private configService: ConfigService,
+              private userService: UserService) {
+  }
 
   ngOnInit() {
+    console.log('init header');
+
     this.promiseUser = this.userService.getAuthenticatedUser();
-    this.availableTenants = this.configService.getTenantList();
+    this.availableTenants$ = this.configService.getTenantList();
+
     this.eventsManager.tenantEmitter.subscribe(tenant => {
       this.tenant = tenant;
     });

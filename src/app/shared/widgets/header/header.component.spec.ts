@@ -1,4 +1,4 @@
-import { async, inject, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 
 import { HeaderComponent } from './header.component';
 import { MaterialConfigModule } from '../../../routing/material-config.module';
@@ -9,6 +9,8 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ConfigResolver } from '../../../routing/shared/config-resolver.service';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { ActivatedRouteStub } from '../../../../testing/router-stubs';
+import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 class RouterStub {
   navigate(url: string) {
@@ -36,12 +38,12 @@ describe('HeaderComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [MaterialConfigModule],
+        imports: [MaterialConfigModule, HttpClientModule, HttpModule],
         declarations: [HeaderComponent],
         providers: [
-          { provide: ActivatedRoute, useValue: activatedRoute },
-          { provide: Router, useClass: RouterStub },
-          { provide: ConfigService, useValue: configServiceStub },
+          {provide: ActivatedRoute, useValue: activatedRoute},
+          {provide: Router, useClass: RouterStub},
+          {provide: ConfigService, useValue: configServiceStub},
           ConfigResolver,
           GlobalEventsManagerService,
           UserService
@@ -63,7 +65,7 @@ describe('HeaderComponent', () => {
 
   it('should contain accounts in the account menu', () => {
     const route = new ActivatedRouteSnapshot();
-    const routeParams = { tenant: 'test-tenant' };
+    const routeParams = {tenant: 'test-tenant'};
     route.params = routeParams;
     inject([ConfigResolver], (service: ConfigResolver) => {
       service.resolve(route, null).then(config => {

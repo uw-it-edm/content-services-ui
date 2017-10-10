@@ -5,6 +5,8 @@
 
 export const environment = {
   production: true,
+
+  config_environment: 'dev',
   search_api: {
     url: 'search-api.dev',
     context: '/search',
