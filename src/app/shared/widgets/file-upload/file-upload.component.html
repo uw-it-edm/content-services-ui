@@ -1,8 +1,15 @@
-<div [formGroup]="formGroup">
-  <label [for]="fieldName">Upload file</label>
-  <input class="form-control"
-         [name]="fieldName"
-         type="file"
-         (change)="fileChange($event)"
-         [formControlName]="fieldName">
+<div [formGroup]="formGroup" class="cs-file-upload">
+  <div class="mat-input-container mat-form-field">
+    <div class="mat-input-wrapper mat-form-field-wrapper">
+        <div class="mat-input-flex mat-form-field-flex">
+          <div class="mat-input-infix mat-form-field-infix">
+            <input class="mat-input-element"
+                   [name]="fieldName"
+                   type="file"
+                   (change)="fileChange($event)"
+                   [formControlName]="fieldName">
+          </div>
+        </div>
+    </div>
+  </div>
 </div>

@@ -28,6 +28,20 @@ export class ConfigService {
     {
       "tenant": "Demo",
       "appName": "My demo app",
+      "customText": {
+         "addContentItemButton": {
+            "label": "Add Item",
+            "description": "Upload a new content item"
+          },
+          "nextContentItemButton": {
+            "label": "Next",
+            "description": "Move down to next content item"
+          },
+          "previousContentItemButton": {
+            "label": "Previous",
+            "description": "Move up to previous content item"
+          }
+      },
       "pages": {
         "google-search": {
           "pageName": "google search page",
