@@ -39,6 +39,14 @@
     }
 }
 
+/*.cs-file-upload input[type="file"] {*/
+    /*display: none;*/
+/*}*/
+
+.cs-file-upload {
+    margin-bottom: 1rem;
+}
+
 .uwit-cs-appbar .mat-toolbar {
     background: transparent;
     color: whitesmoke;
@@ -92,7 +100,7 @@
     padding: 0rem 2rem;
 }
 
-.uw-default .cs-content-metadata .mat-raised-button {
+.uw-default .cs-edit-page .mat-raised-button {
     margin-right: 1rem;
 }
 
