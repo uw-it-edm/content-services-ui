@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { GlobalEventsManagerService } from '../../../core/shared/global-events-manager.service';
 import { ConfigService } from '../../../core/shared/config.service';
 import { UserService } from '../../../user/shared/user.service';
 import { User } from '../../../user/shared/user';
+import { isNullOrUndefined } from 'util';
+import { Title } from '@angular/platform-browser';
+import { ConfigResolver } from '../../../routing/shared/config-resolver.service';
+import { MdMenu } from '@angular/material';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +19,11 @@ export class HeaderComponent implements OnInit {
   promiseUser: Promise<User>;
   availableTenants: Promise<string[]>;
 
+  @ViewChild(MdMenu) accountMenu: MdMenu;
+  @ViewChild(MdMenu) userMenu: MdMenu;
+
   constructor(
+    private configResolver: ConfigResolver,
     private eventsManager: GlobalEventsManagerService,
     private configService: ConfigService,
     private userService: UserService
@@ -27,6 +35,8 @@ export class HeaderComponent implements OnInit {
     this.eventsManager.tenantEmitter.subscribe(tenant => {
       this.tenant = tenant;
     });
-    this.title = 'Content Services';
+    this.configResolver.getTenantNameSubject().subscribe(tenantName => {
+      this.title = tenantName;
+    });
   }
 }

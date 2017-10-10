@@ -7,7 +7,6 @@ import { EditPageComponent } from './edit-page/edit-page.component';
 import { ContentMetadataComponent } from './content-metadata/content-metadata.component';
 import { ContentViewComponent } from './content-view/content-view.component';
 import { PdfViewerComponent } from 'ng2-pdf-viewer';
-import { SafeUrlPipe } from '../shared/pipes/safe-url.pipe';
 
 @NgModule({
   imports: [SharedModule, ReactiveFormsModule, UserModule],

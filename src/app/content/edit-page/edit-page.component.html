@@ -5,7 +5,8 @@
       <span class="cs-fill-remaining-space"></span>
       <span class="button-row">
         <button md-button>
-          <md-icon class="md-24" aria-label="Previous item">keyboard_arrow_up</md-icon> Previous
+          <md-icon class="md-24">keyboard_arrow_up</md-icon>
+          <span appCustomText="previousContentItemButton" defaultValue="Prev"></span>
         </button>
         <span>
           <!-- FIXME: This is a placeholder -->
@@ -13,7 +14,8 @@
           <!-- END FIXME -->
         </span>
         <button md-button>
-          Next <md-icon class="md-24" aria-label="Next item">keyboard_arrow_down</md-icon>
+          <span appCustomText="nextContentItemButton" defaultValue="Next"></span>
+          <md-icon class="md-24">keyboard_arrow_down</md-icon>
         </button>
       </span>
     </md-toolbar>
