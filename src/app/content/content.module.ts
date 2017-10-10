@@ -7,11 +7,18 @@ import { EditPageComponent } from './edit-page/edit-page.component';
 import { ContentMetadataComponent } from './content-metadata/content-metadata.component';
 import { ContentViewComponent } from './content-view/content-view.component';
 import { PdfViewerComponent } from 'ng2-pdf-viewer';
+import { ContentPagerComponent } from './content-pager/content-pager.component';
 
 @NgModule({
   imports: [SharedModule, ReactiveFormsModule, UserModule],
   exports: [EditPageComponent],
-  declarations: [EditPageComponent, ContentMetadataComponent, ContentViewComponent, PdfViewerComponent],
+  declarations: [
+    EditPageComponent,
+    ContentMetadataComponent,
+    ContentViewComponent,
+    PdfViewerComponent,
+    ContentPagerComponent
+  ],
   providers: [ContentService]
 })
 export class ContentModule {}

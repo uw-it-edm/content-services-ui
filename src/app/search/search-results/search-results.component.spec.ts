@@ -9,6 +9,11 @@ import { RouterModule } from '@angular/router';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { PageConfig } from '../../core/shared/model/page-config';
 import { SearchResults } from '../shared/model/search-result';
+import { DataService } from '../../shared/providers/data.service';
+
+class MockDataService {
+  storage = ['123', '456'];
+}
 
 describe('SearchResultsComponent', () => {
   let component: SearchResultsComponent;
@@ -18,6 +23,7 @@ describe('SearchResultsComponent', () => {
     async(() => {
       TestBed.configureTestingModule({
         imports: [MaterialConfigModule, NoopAnimationsModule, RouterModule],
+        providers: [{ provide: DataService, useClass: MockDataService }],
         declarations: [SearchResultsComponent]
       }).compileComponents();
     })

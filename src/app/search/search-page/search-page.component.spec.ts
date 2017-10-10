@@ -16,6 +16,7 @@ import { SearchResults } from '../shared/model/search-result';
 import { HttpModule } from '@angular/http';
 import { SearchModel } from '../shared/model/search-model';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { DataService } from '../../shared/providers/data.service';
 
 let activatedRoute: ActivatedRouteStub;
 let searchServiceSpy: MockSearchService;
@@ -27,7 +28,9 @@ class MockSearchService {
     return Observable.of(new SearchResults());
   }
 }
-
+class MockDataService {
+  storage = ['123', '456'];
+}
 describe('SearchPageComponent', () => {
   beforeEach(() => {
     activatedRoute = new ActivatedRouteStub();
@@ -42,6 +45,7 @@ describe('SearchPageComponent', () => {
         providers: [
           { provide: ActivatedRoute, useValue: activatedRoute },
           { provide: SearchService, useValue: searchServiceSpy },
+          { provide: DataService, useClass: MockDataService },
           Title
         ],
         schemas: [NO_ERRORS_SCHEMA]

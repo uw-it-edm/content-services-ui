@@ -2,7 +2,7 @@
     <div class="search-form-group">
         <label *ngIf="pageConfig?.searchConfig?.label">{{pageConfig.searchConfig.label}}</label>
         <md-form-field>
-            <input mdInput [(ngModel)]="searchModel.stringQuery" (ngModelChange)="updateSearch()" placeholder="{{pageConfig?.searchConfig?.placeholder}}" type="search">
+            <input mdInput [(ngModel)]="searchModel.stringQuery" (search)="updateSearch()" (ngModelChange)="updateSearch()" placeholder="{{pageConfig?.searchConfig?.placeholder}}" type="search">
             <!--<md-icon mdSuffix>search</md-icon>-->
 
             <md-hint *ngIf="pageConfig?.searchConfig?.directions" align="start">{{pageConfig?.searchConfig?.directions}}</md-hint>

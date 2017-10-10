@@ -4,19 +4,9 @@
       <a routerLink="/{{config.tenant}}/{{page}}">Return to Results</a>
       <span class="cs-fill-remaining-space"></span>
       <span class="button-row">
-        <button md-button>
-          <md-icon class="md-24">keyboard_arrow_up</md-icon>
-          <span appCustomText="previousContentItemButton" defaultValue="Prev"></span>
-        </button>
-        <span>
-          <!-- FIXME: This is a placeholder -->
-          1 of 1
-          <!-- END FIXME -->
-        </span>
-        <button md-button>
-          <span appCustomText="nextContentItemButton" defaultValue="Next"></span>
-          <md-icon class="md-24">keyboard_arrow_down</md-icon>
-        </button>
+        <app-content-pager
+          [nextBaseUrl]=" config.tenant + '/' + page + '/edit/'"
+          [contentItem$]="contentItem$"></app-content-pager>
       </span>
     </md-toolbar>
     <form [formGroup]="editContentItemForm">
@@ -26,7 +16,6 @@
             [fieldName]="'updateFile'"
             (fileSelected)="fileSelected($event)"
             [(formGroup)]="editContentItemForm"
-            [(previewUrl$)]="displayUrl$"
           >
           </app-file-upload>
 
@@ -38,24 +27,28 @@
           <div fxFlex="30">
             <app-content-metadata
               [formGroup]="editContentItemForm"
-              [contentItem]="contentItem"
+              [contentItem$]="contentItem$"
               [pageConfig]="pageConfig"
-              (save)="onSave($event)"
+              (save)="saveItem($event)"
             >
             </app-content-metadata>
           </div>
           <div fxFlex="70">
             <app-content-view
               *ngIf="pageConfig.viewPanel"
-              [item$]="displayItem$"
-              [(url$)]="displayUrl$"
+              [item$]="contentItem$"
+              [file$]="file$"
             >
             </app-content-view>
           </div>
         </div>
       </div>
       <div *ngIf="pageConfig?.buttons" class="button-row" style="margin-bottom: 1em">
-        <button *ngFor="let button of pageConfig?.buttons" md-raised-button (click)="buttonPress(button)" [color]="button.color" [disabled]="editContentItemForm.pristine" [id]="button.command" [type]="button.type">{{button.label}}</button>
+        <button *ngFor="let button of pageConfig?.buttons" md-raised-button
+                (click)="buttonPress(button)" [color]="button.color"
+                [disabled]="editContentItemForm.pristine" [id]="button.command"
+                [type]="button.type">{{button.label}}
+        </button>
       </div>
     </form>
 

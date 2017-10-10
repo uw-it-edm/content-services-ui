@@ -6,7 +6,9 @@ import { RouterModule } from '@angular/router';
 import { FileUploadComponent } from './widgets/file-upload/file-upload.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SafeUrlPipe } from './pipes/safe-url.pipe';
+
 import { CustomTextDirective } from './directives/custom-text/custom-text.directive';
+import { DataService } from './providers/data.service'; 
 
 @NgModule({
   imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule],
@@ -20,6 +22,6 @@ import { CustomTextDirective } from './directives/custom-text/custom-text.direct
     SafeUrlPipe
   ],
   declarations: [CustomTextDirective, HeaderComponent, FileUploadComponent, SafeUrlPipe],
-  providers: []
+  providers: [DataService]
 })
 export class SharedModule {}

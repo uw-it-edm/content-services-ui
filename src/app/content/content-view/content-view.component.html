@@ -1,13 +1,26 @@
 <div class="cs-content-view">
-    <div *ngIf="!isPdf">
-        <iframe [src]="url | safeUrl"></iframe>
+  <div [ngSwitch]="dataType">
+
+    <div *ngSwitchCase="'pdfData'">
+      <pdf-viewer [src]="pdfDataSource"
+                  [page]="pageNumber"
+                  [render-text]="true"
+                  ></pdf-viewer>
     </div>
 
-    <div *ngIf="isPdf">
-        <pdf-viewer
-                [src]="url"
-                [page]="pageNumber"
-                style="display: block;"
-        ></pdf-viewer>
+    <div *ngSwitchCase="'pdfUrl'">
+      <pdf-viewer [src]="url"
+                  [page]="pageNumber"
+                  [render-text]="true"
+                  ></pdf-viewer>
     </div>
+
+    <div *ngSwitchCase="'image'">
+      <img [src]="url | safeUrl"/>
+    </div>
+
+    <div *ngSwitchCase="'unknown'">
+      Unable to display Content Preview.
+    </div>
+  </div>
 </div>

@@ -8,6 +8,7 @@ import { MdPaginator, PageEvent } from '@angular/material';
 import { isNullOrUndefined } from 'util';
 import { PaginatorConfig } from '../shared/model/paginator-config';
 import { Subject } from 'rxjs/Subject';
+import { DataService } from '../../shared/providers/data.service';
 
 @Component({
   selector: 'app-search-results',
@@ -31,6 +32,8 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   @ViewChild(MdPaginator) topPaginator: MdPaginator;
   @ViewChild(MdPaginator) bottomPaginator: MdPaginator;
 
+  constructor(private data: DataService) {}
+
   ngOnInit(): void {
     this.searchModel$.takeUntil(this.componentDestroyed).subscribe(searchModel => {
       this.searchModel = searchModel;
@@ -41,6 +44,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
       if (this.hasResults) {
         this.paginatorConfig.numberOfResults = results.total;
       }
+      this.data.storage = results.results.map(result => result['id']); // store a list of result ids to be passed to edit page
     });
     for (const field of this.pageConfig.fieldsToDisplay) {
       this.displayedColumns.push(field);

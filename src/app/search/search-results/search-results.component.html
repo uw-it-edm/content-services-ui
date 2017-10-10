@@ -19,7 +19,8 @@
 
     <ng-container mdColumnDef="label">
       <md-header-cell *mdHeaderCellDef md-sort-header> Name</md-header-cell>
-      <md-cell *mdCellDef="let element"><a routerLink="edit/{{element.id}}">{{element.label}}</a>
+      <md-cell *mdCellDef="let element"><a routerLink="edit/{{element.id}}"
+                                           queryParamsHandling="merge">{{element.label}}</a>
       </md-cell>
     </ng-container>
 

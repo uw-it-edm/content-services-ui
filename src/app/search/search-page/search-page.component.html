@@ -6,7 +6,8 @@
       <app-search-box
         [searchModel$]="searchModel$"
         [pageConfig]="pageConfig"
-        (search)="onSearch($event)"
+        (searchEvent)="onSearch($event)"
+
       >
       </app-search-box>
     </div>
