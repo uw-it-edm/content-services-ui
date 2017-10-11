@@ -21,6 +21,7 @@ import { SearchModule } from '../search/search.module';
 import { ContentModule } from '../content/content.module';
 import { SharedModule } from '../shared/shared.module';
 import { UserModule } from '../user/user.module';
+import { HttpClientModule } from '@angular/common/http';
 
 let enableRouterTracing = true;
 if (environment.production) {

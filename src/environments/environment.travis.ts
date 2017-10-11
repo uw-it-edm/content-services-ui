@@ -5,6 +5,8 @@
 
 export const environment = {
   production: true,
+
+  tenantConfigGithubPath: '/uw-it-edm/content-services-ui-config/contents/dev',
   search_api: {
     url: 'search-api.dev',
     context: '/search',

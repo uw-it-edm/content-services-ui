@@ -1,232 +1,75 @@
 import { Injectable } from '@angular/core';
 import { Config } from './model/config';
+import { Http } from '@angular/http';
+
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toArray';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/mergeMap';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/publishReplay';
+import 'rxjs/add/operator/toPromise';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { TenantConfigInfo } from './model/tenant-config-info';
 
 @Injectable()
 export class ConfigService {
-  configs: Map<string, Config>;
+  private configs: Map<string, Config> = new Map();
+  private tenantsConfig = null;
+  private listTenantsUrl = 'https://api.github.com/repos' + environment.tenantConfigGithubPath;
 
-  constructor() {
-    this.load();
+  constructor(private http: Http, private httpclient: HttpClient) {}
+
+  getConfigForTenant(requestedTenant: string): Promise<Config> {
+    return this.getTenantList()
+      .toPromise()
+      .then(tenants => {
+        const tenantInfo = tenants.find(tenantInList => {
+          return tenantInList.tenantName === requestedTenant;
+        });
+
+        if (this.configs.has(tenantInfo.tenantName)) {
+          console.log('getConfigForTenant from cache');
+          return Promise.resolve(this.configs.get(tenantInfo.tenantName));
+        } else {
+          console.log('getConfigForTenant');
+          return this.httpclient
+            .get<Config>(tenantInfo.downloadUrl)
+            .do(config => this.configs.set(tenantInfo.tenantName, config))
+            .publishReplay(1)
+            .refCount()
+            .toPromise();
+        }
+      });
   }
 
-  load() {
-    console.log('init config ');
-    const facilitiesConfig: Config = JSON.parse(`
-    {
-      "tenant": "Facilities",
-      "appName": "Facilities app",
-      "pages": {
-        "google-search": {
-          "pageName": "my search page"
-        }
-      }
-    }`);
+  getTenantList(): Observable<TenantConfigInfo[]> {
+    if (this.tenantsConfig !== null) {
+      console.log('getTenantList from cache');
+      return Observable.of(this.tenantsConfig);
+    } else {
+      console.log('getTenantList');
+      return this.http
+        .get(this.listTenantsUrl)
+        .map(result => result.json())
+        .map(result => {
+          const tenants = [];
 
-    const demoConfig: Config = Object.assign(
-      new Config(),
-      JSON.parse(`
-    {
-      "tenant": "Demo",
-      "appName": "My demo app",
-      "customText": {
-         "addContentItemButton": {
-            "label": "Add Item",
-            "description": "Upload a new content item"
-          },
-          "nextContentItemButton": {
-            "label": "Next",
-            "description": "Move down to next content item"
-          },
-          "previousContentItemButton": {
-            "label": "Previous",
-            "description": "Move up to previous content item"
-          }
-      },
-      "pages": {
-        "google-search": {
-          "pageName": "google search page",
-          "theme": "uw-default",
-          "fieldsToDisplay" : ["LastModifier", "MimeType"],
-           "secondSearchBox": true,
-           "facetsConfig":{
-             "active": true,
-             "facets": {
-                "metadata.DocumentType.label.raw": {
-                   "key" : "metadata.DocumentType.label.raw",
-                   "label" : "Document Type",
-                   "order": "desc",
-                   "size":5
-                 },
-                "metadata.DocumentYear": {
-                   "key" : "metadata.DocumentYear",
-                   "label" : "Document Year",
-                   "order": "desc",
-                   "size":10
-                }
-             }
-           },
-           "editPageConfig": {
-              "pageName": "Edit Content Item",
-              "theme": "uw-default",
-              "fieldsToDisplay" : ["CategoryId","ProfileId","OriginalFileName","PublishStatus","LastModifiedDate"],
-              "viewPanel": true,
-              "buttons": [
-                {
-                  "label": "Delete",
-                  "command": "deleteItem"
-                },
-                {
-                  "label": "Publish",
-                  "command": "publishItem"
-                },
-                {
-                  "label": "Save",
-                  "color": "primary",
-                  "command": "saveItem"
-                }
-              ]
-           }
-         },
-        "tab-search": {
-          "pageName": "Demonstration Search",
-          "theme": "uw-default",
-          "fieldsToDisplay" : ["LastModifier"],
-          "editPageConfig": {
-              "theme": "uw-default",
-              "pageName": "Edit Content Item",
-              "fieldsToDisplay" : ["CategoryId","ProfileId","OriginalFileName","PublishStatus"],
-              "buttons": [
-                {
-                  "label": "Delete",
-                  "command": "deleteItem"
-                },
-                {
-                  "label": "Publish",
-                  "command": "publishItem"
-                },
-                {
-                  "label": "Save",
-                  "color": "primary",
-                  "command": "saveItem"
-                }
-              ],
-              "viewPanel": true
-          },
-          "searchConfig": {
-              "directions": "Type a budget number, vendor name, amount, or other info",
-              "label": "",
-              "placeholder": "Search for documents",
-              "indexName": "documents-facilities"
-          },
-          "facetsConfig": {
-             "active": true,
-             "facets": {
-                "metadata.DocumentType.label.raw": {
-                   "key" : "metadata.DocumentType.label.raw",
-                   "label" : "Document Type",
-                   "order": "desc",
-                   "size":5
-                 },
-                "metadata.DocumentYear": {
-                   "key" : "metadata.DocumentYear",
-                   "label" : "Document Year",
-                   "order": "desc",
-                   "size":10
-                }
-             }
-          }
-        }
-      }
-    }`)
-    );
-    const mechEngProCardConfig: Config = Object.assign(
-      new Config(),
-      JSON.parse(`
-    {
-      "tenant": "mech-eng-procard",
-      "appName": "Mechanical Engineering: ProCard Receipts",
-      "pages": {
-        "tab-search": {
-          "pageName": "ProCard Receipts",
-          "theme": "uw-default",
-          "fieldsToDisplay" : ["ProCardHolder","PurchaseDate","Amount","Vendor","BudgetNumber","DocumentSubtype","PublishStatus"],
-          "editPageConfig": {
-              "theme": "uw-default",
-              "pageName": "Edit Content Item",
-              "fieldsToDisplay" : ["ReceivedDate","ProCardHolder","Filer","PurchaseDate","DocumentSubtype","Amount","Vendor",
-                                  "BudgetNumber","PublishStatus"],
-              "buttons": [
-                {
-                  "label": "Void",
-                  "command": "voidItem"
-                },
-                {
-                  "label": "Publish",
-                  "command": "publishItem"
-                },
-                {
-                  "label": "Save",
-                  "color": "primary",
-                  "command": "saveItem"
-                }
-              ],
-              "viewPanel": true
-          },
-          "searchConfig": {
-              "directions": "Type a budget number, vendor name, amount, or other info",
-              "label": "",
-              "placeholder": "Search for documents",
-              "indexName": "documents-procard"
-          },
-          "facetsConfig": {
-             "active": true,
-             "facets": {
-                "metadata.ProCardHolder.raw": {
-                   "key" : "metadata.ProCardHolder.raw",
-                   "label" : "ProCard Holder",
-                   "order": "desc",
-                   "size":10
-                 },
-                "metadata.PublishStatus": {
-                   "key" : "metadata.PublishStatus",
-                   "label" : "Reviewed",
-                   "order": "desc",
-                   "size":5
-                 },
-                  "metadata.BudgetNumber.raw": {
-                   "key" : "metadata.BudgetNumber.raw",
-                   "label" : "Document Type",
-                   "order": "desc",
-                   "size":10
-                },
-                "metadata.DocumentSubtype.raw": {
-                   "key" : "metadata.DocumentSubtype.raw",
-                   "label" : "Type",
-                   "order": "desc",
-                   "size":5
-                }
-             }
-          }
-        }
-      }
-    }`)
-    );
-    const configs = new Map<string, Config>();
+          result.forEach(entry => {
+            const tenantName = entry['name'].replace('.json', '');
+            const tenantConfigInfo = new TenantConfigInfo(tenantName, entry['download_url']);
 
-    configs.set('demo', demoConfig);
-    configs.set('facilities', facilitiesConfig);
-    configs.set('mech-eng-procard', mechEngProCardConfig);
+            tenants.push(tenantConfigInfo);
+          });
 
-    this.configs = configs;
-  }
-
-  getConfigForTenant(tenant: string): Promise<Config> {
-    console.log('loading for ' + tenant);
-
-    return Promise.resolve(this.configs.get(tenant));
-  }
-
-  getTenantList(): Promise<string[]> {
-    return Promise.resolve(Array.from(this.configs.keys()));
+          return tenants;
+        })
+        .do(tenantsConfig => {
+          this.tenantsConfig = tenantsConfig;
+        })
+        .publishReplay(1)
+        .refCount();
+    }
   }
 }

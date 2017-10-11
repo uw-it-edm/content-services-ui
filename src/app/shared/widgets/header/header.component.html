@@ -9,10 +9,10 @@
     <button md-icon-button [mdMenuTriggerFor]="accountMenu"><md-icon class="cs-icon">apps</md-icon></button>
     <md-menu #accountMenu="mdMenu" xPosition="before" yPosition="below">
       <button md-menu-item
-              *ngFor="let availableTenant of availableTenants | async"
-              routerLink="/{{availableTenant}}/"
+              *ngFor="let availableTenant of availableTenants$ | async"
+              routerLink="/{{availableTenant['tenantName']}}/"
               routerLinkActive="active">
-        <span>{{availableTenant}}</span>
+        <span>{{availableTenant['tenantName']}}</span>
       </button>
     </md-menu>
     <button md-button [mdMenuTriggerFor]="userMenu"><md-icon>account_box</md-icon>&nbsp;<span *ngIf="promiseUser | async as user">{{user.username}}</span></button>
