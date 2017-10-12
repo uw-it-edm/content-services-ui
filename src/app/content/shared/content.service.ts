@@ -12,7 +12,7 @@ import { isNullOrUndefined } from 'util';
 export class ContentService {
   itemPathFragment = '/item/';
   filePathFragment = '/file/';
-  baseUrl = environment.content_api.url + environment.content_api.context;
+  baseUrl = environment.content_api.url + environment.content_api.contextV3;
 
   constructor(private http: Http, private userService: UserService) {}
 

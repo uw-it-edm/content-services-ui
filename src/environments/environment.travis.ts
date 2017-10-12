@@ -18,7 +18,7 @@ export const environment = {
   },
   content_api: {
     url: 'http://content-api.dev',
-    context: '/content/v3',
+    contextV3: '/content/v3',
     contextV4: '/content/v4',
     authenticationHeader: 'auth'
   }
