@@ -1,9 +1,10 @@
 export class User {
-  username: string;
+  userName: string;
   actAs: string;
+  accounts: Map<string, string>;
 
-  constructor(username: string, actAs: string) {
-    this.username = username;
+  constructor(actAs: string) {
+    this.userName = actAs;
     this.actAs = actAs;
   }
 }

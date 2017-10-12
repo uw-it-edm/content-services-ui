@@ -6,7 +6,9 @@
     <span *ngIf="title"><a routerLink="/" class="cs-title">{{title}}</a></span>
     <span *ngIf="!title"><a routerLink="/" class="cs-title">Content Services</a></span>
     <span class="cs-spacer"></span>
-    <button md-icon-button [mdMenuTriggerFor]="accountMenu"><md-icon class="cs-icon">apps</md-icon></button>
+    <button md-icon-button [mdMenuTriggerFor]="accountMenu">
+      <md-icon class="cs-icon">apps</md-icon>
+    </button>
     <md-menu #accountMenu="mdMenu" xPosition="before" yPosition="below">
       <button md-menu-item
               *ngFor="let availableTenant of availableTenants$ | async"
@@ -15,7 +17,9 @@
         <span>{{availableTenant['tenantName']}}</span>
       </button>
     </md-menu>
-    <button md-button [mdMenuTriggerFor]="userMenu"><md-icon>account_box</md-icon>&nbsp;<span *ngIf="promiseUser | async as user">{{user.username}}</span></button>
+    <button md-button [mdMenuTriggerFor]="userMenu">
+      <md-icon>account_box</md-icon>&nbsp;<span *ngIf="promiseUser | async as user">{{user.userName}}</span>
+    </button>
     <md-menu #userMenu="mdMenu" xPosition="before" yPosition="below">
       <button md-menu-item
               routerLink="/logout"

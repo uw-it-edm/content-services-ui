@@ -9,8 +9,12 @@ import { FacetConfig } from '../../core/shared/model/facet-config';
 import { SearchFilter } from './model/search-filter';
 
 class UserServiceMock extends UserService {
+  constructor() {
+    super(null);
+  }
+
   getUser(): User {
-    return new User('test name', 'test');
+    return new User('test');
   }
 }
 
