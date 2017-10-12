@@ -86,7 +86,12 @@ describe('EditPageComponent', () => {
     saveButton.label = 'Save';
 
     editPageConfig = new EditPageConfig();
-    editPageConfig.fieldsToDisplay = ['1', '2', '3', 'a'];
+    editPageConfig.fieldsToDisplay = [
+      { name: '1', label: '1' },
+      { name: '2', label: '2' },
+      { name: '3', label: '3' },
+      { name: 'a', label: 'a' }
+    ];
     editPageConfig.buttons = [deleteButton, saveButton];
 
     editPageConfig.pageName = 'test-edit-page';

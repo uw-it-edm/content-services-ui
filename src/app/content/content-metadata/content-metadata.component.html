@@ -8,8 +8,8 @@
     <div formGroupName="metadata">
       <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
         <md-form-field>
-          <input mdInput [formControlName]="fieldToDisplay" [name]="fieldToDisplay"
-                 [placeholder]="fieldToDisplay">
+          <input mdInput [formControlName]="fieldToDisplay.name" [name]="fieldToDisplay.name"
+                 [placeholder]="fieldToDisplay.label">
         </md-form-field>
       </li>
     </div>
