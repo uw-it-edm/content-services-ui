@@ -29,7 +29,12 @@ describe('ContentMetadataComponent', () => {
   beforeEach(() => {
     const editPageConfig = new EditPageConfig();
     editPageConfig.pageName = 'test-edit-page';
-    editPageConfig.fieldsToDisplay = ['1', '2', '3', 'a'];
+    editPageConfig.fieldsToDisplay = [
+      { name: '1', label: 'First' },
+      { name: '2', label: 'Second' },
+      { name: '3', label: 'Third' },
+      { name: 'a', label: 'a' }
+    ];
     editPageConfig.viewPanel = false;
     component.pageConfig = editPageConfig;
 
@@ -59,6 +64,14 @@ describe('ContentMetadataComponent', () => {
     expect(input[2].name).toBe('2');
     expect(input[3].name).toBe('3');
     expect(input[4].name).toBe('a');
+  });
+  it('should contain the defined field label placeholders', () => {
+    const input = fixture.debugElement.nativeElement.querySelectorAll('input');
+    expect(input[0].placeholder).toBe('label');
+    expect(input[1].placeholder).toBe('First');
+    expect(input[2].placeholder).toBe('Second');
+    expect(input[3].placeholder).toBe('Third');
+    expect(input[4].placeholder).toBe('a');
   });
 
   it('should contain the default values', () => {

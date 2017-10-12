@@ -24,9 +24,9 @@
       </md-cell>
     </ng-container>
 
-    <ng-container *ngFor="let col of pageConfig.fieldsToDisplay" mdColumnDef={{col}}>
-      <md-header-cell *mdHeaderCellDef md-sort-header>{{ col }}</md-header-cell>
-      <md-cell *mdCellDef="let element">{{element.metadata[col]}}</md-cell>
+    <ng-container *ngFor="let col of pageConfig.fieldsToDisplay" mdColumnDef={{col.name}}>
+      <md-header-cell *mdHeaderCellDef md-sort-header>{{ col.label }}</md-header-cell>
+      <md-cell *mdCellDef="let element">{{element.metadata[col.name]}}</md-cell>
     </ng-container>
 
     <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>

@@ -47,7 +47,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
       this.data.storage = results.results.map(result => result['id']); // store a list of result ids to be passed to edit page
     });
     for (const field of this.pageConfig.fieldsToDisplay) {
-      this.displayedColumns.push(field);
+      this.displayedColumns.push(field.name);
     }
   }
 

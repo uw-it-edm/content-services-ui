@@ -39,7 +39,7 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
 
   private generateDisplayedMetadataGroup(): FormGroup {
     const group: any = {};
-    this.pageConfig.fieldsToDisplay.map(field => (group[field] = new FormControl('')));
+    this.pageConfig.fieldsToDisplay.map(field => (group[field.name] = new FormControl('')));
     return new FormGroup(group);
   }
 
@@ -53,7 +53,7 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
       const metaDataForm: FormGroup = <FormGroup>this.formGroup.controls['metadata'];
       if (!isNullOrUndefined(metaDataForm)) {
         this.pageConfig.fieldsToDisplay.map(field => {
-          metaDataForm.get(field).patchValue(this.contentItem.metadata[field]);
+          metaDataForm.get(field.name).patchValue(this.contentItem.metadata[field.name]);
         });
       }
     }

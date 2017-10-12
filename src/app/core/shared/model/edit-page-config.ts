@@ -1,4 +1,5 @@
 import { ButtonConfig } from './button-config';
+import { Field } from './field';
 
 export class EditPageConfig {
   pageName: string;
@@ -6,5 +7,5 @@ export class EditPageConfig {
   viewPanel: boolean;
 
   buttons: Array<ButtonConfig> = [];
-  fieldsToDisplay: Array<string> = [];
+  fieldsToDisplay: Array<Field> = [];
 }
