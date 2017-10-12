@@ -4,8 +4,12 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  tenantConfigGithubPath: '/uw-it-edm/content-services-ui-config/contents/dev',
   production: false,
+
+  tenantConfigGithubPath: '/uw-it-edm/content-services-ui-config/contents/dev',
+
+  testUser: null,
+
   search_api: {
     url: 'search-api.dev',
     context: '/search',
@@ -14,7 +18,8 @@ export const environment = {
   },
   content_api: {
     url: 'http://content-api.dev',
-    context: '/content/v3',
+    contextV3: '/content/v3',
+    contextV4: '/content/v4',
     authenticationHeader: 'auth'
   }
 };

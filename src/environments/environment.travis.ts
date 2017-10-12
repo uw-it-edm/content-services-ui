@@ -7,15 +7,19 @@ export const environment = {
   production: true,
 
   tenantConfigGithubPath: '/uw-it-edm/content-services-ui-config/contents/dev',
+
+  testUser: null,
+
   search_api: {
-    url: 'search-api.dev',
+    url: 'http://search-api.dev',
     context: '/search',
     method: 'POST',
     authenticationHeader: 'auth'
   },
   content_api: {
     url: 'http://content-api.dev',
-    context: '/content/v3',
+    contextV3: '/content/v3',
+    contextV4: '/content/v4',
     authenticationHeader: 'auth'
   }
 };

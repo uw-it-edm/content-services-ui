@@ -1,26 +1,42 @@
 import { Injectable } from '@angular/core';
 import { User } from './user';
+import { Headers, Http, RequestOptions, RequestOptionsArgs } from '@angular/http';
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class UserService {
   private loggedUser;
 
-  constructor() {}
+  private contentApiBaseUrl: String = environment.content_api.url + environment.content_api.contextV4;
+
+  constructor(private http: Http) {}
 
   getAuthenticatedUser(): Promise<User> {
-    const user: User = new User('Maxime Deravet', 'maximed');
+    const options = this.buildRequestOptions();
 
-    // TODO save in local storage ?
-
-    this.loggedUser = user;
-    return Promise.resolve(user);
+    return this.http
+      .get(this.contentApiBaseUrl + '/user', options)
+      .map(response => response.json())
+      .toPromise()
+      .then(contentApiUser => {
+        contentApiUser.actAs = contentApiUser.userName;
+        this.loggedUser = contentApiUser;
+        return contentApiUser;
+      });
   }
 
   getUser(): User {
-    const user: User = new User('Maxime Deravet', 'maximed');
-
-    // TODO save in local storage ?
-
     return this.loggedUser;
+  }
+
+  private buildRequestOptions() {
+    const requestOptionsArgs = <RequestOptionsArgs>{};
+    if (environment.content_api.authenticationHeader && environment.testUser) {
+      const authenticationHeaders = new Headers();
+      authenticationHeaders.append(environment.content_api.authenticationHeader, environment.testUser);
+
+      requestOptionsArgs.headers = authenticationHeaders;
+    }
+    return new RequestOptions(requestOptionsArgs);
   }
 }

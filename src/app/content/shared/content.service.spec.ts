@@ -8,8 +8,12 @@ import { ContentItem } from './model/content-item';
 
 describe('ContentService', () => {
   class UserServiceMock extends UserService {
+    constructor() {
+      super(null);
+    }
+
     getUser(): User {
-      return new User('test name', 'test');
+      return new User('test');
     }
   }
 
