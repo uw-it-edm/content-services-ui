@@ -57,7 +57,7 @@ export class ContentService {
     }
     if (environment.content_api.authenticationHeader) {
       const user = this.userService.getUser();
-      urlParameters.push('x-uw-act-as=' + user.actAs);
+      urlParameters.push(environment.content_api.authenticationHeader + '=' + user.actAs);
     }
     const url = this.baseUrl + this.filePathFragment + itemId + UrlUtilities.generateUrlParameterString(urlParameters);
 
