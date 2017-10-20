@@ -47,14 +47,17 @@ export class ContentService {
     }); // TODO: handle failure
   }
 
-  public getFileUrl(itemId: string, webViewable: boolean): string {
+  public getFileUrl(itemId: string, webViewable: boolean, disposition?: string): string {
     const urlParameters: string[] = [];
     if (webViewable) {
       urlParameters.push('rendition=Web');
     }
+    if (!isNullOrUndefined(disposition)) {
+      urlParameters.push('disposition=' + disposition);
+    }
     if (environment.content_api.authenticationHeader) {
       const user = this.userService.getUser();
-      urlParameters.push('x-uw-act-as=' + user.actAs);
+      urlParameters.push(environment.content_api.authenticationHeader + '=' + user.actAs);
     }
     const url = this.baseUrl + this.filePathFragment + itemId + UrlUtilities.generateUrlParameterString(urlParameters);
 
