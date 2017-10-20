@@ -1,26 +1,36 @@
-<div class="cs-content-view">
+<div class="cs-content-view"
+     fxLayout="row"
+     fxLayoutAlign="center center"
+    >
   <div [ngSwitch]="dataType">
 
     <div *ngSwitchCase="'pdfData'">
       <pdf-viewer [src]="pdfDataSource"
                   [page]="pageNumber"
                   [render-text]="true"
-                  ></pdf-viewer>
+      ></pdf-viewer>
     </div>
 
     <div *ngSwitchCase="'pdfUrl'">
       <pdf-viewer [src]="url"
                   [page]="pageNumber"
                   [render-text]="true"
-                  ></pdf-viewer>
+      ></pdf-viewer>
     </div>
 
     <div *ngSwitchCase="'image'">
       <img [src]="url | safeUrl"/>
     </div>
 
-    <div *ngSwitchCase="'unknown'">
-      Unable to display Content Preview.
+    <div *ngSwitchCase="'unknown'" layout="row">
+      <p >Unable to display Content Preview.</p>
+      <div align="center">
+        <button autofocus md-raised-button (click)="download()" >
+          <md-icon class="cs-icon">file_download</md-icon>
+          <span>Download</span>
+        </button>
+      </div>
+
     </div>
   </div>
 </div>

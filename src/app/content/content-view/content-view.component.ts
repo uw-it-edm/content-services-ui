@@ -35,20 +35,24 @@ export class ContentViewComponent implements OnInit, OnDestroy {
       if (!isNullOrUndefined(file)) {
         this.displayFilePreview(file);
       } else {
-        this.displayDefaultUrl();
+        this.setUrlToDefault();
       }
     });
 
     this.item$.takeUntil(this.componentDestroyed).subscribe((contentItem: ContentItem) => {
       this.item = contentItem;
-      this.defaultUrl = this.contentService.getFileUrl(this.item.id, true);
-      this.displayDefaultUrl();
+      this.defaultUrl = this.getUrl();
+      this.setUrlToDefault();
     });
   }
 
-  private displayDefaultUrl(): void {
+  private setUrlToDefault(): void {
     this.url = this.defaultUrl;
     this.determineItemType();
+  }
+
+  private getUrl(isWebViewable = true, disposition?: string) {
+    return this.contentService.getFileUrl(this.item.id, isWebViewable, disposition);
   }
 
   // TODO: type detection should be improved
@@ -72,7 +76,7 @@ export class ContentViewComponent implements OnInit, OnDestroy {
   private displayFilePreview(file: File) {
     const mimeType = file.type;
     const reader = new FileReader();
-    reader.onload = this._handleReaderLoaded.bind(this);
+    reader.onload = this._whenPreviewFileLoaded.bind(this);
 
     if (mimeType === 'application/pdf') {
       reader.readAsArrayBuffer(file); // ng2-pdf-preview does not accept DataUrl
@@ -81,7 +85,7 @@ export class ContentViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _handleReaderLoaded(e) {
+  private _whenPreviewFileLoaded(e) {
     const reader = e.target;
     const data = reader.result;
 
@@ -114,5 +118,9 @@ export class ContentViewComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.componentDestroyed.next();
     this.componentDestroyed.complete();
+  }
+
+  download() {
+    window.open(this.getUrl(false, 'attachment'));
   }
 }
