@@ -121,6 +121,6 @@ export class ContentViewComponent implements OnInit, OnDestroy {
   }
 
   download() {
-    window.open(this.getUrl(false, 'attachment'));
+    window.location.href = this.getUrl(false, 'attachment');
   }
 }
