@@ -5,7 +5,7 @@ import { UserService } from '../../../user/shared/user.service';
 import { User } from '../../../user/shared/user';
 import { Observable } from 'rxjs/Observable';
 import { ConfigResolver } from '../../../routing/shared/config-resolver.service';
-import { MdMenu } from '@angular/material';
+import { MatMenu } from '@angular/material';
 import { TenantConfigInfo } from '../../../core/shared/model/tenant-config-info';
 
 @Component({
@@ -19,8 +19,8 @@ export class HeaderComponent implements OnInit {
   promiseUser: Promise<User>;
   availableTenants$: Observable<TenantConfigInfo[]>;
 
-  @ViewChild(MdMenu) accountMenu: MdMenu;
-  @ViewChild(MdMenu) userMenu: MdMenu;
+  @ViewChild(MatMenu) accountMenu: MatMenu;
+  @ViewChild(MatMenu) userMenu: MatMenu;
 
   constructor(
     private configResolver: ConfigResolver,

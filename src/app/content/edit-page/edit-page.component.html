@@ -1,6 +1,6 @@
 <div [ngClass]="pageConfig?.theme" *ngIf="contentItem">
   <div class="cs-edit-page">
-    <md-toolbar class="secondary-toolbar">
+    <mat-toolbar class="secondary-toolbar">
       <a routerLink="/{{config.tenant}}/{{page}}">Return to Results</a>
       <span class="cs-fill-remaining-space"></span>
       <span class="button-row">
@@ -8,7 +8,7 @@
           [nextBaseUrl]=" config.tenant + '/' + page + '/edit/'"
           [contentItem$]="contentItem$"></app-content-pager>
       </span>
-    </md-toolbar>
+    </mat-toolbar>
     <form [formGroup]="editContentItemForm">
       <div fxLayout="row">
         <div fxFlex="30">
@@ -44,7 +44,7 @@
         </div>
       </div>
       <div *ngIf="pageConfig?.buttons" class="button-row" style="margin-bottom: 1em">
-        <button *ngFor="let button of pageConfig?.buttons" md-raised-button
+        <button *ngFor="let button of pageConfig?.buttons" mat-raised-button
                 (click)="buttonPress(button)" [color]="button.color"
                 [disabled]="editContentItemForm.pristine" [id]="button.command"
                 [type]="button.type">{{button.label}}

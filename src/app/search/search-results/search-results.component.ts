@@ -4,7 +4,7 @@ import { SearchResults } from '../shared/model/search-result';
 import { PageConfig } from '../../core/shared/model/page-config';
 import { Observable } from 'rxjs/Observable';
 import { SearchDataSource } from '../shared/model/search-datasource.model';
-import { MdPaginator, PageEvent } from '@angular/material';
+import { MatPaginator, PageEvent } from '@angular/material';
 import { isNullOrUndefined } from 'util';
 import { PaginatorConfig } from '../shared/model/paginator-config';
 import { Subject } from 'rxjs/Subject';
@@ -29,8 +29,8 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   @Input() pageConfig: PageConfig;
   @Output() search = new EventEmitter<SearchModel>();
 
-  @ViewChild(MdPaginator) topPaginator: MdPaginator;
-  @ViewChild(MdPaginator) bottomPaginator: MdPaginator;
+  @ViewChild(MatPaginator) topPaginator: MatPaginator;
+  @ViewChild(MatPaginator) bottomPaginator: MatPaginator;
 
   constructor(private data: DataService) {}
 

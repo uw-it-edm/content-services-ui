@@ -1,43 +1,43 @@
 <div>
-  <md-paginator #topPaginator
+  <mat-paginator #topPaginator
                 [pageIndex]="paginatorConfig.pageIndex"
                 [pageSize]="paginatorConfig.pageSize"
                 [pageSizeOptions]="paginatorConfig.pageSizeOptions"
                 [length]="paginatorConfig.numberOfResults"
                 (page)="onPageEvent($event)">
-  </md-paginator>
+  </mat-paginator>
 
-  <md-table #table [dataSource]="dataSource" mdSort>
+  <mat-table #table [dataSource]="dataSource" matSort>
 
     <!--- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
 
-    <ng-container mdColumnDef="id">
-      <md-header-cell *mdHeaderCellDef md-sort-header> Id</md-header-cell>
-      <md-cell *mdCellDef="let element">{{element.id}}</md-cell>
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Id</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.id}}</mat-cell>
     </ng-container>
 
-    <ng-container mdColumnDef="label">
-      <md-header-cell *mdHeaderCellDef md-sort-header> Name</md-header-cell>
-      <md-cell *mdCellDef="let element"><a routerLink="edit/{{element.id}}"
+    <ng-container matColumnDef="label">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Name</mat-header-cell>
+      <mat-cell *matCellDef="let element"><a routerLink="edit/{{element.id}}"
                                            queryParamsHandling="merge">{{element.label}}</a>
-      </md-cell>
+      </mat-cell>
     </ng-container>
 
-    <ng-container *ngFor="let col of pageConfig.fieldsToDisplay" mdColumnDef={{col.name}}>
-      <md-header-cell *mdHeaderCellDef md-sort-header>{{ col.label }}</md-header-cell>
-      <md-cell *mdCellDef="let element">{{element.metadata[col.name]}}</md-cell>
+    <ng-container *ngFor="let col of pageConfig.fieldsToDisplay" matColumnDef={{col.name}}>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>{{ col.label }}</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.metadata[col.name]}}</mat-cell>
     </ng-container>
 
-    <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
-    <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
-  </md-table>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
 
-  <md-paginator #bottomPaginator
+  <mat-paginator #bottomPaginator
                 [pageIndex]="paginatorConfig.pageIndex"
                 [pageSize]="paginatorConfig.pageSize"
                 [pageSizeOptions]="paginatorConfig.pageSizeOptions"
                 [length]="paginatorConfig.numberOfResults"
                 (page)="onPageEvent($event)">
-  </md-paginator>
+  </mat-paginator>
 </div>

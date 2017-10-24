@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ContentMetadataComponent } from './content-metadata.component';
 import { ContentItem } from '../shared/model/content-item';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MdButtonModule, MdFormFieldModule, MdInputModule } from '@angular/material';
+import { MatButtonModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { EditPageConfig } from '../../core/shared/model/edit-page-config';
 import { Observable } from 'rxjs/Observable';
@@ -15,7 +15,7 @@ describe('ContentMetadataComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [NoopAnimationsModule, MdFormFieldModule, MdInputModule, MdButtonModule, ReactiveFormsModule],
+        imports: [NoopAnimationsModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule],
         declarations: [ContentMetadataComponent]
       })
         .compileComponents()
