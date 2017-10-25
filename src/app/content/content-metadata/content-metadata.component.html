@@ -8,7 +8,8 @@
     <div formGroupName="metadata">
       <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
         <mat-form-field>
-          <input matInput [formControlName]="fieldToDisplay.name" [name]="fieldToDisplay.name"
+          <input matInput [formControlName]="fieldToDisplay.name" 
+                 [name]="fieldToDisplay.name"
                  [placeholder]="fieldToDisplay.label">
         </mat-form-field>
       </li>
