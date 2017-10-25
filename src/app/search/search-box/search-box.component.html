@@ -1,21 +1,21 @@
 <div class="cs-search-box">
     <div class="search-form-group">
         <label *ngIf="pageConfig?.searchConfig?.label">{{pageConfig.searchConfig.label}}</label>
-        <md-form-field>
-            <input mdInput [(ngModel)]="searchModel.stringQuery" (search)="updateSearch()" (ngModelChange)="updateSearch()" placeholder="{{pageConfig?.searchConfig?.placeholder}}" type="search">
-            <!--<md-icon mdSuffix>search</md-icon>-->
+        <mat-form-field>
+            <input matInput [(ngModel)]="searchModel.stringQuery" (search)="updateSearch()" (ngModelChange)="updateSearch()" placeholder="{{pageConfig?.searchConfig?.placeholder}}" type="search">
+            <!--<mat-icon MatSuffix>search</mat-icon>-->
 
-            <md-hint *ngIf="pageConfig?.searchConfig?.directions" align="start">{{pageConfig?.searchConfig?.directions}}</md-hint>
-        </md-form-field>
+            <mat-hint *ngIf="pageConfig?.searchConfig?.directions" align="start">{{pageConfig?.searchConfig?.directions}}</mat-hint>
+        </mat-form-field>
     </div>
     <div class="selected-facets-form-group selected-facets" *ngIf="pageConfig?.facetsConfig?.active">
-        <md-chip-list>
-            <md-chip *ngFor="let filter of searchModel.filters">
+        <mat-chip-list>
+            <mat-chip *ngFor="let filter of searchModel.filters">
                 {{pageConfig.facetsConfig.facets[filter.key].label}}: {{filter.value}}
-                <button (click)="removeFilter(filter)" md-icon-button aria-label="Remove filter">
-                    <md-icon>clear</md-icon>
+                <button (click)="removeFilter(filter)" mat-icon-button aria-label="Remove filter">
+                    <mat-icon>clear</mat-icon>
                 </button>
-            </md-chip>
-        </md-chip-list>
+            </mat-chip>
+        </mat-chip-list>
     </div>
 </div>

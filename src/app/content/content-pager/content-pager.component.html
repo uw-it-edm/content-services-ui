@@ -1,17 +1,17 @@
-<button md-button id="previousItem"
+<button mat-button id="previousItem"
         [disabled]="(currentPosition == undefined) || (currentPosition < 1 )"
         (click)="navigate(currentPosition - 1)">
-  <md-icon class="md-24" aria-label="Previous item">keyboard_arrow_up</md-icon>
+  <mat-icon class="mat-24" aria-label="Previous item">keyboard_arrow_up</mat-icon>
   Previous
 </button>
 <span *ngIf="(currentPosition != undefined)">
           {{currentPosition +1}} of {{adjacentIds.length}}
         </span>
-<button md-button id="nextItem"
+<button mat-button id="nextItem"
         [disabled]="(currentPosition == undefined) || (currentPosition === (adjacentIds.length - 1)) "
         (click)="navigate(currentPosition + 1)">
   Next
-  <md-icon class="md-24" aria-label="Next item">keyboard_arrow_down</md-icon>
+  <mat-icon class="mat-24" aria-label="Next item">keyboard_arrow_down</mat-icon>
 </button>
 
 

@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ContentPagerComponent } from './content-pager.component';
-import { MdButtonModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material';
 import { Router } from '@angular/router';
 import { DataService } from '../../shared/providers/data.service';
 import { ContentItem } from '../shared/model/content-item';
@@ -22,7 +22,7 @@ describe('ContentPagerComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [MdButtonModule],
+        imports: [MatButtonModule],
         providers: [{ provide: Router, useValue: mockRouter }, { provide: DataService, useClass: MockDataService }],
         declarations: [ContentPagerComponent]
       }).compileComponents();

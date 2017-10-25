@@ -1,33 +1,33 @@
 <header class="uwit-cs-appbar uw-thinstrip">
-  <md-toolbar>
+  <mat-toolbar>
     <span class="mat-button-wrapper">
       <a class="uw-patch" href="http://uw.edu" title="University of Washington Home">University of Washington</a>
     </span>
     <span *ngIf="title"><a routerLink="/" class="cs-title">{{title}}</a></span>
     <span *ngIf="!title"><a routerLink="/" class="cs-title">Content Services</a></span>
     <span class="cs-spacer"></span>
-    <button md-icon-button [mdMenuTriggerFor]="accountMenu">
-      <md-icon class="cs-icon">apps</md-icon>
+    <button mat-icon-button [matMenuTriggerFor]="accountMenu">
+      <mat-icon class="cs-icon">apps</mat-icon>
     </button>
-    <md-menu #accountMenu="mdMenu" xPosition="before" yPosition="below">
-      <button md-menu-item
+    <mat-menu #accountMenu="matMenu" xPosition="before" yPosition="below">
+      <button mat-menu-item
               *ngFor="let availableTenant of availableTenants$ | async"
-              routerLink="/{{availableTenant['tenantName']}}/"
+              routerLink="/{{availableTenant['tenantName']}}/"å
               routerLinkActive="active">
         <span>{{availableTenant['tenantName']}}</span>
       </button>
-    </md-menu>
-    <button md-button [mdMenuTriggerFor]="userMenu">
-      <md-icon>account_box</md-icon>&nbsp;<span *ngIf="promiseUser | async as user">{{user.userName}}</span>
+    </mat-menu>
+    <button mat-button [matMenuTriggerFor]="userMenu">
+      <mat-icon>account_box</mat-icon>&nbsp;<span *ngIf="promiseUser | async as user">{{user.userName}}</span>
     </button>
-    <md-menu #userMenu="mdMenu" xPosition="before" yPosition="below">
-      <button md-menu-item
+    <mat-menu #userMenu="matMenu" xPosition="before" yPosition="below">
+      <button mat-menu-item
               routerLink="/logout"
               routerLinkActive="active">
         <span>Logout</span>
       </button>
-    </md-menu>
-  </md-toolbar>
+    </mat-menu>
+  </mat-toolbar>
 </header>
 
 

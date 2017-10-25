@@ -3,10 +3,10 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import { SearchResults } from './search-result';
 import { ResultRow } from './result-row';
-import { MdPaginator } from '@angular/material';
+import { MatPaginator } from '@angular/material';
 
 export class SearchDataSource extends DataSource<ResultRow> {
-  constructor(private searchResults$: Observable<SearchResults>, private paginators: Array<MdPaginator>) {
+  constructor(private searchResults$: Observable<SearchResults>, private paginators: Array<MatPaginator>) {
     super();
   }
 

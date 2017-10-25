@@ -1,16 +1,17 @@
 <div [formGroup]="formGroup" class="cs-content-metadata">
   <ul *ngIf="pageConfig?.fieldsToDisplay && contentItem" class="fields">
     <li>
-      <md-form-field>
-        <input mdInput formControlName="label" name="label" placeholder="label">
-      </md-form-field>
+      <mat-form-field>
+        <input matInput formControlName="label" name="label" placeholder="label">
+      </mat-form-field>
     </li>
     <div formGroupName="metadata">
       <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
-        <md-form-field>
-          <input mdInput [formControlName]="fieldToDisplay.name" [name]="fieldToDisplay.name"
+        <mat-form-field>
+          <input matInput [formControlName]="fieldToDisplay.name" 
+                 [name]="fieldToDisplay.name"
                  [placeholder]="fieldToDisplay.label">
-        </md-form-field>
+        </mat-form-field>
       </li>
     </div>
   </ul>
