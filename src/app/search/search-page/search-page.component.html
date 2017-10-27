@@ -1,0 +1,41 @@
+<div [ngClass]="pageConfig?.theme">
+  <div fxLayout="row" class="cs-generic-header">
+    <div fxFlex="20">
+    </div>
+    <div fxFlex="70">
+      <app-search-box
+        [searchModel$]="searchModel$"
+        [pageConfig]="pageConfig"
+        (searchEvent)="onSearch($event)"
+
+      >
+      </app-search-box>
+    </div>
+    <div fxFlex="10" style="text-align: right">
+      <button mat-button role="button">
+          <span appCustomText="addContentItemButton" defaultValue="Upload"></span>&nbsp;<mat-icon>backup</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div fxLayout="row" class="cs-generic-body">
+    <div fxFlex="20">
+      <app-facets-box
+        *ngIf="pageConfig.facetsConfig && pageConfig.facetsConfig.active"
+        [searchModel$]="searchModel$"
+        [searchResults$]="searchResults$"
+        [pageConfig]="pageConfig"
+        (facetFilterAdded)="onSearch($event)"
+      >
+      </app-facets-box>
+    </div>
+    <div fxFlex>
+      <app-search-results
+        [searchModel$]="searchModel$"
+        [searchResults$]="searchResults$"
+        [pageConfig]="pageConfig"
+        (search)="onSearch($event)"
+      ></app-search-results>
+    </div>
+  </div>
+</div>

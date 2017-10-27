@@ -1,0 +1,34 @@
+<header class="uwit-cs-appbar uw-thinstrip">
+  <mat-toolbar>
+    <span class="mat-button-wrapper">
+      <a class="uw-patch" href="http://uw.edu" title="University of Washington Home">University of Washington</a>
+    </span>
+    <span *ngIf="title"><a routerLink="/" class="cs-title">{{title}}</a></span>
+    <span *ngIf="!title"><a routerLink="/" class="cs-title">Content Services</a></span>
+    <span class="cs-spacer"></span>
+    <button mat-icon-button [matMenuTriggerFor]="accountMenu">
+      <mat-icon class="cs-icon">apps</mat-icon>
+    </button>
+    <mat-menu #accountMenu="matMenu" xPosition="before" yPosition="below">
+      <button mat-menu-item
+              *ngFor="let availableTenant of availableTenants$ | async"
+              routerLink="/{{availableTenant['tenantName']}}/"å
+              routerLinkActive="active">
+        <span>{{availableTenant['tenantName']}}</span>
+      </button>
+    </mat-menu>
+    <button mat-button [matMenuTriggerFor]="userMenu">
+      <mat-icon>account_box</mat-icon>&nbsp;<span *ngIf="promiseUser | async as user">{{user.userName}}</span>
+    </button>
+    <mat-menu #userMenu="matMenu" xPosition="before" yPosition="below">
+      <button mat-menu-item
+              routerLink="/logout"
+              routerLinkActive="active">
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar>
+</header>
+
+
+

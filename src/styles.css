@@ -1,0 +1,206 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+@media only screen and (max-width: 767px) {
+    .uwit-cs-appbar .cs-title {
+        font-size: 2.5rem;
+    }
+
+    .uwit-cs-appbar.uw-thinstrip {
+        padding-top: 0px;
+    }
+
+    .mat-toolbar-row {
+         height: 46px !important;
+    }
+
+    .uwit-cs-appbar .mat-toolbar {
+        padding-left: 105px;
+    }
+}
+
+@media only screen and (max-width: 991px) and (min-width: 768px) {
+    .uw-thinstrip {
+        height: 90px;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .uwit-cs-appbar .cs-title {
+        font-size: 4.5rem;
+    }
+
+    .uwit-cs-appbar.uw-thinstrip {
+        padding-top: 15px;
+    }
+
+    .uwit-cs-appbar .mat-toolbar {
+        padding-left: 155px;
+    }
+}
+
+/*.cs-file-upload input[type="file"] {*/
+    /*display: none;*/
+/*}*/
+
+.cs-file-upload {
+    margin-bottom: 1rem;
+}
+
+.uwit-cs-appbar .mat-toolbar {
+    background: transparent;
+    color: whitesmoke;
+}
+
+.uw-thinstrip .mat-toolbar .mat-button-wrapper .uw-patch {
+    left: 10px;
+    top: 0px;
+}
+
+.uwit-cs-appbar .cs-icon {
+    padding: 0 14px;
+}
+
+.uwit-cs-appbar .cs-spacer {
+    flex: 1 1 auto;
+}
+
+.uwit-cs-appbar a.cs-title {
+    color: white;
+    font-weight: 300;
+}
+
+.uw-body {
+    margin: 2rem 4rem;
+}
+
+.uw-default {
+
+}
+
+.uw-default .cs-content-metadata ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.uw-default .cs-content-view .ng2-pdf-viewer-container {
+    border: 1px solid #aaaaaa;
+    margin: 0 4rem;
+    width: 100%;
+}
+
+.uw-default .cs-content-view iframe {
+    border: 1px solid #aaaaaa;
+    height: 600px;
+    margin: 0 4rem;
+    width: 100%;
+}
+
+.uw-default .cs-edit-page {
+    padding: 0rem 2rem;
+}
+
+.uw-default .cs-edit-page .mat-raised-button {
+    margin-right: 1rem;
+}
+
+.uw-default .cs-edit-page .mat-form-field {
+    width: 100%;
+    padding-right: 3rem;
+}
+
+.uw-default .cs-edit-page .secondary-toolbar.mat-toolbar {
+    background-color: transparent;
+    font-size: 1.5rem;
+    padding: 0;
+}
+
+.uw-default .cs-edit-page .secondary-toolbar.mat-toolbar .mat-toolbar-row {
+    height: 1.5rem;
+}
+
+.uw-default .cs-facet-box .mat-card {
+    margin: 0;
+}
+
+.uw-default .cs-facet-box .mat-list .mat-list-option .mat-list-text,
+.uw-default .cs-facet-box .mat-nav-list .mat-list-option .mat-list-text,
+.uw-default .cs-facet-box .mat-selection-list .mat-list-option .mat-list-text {
+    padding: 0;
+}
+
+.uw-default .cs-facet-box .mat-selection-list .mat-list-option {
+    font-size: 1.25rem;
+    padding: 0;
+}
+
+.uw-default .cs-facet-box .mat-list[dense] .mat-list-item .mat-list-item-content {
+    height: 2.5rem;
+    line-height: 1.25rem;
+}
+
+.uw-default .cs-facet-box .mat-card:not([class*=mat-elevation-z]) {
+    box-shadow: none;
+}
+
+.uw-default .cs-search-box {
+    background-color: rgba(0,0,0,.02);
+    padding: 10px 20px;
+    /*border-radius: 4px;*/
+}
+
+.uw-default .cs-generic-body {
+    margin-top: 0;
+}
+
+.uw-default .cs-search-box .search-form-group .mat-form-field {
+    font-size: 1.75rem;
+    width: 450px;
+}
+
+.uw-default .cs-search-box .search-form-group .mat-form-field-prefix {
+    font-size: 1rem;
+    margin-right: 2rem;
+}
+
+.uw-default .cs-search-box .search-form-group .mat-input-container {
+
+}
+
+.uw-default .cs-search-box .selected-facets {
+    margin-top: 2rem;
+}
+
+.uw-default .cs-search-box .selected-facets .mat-chip:not(.mat-basic-chip) {
+    border-radius: 0px;
+    padding: 0px 0px 0px 10px;
+}
+
+.uw-default .cs-search-box .selected-facets .mat-chip:not(.mat-basic-chip) .mat-icon {
+    font-size: 12pt;
+}
+
+.uw-default .cs-search-box .selected-facets .mat-chip:not(.mat-basic-chip) .mat-icon-button {
+    height: 2.4rem;
+    line-height: 1rem;
+}
+
+.cs-fill-remaining-space {
+    flex: 1 1 auto;
+}
+
+
+/* Rules for sizing the icon. */
+.material-icons.Mat-18 { font-size: 18px; }
+.material-icons.Mat-24 { font-size: 24px; }
+.material-icons.Mat-36 { font-size: 36px; }
+.material-icons.Mat-48 { font-size: 48px; }
+
+/* Rules for using icons as black on a light background. */
+.material-icons.Mat-dark { color: rgba(0, 0, 0, 0.54); }
+.material-icons.Mat-dark.Mat-inactive { color: rgba(0, 0, 0, 0.26); }
+
+/* Rules for using icons as white on a dark background. */
+.material-icons.Mat-light { color: rgba(255, 255, 255, 1); }
+.material-icons.Mat-light.Mat-inactive { color: rgba(255, 255, 255, 0.3); }
+
