@@ -5,6 +5,7 @@ import { User } from '../../user/shared/user';
 import { Observable } from 'rxjs/Observable';
 import { inject, TestBed } from '@angular/core/testing';
 import { ContentItem } from './model/content-item';
+import { environment } from '../../../environments/environment';
 
 describe('ContentService', () => {
   class UserServiceMock extends UserService {
@@ -79,7 +80,7 @@ describe('ContentService', () => {
     'should to get the file url',
     inject([ContentService, Http], (service: ContentService) => {
       expect(service.getFileUrl('123', true)).toEqual(
-        'http://content-api.dev/content/v3/file/123?rendition=Web&auth=test'
+        environment.content_api.url + '/content/v3/file/123?rendition=Web&auth=test'
       );
     })
   );
