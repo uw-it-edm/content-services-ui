@@ -5,6 +5,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { isNullOrUndefined } from 'util';
+import 'rxjs/add/operator/startWith';
 
 @Component({
   selector: 'app-content-metadata',
@@ -37,9 +38,24 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
     this.formGroup.get('label').disable();
   }
 
+  private filterOptions(name: string, options: any[]) {
+    return options.filter(option => option.toLowerCase().indexOf(name.toLowerCase()) === 0);
+  }
+
   private generateDisplayedMetadataGroup(): FormGroup {
     const group: any = {};
-    this.pageConfig.fieldsToDisplay.map(field => (group[field.name] = new FormControl('')));
+    this.pageConfig.fieldsToDisplay.map(field => {
+      if (field.type === 'typeahead' && field.options && field.options.length > 0) {
+        field.filteredOptions = new Observable<any[]>();
+        const fc = new FormControl('');
+        field.filteredOptions = fc.valueChanges
+          .startWith(null)
+          .map(x => (x ? this.filterOptions(x, field.options) : field.options.slice()));
+        group[field.name] = fc;
+      } else {
+        group[field.name] = new FormControl('');
+      }
+    });
     return new FormGroup(group);
   }
 

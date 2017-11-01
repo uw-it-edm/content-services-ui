@@ -3,7 +3,13 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ContentMetadataComponent } from './content-metadata.component';
 import { ContentItem } from '../shared/model/content-item';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule, MatFormFieldModule, MatInputModule } from '@angular/material';
+import {
+  MatButtonModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatOptionModule,
+  MatAutocompleteModule
+} from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { EditPageConfig } from '../../core/shared/model/edit-page-config';
 import { Observable } from 'rxjs/Observable';
@@ -15,7 +21,15 @@ describe('ContentMetadataComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [NoopAnimationsModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule],
+        imports: [
+          NoopAnimationsModule,
+          MatFormFieldModule,
+          MatInputModule,
+          MatButtonModule,
+          ReactiveFormsModule,
+          MatOptionModule,
+          MatAutocompleteModule
+        ],
         declarations: [ContentMetadataComponent]
       })
         .compileComponents()
@@ -33,7 +47,8 @@ describe('ContentMetadataComponent', () => {
       { name: '1', label: 'First' },
       { name: '2', label: 'Second' },
       { name: '3', label: 'Third' },
-      { name: 'a', label: 'a' }
+      { name: 'a', label: 'a' },
+      { name: 't', label: 't', type: 'typeahead', options: ['o1', 'o2', 'o3'] }
     ];
     editPageConfig.viewPanel = false;
     component.pageConfig = editPageConfig;
@@ -46,6 +61,7 @@ describe('ContentMetadataComponent', () => {
     defaultContentItem.metadata['3'] = 'three';
     defaultContentItem.metadata['a'] = 'a';
     defaultContentItem.metadata['b'] = 'asdf';
+    defaultContentItem.metadata['t'] = 't';
     component.contentItem$ = Observable.of(defaultContentItem);
     component.formGroup = new FormGroup({});
 
@@ -73,11 +89,15 @@ describe('ContentMetadataComponent', () => {
     expect(input[3].placeholder).toBe('Third');
     expect(input[4].placeholder).toBe('a');
   });
+  it('should contain mat-autocomplete', () => {
+    const el = fixture.debugElement.nativeElement.querySelectorAll('mat-autocomplete');
+    expect(el.length).toBe(1);
+  });
 
   it('should contain the default values', () => {
     const label = component.formGroup.controls['label'];
     expect(label.value).toBe('test label');
     const metaDataGroup = component.formGroup.controls['metadata'];
-    expect(metaDataGroup.value).toEqual({ '1': 'one', '2': 'two', '3': 'three', a: 'a' });
+    expect(metaDataGroup.value).toEqual({ '1': 'one', '2': 'two', '3': 'three', a: 'a', t: 't' });
   });
 });
