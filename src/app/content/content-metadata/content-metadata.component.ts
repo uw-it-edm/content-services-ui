@@ -39,7 +39,7 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private filterOptions(name: string, options: any[]) {
-    return options.filter(option => option.toLowerCase().indexOf(name.toLowerCase()) === 0);
+    return options.filter(option => option.toLowerCase().indexOf(name.toLowerCase()) >= 0);
   }
 
   private generateDisplayedMetadataGroup(): FormGroup {
