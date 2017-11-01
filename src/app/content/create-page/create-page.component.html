@@ -1,33 +1,28 @@
-<div [ngClass]="pageConfig?.theme" *ngIf="contentItem">
+<div [ngClass]="pageConfig?.theme" >
   <div class="cs-content-page">
     <mat-toolbar class="secondary-toolbar">
       <a routerLink="/{{config.tenant}}/{{page}}">Return to Results</a>
       <span class="cs-fill-remaining-space"></span>
-      <span class="button-row">
-        <app-content-pager
-          [nextBaseUrl]=" config.tenant + '/' + page + '/edit/'"
-          [contentItem$]="contentItem$"></app-content-pager>
-      </span>
     </mat-toolbar>
-    <form [formGroup]="editContentItemForm">
+    <form [formGroup]="createContentItemForm">
       <div fxLayout="row">
         <div fxFlex="30">
           <app-file-upload
             [fieldName]="'updateFile'"
             (fileSelected)="fileSelected($event)"
-            [(formGroup)]="editContentItemForm"
+            [(formGroup)]="createContentItemForm"
           >
           </app-file-upload>
 
         </div>
       </div>
 
-      <div *ngIf="contentItem" class="content-area">
+      <div class="content-area">
         <div fxLayout="row">
           <div fxFlex="30">
             <app-content-metadata
-              [formGroup]="editContentItemForm"
-              [contentItem$]="contentItem$"
+              [formGroup]="createContentItemForm"
+              [contentItem$]=""
               [pageConfig]="pageConfig"
               (save)="saveItem($event)"
             >
@@ -46,12 +41,14 @@
       <div *ngIf="pageConfig?.buttons" class="button-row" style="margin-bottom: 1em">
         <button *ngFor="let button of pageConfig?.buttons" mat-raised-button
                 (click)="buttonPress(button)" [color]="button.color"
-                [disabled]="editContentItemForm.pristine" [id]="button.command"
+                [disabled]="createContentItemForm.pristine" [id]="button.command"
                 [type]="button.type">{{button.label}}
         </button>
+        <mat-checkbox [(formGroup)]="createContentItemForm"
+                      formControlName="uploadAnother"
+                      name="uploadAnother" >Upload another</mat-checkbox>
       </div>
     </form>
 
   </div>
 </div>
-

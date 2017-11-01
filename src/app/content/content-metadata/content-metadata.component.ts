@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { ContentItem } from '../shared/model/content-item';
-import { EditPageConfig } from '../../core/shared/model/edit-page-config';
+import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -14,7 +14,7 @@ import { isNullOrUndefined } from 'util';
 export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
   private componentDestroyed = new Subject();
 
-  @Input() pageConfig: EditPageConfig;
+  @Input() pageConfig: ContentPageConfig;
   @Input() contentItem$: Observable<ContentItem>;
   @Input() formGroup: FormGroup;
 
@@ -23,10 +23,12 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
   constructor() {}
 
   ngOnInit() {
-    this.contentItem$.takeUntil(this.componentDestroyed).subscribe(item => {
-      this.contentItem = item;
-      this.ngOnChanges();
-    });
+    if (!isNullOrUndefined(this.contentItem$)) {
+      this.contentItem$.takeUntil(this.componentDestroyed).subscribe(item => {
+        this.contentItem = item;
+        this.ngOnChanges();
+      });
+    }
     this.createForm();
     this.ngOnChanges();
   }

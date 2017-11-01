@@ -1,5 +1,5 @@
 import { FacetsConfig } from './facets-config';
-import { EditPageConfig } from './edit-page-config';
+import { ContentPageConfig } from './content-page-config';
 import { SearchConfig } from './search-config';
 import { Field } from './field';
 
@@ -9,6 +9,7 @@ export class PageConfig {
   fieldsToDisplay: Array<Field> = [];
 
   facetsConfig: FacetsConfig = new FacetsConfig();
-  editPageConfig: EditPageConfig = new EditPageConfig();
+  editPageConfig: ContentPageConfig = new ContentPageConfig();
+  createPageConfig: ContentPageConfig = new ContentPageConfig();
   searchConfig: SearchConfig = new SearchConfig();
 }

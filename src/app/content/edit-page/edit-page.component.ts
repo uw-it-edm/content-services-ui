@@ -1,5 +1,5 @@
 import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
-import { EditPageConfig } from '../../core/shared/model/edit-page-config';
+import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { ActivatedRoute } from '@angular/router';
 
 import { ContentService } from '../shared/content.service';
@@ -23,7 +23,7 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
   private componentDestroyed = new Subject();
 
   config: Config;
-  pageConfig: EditPageConfig;
+  pageConfig: ContentPageConfig;
   page: string;
   id: string;
 

@@ -5,7 +5,7 @@ import { ContentItem } from '../shared/model/content-item';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { EditPageConfig } from '../../core/shared/model/edit-page-config';
+import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { Observable } from 'rxjs/Observable';
 
 describe('ContentMetadataComponent', () => {
@@ -27,7 +27,7 @@ describe('ContentMetadataComponent', () => {
   );
 
   beforeEach(() => {
-    const editPageConfig = new EditPageConfig();
+    const editPageConfig = new ContentPageConfig();
     editPageConfig.pageName = 'test-edit-page';
     editPageConfig.fieldsToDisplay = [
       { name: '1', label: 'First' },

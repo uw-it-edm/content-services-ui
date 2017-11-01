@@ -103,6 +103,6 @@ describe('ContentViewComponent', () => {
   it('should have an identify unkown dataType from dataURI', () => {
     component.url = 'data:application/unknown;asdfasdfasdfasdfsad';
     component.determineUrlType();
-    expect(component.dataType).toEqual('unknown');
+    expect(component.dataType).toEqual('unknown-dataURI');
   });
 });

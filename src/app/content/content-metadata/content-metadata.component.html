@@ -1,5 +1,5 @@
 <div [formGroup]="formGroup" class="cs-content-metadata">
-  <ul *ngIf="pageConfig?.fieldsToDisplay && contentItem" class="fields">
+  <ul *ngIf="pageConfig?.fieldsToDisplay" class="fields">
     <li>
       <mat-form-field>
         <input matInput formControlName="label" name="label" placeholder="label">
@@ -8,7 +8,7 @@
     <div formGroupName="metadata">
       <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
         <mat-form-field>
-          <input matInput [formControlName]="fieldToDisplay.name" 
+          <input matInput [formControlName]="fieldToDisplay.name"
                  [name]="fieldToDisplay.name"
                  [placeholder]="fieldToDisplay.label">
         </mat-form-field>
