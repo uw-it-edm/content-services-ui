@@ -48,7 +48,7 @@ describe('ContentMetadataComponent', () => {
       { name: '2', label: 'Second' },
       { name: '3', label: 'Third' },
       { name: 'a', label: 'a' },
-      { name: 't', label: 't', type: 'typeahead', options: ['o1', 'o2', 'o3'] }
+      { name: 't', label: 't', displayType: 'typeahead', options: ['o1', 'o2', 'o3'] }
     ];
     editPageConfig.viewPanel = false;
     component.pageConfig = editPageConfig;

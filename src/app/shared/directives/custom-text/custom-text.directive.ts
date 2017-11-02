@@ -1,7 +1,5 @@
-import { Directive, ElementRef, Injectable, Input, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
-import { Config, CustomTextItem } from '../../../core/shared/model/config';
-import { ActivatedRoute, ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Directive, ElementRef, Input, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
+import { CustomTextItem } from '../../../core/shared/model/config';
 import { ConfigResolver } from '../../../routing/shared/config-resolver.service';
 import { isNullOrUndefined } from 'util';
 
