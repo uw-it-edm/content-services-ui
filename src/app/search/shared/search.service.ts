@@ -137,7 +137,7 @@ export class SearchService {
 
       if (newOrder.term !== 'id' && newOrder.term !== 'label') {
         newOrder.term = 'metadata.' + newOrder.term;
-      } else {
+      } else if (newOrder.term !== 'id') {
         newOrder.term += '.lowercase';
       }
 
