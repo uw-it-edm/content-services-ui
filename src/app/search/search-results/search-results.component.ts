@@ -4,7 +4,7 @@ import { SearchResults } from '../shared/model/search-result';
 import { PageConfig } from '../../core/shared/model/page-config';
 import { Observable } from 'rxjs/Observable';
 import { SearchDataSource } from '../shared/model/search-datasource.model';
-import { MatPaginator, PageEvent } from '@angular/material';
+import { MatPaginator, MatSort, PageEvent, Sort } from '@angular/material';
 import { isNullOrUndefined } from 'util';
 import { PaginatorConfig } from '../shared/model/paginator-config';
 import { Subject } from 'rxjs/Subject';
@@ -31,6 +31,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatPaginator) topPaginator: MatPaginator;
   @ViewChild(MatPaginator) bottomPaginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort = new MatSort();
 
   constructor(private data: DataService) {}
 
@@ -38,7 +39,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     this.searchModel$.takeUntil(this.componentDestroyed).subscribe(searchModel => {
       this.searchModel = searchModel;
     });
-    this.dataSource = new SearchDataSource(this.searchResults$, [this.topPaginator, this.bottomPaginator]);
+    this.dataSource = new SearchDataSource(this.searchResults$, this.sort, [this.topPaginator, this.bottomPaginator]);
     this.searchResults$.takeUntil(this.componentDestroyed).subscribe(results => {
       this.hasResults = !isNullOrUndefined(results) && results.total > 0;
       if (this.hasResults) {
@@ -49,6 +50,12 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     for (const field of this.pageConfig.fieldsToDisplay) {
       this.displayedColumns.push(field.name);
     }
+
+    this.sort.sortChange.subscribe((sort: Sort) => {
+      this.searchModel.order.order = sort.direction;
+      this.searchModel.order.term = sort.active;
+      this.search.next(this.searchModel);
+    });
   }
 
   onPageEvent(pageEvent: PageEvent) {

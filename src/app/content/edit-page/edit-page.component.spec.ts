@@ -18,7 +18,7 @@ import { PageConfig } from '../../core/shared/model/page-config';
 import { FormBuilder } from '@angular/forms';
 import { SafeUrlPipe } from '../../shared/pipes/safe-url.pipe';
 import { ButtonConfig } from '../../core/shared/model/button-config';
-import { MatOptionModule, MatAutocompleteModule } from '@angular/material';
+import { MatAutocompleteModule, MatOptionModule } from '@angular/material';
 
 class MockContentService {
   read(itemId: string): Observable<ContentItem> {
@@ -93,8 +93,8 @@ describe('EditPageComponent', () => {
       { name: '2', label: '2' },
       { name: '3', label: '3' },
       { name: 'a', label: 'a' },
-      { name: 'd', label: 'd', type: 'date' },
-      { name: 't', label: 't', type: 'typeahead', options: ['o1', 'o2'] }
+      { name: 'd', label: 'd', dataType: 'date' },
+      { name: 't', label: 't', dataType: 'string', displayType: 'typeahead', options: ['o1', 'o2'] }
     ];
     editPageConfig.buttons = [deleteButton, saveButton];
 

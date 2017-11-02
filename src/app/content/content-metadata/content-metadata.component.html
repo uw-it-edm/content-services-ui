@@ -7,7 +7,7 @@
     </li>
     <div formGroupName="metadata">
       <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
-        <mat-form-field [ngSwitch]="fieldToDisplay.type">
+        <mat-form-field [ngSwitch]="fieldToDisplay.displayType">
           <div *ngSwitchCase="'typeahead'">
             <input type="text" matInput [formControlName]="fieldToDisplay.name"
                  [name]="fieldToDisplay.name"

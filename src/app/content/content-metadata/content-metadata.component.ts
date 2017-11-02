@@ -45,7 +45,7 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
   private generateDisplayedMetadataGroup(): FormGroup {
     const group: any = {};
     this.pageConfig.fieldsToDisplay.map(field => {
-      if (field.type === 'typeahead' && field.options && field.options.length > 0) {
+      if (field.displayType === 'typeahead' && field.options && field.options.length > 0) {
         field.filteredOptions = new Observable<any[]>();
         const fc = new FormControl('');
         field.filteredOptions = fc.valueChanges

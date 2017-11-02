@@ -13,6 +13,8 @@ import { UserService } from '../../user/shared/user.service';
 import { SearchFilter } from './model/search-filter';
 import { PageConfig } from '../../core/shared/model/page-config';
 import { FacetConfig } from '../../core/shared/model/facet-config';
+import { SearchOrder } from './model/search-order';
+import { Field } from '../../core/shared/model/field';
 
 @Injectable()
 export class SearchService {
@@ -62,6 +64,7 @@ export class SearchService {
     this.addFacetsToSearchPayload(searchPayload, pageConfig);
     this.addFiltersToSearchPayload(searchPayload, term);
     this.addPaginationToSearchPayload(searchPayload, term);
+    this.addOrderingToSearchPayload(searchPayload, term.order, pageConfig);
     return searchPayload;
   }
 
@@ -125,5 +128,28 @@ export class SearchService {
       });
 
     searchPayload['facets'] = facets;
+  }
+
+  private addOrderingToSearchPayload(searchPayload: any, order: SearchOrder, pageConfig: PageConfig) {
+    if (order && order.term && order.order) {
+      const newOrder: SearchOrder = Object.assign(new SearchOrder(), order);
+      const fieldConfig: Field = pageConfig.fieldsToDisplay.find(field => field.name === newOrder.term);
+
+      if (newOrder.term !== 'id' && newOrder.term !== 'label') {
+        newOrder.term = 'metadata.' + newOrder.term;
+      } else {
+        newOrder.term += '.lowercase';
+      }
+
+      if (
+        fieldConfig &&
+        (!fieldConfig.dataType || fieldConfig.dataType === 'string') &&
+        !fieldConfig.name.endsWith('Date')
+      ) {
+        newOrder.term += '.lowercase';
+      }
+
+      searchPayload['searchOrder'] = newOrder;
+    }
   }
 }
