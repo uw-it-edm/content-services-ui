@@ -1,10 +1,5 @@
 <div [formGroup]="formGroup" class="cs-content-metadata">
   <ul *ngIf="pageConfig?.fieldsToDisplay" class="fields">
-    <li>
-      <mat-form-field>
-        <input matInput formControlName="label" name="label" placeholder="label">
-      </mat-form-field>
-    </li>
     <div formGroupName="metadata">
       <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
         <mat-form-field>

@@ -35,8 +35,6 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
 
   private createForm() {
     this.formGroup.setControl('metadata', this.generateDisplayedMetadataGroup());
-    this.formGroup.setControl('label', new FormControl('', Validators.required));
-    this.formGroup.get('label').disable();
   }
 
   private generateDisplayedMetadataGroup(): FormGroup {

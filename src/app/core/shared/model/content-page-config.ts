@@ -6,6 +6,9 @@ export class ContentPageConfig {
   theme: string;
   viewPanel: boolean;
 
+  uploadAnother: boolean;
+  onSave: Array<any> = [];
+
   buttons: Array<ButtonConfig> = [];
   fieldsToDisplay: Array<Field> = [];
 }

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { Config } from '../../core/shared/model/config';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -10,6 +10,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ContentItem } from '../shared/model/content-item';
 import { User } from '../../user/shared/user';
 import { UserService } from '../../user/shared/user.service';
+import { FileUploadComponent } from '../../shared/widgets/file-upload/file-upload.component';
 
 @Component({
   selector: 'app-create-page',
@@ -19,6 +20,7 @@ import { UserService } from '../../user/shared/user.service';
 export class CreatePageComponent implements OnInit, OnDestroy {
   private componentDestroyed = new Subject();
   private user: User;
+
   config: Config;
   pageConfig: ContentPageConfig;
   createContentItemForm: FormGroup;
@@ -26,6 +28,8 @@ export class CreatePageComponent implements OnInit, OnDestroy {
 
   file: File;
   file$: Subject<File> = new BehaviorSubject(null);
+
+  @ViewChild(FileUploadComponent) fileUploadComponent: FileUploadComponent;
 
   constructor(
     private router: Router,
@@ -38,7 +42,6 @@ export class CreatePageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.user = this.userService.getUser();
-    // form
     this.createForm();
 
     this.route.paramMap.takeUntil(this.componentDestroyed).subscribe(params => {
@@ -48,13 +51,9 @@ export class CreatePageComponent implements OnInit, OnDestroy {
         this.config = data.config;
         this.pageConfig = data.config.pages[this.page.toLowerCase()].createPageConfig;
         this.titleService.setTitle(this.pageConfig.pageName);
+        this.setDefaults();
       });
     });
-  }
-
-  private createForm() {
-    this.createContentItemForm = this.fb.group({});
-    this.createContentItemForm.addControl('uploadAnother', new FormControl());
   }
 
   saveItem() {
@@ -62,16 +61,17 @@ export class CreatePageComponent implements OnInit, OnDestroy {
     this.contentService
       .create(contentItem, this.file)
       .takeUntil(this.componentDestroyed)
-      .subscribe(updatedContentItem => {
+      .subscribe(newContentItem => {
+        console.log('Item Created: ' + newContentItem.id);
         if (this.createContentItemForm.get('uploadAnother').value) {
-          this.createContentItemForm.reset();
+          this.reset();
         } else {
           this.router.navigate([this.config.tenant + '/' + this.page]);
         }
       });
   }
 
-  private prepareSaveContentItem(): ContentItem {
+  prepareSaveContentItem(): ContentItem {
     const formModel = this.createContentItemForm.value;
     const updatedContentItem = new ContentItem();
 
@@ -81,7 +81,27 @@ export class CreatePageComponent implements OnInit, OnDestroy {
     }
     updatedContentItem.metadata['ProfileId'] = this.config.profile;
     updatedContentItem.metadata['Account'] = this.config.account + '/' + this.user.userName; // TODO: This should be done serverside
+
+    this.pageConfig.onSave.forEach(metadataOverride => {
+      updatedContentItem.metadata[metadataOverride.name] = metadataOverride.value;
+    });
+
     return updatedContentItem;
+  }
+
+  private createForm() {
+    this.createContentItemForm = this.fb.group({});
+    this.createContentItemForm.addControl('uploadAnother', new FormControl());
+  }
+
+  private setDefaults() {
+    this.createContentItemForm.get('uploadAnother').patchValue(this.pageConfig.uploadAnother);
+  }
+
+  reset() {
+    this.createContentItemForm.reset();
+    this.fileUploadComponent.reset();
+    this.setDefaults();
   }
 
   fileSelected(event) {
