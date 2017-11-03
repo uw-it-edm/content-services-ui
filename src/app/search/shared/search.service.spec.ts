@@ -7,6 +7,7 @@ import { SearchModel } from './model/search-model';
 import { PageConfig } from '../../core/shared/model/page-config';
 import { FacetConfig } from '../../core/shared/model/facet-config';
 import { SearchFilter } from './model/search-filter';
+import { Field } from '../../core/shared/model/field';
 
 class UserServiceMock extends UserService {
   constructor() {
@@ -156,6 +157,66 @@ describe('SearchService', () => {
       expect(payload.pageSize).toEqual(25);
       expect(payload.page).toEqual(2);
       expect(payload.from).toEqual(50);
+    });
+  });
+
+  it('should add metadata Ordering to the query payload', () => {
+    const searchModel = new SearchModel();
+    searchModel.stringQuery = 'iSearch';
+    searchModel.order.term = 'myfield';
+    searchModel.order.order = 'desc';
+
+    httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(new Response(new ResponseOptions())));
+
+    searchService.search(Observable.of(searchModel), new PageConfig()).subscribe(result => {
+      expect(httpSpy).toHaveBeenCalledTimes(1);
+      // args[1] is the payload
+      const payload = httpSpy.calls.first().args[1];
+      expect(payload['query']).toBe('iSearch');
+      expect(payload.searchOrder.term).toEqual('metadata.myfield');
+      expect(payload.searchOrder.order).toEqual('desc');
+    });
+  });
+
+  it('should add label Ordering to the query payload', () => {
+    const searchModel = new SearchModel();
+    searchModel.stringQuery = 'iSearch';
+    searchModel.order.term = 'label';
+    searchModel.order.order = 'desc';
+
+    httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(new Response(new ResponseOptions())));
+
+    searchService.search(Observable.of(searchModel), new PageConfig()).subscribe(result => {
+      expect(httpSpy).toHaveBeenCalledTimes(1);
+      // args[1] is the payload
+      const payload = httpSpy.calls.first().args[1];
+      expect(payload['query']).toBe('iSearch');
+      expect(payload.searchOrder.term).toEqual('label.lowercase');
+      expect(payload.searchOrder.order).toEqual('desc');
+    });
+  });
+
+  it('should add .lowercase to string field Ordering to the query payload', () => {
+    const searchModel = new SearchModel();
+    searchModel.stringQuery = 'iSearch';
+    searchModel.order.term = 'myfield';
+    searchModel.order.order = 'desc';
+
+    const pageConfig = new PageConfig();
+    const field = new Field();
+    field.name = 'myfield';
+    field.displayType = 'string';
+    pageConfig.fieldsToDisplay.push(field);
+
+    httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(new Response(new ResponseOptions())));
+
+    searchService.search(Observable.of(searchModel), pageConfig).subscribe(result => {
+      expect(httpSpy).toHaveBeenCalledTimes(1);
+      // args[1] is the payload
+      const payload = httpSpy.calls.first().args[1];
+      expect(payload['query']).toBe('iSearch');
+      expect(payload.searchOrder.term).toEqual('metadata.myfield.lowercase');
+      expect(payload.searchOrder.order).toEqual('desc');
     });
   });
 });

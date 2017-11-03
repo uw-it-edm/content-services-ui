@@ -21,6 +21,7 @@ import { PageConfig } from '../../core/shared/model/page-config';
 import { Config } from '../../core/shared/model/config';
 import { User } from '../../user/shared/user';
 import { FileUploadComponent } from '../../shared/widgets/file-upload/file-upload.component';
+import { MatAutocompleteModule, MatOptionModule } from '@angular/material';
 
 class MockContentService {
   create(contentItem: ContentItem, file: File): Observable<ContentItem> {
@@ -58,7 +59,7 @@ describe('CreatePageComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [HttpModule, RouterTestingModule],
+        imports: [HttpModule, RouterTestingModule, MatAutocompleteModule, MatOptionModule],
         declarations: [CreatePageComponent, ContentMetadataComponent, ContentViewComponent, SafeUrlPipe],
         providers: [
           { provide: ActivatedRoute, useValue: activatedRoute },

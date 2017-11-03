@@ -1,13 +1,11 @@
-import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
-import { ConfigService } from '../../../core/shared/config.service';
+import { async, inject, TestBed } from '@angular/core/testing';
 import { Component, Injector, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ConfigResolver } from '../../../routing/shared/config-resolver.service';
 import { CustomTextItem } from '../../../core/shared/model/config';
 import { Observable } from 'rxjs/Observable';
 import { CustomTextDirective } from './custom-text.directive';
-import { CommonModule } from '@angular/common';
 import { By } from '@angular/platform-browser';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 class RouterStub {
   navigate(url: string) {

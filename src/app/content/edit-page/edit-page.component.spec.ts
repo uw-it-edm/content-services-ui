@@ -18,6 +18,7 @@ import { PageConfig } from '../../core/shared/model/page-config';
 import { FormBuilder } from '@angular/forms';
 import { SafeUrlPipe } from '../../shared/pipes/safe-url.pipe';
 import { ButtonConfig } from '../../core/shared/model/button-config';
+import { MatAutocompleteModule, MatOptionModule } from '@angular/material';
 
 class MockContentService {
   read(itemId: string): Observable<ContentItem> {
@@ -29,6 +30,7 @@ class MockContentService {
     defaultContentItem.metadata['3'] = 'three';
     defaultContentItem.metadata['a'] = 'a';
     defaultContentItem.metadata['b'] = 'asdf';
+    defaultContentItem.metadata['t'] = 't';
     return Observable.of(defaultContentItem);
   }
 
@@ -56,7 +58,7 @@ describe('EditPageComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [HttpModule],
+        imports: [HttpModule, MatAutocompleteModule, MatOptionModule],
         declarations: [EditPageComponent, ContentMetadataComponent, ContentViewComponent, SafeUrlPipe],
         providers: [
           { provide: ActivatedRoute, useValue: activatedRoute },
@@ -90,7 +92,9 @@ describe('EditPageComponent', () => {
       { name: '1', label: '1' },
       { name: '2', label: '2' },
       { name: '3', label: '3' },
-      { name: 'a', label: 'a' }
+      { name: 'a', label: 'a' },
+      { name: 'd', label: 'd', dataType: 'date' },
+      { name: 't', label: 't', dataType: 'string', displayType: 'typeahead', options: ['o1', 'o2'] }
     ];
     editPageConfig.buttons = [deleteButton, saveButton];
 
@@ -167,5 +171,6 @@ describe('EditPageComponent', () => {
     expect(component.contentItem.metadata['3']).toEqual(expectedMetadata['3']);
     expect(component.contentItem.metadata['a']).toEqual(expectedMetadata['a']);
     expect(component.contentItem.metadata['b']).toEqual(expectedMetadata['b']); // test a field that was not displayed
+    expect(component.contentItem.metadata['t']).toEqual(expectedMetadata['t']);
   });
 });

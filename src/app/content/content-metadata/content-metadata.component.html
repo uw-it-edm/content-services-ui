@@ -2,8 +2,16 @@
   <ul *ngIf="pageConfig?.fieldsToDisplay" class="fields">
     <div formGroupName="metadata">
       <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
-        <mat-form-field>
-          <input matInput [formControlName]="fieldToDisplay.name"
+        <mat-form-field [ngSwitch]="fieldToDisplay.displayType">
+          <div *ngSwitchCase="'typeahead'">
+            <input type="text" matInput [formControlName]="fieldToDisplay.name"
+                 [name]="fieldToDisplay.name"
+                 [placeholder]="fieldToDisplay.label" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let option of fieldToDisplay.filteredOptions | async " [value]="option">{{option}}</mat-option>
+            </mat-autocomplete>
+          </div>
+          <input matInput *ngSwitchDefault [formControlName]="fieldToDisplay.name"
                  [name]="fieldToDisplay.name"
                  [placeholder]="fieldToDisplay.label">
         </mat-form-field>
