@@ -21,7 +21,6 @@ import { SearchModule } from '../search/search.module';
 import { ContentModule } from '../content/content.module';
 import { SharedModule } from '../shared/shared.module';
 import { UserModule } from '../user/user.module';
-import { HttpClientModule } from '@angular/common/http';
 
 let enableRouterTracing = true;
 if (environment.production) {
@@ -30,6 +29,7 @@ if (environment.production) {
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
+
   {
     path: ':tenant',
     component: TenantComponent,
@@ -61,7 +61,8 @@ const appRoutes: Routes = [
   },
   {
     path: '**',
-    component: PageNotFoundComponent
+    component: PageNotFoundComponent,
+    canActivate: [AuthGardService]
   }
 ];
 
