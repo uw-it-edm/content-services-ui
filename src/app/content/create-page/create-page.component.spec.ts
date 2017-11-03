@@ -22,7 +22,6 @@ import { Config } from '../../core/shared/model/config';
 import { User } from '../../user/shared/user';
 import { FileUploadComponent } from '../../shared/widgets/file-upload/file-upload.component';
 
-// TODO: Should we be creating a seperate shared MockContentService? or just copy pasting
 class MockContentService {
   create(contentItem: ContentItem, file: File): Observable<ContentItem> {
     return Observable.of(contentItem);
