@@ -96,26 +96,26 @@
     width: 100%;
 }
 
-.uw-default .cs-edit-page {
+.uw-default .cs-content-page {
     padding: 0rem 2rem;
 }
 
-.uw-default .cs-edit-page .mat-raised-button {
+.uw-default .cs-content-page .mat-raised-button {
     margin-right: 1rem;
 }
 
-.uw-default .cs-edit-page .mat-form-field {
+.uw-default .cs-content-page .mat-form-field {
     width: 100%;
     padding-right: 3rem;
 }
 
-.uw-default .cs-edit-page .secondary-toolbar.mat-toolbar {
+.uw-default .cs-content-page .secondary-toolbar.mat-toolbar {
     background-color: transparent;
     font-size: 1.5rem;
     padding: 0;
 }
 
-.uw-default .cs-edit-page .secondary-toolbar.mat-toolbar .mat-toolbar-row {
+.uw-default .cs-content-page .secondary-toolbar.mat-toolbar .mat-toolbar-row {
     height: 1.5rem;
 }
 

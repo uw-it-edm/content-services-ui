@@ -11,7 +11,7 @@ import {
   MatAutocompleteModule
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { EditPageConfig } from '../../core/shared/model/edit-page-config';
+import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { Observable } from 'rxjs/Observable';
 
 describe('ContentMetadataComponent', () => {
@@ -41,7 +41,7 @@ describe('ContentMetadataComponent', () => {
   );
 
   beforeEach(() => {
-    const editPageConfig = new EditPageConfig();
+    const editPageConfig = new ContentPageConfig();
     editPageConfig.pageName = 'test-edit-page';
     editPageConfig.fieldsToDisplay = [
       { name: '1', label: 'First' },
@@ -75,19 +75,17 @@ describe('ContentMetadataComponent', () => {
 
   it('should contain the defined fields in the proper order', () => {
     const input = fixture.debugElement.nativeElement.querySelectorAll('input');
-    expect(input[0].name).toBe('label');
-    expect(input[1].name).toBe('1');
-    expect(input[2].name).toBe('2');
-    expect(input[3].name).toBe('3');
-    expect(input[4].name).toBe('a');
+    expect(input[0].name).toBe('1');
+    expect(input[1].name).toBe('2');
+    expect(input[2].name).toBe('3');
+    expect(input[3].name).toBe('a');
   });
   it('should contain the defined field label placeholders', () => {
     const input = fixture.debugElement.nativeElement.querySelectorAll('input');
-    expect(input[0].placeholder).toBe('label');
-    expect(input[1].placeholder).toBe('First');
-    expect(input[2].placeholder).toBe('Second');
-    expect(input[3].placeholder).toBe('Third');
-    expect(input[4].placeholder).toBe('a');
+    expect(input[0].placeholder).toBe('First');
+    expect(input[1].placeholder).toBe('Second');
+    expect(input[2].placeholder).toBe('Third');
+    expect(input[3].placeholder).toBe('a');
   });
   it('should contain mat-autocomplete', () => {
     const el = fixture.debugElement.nativeElement.querySelectorAll('mat-autocomplete');
@@ -95,8 +93,6 @@ describe('ContentMetadataComponent', () => {
   });
 
   it('should contain the default values', () => {
-    const label = component.formGroup.controls['label'];
-    expect(label.value).toBe('test label');
     const metaDataGroup = component.formGroup.controls['metadata'];
     expect(metaDataGroup.value).toEqual({ '1': 'one', '2': 'two', '3': 'three', a: 'a', t: 't' });
   });

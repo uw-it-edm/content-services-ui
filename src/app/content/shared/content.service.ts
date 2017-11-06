@@ -28,17 +28,32 @@ export class ContentService {
   public update(contentItem: ContentItem, file?: File): Observable<ContentItem> {
     console.log('Updating: ' + JSON.stringify(contentItem));
     const url: string = this.baseUrl + this.itemPathFragment + contentItem.id;
-    const options: RequestOptions = this.buildRequestOptions();
 
     const formData: FormData = new FormData();
     if (!isNullOrUndefined(file)) {
       formData.append('attachment', file);
 
-      // update revisionId
       let revisionId: number = Number(contentItem.metadata['RevisionId']);
       revisionId += 1;
       contentItem.metadata['RevisionId'] = revisionId;
     }
+
+    return this.createOrUpdate(formData, contentItem, url);
+  }
+
+  public create(contentItem: ContentItem, file: File): Observable<ContentItem> {
+    console.log('Creating: ' + JSON.stringify(contentItem));
+    const url: string = this.baseUrl + this.itemPathFragment;
+
+    const formData: FormData = new FormData();
+    formData.append('attachment', file);
+    contentItem.metadata['RevisionId'] = 1; // initial revisionId
+
+    return this.createOrUpdate(formData, contentItem, url);
+  }
+
+  private createOrUpdate(formData: FormData, contentItem: ContentItem, url: string) {
+    const options: RequestOptions = this.buildRequestOptions();
     const blob: Blob = new Blob([JSON.stringify(contentItem)], { type: 'application/json' });
     formData.append('document', blob);
 
@@ -64,7 +79,7 @@ export class ContentService {
     return url;
   }
 
-  // TODO: copied from SearchSerice
+  // TODO: copied from SearchService
   private buildRequestOptions() {
     const requestOptionsArgs = <RequestOptionsArgs>{};
     if (environment.content_api.authenticationHeader) {

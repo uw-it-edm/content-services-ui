@@ -38,12 +38,13 @@ export class ContentViewComponent implements OnInit, OnDestroy {
         this.setUrlToDefault();
       }
     });
-
-    this.item$.takeUntil(this.componentDestroyed).subscribe((contentItem: ContentItem) => {
-      this.item = contentItem;
-      this.defaultUrl = this.getUrl();
-      this.setUrlToDefault();
-    });
+    if (!isNullOrUndefined(this.item$)) {
+      this.item$.takeUntil(this.componentDestroyed).subscribe((contentItem: ContentItem) => {
+        this.item = contentItem;
+        this.defaultUrl = this.getUrl();
+        this.setUrlToDefault();
+      });
+    }
   }
 
   private setUrlToDefault(): void {
@@ -68,7 +69,7 @@ export class ContentViewComponent implements OnInit, OnDestroy {
         this.dataType = 'unknown';
       }
     } else {
-      this.dataType = 'unknown';
+      this.dataType = 'blank';
     }
     this.defaultItemType = this.dataType;
   }
@@ -110,6 +111,8 @@ export class ContentViewComponent implements OnInit, OnDestroy {
       this.dataType = 'image';
     } else if (url.startsWith('data:application/pdf')) {
       this.dataType = 'pdf';
+    } else if (url.startsWith('data:')) {
+      this.dataType = 'unknown-dataURI';
     } else {
       this.dataType = 'unknown';
     }

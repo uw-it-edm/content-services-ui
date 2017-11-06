@@ -21,6 +21,7 @@ import { SearchModule } from '../search/search.module';
 import { ContentModule } from '../content/content.module';
 import { SharedModule } from '../shared/shared.module';
 import { UserModule } from '../user/user.module';
+import { CreatePageComponent } from '../content/create-page/create-page.component';
 
 let enableRouterTracing = true;
 if (environment.production) {
@@ -49,6 +50,13 @@ const appRoutes: Routes = [
       {
         path: ':page/edit/:id',
         component: EditPageComponent,
+        resolve: {
+          config: ConfigResolver
+        }
+      },
+      {
+        path: ':page/create',
+        component: CreatePageComponent,
         resolve: {
           config: ConfigResolver
         }

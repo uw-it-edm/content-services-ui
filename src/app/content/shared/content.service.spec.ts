@@ -111,4 +111,30 @@ describe('ContentService', () => {
       });
     })
   );
+  it(
+    'should create content-items',
+    inject([ContentService, Http], (service: ContentService, http: Http) => {
+      const httpSpy = spyOn(http, 'post').and.callFake(function(_url, _options) {
+        return Observable.of(
+          new Response(
+            new ResponseOptions({
+              body: JSON.stringify({
+                id: '123',
+                label: 'test.pdf',
+                metadata: {
+                  ProfileId: 'test'
+                }
+              }),
+              status: 200
+            })
+          )
+        );
+      });
+      const contentItem = new ContentItem();
+
+      service.create(contentItem, null).subscribe(result => {
+        expect(httpSpy).toHaveBeenCalledTimes(1);
+      });
+    })
+  );
 });

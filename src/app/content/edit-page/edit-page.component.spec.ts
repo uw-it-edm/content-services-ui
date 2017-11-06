@@ -12,7 +12,7 @@ import { ContentItem } from '../shared/model/content-item';
 import { Observable } from 'rxjs/Observable';
 
 import { Title } from '@angular/platform-browser';
-import { EditPageConfig } from '../../core/shared/model/edit-page-config';
+import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { Config } from '../../core/shared/model/config';
 import { PageConfig } from '../../core/shared/model/page-config';
 import { FormBuilder } from '@angular/forms';
@@ -48,7 +48,7 @@ describe('EditPageComponent', () => {
   let fixture: ComponentFixture<EditPageComponent>;
   let activatedRoute: ActivatedRouteStub;
   let mockContentService: MockContentService;
-  let editPageConfig: EditPageConfig;
+  let editPageConfig: ContentPageConfig;
 
   beforeEach(() => {
     activatedRoute = new ActivatedRouteStub();
@@ -87,7 +87,7 @@ describe('EditPageComponent', () => {
     saveButton.command = 'saveItem';
     saveButton.label = 'Save';
 
-    editPageConfig = new EditPageConfig();
+    editPageConfig = new ContentPageConfig();
     editPageConfig.fieldsToDisplay = [
       { name: '1', label: '1' },
       { name: '2', label: '2' },

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Config } from '../../core/shared/model/config';
 import { PageConfig } from '../../core/shared/model/page-config';
 import { Title } from '@angular/platform-browser';
@@ -23,7 +23,12 @@ export class SearchPageComponent implements OnInit, OnDestroy {
   searchModel$ = new Subject<SearchModel>();
   searchResults$: Observable<SearchResults>;
 
-  constructor(private route: ActivatedRoute, private titleService: Title, private searchService: SearchService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private titleService: Title,
+    private searchService: SearchService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     console.log('init generic page component');
@@ -49,5 +54,9 @@ export class SearchPageComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.componentDestroyed.next();
     this.componentDestroyed.complete();
+  }
+
+  navigateToCreate() {
+    this.router.navigate([this.config.tenant + '/' + this.page + '/create']);
   }
 }
