@@ -30,6 +30,7 @@ if (environment.production) {
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
+
   {
     path: ':tenant',
     component: TenantComponent,
@@ -68,7 +69,8 @@ const appRoutes: Routes = [
   },
   {
     path: '**',
-    component: PageNotFoundComponent
+    component: PageNotFoundComponent,
+    canActivate: [AuthGardService]
   }
 ];
 
