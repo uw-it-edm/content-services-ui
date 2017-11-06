@@ -25,7 +25,7 @@
 
 
     <div *ngSwitchCase="'unknown-dataURI'" layout="row">
-      <p >Unable to display Content Preview.</p>
+      <p appCustomText="previewUnknownDataURI" defaultValue="Unable to display Content Preview."></p>
     </div>
     <div *ngSwitchCase="'unknown'" layout="row">
       <p >Unable to display Content Preview.</p>

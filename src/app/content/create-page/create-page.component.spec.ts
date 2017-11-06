@@ -136,7 +136,12 @@ describe('CreatePageComponent', () => {
     const contentItem = component.prepareSaveContentItem();
     expect(contentItem.metadata['ProfileId']).toBe('testProfile');
   });
-  it('should correctly populate the account when preparing to save', () => {
+  it('should populate the account when preparing to save', () => {
+    const contentItem = component.prepareSaveContentItem();
+    expect(contentItem.metadata['Account']).toBe('testAccount');
+  });
+  it('should populate the account replacing user template when preparing to save', () => {
+    component.config.account += '/${user}';
     const contentItem = component.prepareSaveContentItem();
     expect(contentItem.metadata['Account']).toBe('testAccount/testUser');
   });

@@ -33,7 +33,12 @@ export class HeaderComponent implements OnInit {
     console.log('init header');
 
     this.promiseUser = this.userService.getAuthenticatedUser();
-    this.availableTenants$ = this.configService.getTenantList();
+
+    this.promiseUser.then(user => {
+      if (user) {
+        this.availableTenants$ = this.configService.getTenantList();
+      }
+    });
 
     this.eventsManager.tenantEmitter.subscribe(tenant => {
       this.tenant = tenant;

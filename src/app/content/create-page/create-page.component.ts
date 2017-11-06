@@ -80,11 +80,13 @@ export class CreatePageComponent implements OnInit, OnDestroy {
       updatedContentItem.metadata[key] = formModel.metadata[key];
     }
     updatedContentItem.metadata['ProfileId'] = this.config.profile;
-    updatedContentItem.metadata['Account'] = this.config.account + '/' + this.user.userName; // TODO: This should be done serverside
+    updatedContentItem.metadata['Account'] = this.config.account.replace('${user}', this.user.userName);
 
-    this.pageConfig.onSave.forEach(metadataOverride => {
-      updatedContentItem.metadata[metadataOverride.name] = metadataOverride.value;
-    });
+    if (this.pageConfig.onSave) {
+      this.pageConfig.onSave.forEach(metadataOverride => {
+        updatedContentItem.metadata[metadataOverride.name] = metadataOverride.value;
+      });
+    }
 
     return updatedContentItem;
   }
