@@ -5,6 +5,8 @@ import { ContentItem } from '../shared/model/content-item';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
   MatFormFieldModule,
   MatInputModule,
   MatOptionModule,
@@ -26,6 +28,8 @@ describe('ContentMetadataComponent', () => {
           MatFormFieldModule,
           MatInputModule,
           MatButtonModule,
+          MatDatepickerModule,
+          MatNativeDateModule,
           ReactiveFormsModule,
           MatOptionModule,
           MatAutocompleteModule
@@ -48,7 +52,8 @@ describe('ContentMetadataComponent', () => {
       { name: '2', label: 'Second' },
       { name: '3', label: 'Third' },
       { name: 'a', label: 'a' },
-      { name: 't', label: 't', displayType: 'typeahead', options: ['o1', 'o2', 'o3'] }
+      { name: 'd', label: 'd', displayType: 'date' },
+      { name: 't', label: 't', displayType: 'autocomplete', options: ['o1', 'o2', 'o3'] }
     ];
     editPageConfig.viewPanel = false;
     component.pageConfig = editPageConfig;
@@ -62,6 +67,7 @@ describe('ContentMetadataComponent', () => {
     defaultContentItem.metadata['a'] = 'a';
     defaultContentItem.metadata['b'] = 'asdf';
     defaultContentItem.metadata['t'] = 't';
+    defaultContentItem.metadata['d'] = 1509519600000;
     component.contentItem$ = Observable.of(defaultContentItem);
     component.formGroup = new FormGroup({});
 
@@ -94,10 +100,22 @@ describe('ContentMetadataComponent', () => {
     expect(el.length).toBe(1);
   });
 
+  it('should contain mat-datepicker', () => {
+    const el = fixture.debugElement.nativeElement.querySelectorAll('mat-datepicker');
+    expect(el.length).toBe(1);
+  });
+
   it('should contain the default values', () => {
     const label = component.formGroup.controls['label'];
     expect(label.value).toBe('test label');
     const metaDataGroup = component.formGroup.controls['metadata'];
-    expect(metaDataGroup.value).toEqual({ '1': 'one', '2': 'two', '3': 'three', a: 'a', t: 't' });
+    expect(metaDataGroup.value).toEqual({
+      '1': 'one',
+      '2': 'two',
+      '3': 'three',
+      a: 'a',
+      t: 't',
+      d: new Date(1509519600000)
+    });
   });
 });
