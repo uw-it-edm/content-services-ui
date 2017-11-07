@@ -41,7 +41,7 @@
       <div *ngIf="pageConfig?.buttons" class="button-row" style="margin-bottom: 1em">
         <button *ngFor="let button of pageConfig?.buttons" mat-raised-button
                 (click)="buttonPress(button)" [color]="button.color"
-                [disabled]="createContentItemForm.pristine" [id]="button.command"
+                [disabled]="!button.alwaysActive && createContentItemForm.pristine" [id]="button.command"
                 [type]="button.type">{{button.label}}
         </button>
         <mat-checkbox [(formGroup)]="createContentItemForm"

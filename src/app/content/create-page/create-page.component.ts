@@ -56,6 +56,10 @@ export class CreatePageComponent implements OnInit, OnDestroy {
     });
   }
 
+  cancel() {
+    this.router.navigate([this.config.tenant + '/' + this.page]);
+  }
+
   saveItem() {
     const contentItem = this.prepareSaveContentItem();
     this.contentService
