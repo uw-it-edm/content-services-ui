@@ -8,6 +8,7 @@ import { ContentMetadataComponent } from './content-metadata/content-metadata.co
 import { ContentViewComponent } from './content-view/content-view.component';
 import { PdfViewerComponent } from 'ng2-pdf-viewer';
 import { ContentPagerComponent } from './content-pager/content-pager.component';
+import { CreatePageComponent } from './create-page/create-page.component';
 
 @NgModule({
   imports: [SharedModule, ReactiveFormsModule, UserModule],
@@ -17,7 +18,8 @@ import { ContentPagerComponent } from './content-pager/content-pager.component';
     ContentMetadataComponent,
     ContentViewComponent,
     PdfViewerComponent,
-    ContentPagerComponent
+    ContentPagerComponent,
+    CreatePageComponent
   ],
   providers: [ContentService]
 })

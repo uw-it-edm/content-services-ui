@@ -21,5 +21,10 @@ export const environment = {
     contextV3: '/content/v3',
     contextV4: '/content/v4',
     authenticationHeader: 'auth'
+  },
+  profile_api: {
+    url: 'http://profile-api.dev',
+    context: '/profile/v1',
+    authenticationHeader: 'auth'
   }
 };

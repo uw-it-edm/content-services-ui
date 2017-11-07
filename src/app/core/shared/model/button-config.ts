@@ -4,6 +4,7 @@ export class ButtonConfig {
   command: string;
   args: Array<string>;
   type: string;
+  alwaysActive = false;
 
   constructor() {
     this.type = 'button';

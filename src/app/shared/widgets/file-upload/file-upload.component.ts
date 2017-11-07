@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'app-file-upload',
@@ -10,10 +9,10 @@ import { Subject } from 'rxjs/Subject';
 export class FileUploadComponent implements OnInit {
   @Input() fieldName: string;
   @Input() formGroup: FormGroup;
-
-  // private file: File;
-
+  @Input() autoFocus = false;
   @Output() fileSelected: EventEmitter<File> = new EventEmitter();
+
+  files: File[] = new Array<File>();
 
   constructor() {}
 
@@ -21,16 +20,51 @@ export class FileUploadComponent implements OnInit {
     this.formGroup.setControl(this.fieldName, new FormControl('', Validators.required));
   }
 
-  fileChange(event) {
+  onFileChange(event) {
     const fileList: FileList = event.target.files;
+    this.selectFiles(fileList);
+  }
 
-    if (fileList.length > 0) {
+  private selectFiles(fileList: FileList) {
+    for (let i = 0; i < fileList.length; i++) {
+      this.files.push(fileList.item(i));
+    }
+    this.emitFiles();
+  }
+
+  private emitFiles() {
+    if (this.files.length > 0) {
       this.formGroup.get(this.fieldName).markAsDirty();
-      const file = event.dataTransfer ? event.dataTransfer.files[0] : fileList[0];
+      const file = this.files[0];
       this.fileSelected.emit(file);
     } else {
       this.fileSelected.emit(null);
+      this.formGroup.get(this.fieldName).reset();
       this.formGroup.get(this.fieldName).markAsPristine();
     }
+  }
+
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    const fileList = event.dataTransfer.files;
+    this.selectFiles(fileList);
+  }
+
+  onDragOver(event: DragEvent) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
+  removeFile(file) {
+    const index: number = this.files.indexOf(file);
+    if (index !== -1) {
+      this.files.splice(index, 1);
+      this.emitFiles();
+    }
+  }
+
+  reset() {
+    this.files = [];
+    this.emitFiles();
   }
 }
