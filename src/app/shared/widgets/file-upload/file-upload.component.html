@@ -7,13 +7,14 @@
                 (drop)="onDrop($event)"
                 (dragover)="onDragOver($event)">
             <p>Drag and drop, or</p>
-            <input class="hidden"
+            <input class="inputfile"
                    id="attach-files"
                    [name]="fieldName"
                    type="file"
                    (change)="onFileChange($event)"
                    [formControlName]="fieldName">
-            <label for="attach-files" class="mat-raised-button">
+
+            <label for="attach-files" class="mat-raised-button mat-button" [focus]="autoFocus">
               <mat-icon class="cs-icon">cloud_upload</mat-icon>
               Choose Files</label>
           </div>

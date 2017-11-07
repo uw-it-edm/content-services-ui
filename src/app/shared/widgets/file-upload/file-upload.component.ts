@@ -9,7 +9,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class FileUploadComponent implements OnInit {
   @Input() fieldName: string;
   @Input() formGroup: FormGroup;
-
+  @Input() autoFocus = false;
   @Output() fileSelected: EventEmitter<File> = new EventEmitter();
 
   files: File[] = new Array<File>();
