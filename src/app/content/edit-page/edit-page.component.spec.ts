@@ -18,7 +18,7 @@ import { PageConfig } from '../../core/shared/model/page-config';
 import { FormBuilder } from '@angular/forms';
 import { SafeUrlPipe } from '../../shared/pipes/safe-url.pipe';
 import { ButtonConfig } from '../../core/shared/model/button-config';
-import { MatAutocompleteModule, MatOptionModule } from '@angular/material';
+import { MatAutocompleteModule, MatDatepickerModule, MatOptionModule } from '@angular/material';
 
 class MockContentService {
   read(itemId: string): Observable<ContentItem> {
@@ -58,7 +58,7 @@ describe('EditPageComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [HttpModule, MatAutocompleteModule, MatOptionModule],
+        imports: [HttpModule, MatAutocompleteModule, MatDatepickerModule, MatOptionModule],
         declarations: [EditPageComponent, ContentMetadataComponent, ContentViewComponent, SafeUrlPipe],
         providers: [
           { provide: ActivatedRoute, useValue: activatedRoute },

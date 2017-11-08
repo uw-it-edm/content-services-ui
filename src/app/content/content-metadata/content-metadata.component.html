@@ -2,19 +2,28 @@
   <ul *ngIf="pageConfig?.fieldsToDisplay" class="fields">
     <div formGroupName="metadata">
       <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
-        <mat-form-field [ngSwitch]="fieldToDisplay.displayType">
-          <div *ngSwitchCase="'typeahead'">
+        <div [ngSwitch]="fieldToDisplay.displayType">
+          <mat-form-field *ngSwitchCase="'autocomplete'">
             <input type="text" matInput [formControlName]="fieldToDisplay.name"
                  [name]="fieldToDisplay.name"
                  [placeholder]="fieldToDisplay.label" [matAutocomplete]="auto">
             <mat-autocomplete #auto="matAutocomplete">
               <mat-option *ngFor="let option of fieldToDisplay.filteredOptions | async " [value]="option">{{option}}</mat-option>
             </mat-autocomplete>
-          </div>
-          <input matInput *ngSwitchDefault [formControlName]="fieldToDisplay.name"
+          </mat-form-field>
+          <mat-form-field *ngSwitchCase="'date'">
+            <input matInput [formControlName]="fieldToDisplay.name"
+                 [name]="fieldToDisplay.name"
+                 [placeholder]="fieldToDisplay.label" [matDatepicker]="picker">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field *ngSwitchDefault >
+            <input matInput  [formControlName]="fieldToDisplay.name"
                  [name]="fieldToDisplay.name"
                  [placeholder]="fieldToDisplay.label">
-        </mat-form-field>
+          </mat-form-field>
+        </div>
       </li>
     </div>
   </ul>

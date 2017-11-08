@@ -99,10 +99,13 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
     const formModel = this.editContentItemForm.value;
     const updatedContentItem = new ContentItem(this.contentItem);
 
-    // copy formModel updates into contentItem
-    for (const key of Object.keys(formModel.metadata)) {
-      updatedContentItem.metadata[key] = formModel.metadata[key];
-    }
+    this.pageConfig.fieldsToDisplay.map(field => {
+      if (field.displayType === 'date') {
+        updatedContentItem.metadata[field.name] = formModel.metadata[field.name].getTime();
+      } else {
+        updatedContentItem.metadata[field.name] = formModel.metadata[field.name];
+      }
+    });
 
     return updatedContentItem;
   }
