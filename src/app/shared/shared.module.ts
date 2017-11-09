@@ -9,6 +9,7 @@ import { SafeUrlPipe } from './pipes/safe-url.pipe';
 
 import { CustomTextDirective } from './directives/custom-text/custom-text.directive';
 import { DataService } from './providers/data.service';
+import { TruncatePipe } from './pipes/truncate.pipe';
 
 @NgModule({
   imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule],
@@ -19,9 +20,10 @@ import { DataService } from './providers/data.service';
     MaterialConfigModule,
     RouterModule,
     FileUploadComponent,
-    SafeUrlPipe
+    SafeUrlPipe,
+    TruncatePipe
   ],
-  declarations: [CustomTextDirective, HeaderComponent, FileUploadComponent, SafeUrlPipe],
+  declarations: [CustomTextDirective, HeaderComponent, FileUploadComponent, SafeUrlPipe, TruncatePipe],
   providers: [DataService]
 })
 export class SharedModule {}

@@ -1,10 +1,9 @@
 import { inject, TestBed } from '@angular/core/testing';
 
 import { ConfigService } from './config.service';
-import { HttpModule } from '@angular/http';
-import { HttpClientModule } from '@angular/common/http';
 import { UserService } from '../../user/shared/user.service';
 import { User } from '../../user/shared/user';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('ConfigService', () => {
   class UserServiceMock extends UserService {
@@ -19,7 +18,7 @@ describe('ConfigService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientModule, HttpModule],
+      imports: [HttpClientModule, HttpClientModule],
       providers: [ConfigService, { provide: UserService, useValue: new UserServiceMock() }]
     });
   });

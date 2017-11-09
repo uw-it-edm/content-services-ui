@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { User } from './user';
-import { Headers, Http, RequestOptions, RequestOptionsArgs } from '@angular/http';
 import { environment } from '../../../environments/environment';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class UserService {
@@ -9,14 +9,13 @@ export class UserService {
 
   private contentApiBaseUrl: String = environment.content_api.url + environment.content_api.contextV4;
 
-  constructor(private http: Http) {}
+  constructor(private http: HttpClient) {}
 
   getAuthenticatedUser(): Promise<User> {
     const options = this.buildRequestOptions();
 
     return this.http
-      .get(this.contentApiBaseUrl + '/user', options)
-      .map(response => response.json())
+      .get<User>(this.contentApiBaseUrl + '/user', options)
       .toPromise()
       .then(contentApiUser => {
         contentApiUser.actAs = contentApiUser.userName;
@@ -30,13 +29,14 @@ export class UserService {
   }
 
   private buildRequestOptions() {
-    const requestOptionsArgs = <RequestOptionsArgs>{};
+    // TODO: should this be in an interceptor?
+    const requestOptionsArgs = {};
     if (environment.content_api.authenticationHeader && environment.testUser) {
-      const authenticationHeaders = new Headers();
-      authenticationHeaders.append(environment.content_api.authenticationHeader, environment.testUser);
-
-      requestOptionsArgs.headers = authenticationHeaders;
+      requestOptionsArgs['headers'] = new HttpHeaders().append(
+        environment.content_api.authenticationHeader,
+        environment.testUser
+      );
     }
-    return new RequestOptions(requestOptionsArgs);
+    return requestOptionsArgs;
   }
 }

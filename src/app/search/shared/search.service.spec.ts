@@ -1,5 +1,4 @@
 import { SearchService } from './search.service';
-import { Http, Response, ResponseOptions } from '@angular/http';
 import { User } from '../../user/shared/user';
 import { Observable } from 'rxjs/Observable';
 import { UserService } from '../../user/shared/user.service';
@@ -8,6 +7,8 @@ import { PageConfig } from '../../core/shared/model/page-config';
 import { FacetConfig } from '../../core/shared/model/facet-config';
 import { SearchFilter } from './model/search-filter';
 import { Field } from '../../core/shared/model/field';
+import { HttpClient } from '@angular/common/http';
+import { ResponseOptions } from '@angular/http';
 
 class UserServiceMock extends UserService {
   constructor() {
@@ -24,7 +25,7 @@ let httpSpy;
 let http;
 describe('SearchService', () => {
   beforeEach(() => {
-    http = new Http(null, null);
+    http = new HttpClient(null);
     searchService = new SearchService(http, new UserServiceMock());
   });
 
@@ -36,37 +37,30 @@ describe('SearchService', () => {
     const searchModel = new SearchModel();
     searchModel.stringQuery = 'iSearch';
 
-    httpSpy = spyOn(http, 'post').and.callFake(function(any, any2, any3) {
-      return Observable.of(
-        new Response(
-          new ResponseOptions({
-            body: JSON.stringify({
-              searchResults: [
-                {
-                  metadata: {
-                    id: '1',
-                    label: 'myLabel1'
-                  }
-                },
-                {
-                  metadata: {
-                    id: '2',
-                    label: 'myLabel2'
-                  }
-                }
-              ],
-              facets: [],
-              from: 0,
-              page: 0,
-              pageSize: 10,
-              totalCount: 155249,
-              timeTaken: '13.0'
-            }),
+    const response = {};
+    response['searchResults'] = [
+      {
+        metadata: {
+          id: '1',
+          label: 'myLabel1'
+        }
+      },
+      {
+        metadata: {
+          id: '2',
+          label: 'myLabel2'
+        }
+      }
+    ];
+    response['facets'] = [];
+    response['from'] = 0;
+    response['page'] = 0;
+    response['pageSize'] = 10;
+    response['totalCount'] = 155249;
+    response['timeTaken'] = '13.0';
 
-            status: 200
-          })
-        )
-      );
+    httpSpy = spyOn(http, 'post').and.callFake(function(any, any2, any3) {
+      return Observable.of(response);
     });
 
     searchService.search(Observable.of(searchModel), new PageConfig()).subscribe(result => {

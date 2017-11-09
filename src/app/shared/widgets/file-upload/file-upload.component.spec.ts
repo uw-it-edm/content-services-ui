@@ -5,6 +5,7 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
+import { TruncatePipe } from '../../pipes/truncate.pipe';
 
 function getFakeEventData(): any {
   return {
@@ -30,7 +31,7 @@ describe('FileUploadComponent', () => {
     async(() => {
       TestBed.configureTestingModule({
         imports: [MatButtonModule, ReactiveFormsModule],
-        declarations: [FileUploadComponent]
+        declarations: [FileUploadComponent, TruncatePipe]
       }).compileComponents();
     })
   );

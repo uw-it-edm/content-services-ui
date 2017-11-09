@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http, RequestOptions, RequestOptionsArgs } from '@angular/http';
+
 import { Observable } from 'rxjs/Observable';
 import { SearchModel } from './model/search-model';
 import 'rxjs/add/operator/debounceTime';
@@ -15,12 +15,13 @@ import { PageConfig } from '../../core/shared/model/page-config';
 import { FacetConfig } from '../../core/shared/model/facet-config';
 import { SearchOrder } from './model/search-order';
 import { Field } from '../../core/shared/model/field';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class SearchService {
   baseUrl = environment.search_api.url + environment.search_api.context;
 
-  constructor(private http: Http, private userService: UserService) {}
+  constructor(private http: HttpClient, private userService: UserService) {}
 
   search(terms: Observable<SearchModel>, pageConfig: PageConfig): Observable<SearchResults> {
     return terms
@@ -39,21 +40,18 @@ export class SearchService {
 
     console.log('searching "' + indexName + '" with ' + JSON.stringify(searchPayload));
     return this.http.post(this.baseUrl + indexName, searchPayload, options).map(response => {
-      return this.convertSearchApiResultsToSearchResults(response.json());
+      return this.convertSearchApiResultsToSearchResults(response);
     });
   }
 
   private buildRequestOptions() {
-    const requestOptionsArgs = <RequestOptionsArgs>{};
+    // TODO: should this be in an interceptor?
+    const requestOptionsArgs = {};
     if (environment.search_api.authenticationHeader) {
       const user = this.userService.getUser();
-
-      const authenticationHeaders = new Headers();
-      authenticationHeaders.append(environment.search_api.authenticationHeader, user.actAs);
-
-      requestOptionsArgs.headers = authenticationHeaders;
+      requestOptionsArgs['headers'] = new HttpHeaders().append(environment.search_api.authenticationHeader, user.actAs);
     }
-    return new RequestOptions(requestOptionsArgs);
+    return requestOptionsArgs;
   }
 
   private buildSearchPayload(term: SearchModel, pageConfig: PageConfig) {

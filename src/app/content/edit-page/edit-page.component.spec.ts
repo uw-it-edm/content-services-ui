@@ -6,7 +6,6 @@ import { ContentViewComponent } from '../content-view/content-view.component';
 import { ActivatedRoute } from '@angular/router';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ContentService } from '../shared/content.service';
-import { HttpModule } from '@angular/http';
 import { ActivatedRouteStub } from '../../../testing/router-stubs';
 import { ContentItem } from '../shared/model/content-item';
 import { Observable } from 'rxjs/Observable';
@@ -19,6 +18,7 @@ import { FormBuilder } from '@angular/forms';
 import { SafeUrlPipe } from '../../shared/pipes/safe-url.pipe';
 import { ButtonConfig } from '../../core/shared/model/button-config';
 import { MatAutocompleteModule, MatOptionModule } from '@angular/material';
+import { HttpClientModule } from '@angular/common/http';
 
 class MockContentService {
   read(itemId: string): Observable<ContentItem> {
@@ -58,7 +58,7 @@ describe('EditPageComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [HttpModule, MatAutocompleteModule, MatOptionModule],
+        imports: [HttpClientModule, MatAutocompleteModule, MatOptionModule],
         declarations: [EditPageComponent, ContentMetadataComponent, ContentViewComponent, SafeUrlPipe],
         providers: [
           { provide: ActivatedRoute, useValue: activatedRoute },

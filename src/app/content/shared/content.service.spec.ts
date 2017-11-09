@@ -1,13 +1,16 @@
 import { ContentService } from './content.service';
-import { Http, HttpModule, Response, ResponseOptions } from '@angular/http';
+import { Response, ResponseOptions } from '@angular/http';
 import { UserService } from '../../user/shared/user.service';
 import { User } from '../../user/shared/user';
 import { Observable } from 'rxjs/Observable';
 import { inject, TestBed } from '@angular/core/testing';
 import { ContentItem } from './model/content-item';
 import { environment } from '../../../environments/environment';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 describe('ContentService', () => {
+  let testContentItem: ContentItem;
+
   class UserServiceMock extends UserService {
     constructor() {
       super(null);
@@ -20,38 +23,30 @@ describe('ContentService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpModule],
+      imports: [HttpClientModule],
       providers: [
         ContentService,
         { provide: UserService, useValue: new UserServiceMock() },
-        { provide: Http, useValue: new Http(null, null) }
+        { provide: HttpClient, useValue: new HttpClient(null) }
       ]
     });
   });
-
+  beforeEach(() => {
+    testContentItem = new ContentItem();
+    testContentItem.id = '123';
+    testContentItem.label = 'test.pdf';
+    testContentItem.metadata['ProfileId'] = 'test';
+  });
   it('should be created', () =>
-    inject([ContentService, Http], (service: ContentService) => {
+    inject([ContentService, HttpClient], (service: ContentService) => {
       expect(service).toBeTruthy();
     }));
 
   it(
     'should read from the content api',
-    inject([ContentService, Http], (service: ContentService, http: Http) => {
+    inject([ContentService, HttpClient], (service: ContentService, http: HttpClient) => {
       const httpSpy = spyOn(http, 'get').and.callFake(function(_url, _options) {
-        return Observable.of(
-          new Response(
-            new ResponseOptions({
-              body: JSON.stringify({
-                id: '123',
-                label: 'test.pdf',
-                metadata: {
-                  ProfileId: 'test'
-                }
-              }),
-              status: 200
-            })
-          )
-        );
+        return Observable.of(testContentItem);
       });
 
       service.read('123').subscribe(result => {
@@ -66,19 +61,19 @@ describe('ContentService', () => {
 
   it(
     'should add web rendition to getFileUrl',
-    inject([ContentService, Http], (service: ContentService) => {
+    inject([ContentService, HttpClient], (service: ContentService) => {
       expect(service.getFileUrl('123', true)).toContain('rendition=Web');
     })
   );
   it(
     'should not web rendition to getFileUrl',
-    inject([ContentService, Http], (service: ContentService) => {
+    inject([ContentService, HttpClient], (service: ContentService) => {
       expect(service.getFileUrl('123', false)).not.toContain('rendition=Web');
     })
   );
   it(
     'should to get the file url',
-    inject([ContentService, Http], (service: ContentService) => {
+    inject([ContentService, HttpClient], (service: ContentService) => {
       expect(service.getFileUrl('123', true)).toEqual(
         environment.content_api.url + '/content/v3/file/123?rendition=Web&auth=test'
       );
@@ -87,7 +82,7 @@ describe('ContentService', () => {
 
   it(
     'should update the content api',
-    inject([ContentService, Http], (service: ContentService, http: Http) => {
+    inject([ContentService, HttpClient], (service: ContentService, http: HttpClient) => {
       const httpSpy = spyOn(http, 'post').and.callFake(function(_url, _options) {
         return Observable.of(
           new Response(
@@ -113,7 +108,7 @@ describe('ContentService', () => {
   );
   it(
     'should create content-items',
-    inject([ContentService, Http], (service: ContentService, http: Http) => {
+    inject([ContentService, HttpClient], (service: ContentService, http: HttpClient) => {
       const httpSpy = spyOn(http, 'post').and.callFake(function(_url, _options) {
         return Observable.of(
           new Response(
