@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { ActivatedRoute } from '@angular/router';
 
@@ -11,8 +11,8 @@ import { ContentItem } from '../shared/model/content-item';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import 'rxjs/add/observable/of';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { isNullOrUndefined } from 'util';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { FileUploadComponent } from '../../shared/widgets/file-upload/file-upload.component';
 
 @Component({
   selector: 'app-edit-page',
@@ -34,6 +34,7 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
 
   file: File;
   file$: Subject<File> = new BehaviorSubject(null);
+  @ViewChild(FileUploadComponent) fileUploadComponent: FileUploadComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -72,6 +73,9 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
   private updateContentItem(contentItem: ContentItem): void {
     this.contentItem = contentItem;
     this.contentItem$.next(this.contentItem);
+    if (this.fileUploadComponent) {
+      this.fileUploadComponent.reset();
+    }
   }
 
   private createForm() {
@@ -95,10 +99,13 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
     const formModel = this.editContentItemForm.value;
     const updatedContentItem = new ContentItem(this.contentItem);
 
-    // copy formModel updates into contentItem
-    for (const key of Object.keys(formModel.metadata)) {
-      updatedContentItem.metadata[key] = formModel.metadata[key];
-    }
+    this.pageConfig.fieldsToDisplay.map(field => {
+      if (field.displayType === 'date') {
+        updatedContentItem.metadata[field.name] = formModel.metadata[field.name].getTime();
+      } else {
+        updatedContentItem.metadata[field.name] = formModel.metadata[field.name];
+      }
+    });
 
     return updatedContentItem;
   }
@@ -111,6 +118,7 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
   ngOnChanges() {
     if (this.editContentItemForm && this.contentItem) {
       this.editContentItemForm.reset();
+      this.fileUploadComponent.reset();
     }
   }
 
