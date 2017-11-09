@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http, RequestOptions, RequestOptionsArgs } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { ContentItem } from './model/content-item';
 import { Observable } from 'rxjs/Observable';
@@ -7,6 +6,7 @@ import { environment } from '../../../environments/environment';
 import { UserService } from '../../user/shared/user.service';
 import { UrlUtilities } from '../../core/util/url-utilities';
 import { isNullOrUndefined } from 'util';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class ContentService {
@@ -14,15 +14,13 @@ export class ContentService {
   filePathFragment = '/file/';
   baseUrl = environment.content_api.url + environment.content_api.contextV3;
 
-  constructor(private http: Http, private userService: UserService) {}
+  constructor(private http: HttpClient, private userService: UserService) {}
 
   public read(itemId: string): Observable<ContentItem> {
     const url: string = this.baseUrl + this.itemPathFragment + itemId;
-    const options: RequestOptions = this.buildRequestOptions();
+    const options = this.buildRequestOptions();
 
-    return this.http.get(url, options).map(response => {
-      return response.json();
-    }); // TODO: handle failure
+    return this.http.get<ContentItem>(url, options); // TODO: handle failure
   }
 
   public update(contentItem: ContentItem, file?: File): Observable<ContentItem> {
@@ -53,13 +51,12 @@ export class ContentService {
   }
 
   private createOrUpdate(formData: FormData, contentItem: ContentItem, url: string) {
-    const options: RequestOptions = this.buildRequestOptions();
+    const options = this.buildRequestOptions();
     const blob: Blob = new Blob([JSON.stringify(contentItem)], { type: 'application/json' });
     formData.append('document', blob);
 
-    return this.http.post(url, formData, options).map(response => {
-      return response.json();
-    }); // TODO: handle failure
+    return this.http.post<ContentItem>(url, formData, options);
+    // TODO: handle failure
   }
 
   public getFileUrl(itemId: string, webViewable: boolean, disposition?: string): string {
@@ -79,17 +76,16 @@ export class ContentService {
     return url;
   }
 
-  // TODO: copied from SearchService
   private buildRequestOptions() {
-    const requestOptionsArgs = <RequestOptionsArgs>{};
+    // TODO: should this be in an interceptor?
+    const requestOptionsArgs = {};
     if (environment.content_api.authenticationHeader) {
       const user = this.userService.getUser();
-
-      const authenticationHeaders = new Headers();
-      authenticationHeaders.append(environment.content_api.authenticationHeader, user.actAs);
-
-      requestOptionsArgs.headers = authenticationHeaders;
+      requestOptionsArgs['headers'] = new HttpHeaders().append(
+        environment.content_api.authenticationHeader,
+        user.actAs
+      );
     }
-    return new RequestOptions(requestOptionsArgs);
+    return requestOptionsArgs;
   }
 }

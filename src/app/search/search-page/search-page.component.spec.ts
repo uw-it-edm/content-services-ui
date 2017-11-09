@@ -13,11 +13,11 @@ import { SearchResultsComponent } from '../search-results/search-results.compone
 import { SearchService } from '../shared/search.service';
 import { Observable } from 'rxjs/Observable';
 import { SearchResults } from '../shared/model/search-result';
-import { HttpModule } from '@angular/http';
 import { SearchModel } from '../shared/model/search-model';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DataService } from '../../shared/providers/data.service';
 import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientModule } from '@angular/common/http';
 
 let activatedRoute: ActivatedRouteStub;
 let searchServiceSpy: MockSearchService;
@@ -43,7 +43,7 @@ describe('SearchPageComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [NoopAnimationsModule, MaterialConfigModule, HttpModule, RouterTestingModule],
+        imports: [NoopAnimationsModule, MaterialConfigModule, HttpClientModule, RouterTestingModule],
         declarations: [SearchPageComponent, SearchBoxComponent, SearchResultsComponent],
         providers: [
           { provide: ActivatedRoute, useValue: activatedRoute },

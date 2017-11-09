@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CreatePageComponent } from './create-page.component';
-import { HttpModule } from '@angular/http';
 import { ActivatedRoute } from '@angular/router';
 import { ContentService } from '../shared/content.service';
 import { Title } from '@angular/platform-browser';
@@ -22,6 +21,7 @@ import { Config } from '../../core/shared/model/config';
 import { User } from '../../user/shared/user';
 import { FileUploadComponent } from '../../shared/widgets/file-upload/file-upload.component';
 import { MatAutocompleteModule, MatOptionModule } from '@angular/material';
+import { HttpClientModule } from '@angular/common/http';
 
 class MockContentService {
   create(contentItem: ContentItem, file: File): Observable<ContentItem> {
@@ -59,7 +59,7 @@ describe('CreatePageComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [HttpModule, RouterTestingModule, MatAutocompleteModule, MatOptionModule],
+        imports: [HttpClientModule, RouterTestingModule, MatAutocompleteModule, MatOptionModule],
         declarations: [CreatePageComponent, ContentMetadataComponent, ContentViewComponent, SafeUrlPipe],
         providers: [
           { provide: ActivatedRoute, useValue: activatedRoute },

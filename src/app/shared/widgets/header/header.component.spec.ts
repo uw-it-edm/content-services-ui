@@ -9,17 +9,16 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ConfigResolver } from '../../../routing/shared/config-resolver.service';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { ActivatedRouteStub } from '../../../../testing/router-stubs';
-import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 
 class RouterStub {
-  navigate(url: string) {
+  static navigate(url: string) {
     return url;
   }
 }
 
 class ConfigServiceStub {
-  getTenantList(): Promise<string[]> {
+  static getTenantList(): Promise<string[]> {
     return Promise.resolve(Array.from(['demo', 'one', 'two', 'three']));
   }
 }
@@ -38,12 +37,12 @@ describe('HeaderComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [MaterialConfigModule, HttpClientModule, HttpModule],
+        imports: [MaterialConfigModule, HttpClientModule, HttpClientModule],
         declarations: [HeaderComponent],
         providers: [
-          {provide: ActivatedRoute, useValue: activatedRoute},
-          {provide: Router, useClass: RouterStub},
-          {provide: ConfigService, useValue: configServiceStub},
+          { provide: ActivatedRoute, useValue: activatedRoute },
+          { provide: Router, useClass: RouterStub },
+          { provide: ConfigService, useValue: configServiceStub },
           ConfigResolver,
           GlobalEventsManagerService,
           UserService
@@ -65,8 +64,7 @@ describe('HeaderComponent', () => {
 
   it('should contain accounts in the account menu', () => {
     const route = new ActivatedRouteSnapshot();
-    const routeParams = {tenant: 'test-tenant'};
-    route.params = routeParams;
+    route.params = { tenant: 'test-tenant' };
     inject([ConfigResolver], (service: ConfigResolver) => {
       service.resolve(route, null).then(config => {
         expect(component.accountMenu.items.length).toBeGreaterThanOrEqual(4);

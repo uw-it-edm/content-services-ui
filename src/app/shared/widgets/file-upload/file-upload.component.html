@@ -25,6 +25,6 @@
 </div>
 <div *ngFor="let file of files">
   <button mat-button role="button" (click)="removeFile(file)" [title]="'Remove ' + file.name">
-    {{(file.name.length>20)? (file.name | slice:0:20)+'...':(file.name)}} <mat-icon>delete</mat-icon>
+    {{file.name | truncate}}<mat-icon>delete</mat-icon>
   </button>
 </div>

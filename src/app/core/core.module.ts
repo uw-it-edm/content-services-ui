@@ -3,7 +3,6 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { throwIfAlreadyLoaded } from './util/module-import-guard';
 import { GlobalEventsManagerService } from './shared/global-events-manager.service';
 import { ConfigService } from './shared/config.service';
-import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
