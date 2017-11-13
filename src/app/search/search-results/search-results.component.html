@@ -25,7 +25,16 @@
     </ng-container>
 
     <ng-container *ngFor="let col of pageConfig.fieldsToDisplay" matColumnDef={{col.name}}>
-      <mat-header-cell *matHeaderCellDef mat-sort-header>{{ col.label }}</mat-header-cell>
+      <span [ngSwitch]="col.sortable">
+         <span *ngSwitchCase="false">
+          <mat-header-cell *matHeaderCellDef >{{ col.label }}</mat-header-cell>
+        </span>
+        <span *ngSwitchDefault>
+         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ col.label }}</mat-header-cell>
+        </span>
+      </span>
+
+
       <mat-cell *matCellDef="let element">{{element.metadata[col.name]}}</mat-cell>
     </ng-container>
 
