@@ -4,7 +4,7 @@ import { CheckboxInputComponent } from './checkbox-input.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material';
 import { Field } from '../../../core/shared/model/field';
-import { CheckboxOptions } from '../../../core/shared/model/field/CheckBoxOptions';
+import { CheckboxOptions } from '../../../core/shared/model/field/checkbox-options';
 
 describe('CheckboxInput', () => {
   let component: CheckboxInputComponent;

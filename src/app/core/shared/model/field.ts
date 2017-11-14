@@ -1,4 +1,4 @@
-import { CheckboxOptions } from './field/CheckboxOptions';
+import { CheckboxOptions } from './field/checkbox-options';
 
 export class Field {
   public name: string;
