@@ -10,6 +10,7 @@ import { SafeUrlPipe } from './pipes/safe-url.pipe';
 import { CustomTextDirective } from './directives/custom-text/custom-text.directive';
 import { DataService } from './providers/data.service';
 import { FocusModule } from 'angular2-focus/src/focus.module';
+import { CheckboxInputComponent } from './widgets/checkbox/checkbox-input.component';
 
 @NgModule({
   imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule, FocusModule.forRoot()],
@@ -20,9 +21,10 @@ import { FocusModule } from 'angular2-focus/src/focus.module';
     MaterialConfigModule,
     RouterModule,
     FileUploadComponent,
-    SafeUrlPipe
+    SafeUrlPipe,
+    CheckboxInputComponent
   ],
-  declarations: [CustomTextDirective, HeaderComponent, FileUploadComponent, SafeUrlPipe],
+  declarations: [CustomTextDirective, HeaderComponent, FileUploadComponent, SafeUrlPipe, CheckboxInputComponent],
   providers: [DataService]
 })
 export class SharedModule {}

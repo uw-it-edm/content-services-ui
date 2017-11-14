@@ -15,6 +15,7 @@ import {
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { Observable } from 'rxjs/Observable';
+import { CheckboxInputComponent } from '../../shared/widgets/checkbox/checkbox-input.component';
 
 describe('ContentMetadataComponent', () => {
   let component: ContentMetadataComponent;
@@ -34,7 +35,7 @@ describe('ContentMetadataComponent', () => {
           MatOptionModule,
           MatAutocompleteModule
         ],
-        declarations: [ContentMetadataComponent]
+        declarations: [ContentMetadataComponent, CheckboxInputComponent]
       })
         .compileComponents()
         .then(() => {

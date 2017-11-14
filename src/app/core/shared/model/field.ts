@@ -1,3 +1,5 @@
+import { CheckboxOptions } from './field/checkbox-options';
+
 export class Field {
   public name: string;
   public label: string;
@@ -7,6 +9,8 @@ export class Field {
 
   public options?: any[] = [];
   public filteredOptions?: any = [];
+
+  public checkboxOptions?: CheckboxOptions;
 
   public sortable?: boolean;
 }
