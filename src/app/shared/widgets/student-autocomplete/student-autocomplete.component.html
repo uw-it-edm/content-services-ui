@@ -1,0 +1,8 @@
+<div [formGroup]="formGroup">
+  <input type="text" placeholder="Assignee" aria-label="Assignee" matInput formControlName="studentAutocomplete" [matAutocomplete]="auto">
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+    <mat-option *ngFor="let student of filteredOptions | async" [value]="student">
+      <span>{{ student.displayName }}</span>
+    </mat-option>
+  </mat-autocomplete>
+</div>

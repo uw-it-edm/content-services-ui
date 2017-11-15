@@ -15,6 +15,7 @@ import {
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { Observable } from 'rxjs/Observable';
+import { SharedModule } from '../../shared/shared.module';
 
 describe('ContentMetadataComponent', () => {
   let component: ContentMetadataComponent;
@@ -32,7 +33,8 @@ describe('ContentMetadataComponent', () => {
           MatNativeDateModule,
           ReactiveFormsModule,
           MatOptionModule,
-          MatAutocompleteModule
+          MatAutocompleteModule,
+          SharedModule
         ],
         declarations: [ContentMetadataComponent]
       })

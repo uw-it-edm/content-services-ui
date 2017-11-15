@@ -10,6 +10,8 @@ import { SafeUrlPipe } from './pipes/safe-url.pipe';
 import { CustomTextDirective } from './directives/custom-text/custom-text.directive';
 import { DataService } from './providers/data.service';
 import { FocusModule } from 'angular2-focus/src/focus.module';
+import { StudentAutocompleteComponent } from './widgets/student-autocomplete/student-autocomplete.component';
+import { StudentService } from './providers/student.service';
 
 @NgModule({
   imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule, FocusModule.forRoot()],
@@ -20,9 +22,10 @@ import { FocusModule } from 'angular2-focus/src/focus.module';
     MaterialConfigModule,
     RouterModule,
     FileUploadComponent,
-    SafeUrlPipe
+    SafeUrlPipe,
+    StudentAutocompleteComponent
   ],
-  declarations: [CustomTextDirective, HeaderComponent, FileUploadComponent, SafeUrlPipe],
-  providers: [DataService]
+  declarations: [CustomTextDirective, HeaderComponent, FileUploadComponent, SafeUrlPipe, StudentAutocompleteComponent],
+  providers: [DataService, StudentService]
 })
 export class SharedModule {}
