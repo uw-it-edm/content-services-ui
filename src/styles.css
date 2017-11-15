@@ -83,12 +83,6 @@
     padding-left: 0;
 }
 
-.uw-default .cs-content-view .ng2-pdf-viewer-container {
-    border: 1px solid #aaaaaa;
-    margin: 0 4rem;
-    width: 100%;
-}
-
 .uw-default .cs-content-view iframe {
     border: 1px solid #aaaaaa;
     height: 600px;

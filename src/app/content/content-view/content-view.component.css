@@ -1,5 +1,17 @@
 
 .cs-content-view {
-  height: 100%;
-  width: 100%;
 }
+
+.cs-content-view .cs-preview-max-height {
+  max-height: 1056px;
+  overflow-x:scroll;
+  overflow-y:scroll;
+  display:block;
+  border: 1px solid #aaaaaa;
+}
+
+
+.cs-content-view .ng2-pdf-viewer-container {
+  margin: 0 4rem;
+}
+
