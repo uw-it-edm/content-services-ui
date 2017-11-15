@@ -7,7 +7,6 @@ import { SearchModel } from '../shared/model/search-model';
 import { SearchResults } from '../shared/model/search-result';
 import { SearchService } from '../shared/search.service';
 import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-search-page',
@@ -21,7 +20,7 @@ export class SearchPageComponent implements OnInit, OnDestroy {
   page: string;
 
   searchModel$ = new Subject<SearchModel>();
-  searchResults$: Observable<SearchResults>;
+  searchResults$ = new Subject<SearchResults>();
 
   constructor(
     private route: ActivatedRoute,
@@ -39,7 +38,14 @@ export class SearchPageComponent implements OnInit, OnDestroy {
         this.config = data.config;
         this.pageConfig = data.config.pages[this.page.toLowerCase()];
         this.titleService.setTitle(this.pageConfig.pageName);
-        this.searchResults$ = this.searchService.search(this.searchModel$, this.pageConfig);
+        this.searchService.search(this.searchModel$, this.pageConfig).subscribe((searchResults: SearchResults) => {
+          /* we are not sending the search results observable
+             directly to the underlying components
+             as doing so makes all the components subscribe
+             to the search service and execute multiple searches
+             */
+          this.searchResults$.next(searchResults);
+        });
       });
 
       this.searchModel$.next(new SearchModel());
