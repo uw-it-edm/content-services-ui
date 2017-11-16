@@ -1,9 +1,7 @@
 import { Component, ElementRef, forwardRef, HostBinding, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { StudentSearchModel } from '../../shared/model/student-search-model';
 import { StudentService } from '../../providers/student.service';
-import { Observable } from 'rxjs/Observable';
 import { StudentSearchResults } from '../../shared/model/student-search-results';
 import { Student } from '../../shared/model/student';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
@@ -49,9 +47,6 @@ export class StudentAutocompleteComponent
 
   private componentDestroyed = new Subject();
 
-  private searchModel$: Subject<StudentSearchModel> = new Subject<StudentSearchModel>();
-  private searchResult$: Observable<StudentSearchResults> = new Observable<StudentSearchResults>();
-
   filteredOptions: Student[] = [];
   formGroup: FormGroup;
 
@@ -72,49 +67,22 @@ export class StudentAutocompleteComponent
     this.formGroup = this.fb.group({
       studentAutocomplete: new FormControl()
     });
-    this.searchResult$ = this.studentService.search(this.searchModel$);
-    this.searchResult$.takeUntil(this.componentDestroyed).subscribe((results: StudentSearchResults) => {
-      this.filteredOptions = results.content;
-    });
 
-    //      TODO:
-    //   1) search (last, first)
-    //   if no results
-    //   2)  search (first, last)
-    //   if no results return no results
     this.formGroup.controls['studentAutocomplete'].valueChanges
+      .debounceTime(400)
+      .distinctUntilChanged()
       .startWith(null)
       .takeUntil(this.componentDestroyed)
-      .map(student => (student && typeof student === 'object' ? student.displayName : student))
       .subscribe((term: string) => {
-        this.search(term);
+        if (term && term.trim().length > 1) {
+          this.studentService
+            .autocomplete(term)
+            .takeUntil(this.componentDestroyed)
+            .subscribe((results: StudentSearchResults) => {
+              this.filteredOptions = results.content;
+            });
+        }
       });
-  }
-
-  private search(term: string) {
-    console.log('autocomplete: ' + term);
-
-    if (term) {
-      if (term.trim().length > 1) {
-        const searchModel = this.createSearchModel(term);
-        this.searchModel$.next(searchModel);
-      }
-    } else {
-      this.searchModel$.next(null);
-    }
-  }
-
-  private createSearchModel(term: string) {
-    const searchModel = new StudentSearchModel();
-
-    // TODO: improve the create searchmodel stuff.. what if no comma, etc
-    const names: string[] = term.split(',', 2).map(s => s.trim());
-    searchModel.lastName = names[0];
-    if (names.length > 1 && names[1].length > 0) {
-      searchModel.firstName = names[1];
-    }
-
-    return searchModel;
   }
 
   get displayFn() {
