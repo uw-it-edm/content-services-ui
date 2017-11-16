@@ -1,5 +1,5 @@
 <div class="cs-content-view"
-    >
+>
   <div [ngSwitch]="dataType">
     <div *ngSwitchCase="'blank'">
     </div>
@@ -30,13 +30,17 @@
     </div>
 
 
-    <div *ngSwitchCase="'unknown-dataURI'" layout="row">
-      <p appCustomText="previewUnknownDataURI" defaultValue="Unable to display Content Preview."></p>
-    </div>
-    <div *ngSwitchCase="'unknown'" layout="row">
-      <p >Unable to display Content Preview.</p>
+    <div *ngSwitchCase="'unknown-dataURI'">
       <div align="center">
-        <button autofocus mat-raised-button (click)="download()" >
+        <p appCustomText="previewUnknownDataURI"
+           defaultValue="Unable to display Content Preview."></p>
+      </div>
+    </div>
+    <div *ngSwitchCase="'unknown'">
+      <div align="center">
+        <p appCustomText="previewUnknownDataURI"
+           defaultValue="Unable to display Content Preview."></p>
+        <button autofocus mat-raised-button (click)="download()">
           <mat-icon class="cs-icon">file_download</mat-icon>
           <span>Download</span>
         </button>
