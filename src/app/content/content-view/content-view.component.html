@@ -1,6 +1,4 @@
 <div class="cs-content-view"
-     fxLayout="row"
-     fxLayoutAlign="center center"
     >
   <div [ngSwitch]="dataType">
     <div *ngSwitchCase="'blank'">
@@ -9,6 +7,10 @@
       <pdf-viewer [src]="pdfDataSource"
                   [page]="pageNumber"
                   [render-text]="true"
+                  [show-all]="true"
+                  [original-size]="false"
+                  [fit-to-page]="false"
+                  class="cs-preview-max-height"
       ></pdf-viewer>
     </div>
 
@@ -16,11 +18,15 @@
       <pdf-viewer [src]="url"
                   [page]="pageNumber"
                   [render-text]="true"
+                  [show-all]="true"
+                  [original-size]="false"
+                  [fit-to-page]="false"
+                  class="cs-preview-max-height"
       ></pdf-viewer>
     </div>
 
     <div *ngSwitchCase="'image'">
-      <img [src]="url | safeUrl"/>
+      <img [src]="url | safeUrl" class="cs-preview-max-height"/>
     </div>
 
 

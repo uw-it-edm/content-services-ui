@@ -5,6 +5,7 @@ import { ContentItem } from '../shared/model/content-item';
 import { isNullOrUndefined } from 'util';
 import { Subject } from 'rxjs/Subject';
 import { ContentService } from '../shared/content.service';
+import 'rxjs/add/operator/takeUntil';
 
 @Component({
   selector: 'app-content-view',
