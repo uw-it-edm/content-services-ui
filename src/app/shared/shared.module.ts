@@ -27,7 +27,14 @@ import { CheckboxInputComponent } from './widgets/checkbox/checkbox-input.compon
     CheckboxInputComponent,
     StudentAutocompleteComponent
   ],
-  declarations: [CustomTextDirective, HeaderComponent, FileUploadComponent, SafeUrlPipe, CheckboxInputComponent],
+  declarations: [
+    CustomTextDirective,
+    HeaderComponent,
+    FileUploadComponent,
+    SafeUrlPipe,
+    CheckboxInputComponent,
+    StudentAutocompleteComponent
+  ],
   providers: [DataService, StudentService]
 })
 export class SharedModule {}

@@ -7,6 +7,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { isNullOrUndefined } from 'util';
 import { StudentSearchModel } from '../shared/model/student-search-model';
 import { StudentSearchResults } from '../shared/model/student-search-results';
+import { Student } from '../shared/model/student';
 
 @Injectable()
 export class StudentService {
@@ -19,13 +20,18 @@ export class StudentService {
       .debounceTime(400)
       .distinctUntilChanged()
       .switchMap(searchModel => {
-        console.log('processing search request');
+        console.log('processing search request: ' + JSON.stringify(searchModel));
         if (isNullOrUndefined(searchModel)) {
           return Observable.of(new StudentSearchResults());
         } else {
           return this.searchStudent(searchModel);
         }
       });
+  }
+
+  public read(id: string): Observable<Student> {
+    const options = this.buildRequestOptions();
+    return this.http.get<Student>(this.studentUrl + '/' + id, options); // TODO: handle failure
   }
 
   // TODO: Do we want to convert the API Results into something else?
@@ -36,6 +42,9 @@ export class StudentService {
     }
     if (searchModel.lastName) {
       params = params.set('lastName', searchModel.lastName);
+    }
+    if (searchModel.id) {
+      params = params.set('id', searchModel.id);
     }
 
     const options = this.buildRequestOptions(params);
