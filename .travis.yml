@@ -13,7 +13,7 @@ before_install:
   - export PATH="$HOME/.yarn/bin:$PATH"
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
   - docker build -t content-services-api-mock ./e2e/mocks
-  - docker run --name content-services-api --rm -p 8080:80 -v ${PWD}/e2e/mocks:/usr/share/nginx/html/ content-services-api-mock
+  - docker run --name content-services-api --rm -d -p 8080:80 -v ${PWD}/e2e/mocks:/usr/share/nginx/html/ content-services-api-mock
 
 jobs:
   include:
@@ -21,10 +21,10 @@ jobs:
       script: yarn run test-cover
       env:
         job=yarn run test-cover
-    #- stage: test
-    #  script: yarn e2e
-    #  env:
-    #    job=yarn e2e
+    - stage: test
+      script: yarn e2e -- --env=travis
+      env:
+        job=yarn e2e -- --env=travis
     - stage: test
       script: yarn build -- --prod --env=travis
       env:
