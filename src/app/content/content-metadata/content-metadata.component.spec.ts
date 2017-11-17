@@ -4,18 +4,32 @@ import { ContentMetadataComponent } from './content-metadata.component';
 import { ContentItem } from '../shared/model/content-item';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
+  MatAutocompleteModule,
   MatButtonModule,
   MatDatepickerModule,
-  MatNativeDateModule,
   MatFormFieldModule,
   MatInputModule,
-  MatOptionModule,
-  MatAutocompleteModule
+  MatNativeDateModule,
+  MatOptionModule
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { Observable } from 'rxjs/Observable';
+import { HttpClient } from '@angular/common/http';
+import { UserService } from '../../user/shared/user.service';
+import { User } from '../../user/shared/user';
+import { StudentAutocompleteComponent } from '../../shared/widgets/student-autocomplete/student-autocomplete.component';
 import { CheckboxInputComponent } from '../../shared/widgets/checkbox/checkbox-input.component';
+
+class UserServiceMock extends UserService {
+  constructor() {
+    super(null);
+  }
+
+  getUser(): User {
+    return new User('test');
+  }
+}
 
 describe('ContentMetadataComponent', () => {
   let component: ContentMetadataComponent;
@@ -35,7 +49,11 @@ describe('ContentMetadataComponent', () => {
           MatOptionModule,
           MatAutocompleteModule
         ],
-        declarations: [ContentMetadataComponent, CheckboxInputComponent]
+        declarations: [ContentMetadataComponent, CheckboxInputComponent, StudentAutocompleteComponent],
+        providers: [
+          { provide: UserService, useValue: new UserServiceMock() },
+          { provide: HttpClient, useValue: new HttpClient(null) }
+        ]
       })
         .compileComponents()
         .then(() => {
