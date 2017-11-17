@@ -74,26 +74,7 @@ export class StudentService {
     return searchModel;
   }
 
-  public search(searchModel$: Observable<StudentSearchModel>): Observable<StudentSearchResults> {
-    return searchModel$
-      .debounceTime(400)
-      .distinctUntilChanged()
-      .switchMap(searchModel => {
-        console.log('processing search request: ' + JSON.stringify(searchModel));
-        if (isNullOrUndefined(searchModel)) {
-          return Observable.of(new StudentSearchResults());
-        } else {
-          return this.searchStudent(searchModel);
-        }
-      });
-  }
-
-  public read(studentNumber: string): Observable<Student> {
-    const options = this.buildRequestOptions();
-    return this.http.get<Student>(this.studentUrl + '/' + studentNumber, options); // TODO: handle failure
-  }
-
-  public searchStudent(searchModel: StudentSearchModel): Observable<StudentSearchResults> {
+  private searchStudent(searchModel: StudentSearchModel): Observable<StudentSearchResults> {
     let params = new HttpParams();
     if (searchModel.firstName) {
       params = params.set('firstName', searchModel.firstName);
@@ -108,6 +89,11 @@ export class StudentService {
     const options = this.buildRequestOptions(params);
 
     return this.http.get<StudentSearchResults>(this.studentUrl, options); // TODO: handle failure
+  }
+
+  public read(studentNumber: string): Observable<Student> {
+    const options = this.buildRequestOptions();
+    return this.http.get<Student>(this.studentUrl + '/' + studentNumber, options); // TODO: handle failure
   }
 
   private buildRequestOptions(httpParams?: HttpParams) {
