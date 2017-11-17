@@ -10,6 +10,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { PageConfig } from '../../core/shared/model/page-config';
 import { SearchResults } from '../shared/model/search-result';
 import { DataService } from '../../shared/providers/data.service';
+import { SharedModule } from '../../shared/shared.module';
 
 class MockDataService {
   storage = ['123', '456'];
@@ -22,7 +23,7 @@ describe('SearchResultsComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [MaterialConfigModule, NoopAnimationsModule, RouterModule],
+        imports: [MaterialConfigModule, NoopAnimationsModule, RouterModule, SharedModule],
         providers: [{ provide: DataService, useClass: MockDataService }],
         declarations: [SearchResultsComponent]
       }).compileComponents();

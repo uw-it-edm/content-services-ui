@@ -7,4 +7,8 @@ export class Student {
   public netId: string;
   public studentNumber: string;
   public studentSystemKey: string;
+
+  static convertToDisplayName(student: Student) {
+    return student.lastName + ', ' + student.firstName + ' (' + student.studentNumber + ')';
+  }
 }

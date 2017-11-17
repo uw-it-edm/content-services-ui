@@ -87,14 +87,10 @@ export class StudentAutocompleteComponent
     return (studentNumber: string) => {
       if (this.filteredOptions && studentNumber) {
         const student: Student = this.filteredOptions.find((s: Student) => s.studentNumber === studentNumber);
-        return student ? this.convertToDisplayName(student) : null;
+        return student ? Student.convertToDisplayName(student) : null;
       }
       return null;
     };
-  }
-
-  private convertToDisplayName(student: Student) {
-    return student.lastName + ', ' + student.firstName + ' (' + student.studentNumber + ')';
   }
 
   ngOnDestroy() {

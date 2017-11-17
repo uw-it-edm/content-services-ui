@@ -13,6 +13,7 @@ import { FocusModule } from 'angular2-focus/src/focus.module';
 import { StudentAutocompleteComponent } from './widgets/student-autocomplete/student-autocomplete.component';
 import { StudentService } from './providers/student.service';
 import { CheckboxInputComponent } from './widgets/checkbox/checkbox-input.component';
+import { StudentDisplayComponent } from './widgets/student-display/student-display.component';
 
 @NgModule({
   imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule, FocusModule.forRoot()],
@@ -25,7 +26,8 @@ import { CheckboxInputComponent } from './widgets/checkbox/checkbox-input.compon
     FileUploadComponent,
     SafeUrlPipe,
     CheckboxInputComponent,
-    StudentAutocompleteComponent
+    StudentAutocompleteComponent,
+    StudentDisplayComponent
   ],
   declarations: [
     CustomTextDirective,
@@ -33,7 +35,8 @@ import { CheckboxInputComponent } from './widgets/checkbox/checkbox-input.compon
     FileUploadComponent,
     SafeUrlPipe,
     CheckboxInputComponent,
-    StudentAutocompleteComponent
+    StudentAutocompleteComponent,
+    StudentDisplayComponent
   ],
   providers: [DataService, StudentService]
 })
