@@ -76,12 +76,6 @@ describe('StudentService', () => {
     studentService = new StudentService(http, new UserServiceMock());
   });
 
-  /*  beforeEach(() => {
-    TestBed.configureTestingModule({
-
-    });
-  });*/
-
   it('should be created', () => {
     expect(studentService).toBeTruthy();
   });
@@ -107,7 +101,6 @@ describe('StudentService', () => {
 
     studentService.autocomplete('1234').subscribe((result: StudentSearchResults) => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
-      // expect(JSON.stringify(httpSpy.calls.first().args)).toBe('');
       expect(httpSpy.calls.first().args[0]).toBe(expectedSearchUrl);
       expect(httpSpy.calls.first().args[1].params.toString()).toEqual('studentNumber=1234');
       expect(result.totalElements).toBe(1);
