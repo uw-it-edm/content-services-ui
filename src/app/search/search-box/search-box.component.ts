@@ -28,8 +28,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   removeFilter(filter: SearchFilter) {
     console.log('removing filter for ' + filter.key);
-    this.searchModel.filters = this.searchModel.filters.filter(oldFilter => oldFilter !== filter);
-
+    this.searchModel.removeFilter(filter);
     this.updateSearch();
   }
 

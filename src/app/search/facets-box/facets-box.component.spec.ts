@@ -32,6 +32,7 @@ describe('FacetsBoxComponent', () => {
     component.pageConfig = new PageConfig();
 
     const searchResults = new SearchResults();
+
     component.searchResults$ = Observable.of(searchResults);
 
     fixture.detectChanges();
