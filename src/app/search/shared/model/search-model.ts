@@ -1,10 +1,29 @@
 import { SearchFilter } from './search-filter';
 import { PaginatorConfig } from './paginator-config';
 import { SearchOrder } from './search-order';
+import { isNullOrUndefined } from 'util';
 
 export class SearchModel {
   stringQuery: string;
-  filters: SearchFilter[] = [];
+  private _filters: SearchFilter[] = [];
   pagination: PaginatorConfig = new PaginatorConfig();
   order: SearchOrder = new SearchOrder();
+
+  get filters(): SearchFilter[] {
+    return this._filters;
+  }
+
+  addFilterIfNotThere(newFilter: SearchFilter): void {
+    if (!this._filters.find(filter => filter.equals(newFilter))) {
+      this._filters.push(newFilter);
+    }
+  }
+
+  removeFilter(filterToRemove: SearchFilter): void {
+    this._filters = this._filters.filter(oldFilter => !oldFilter.equals(filterToRemove));
+  }
+
+  hasFilterForKey(key: String): boolean {
+    return !isNullOrUndefined(this._filters.find(filter => filter.key === key));
+  }
 }
