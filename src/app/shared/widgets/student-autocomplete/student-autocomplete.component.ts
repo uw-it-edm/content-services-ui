@@ -69,8 +69,6 @@ export class StudentAutocompleteComponent
     });
 
     this.formGroup.controls['studentAutocomplete'].valueChanges
-      .debounceTime(400)
-      .distinctUntilChanged()
       .startWith(null)
       .takeUntil(this.componentDestroyed)
       .subscribe((term: string) => {
