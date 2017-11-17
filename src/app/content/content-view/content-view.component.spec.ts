@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ContentViewComponent } from './content-view.component';
 import { SafeUrlPipe } from '../../shared/pipes/safe-url.pipe';
-import { PdfViewerComponent } from 'ng2-pdf-viewer';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { ContentItem } from '../shared/model/content-item';
 import { Observable } from 'rxjs/Observable';
 import { ContentService } from '../shared/content.service';
@@ -21,9 +21,9 @@ describe('ContentViewComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [MatButtonModule],
+      imports: [MatButtonModule, PdfViewerModule],
       providers: [{ provide: ContentService, useClass: MockContentService }],
-      declarations: [ContentViewComponent, PdfViewerComponent, SafeUrlPipe]
+      declarations: [ContentViewComponent, SafeUrlPipe]
     }).compileComponents();
   });
 

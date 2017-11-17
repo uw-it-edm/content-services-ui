@@ -5,30 +5,36 @@
       <span class="cs-fill-remaining-space"></span>
     </mat-toolbar>
     <form [formGroup]="createContentItemForm">
-      <div fxLayout="row">
-        <div fxFlex="30">
-          <app-file-upload
-            [fieldName]="'updateFile'"
-            (fileSelected)="fileSelected($event)"
-            [(formGroup)]="createContentItemForm"
-            [autoFocus]="true"
-          >
-          </app-file-upload>
-
-        </div>
-      </div>
 
       <div class="content-area">
-        <div fxLayout="row">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
           <div fxFlex="30">
+            <app-file-upload
+              [fieldName]="'updateFile'"
+              (fileSelected)="fileSelected($event)"
+              [(formGroup)]="createContentItemForm"
+              [autoFocus]="true"
+            >
+            </app-file-upload>
+
             <app-content-metadata
               [formGroup]="createContentItemForm"
               [contentItem$]=""
               [pageConfig]="pageConfig"
 
             ></app-content-metadata>
+            <div *ngIf="pageConfig?.buttons" class="button-row" style="margin-bottom: 1em">
+              <button *ngFor="let button of pageConfig?.buttons" mat-raised-button
+                      (click)="buttonPress(button)" [color]="button.color"
+                      [disabled]="!button.alwaysActive && createContentItemForm.pristine" [id]="button.command"
+                      [type]="button.type">{{button.label}}
+              </button>
+              <mat-checkbox [(formGroup)]="createContentItemForm"
+                            formControlName="uploadAnother"
+                            name="uploadAnother" >Upload another</mat-checkbox>
+            </div>
           </div>
-          <div fxFlex="70">
+          <div fxFlex="auto">
             <app-content-view
               *ngIf="pageConfig.viewPanel"
               [item$]=""
@@ -38,16 +44,7 @@
           </div>
         </div>
       </div>
-      <div *ngIf="pageConfig?.buttons" class="button-row" style="margin-bottom: 1em">
-        <button *ngFor="let button of pageConfig?.buttons" mat-raised-button
-                (click)="buttonPress(button)" [color]="button.color"
-                [disabled]="!button.alwaysActive && createContentItemForm.pristine" [id]="button.command"
-                [type]="button.type">{{button.label}}
-        </button>
-        <mat-checkbox [(formGroup)]="createContentItemForm"
-                      formControlName="uploadAnother"
-                      name="uploadAnother" >Upload another</mat-checkbox>
-      </div>
+
     </form>
 
   </div>
