@@ -11,10 +11,10 @@ export const environment = {
   testUser: null,
 
   search_api: {
-    url: 'http://search-api.dev',
+    url: 'http://localhost:8080',
     context: '/search',
     method: 'POST',
-    authenticationHeader: 'auth'
+    authenticationHeader: null
   },
   content_api: {
     url: 'http://localhost:8080',
