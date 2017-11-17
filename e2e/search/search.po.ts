@@ -10,7 +10,7 @@ export class SearchPage {
   }
 
   getSearchBox() {
-    return element(by.id('md-input-0'));
+    return element(by.id('mat-input-0'));
   }
 
   getSearchBoxInputText() {
@@ -45,7 +45,7 @@ export class SearchPage {
   }
 
   clickPaginatorSize(index) {
-    const id = 'md-option-' + index;
+    const id = 'mat-option-' + index;
     element(by.id(id)).click();
   }
 }
