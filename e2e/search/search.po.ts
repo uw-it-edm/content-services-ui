@@ -14,7 +14,7 @@ export class SearchPage {
   }
 
   getSearchBoxInputText() {
-    return this.getSearchBox().getAttribute('ng-reflect-model');
+    return this.getSearchBox().getAttribute('value');
   }
 
   getPaginators() {
