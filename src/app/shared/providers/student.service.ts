@@ -9,6 +9,7 @@ import { StudentSearchModel } from '../shared/model/student-search-model';
 import { StudentSearchResults } from '../shared/model/student-search-results';
 import { Student } from '../shared/model/student';
 import { isNumeric } from 'rxjs/util/isNumeric';
+import { CacheObservableDecorator } from '../decorators/cache-observable.decorator';
 
 @Injectable()
 export class StudentService {
@@ -91,6 +92,7 @@ export class StudentService {
     return this.http.get<StudentSearchResults>(this.studentUrl, options); // TODO: handle failure
   }
 
+  @CacheObservableDecorator
   public read(studentNumber: string): Observable<Student> {
     const options = this.buildRequestOptions();
     return this.http.get<Student>(this.studentUrl + '/' + studentNumber, options); // TODO: handle failure
