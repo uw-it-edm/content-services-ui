@@ -1,0 +1,17 @@
+<button mat-button id="previousItem"
+        [disabled]="(currentPosition == undefined) || (currentPosition < 1 )"
+        (click)="navigate(currentPosition - 1)">
+  <mat-icon class="mat-24" aria-label="Previous item">keyboard_arrow_up</mat-icon>
+  Previous
+</button>
+<span *ngIf="(currentPosition != undefined)">
+          {{currentPosition +1}} of {{adjacentIds.length}}
+        </span>
+<button mat-button id="nextItem"
+        [disabled]="(currentPosition == undefined) || (currentPosition === (adjacentIds.length - 1)) "
+        (click)="navigate(currentPosition + 1)">
+  Next
+  <mat-icon class="mat-24" aria-label="Next item">keyboard_arrow_down</mat-icon>
+</button>
+
+

@@ -1,0 +1,30 @@
+<div [formGroup]="formGroup" class="cs-file-upload">
+  <div class="mat-input-container mat-form-field">
+    <div class="mat-input-wrapper mat-form-field-wrapper">
+      <div class="mat-input-flex mat-form-field-flex">
+        <div class="mat-input-infix mat-form-field-infix">
+          <div [ngClass]="files.length > 0 ? 'hidden' : 'drop-zone'" id="drop-zone"
+                (drop)="onDrop($event)"
+                (dragover)="onDragOver($event)">
+            <p>Drag and drop, or</p>
+            <input class="inputfile"
+                   id="attach-files"
+                   [name]="fieldName"
+                   type="file"
+                   (change)="onFileChange($event)"
+                   [formControlName]="fieldName">
+
+            <label for="attach-files" class="mat-raised-button mat-button" [focus]="autoFocus">
+              <mat-icon class="cs-icon">cloud_upload</mat-icon>
+              Choose Files</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngFor="let file of files">
+  <button mat-button role="button" (click)="removeFile(file)" [title]="'Remove ' + file.name">
+    {{(file.name.length>20)? (file.name | slice:0:20)+'...':(file.name)}} <mat-icon>delete</mat-icon>
+  </button>
+</div>
