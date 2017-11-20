@@ -14,6 +14,7 @@ import { StudentAutocompleteComponent } from './widgets/student-autocomplete/stu
 import { StudentService } from './providers/student.service';
 import { CheckboxInputComponent } from './widgets/checkbox/checkbox-input.component';
 import { StudentDisplayComponent } from './widgets/student-display/student-display.component';
+import { TruncatePipe } from './pipes/truncate.pipe';
 
 @NgModule({
   imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule, FocusModule.forRoot()],
@@ -27,7 +28,8 @@ import { StudentDisplayComponent } from './widgets/student-display/student-displ
     SafeUrlPipe,
     CheckboxInputComponent,
     StudentAutocompleteComponent,
-    StudentDisplayComponent
+    StudentDisplayComponent,
+    TruncatePipe
   ],
   declarations: [
     CustomTextDirective,
@@ -36,7 +38,8 @@ import { StudentDisplayComponent } from './widgets/student-display/student-displ
     SafeUrlPipe,
     CheckboxInputComponent,
     StudentAutocompleteComponent,
-    StudentDisplayComponent
+    StudentDisplayComponent,
+    TruncatePipe
   ],
   providers: [DataService, StudentService]
 })
