@@ -56,6 +56,9 @@ describe('ContentService', () => {
   it('should not web rendition to getFileUrl', () => {
     expect(service.getFileUrl('123', false)).not.toContain('rendition=Web');
   });
+  it('should add disposition to getFileUrl', () => {
+    expect(service.getFileUrl('123', false, 'attachment')).toContain('disposition=attachment');
+  });
   it('should to get the file url', () => {
     const expectedUrl =
       environment.content_api.url + environment.content_api.contextV3 + '/file/123?rendition=Web&auth=test';
