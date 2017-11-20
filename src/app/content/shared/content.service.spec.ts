@@ -1,140 +1,90 @@
 import { ContentService } from './content.service';
-import { Http, HttpModule, Response, ResponseOptions } from '@angular/http';
 import { UserService } from '../../user/shared/user.service';
 import { User } from '../../user/shared/user';
 import { Observable } from 'rxjs/Observable';
-import { inject, TestBed } from '@angular/core/testing';
 import { ContentItem } from './model/content-item';
 import { environment } from '../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
 
-describe('ContentService', () => {
-  class UserServiceMock extends UserService {
-    constructor() {
-      super(null);
-    }
+let httpSpy;
+let http: HttpClient;
+let service: ContentService;
+const readResponse = {
+  id: '123',
+  label: 'test.pdf',
+  metadata: {
+    ProfileId: 'Foster'
+  }
+};
 
-    getUser(): User {
-      return new User('test');
-    }
+class UserServiceMock extends UserService {
+  constructor() {
+    super(null);
   }
 
+  getUser(): User {
+    return new User('test');
+  }
+}
+
+describe('ContentService', () => {
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [HttpModule],
-      providers: [
-        ContentService,
-        { provide: UserService, useValue: new UserServiceMock() },
-        { provide: Http, useValue: new Http(null, null) }
-      ]
+    http = new HttpClient(null);
+    service = new ContentService(http, new UserServiceMock());
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+
+  it('should read from the content api', () => {
+    httpSpy = spyOn(http, 'get').and.returnValue(Observable.of(readResponse));
+
+    const expectedUrl = environment.content_api.url + environment.content_api.contextV3 + '/item/123';
+    service.read('123').subscribe(result => {
+      expect(httpSpy).toHaveBeenCalledTimes(1);
+      expect(httpSpy.calls.first().args[0]).toBe(expectedUrl);
+      expect(result.id).toBe('123');
+      expect(result.label).toBe('test.pdf');
+      expect(result.metadata['ProfileId']).toBe('Foster');
     });
   });
 
-  it('should be created', () =>
-    inject([ContentService, Http], (service: ContentService) => {
-      expect(service).toBeTruthy();
-    }));
+  it('should add web rendition to getFileUrl', () => {
+    expect(service.getFileUrl('123', true)).toContain('rendition=Web');
+  });
+  it('should not web rendition to getFileUrl', () => {
+    expect(service.getFileUrl('123', false)).not.toContain('rendition=Web');
+  });
+  it('should to get the file url', () => {
+    const expectedUrl =
+      environment.content_api.url + environment.content_api.contextV3 + '/file/123?rendition=Web&auth=test';
+    expect(service.getFileUrl('123', true)).toEqual(expectedUrl);
+  });
 
-  it(
-    'should read from the content api',
-    inject([ContentService, Http], (service: ContentService, http: Http) => {
-      const httpSpy = spyOn(http, 'get').and.callFake(function(_url, _options) {
-        return Observable.of(
-          new Response(
-            new ResponseOptions({
-              body: JSON.stringify({
-                id: '123',
-                label: 'test.pdf',
-                metadata: {
-                  ProfileId: 'test'
-                }
-              }),
-              status: 200
-            })
-          )
-        );
-      });
+  it('should update the content api', () => {
+    httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(readResponse));
 
-      service.read('123').subscribe(result => {
-        expect(httpSpy).toHaveBeenCalledTimes(1);
+    const contentItem = new ContentItem();
+    contentItem.id = '123';
+    const expectedUrl = environment.content_api.url + environment.content_api.contextV3 + '/item/123';
 
-        expect(result.id).toBe('123');
-        expect(result.label).toBe('test.pdf');
-        expect(result.metadata['ProfileId']).toBe('test');
-      });
-    })
-  );
+    service.update(contentItem).subscribe(result => {
+      expect(httpSpy).toHaveBeenCalledTimes(1);
+      expect(httpSpy.calls.first().args[0]).toBe(expectedUrl);
+      expect(result.id).toEqual(contentItem.id);
+    });
+  });
+  it('should create content-items', () => {
+    httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(readResponse));
+    const expectedUrl = environment.content_api.url + environment.content_api.contextV3 + '/item/';
+    const contentItem = new ContentItem();
+    contentItem.id = '123';
 
-  it(
-    'should add web rendition to getFileUrl',
-    inject([ContentService, Http], (service: ContentService) => {
-      expect(service.getFileUrl('123', true)).toContain('rendition=Web');
-    })
-  );
-  it(
-    'should not web rendition to getFileUrl',
-    inject([ContentService, Http], (service: ContentService) => {
-      expect(service.getFileUrl('123', false)).not.toContain('rendition=Web');
-    })
-  );
-  it(
-    'should to get the file url',
-    inject([ContentService, Http], (service: ContentService) => {
-      expect(service.getFileUrl('123', true)).toEqual(
-        environment.content_api.url + '/content/v3/file/123?rendition=Web&auth=test'
-      );
-    })
-  );
-
-  it(
-    'should update the content api',
-    inject([ContentService, Http], (service: ContentService, http: Http) => {
-      const httpSpy = spyOn(http, 'post').and.callFake(function(_url, _options) {
-        return Observable.of(
-          new Response(
-            new ResponseOptions({
-              body: JSON.stringify({
-                id: '123',
-                label: 'test.pdf',
-                metadata: {
-                  ProfileId: 'test'
-                }
-              }),
-              status: 200
-            })
-          )
-        );
-      });
-      const contentItem = new ContentItem();
-
-      service.update(contentItem).subscribe(result => {
-        expect(httpSpy).toHaveBeenCalledTimes(1);
-      });
-    })
-  );
-  it(
-    'should create content-items',
-    inject([ContentService, Http], (service: ContentService, http: Http) => {
-      const httpSpy = spyOn(http, 'post').and.callFake(function(_url, _options) {
-        return Observable.of(
-          new Response(
-            new ResponseOptions({
-              body: JSON.stringify({
-                id: '123',
-                label: 'test.pdf',
-                metadata: {
-                  ProfileId: 'test'
-                }
-              }),
-              status: 200
-            })
-          )
-        );
-      });
-      const contentItem = new ContentItem();
-
-      service.create(contentItem, null).subscribe(result => {
-        expect(httpSpy).toHaveBeenCalledTimes(1);
-      });
-    })
-  );
+    service.create(contentItem, null).subscribe(result => {
+      expect(httpSpy).toHaveBeenCalledTimes(1);
+      expect(httpSpy.calls.first().args[0]).toBe(expectedUrl);
+      expect(result.id).toEqual(contentItem.id);
+    });
+  });
 });
