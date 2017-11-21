@@ -18,6 +18,9 @@ import { SearchModel } from '../shared/model/search-model';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DataService } from '../../shared/providers/data.service';
 import { RouterTestingModule } from '@angular/router/testing';
+import { SharedModule } from '../../shared/shared.module';
+import { DatePipe } from '@angular/common';
+import { DateTimePipe } from '../../shared/pipes/date-time.pipe';
 
 let activatedRoute: ActivatedRouteStub;
 let searchServiceSpy: MockSearchService;
@@ -44,11 +47,12 @@ describe('SearchPageComponent', () => {
     async(() => {
       TestBed.configureTestingModule({
         imports: [NoopAnimationsModule, MaterialConfigModule, HttpModule, RouterTestingModule],
-        declarations: [SearchPageComponent, SearchBoxComponent, SearchResultsComponent],
+        declarations: [SearchPageComponent, SearchBoxComponent, SearchResultsComponent, DateTimePipe],
         providers: [
           { provide: ActivatedRoute, useValue: activatedRoute },
           { provide: SearchService, useValue: searchServiceSpy },
           { provide: DataService, useClass: MockDataService },
+          DatePipe,
           Title
         ],
         schemas: [NO_ERRORS_SCHEMA]

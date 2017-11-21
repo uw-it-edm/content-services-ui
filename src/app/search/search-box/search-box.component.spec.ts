@@ -8,6 +8,7 @@ import { SearchModel } from '../shared/model/search-model';
 import 'rxjs/add/observable/of';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { PageConfig } from '../../core/shared/model/page-config';
+import { SharedModule } from '../../shared/shared.module';
 
 describe('SearchBoxComponent', () => {
   let component: SearchBoxComponent;

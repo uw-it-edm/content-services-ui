@@ -34,7 +34,14 @@
         </span>
       </span>
 
+
       <span [ngSwitch]="col.displayType">
+         <span *ngSwitchCase="'date'">
+           <mat-cell *matCellDef="let element">{{element.metadata[col.name] | dateTime: 'date'}}</mat-cell>
+         </span>
+         <span *ngSwitchCase="'dateTime'">
+           <mat-cell *matCellDef="let element">{{element.metadata[col.name] | dateTime }}</mat-cell>
+         </span>
         <span *ngSwitchCase="'student'">
           <mat-cell *matCellDef="let element"> <app-student-display
             value="{{element.metadata[col.name]}}"></app-student-display></mat-cell>
