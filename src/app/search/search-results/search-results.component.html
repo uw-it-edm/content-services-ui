@@ -37,10 +37,10 @@
 
       <span [ngSwitch]="col.displayType">
          <span *ngSwitchCase="'date'">
-           <mat-cell *matCellDef="let element">{{element.metadata[col.name] | dateTime: 'date'}}</mat-cell>
+           <mat-cell *matCellDef="let element">{{element.metadata[col.name] | date: 'shortDate'}}</mat-cell>
          </span>
          <span *ngSwitchCase="'dateTime'">
-           <mat-cell *matCellDef="let element">{{element.metadata[col.name] | dateTime }}</mat-cell>
+           <mat-cell *matCellDef="let element">{{element.metadata[col.name] | date: 'short' }}</mat-cell>
          </span>
         <span *ngSwitchCase="'student'">
           <mat-cell *matCellDef="let element"> <app-student-display

@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { HeaderComponent } from './widgets/header/header.component';
 import { MaterialConfigModule } from '../routing/material-config.module';
@@ -15,7 +15,6 @@ import { StudentService } from './providers/student.service';
 import { CheckboxInputComponent } from './widgets/checkbox/checkbox-input.component';
 import { StudentDisplayComponent } from './widgets/student-display/student-display.component';
 import { TruncatePipe } from './pipes/truncate.pipe';
-import { DateTimePipe } from './pipes/date-time.pipe';
 
 @NgModule({
   imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule, FocusModule.forRoot()],
@@ -30,8 +29,7 @@ import { DateTimePipe } from './pipes/date-time.pipe';
     CheckboxInputComponent,
     StudentAutocompleteComponent,
     StudentDisplayComponent,
-    TruncatePipe,
-    DateTimePipe
+    TruncatePipe
   ],
   declarations: [
     CustomTextDirective,
@@ -41,9 +39,8 @@ import { DateTimePipe } from './pipes/date-time.pipe';
     CheckboxInputComponent,
     StudentAutocompleteComponent,
     StudentDisplayComponent,
-    TruncatePipe,
-    DateTimePipe
+    TruncatePipe
   ],
-  providers: [DataService, StudentService, DatePipe]
+  providers: [DataService, StudentService]
 })
 export class SharedModule {}
