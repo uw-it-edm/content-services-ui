@@ -69,11 +69,7 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
       const metaDataForm: FormGroup = <FormGroup>this.formGroup.controls['metadata'];
       if (!isNullOrUndefined(metaDataForm)) {
         this.pageConfig.fieldsToDisplay.map(field => {
-          if (field.displayType === 'date') {
-            metaDataForm.get(field.name).patchValue(new Date(this.contentItem.metadata[field.name]));
-          } else {
-            metaDataForm.get(field.name).patchValue(this.contentItem.metadata[field.name]);
-          }
+          metaDataForm.get(field.name).patchValue(this.contentItem.metadata[field.name]);
         });
       }
     }
