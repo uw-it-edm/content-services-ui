@@ -2,6 +2,7 @@ import { Component, forwardRef, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-timestamp-picker',
@@ -37,7 +38,11 @@ export class TimestampPickerComponent implements ControlValueAccessor, OnInit, O
       .takeUntil(this.componentDestroyed)
       .subscribe((date: Date) => {
         if (date) {
-          this.propagateChange(date.getTime());
+          this.propagateChange(
+            moment(date)
+              .utcOffset('-08:00')
+              .valueOf()
+          );
         }
       });
   }
@@ -49,7 +54,10 @@ export class TimestampPickerComponent implements ControlValueAccessor, OnInit, O
 
   writeValue(value: any): void {
     if (value !== undefined && parseInt(value, 10) > 0) {
-      this.formGroup.controls['internalDate'].patchValue(new Date(value));
+      const date = moment(value)
+        .utcOffset('-08:00')
+        .toDate();
+      this.formGroup.controls['internalDate'].patchValue(date);
     }
   }
 
