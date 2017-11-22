@@ -2,7 +2,7 @@ import { Component, forwardRef, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 
 @Component({
   selector: 'app-timestamp-picker',
@@ -23,12 +23,24 @@ export class TimestampPickerComponent implements ControlValueAccessor, OnInit, O
 
   private componentDestroyed = new Subject();
 
+  private userOffset = moment().utcOffset();
+
+  private seattleOffset;
+
   formGroup: FormGroup;
   onTouched = () => {};
 
   constructor(private fb: FormBuilder) {}
 
+  private getSeattleOffset(): number {
+    return moment()
+      .tz('America/Los_Angeles')
+      .utcOffset();
+  }
+
   ngOnInit() {
+    this.seattleOffset = this.getSeattleOffset();
+
     this.formGroup = this.fb.group({
       internalDate: new FormControl()
     });
@@ -38,9 +50,10 @@ export class TimestampPickerComponent implements ControlValueAccessor, OnInit, O
       .takeUntil(this.componentDestroyed)
       .subscribe((date: Date) => {
         if (date) {
+          const shift = this.seattleOffset - this.userOffset;
           this.propagateChange(
             moment(date)
-              .utcOffset('-08:00')
+              .subtract(shift, 'minutes')
               .valueOf()
           );
         }
@@ -55,7 +68,7 @@ export class TimestampPickerComponent implements ControlValueAccessor, OnInit, O
   writeValue(value: any): void {
     if (value !== undefined && parseInt(value, 10) > 0) {
       const date = moment(value)
-        .utcOffset('-08:00')
+        .utcOffset(this.getSeattleOffset())
         .toDate();
       this.formGroup.controls['internalDate'].patchValue(date);
     }

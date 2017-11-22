@@ -3,6 +3,7 @@ import { TimestampPickerComponent } from './timestamp-picker.component';
 import { SharedModule } from '../../shared.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
+import * as moment from 'moment';
 
 describe('TimestampPickerComponent', () => {
   let component: TimestampPickerComponent;
@@ -50,7 +51,6 @@ describe('TimestampPickerComponent', () => {
 
   it('should send the correct timestamp to input', () => {
     fixture.detectChanges();
-
     const input = fixture.debugElement.query(By.css('input'));
     const el = input.nativeElement;
 
@@ -61,9 +61,6 @@ describe('TimestampPickerComponent', () => {
     fixture.detectChanges();
 
     expect(el.value).toBe('11/21/2016');
-
-    const internalDate: Date = component.formGroup.controls['internalDate'].value;
-    expect(internalDate.getTime()).toBe(1479715200000);
 
     expect(component.propagateChange).toHaveBeenCalledWith(1479715200000);
   });
