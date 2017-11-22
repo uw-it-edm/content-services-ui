@@ -16,6 +16,7 @@ import { CheckboxInputComponent } from './widgets/checkbox/checkbox-input.compon
 import { StudentDisplayComponent } from './widgets/student-display/student-display.component';
 import { TimestampPickerComponent } from './widgets/timestamp-picker/timestamp-picker.component';
 import { TruncatePipe } from './pipes/truncate.pipe';
+import { DisplayFieldComponent } from './widgets/display-field/display-field.component';
 
 @NgModule({
   imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule, FocusModule.forRoot()],
@@ -31,7 +32,8 @@ import { TruncatePipe } from './pipes/truncate.pipe';
     StudentAutocompleteComponent,
     StudentDisplayComponent,
     TimestampPickerComponent,
-    TruncatePipe
+    TruncatePipe,
+    DisplayFieldComponent
   ],
   declarations: [
     CustomTextDirective,
@@ -42,7 +44,8 @@ import { TruncatePipe } from './pipes/truncate.pipe';
     StudentAutocompleteComponent,
     StudentDisplayComponent,
     TimestampPickerComponent,
-    TruncatePipe
+    TruncatePipe,
+    DisplayFieldComponent
   ],
   providers: [DataService, StudentService]
 })

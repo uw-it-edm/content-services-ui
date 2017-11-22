@@ -1,0 +1,15 @@
+<span *ngIf="field" [ngSwitch]="field.displayType">
+ <span *ngSwitchCase="'date'">
+  {{value | date: 'shortDate'}}
+  </span>
+  <span *ngSwitchCase="'dateTime'">
+     {{value | date: 'short' }}
+   </span>
+  <span *ngSwitchCase="'student'">
+    <app-student-display
+      value="{{value }}"></app-student-display>
+  </span>
+  <span *ngSwitchDefault>
+   {{value}}
+  </span>
+</span>
