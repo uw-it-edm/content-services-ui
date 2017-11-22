@@ -30,10 +30,10 @@ describe('TimestampPickerComponent', () => {
   });
 
   it('should populate the initial value', () => {
+    spyOn(component, 'propagateChange').and.callThrough();
     component.writeValue(1511292577000);
 
-    const internalDate: Date = component.formGroup.controls['internalDate'].value;
-    expect(internalDate.getTime()).toBe(1511292577000);
+    expect(component.propagateChange).toHaveBeenCalledWith(1511292577000);
   });
 
   it('should have the correct display when input is timestamp', () => {
@@ -44,9 +44,6 @@ describe('TimestampPickerComponent', () => {
     const el = input.nativeElement;
 
     expect(el.value).toBe('11/21/2017');
-
-    const internalDate: Date = component.formGroup.controls['internalDate'].value;
-    expect(internalDate.getTime()).toBe(1511292577000);
   });
 
   it('should send the correct timestamp to input', () => {

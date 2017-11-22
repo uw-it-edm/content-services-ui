@@ -51,11 +51,10 @@ export class TimestampPickerComponent implements ControlValueAccessor, OnInit, O
       .subscribe((date: Date) => {
         if (date) {
           const shift = this.seattleOffset - this.userOffset;
-          this.propagateChange(
-            moment(date)
-              .subtract(shift, 'minutes')
-              .valueOf()
-          );
+          const adjustedDate = moment(date)
+            .subtract(shift, 'minutes')
+            .valueOf();
+          this.propagateChange(adjustedDate);
         }
       });
   }
@@ -67,8 +66,10 @@ export class TimestampPickerComponent implements ControlValueAccessor, OnInit, O
 
   writeValue(value: any): void {
     if (value !== undefined && parseInt(value, 10) > 0) {
+      const shift = this.seattleOffset - this.userOffset;
       const date = moment(value)
         .utcOffset(this.getSeattleOffset())
+        .add(shift, 'minutes')
         .toDate();
       this.formGroup.controls['internalDate'].patchValue(date);
     }

@@ -21,6 +21,7 @@ import { User } from '../../user/shared/user';
 import { StudentAutocompleteComponent } from '../../shared/widgets/student-autocomplete/student-autocomplete.component';
 import { CheckboxInputComponent } from '../../shared/widgets/checkbox/checkbox-input.component';
 import { TimestampPickerComponent } from '../../shared/widgets/timestamp-picker/timestamp-picker.component';
+import * as moment from 'moment';
 
 class UserServiceMock extends UserService {
   constructor() {
