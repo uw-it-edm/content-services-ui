@@ -34,24 +34,10 @@
         </span>
       </span>
 
+      <mat-cell *matCellDef="let element">
+        <app-display-field [field]="col" [value]="element.metadata[col.name]"></app-display-field>
+      </mat-cell>
 
-      <span [ngSwitch]="col.displayType">
-         <span *ngSwitchCase="'date'">
-           <mat-cell *matCellDef="let element">{{element.metadata[col.name] | date: 'shortDate'}}</mat-cell>
-         </span>
-         <span *ngSwitchCase="'dateTime'">
-           <mat-cell *matCellDef="let element">{{element.metadata[col.name] | date: 'short' }}</mat-cell>
-         </span>
-        <span *ngSwitchCase="'student'">
-          <mat-cell *matCellDef="let element"> <app-student-display
-            value="{{element.metadata[col.name]}}"></app-student-display></mat-cell>
-        </span>
-        <span *ngSwitchDefault>
-          <mat-cell *matCellDef="let element">{{element.metadata[col.name]}}</mat-cell>
-        </span>
-
-
-      </span>
 
     </ng-container>
 
