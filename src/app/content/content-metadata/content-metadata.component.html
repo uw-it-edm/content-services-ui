@@ -16,13 +16,11 @@
             </mat-autocomplete>
           </mat-form-field>
 
-          <mat-form-field *ngSwitchCase="'date'">
-            <input matInput [formControlName]="fieldToDisplay.name"
-                   [name]="fieldToDisplay.name"
-                   [placeholder]="fieldToDisplay.label" [matDatepicker]="picker">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
+            <app-timestamp-picker *ngSwitchCase="'date'"
+              [formControlName]="fieldToDisplay.name"
+              [placeholder]="fieldToDisplay.label"
+            >
+            </app-timestamp-picker>
 
           <mat-form-field *ngSwitchCase="'checkbox'">
             <app-checkbox-input
@@ -36,7 +34,8 @@
             <app-student-autocomplete
               [formControlName]="fieldToDisplay.name"
               [placeholder]="fieldToDisplay.label"
-            ></app-student-autocomplete>
+            >
+            </app-student-autocomplete>
 
           </mat-form-field>
 

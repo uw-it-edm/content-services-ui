@@ -20,6 +20,8 @@ import { UserService } from '../../user/shared/user.service';
 import { User } from '../../user/shared/user';
 import { StudentAutocompleteComponent } from '../../shared/widgets/student-autocomplete/student-autocomplete.component';
 import { CheckboxInputComponent } from '../../shared/widgets/checkbox/checkbox-input.component';
+import { TimestampPickerComponent } from '../../shared/widgets/timestamp-picker/timestamp-picker.component';
+import * as moment from 'moment';
 
 class UserServiceMock extends UserService {
   constructor() {
@@ -49,7 +51,12 @@ describe('ContentMetadataComponent', () => {
           MatOptionModule,
           MatAutocompleteModule
         ],
-        declarations: [ContentMetadataComponent, CheckboxInputComponent, StudentAutocompleteComponent],
+        declarations: [
+          ContentMetadataComponent,
+          CheckboxInputComponent,
+          StudentAutocompleteComponent,
+          TimestampPickerComponent
+        ],
         providers: [
           { provide: UserService, useValue: new UserServiceMock() },
           { provide: HttpClient, useValue: new HttpClient(null) }
@@ -130,7 +137,7 @@ describe('ContentMetadataComponent', () => {
       '3': 'three',
       a: 'a',
       t: 't',
-      d: new Date(1509519600000)
+      d: 1509519600000
     });
   });
 });

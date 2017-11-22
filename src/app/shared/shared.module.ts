@@ -14,6 +14,7 @@ import { StudentAutocompleteComponent } from './widgets/student-autocomplete/stu
 import { StudentService } from './providers/student.service';
 import { CheckboxInputComponent } from './widgets/checkbox/checkbox-input.component';
 import { StudentDisplayComponent } from './widgets/student-display/student-display.component';
+import { TimestampPickerComponent } from './widgets/timestamp-picker/timestamp-picker.component';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { DisplayFieldComponent } from './widgets/display-field/display-field.component';
 
@@ -30,6 +31,7 @@ import { DisplayFieldComponent } from './widgets/display-field/display-field.com
     CheckboxInputComponent,
     StudentAutocompleteComponent,
     StudentDisplayComponent,
+    TimestampPickerComponent,
     TruncatePipe,
     DisplayFieldComponent
   ],
@@ -41,6 +43,7 @@ import { DisplayFieldComponent } from './widgets/display-field/display-field.com
     CheckboxInputComponent,
     StudentAutocompleteComponent,
     StudentDisplayComponent,
+    TimestampPickerComponent,
     TruncatePipe,
     DisplayFieldComponent
   ],
