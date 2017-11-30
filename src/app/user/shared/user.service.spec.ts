@@ -2,14 +2,14 @@ import { inject, TestBed } from '@angular/core/testing';
 
 import { UserService } from './user.service';
 import { User } from './user';
-import { Http, HttpModule, ResponseOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import { HttpClient } from '@angular/common/http';
 
 describe('UserService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpModule],
-      providers: [UserService, { provide: Http, useValue: new Http(null, null) }]
+      imports: [],
+      providers: [UserService, { provide: HttpClient, useValue: new HttpClient(null) }]
     });
   });
 
@@ -22,21 +22,14 @@ describe('UserService', () => {
 
   it(
     'should return a user named myusername',
-    inject([UserService, Http], (service: UserService, http: Http) => {
+    inject([UserService, HttpClient], (service: UserService, http: HttpClient) => {
       const httpSpy = spyOn(http, 'get').and.callFake(function(_url, _options) {
-        return Observable.of(
-          new Response(
-            new ResponseOptions({
-              body: JSON.stringify({
-                userName: 'myusername',
-                accounts: {
-                  'test-account': 'rwd'
-                }
-              }),
-              status: 200
-            })
-          )
-        );
+        return Observable.of({
+          userName: 'myusername',
+          accounts: {
+            'test-account': 'rwd'
+          }
+        });
       });
 
       const authenticatedUserPromise: Promise<User> = service.getAuthenticatedUser();

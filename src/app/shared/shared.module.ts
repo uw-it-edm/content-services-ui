@@ -10,7 +10,13 @@ import { SafeUrlPipe } from './pipes/safe-url.pipe';
 import { CustomTextDirective } from './directives/custom-text/custom-text.directive';
 import { DataService } from './providers/data.service';
 import { FocusModule } from 'angular2-focus/src/focus.module';
+import { StudentAutocompleteComponent } from './widgets/student-autocomplete/student-autocomplete.component';
+import { StudentService } from './providers/student.service';
 import { CheckboxInputComponent } from './widgets/checkbox/checkbox-input.component';
+import { StudentDisplayComponent } from './widgets/student-display/student-display.component';
+import { TimestampPickerComponent } from './widgets/timestamp-picker/timestamp-picker.component';
+import { TruncatePipe } from './pipes/truncate.pipe';
+import { DisplayFieldComponent } from './widgets/display-field/display-field.component';
 
 @NgModule({
   imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule, FocusModule.forRoot()],
@@ -22,9 +28,25 @@ import { CheckboxInputComponent } from './widgets/checkbox/checkbox-input.compon
     RouterModule,
     FileUploadComponent,
     SafeUrlPipe,
-    CheckboxInputComponent
+    CheckboxInputComponent,
+    StudentAutocompleteComponent,
+    StudentDisplayComponent,
+    TimestampPickerComponent,
+    TruncatePipe,
+    DisplayFieldComponent
   ],
-  declarations: [CustomTextDirective, HeaderComponent, FileUploadComponent, SafeUrlPipe, CheckboxInputComponent],
-  providers: [DataService]
+  declarations: [
+    CustomTextDirective,
+    HeaderComponent,
+    FileUploadComponent,
+    SafeUrlPipe,
+    CheckboxInputComponent,
+    StudentAutocompleteComponent,
+    StudentDisplayComponent,
+    TimestampPickerComponent,
+    TruncatePipe,
+    DisplayFieldComponent
+  ],
+  providers: [DataService, StudentService]
 })
 export class SharedModule {}

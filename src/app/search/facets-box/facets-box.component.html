@@ -7,7 +7,17 @@
       </mat-card-header>
       <mat-card-content>
         <mat-list dense>
-          <mat-list-item *ngFor="let facetResult of searchResults?.facets.get(facetConfig.key).buckets"><a (click)="addFacetFilter(facetConfig.key,facetResult.key)">{{facetResult.key}} ({{facetResult.count}})</a></mat-list-item>
+          <mat-list-item
+            *ngFor="let facetResult of searchResults?.facets.get(facetConfig.key).buckets">
+
+            <span *ngIf="hasSelectedFacet(facetConfig.key); else showLink">
+              {{facetResult.key}} ({{facetResult.count}})
+            </span>
+            <ng-template #showLink>
+              <a (click)="addFacetFilter(facetConfig.key,facetResult.key)">
+                {{facetResult.key}} ({{facetResult.count}})</a>
+            </ng-template>
+          </mat-list-item>
         </mat-list>
       </mat-card-content>
     </mat-card>

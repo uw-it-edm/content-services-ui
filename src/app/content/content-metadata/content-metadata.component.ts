@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { ContentItem } from '../shared/model/content-item';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { isNullOrUndefined } from 'util';
@@ -69,11 +69,7 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
       const metaDataForm: FormGroup = <FormGroup>this.formGroup.controls['metadata'];
       if (!isNullOrUndefined(metaDataForm)) {
         this.pageConfig.fieldsToDisplay.map(field => {
-          if (field.displayType === 'date') {
-            metaDataForm.get(field.name).patchValue(new Date(this.contentItem.metadata[field.name]));
-          } else {
-            metaDataForm.get(field.name).patchValue(this.contentItem.metadata[field.name]);
-          }
+          metaDataForm.get(field.name).patchValue(this.contentItem.metadata[field.name]);
         });
       }
     }

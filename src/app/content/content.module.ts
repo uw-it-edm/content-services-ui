@@ -12,7 +12,7 @@ import { CreatePageComponent } from './create-page/create-page.component';
 
 @NgModule({
   imports: [SharedModule, ReactiveFormsModule, UserModule, PdfViewerModule],
-  exports: [EditPageComponent],
+  exports: [],
   declarations: [
     EditPageComponent,
     ContentMetadataComponent,

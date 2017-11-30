@@ -20,7 +20,13 @@ jobs:
     - stage: test
       script: yarn run test-cover
       env:
-        job=yarn run test-cover
+        - job=yarn run test-cover
+        - TZ=America/Los_Angeles
+    - stage: test
+      script: yarn test
+      env:
+        - job=yarn test
+        - TZ=Europe/Brussels
     - stage: test
       script: yarn e2e -- --env=travis
       env:

@@ -26,5 +26,10 @@ export const environment = {
     url: 'http://localhost:8080',
     context: '/profile/v1',
     authenticationHeader: null
+  },
+  data_api: {
+    url: 'http://data-api.dev',
+    context: '/students/v1',
+    authenticationHeader: 'auth'
   }
 };
