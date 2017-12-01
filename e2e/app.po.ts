@@ -1,4 +1,4 @@
-import { browser, by, element, protractor } from 'protractor';
+import { browser, by, element, ExpectedConditions } from 'protractor';
 
 export class ContentServicesUiPage {
   navigateTo() {
@@ -31,7 +31,7 @@ export class ContentServicesUiPage {
 
   clickAppMenuItem(itemIndex: number) {
     const menuItem = element.all(by.className('mat-menu-ripple')).get(itemIndex);
-    browser.wait(protractor.ExpectedConditions.elementToBeClickable(menuItem), 500);
+    browser.wait(ExpectedConditions.elementToBeClickable(menuItem), 500);
     menuItem.click();
   }
 
