@@ -30,4 +30,11 @@ describe('content-services-ui App', () => {
     expect(page.getUWLogoElement().getAttribute('href')).toContain('uw.edu');
     expect(page.getUWLogoElement().getAttribute('title')).toEqual('University of Washington Home');
   });
+
+  it('should navigate to search page when tenant is selected on app menu icon', () => {
+    page.clickAppMenuIcon();
+    page.clickAppMenuItem(0);
+
+    expect(page.getCurrentUrl()).toContain('/demo/tab-search');
+  });
 });
