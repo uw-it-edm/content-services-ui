@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { EditPageComponent } from './edit-page.component';
 import { ContentMetadataComponent } from '../content-metadata/content-metadata.component';
 import { ContentViewComponent } from '../content-view/content-view.component';
@@ -18,7 +18,17 @@ import { PageConfig } from '../../core/shared/model/page-config';
 import { FormBuilder } from '@angular/forms';
 import { SafeUrlPipe } from '../../shared/pipes/safe-url.pipe';
 import { ButtonConfig } from '../../core/shared/model/button-config';
-import { MatAutocompleteModule, MatDatepickerModule, MatOptionModule } from '@angular/material';
+import {
+  MatAutocompleteModule,
+  MatDatepickerModule,
+  MatOptionModule,
+  MatSnackBar,
+  MatSnackBarContainer
+} from '@angular/material';
+import { UserService } from '../../user/shared/user.service';
+import { User } from '../../user/shared/user';
+import { MaterialConfigModule } from '../../routing/material-config.module';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 class MockContentService {
   read(itemId: string): Observable<ContentItem> {
@@ -43,31 +53,57 @@ class MockContentService {
   }
 }
 
+class MockUserService extends UserService {
+  constructor() {
+    super(null, null);
+  }
+
+  getUser(): User {
+    return new User('testUser');
+  }
+}
+
 describe('EditPageComponent', () => {
   let component: EditPageComponent;
   let fixture: ComponentFixture<EditPageComponent>;
   let activatedRoute: ActivatedRouteStub;
   let mockContentService: MockContentService;
+  let mockUserService: MockUserService;
   let editPageConfig: ContentPageConfig;
 
   beforeEach(() => {
     activatedRoute = new ActivatedRouteStub();
     mockContentService = new MockContentService();
+    mockUserService = new MockUserService();
   });
 
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [HttpModule, MatAutocompleteModule, MatDatepickerModule, MatOptionModule],
+        imports: [
+          HttpModule,
+          MaterialConfigModule,
+          MatAutocompleteModule,
+          MatDatepickerModule,
+          MatOptionModule,
+          NoopAnimationsModule
+        ],
         declarations: [EditPageComponent, ContentMetadataComponent, ContentViewComponent, SafeUrlPipe],
         providers: [
           { provide: ActivatedRoute, useValue: activatedRoute },
           { provide: ContentService, useValue: mockContentService },
           Title,
-          FormBuilder
+          FormBuilder,
+          MatSnackBar,
+          { provide: UserService, useValue: mockUserService }
         ],
         schemas: [NO_ERRORS_SCHEMA]
       })
+        .overrideModule(BrowserDynamicTestingModule, {
+          set: {
+            entryComponents: [ContentViewComponent]
+          }
+        })
         .compileComponents()
         .then(() => {
           fixture = TestBed.createComponent(EditPageComponent);
@@ -77,7 +113,7 @@ describe('EditPageComponent', () => {
   );
 
   beforeEach(() => {
-    activatedRoute.testParamMap = { page: 'test-page' };
+    activatedRoute.testParamMap = { id: '1', page: 'test-page' };
 
     const deleteButton = new ButtonConfig();
     deleteButton.command = 'deleteItem';
@@ -142,35 +178,45 @@ describe('EditPageComponent', () => {
   it('should display the content view component when a content item exists and view panel is true', () => {
     editPageConfig.viewPanel = true;
     fixture.detectChanges();
-    const contentArea = fixture.debugElement.nativeElement.querySelectorAll('app-content-view');
+    const contentArea = fixture.debugElement.nativeElement.querySelectorAll('.cs-content-view-wrapper-insert');
     expect(contentArea.length).toEqual(1);
   });
 
   it('should not display the content view component when view panel is false', () => {
     // editPageConfig.viewPanel = false;
-    const contentArea = fixture.debugElement.nativeElement.querySelectorAll('app-content-view');
+    const contentArea = fixture.debugElement.nativeElement.querySelectorAll('.cs-content-view-wrapper-insert');
     expect(contentArea.length).toEqual(0);
   });
 
   it('should contain buttons to save and delete items in the proper order', () => {
-    const button = fixture.debugElement.nativeElement.querySelectorAll('button');
-    expect(button[0].id).toEqual('deleteItem');
-    expect(button[1].id).toEqual('saveItem');
+    const buttons = fixture.debugElement.nativeElement.querySelectorAll('button');
+    let foundDeleteButton = false;
+    let foundSaveButton = false;
+    for (const button of buttons) {
+      if (button.id === 'deleteItem') {
+        foundDeleteButton = true;
+      }
+      if (button.id === 'saveItem') {
+        foundSaveButton = true;
+      }
+    }
+    expect(foundDeleteButton).toBeTruthy();
+    expect(foundSaveButton).toBeTruthy();
   });
 
   it('should update values on save', () => {
-    const metataDataGroup = component.editContentItemForm.controls['metadata'];
+    const metataDataGroup = component.form.controls['metadata'];
     metataDataGroup.patchValue({ '1': 'a spec title' });
 
-    const expectedMetadata = Object.assign({}, component.contentItem.metadata);
+    const expectedMetadata = Object.assign({}, component.transaction.contentObjects[0].item.metadata);
     expectedMetadata['1'] = 'a spec title';
     component.saveItem();
 
-    expect(component.contentItem.metadata['1']).toEqual(expectedMetadata['1']);
-    expect(component.contentItem.metadata['2']).toEqual(expectedMetadata['2']);
-    expect(component.contentItem.metadata['3']).toEqual(expectedMetadata['3']);
-    expect(component.contentItem.metadata['a']).toEqual(expectedMetadata['a']);
-    expect(component.contentItem.metadata['b']).toEqual(expectedMetadata['b']); // test a field that was not displayed
-    expect(component.contentItem.metadata['t']).toEqual(expectedMetadata['t']);
+    expect(component.contentItems[0].metadata['1']).toEqual(expectedMetadata['1']);
+    expect(component.contentItems[0].metadata['2']).toEqual(expectedMetadata['2']);
+    expect(component.contentItems[0].metadata['3']).toEqual(expectedMetadata['3']);
+    expect(component.contentItems[0].metadata['a']).toEqual(expectedMetadata['a']);
+    expect(component.contentItems[0].metadata['b']).toEqual(expectedMetadata['b']); // test a field that was not displayed
+    expect(component.contentItems[0].metadata['t']).toEqual(expectedMetadata['t']);
   });
 });

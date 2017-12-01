@@ -17,6 +17,7 @@ import { StudentDisplayComponent } from './widgets/student-display/student-displ
 import { TimestampPickerComponent } from './widgets/timestamp-picker/timestamp-picker.component';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { DisplayFieldComponent } from './widgets/display-field/display-field.component';
+import { ProgressService } from './providers/progress.service';
 
 @NgModule({
   imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule, FocusModule.forRoot()],
@@ -47,6 +48,6 @@ import { DisplayFieldComponent } from './widgets/display-field/display-field.com
     TruncatePipe,
     DisplayFieldComponent
   ],
-  providers: [DataService, StudentService]
+  providers: [DataService, ProgressService, StudentService]
 })
 export class SharedModule {}

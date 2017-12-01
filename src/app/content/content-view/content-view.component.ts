@@ -1,122 +1,67 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
-import { Observable } from 'rxjs/Observable';
-import { ContentItem } from '../shared/model/content-item';
-import { isNullOrUndefined } from 'util';
 import { Subject } from 'rxjs/Subject';
 import { ContentService } from '../shared/content.service';
 import 'rxjs/add/operator/takeUntil';
+import { ProgressService } from '../../shared/providers/progress.service';
+import { ContentObject } from '../shared/model/content-object';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-content-view',
   templateUrl: './content-view.component.html',
   styleUrls: ['./content-view.component.css']
 })
-export class ContentViewComponent implements OnInit, OnDestroy {
+export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   private componentDestroyed = new Subject();
-  private defaultUrl: string;
-  private defaultItemType: string;
 
-  url: SafeUrl;
-  item: ContentItem;
-  dataType: string;
-  pdfDataSource: Object; // ng2-pdf-preview does not accept DataUrl
+  contentObject: ContentObject;
 
-  @Input() item$: Observable<ContentItem>;
-  @Input() file$: Observable<File>;
-
+  fitToPage = false;
+  originalSize = true;
+  pageCount: number;
   pageNumber: number;
+  renderText = true;
+  showAll = true;
+  stickToPage = false;
 
-  constructor(private contentService: ContentService) {}
+  constructor(private contentService: ContentService, private progressService: ProgressService) {}
 
   ngOnInit() {
     this.pageNumber = 1;
-
-    this.file$.takeUntil(this.componentDestroyed).subscribe((file: File) => {
-      if (!isNullOrUndefined(file)) {
-        this.displayFilePreview(file);
-      } else {
-        this.setUrlToDefault();
-      }
-    });
-    if (!isNullOrUndefined(this.item$)) {
-      this.item$.takeUntil(this.componentDestroyed).subscribe((contentItem: ContentItem) => {
-        this.item = contentItem;
-        this.defaultUrl = this.getUrl();
-        this.setUrlToDefault();
-      });
-    }
   }
 
-  private setUrlToDefault(): void {
-    this.url = this.defaultUrl;
-    this.determineItemType();
+  ngOnChanges(changes: SimpleChanges): void {
+    this.pageNumber = 1;
   }
 
-  private getUrl(isWebViewable = true, disposition?: string) {
-    return this.contentService.getFileUrl(this.item.id, isWebViewable, disposition);
+  onContentObjectChanged(contentObject: ContentObject) {
+    this.contentObject = contentObject;
+    this.progressService.start('determinate', 'primary', contentObject.contentLength);
   }
 
-  // TODO: type detection should be improved
-  private determineItemType(): void {
-    if (!isNullOrUndefined(this.item)) {
-      // const webExtension = this.item.metadata['WebExtension'];
-      const mimeType = this.item.metadata['MimeType'];
-      if (mimeType && mimeType === 'application/pdf') {
-        this.dataType = 'pdfUrl';
-      } else if (mimeType && mimeType.startsWith('image')) {
-        this.dataType = 'image';
-      } else {
-        this.dataType = 'unknown';
-      }
-    } else {
-      this.dataType = 'blank';
-    }
-    this.defaultItemType = this.dataType;
+  onDisplayComplete(pdf: any) {
+    this.progressService.end();
+    this.pageCount = pdf.numPages;
   }
 
-  private displayFilePreview(file: File) {
-    const mimeType = file.type;
-    const reader = new FileReader();
-    reader.onload = this._whenPreviewFileLoaded.bind(this);
-
-    if (mimeType === 'application/pdf') {
-      reader.readAsArrayBuffer(file); // ng2-pdf-preview does not accept DataUrl
-    } else {
-      reader.readAsDataURL(file);
-    }
+  onDisplayError() {
+    this.progressService.end();
   }
 
-  private _whenPreviewFileLoaded(e) {
-    const reader = e.target;
-    const data = reader.result;
+  onDisplayProgress(progressData: any) {
+    console.log('Progress: ' + JSON.stringify(progressData));
 
-    if (data instanceof ArrayBuffer) {
-      this.url = '';
-      this.pdfDataSource = { data: data };
-    } else {
-      this.pdfDataSource = null;
-      this.url = data;
-    }
-    this.determineUrlType();
+    const loaded = progressData.loaded;
+    this.progressService.progress(loaded);
   }
 
-  // TODO: type detection should be improved
-  determineUrlType(): void {
-    const url = this.url.toString();
-    if (!isNullOrUndefined(this.pdfDataSource)) {
-      this.dataType = 'pdfData';
-    } else if (url.startsWith('http')) {
-      this.dataType = this.defaultItemType;
-    } else if (url.startsWith('data:image')) {
-      this.dataType = 'image';
-    } else if (url.startsWith('data:application/pdf')) {
-      this.dataType = 'pdf';
-    } else if (url.startsWith('data:')) {
-      this.dataType = 'unknown-dataURI';
-    } else {
-      this.dataType = 'unknown';
-    }
+  onPageChanged(pageNumber: number) {
+    this.pageNumber = pageNumber;
+  }
+
+  private buildUrl(id: string, isWebViewable = true, disposition?: string) {
+    return this.contentService.getFileUrl(id, isWebViewable, disposition);
   }
 
   ngOnDestroy(): void {
@@ -124,7 +69,7 @@ export class ContentViewComponent implements OnInit, OnDestroy {
     this.componentDestroyed.complete();
   }
 
-  download() {
-    window.location.href = this.getUrl(false, 'attachment');
+  download(id: string) {
+    window.location.href = this.buildUrl(id, false, 'attachment');
   }
 }

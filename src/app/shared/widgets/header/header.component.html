@@ -18,7 +18,7 @@
       </button>
     </mat-menu>
     <button mat-button [matMenuTriggerFor]="userMenu">
-      <mat-icon>account_box</mat-icon>&nbsp;<span *ngIf="promiseUser | async as user">{{user.userName}}</span>
+      <mat-icon>account_box</mat-icon>&nbsp;<span *ngIf="user$ | async as user">{{user.userName}}</span>
     </button>
     <mat-menu #userMenu="matMenu" xPosition="before" yPosition="below">
       <button mat-menu-item

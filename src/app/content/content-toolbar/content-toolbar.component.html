@@ -1,0 +1,29 @@
+<mat-toolbar aria-label="Navigation of document content" role="toolbar">
+    <span class="button-row">
+        <button mat-icon-button (click)="toggleShowAll()" [matTooltip]="showAllValue ? 'Page by Page Mode' : 'Continuous Scrolling Mode'" role="button">
+            <mat-icon>{{showAllValue ? 'note' : 'vertical_align_bottom'}}</mat-icon>
+        </button>
+        <span *ngIf="!showAllValue">
+            <button mat-icon-button (click)="pageDown()" role="button">
+                <mat-icon>arrow_drop_down</mat-icon>
+            </button>
+            <button mat-icon-button (click)="pageUp()" role="button">
+                <mat-icon>arrow_drop_up</mat-icon>
+            </button>
+        </span>
+    </span>
+    <span class="cs-fill-remaining-space">
+
+    </span>
+    <span *ngIf="pageCount && !showAllValue" class="content-paginator">
+        <span>
+            <mat-form-field class="narrow-field">
+                <input matInput [(ngModel)]="pageNumberEntry" (ngModelChange)="changePageNumber($event)" type="text">
+            </mat-form-field>
+        </span>
+        <span>of {{pageCount}}</span>
+    </span>
+    <span class="button-row">
+
+    </span>
+</mat-toolbar>

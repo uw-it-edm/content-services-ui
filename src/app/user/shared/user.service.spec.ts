@@ -4,12 +4,13 @@ import { UserService } from './user.service';
 import { User } from './user';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
+import { ProgressService } from '../../shared/providers/progress.service';
 
 describe('UserService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [UserService, { provide: HttpClient, useValue: new HttpClient(null) }]
+      providers: [ProgressService, UserService, { provide: HttpClient, useValue: new HttpClient(null) }]
     });
   });
 
@@ -32,9 +33,9 @@ describe('UserService', () => {
         });
       });
 
-      const authenticatedUserPromise: Promise<User> = service.getAuthenticatedUser();
+      const authenticatedUserObservable: Observable<User> = service.getUserObservable();
 
-      authenticatedUserPromise.then(authenticatedUser => {
+      authenticatedUserObservable.subscribe(authenticatedUser => {
         expect(authenticatedUser.actAs).toBe('myusername');
         expect(authenticatedUser.userName).toBe('myusername');
         expect(authenticatedUser.accounts['test-account']).toBe('rwd');

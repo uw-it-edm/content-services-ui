@@ -1,49 +1,65 @@
-<div class="cs-content-view"
->
-  <div [ngSwitch]="dataType">
-    <div *ngSwitchCase="'blank'">
-    </div>
-    <div *ngSwitchCase="'pdfData'">
-      <pdf-viewer [src]="pdfDataSource"
-                  [page]="pageNumber"
-                  [render-text]="true"
-                  [show-all]="true"
-                  [original-size]="false"
-                  [fit-to-page]="false"
-                  class="cs-preview-max-height"
-      ></pdf-viewer>
-    </div>
-
-    <div *ngSwitchCase="'pdfUrl'">
-      <pdf-viewer [src]="url"
-                  [page]="pageNumber"
-                  [render-text]="true"
-                  [show-all]="true"
-                  [original-size]="false"
-                  [fit-to-page]="false"
-                  class="cs-preview-max-height"
-      ></pdf-viewer>
-    </div>
-
-    <div *ngSwitchCase="'image'">
-      <img [src]="url | safeUrl" class="cs-preview-max-height"/>
-    </div>
-
-
-    <div *ngSwitchCase="'unknown-dataURI'">
-      <div align="center">
-        <p appCustomText="previewUnknownDataURI"
-           defaultValue="Unable to display Content Preview."></p>
+<div class="cs-content-view">
+  <app-content-toolbar
+          (page)="onPageChanged($event)"
+          [pageCount]="pageCount"
+          [(pageNumber)]="pageNumber"
+          [(showAll)]="showAll">
+  </app-content-toolbar>
+  <div class="content-object-display">
+    <div [ngSwitch]="contentObject.displayType">
+      <div *ngSwitchCase="'blank'">
       </div>
-    </div>
-    <div *ngSwitchCase="'unknown'">
-      <div align="center">
-        <p appCustomText="previewUnknownDataURI"
-           defaultValue="Unable to display Content Preview."></p>
-        <button autofocus mat-raised-button (click)="download()">
-          <mat-icon class="cs-icon">file_download</mat-icon>
-          <span>Download</span>
-        </button>
+      <div *ngSwitchCase="'pdfData'">
+        <pdf-viewer [src]="contentObject.pdfDataSource"
+                    [(page)]="pageNumber"
+                    [external-link-target]="'blank'"
+                    [render-text]="renderText"
+                    [show-all]="showAll"
+                    [original-size]="originalSize"
+                    [fit-to-page]="fitToPage"
+                    [stick-to-page]="stickToPage"
+                    (after-load-complete)="onDisplayComplete($event)"
+                    (on-progress)="onDisplayProgress($event)"
+                    (error)="onDisplayError($event)"
+                    class="cs-preview-max-height">
+        </pdf-viewer>
+      </div>
+
+      <div *ngSwitchCase="'pdfUrl'">
+        <pdf-viewer [src]="contentObject.url"
+                    [(page)]="pageNumber"
+                    [external-link-target]="'blank'"
+                    [render-text]="renderText"
+                    [show-all]="showAll"
+                    [original-size]="originalSize"
+                    [fit-to-page]="fitToPage"
+                    [stick-to-page]="stickToPage"
+                    (after-load-complete)="onDisplayComplete($event)"
+                    (on-progress)="onDisplayProgress($event)"
+                    (error)="onDisplayError($event)"
+                    class="cs-preview-max-height"
+        ></pdf-viewer>
+      </div>
+
+      <div *ngSwitchCase="'image'">
+        <img [src]="contentObject.url | safeUrl" class="cs-preview-max-height"/>
+      </div>
+
+      <div *ngSwitchCase="'unknown-dataURI'">
+        <div align="center">
+          <p appCustomText="previewUnknownDataURI"
+             defaultValue="Unable to display Content Preview."></p>
+        </div>
+      </div>
+      <div *ngSwitchCase="'unknown'">
+        <div align="center">
+          <p appCustomText="previewUnknownDataURI"
+             defaultValue="Unable to display Content Preview."></p>
+          <button autofocus mat-raised-button (click)="download(contentObject.itemId)">
+            <mat-icon class="cs-icon">file_download</mat-icon>
+            <span>Download</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>

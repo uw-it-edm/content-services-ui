@@ -13,6 +13,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { TenantConfigInfo } from './model/tenant-config-info';
 import { UserService } from '../../user/shared/user.service';
+import { ProgressService } from '../../shared/providers/progress.service';
 
 @Injectable()
 export class ConfigService {
@@ -21,41 +22,55 @@ export class ConfigService {
 
   private appConfigBaseUrl = environment.profile_api.url + environment.profile_api.context;
 
-  constructor(private http: Http, private httpclient: HttpClient, private userService: UserService) {}
+  constructor(
+    private http: Http,
+    private httpclient: HttpClient,
+    private progressService: ProgressService,
+    private userService: UserService
+  ) {}
 
   getConfigForTenant(requestedTenant: string): Promise<Config> {
+    this.progressService.start('query');
     return this.getTenantList()
       .toPromise()
-      .then(tenants => {
-        const tenantInfo = tenants.find(tenantInList => {
-          return tenantInList.tenantName === requestedTenant;
-        });
+      .then(
+        tenants => {
+          this.progressService.end();
+          const tenantInfo = tenants.find(tenantInList => {
+            return tenantInList.tenantName === requestedTenant;
+          });
 
-        if (this.configs.has(tenantInfo.tenantName)) {
-          console.log('getConfigForTenant from cache');
-          return Promise.resolve(this.configs.get(tenantInfo.tenantName));
-        } else {
-          console.log('getConfigForTenant');
-          const requestOptions = this.buildRequestOptions();
-          return this.http
-            .get(tenantInfo.downloadUrl, requestOptions)
-            .map(config => config.json() as Config)
-            .do(config => this.configs.set(tenantInfo.tenantName, config))
-            .publishReplay(1)
-            .refCount()
-            .toPromise();
+          if (this.configs.has(tenantInfo.tenantName)) {
+            console.log('getConfigForTenant from cache');
+            return Promise.resolve(this.configs.get(tenantInfo.tenantName));
+          } else {
+            console.log('getConfigForTenant');
+            const requestOptions = this.buildRequestOptions();
+            return this.http
+              .get(tenantInfo.downloadUrl, requestOptions)
+              .map(config => config.json() as Config)
+              .do(config => this.configs.set(tenantInfo.tenantName, config))
+              .publishReplay(1)
+              .refCount()
+              .toPromise();
+          }
+        },
+        () => {
+          this.progressService.end();
         }
-      });
+      );
   }
 
   getTenantList(): Observable<TenantConfigInfo[]> {
+    this.progressService.start('query');
     if (this.tenantsConfig !== null) {
       console.log('getTenantList from cache');
+      this.progressService.end();
       return Observable.of(this.tenantsConfig);
     } else {
       console.log('getTenantList');
       const requestOptions = this.buildRequestOptions();
-      return this.http
+      const response = this.http
         .get(this.appConfigBaseUrl + '/app/content-services-ui', requestOptions)
         .map(result => result.json())
         .map(result => {
@@ -80,6 +95,16 @@ export class ConfigService {
         })
         .publishReplay(1)
         .refCount();
+
+      response.subscribe(
+        () => {
+          this.progressService.end();
+        },
+        () => {
+          this.progressService.end();
+        }
+      );
+      return response;
     }
   }
 

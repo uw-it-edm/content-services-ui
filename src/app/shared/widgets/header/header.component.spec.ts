@@ -10,6 +10,7 @@ import { ConfigResolver } from '../../../routing/shared/config-resolver.service'
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { ActivatedRouteStub } from '../../../../testing/router-stubs';
 import { HttpClientModule } from '@angular/common/http';
+import { ProgressService } from '../../providers/progress.service';
 
 class RouterStub {
   navigate(url: string) {
@@ -45,6 +46,7 @@ describe('HeaderComponent', () => {
           { provide: ConfigService, useValue: configServiceStub },
           ConfigResolver,
           GlobalEventsManagerService,
+          ProgressService,
           UserService
         ],
         schemas: [NO_ERRORS_SCHEMA]

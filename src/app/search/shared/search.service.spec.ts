@@ -12,7 +12,7 @@ import { HttpClient } from '@angular/common/http';
 
 class UserServiceMock extends UserService {
   constructor() {
-    super(null);
+    super(null, null);
   }
 
   getUser(): User {

@@ -5,11 +5,12 @@ import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { UserService } from '../../user/shared/user.service';
 import { User } from '../../user/shared/user';
+import { ProgressService } from '../../shared/providers/progress.service';
 
 describe('ConfigService', () => {
   class UserServiceMock extends UserService {
     constructor() {
-      super(null);
+      super(null, null);
     }
 
     getUser(): User {
@@ -20,7 +21,7 @@ describe('ConfigService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule, HttpModule],
-      providers: [ConfigService, { provide: UserService, useValue: new UserServiceMock() }]
+      providers: [ConfigService, ProgressService, { provide: UserService, useValue: new UserServiceMock() }]
     });
   });
 

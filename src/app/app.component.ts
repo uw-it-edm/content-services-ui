@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ProgressService } from './shared/providers/progress.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app';
+
+  constructor(public progressService: ProgressService) {}
 }

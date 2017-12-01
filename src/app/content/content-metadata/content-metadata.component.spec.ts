@@ -25,7 +25,7 @@ import * as moment from 'moment';
 
 class UserServiceMock extends UserService {
   constructor() {
-    super(null);
+    super(null, null);
   }
 
   getUser(): User {
