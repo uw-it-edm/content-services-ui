@@ -1,4 +1,6 @@
+///<reference path="../../node_modules/@types/jasminewd2/index.d.ts"/>
 import { SearchPage } from './search.po';
+import { browser } from 'protractor';
 
 describe('content-services-ui Search Page', () => {
   let page: SearchPage;
@@ -6,9 +8,6 @@ describe('content-services-ui Search Page', () => {
 
   beforeAll(() => {
     page = new SearchPage();
-  });
-
-  beforeEach(() => {
     page.navigateTo();
   });
 
@@ -24,5 +23,14 @@ describe('content-services-ui Search Page', () => {
 
   it('should display 2 page paginators', () => {
     expect(page.getPaginators().count()).toEqual(2);
+  });
+
+  it('should navigate to Upload page when upload button is clicked', () => {
+    page.clickUploadButton();
+
+    const actualUrl = browser.getCurrentUrl().then(url => {
+      return url.toLowerCase();
+    });
+    expect(actualUrl).toMatch(page.pageUrl.toLowerCase() + '/create');
   });
 });
