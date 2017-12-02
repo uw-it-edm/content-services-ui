@@ -58,8 +58,6 @@ export class ConfigService {
   }
 
   getTenantList(): Observable<TenantConfigInfo[]> {
-    const response$ = new ReplaySubject<TenantConfigInfo[]>();
-    this.progressService.start('query');
     if (this.tenantsConfig !== null) {
       console.log('getTenantList from cache');
       this.progressService.end();
@@ -67,7 +65,7 @@ export class ConfigService {
     } else {
       console.log('getTenantList');
       const requestOptions = this.buildRequestOptions();
-      const response = this.http
+      return this.http
         .get(this.appConfigBaseUrl + '/app/content-services-ui', requestOptions)
         .map(result => result.json())
         .map(result => {
@@ -92,18 +90,6 @@ export class ConfigService {
         })
         .publishReplay(1)
         .refCount();
-
-      response.subscribe(
-        tenantsConfig => {
-          this.progressService.end();
-          response$.next(tenantsConfig);
-        },
-        err => {
-          this.progressService.end();
-          response$.error(err);
-        }
-      );
-      return response$;
     }
   }
 
