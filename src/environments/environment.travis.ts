@@ -11,21 +11,21 @@ export const environment = {
   testUser: null,
 
   search_api: {
-    url: 'http://search-api.dev',
+    url: 'http://localhost:8080',
     context: '/search',
     method: 'POST',
-    authenticationHeader: 'auth'
+    authenticationHeader: null
   },
   content_api: {
-    url: 'http://content-api.dev',
+    url: 'http://localhost:8080',
     contextV3: '/content/v3',
     contextV4: '/content/v4',
-    authenticationHeader: 'auth'
+    authenticationHeader: null
   },
   profile_api: {
-    url: 'http://profile-api.dev',
+    url: 'http://localhost:8080',
     context: '/profile/v1',
-    authenticationHeader: 'auth'
+    authenticationHeader: null
   },
   data_api: {
     url: 'http://data-api.dev',

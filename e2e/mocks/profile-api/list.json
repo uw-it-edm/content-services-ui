@@ -1,0 +1,7 @@
+{
+  "_links": {
+    "demo": {
+      "href": "http://localhost:8080/profile/v1/app/my-app/demo"
+    }
+  }
+}
