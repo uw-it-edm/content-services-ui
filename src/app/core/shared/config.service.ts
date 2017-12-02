@@ -14,6 +14,7 @@ import { environment } from '../../../environments/environment';
 import { TenantConfigInfo } from './model/tenant-config-info';
 import { UserService } from '../../user/shared/user.service';
 import { ProgressService } from '../../shared/providers/progress.service';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Injectable()
 export class ConfigService {
@@ -22,12 +23,7 @@ export class ConfigService {
 
   private appConfigBaseUrl = environment.profile_api.url + environment.profile_api.context;
 
-  constructor(
-    private http: Http,
-    private httpclient: HttpClient,
-    private progressService: ProgressService,
-    private userService: UserService
-  ) {}
+  constructor(private http: Http, private progressService: ProgressService, private userService: UserService) {}
 
   getConfigForTenant(requestedTenant: string): Promise<Config> {
     this.progressService.start('query');
@@ -62,6 +58,7 @@ export class ConfigService {
   }
 
   getTenantList(): Observable<TenantConfigInfo[]> {
+    const response$ = new ReplaySubject<TenantConfigInfo[]>();
     this.progressService.start('query');
     if (this.tenantsConfig !== null) {
       console.log('getTenantList from cache');
@@ -97,14 +94,16 @@ export class ConfigService {
         .refCount();
 
       response.subscribe(
-        () => {
+        tenantsConfig => {
           this.progressService.end();
+          response$.next(tenantsConfig);
         },
-        () => {
+        err => {
           this.progressService.end();
+          response$.error(err);
         }
       );
-      return response;
+      return response$;
     }
   }
 
