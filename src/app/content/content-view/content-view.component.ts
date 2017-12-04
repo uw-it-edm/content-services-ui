@@ -28,7 +28,7 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   stickToPage = false;
   zoom = 1.0;
 
-  constructor(private contentService: ContentService, private progressService: ProgressService) {}
+  constructor(private contentService: ContentService, public progressService: ProgressService) {}
 
   @ViewChild(PdfViewerComponent) pdfViewer: PdfViewerComponent;
 
@@ -42,6 +42,7 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
 
   onContentObjectChanged(contentObject: ContentObject) {
     this.contentObject = contentObject;
+    this.pageCount = undefined;
     const mode = this.contentObject.contentType === 'application/pdf' ? 'determinate' : 'indeterminate';
     const displayType = this.contentObject.displayType;
     if (displayType !== 'unknown') {
@@ -97,10 +98,9 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
       this.originalSize = false;
       this.zoom = parseFloat(zoomFactor);
     }
-    // this.pdfViewer.updateSize();
   }
 
-  private buildUrl(id: string, isWebViewable = true, disposition?: string) {
+  buildUrl(id: string, isWebViewable = true, disposition?: string) {
     return this.contentService.getFileUrl(id, isWebViewable, disposition);
   }
 

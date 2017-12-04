@@ -42,7 +42,7 @@ describe('ContentViewComponent', () => {
     defaultContentItem.metadata['MimeType'] = 'application/pdf';
 
     contentObject = new ContentObject(defaultContentItem);
-    component.contentObject = contentObject;
+    component.onContentObjectChanged(contentObject);
 
     fixture.detectChanges();
   });
@@ -53,5 +53,105 @@ describe('ContentViewComponent', () => {
 
   it('should have an initialized contentItem', () => {
     expect(component.contentObject.item).toEqual(defaultContentItem);
+  });
+
+  it('should have default pdf viewer settings applied', () => {
+    expect(component.autoResize).toBeFalsy();
+    expect(component.fitToPage).toBeTruthy();
+    expect(component.fullScreen).toBeFalsy();
+    expect(component.originalSize).toBeFalsy();
+    expect(component.pageCount).toBeUndefined();
+    expect(component.pageNumber).toBe(1);
+    expect(component.autoResize).toBeFalsy();
+    expect(component.renderText).toBeTruthy();
+    expect(component.showAll).toBeFalsy();
+    expect(component.stickToPage).toBeFalsy();
+    expect(component.zoom).toBe(1.0);
+  });
+
+  it('should change the page count when display completes', () => {
+    expect(component.pageCount).toBeUndefined();
+    const pdf = {
+      numPages: 10
+    };
+    component.onDisplayComplete(pdf);
+    expect(component.pageCount).toBe(10);
+  });
+
+  it('should change the page number when page changes', () => {
+    expect(component.pageNumber).toBe(1);
+    component.onPageChanged(19);
+    expect(component.pageNumber).toBe(19);
+  });
+
+  it('should update pdf viewer settings when zoom factor changes to actual size', () => {
+    component.onZoomFactorChanged('actual-size');
+    expect(component.autoResize).toBeFalsy();
+    expect(component.fitToPage).toBeTruthy();
+    expect(component.fullScreen).toBeFalsy();
+    expect(component.originalSize).toBeTruthy();
+    expect(component.pageCount).toBeUndefined();
+    expect(component.pageNumber).toBe(1);
+    expect(component.autoResize).toBeFalsy();
+    expect(component.renderText).toBeTruthy();
+    expect(component.showAll).toBeFalsy();
+    expect(component.stickToPage).toBeFalsy();
+    expect(component.zoom).toBe(1.0);
+  });
+
+  it('should update pdf viewer settings when zoom factor changes to automatic zoom', () => {
+    component.onZoomFactorChanged('automatic-zoom');
+    expect(component.autoResize).toBeTruthy();
+    expect(component.fitToPage).toBeFalsy();
+    expect(component.fullScreen).toBeFalsy();
+    expect(component.originalSize).toBeFalsy();
+    expect(component.pageCount).toBeUndefined();
+    expect(component.pageNumber).toBe(1);
+    expect(component.autoResize).toBeTruthy();
+    expect(component.renderText).toBeTruthy();
+    expect(component.showAll).toBeFalsy();
+    expect(component.stickToPage).toBeFalsy();
+    expect(component.zoom).toBe(1.0);
+  });
+
+  it('should update pdf viewer settings when zoom factor changes to 0.75', () => {
+    component.onZoomFactorChanged('0.75');
+    expect(component.autoResize).toBeFalsy();
+    expect(component.fitToPage).toBeFalsy();
+    expect(component.fullScreen).toBeFalsy();
+    expect(component.originalSize).toBeFalsy();
+    expect(component.pageCount).toBeUndefined();
+    expect(component.pageNumber).toBe(1);
+    expect(component.autoResize).toBeFalsy();
+    expect(component.renderText).toBeTruthy();
+    expect(component.showAll).toBeFalsy();
+    expect(component.stickToPage).toBeFalsy();
+    expect(component.zoom).toBe(0.75);
+  });
+
+  it('should build the url by delegating to the content service', () => {
+    const webUrl = component.buildUrl('456');
+    expect(webUrl).toBe('testUrl/456');
+  });
+
+  it('should stop the progress service when there is a display error', () => {
+    const progressServiceSpy = spyOn(component.progressService, 'end');
+    component.onDisplayError();
+    expect(progressServiceSpy).toHaveBeenCalled();
+  });
+
+  it('should stop the progress service when image is loaded', () => {
+    const progressServiceSpy = spyOn(component.progressService, 'end');
+    component.onImageLoaded();
+    expect(progressServiceSpy).toHaveBeenCalled();
+  });
+
+  it('should nudge the progress service when progress is made', () => {
+    const progressServiceSpy = spyOn(component.progressService, 'progress');
+    const progressData = {
+      loaded: 90232
+    };
+    component.onDisplayProgress(progressData);
+    expect(progressServiceSpy).toHaveBeenCalledWith(90232);
   });
 });
