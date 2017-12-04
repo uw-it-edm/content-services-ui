@@ -15,7 +15,7 @@
 .content-object-display {
   background-color: #404040;
   height: calc(100vh - 265px);
-  width: calc(60vw - 60px);
+  /*width: calc(60vw - 60px);*/
   overflow-x: auto;
   overflow-y: auto;
 }

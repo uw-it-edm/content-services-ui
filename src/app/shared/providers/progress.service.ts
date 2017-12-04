@@ -31,10 +31,6 @@ export class ProgressService {
     } else {
       this.total = 100;
     }
-
-    // if (this.mode === 'determinate') {
-    //   this.increaseSteadily();
-    // }
   }
 
   public progress(current: number) {
