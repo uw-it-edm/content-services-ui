@@ -1,27 +1,30 @@
 .cs-content-view {
-  /*margin: 0 2rem;*/
+
 }
 
 .cs-content-view.full-screen .content-object-display {
   height: calc(100vh - 160px) !important;
   left: 0px;
   margin: 0;
-  padding-top: 1rem;
   position: absolute;
   top: 54px;
   width: 100% !important;
 }
 
 .content-object-display {
-  background-color: #404040;
+  background-color: white;
+  color: black;
   height: calc(100vh - 265px);
-  /*width: calc(60vw - 60px);*/
   overflow-x: auto;
   overflow-y: auto;
 }
 
 .content-object-display img {
   background-color: #ffffff;
+}
+
+.content-object-display p {
+  margin-top: 2rem;
 }
 
 .content-object-display img.center {
@@ -35,7 +38,9 @@
 }
 
 pdf-viewer {
+  background-color: #404040;
   display: block;
+  min-height: calc(100vh - 265px);
 }
 
 /*.cs-content-view .cs-preview-max-height {*/

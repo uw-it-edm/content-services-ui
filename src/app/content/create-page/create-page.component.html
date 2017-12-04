@@ -56,13 +56,24 @@
                       [disabled]="!button.alwaysActive && form.pristine" [id]="button.command"
                       [type]="button.type">{{button.label}}
               </button>
-              <mat-checkbox [(formGroup)]="form"
+              <!--<mat-checkbox [(formGroup)]="form"
                             formControlName="uploadAnother"
-                            name="uploadAnother" >Upload another</mat-checkbox>
+                            name="uploadAnother" >Upload another</mat-checkbox>-->
             </div>
           </div>
           <div fxFlex="auto" class="cs-content-view-wrapper">
             <ng-template appDynamicComponent></ng-template>
+            <div *ngIf="transaction.contentObjects.length === 0">
+              <app-file-upload
+                      [fieldName]="'dragFiles'"
+                      label="Add Files"
+                      (fileSelected)="addFile($event)"
+                      [(formGroup)]="form"
+                      [autoFocus]="true"
+                      [dropzone]="true"
+                      multiple="true">
+              </app-file-upload>
+            </div>
           </div>
         </div>
       </div>

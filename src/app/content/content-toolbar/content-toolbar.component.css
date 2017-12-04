@@ -5,6 +5,9 @@
     width: 100% !important;
 }
 
+.cs-content-toolbar .mat-toolbar {
+    background-color: #eeeeee;
+}
 
 input.mat-input-element {
     text-align: right;

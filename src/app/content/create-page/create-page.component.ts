@@ -153,8 +153,7 @@ export class CreatePageComponent implements OnInit, OnDestroy {
           }
           contentObject.onLoad(item);
 
-          if (existingIndex) {
-          } else {
+          if (existingIndex === -1) {
             console.log('Item Created: ' + item.id);
             this.contentItems.push(item);
           }
@@ -195,12 +194,12 @@ export class CreatePageComponent implements OnInit, OnDestroy {
 
   private createForm(): FormGroup {
     const form = this.fb.group({});
-    form.addControl('uploadAnother', new FormControl());
+    // form.addControl('uploadAnother', new FormControl());
     return form;
   }
 
   private setDefaults() {
-    this.form.get('uploadAnother').patchValue(this.pageConfig.uploadAnother);
+    // this.form.get('uploadAnother').patchValue(this.pageConfig.uploadAnother);
   }
 
   reset() {

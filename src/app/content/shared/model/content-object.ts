@@ -144,6 +144,8 @@ export class ContentObject {
       displayType = 'image';
     } else if (url.startsWith('data:application/pdf')) {
       displayType = 'pdf';
+      // } else if (url.startsWith('data:text/plain')) {
+      //   displayType = 'text';
     } else if (url.startsWith('data:')) {
       displayType = 'unknown-dataURI';
     } else {

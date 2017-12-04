@@ -1,6 +1,4 @@
-<!--<div class="cs-file-upload">
-  <div [formGroup]="formGroup"> -->
-
+<span *ngIf="!dropzone">
     <span [formGroup]="formGroup">
         <input class="inputfile"
                [id]="fieldName"
@@ -15,8 +13,10 @@
             </span>
         </label>
     </span>
+</span>
 
-    <!--
+<div *ngIf="dropzone" class="cs-file-upload">
+  <div [formGroup]="formGroup">
     <div class="mat-input-container mat-form-field">
       <div class="mat-input-wrapper mat-form-field-wrapper">
         <div class="mat-input-flex mat-form-field-flex">
@@ -41,32 +41,4 @@
         </div>
       </div>
     </div>
-    -->
-  <!--</div>
-</div> -->
-
-
-<!--
-<mat-selection-list>
-  <mat-list-option *ngFor="let file of files" style="padding: 0">
-    <p matLine style="padding: 0">
-      <mat-icon matListIcon>cloud_off</mat-icon>
-      <span>{{file.name | truncate}}</span>
-    </p>
-  </mat-list-option>
-</mat-selection-list>
--->
-<!--
-<div *ngFor="let file of files">
-
-
-  <mat-card>
-    {{file.name | truncate}} <button mat-icon-button role="button" (click)="removeFile(file)" [title]="'Remove ' + file.name"><mat-icon>delete</mat-icon></button>
-  </mat-card>
-
-
-  <button mat-button role="button" (click)="removeFile(file)" [title]="'Remove ' + file.name">
-    {{file.name | truncate}} <mat-icon>delete</mat-icon>
-  </button>
 </div>
--->
