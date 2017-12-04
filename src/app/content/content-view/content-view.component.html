@@ -1,9 +1,12 @@
-<div class="cs-content-view">
+<div [ngClass]="fullScreen ? 'full-screen' : ''" class="cs-content-view">
   <app-content-toolbar
+          [contentType]="contentObject.contentType"
+          (fullScreenChange)="onFullScreenChanged($event)"
           (page)="onPageChanged($event)"
           [pageCount]="pageCount"
           [(pageNumber)]="pageNumber"
-          [(showAll)]="showAll">
+          [(showAll)]="showAll"
+          (zoom)="onZoomFactorChanged($event)">
   </app-content-toolbar>
   <div class="content-object-display">
     <div [ngSwitch]="contentObject.displayType">
@@ -13,11 +16,13 @@
         <pdf-viewer [src]="contentObject.pdfDataSource"
                     [(page)]="pageNumber"
                     [external-link-target]="'blank'"
+                    [autoresize]="autoResize"
                     [render-text]="renderText"
                     [show-all]="showAll"
                     [original-size]="originalSize"
                     [fit-to-page]="fitToPage"
                     [stick-to-page]="stickToPage"
+                    [zoom]="zoom"
                     (after-load-complete)="onDisplayComplete($event)"
                     (on-progress)="onDisplayProgress($event)"
                     (error)="onDisplayError($event)"
@@ -29,11 +34,13 @@
         <pdf-viewer [src]="contentObject.url"
                     [(page)]="pageNumber"
                     [external-link-target]="'blank'"
+                    [autoresize]="autoResize"
                     [render-text]="renderText"
                     [show-all]="showAll"
                     [original-size]="originalSize"
                     [fit-to-page]="fitToPage"
                     [stick-to-page]="stickToPage"
+                    [zoom]="zoom"
                     (after-load-complete)="onDisplayComplete($event)"
                     (on-progress)="onDisplayProgress($event)"
                     (error)="onDisplayError($event)"
@@ -42,7 +49,7 @@
       </div>
 
       <div *ngSwitchCase="'image'">
-        <img [src]="contentObject.url | safeUrl" class="cs-preview-max-height"/>
+        <img (load)="onImageLoaded()" [src]="contentObject.url | safeUrl" class="cs-preview-max-height center"/>
       </div>
 
       <div *ngSwitchCase="'unknown-dataURI'">

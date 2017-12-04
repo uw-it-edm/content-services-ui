@@ -1,9 +1,24 @@
+.cs-content-toolbar.full-screen {
+    left: 0px;
+    position: absolute;
+    top: -10px !important;
+    width: 100% !important;
+}
+
+
 input.mat-input-element {
     text-align: right;
 }
 
 .content-paginator {
     font-size: 12pt;
+}
+
+.medium-field {
+    width: 12rem !important;
+    text-align: center;
+    font-size: 12pt;
+    padding: 0 !important;
 }
 
 .narrow-field {

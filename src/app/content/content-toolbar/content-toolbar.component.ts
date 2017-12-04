@@ -6,15 +6,20 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./content-toolbar.component.css']
 })
 export class ContentToolbarComponent {
+  @Input() contentType: string;
   @Input() pageCount: number;
 
+  @Output() fullScreenChange = new EventEmitter<boolean>();
   @Output() pageNumberChange = new EventEmitter<number>();
   @Output() showAllChange = new EventEmitter<boolean>();
+  @Output() zoom = new EventEmitter<string>();
 
+  fullScreen = false;
   pageNumberEntry: string;
   pageNumberTimeout: any;
   pageNumberValue: number;
   showAllValue: boolean;
+  zoomFactor = 'automatic-zoom';
 
   constructor() {}
 
@@ -53,14 +58,21 @@ export class ContentToolbarComponent {
     }
   }
 
+  changeZoomFactor(factor: string) {
+    this.zoom.emit(factor);
+  }
+
   pageDown() {
     this.pageNumber++;
-    // this.pageNumberChange.emit(this.pageNumber + 1);
   }
 
   pageUp() {
     this.pageNumber--;
-    // this.pageNumberChange.emit(this.pageNumber - 1);
+  }
+
+  toggleFullScreen() {
+    this.fullScreen = !this.fullScreen;
+    this.fullScreenChange.emit(this.fullScreen);
   }
 
   toggleShowAll() {

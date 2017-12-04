@@ -1,16 +1,46 @@
 .cs-content-view {
-  height: calc(100vh - 201px);
+  /*margin: 0 2rem;*/
+}
+
+.cs-content-view.full-screen .content-object-display {
+  height: calc(100vh - 160px) !important;
+  left: 0px;
+  margin: 0;
+  padding-top: 1rem;
+  position: absolute;
+  top: 54px;
+  width: 100% !important;
 }
 
 .content-object-display {
+  background-color: #404040;
   height: calc(100vh - 265px);
+  width: calc(60vw - 60px);
   overflow-x: auto;
   overflow-y: auto;
 }
 
-.cs-content-view .cs-preview-max-height {
-  display:block;
+.content-object-display img {
+  background-color: #ffffff;
 }
+
+.content-object-display img.center {
+  display: block;
+  margin: 0 auto;
+}
+
+.pdfViewer {
+  /*height: calc(100vh - 265px);*/
+  /*width: calc(60vw - 60px);;*/
+}
+
+pdf-viewer {
+  display: block;
+}
+
+/*.cs-content-view .cs-preview-max-height {*/
+  /*display:block;*/
+/*}*/
 
 .cs-content-view .ng2-pdf-viewer-container {
   margin: 0 4rem;

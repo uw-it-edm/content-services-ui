@@ -1,11 +1,11 @@
-import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
 import { Subject } from 'rxjs/Subject';
 import { ContentService } from '../shared/content.service';
 import 'rxjs/add/operator/takeUntil';
 import { ProgressService } from '../../shared/providers/progress.service';
 import { ContentObject } from '../shared/model/content-object';
-import { MatSnackBar } from '@angular/material';
+import { PdfViewerComponent } from 'ng2-pdf-viewer/dist/pdf-viewer.component';
 
 @Component({
   selector: 'app-content-view',
@@ -17,15 +17,20 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
 
   contentObject: ContentObject;
 
-  fitToPage = false;
-  originalSize = true;
+  autoResize = false;
+  fitToPage = true;
+  fullScreen = false;
+  originalSize = false;
   pageCount: number;
   pageNumber: number;
   renderText = true;
-  showAll = true;
+  showAll = false;
   stickToPage = false;
+  zoom = 1.0;
 
   constructor(private contentService: ContentService, private progressService: ProgressService) {}
+
+  @ViewChild(PdfViewerComponent) pdfViewer: PdfViewerComponent;
 
   ngOnInit() {
     this.pageNumber = 1;
@@ -37,12 +42,17 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
 
   onContentObjectChanged(contentObject: ContentObject) {
     this.contentObject = contentObject;
-    this.progressService.start('determinate', 'primary', contentObject.contentLength);
+    const mode = this.contentObject.contentType === 'application/pdf' ? 'determinate' : 'indeterminate';
+    const displayType = this.contentObject.displayType;
+    if (displayType !== 'unknown') {
+      this.progressService.start(mode, 'primary', contentObject.contentLength);
+    }
   }
 
   onDisplayComplete(pdf: any) {
     this.progressService.end();
     this.pageCount = pdf.numPages;
+    this.onZoomFactorChanged('automatic-zoom');
   }
 
   onDisplayError() {
@@ -56,8 +66,38 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
     this.progressService.progress(loaded);
   }
 
+  onFullScreenChanged(fullScreen: boolean) {
+    this.fullScreen = fullScreen;
+  }
+
+  onImageLoaded() {
+    this.progressService.end();
+  }
+
   onPageChanged(pageNumber: number) {
     this.pageNumber = pageNumber;
+  }
+
+  onZoomFactorChanged(zoomFactor: string) {
+    console.log(zoomFactor);
+    this.autoResize = false;
+    this.fitToPage = false;
+    this.originalSize = false;
+    this.stickToPage = false;
+    this.zoom = 1.0;
+
+    if (zoomFactor === 'actual-size') {
+      this.originalSize = true;
+      this.fitToPage = true;
+    } else if (zoomFactor === 'automatic-zoom') {
+      this.autoResize = true;
+    } else if (zoomFactor === 'page-width') {
+      this.fitToPage = true;
+    } else {
+      this.originalSize = false;
+      this.zoom = parseFloat(zoomFactor);
+    }
+    // this.pdfViewer.updateSize();
   }
 
   private buildUrl(id: string, isWebViewable = true, disposition?: string) {
