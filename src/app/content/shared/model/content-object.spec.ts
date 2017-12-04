@@ -67,4 +67,16 @@ describe('ContentObject', () => {
     const unknownObject2 = new ContentObject(contentItem3);
     expect(unknownObject2.displayType).toEqual('unknown');
   });
+
+  it('should initialize variables when file is added', () => {
+    const properties = {
+      type: 'text/plain'
+    };
+    const file = new File(['This is a test file'], 'test.txt', properties);
+
+    const co = new ContentObject(null, file);
+    expect(co.file).toBe(file);
+    expect(co.getOriginalFileName()).toBe('test.txt');
+    expect(co.persisted).toBeFalsy();
+  });
 });
