@@ -26,19 +26,22 @@ export class ProgressService {
     } else {
       this.color = color;
     }
-    if (total !== null) {
+    if (total) {
       this.total = total;
     } else {
       this.total = 100;
     }
   }
 
-  public progress(current: number) {
+  public progress(current: number): number {
     if (this.total !== 0 && this.total > current) {
-      const value = 100 * (current / this.total);
+      const value = 100 * Math.round(Number(current)) / this.total;
       console.log('Setting progress to ' + value);
       this.value = value;
+    } else if (this.total <= current) {
+      this.end();
     }
+    return this.value;
   }
 
   public end() {
@@ -47,12 +50,9 @@ export class ProgressService {
     this.value = 0;
   }
 
-  private increaseSteadily() {
-    const remaining = this.total - this.value;
-    const increment = remaining / 20;
-    this.progress(increment);
-    if (remaining > 0) {
-      setTimeout(this.increaseSteadily, 100);
-    }
+  public increaseSteadily() {
+    let remaining = this.total - this.value;
+    const increment = this.value + Math.round(Number(remaining / 10));
+    remaining = this.progress(increment);
   }
 }
