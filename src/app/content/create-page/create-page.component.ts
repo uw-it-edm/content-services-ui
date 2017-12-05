@@ -84,6 +84,12 @@ export class CreatePageComponent implements OnInit, OnDestroy {
     console.log('Added file');
     const index = this.transaction.addFile(file);
     this.transaction.selectObject(index);
+    return index;
+  }
+
+  removeFile(index: number) {
+    console.log('Removed file');
+    this.transaction.removeContentObject(index);
   }
 
   cancel() {
@@ -96,11 +102,13 @@ export class CreatePageComponent implements OnInit, OnDestroy {
       if (this.componentFactoryResolver) {
         const componentFactory = this.componentFactoryResolver.resolveComponentFactory(ContentViewComponent);
 
-        const viewContainerRef = this.contentViewDirective.viewContainerRef;
-        viewContainerRef.clear();
+        if (this.contentViewDirective) {
+          const viewContainerRef = this.contentViewDirective.viewContainerRef;
+          viewContainerRef.clear();
 
-        const componentRef = viewContainerRef.createComponent(componentFactory);
-        this.contentViewComponent = <ContentViewComponent>componentRef.instance;
+          const componentRef = viewContainerRef.createComponent(componentFactory);
+          this.contentViewComponent = <ContentViewComponent>componentRef.instance;
+        }
       }
     }
     if (this.contentViewComponent) {

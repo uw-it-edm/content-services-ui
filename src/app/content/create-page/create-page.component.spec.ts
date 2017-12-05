@@ -29,7 +29,11 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 class MockContentService {
   create(contentItem: ContentItem, file: File): Observable<ContentItem> {
+    contentItem.id = '987';
     return Observable.of(contentItem);
+  }
+  getFileUrl(itemId: string, webViewable: boolean): string {
+    return 'testUrl/' + itemId;
   }
 }
 
@@ -150,17 +154,54 @@ describe('CreatePageComponent', () => {
     expect(title.getTitle()).toEqual('test-create-page');
   });
 
-  // it('should reset fields', () => {
-  //   // component.fileUploadComponent = new MockFileUploadComponent();
-  //   component.form
-  //     .get('metadata')
-  //     .get('1')
-  //     .patchValue('asdf');
-  //   let contentItem = component.prepareSaveContentItem();
-  //   expect(contentItem.metadata['1']).toBe('asdf');
-  //   component.reset();
-  //   contentItem = component.prepareSaveContentItem();
-  //   expect(contentItem.metadata.hasOwnProperty('1')).toBe(true);
-  //   expect(contentItem.metadata['1']).toBe(null);
-  // });
+  it('should add a file to the transaction and select the object', () => {
+    const properties = {
+      type: 'application/pdf'
+    };
+    const file = new File(['This is a test file'], 'test.pdf', properties);
+    const index = component.addFile(file);
+    expect(component.transaction.contentObjects.length).toBe(1);
+    component.removeFile(index);
+  });
+
+  it('should replace a file on a persisted content item', () => {
+    const properties = {
+      type: 'application/pdf'
+    };
+    const item = new ContentItem();
+    item.id = '123';
+    item.metadata = new Map<string, string>();
+    item.metadata.set('MimeType', 'application/pdf');
+    item.metadata.set('FileSize', '2000');
+    item.metadata.set('OriginalFileName', 'file123.pdf');
+
+    const index = component.transaction.addItem(item);
+    const co = component.transaction.contentObjects[index];
+    const file = new File(['This is a test file'], 'test.pdf', properties);
+    component.replaceFile(co, file);
+    expect(component.transaction.contentObjects.length).toBe(1);
+    expect(co.file).toBe(file);
+    expect(co.url).toBe('testUrl/123');
+    component.transaction.removeContentObject(index);
+  });
+
+  it('should save item and reset fields', () => {
+    const properties = {
+      type: 'application/pdf'
+    };
+    const file = new File(['This is a test file'], 'test.pdf', properties);
+    const index = component.addFile(file);
+    expect(component.transaction.contentObjects.length).toBe(1);
+    component.form
+      .get('metadata')
+      .get('1')
+      .patchValue('asdf');
+    component.saveItem();
+    expect(component.contentItems.length).toBe(1);
+    const item = component.contentItems[0];
+    expect(item.id).toBe('987');
+    expect(item.metadata['1']).toBe('asdf');
+    component.reset();
+    expect(component.form.get('metadata').get('1').value).toBeNull();
+  });
 });
