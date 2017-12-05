@@ -130,7 +130,7 @@ export class SearchService {
   private addOrderingToSearchPayload(searchPayload: any, order: SearchOrder, pageConfig: PageConfig) {
     if (order && order.term && order.order) {
       const newOrder: SearchOrder = Object.assign(new SearchOrder(), order);
-      const fieldConfig: Field = pageConfig.fieldsToDisplay.find(field => field.name === newOrder.term);
+      const fieldConfig: Field = pageConfig.fieldsToDisplay.find(field => field.key === newOrder.term);
 
       if (newOrder.term !== 'id' && newOrder.term !== 'label') {
         newOrder.term = 'metadata.' + newOrder.term;
@@ -141,7 +141,7 @@ export class SearchService {
       if (
         fieldConfig &&
         (!fieldConfig.dataType || fieldConfig.dataType === 'string') &&
-        !fieldConfig.name.endsWith('Date')
+        !fieldConfig.key.endsWith('Date')
       ) {
         newOrder.term += '.lowercase';
       }

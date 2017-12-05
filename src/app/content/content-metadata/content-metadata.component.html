@@ -6,8 +6,8 @@
         <div [ngSwitch]="fieldToDisplay.displayType">
 
           <mat-form-field *ngSwitchCase="'autocomplete'">
-            <input type="text" matInput [formControlName]="fieldToDisplay.name"
-                   [name]="fieldToDisplay.name"
+            <input type="text" matInput [formControlName]="fieldToDisplay.key"
+                   [name]="fieldToDisplay.key"
                    [placeholder]="fieldToDisplay.label" [matAutocomplete]="auto">
             <mat-autocomplete #auto="matAutocomplete">
               <mat-option *ngFor="let option of fieldToDisplay.filteredOptions | async "
@@ -17,7 +17,7 @@
           </mat-form-field>
 
             <app-timestamp-picker *ngSwitchCase="'date'"
-              [formControlName]="fieldToDisplay.name"
+              [formControlName]="fieldToDisplay.key"
               [placeholder]="fieldToDisplay.label"
             >
             </app-timestamp-picker>
@@ -25,14 +25,14 @@
           <mat-form-field *ngSwitchCase="'checkbox'">
             <app-checkbox-input
               [fieldConfig]="fieldToDisplay"
-              [formControlName]="fieldToDisplay.name"
+              [formControlName]="fieldToDisplay.key"
               [placeholder]="fieldToDisplay.label"
             ></app-checkbox-input>
           </mat-form-field>
 
           <mat-form-field *ngSwitchCase="'student-autocomplete'">
             <app-student-autocomplete
-              [formControlName]="fieldToDisplay.name"
+              [formControlName]="fieldToDisplay.key"
               [placeholder]="fieldToDisplay.label"
             >
             </app-student-autocomplete>
@@ -40,8 +40,8 @@
           </mat-form-field>
 
           <mat-form-field *ngSwitchDefault>
-            <input matInput [formControlName]="fieldToDisplay.name"
-                   [name]="fieldToDisplay.name"
+            <input matInput [formControlName]="fieldToDisplay.key"
+                   [name]="fieldToDisplay.key"
                    [placeholder]="fieldToDisplay.label">
           </mat-form-field>
         </div>

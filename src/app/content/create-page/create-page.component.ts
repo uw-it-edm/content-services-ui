@@ -88,7 +88,7 @@ export class CreatePageComponent implements OnInit, OnDestroy {
 
     if (this.pageConfig.onSave) {
       this.pageConfig.onSave.forEach(metadataOverride => {
-        updatedContentItem.metadata[metadataOverride.name] = metadataOverride.value;
+        updatedContentItem.metadata[metadataOverride.key] = metadataOverride.value;
       });
     }
 

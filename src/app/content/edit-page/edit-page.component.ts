@@ -100,7 +100,7 @@ export class EditPageComponent implements OnInit, OnDestroy, OnChanges {
     const updatedContentItem = new ContentItem(this.contentItem);
 
     this.pageConfig.fieldsToDisplay.map(field => {
-      updatedContentItem.metadata[field.name] = formModel.metadata[field.name];
+      updatedContentItem.metadata[field.key] = formModel.metadata[field.key];
     });
 
     return updatedContentItem;

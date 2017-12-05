@@ -87,16 +87,13 @@ describe('CreatePageComponent', () => {
 
     const createPageConfig = new ContentPageConfig();
     createPageConfig.fieldsToDisplay = [
-      { name: '1', label: '1' },
-      { name: '2', label: '2' },
-      { name: '3', label: '3' },
-      { name: 'a', label: 'a' }
+      { key: '1', label: '1' },
+      { key: '2', label: '2' },
+      { key: '3', label: '3' },
+      { key: 'a', label: 'a' }
     ];
     createPageConfig.buttons = [saveButton];
-    createPageConfig.onSave = [
-      { name: 'PublishStatus', value: 'Published' },
-      { name: 'AnotherOnSave', value: 'Value' }
-    ];
+    createPageConfig.onSave = [{ key: 'PublishStatus', value: 'Published' }, { key: 'AnotherOnSave', value: 'Value' }];
     createPageConfig.pageName = 'test-create-page';
     createPageConfig.viewPanel = true;
 

@@ -89,12 +89,12 @@ describe('EditPageComponent', () => {
 
     editPageConfig = new ContentPageConfig();
     editPageConfig.fieldsToDisplay = [
-      { name: '1', label: '1' },
-      { name: '2', label: '2' },
-      { name: '3', label: '3' },
-      { name: 'a', label: 'a' },
-      { name: 'd', label: 'd', dataType: 'date' },
-      { name: 't', label: 't', dataType: 'string', displayType: 'typeahead', options: ['o1', 'o2'] }
+      { key: '1', label: '1' },
+      { key: '2', label: '2' },
+      { key: '3', label: '3' },
+      { key: 'a', label: 'a' },
+      { key: 'd', label: 'd', dataType: 'date' },
+      { key: 't', label: 't', dataType: 'string', displayType: 'typeahead', options: ['o1', 'o2'] }
     ];
     editPageConfig.buttons = [deleteButton, saveButton];
 
