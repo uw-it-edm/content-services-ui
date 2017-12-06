@@ -104,8 +104,10 @@ describe('CreatePageComponent', () => {
     const config = new Config();
     config.tenant = 'test-tenant';
     config.pages['test-page'] = searchPageConfig;
-    config.profile = 'testProfile';
-    config.account = 'testAccount';
+    config.contentConfig = {
+      account: 'testAccount',
+      profile: 'testProfile'
+    };
 
     activatedRoute.testData = { config: config };
 
@@ -138,7 +140,7 @@ describe('CreatePageComponent', () => {
     expect(contentItem.metadata['Account']).toBe('testAccount');
   });
   it('should populate the account replacing user template when preparing to save', () => {
-    component.config.account += '/${user}';
+    component.config.contentConfig.account += '/${user}';
     const contentItem = component.prepareSaveContentItem();
     expect(contentItem.metadata['Account']).toBe('testAccount/testUser');
   });
