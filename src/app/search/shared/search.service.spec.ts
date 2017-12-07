@@ -197,7 +197,7 @@ describe('SearchService', () => {
 
     const pageConfig = new PageConfig();
     const field = new Field();
-    field.name = 'myfield';
+    field.key = 'myfield';
     field.displayType = 'string';
     pageConfig.fieldsToDisplay.push(field);
 

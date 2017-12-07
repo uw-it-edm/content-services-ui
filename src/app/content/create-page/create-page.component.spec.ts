@@ -87,16 +87,13 @@ describe('CreatePageComponent', () => {
 
     const createPageConfig = new ContentPageConfig();
     createPageConfig.fieldsToDisplay = [
-      { name: '1', label: '1' },
-      { name: '2', label: '2' },
-      { name: '3', label: '3' },
-      { name: 'a', label: 'a' }
+      { key: '1', label: '1' },
+      { key: '2', label: '2' },
+      { key: '3', label: '3' },
+      { key: 'a', label: 'a' }
     ];
     createPageConfig.buttons = [saveButton];
-    createPageConfig.onSave = [
-      { name: 'PublishStatus', value: 'Published' },
-      { name: 'AnotherOnSave', value: 'Value' }
-    ];
+    createPageConfig.onSave = [{ key: 'PublishStatus', value: 'Published' }, { key: 'AnotherOnSave', value: 'Value' }];
     createPageConfig.pageName = 'test-create-page';
     createPageConfig.viewPanel = true;
 
@@ -107,8 +104,10 @@ describe('CreatePageComponent', () => {
     const config = new Config();
     config.tenant = 'test-tenant';
     config.pages['test-page'] = searchPageConfig;
-    config.profile = 'testProfile';
-    config.account = 'testAccount';
+    config.contentConfig = {
+      account: 'testAccount',
+      profile: 'testProfile'
+    };
 
     activatedRoute.testData = { config: config };
 
@@ -141,7 +140,7 @@ describe('CreatePageComponent', () => {
     expect(contentItem.metadata['Account']).toBe('testAccount');
   });
   it('should populate the account replacing user template when preparing to save', () => {
-    component.config.account += '/${user}';
+    component.config.contentConfig.account += '/${user}';
     const contentItem = component.prepareSaveContentItem();
     expect(contentItem.metadata['Account']).toBe('testAccount/testUser');
   });
