@@ -14,7 +14,6 @@ import { Observable } from 'rxjs/Observable';
 import { Title } from '@angular/platform-browser';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { Config } from '../../core/shared/model/config';
-import { PageConfig } from '../../core/shared/model/page-config';
 import { FormBuilder } from '@angular/forms';
 import { SafeUrlPipe } from '../../shared/pipes/safe-url.pipe';
 import { ButtonConfig } from '../../core/shared/model/button-config';
@@ -101,13 +100,9 @@ describe('EditPageComponent', () => {
     editPageConfig.pageName = 'test-edit-page';
     editPageConfig.viewPanel = false;
 
-    const searchPageConfig = new PageConfig();
-    searchPageConfig.pageName = 'test-page';
-    searchPageConfig.editPageConfig = editPageConfig;
-
     const config = new Config();
     config.tenant = 'test-tenant';
-    config.pages['test-page'] = searchPageConfig;
+    config.pages['edit'] = editPageConfig;
 
     activatedRoute.testData = { config: config };
 
@@ -147,7 +142,6 @@ describe('EditPageComponent', () => {
   });
 
   it('should not display the content view component when view panel is false', () => {
-    // editPageConfig.viewPanel = false;
     const contentArea = fixture.debugElement.nativeElement.querySelectorAll('app-content-view');
     expect(contentArea.length).toEqual(0);
   });

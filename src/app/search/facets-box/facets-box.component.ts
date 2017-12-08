@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { SearchModel } from '../shared/model/search-model';
-import { PageConfig } from '../../core/shared/model/page-config';
+import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { Observable } from 'rxjs/Observable';
 import { SearchResults } from '../shared/model/search-result';
 import { SearchFilter } from '../shared/model/search-filter';
@@ -20,7 +20,7 @@ export class FacetsBoxComponent implements OnInit, OnDestroy {
 
   @Input() searchModel$: Observable<SearchModel>;
   @Input() searchResults$: Observable<SearchResults>;
-  @Input() pageConfig: PageConfig;
+  @Input() pageConfig: SearchPageConfig;
   @Output() facetFilterAdded = new EventEmitter<SearchModel>();
 
   searchResults: SearchResults;

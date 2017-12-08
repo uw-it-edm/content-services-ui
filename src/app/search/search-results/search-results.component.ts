@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { SearchModel } from '../shared/model/search-model';
 import { SearchResults } from '../shared/model/search-result';
-import { PageConfig } from '../../core/shared/model/page-config';
+import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { Observable } from 'rxjs/Observable';
 import { SearchDataSource } from '../shared/model/search-datasource.model';
 import { MatPaginator, MatSort, PageEvent, Sort } from '@angular/material';
@@ -26,7 +26,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
 
   @Input() searchModel$: Observable<SearchModel>;
   @Input() searchResults$: Observable<SearchResults>;
-  @Input() pageConfig: PageConfig;
+  @Input() pageConfig: SearchPageConfig;
   @Output() search = new EventEmitter<SearchModel>();
 
   @ViewChild(MatPaginator) topPaginator: MatPaginator;

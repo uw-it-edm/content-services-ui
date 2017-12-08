@@ -17,7 +17,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { UserService } from '../../user/shared/user.service';
 import { ButtonConfig } from '../../core/shared/model/button-config';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
-import { PageConfig } from '../../core/shared/model/page-config';
 import { Config } from '../../core/shared/model/config';
 import { User } from '../../user/shared/user';
 import { FileUploadComponent } from '../../shared/widgets/file-upload/file-upload.component';
@@ -97,13 +96,9 @@ describe('CreatePageComponent', () => {
     createPageConfig.pageName = 'test-create-page';
     createPageConfig.viewPanel = true;
 
-    const searchPageConfig = new PageConfig();
-    searchPageConfig.pageName = 'test-page';
-    searchPageConfig.createPageConfig = createPageConfig;
-
     const config = new Config();
     config.tenant = 'test-tenant';
-    config.pages['test-page'] = searchPageConfig;
+    config.pages['create'] = createPageConfig;
     config.contentConfig = {
       account: 'testAccount',
       profile: 'testProfile'

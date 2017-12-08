@@ -10,7 +10,7 @@ import 'rxjs/add/observable/from';
 import { environment } from '../../../environments/environment';
 import { UserService } from '../../user/shared/user.service';
 import { SearchFilter } from './model/search-filter';
-import { PageConfig } from '../../core/shared/model/page-config';
+import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { FacetConfig } from '../../core/shared/model/facet-config';
 import { SearchOrder } from './model/search-order';
 import { Field } from '../../core/shared/model/field';
@@ -22,7 +22,7 @@ export class SearchService {
 
   constructor(private http: HttpClient, private userService: UserService) {}
 
-  search(terms: Observable<SearchModel>, pageConfig: PageConfig): Observable<SearchResults> {
+  search(terms: Observable<SearchModel>, pageConfig: SearchPageConfig): Observable<SearchResults> {
     return terms
       .debounceTime(400)
       .distinctUntilChanged()
@@ -32,7 +32,7 @@ export class SearchService {
       });
   }
 
-  private searchEntries(term: SearchModel, pageConfig: PageConfig): Observable<SearchResults> {
+  private searchEntries(term: SearchModel, pageConfig: SearchPageConfig): Observable<SearchResults> {
     const indexName = pageConfig.searchConfig.indexName;
     const searchPayload = this.buildSearchPayload(term, pageConfig);
     const options = this.buildRequestOptions();
@@ -53,7 +53,7 @@ export class SearchService {
     return requestOptionsArgs;
   }
 
-  private buildSearchPayload(term: SearchModel, pageConfig: PageConfig) {
+  private buildSearchPayload(term: SearchModel, pageConfig: SearchPageConfig) {
     const searchPayload = {
       query: term.stringQuery
     };
@@ -109,7 +109,7 @@ export class SearchService {
     searchPayload['pageSize'] = term.pagination.pageSize;
   }
 
-  private addFacetsToSearchPayload(searchPayload: any, pageConfig: PageConfig) {
+  private addFacetsToSearchPayload(searchPayload: any, pageConfig: SearchPageConfig) {
     const facets = [];
 
     Object.keys(pageConfig.facetsConfig.facets)
@@ -127,7 +127,7 @@ export class SearchService {
     searchPayload['facets'] = facets;
   }
 
-  private addOrderingToSearchPayload(searchPayload: any, order: SearchOrder, pageConfig: PageConfig) {
+  private addOrderingToSearchPayload(searchPayload: any, order: SearchOrder, pageConfig: SearchPageConfig) {
     if (order && order.term && order.order) {
       const newOrder: SearchOrder = Object.assign(new SearchOrder(), order);
       const fieldConfig: Field = pageConfig.fieldsToDisplay.find(field => field.key === newOrder.term);
