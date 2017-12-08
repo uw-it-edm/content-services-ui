@@ -1,11 +1,11 @@
 <div [ngClass]="pageConfig?.theme" *ngIf="contentItem">
   <div class="cs-content-page">
     <mat-toolbar class="secondary-toolbar">
-      <a routerLink="/{{config.tenant}}/{{page}}">Return to Results</a>
+      <a routerLink="/{{config.tenant}}">Return to Results</a>
       <span class="cs-fill-remaining-space"></span>
       <span class="button-row">
         <app-content-pager
-          [nextBaseUrl]=" config.tenant + '/' + page + '/edit/'"
+          [nextBaseUrl]=" config.tenant + '/edit/'"
           [contentItem$]="contentItem$"></app-content-pager>
       </span>
     </mat-toolbar>

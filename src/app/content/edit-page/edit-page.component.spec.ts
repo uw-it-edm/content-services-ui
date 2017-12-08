@@ -14,7 +14,6 @@ import { Observable } from 'rxjs/Observable';
 import { Title } from '@angular/platform-browser';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { Config } from '../../core/shared/model/config';
-import { PageConfig } from '../../core/shared/model/page-config';
 import { FormBuilder } from '@angular/forms';
 import { SafeUrlPipe } from '../../shared/pipes/safe-url.pipe';
 import { ButtonConfig } from '../../core/shared/model/button-config';
@@ -89,25 +88,21 @@ describe('EditPageComponent', () => {
 
     editPageConfig = new ContentPageConfig();
     editPageConfig.fieldsToDisplay = [
-      { name: '1', label: '1' },
-      { name: '2', label: '2' },
-      { name: '3', label: '3' },
-      { name: 'a', label: 'a' },
-      { name: 'd', label: 'd', dataType: 'date' },
-      { name: 't', label: 't', dataType: 'string', displayType: 'typeahead', options: ['o1', 'o2'] }
+      { key: '1', label: '1' },
+      { key: '2', label: '2' },
+      { key: '3', label: '3' },
+      { key: 'a', label: 'a' },
+      { key: 'd', label: 'd', dataType: 'date' },
+      { key: 't', label: 't', dataType: 'string', displayType: 'typeahead', options: ['o1', 'o2'] }
     ];
     editPageConfig.buttons = [deleteButton, saveButton];
 
     editPageConfig.pageName = 'test-edit-page';
     editPageConfig.viewPanel = false;
 
-    const searchPageConfig = new PageConfig();
-    searchPageConfig.pageName = 'test-page';
-    searchPageConfig.editPageConfig = editPageConfig;
-
     const config = new Config();
     config.tenant = 'test-tenant';
-    config.pages['test-page'] = searchPageConfig;
+    config.pages['edit'] = editPageConfig;
 
     activatedRoute.testData = { config: config };
 
@@ -147,7 +142,6 @@ describe('EditPageComponent', () => {
   });
 
   it('should not display the content view component when view panel is false', () => {
-    // editPageConfig.viewPanel = false;
     const contentArea = fixture.debugElement.nativeElement.querySelectorAll('app-content-view');
     expect(contentArea.length).toEqual(0);
   });

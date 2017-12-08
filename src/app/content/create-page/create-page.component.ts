@@ -24,7 +24,6 @@ export class CreatePageComponent implements OnInit, OnDestroy {
   config: Config;
   pageConfig: ContentPageConfig;
   createContentItemForm: FormGroup;
-  page: string;
 
   file: File;
   file$: Subject<File> = new BehaviorSubject(null);
@@ -45,11 +44,9 @@ export class CreatePageComponent implements OnInit, OnDestroy {
     this.createForm();
 
     this.route.paramMap.takeUntil(this.componentDestroyed).subscribe(params => {
-      this.page = params.get('page');
-
       this.route.data.takeUntil(this.componentDestroyed).subscribe((data: { config: Config }) => {
         this.config = data.config;
-        this.pageConfig = data.config.pages[this.page.toLowerCase()].createPageConfig;
+        this.pageConfig = data.config.pages['create'];
         this.titleService.setTitle(this.pageConfig.pageName);
         this.setDefaults();
       });
@@ -57,7 +54,7 @@ export class CreatePageComponent implements OnInit, OnDestroy {
   }
 
   cancel() {
-    this.router.navigate([this.config.tenant + '/' + this.page]);
+    this.router.navigate([this.config.tenant]);
   }
 
   saveItem() {
@@ -70,7 +67,7 @@ export class CreatePageComponent implements OnInit, OnDestroy {
         if (this.createContentItemForm.get('uploadAnother').value) {
           this.reset();
         } else {
-          this.router.navigate([this.config.tenant + '/' + this.page]);
+          this.router.navigate([this.config.tenant]);
         }
       });
   }
@@ -83,12 +80,12 @@ export class CreatePageComponent implements OnInit, OnDestroy {
     for (const key of Object.keys(formModel.metadata)) {
       updatedContentItem.metadata[key] = formModel.metadata[key];
     }
-    updatedContentItem.metadata['ProfileId'] = this.config.profile;
-    updatedContentItem.metadata['Account'] = this.config.account.replace('${user}', this.user.userName);
+    updatedContentItem.metadata['ProfileId'] = this.config.contentConfig.profile;
+    updatedContentItem.metadata['Account'] = this.config.contentConfig.account.replace('${user}', this.user.userName);
 
     if (this.pageConfig.onSave) {
       this.pageConfig.onSave.forEach(metadataOverride => {
-        updatedContentItem.metadata[metadataOverride.name] = metadataOverride.value;
+        updatedContentItem.metadata[metadataOverride.key] = metadataOverride.value;
       });
     }
 
