@@ -22,107 +22,32 @@
       "theme": "uw-default",
       "fieldsToDisplay": [
         {
-          "name": "Description",
+          "key": "Description",
           "label": "Description"
         },
         {
-          "name": "ProfileId",
+          "key": "ProfileId",
           "label": "Profile Id"
         },
         {
-          "name": "Filer",
+          "key": "Filer",
           "label": "Filer"
         },
         {
-          "name": "PublishStatus",
+          "key": "PublishStatus",
           "label": "Publish Status"
         },
         {
-          "name": "LastModifiedDate",
+          "key": "LastModifiedDate",
           "label": "Last Modified Date"
         }
       ],
-      "editPageConfig": {
-        "theme": "uw-default",
-        "pageName": "Edit Content Item",
-        "fieldsToDisplay": [
-          {
-            "name": "Description",
-            "label": "Description"
-          },
-          {
-            "name": "Filer",
-            "label": "Filer"
-          },
-          {
-            "name": "PublishStatus",
-            "label": "Publish Status"
-          },
-          {
-            "name": "LastModifiedDate",
-            "label": "Last Modified Date",
-            "dataType": "date"
-          }
-        ],
-        "buttons": [
-          {
-            "label": "Void",
-            "command": "voidItem"
-          },
-          {
-            "label": "Publish",
-            "command": "publishItem"
-          },
-          {
-            "label": "Save",
-            "color": "primary",
-            "command": "saveItem"
-          }
-        ],
-        "viewPanel": true
-      },
+
       "searchConfig": {
         "directions": "Type a budget number, vendor name, amount, or other info",
         "label": "",
         "placeholder": "Search for documents",
         "indexName": "documents-demo"
-      },
-      "createPageConfig": {
-        "theme": "uw-default",
-        "pageName": "Create Content Item",
-        "fieldsToDisplay": [
-          {
-            "name": "Description",
-            "label": "Description"
-          },
-          {
-            "name": "Filer",
-            "label": "Filer"
-          },
-          {
-            "name": "PublishStatus",
-            "label": "Publish Status"
-          },
-          {
-            "name": "LastModifiedDate",
-            "label": "Last Modified Date",
-            "dataType": "date"
-          }
-        ],
-        "buttons": [
-          {
-            "label": "Save",
-            "color": "primary",
-            "command": "saveItem"
-          },
-          {
-            "label": "Cancel",
-            "alwaysActive": true,
-            "command": "cancel"
-          }
-        ],
-        "viewPanel": true,
-        "uploadAnother": true
       },
       "facetsConfig": {
         "active": true,
@@ -147,6 +72,82 @@
           }
         }
       }
+    },
+    "edit": {
+      "theme": "uw-default",
+      "pageName": "Edit Content Item",
+      "fieldsToDisplay": [
+        {
+          "key": "Description",
+          "label": "Description"
+        },
+        {
+          "key": "Filer",
+          "label": "Filer"
+        },
+        {
+          "key": "PublishStatus",
+          "label": "Publish Status"
+        },
+        {
+          "key": "LastModifiedDate",
+          "label": "Last Modified Date",
+          "dataType": "date"
+        }
+      ],
+      "buttons": [
+        {
+          "label": "Void",
+          "command": "voidItem"
+        },
+        {
+          "label": "Publish",
+          "command": "publishItem"
+        },
+        {
+          "label": "Save",
+          "color": "primary",
+          "command": "saveItem"
+        }
+      ],
+      "viewPanel": true
+    },
+    "create": {
+      "theme": "uw-default",
+      "pageName": "Create Content Item",
+      "fieldsToDisplay": [
+        {
+          "key": "Description",
+          "label": "Description"
+        },
+        {
+          "key": "Filer",
+          "label": "Filer"
+        },
+        {
+          "key": "PublishStatus",
+          "label": "Publish Status"
+        },
+        {
+          "key": "LastModifiedDate",
+          "label": "Last Modified Date",
+          "dataType": "date"
+        }
+      ],
+      "buttons": [
+        {
+          "label": "Save",
+          "color": "primary",
+          "command": "saveItem"
+        },
+        {
+          "label": "Cancel",
+          "alwaysActive": true,
+          "command": "cancel"
+        }
+      ],
+      "viewPanel": true,
+      "uploadAnother": true
     }
   }
 }
