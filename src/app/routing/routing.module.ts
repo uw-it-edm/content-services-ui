@@ -41,22 +41,22 @@ const appRoutes: Routes = [
     },
     children: [
       {
-        path: ':page',
-        component: SearchPageComponent,
+        path: 'create',
+        component: CreatePageComponent,
         resolve: {
           config: ConfigResolver
         }
       },
       {
-        path: ':page/edit/:id',
+        path: 'edit/:id',
         component: EditPageComponent,
         resolve: {
           config: ConfigResolver
         }
       },
       {
-        path: ':page/create',
-        component: CreatePageComponent,
+        path: ':page',
+        component: SearchPageComponent,
         resolve: {
           config: ConfigResolver
         }

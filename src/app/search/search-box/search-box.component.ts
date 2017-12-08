@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { SearchModel } from '../shared/model/search-model';
-import { PageConfig } from '../../core/shared/model/page-config';
+import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { Observable } from 'rxjs/Observable';
 import { SearchFilter } from '../shared/model/search-filter';
 import { Subject } from 'rxjs/Subject';
@@ -15,7 +15,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
   searchModel: SearchModel = new SearchModel();
 
   @Input() searchModel$: Observable<SearchModel>;
-  @Input() pageConfig: PageConfig;
+  @Input() pageConfig: SearchPageConfig;
   @Output() searchEvent = new EventEmitter<SearchModel>();
 
   constructor() {}

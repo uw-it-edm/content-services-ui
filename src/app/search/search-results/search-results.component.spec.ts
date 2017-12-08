@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import { RouterModule } from '@angular/router';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { PageConfig } from '../../core/shared/model/page-config';
+import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { SearchResults } from '../shared/model/search-result';
 import { DataService } from '../../shared/providers/data.service';
 import { SharedModule } from '../../shared/shared.module';
@@ -36,7 +36,7 @@ describe('SearchResultsComponent', () => {
     const searchModel = new SearchModel();
     searchModel.stringQuery = 'iSearch';
     component.searchModel$ = Observable.of(searchModel);
-    component.pageConfig = new PageConfig();
+    component.pageConfig = new SearchPageConfig();
     const searchResults = new SearchResults();
     component.searchResults$ = Observable.of(searchResults);
 
