@@ -19,6 +19,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DataService } from '../../shared/providers/data.service';
 import { RouterTestingModule } from '@angular/router/testing';
 
+let dataService: DataService;
 let activatedRoute: ActivatedRouteStub;
 let searchServiceSpy: MockSearchService;
 let component: SearchPageComponent;
@@ -30,14 +31,12 @@ class MockSearchService {
   }
 }
 
-class MockDataService {
-  storage = ['123', '456'];
-}
-
 describe('SearchPageComponent', () => {
   beforeEach(() => {
     activatedRoute = new ActivatedRouteStub();
     searchServiceSpy = new MockSearchService();
+    dataService = new DataService();
+    dataService.set('adjacentIds', ['123', '456']);
   });
 
   beforeEach(
@@ -48,7 +47,7 @@ describe('SearchPageComponent', () => {
         providers: [
           { provide: ActivatedRoute, useValue: activatedRoute },
           { provide: SearchService, useValue: searchServiceSpy },
-          { provide: DataService, useClass: MockDataService },
+          { provide: DataService, useValue: dataService },
           Title
         ],
         schemas: [NO_ERRORS_SCHEMA]

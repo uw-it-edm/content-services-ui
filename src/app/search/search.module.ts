@@ -8,7 +8,6 @@ import { MaterialConfigModule } from '../routing/material-config.module';
 import { SharedModule } from '../shared/shared.module';
 import { UserModule } from '../user/user.module';
 import { SearchPageComponent } from './search-page/search-page.component';
-import { CustomTextDirective } from '../shared/directives/custom-text/custom-text.directive';
 
 @NgModule({
   imports: [SharedModule, FormsModule, MaterialConfigModule, UserModule],
