@@ -2,7 +2,7 @@ import { browser } from 'protractor';
 
 export class EditPage {
   navigateTo() {
-    return browser.get('/demo/tab-search/edit/123456');
+    return browser.get('/demo/edit/123456');
   }
 
   getPageTitle() {
