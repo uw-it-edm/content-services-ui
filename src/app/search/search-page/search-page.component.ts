@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Config } from '../../core/shared/model/config';
-import { PageConfig } from '../../core/shared/model/page-config';
+import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { Title } from '@angular/platform-browser';
 import { SearchModel } from '../shared/model/search-model';
 import { SearchResults } from '../shared/model/search-result';
@@ -16,7 +16,7 @@ import { Subject } from 'rxjs/Subject';
 export class SearchPageComponent implements OnInit, OnDestroy {
   private componentDestroyed = new Subject();
   config: Config;
-  pageConfig: PageConfig;
+  pageConfig: SearchPageConfig;
   page: string;
 
   searchModel$ = new Subject<SearchModel>();
@@ -63,6 +63,6 @@ export class SearchPageComponent implements OnInit, OnDestroy {
   }
 
   navigateToCreate() {
-    this.router.navigate([this.config.tenant + '/' + this.page + '/create']);
+    this.router.navigate([this.config.tenant + '/create']);
   }
 }
