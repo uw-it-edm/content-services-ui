@@ -1,5 +1,6 @@
 ///<reference path="../../node_modules/@types/jasminewd2/index.d.ts"/>
 import { SearchPage } from './search.po';
+import { CreatePage } from '../create/create.po';
 import { browser } from 'protractor';
 
 describe('content-services-ui Search Page', () => {
@@ -31,6 +32,9 @@ describe('content-services-ui Search Page', () => {
     const actualUrl = browser.getCurrentUrl().then(url => {
       return url.toLowerCase();
     });
-    expect(actualUrl).toMatch(page.pageUrl.toLowerCase() + '/create');
+
+    let createPage: CreatePage;
+    createPage = new CreatePage();
+    expect(actualUrl).toMatch(createPage.pageUrl.toLowerCase());
   });
 });

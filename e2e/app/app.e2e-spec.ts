@@ -1,4 +1,5 @@
 import { ContentServicesUiPage } from './app.po';
+import { SearchPage } from '../search/search.po';
 
 describe('content-services-ui App', () => {
   let page: ContentServicesUiPage;
@@ -35,6 +36,9 @@ describe('content-services-ui App', () => {
     page.clickAppMenuIcon();
     page.clickAppMenuItem(0);
 
-    expect(page.getCurrentUrl()).toContain('/demo/tab-search');
+    let searchPage: SearchPage;
+    searchPage = new SearchPage();
+
+    expect(page.getCurrentUrl()).toContain(searchPage.pageUrl);
   });
 });

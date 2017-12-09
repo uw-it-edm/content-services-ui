@@ -2,8 +2,10 @@ import { browser, by, element } from 'protractor';
 import * as path from 'path';
 
 export class CreatePage {
+  public pageUrl = '/demo/create';
+
   navigateTo() {
-    return browser.get('/demo/tab-search/create');
+    return browser.get(this.pageUrl);
   }
 
   getPageTitle() {

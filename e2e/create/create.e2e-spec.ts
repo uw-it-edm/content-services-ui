@@ -13,7 +13,7 @@ const getSearchPageUrl = function() {
   return searchPage.pageUrl;
 };
 
-describe('content-services-ui Edit Page', () => {
+describe('content-services-ui Create Page', () => {
   let page: CreatePage;
   const TITLE = 'Create Content Item';
 
