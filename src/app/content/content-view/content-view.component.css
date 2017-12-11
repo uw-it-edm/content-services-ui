@@ -11,6 +11,12 @@
   width: 100% !important;
 }
 
+.cs-text-file {
+  font-family: Courier;
+  font-size: 12pt;
+  margin: 2rem;
+}
+
 .content-object-display {
   background-color: white;
   color: black;
@@ -33,8 +39,7 @@
 }
 
 .pdfViewer {
-  /*height: calc(100vh - 265px);*/
-  /*width: calc(60vw - 60px);;*/
+
 }
 
 pdf-viewer {
@@ -42,10 +47,6 @@ pdf-viewer {
   display: block;
   min-height: calc(100vh - 265px);
 }
-
-/*.cs-content-view .cs-preview-max-height {*/
-  /*display:block;*/
-/*}*/
 
 .cs-content-view .ng2-pdf-viewer-container {
   margin: 0 4rem;

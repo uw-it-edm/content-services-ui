@@ -94,7 +94,7 @@ describe('ContentMetadataComponent', () => {
     defaultContentItem.metadata['b'] = 'asdf';
     defaultContentItem.metadata['t'] = 't';
     defaultContentItem.metadata['d'] = 1509519600000;
-    component.contentItem$ = Observable.of(defaultContentItem);
+    component.contentItem = defaultContentItem;
     component.formGroup = new FormGroup({});
 
     fixture.detectChanges();

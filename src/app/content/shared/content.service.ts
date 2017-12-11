@@ -43,7 +43,9 @@ export class ContentService {
     const url: string = this.baseUrl + this.itemPathFragment + item.id;
 
     const formData: FormData = new FormData();
+    let filename;
     if (!isNullOrUndefined(file)) {
+      filename = file.name;
       formData.append('attachment', file);
 
       let revisionId: number = Number(item.metadata['RevisionId']);
@@ -54,7 +56,12 @@ export class ContentService {
     return this.createOrUpdate(formData, item, url);
   }
 
-  private createOrUpdate(formData: FormData, contentItem: ContentItem, url: string): Observable<ContentItem> {
+  private createOrUpdate(
+    formData: FormData,
+    contentItem: ContentItem,
+    url: string,
+    filename?: string
+  ): Observable<ContentItem> {
     const options = this.buildRequestOptions();
     const blob: Blob = new Blob([JSON.stringify(contentItem)], { type: 'application/json' });
     formData.append('document', blob);
@@ -72,12 +79,14 @@ export class ContentService {
         contentItem$.next(item);
       },
       err => {
+        err.item = contentItem;
+        err.filename = filename;
         if (this.progressService != null) {
           this.progressService.end();
         }
         contentItem$.error(err);
       }
-    ); // TODO: handle failure
+    );
     return contentItem$;
   }
 
@@ -101,7 +110,7 @@ export class ContentService {
     const requestOptionsArgs = {};
     const CONTENT_API = environment.content_api;
     const headers = new HttpHeaders();
-
+    headers.set('Accept', 'application/json');
     if (CONTENT_API.authenticationHeader) {
       const user = this.userService.getUser();
       requestOptionsArgs['headers'] = new HttpHeaders().append(
@@ -109,13 +118,6 @@ export class ContentService {
         user.actAs
       );
     }
-    // if (CONTENT_API.headers) {
-    //   Object.keys(CONTENT_API.headers).forEach(function (key) {
-    //     const value = CONTENT_API.headers[key];
-    //     headers.append(key, value);
-    //   });
-    // }
-    // requestOptionsArgs['headers'] = headers;
     return requestOptionsArgs;
   }
 }

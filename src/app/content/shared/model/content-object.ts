@@ -13,12 +13,14 @@ export class ContentObject {
   public item: ContentItem;
   public loaded$ = new ReplaySubject<boolean>();
   public persisted: boolean;
+  public failed: boolean;
   public pdfDataSource: Object;
+  public text: any;
   public url;
-  // public form: FormGroup;
 
   private defaultDisplayType;
   private originalFileName;
+  private reader;
 
   constructor(item?: ContentItem, file?: File) {
     if (item) {
@@ -98,12 +100,22 @@ export class ContentObject {
   public displayFilePreview(file: File) {
     console.log('Reading data from local file');
     const mimeType = file.type;
-    const reader = new FileReader();
-    reader.onload = this._whenPreviewFileLoaded.bind(this);
+    let reader = this.reader;
+    if (reader) {
+      reader.abort();
+    } else {
+      this.reader = new FileReader();
+      reader = this.reader;
+    }
 
     if (mimeType === 'application/pdf') {
+      reader.onload = this._whenPreviewFileLoaded.bind(this);
       reader.readAsArrayBuffer(file); // ng2-pdf-preview does not accept DataUrl
+    } else if (mimeType === 'text/plain') {
+      reader.onload = this._whenTextFileLoaded.bind(this);
+      reader.readAsText(file);
     } else {
+      reader.onload = this._whenPreviewFileLoaded.bind(this);
       reader.readAsDataURL(file);
     }
   }
@@ -132,6 +144,14 @@ export class ContentObject {
     this.setUrl(url);
   }
 
+  private _whenTextFileLoaded(e) {
+    const reader = e.target;
+    this.text = reader.result;
+    const url = 'data:text/plain';
+    this.determineUrlType(url);
+    this.setUrl(url);
+  }
+
   // TODO: type detection should be improved
   public determineUrlType(url: string): void {
     // const url = this.url.toString();
@@ -144,8 +164,8 @@ export class ContentObject {
       displayType = 'image';
     } else if (url.startsWith('data:application/pdf')) {
       displayType = 'pdf';
-      // } else if (url.startsWith('data:text/plain')) {
-      //   displayType = 'text';
+    } else if (url.startsWith('data:text/plain')) {
+      displayType = 'text';
     } else if (url.startsWith('data:')) {
       displayType = 'unknown-dataURI';
     } else {

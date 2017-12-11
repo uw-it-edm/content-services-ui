@@ -12,7 +12,7 @@ export class FileUploadComponent implements OnInit {
   @Input() formGroup: FormGroup;
   @Input() autoFocus = false;
   @Input() multiple = false;
-  @Input() dropzone = false;
+  @Input() dropzone;
   @Output() fileSelected: EventEmitter<File> = new EventEmitter();
 
   files: File[] = new Array<File>();

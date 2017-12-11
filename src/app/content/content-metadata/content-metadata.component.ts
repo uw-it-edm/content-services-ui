@@ -16,20 +16,20 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
   private componentDestroyed = new Subject();
 
   @Input() pageConfig: ContentPageConfig;
-  @Input() contentItem$: Observable<ContentItem>;
+  // @Input() contentItem$: Observable<ContentItem>;
   @Input() formGroup: FormGroup;
 
-  contentItem: ContentItem;
+  @Input() contentItem: ContentItem;
 
   constructor() {}
 
   ngOnInit() {
-    if (!isNullOrUndefined(this.contentItem$)) {
-      this.contentItem$.takeUntil(this.componentDestroyed).subscribe(item => {
-        this.contentItem = item;
-        this.ngOnChanges();
-      });
-    }
+    // if (!isNullOrUndefined(this.contentItem$)) {
+    //   this.contentItem$.takeUntil(this.componentDestroyed).subscribe(item => {
+    //     this.contentItem = item;
+    //     this.ngOnChanges();
+    //   });
+    // }
     this.createForm();
     this.ngOnChanges();
   }

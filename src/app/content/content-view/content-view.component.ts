@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
 import { Subject } from 'rxjs/Subject';
 import { ContentService } from '../shared/content.service';
@@ -6,6 +6,7 @@ import 'rxjs/add/operator/takeUntil';
 import { ProgressService } from '../../shared/providers/progress.service';
 import { ContentObject } from '../shared/model/content-object';
 import { PdfViewerComponent } from 'ng2-pdf-viewer/dist/pdf-viewer.component';
+import { ContentToolbarComponent } from '../content-toolbar/content-toolbar.component';
 
 @Component({
   selector: 'app-content-view',
@@ -15,7 +16,7 @@ import { PdfViewerComponent } from 'ng2-pdf-viewer/dist/pdf-viewer.component';
 export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   private componentDestroyed = new Subject();
 
-  contentObject: ContentObject;
+  @Input() contentObject: ContentObject;
 
   autoResize = false;
   fitToPage = true;
@@ -30,29 +31,43 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(private contentService: ContentService, public progressService: ProgressService) {}
 
+  @ViewChild(ContentToolbarComponent) contentToolbarComponent;
   @ViewChild(PdfViewerComponent) pdfViewer: PdfViewerComponent;
 
   ngOnInit() {
+    this.pageCount = 1;
     this.pageNumber = 1;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    this.pageCount = 1;
     this.pageNumber = 1;
+
+    if (changes.contentObject) {
+      this.onContentObjectChanged(changes.contentObject.currentValue);
+    }
   }
 
+  public reset() {}
+
   onContentObjectChanged(contentObject: ContentObject) {
-    this.contentObject = contentObject;
     this.pageCount = undefined;
-    const mode = this.contentObject.contentType === 'application/pdf' ? 'determinate' : 'indeterminate';
-    const displayType = this.contentObject.displayType;
-    if (displayType !== 'unknown' && displayType !== 'unknown-dataURI') {
-      this.progressService.start(mode, 'primary', contentObject.contentLength);
+    if (contentObject) {
+      const mode = contentObject.contentType === 'application/pdf' ? 'determinate' : 'indeterminate';
+      const displayType = contentObject.displayType;
+      console.log('Display type: ' + displayType);
+      if (displayType === 'application/pdf' || displayType.startsWith('image/')) {
+        this.progressService.start(mode, 'primary', contentObject.contentLength);
+      }
+    } else {
+      this.progressService.end();
     }
   }
 
   onDisplayComplete(pdf: any) {
     this.progressService.end();
     this.pageCount = pdf.numPages;
+    // this.contentToolbarComponent.pageCount = pdf.numPages;
     this.onZoomFactorChanged('automatic-zoom');
   }
 

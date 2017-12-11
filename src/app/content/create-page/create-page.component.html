@@ -24,46 +24,30 @@
           <div fxFlex="30">
             <app-content-metadata
               [formGroup]="form"
-              [contentItem$]="contentItem$"
+              [contentItem]="contentItem"
               [pageConfig]="pageConfig">
             </app-content-metadata>
-            <mat-nav-list>
-              <mat-list-item *ngFor="let contentObject of transaction.contentObjects; let i = index" [ngClass]="transaction.selectedIndex > -1 && i == transaction.selectedIndex ? 'cs-selected' : ''">
-                <p matLine (click)="transaction.selectObject(i)">
-                  <button mat-icon-button>
-                    <mat-icon>{{ contentObject.persisted ? 'cloud_circle' : 'description' }}</mat-icon>
-                  </button>
-                  <span>{{ contentObject.getOriginalFileName() }}</span>
-                </p>
-                <span *ngIf="contentObject.persisted">
-                  <app-file-upload
-                          [fieldName]="'replaceFile'"
-                          label="Replace File"
-                          (fileSelected)="replaceFile(contentObject, $event)"
-                          [(formGroup)]="form">
-                  </app-file-upload>
-                </span>
-                <span *ngIf="!contentObject.persisted">
-                  <button mat-icon-button (click)="transaction.removeContentObject(i)" matTooltip="Undo">
-                    <mat-icon>clear</mat-icon>
-                  </button>
-                </span>
-              </mat-list-item>
-            </mat-nav-list>
+            <app-content-object-list
+              [formGroup]="form"
+              (remove)="removeFile($event)"
+              (select)="selectObject($event)">
+            </app-content-object-list>
             <div *ngIf="pageConfig?.buttons" class="button-row" style="margin: 2rem 0 1rem;text-align: right">
               <button *ngFor="let button of pageConfig?.buttons" mat-raised-button
                       (click)="buttonPress(button)" [color]="button.color"
                       [disabled]="!button.alwaysActive && form.pristine" [id]="button.command"
                       [type]="button.type">{{button.label}}
               </button>
-              <!--<mat-checkbox [(formGroup)]="form"
-                            formControlName="uploadAnother"
-                            name="uploadAnother" >Upload another</mat-checkbox>-->
+              <span *ngIf="pageConfig?.uploadAnother && form.controls['uploadAnother']">
+                <mat-checkbox [(formGroup)]="form"
+                              formControlName="uploadAnother"
+                              name="uploadAnother" >Upload another</mat-checkbox>
+              </span>
             </div>
           </div>
           <div fxFlex="auto" class="cs-content-view-wrapper">
-            <ng-template appDynamicComponent></ng-template>
-            <div *ngIf="transaction.contentObjects.length === 0">
+            <app-content-view [contentObject]="contentObject"></app-content-view>
+            <div *ngIf="!previewing">
               <app-file-upload
                       [fieldName]="'dragFiles'"
                       label="Add Files"

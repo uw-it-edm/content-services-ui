@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class ProgressService {
+  public color$ = new Subject<string>();
+  public mode$ = new Subject<string>();
+  public value$ = new Subject<number>();
+
   color: string;
   mode: string;
   value: number;
@@ -31,6 +36,10 @@ export class ProgressService {
     } else {
       this.total = 100;
     }
+
+    this.color$.next(this.color);
+    this.mode$.next(this.mode);
+    this.value$.next(this.value);
   }
 
   public progress(current: number): number {
@@ -41,6 +50,7 @@ export class ProgressService {
     } else if (this.total <= current) {
       this.end();
     }
+    this.value$.next(this.value);
     return this.value;
   }
 
@@ -48,6 +58,9 @@ export class ProgressService {
     this.color = 'primary';
     this.mode = 'determinate';
     this.value = 0;
+    this.color$.next(this.color);
+    this.mode$.next(this.mode);
+    this.value$.next(this.value);
   }
 
   public increaseSteadily() {

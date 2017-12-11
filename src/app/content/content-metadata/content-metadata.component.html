@@ -1,4 +1,4 @@
-<div [formGroup]="formGroup" class="cs-content-metadata">
+<div [formGroup]="formGroup" *ngIf="pageConfig" class="cs-content-metadata">
   <ul *ngIf="pageConfig?.fieldsToDisplay" class="fields">
     <div formGroupName="metadata">
       <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">

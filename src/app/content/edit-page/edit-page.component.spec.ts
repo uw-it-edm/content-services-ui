@@ -208,15 +208,15 @@ describe('EditPageComponent', () => {
     const metataDataGroup = component.form.controls['metadata'];
     metataDataGroup.patchValue({ '1': 'a spec title' });
 
-    const expectedMetadata = Object.assign({}, component.transaction.contentObjects[0].item.metadata);
+    const expectedMetadata = Object.assign({}, component.contentObject.item.metadata);
     expectedMetadata['1'] = 'a spec title';
     component.saveItem();
 
-    expect(component.contentItems[0].metadata['1']).toEqual(expectedMetadata['1']);
-    expect(component.contentItems[0].metadata['2']).toEqual(expectedMetadata['2']);
-    expect(component.contentItems[0].metadata['3']).toEqual(expectedMetadata['3']);
-    expect(component.contentItems[0].metadata['a']).toEqual(expectedMetadata['a']);
-    expect(component.contentItems[0].metadata['b']).toEqual(expectedMetadata['b']); // test a field that was not displayed
-    expect(component.contentItems[0].metadata['t']).toEqual(expectedMetadata['t']);
+    expect(component.contentItem.metadata['1']).toEqual(expectedMetadata['1']);
+    expect(component.contentItem.metadata['2']).toEqual(expectedMetadata['2']);
+    expect(component.contentItem.metadata['3']).toEqual(expectedMetadata['3']);
+    expect(component.contentItem.metadata['a']).toEqual(expectedMetadata['a']);
+    expect(component.contentItem.metadata['b']).toEqual(expectedMetadata['b']); // test a field that was not displayed
+    expect(component.contentItem.metadata['t']).toEqual(expectedMetadata['t']);
   });
 });

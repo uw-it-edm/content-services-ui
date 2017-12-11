@@ -11,6 +11,7 @@ import { ContentPagerComponent } from './content-pager/content-pager.component';
 import { CreatePageComponent } from './create-page/create-page.component';
 import { DynamicComponentDirective } from './shared/directive/dynamic-component.directive';
 import { ContentToolbarComponent } from './content-toolbar/content-toolbar.component';
+import { ContentObjectListComponent } from './content-object-list/content-object-list.component';
 
 @NgModule({
   imports: [FormsModule, SharedModule, ReactiveFormsModule, UserModule, PdfViewerModule],
@@ -18,6 +19,7 @@ import { ContentToolbarComponent } from './content-toolbar/content-toolbar.compo
   declarations: [
     EditPageComponent,
     ContentMetadataComponent,
+    ContentObjectListComponent,
     ContentToolbarComponent,
     ContentViewComponent,
     DynamicComponentDirective,

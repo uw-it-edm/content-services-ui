@@ -42,8 +42,9 @@ describe('FileUploadComponent', () => {
     component = fixture.componentInstance;
     component.fieldName = 'upload';
     component.formGroup = new FormGroup({});
-    dropZone = fixture.debugElement.query(By.css('#drop-zone'));
+    component.dropzone = true;
     fixture.detectChanges();
+    dropZone = fixture.debugElement.query(By.css('#drop-zone'));
   });
 
   it('should be created', () => {
@@ -53,20 +54,20 @@ describe('FileUploadComponent', () => {
     expect(component.fieldName).toBe('upload');
   });
 
-  // it('handles drop event', () => {
-  //   spyOn(component, 'onDrop');
-  //
-  //   dropZone.triggerEventHandler('drop', getFakeEventData());
-  //
-  //   expect(component.onDrop).toHaveBeenCalled();
-  // });
-  // it('handles dragover event', () => {
-  //   spyOn(component, 'onDragOver');
-  //
-  //   dropZone.triggerEventHandler('dragover', getFakeEventData());
-  //
-  //   expect(component.onDragOver).toHaveBeenCalled();
-  // });
+  it('handles drop event', () => {
+    spyOn(component, 'onDrop');
+
+    dropZone.triggerEventHandler('drop', getFakeEventData());
+
+    expect(component.onDrop).toHaveBeenCalled();
+  });
+  it('handles dragover event', () => {
+    spyOn(component, 'onDragOver');
+
+    dropZone.triggerEventHandler('dragover', getFakeEventData());
+
+    expect(component.onDragOver).toHaveBeenCalled();
+  });
 
   it('should reset', () => {
     const blob = new Blob([''], { type: 'text/html' });

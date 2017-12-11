@@ -1,10 +1,15 @@
 .cs-content-view-wrapper {
     border: 1px solid #cccccc;
     height: calc(100vh - 198px);
+    overflow: auto;
 }
 
 .cs-content-page {
     margin: 0rem 2rem;
+}
+
+.hasError {
+    color: red;
 }
 
 .mat-card {
@@ -13,10 +18,6 @@
 
 .uw-default .cs-content-page .mat-form-field {
     padding-right: 1rem;
-}
-
-.uw-default .cs-selected  {
-    background-color: #eeeeee;
 }
 
 .mat-selection-list .mat-list-option .mat-list-text {
