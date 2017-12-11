@@ -9,7 +9,7 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class ConfigResolver implements Resolve<Config> {
   customText$ = new ReplaySubject<Map<string, CustomTextItem>>();
-  tenantName$ = new Subject<string>();
+  appName$ = new Subject<string>();
 
   constructor(private configService: ConfigService, private router: Router) {}
 
@@ -32,20 +32,28 @@ export class ConfigResolver implements Resolve<Config> {
       if (config) {
         console.log('returning ' + config);
         this.customText$.next(config.customText);
-        this.tenantName$.next(config.tenant);
+        this.appName$.next(this.getAppName(config));
         return config;
       } else {
         // config not found
         this.customText$.next(null);
-        this.tenantName$.next('');
+        this.appName$.next('');
         this.router.navigate(['/']);
         return null;
       }
     });
   }
 
-  getTenantNameSubject(): Observable<string> {
-    return this.tenantName$;
+  private getAppName(config) {
+    if (config.appName) {
+      return config.appName;
+    } else {
+      return config.tenant;
+    }
+  }
+
+  getAppNameSubject(): Observable<string> {
+    return this.appName$;
   }
 
   getCustomTextSubject(): Observable<Map<string, CustomTextItem>> {
