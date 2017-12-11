@@ -26,6 +26,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { MaterialConfigModule } from '../../routing/material-config.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ProgressService } from '../../shared/providers/progress.service';
 
 class MockContentService {
   create(contentItem: ContentItem, file: File): Observable<ContentItem> {
@@ -80,6 +81,7 @@ describe('CreatePageComponent', () => {
           { provide: ActivatedRoute, useValue: activatedRoute },
           { provide: ContentService, useValue: mockContentService },
           { provide: UserService, useValue: mockUserService },
+          ProgressService,
           Title,
           FormBuilder,
           LiveAnnouncer,
