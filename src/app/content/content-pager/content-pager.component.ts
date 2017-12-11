@@ -20,7 +20,7 @@ export class ContentPagerComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private data: DataService) {}
 
   ngOnInit() {
-    this.adjacentIds = this.data.storage;
+    this.adjacentIds = this.data.get('adjacentIds');
 
     if (!isNullOrUndefined(this.adjacentIds)) {
       this.contentItem$.takeUntil(this.componentDestroyed).subscribe(item => {
