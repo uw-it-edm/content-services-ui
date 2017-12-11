@@ -9,6 +9,7 @@ import { FacetConfig } from '../../core/shared/model/facet-config';
 import { SearchFilter } from './model/search-filter';
 import { Field } from '../../core/shared/model/field';
 import { HttpClient } from '@angular/common/http';
+import { DataService } from '../../shared/providers/data.service';
 
 class UserServiceMock extends UserService {
   constructor() {
@@ -26,7 +27,7 @@ let http;
 describe('SearchService', () => {
   beforeEach(() => {
     http = new HttpClient(null);
-    searchService = new SearchService(http, new UserServiceMock());
+    searchService = new SearchService(http, new UserServiceMock(), new DataService());
   });
 
   it('should be created', () => {
