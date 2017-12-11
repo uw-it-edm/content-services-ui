@@ -15,12 +15,13 @@ import { FacetConfig } from '../../core/shared/model/facet-config';
 import { SearchOrder } from './model/search-order';
 import { Field } from '../../core/shared/model/field';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { DataService } from '../../shared/providers/data.service';
 
 @Injectable()
 export class SearchService {
   baseUrl = environment.search_api.url + environment.search_api.context;
 
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(private http: HttpClient, private userService: UserService, private dataService: DataService) {}
 
   search(terms: Observable<SearchModel>, pageConfig: SearchPageConfig): Observable<SearchResults> {
     return terms
@@ -28,6 +29,9 @@ export class SearchService {
       .distinctUntilChanged()
       .switchMap(term => {
         console.log('processing search request');
+
+        this.dataService.set('currentSearch', term);
+
         return this.searchEntries(term, pageConfig);
       });
   }

@@ -45,7 +45,10 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
       if (this.hasResults) {
         this.paginatorConfig.numberOfResults = results.total;
       }
-      this.data.storage = results.results.map(result => result['id']); // store a list of result ids to be passed to edit page
+
+      const adjacentIds = results.results.map(result => result['id']); // store a list of result ids to be passed to edit page
+
+      this.data.set('adjacentIds', adjacentIds);
     });
     for (const field of this.pageConfig.fieldsToDisplay) {
       this.displayedColumns.push(field.key);
