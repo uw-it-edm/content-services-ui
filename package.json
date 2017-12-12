@@ -11,10 +11,12 @@
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "lint": "ng lint --type-check",
     "e2e": "ng e2e",
+    "e2e-local": "yarn mock-services && ng e2e --environment=travis && docker stop content-services-api",
     "validate": "npm-run-all --parallel test lint",
     "prepush": "npm run validate",
     "precommit": "lint-staged",
-    "pretty": "prettier --parser typescript --single-quote --print-width=120 --write"
+    "pretty": "prettier --parser typescript --single-quote --print-width=120 --write",
+    "mock-services": "docker build -t content-services-api-mock ./e2e/mocks && docker run --name content-services-api --rm -d -p 8080:80 -v ${PWD}/e2e/mocks:/usr/share/nginx/html/ content-services-api-mock"
   },
   "lint-staged": {
     "*.ts": [
