@@ -28,7 +28,6 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 #### Running end-to-end tests from local
 
 1. Install [Docker](https://docs.docker.com/docker-for-mac/install/#download-docker-for-mac) on your machine.   
-  1. Run `yarn mock-services`
   1. Run `yarn e2e-local`
 
 
