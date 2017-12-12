@@ -22,20 +22,13 @@ export class ContentPagerComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     this.adjacentIds = this.data.storage;
-
-    // if (!isNullOrUndefined(this.adjacentIds) && !isNullOrUndefined(this.contentItem$)) {
-    //   this.contentItem$.takeUntil(this.componentDestroyed).subscribe(item => {
-    //     this.currentPosition = this.adjacentIds.indexOf(item.id);
-    //   });
-    // }
+    this.determineCurrentPosition(this.contentItem, this.adjacentIds);
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.contentItem) {
       const item = changes.contentItem.currentValue;
-      if (item && this.adjacentIds) {
-        this.currentPosition = this.adjacentIds.indexOf(item.id);
-      }
+      this.determineCurrentPosition(item, this.adjacentIds);
     }
   }
 
@@ -47,5 +40,11 @@ export class ContentPagerComponent implements OnInit, OnChanges, OnDestroy {
   navigate(adjacentIdIndex: number) {
     const nextUrl = this.nextBaseUrl + this.adjacentIds[adjacentIdIndex];
     this.router.navigate([nextUrl], { queryParamsHandling: 'merge' });
+  }
+
+  private determineCurrentPosition(item: ContentItem, adjacentIds: string[]) {
+    if (item && adjacentIds) {
+      this.currentPosition = adjacentIds.indexOf(item.id);
+    }
   }
 }

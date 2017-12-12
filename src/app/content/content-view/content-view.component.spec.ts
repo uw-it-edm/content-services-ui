@@ -42,8 +42,9 @@ describe('ContentViewComponent', () => {
     defaultContentItem.metadata['MimeType'] = 'application/pdf';
 
     contentObject = new ContentObject(defaultContentItem);
-    component.onContentObjectChanged(contentObject);
+    component.contentObject = contentObject;
 
+    component.ngOnInit();
     fixture.detectChanges();
   });
 
@@ -60,7 +61,7 @@ describe('ContentViewComponent', () => {
     expect(component.fitToPage).toBeTruthy();
     expect(component.fullScreen).toBeFalsy();
     expect(component.originalSize).toBeFalsy();
-    expect(component.pageCount).toBeUndefined();
+    expect(component.pageCount).toBe(1);
     expect(component.pageNumber).toBe(1);
     expect(component.autoResize).toBeFalsy();
     expect(component.renderText).toBeTruthy();
@@ -70,7 +71,7 @@ describe('ContentViewComponent', () => {
   });
 
   it('should change the page count when display completes', () => {
-    expect(component.pageCount).toBeUndefined();
+    expect(component.pageCount).toBe(1);
     const pdf = {
       numPages: 10
     };
@@ -90,7 +91,7 @@ describe('ContentViewComponent', () => {
     expect(component.fitToPage).toBeTruthy();
     expect(component.fullScreen).toBeFalsy();
     expect(component.originalSize).toBeTruthy();
-    expect(component.pageCount).toBeUndefined();
+    expect(component.pageCount).toBe(1);
     expect(component.pageNumber).toBe(1);
     expect(component.autoResize).toBeFalsy();
     expect(component.renderText).toBeTruthy();
@@ -105,7 +106,7 @@ describe('ContentViewComponent', () => {
     expect(component.fitToPage).toBeFalsy();
     expect(component.fullScreen).toBeFalsy();
     expect(component.originalSize).toBeFalsy();
-    expect(component.pageCount).toBeUndefined();
+    expect(component.pageCount).toBe(1);
     expect(component.pageNumber).toBe(1);
     expect(component.autoResize).toBeTruthy();
     expect(component.renderText).toBeTruthy();
@@ -120,7 +121,7 @@ describe('ContentViewComponent', () => {
     expect(component.fitToPage).toBeFalsy();
     expect(component.fullScreen).toBeFalsy();
     expect(component.originalSize).toBeFalsy();
-    expect(component.pageCount).toBeUndefined();
+    expect(component.pageCount).toBe(1);
     expect(component.pageNumber).toBe(1);
     expect(component.autoResize).toBeFalsy();
     expect(component.renderText).toBeTruthy();

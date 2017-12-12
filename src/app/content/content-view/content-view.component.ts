@@ -22,8 +22,8 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   fitToPage = true;
   fullScreen = false;
   originalSize = false;
-  pageCount: number;
-  pageNumber: number;
+  pageCount = 1;
+  pageNumber = 1;
   renderText = true;
   showAll = false;
   stickToPage = false;
@@ -37,6 +37,9 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit() {
     this.pageCount = 1;
     this.pageNumber = 1;
+    if (this.contentObject) {
+      this.onContentObjectChanged(this.contentObject);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -51,7 +54,7 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   public reset() {}
 
   onContentObjectChanged(contentObject: ContentObject) {
-    this.pageCount = undefined;
+    this.pageCount = 1;
     if (contentObject) {
       const mode = contentObject.contentType === 'application/pdf' ? 'determinate' : 'indeterminate';
       const displayType = contentObject.displayType;

@@ -160,11 +160,13 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
     }
     if (fields) {
       fields.map(field => {
-        let value = formModel.metadata[field.name];
-        if (value !== null && value === '') {
-          value = null;
+        if (formModel.metadata) {
+          let value = formModel.metadata[field.name];
+          if (value !== null && value === '') {
+            value = null;
+          }
+          item.metadata[field.name] = value;
         }
-        item.metadata[field.name] = value;
       });
     }
     if (metadataOverrides) {

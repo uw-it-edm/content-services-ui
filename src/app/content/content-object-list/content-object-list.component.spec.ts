@@ -54,7 +54,11 @@ describe('ContentObjectList', () => {
   const sourceItem: ContentItem = null;
   const config = new Config();
   config.profile = 'testProfile';
-  const formModel = {};
+  const formModel = {
+    metadata: {
+      1: 'test'
+    }
+  };
   const field = new Field();
   field.name = '1';
   const fields = new Array<Field>();
