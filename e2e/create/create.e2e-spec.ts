@@ -29,21 +29,9 @@ describe('content-services-ui Create Page', () => {
     expect(page.getPageTitle()).toEqual(TITLE);
   });
 
-  // it('should display pdf viewer when pdf file is uploaded', () => {
-  //   page.uploadFile();
-  //
-  //   expect(page.getPdfViewer().isDisplayed()).toBeTruthy();
-  // });
-
   it('should navigate to Search page when Cancel button is clicked', () => {
     page.clickCancelButton();
 
     expect(getCurrentUrl()).toMatch(getSearchPageUrl());
   });
-
-  // it('should navigate to Search page when Return to Results link is clicked', () => {
-  //   page.clickReturnToResultsLink();
-  //
-  //   expect(getCurrentUrl()).toMatch(getSearchPageUrl());
-  // });
 });
