@@ -11,7 +11,7 @@
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "lint": "ng lint --type-check",
     "e2e": "ng e2e",
-    "e2e-local": "ng e2e --environment=local",
+    "e2e-local": "yarn mock-services && ng e2e --environment=travis && docker stop content-services-api",
     "validate": "npm-run-all --parallel test lint",
     "prepush": "npm run validate",
     "precommit": "lint-staged",
