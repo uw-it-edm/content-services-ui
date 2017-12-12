@@ -1,11 +1,11 @@
 ///<reference path="../../node_modules/@types/jasminewd2/index.d.ts"/>
-import { SearchPage } from './search.po';
-import { CreatePage } from '../create/create.po';
-import { browser } from 'protractor';
+import {SearchPage} from './search.po';
+import {CreatePage} from '../create/create.po';
+import {browser} from 'protractor';
 
 describe('content-services-ui Search Page', () => {
   let page: SearchPage;
-  const TITLE = 'Demonstration Search';
+  const demoConfig = require('../mocks/profile-api/demo.json');
 
   beforeAll(() => {
     page = new SearchPage();
@@ -13,7 +13,11 @@ describe('content-services-ui Search Page', () => {
   });
 
   it('should display page title', () => {
-    expect(page.getPageTitle()).toEqual(TITLE);
+    expect(page.getPageTitle()).toEqual(demoConfig.pages['tab-search'].pageName);
+  });
+
+  it('should display app name in banner title', () => {
+    expect(page.getHeaderToolbarText()).toEqual(demoConfig.appName);
   });
 
   it('should accept text input in searchbox and retains the value', () => {
