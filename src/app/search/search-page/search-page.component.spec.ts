@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRouteStub } from '../../../testing/router-stubs';
 import { Config } from '../../core/shared/model/config';
-import { PageConfig } from '../../core/shared/model/page-config';
+import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { SearchBoxComponent } from '../search-box/search-box.component';
 import { SearchResultsComponent } from '../search-results/search-results.component';
@@ -19,25 +19,24 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DataService } from '../../shared/providers/data.service';
 import { RouterTestingModule } from '@angular/router/testing';
 
+let dataService: DataService;
 let activatedRoute: ActivatedRouteStub;
 let searchServiceSpy: MockSearchService;
 let component: SearchPageComponent;
 let fixture: ComponentFixture<SearchPageComponent>;
 
 class MockSearchService {
-  search(terms: Observable<SearchModel>, pageConfig: PageConfig): Observable<SearchResults> {
+  search(terms: Observable<SearchModel>, pageConfig: SearchPageConfig): Observable<SearchResults> {
     return Observable.of(new SearchResults());
   }
-}
-
-class MockDataService {
-  storage = ['123', '456'];
 }
 
 describe('SearchPageComponent', () => {
   beforeEach(() => {
     activatedRoute = new ActivatedRouteStub();
     searchServiceSpy = new MockSearchService();
+    dataService = new DataService();
+    dataService.set('adjacentIds', ['123', '456']);
   });
 
   beforeEach(
@@ -48,7 +47,7 @@ describe('SearchPageComponent', () => {
         providers: [
           { provide: ActivatedRoute, useValue: activatedRoute },
           { provide: SearchService, useValue: searchServiceSpy },
-          { provide: DataService, useClass: MockDataService },
+          { provide: DataService, useValue: dataService },
           Title
         ],
         schemas: [NO_ERRORS_SCHEMA]
@@ -60,7 +59,7 @@ describe('SearchPageComponent', () => {
     async(() => {
       activatedRoute.testParamMap = { page: 'test-page' };
 
-      const pageConfig = new PageConfig();
+      const pageConfig = new SearchPageConfig();
       pageConfig.pageName = 'test-page';
 
       const config = new Config();

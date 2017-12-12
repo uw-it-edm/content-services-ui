@@ -14,17 +14,18 @@
 
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Id</mat-header-cell>
-      <mat-cell *matCellDef="let element">{{element.id}}</mat-cell>
+      <mat-cell *matCellDef="let element"><a routerLink="../edit/{{element.id}}"
+                                             queryParamsHandling="merge">{{element.id}}</a>
+      </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="label">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Name</mat-header-cell>
-      <mat-cell *matCellDef="let element"><a routerLink="edit/{{element.id}}"
-                                             queryParamsHandling="merge">{{element.label}}</a>
-      </mat-cell>
+      <mat-cell *matCellDef="let element">{{element.label}}</mat-cell>
+
     </ng-container>
 
-    <ng-container *ngFor="let col of pageConfig.fieldsToDisplay" matColumnDef={{col.name}}>
+    <ng-container *ngFor="let col of pageConfig.fieldsToDisplay" matColumnDef={{col.key}}>
       <span [ngSwitch]="col.sortable">
          <span *ngSwitchCase="false">
           <mat-header-cell *matHeaderCellDef>{{ col.label }}</mat-header-cell>
@@ -35,7 +36,7 @@
       </span>
 
       <mat-cell *matCellDef="let element">
-        <app-display-field [field]="col" [value]="element.metadata[col.name]"></app-display-field>
+        <app-display-field [field]="col" [value]="element.metadata[col.key]"></app-display-field>
       </mat-cell>
 
 

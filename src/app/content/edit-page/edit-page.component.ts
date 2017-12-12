@@ -33,6 +33,7 @@ export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
   contentObject: ContentObject;
   pageConfig: ContentPageConfig;
   form: FormGroup;
+
   id: string;
   page: string;
   previewing: boolean;
@@ -59,7 +60,6 @@ export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
       this.extractPageConfig();
     });
     this.route.paramMap.takeUntil(this.componentDestroyed).subscribe(params => {
-      this.page = params.get('page');
       this.id = params.get('id');
       if (this.contentObjectListComponent) {
         this.contentObjectListComponent.reset();
@@ -149,7 +149,7 @@ export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
     const config = this.config;
     const page = this.page;
     if (!isNullOrUndefined(config) && !isNullOrUndefined(page)) {
-      this.pageConfig = config.pages[page.toLowerCase()].editPageConfig;
+      this.pageConfig = config.pages['edit'];
       if (!isNullOrUndefined(this.pageConfig)) {
         this.titleService.setTitle(this.pageConfig.pageName);
       }

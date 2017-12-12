@@ -4,11 +4,12 @@ import { User } from '../../user/shared/user';
 import { Observable } from 'rxjs/Observable';
 import { UserService } from '../../user/shared/user.service';
 import { SearchModel } from './model/search-model';
-import { PageConfig } from '../../core/shared/model/page-config';
+import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { FacetConfig } from '../../core/shared/model/facet-config';
 import { SearchFilter } from './model/search-filter';
 import { Field } from '../../core/shared/model/field';
 import { HttpClient } from '@angular/common/http';
+import { DataService } from '../../shared/providers/data.service';
 
 class UserServiceMock extends UserService {
   constructor() {
@@ -26,7 +27,7 @@ let http;
 describe('SearchService', () => {
   beforeEach(() => {
     http = new HttpClient(null);
-    searchService = new SearchService(http, new UserServiceMock());
+    searchService = new SearchService(http, new UserServiceMock(), new DataService());
   });
 
   it('should be created', () => {
@@ -62,7 +63,7 @@ describe('SearchService', () => {
       });
     });
 
-    searchService.search(Observable.of(searchModel), new PageConfig()).subscribe(result => {
+    searchService.search(Observable.of(searchModel), new SearchPageConfig()).subscribe(result => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
 
       // args[1] is the payload
@@ -81,7 +82,7 @@ describe('SearchService', () => {
     const searchModel = new SearchModel();
     searchModel.stringQuery = 'iSearch';
 
-    const pageConfig = new PageConfig();
+    const pageConfig = new SearchPageConfig();
     pageConfig.facetsConfig.active = true;
     const facetConfig = new FacetConfig();
     facetConfig.size = 5;
@@ -121,7 +122,7 @@ describe('SearchService', () => {
 
     httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(new Response(new ResponseOptions())));
 
-    searchService.search(Observable.of(searchModel), new PageConfig()).subscribe(result => {
+    searchService.search(Observable.of(searchModel), new SearchPageConfig()).subscribe(result => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       // args[1] is the payload
       const payload = httpSpy.calls.first().args[1];
@@ -142,7 +143,7 @@ describe('SearchService', () => {
 
     httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(new Response(new ResponseOptions())));
 
-    searchService.search(Observable.of(searchModel), new PageConfig()).subscribe(result => {
+    searchService.search(Observable.of(searchModel), new SearchPageConfig()).subscribe(result => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       // args[1] is the payload
       const payload = httpSpy.calls.first().args[1];
@@ -161,7 +162,7 @@ describe('SearchService', () => {
 
     httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(new Response(new ResponseOptions())));
 
-    searchService.search(Observable.of(searchModel), new PageConfig()).subscribe(result => {
+    searchService.search(Observable.of(searchModel), new SearchPageConfig()).subscribe(result => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       // args[1] is the payload
       const payload = httpSpy.calls.first().args[1];
@@ -179,7 +180,7 @@ describe('SearchService', () => {
 
     httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(new Response(new ResponseOptions())));
 
-    searchService.search(Observable.of(searchModel), new PageConfig()).subscribe(result => {
+    searchService.search(Observable.of(searchModel), new SearchPageConfig()).subscribe(result => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       // args[1] is the payload
       const payload = httpSpy.calls.first().args[1];
@@ -195,9 +196,9 @@ describe('SearchService', () => {
     searchModel.order.term = 'myfield';
     searchModel.order.order = 'desc';
 
-    const pageConfig = new PageConfig();
+    const pageConfig = new SearchPageConfig();
     const field = new Field();
-    field.name = 'myfield';
+    field.key = 'myfield';
     field.displayType = 'string';
     pageConfig.fieldsToDisplay.push(field);
 

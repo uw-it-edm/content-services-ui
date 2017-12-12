@@ -17,7 +17,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { UserService } from '../../user/shared/user.service';
 import { ButtonConfig } from '../../core/shared/model/button-config';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
-import { PageConfig } from '../../core/shared/model/page-config';
 import { Config } from '../../core/shared/model/config';
 import { User } from '../../user/shared/user';
 import { FileUploadComponent } from '../../shared/widgets/file-upload/file-upload.component';
@@ -111,28 +110,23 @@ describe('CreatePageComponent', () => {
 
     const createPageConfig = new ContentPageConfig();
     createPageConfig.fieldsToDisplay = [
-      { name: '1', label: '1' },
-      { name: '2', label: '2' },
-      { name: '3', label: '3' },
-      { name: 'a', label: 'a' }
+      { key: '1', label: '1' },
+      { key: '2', label: '2' },
+      { key: '3', label: '3' },
+      { key: 'a', label: 'a' }
     ];
     createPageConfig.buttons = [saveButton];
-    createPageConfig.onSave = [
-      { name: 'PublishStatus', value: 'Published' },
-      { name: 'AnotherOnSave', value: 'Value' }
-    ];
+    createPageConfig.onSave = [{ key: 'PublishStatus', value: 'Published' }, { key: 'AnotherOnSave', value: 'Value' }];
     createPageConfig.pageName = 'test-create-page';
     createPageConfig.viewPanel = true;
 
-    const searchPageConfig = new PageConfig();
-    searchPageConfig.pageName = 'test-page';
-    searchPageConfig.createPageConfig = createPageConfig;
-
     const config = new Config();
     config.tenant = 'test-tenant';
-    config.pages['test-page'] = searchPageConfig;
-    config.profile = 'testProfile';
-    config.account = 'testAccount';
+    config.pages['create'] = createPageConfig;
+    config.contentConfig = {
+      account: 'testAccount',
+      profile: 'testProfile'
+    };
 
     activatedRoute.testData = { config: config };
 

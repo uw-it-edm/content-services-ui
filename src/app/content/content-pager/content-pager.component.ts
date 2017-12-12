@@ -21,7 +21,7 @@ export class ContentPagerComponent implements OnInit, OnChanges, OnDestroy {
   constructor(private router: Router, private data: DataService) {}
 
   ngOnInit() {
-    this.adjacentIds = this.data.storage;
+    this.adjacentIds = this.data.get('adjacentIds');
     this.determineCurrentPosition(this.contentItem, this.adjacentIds);
   }
 

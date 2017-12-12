@@ -51,9 +51,9 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
         field.filteredOptions = fc.valueChanges
           .startWith(null)
           .map(x => (x ? this.filterOptions(x, field.options) : field.options.slice()));
-        group[field.name] = fc;
+        group[field.key] = fc;
       } else {
-        group[field.name] = new FormControl('');
+        group[field.key] = new FormControl('');
       }
     });
     return new FormGroup(group);
@@ -69,7 +69,7 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
       const metaDataForm: FormGroup = <FormGroup>this.formGroup.controls['metadata'];
       if (!isNullOrUndefined(metaDataForm)) {
         this.pageConfig.fieldsToDisplay.map(field => {
-          metaDataForm.get(field.name).patchValue(this.contentItem.metadata[field.name]);
+          metaDataForm.get(field.key).patchValue(this.contentItem.metadata[field.key]);
         });
       }
     }

@@ -1,22 +1,23 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Config } from '../../core/shared/model/config';
-import { PageConfig } from '../../core/shared/model/page-config';
+import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { Title } from '@angular/platform-browser';
 import { SearchModel } from '../shared/model/search-model';
 import { SearchResults } from '../shared/model/search-result';
 import { SearchService } from '../shared/search.service';
 import { Subject } from 'rxjs/Subject';
+import { DataService } from '../../shared/providers/data.service';
 
 @Component({
   selector: 'app-search-page',
   templateUrl: './search-page.component.html',
   styleUrls: ['./search-page.component.css']
 })
-export class SearchPageComponent implements OnInit, OnDestroy {
+export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   private componentDestroyed = new Subject();
   config: Config;
-  pageConfig: PageConfig;
+  pageConfig: SearchPageConfig;
   page: string;
 
   searchModel$ = new Subject<SearchModel>();
@@ -26,8 +27,15 @@ export class SearchPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private titleService: Title,
     private searchService: SearchService,
+    private dataService: DataService,
     private router: Router
   ) {}
+
+  ngAfterViewInit(): void {
+    if (this.dataService.get('currentSearch')) {
+      this.searchModel$.next(Object.assign(new SearchModel(), this.dataService.get('currentSearch')));
+    }
+  }
 
   ngOnInit() {
     console.log('init generic page component');
@@ -63,6 +71,6 @@ export class SearchPageComponent implements OnInit, OnDestroy {
   }
 
   navigateToCreate() {
-    this.router.navigate([this.config.tenant + '/' + this.page + '/create']);
+    this.router.navigate([this.config.tenant + '/create']);
   }
 }

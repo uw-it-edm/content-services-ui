@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Config } from './model/config';
-import { Headers, Http, RequestOptions, RequestOptionsArgs } from '@angular/http';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toArray';
@@ -9,7 +8,7 @@ import 'rxjs/add/operator/mergeMap';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/publishReplay';
 import 'rxjs/add/operator/toPromise';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { TenantConfigInfo } from './model/tenant-config-info';
 import { UserService } from '../../user/shared/user.service';
@@ -67,7 +66,6 @@ export class ConfigService {
       const requestOptions = this.buildRequestOptions();
       return this.http
         .get(this.appConfigBaseUrl + '/app/content-services-ui', requestOptions)
-        .map(result => result.json())
         .map(result => {
           const tenants: TenantConfigInfo[] = [];
 
@@ -94,15 +92,15 @@ export class ConfigService {
   }
 
   private buildRequestOptions() {
-    const requestOptionsArgs = <RequestOptionsArgs>{};
+    const requestOptionsArgs = {};
     if (environment.profile_api.authenticationHeader) {
       const user = this.userService.getUser();
-
-      const authenticationHeaders = new Headers();
-      authenticationHeaders.append(environment.profile_api.authenticationHeader, user.actAs);
-
-      requestOptionsArgs.headers = authenticationHeaders;
+      requestOptionsArgs['headers'] = new HttpHeaders().append(
+        environment.profile_api.authenticationHeader,
+        user.actAs
+      );
     }
-    return new RequestOptions(requestOptionsArgs);
+
+    return requestOptionsArgs;
   }
 }

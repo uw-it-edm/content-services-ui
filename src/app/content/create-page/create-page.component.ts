@@ -83,7 +83,7 @@ export class CreatePageComponent implements OnInit, OnDestroy {
   }
 
   cancel() {
-    this.router.navigate([this.config.tenant + '/' + this.page]);
+    this.router.navigate([this.config.tenant]);
   }
 
   hasError(contentObject: ContentObject): boolean {
@@ -127,7 +127,7 @@ export class CreatePageComponent implements OnInit, OnDestroy {
     const config = this.config;
     const page = this.page;
     if (!isNullOrUndefined(config) && !isNullOrUndefined(page)) {
-      this.pageConfig = config.pages[page.toLowerCase()].createPageConfig;
+      this.pageConfig = config.pages['create'];
       if (!isNullOrUndefined(this.pageConfig)) {
         this.titleService.setTitle(this.pageConfig.pageName);
       }

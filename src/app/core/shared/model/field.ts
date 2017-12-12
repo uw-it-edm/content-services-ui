@@ -1,7 +1,7 @@
 import { CheckboxOptions } from './field/checkbox-options';
 
 export class Field {
-  public name: string;
+  public key: string;
   public label: string;
 
   public dataType?: string;

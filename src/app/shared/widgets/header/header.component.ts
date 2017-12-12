@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { ConfigResolver } from '../../../routing/shared/config-resolver.service';
 import { MatMenu } from '@angular/material';
 import { TenantConfigInfo } from '../../../core/shared/model/tenant-config-info';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-header',
@@ -48,8 +49,8 @@ export class HeaderComponent implements OnInit {
     this.eventsManager.tenantEmitter.subscribe(tenant => {
       this.tenant = tenant;
     });
-    this.configResolver.getTenantNameSubject().subscribe(tenantName => {
-      this.title = tenantName;
+    this.configResolver.getAppNameSubject().subscribe(appName => {
+      this.title = appName;
     });
   }
 }
