@@ -1,4 +1,4 @@
-import { browser } from 'protractor';
+import { browser, by, element } from 'protractor';
 
 export class EditPage {
   navigateTo() {
@@ -7,5 +7,9 @@ export class EditPage {
 
   getPageTitle() {
     return browser.getTitle();
+  }
+
+  clickReturnToResultsLink() {
+    element(by.css('.cs-content-page .mat-toolbar-row a')).click();
   }
 }
