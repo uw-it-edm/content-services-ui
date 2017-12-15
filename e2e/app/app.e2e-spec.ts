@@ -1,4 +1,5 @@
 import { ContentServicesUiPage } from './app.po';
+import { SearchPage } from '../search/search.po';
 
 describe('content-services-ui App', () => {
   let page: ContentServicesUiPage;
@@ -29,5 +30,15 @@ describe('content-services-ui App', () => {
     expect(page.getUWLogoElement().isDisplayed()).toBe(true);
     expect(page.getUWLogoElement().getAttribute('href')).toContain('uw.edu');
     expect(page.getUWLogoElement().getAttribute('title')).toEqual('University of Washington Home');
+  });
+
+  it('should navigate to search page when tenant is selected on app menu icon', () => {
+    page.clickAppMenuIcon();
+    page.clickAppMenuItem(0);
+
+    let searchPage: SearchPage;
+    searchPage = new SearchPage();
+
+    expect(page.getCurrentUrl()).toContain(searchPage.pageUrl);
   });
 });
