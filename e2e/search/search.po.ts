@@ -1,8 +1,10 @@
 import { browser, by, element, ExpectedConditions } from 'protractor';
 
 export class SearchPage {
+  public pageUrl = '/demo/tab-search';
+
   navigateTo() {
-    return browser.get('/demo/tab-search');
+    return browser.get(this.pageUrl);
   }
 
   getPageTitle() {
@@ -47,5 +49,9 @@ export class SearchPage {
   clickPaginatorSize(index) {
     const id = 'mat-option-' + index;
     element(by.id(id)).click();
+  }
+
+  clickUploadButton() {
+    element(by.css('[appcustomtext=\'addContentItemButton\']')).click();
   }
 }
