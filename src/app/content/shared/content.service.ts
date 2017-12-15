@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/map';
 import { ContentItem } from './model/content-item';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../../environments/environment';
@@ -7,9 +6,7 @@ import { UserService } from '../../user/shared/user.service';
 import { UrlUtilities } from '../../core/util/url-utilities';
 import { isNullOrUndefined } from 'util';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ContentItemChange } from './model/content-item-change';
 import { ProgressService } from '../../shared/providers/progress.service';
-import { Subject } from 'rxjs/Subject';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Injectable()
@@ -113,10 +110,7 @@ export class ContentService {
     headers.set('Accept', 'application/json');
     if (CONTENT_API.authenticationHeader) {
       const user = this.userService.getUser();
-      requestOptionsArgs['headers'] = new HttpHeaders().append(
-        environment.content_api.authenticationHeader,
-        user.actAs
-      );
+      requestOptionsArgs['headers'] = new HttpHeaders().append(CONTENT_API.authenticationHeader, user.actAs);
     }
     return requestOptionsArgs;
   }

@@ -32,7 +32,6 @@ export class CreatePageComponent implements OnInit, OnDestroy {
   contentObject: ContentObject;
   pageConfig: ContentPageConfig;
   form: FormGroup;
-  page: string;
   previewing: boolean;
 
   @ViewChild(DynamicComponentDirective) contentViewDirective: DynamicComponentDirective;
@@ -56,7 +55,6 @@ export class CreatePageComponent implements OnInit, OnDestroy {
       this.extractPageConfig();
     });
     this.route.paramMap.takeUntil(this.componentDestroyed).subscribe(params => {
-      this.page = params.get('page');
       if (this.contentObjectListComponent) {
         this.contentObjectListComponent.reset();
       }
@@ -125,8 +123,7 @@ export class CreatePageComponent implements OnInit, OnDestroy {
 
   private extractPageConfig() {
     const config = this.config;
-    const page = this.page;
-    if (!isNullOrUndefined(config) && !isNullOrUndefined(page)) {
+    if (!isNullOrUndefined(config)) {
       this.pageConfig = config.pages['create'];
       if (!isNullOrUndefined(this.pageConfig)) {
         this.titleService.setTitle(this.pageConfig.pageName);

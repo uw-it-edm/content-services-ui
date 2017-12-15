@@ -17,19 +17,14 @@ import { Config } from '../../core/shared/model/config';
 import { FormBuilder } from '@angular/forms';
 import { SafeUrlPipe } from '../../shared/pipes/safe-url.pipe';
 import { ButtonConfig } from '../../core/shared/model/button-config';
-import {
-  MatAutocompleteModule,
-  MatDatepickerModule,
-  MatOptionModule,
-  MatSnackBar,
-  MatSnackBarContainer
-} from '@angular/material';
+import { MatAutocompleteModule, MatDatepickerModule, MatOptionModule, MatSnackBar } from '@angular/material';
 import { UserService } from '../../user/shared/user.service';
 import { User } from '../../user/shared/user';
 import { MaterialConfigModule } from '../../routing/material-config.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ProgressService } from '../../shared/providers/progress.service';
 import { ContentObject } from '../shared/model/content-object';
+import { ContentObjectListComponent } from '../content-object-list/content-object-list.component';
 
 class MockContentService {
   read(itemId: string): Observable<ContentItem> {
@@ -188,27 +183,31 @@ describe('EditPageComponent', () => {
 
   it('should contain buttons to save and delete items in the proper order', () => {
     const buttons = fixture.debugElement.nativeElement.querySelectorAll('button');
-    let foundDeleteButton = false;
-    let foundSaveButton = false;
+    let deleteButton;
+    let saveButton;
     for (const button of buttons) {
       if (button.id === 'deleteItem') {
-        foundDeleteButton = true;
+        deleteButton = button;
       }
       if (button.id === 'saveItem') {
-        foundSaveButton = true;
+        saveButton = button;
       }
     }
-    expect(foundDeleteButton).toBeTruthy();
-    expect(foundSaveButton).toBeTruthy();
+    expect(deleteButton).toBeTruthy();
+    expect(saveButton).toBeTruthy();
+    expect(deleteButton.id).toEqual(editPageConfig.buttons[0].command);
+    expect(saveButton.id).toEqual(editPageConfig.buttons[1].command);
   });
 
-  // it('should delegate save to content object list', () => {
-  //   const metataDataGroup = component.form.controls['metadata'];
-  //   metataDataGroup.patchValue({ '1': 'a spec title' });
-  //
-  //   const spy = spyOn(component.contentObjectListComponent, 'saveItem');
-  //   component.saveItem();
-  //   expect(spy).toHaveBeenCalled();
-  //
-  // });
+  it('should delegate save to content object list', () => {
+    const metataDataGroup = component.form.controls['metadata'];
+    metataDataGroup.patchValue({ '1': 'a spec title' });
+    fixture.detectChanges();
+    component.contentObjectListComponent = new ContentObjectListComponent(null, null, null, null, null);
+
+    const spy = spyOn(component.contentObjectListComponent, 'saveItem');
+
+    component.saveItem();
+    expect(spy).toHaveBeenCalled();
+  });
 });

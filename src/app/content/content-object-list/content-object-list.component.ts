@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ContentObject } from '../shared/model/content-object';
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ContentItem } from '../shared/model/content-item';
 import { ContentService } from '../shared/content.service';
 import { Field } from '../../core/shared/model/field';
@@ -11,6 +11,7 @@ import { Subject } from 'rxjs/Subject';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../user/shared/user.service';
+import { isUndefined } from 'util';
 
 @Component({
   selector: 'app-content-object-list',
@@ -131,13 +132,13 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
     metadataOverrides?: Array<any>
   ) {
     const metadataDefaults = new Array<any>();
-    if (config) {
-      if (config.profile) {
-        metadataDefaults.push({ name: 'ProfileId', value: config.profile });
+    if (config && config.contentConfig) {
+      if (config.contentConfig.profile) {
+        metadataDefaults.push({ name: 'ProfileId', value: config.contentConfig.profile });
       }
-      if (config.account) {
+      if (config.contentConfig.account) {
         const userName = user.actAs ? user.actAs : user.userName;
-        metadataDefaults.push({ name: 'Account', value: config.account.replace('${user}', userName) });
+        metadataDefaults.push({ name: 'Account', value: config.contentConfig.account.replace('${user}', userName) });
       }
     }
 
@@ -161,11 +162,11 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
     if (fields) {
       fields.map(field => {
         if (formModel.metadata) {
-          let value = formModel.metadata[field.name];
+          let value = formModel.metadata[field.key];
           if (value !== null && value === '') {
             value = null;
           }
-          item.metadata[field.name] = value;
+          item.metadata[field.key] = value;
         }
       });
     }
@@ -182,25 +183,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
       this.snackBarTimeout = null;
     }
     this.snackBarTimeout = setTimeout(() => {
-      const numberOfCreatedItems = this.createdItems.length;
-      const numberOfUpdatedItems = this.updatedItems.length;
-      const numberOfFailures = this.failures.length;
-      let message = numberOfCreatedItems + ' items created';
-      if (numberOfCreatedItems === 1) {
-        const item = this.createdItems[0];
-        message = 'Created new item ' + item.id;
-      } else if (numberOfUpdatedItems === 1) {
-        const item = this.updatedItems[0];
-        message = 'Updated item ' + item.id;
-      }
-
-      if (numberOfFailures > 0) {
-        if (numberOfCreatedItems) {
-          message = numberOfCreatedItems + ' saved and ' + numberOfFailures + ' failed';
-        } else {
-          message = 'Failed to save ' + numberOfFailures + ' items';
-        }
-      }
+      const message = this.createUpdateSnackBarMessage();
       const snackBarRef = this.snackBar.open(message, 'Dismiss', this.snackBarConfig);
 
       if (this.formGroup && this.formGroup.controls.uploadAnother) {
@@ -214,6 +197,31 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
         });
       }
     }, 500);
+  }
+
+  private createUpdateSnackBarMessage(): string {
+    const numberOfCreatedItems = this.createdItems.length;
+    const numberOfUpdatedItems = this.updatedItems.length;
+    const numberOfFailures = this.failures.length;
+
+    let message = numberOfCreatedItems + ' items created';
+    if (numberOfCreatedItems === 1) {
+      const item = this.createdItems[0];
+      message = 'Created new item ' + item.id;
+    } else if (numberOfUpdatedItems === 1) {
+      const item = this.updatedItems[0];
+      message = 'Updated item ' + item.id;
+    }
+
+    if (numberOfFailures > 0) {
+      if (numberOfCreatedItems) {
+        message = numberOfCreatedItems + ' saved and ' + numberOfFailures + ' failed';
+      } else {
+        message = 'Failed to save ' + numberOfFailures + ' items';
+      }
+    }
+
+    return message;
   }
 
   onDisplayType(contentObject: ContentObject, displayType: string) {
@@ -244,7 +252,6 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
       this.updatedItems = new Array<ContentItem>();
       this.failures = new Array<any>();
 
-      const numberOfContentObjects = this.contentObjects.length;
       for (const contentObject of this.contentObjects) {
         const contentItem = this.prepareItem(
           contentObject.item,
@@ -264,23 +271,9 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
         if (contentItem$) {
           contentItem$.subscribe(
             item => {
-              let index = 0;
-              let existingIndex = -1;
-              for (const current of this.createdItems) {
-                if (current.id === item.id) {
-                  existingIndex = index;
-                }
-                index++;
-              }
               contentObject.onLoad(item);
               contentObject.failed = false;
-              if (existingIndex === -1) {
-                console.log('Item Created: ' + item.id);
-                this.createdItems.push(item);
-              } else {
-                this.updatedItems.push(item);
-              }
-
+              this.updateComponentSavedItemLists(item);
               this.notify();
             },
             err => {
@@ -292,6 +285,20 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
           contentItemObservables.push(contentItem$);
         }
       }
+    }
+  }
+
+  private updateComponentSavedItemLists(item: ContentItem) {
+    // if item already exists return its index, otherwise return -1
+    const existingIndex = this.createdItems.findIndex((element: ContentItem) => {
+      return element.id === item.id;
+    });
+
+    if (existingIndex === -1) {
+      console.log('Item Created: ' + item.id);
+      this.createdItems.push(item);
+    } else {
+      this.updatedItems.push(item);
     }
   }
 

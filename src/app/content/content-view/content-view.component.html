@@ -1,13 +1,13 @@
 <div *ngIf="contentObject" [ngClass]="fullScreen ? 'full-screen' : ''" class="cs-content-view">
 
   <app-content-toolbar
-          [contentType]="contentObject.contentType"
-          (fullScreenChange)="onFullScreenChanged($event)"
-          (page)="onPageChanged($event)"
-          [pageCount]="pageCount"
-          [(pageNumber)]="pageNumber"
-          [(showAll)]="showAll"
-          (zoom)="onZoomFactorChanged($event)">
+    [contentType]="contentObject.contentType"
+    (fullScreenChange)="onFullScreenChanged($event)"
+    (page)="onPageChanged($event)"
+    [pageCount]="pageCount"
+    [(pageNumber)]="pageNumber"
+    [(showAll)]="showAll"
+    (zoom)="onZoomFactorChanged($event)">
   </app-content-toolbar>
   <div class="content-object-display">
     <div [ngSwitch]="contentObject.displayType">
@@ -50,11 +50,12 @@
       </div>
 
       <div *ngSwitchCase="'image'">
-        <img (load)="onImageLoaded()" [src]="contentObject.url | safeUrl" class="cs-preview-max-height center"/>
+        <img (load)="onImageLoaded()" [src]="contentObject.url | safeUrl"
+             class="cs-preview-max-height center"/>
       </div>
 
       <div *ngSwitchCase="'text'">
-        <div [innerHtml]="contentObject.text" class="cs-text-file"></div>
+        <div class="cs-text-file">{{contentObject.text}}</div>
       </div>
 
       <div *ngSwitchCase="'unknown-dataURI'">

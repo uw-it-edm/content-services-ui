@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { ActivatedRoute } from '@angular/router';
 
@@ -35,7 +35,6 @@ export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
   form: FormGroup;
 
   id: string;
-  page: string;
   previewing: boolean;
 
   @ViewChild(DynamicComponentDirective) contentViewDirective: DynamicComponentDirective;
@@ -43,7 +42,6 @@ export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(ContentObjectListComponent) contentObjectListComponent: ContentObjectListComponent;
 
   constructor(
-    private componentFactoryResolver: ComponentFactoryResolver,
     private contentService: ContentService,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
@@ -147,8 +145,8 @@ export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private extractPageConfig() {
     const config = this.config;
-    const page = this.page;
-    if (!isNullOrUndefined(config) && !isNullOrUndefined(page)) {
+
+    if (!isNullOrUndefined(config)) {
       this.pageConfig = config.pages['edit'];
       if (!isNullOrUndefined(this.pageConfig)) {
         this.titleService.setTitle(this.pageConfig.pageName);

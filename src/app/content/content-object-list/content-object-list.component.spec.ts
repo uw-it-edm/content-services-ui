@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { ContentService } from '../shared/content.service';
 import { ContentItem } from '../shared/model/content-item';
-import { Config } from '../../core/shared/model/config';
+import { Config, ContentConfig } from '../../core/shared/model/config';
 import { ContentObjectListComponent } from './content-object-list.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Field } from '../../core/shared/model/field';
@@ -19,7 +19,6 @@ import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
 import { ActivatedRouteStub } from '../../../testing/router-stubs';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpModule } from '@angular/http';
-import { PageConfig } from '../../core/shared/model/page-config';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -27,9 +26,11 @@ class MockContentService extends ContentService {
   constructor() {
     super(null, null, null);
   }
+
   create(contentItem: ContentItem, file: File): Observable<ContentItem> {
     return Observable.of(contentItem);
   }
+
   getFileUrl(itemId: string, webViewable: boolean): string {
     return 'testUrl/' + itemId;
   }
@@ -53,14 +54,15 @@ describe('ContentObjectList', () => {
   let fixture: ComponentFixture<ContentObjectListComponent>;
   const sourceItem: ContentItem = null;
   const config = new Config();
-  config.profile = 'testProfile';
+  config.contentConfig = new ContentConfig();
+  config.contentConfig.profile = 'testProfile';
   const formModel = {
     metadata: {
       1: 'test'
     }
   };
   const field = new Field();
-  field.name = '1';
+  field.key = '1';
   const fields = new Array<Field>();
   fields.push(field);
   const user = new User('testUser');
@@ -98,21 +100,19 @@ describe('ContentObjectList', () => {
     component.formGroup = new FormGroup({});
     component.contentItem = undefined;
     component.page = undefined;
-    const searchPageConfig = new PageConfig();
-    searchPageConfig.pageName = 'test-page';
+
     const editPageConfig = new ContentPageConfig();
     editPageConfig.pageName = 'test-edit-page';
     editPageConfig.fieldsToDisplay = [
-      { name: '1', label: 'First' },
-      { name: '2', label: 'Second' },
-      { name: '3', label: 'Third' },
-      { name: 'a', label: 'a' },
-      { name: 'd', label: 'd', displayType: 'date' },
-      { name: 't', label: 't', displayType: 'autocomplete', options: ['o1', 'o2', 'o3'] }
+      { key: '1', label: 'First' },
+      { key: '2', label: 'Second' },
+      { key: '3', label: 'Third' },
+      { key: 'a', label: 'a' },
+      { key: 'd', label: 'd', displayType: 'date' },
+      { key: 't', label: 't', displayType: 'autocomplete', options: ['o1', 'o2', 'o3'] }
     ];
     editPageConfig.viewPanel = false;
-    searchPageConfig.editPageConfig = editPageConfig;
-    config.pages['test-page'] = searchPageConfig;
+    config.pages['edit'] = editPageConfig;
     activatedRoute.testData = { config: config };
 
     component.ngOnInit();
@@ -126,12 +126,12 @@ describe('ContentObjectList', () => {
     expect(contentItem.metadata['ProfileId']).toBe('testProfile');
   });
   it('should populate the account when preparing to save', () => {
-    config.account = 'testAccount';
+    config.contentConfig.account = 'testAccount';
     const contentItem = component.prepareItem(sourceItem, fields, formModel, config, user);
     expect(contentItem.metadata['Account']).toBe('testAccount');
   });
   it('should populate the account replacing user template when preparing to save', () => {
-    config.account = 'testAccount/${user}';
+    config.contentConfig.account = 'testAccount/${user}';
     const contentItem = component.prepareItem(sourceItem, fields, formModel, config, user);
     expect(contentItem.metadata['Account']).toBe('testAccount/testUser');
   });
