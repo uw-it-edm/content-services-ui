@@ -26,6 +26,19 @@ describe('content-services-ui Edit Page', () => {
     expect(page.getPageTitle()).toEqual(demoConfig.pages.edit.pageName);
   });
 
+  it('should display pdf viewer when pdf file is uploaded', () => {
+    page.uploadFile();
+
+    expect(page.getPdfViewer().isDisplayed());
+  });
+
+  it('should re-display file upload panel after uploaded file is removed', () => {
+    page.uploadFile();
+    page.removeFile();
+
+    expect(page.uploadButton.isDisplayed());
+  });
+
   it('should navigate to Search page when Return to Results link is clicked', () => {
     page.clickReturnToResultsLink();
 
