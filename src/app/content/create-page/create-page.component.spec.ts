@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CreatePageComponent } from './create-page.component';
-import { HttpModule } from '@angular/http';
 import { ActivatedRoute } from '@angular/router';
 import { ContentService } from '../shared/content.service';
 import { Title } from '@angular/platform-browser';
@@ -20,18 +19,20 @@ import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { Config } from '../../core/shared/model/config';
 import { User } from '../../user/shared/user';
 import { FileUploadComponent } from '../../shared/widgets/file-upload/file-upload.component';
-import { MatAutocompleteModule, MatOptionModule, MatSnackBar, MatSnackBarContainer } from '@angular/material';
+import { MatAutocompleteModule, MatOptionModule, MatSnackBar } from '@angular/material';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { MaterialConfigModule } from '../../routing/material-config.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ProgressService } from '../../shared/providers/progress.service';
+import { HttpClientModule } from '@angular/common/http';
 
 class MockContentService {
   create(contentItem: ContentItem, file: File): Observable<ContentItem> {
     contentItem.id = '987';
     return Observable.of(contentItem);
   }
+
   getFileUrl(itemId: string, webViewable: boolean): string {
     return 'testUrl/' + itemId;
   }
@@ -68,7 +69,7 @@ describe('CreatePageComponent', () => {
     async(() => {
       TestBed.configureTestingModule({
         imports: [
-          HttpModule,
+          HttpClientModule,
           MaterialConfigModule,
           RouterTestingModule,
           MatAutocompleteModule,

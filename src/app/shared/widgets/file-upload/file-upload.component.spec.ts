@@ -5,8 +5,8 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule, MatTooltipModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-import { FocusModule } from 'angular2-focus/src/focus.module';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
+import { FocusModule } from 'angular-focus-directive';
 
 function getFakeEventData(): any {
   return {
@@ -31,7 +31,7 @@ describe('FileUploadComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [MatButtonModule, MatTooltipModule, ReactiveFormsModule, FocusModule.forRoot()],
+        imports: [MatButtonModule, MatTooltipModule, ReactiveFormsModule, FocusModule],
         declarations: [FileUploadComponent, TruncatePipe]
       }).compileComponents();
     })

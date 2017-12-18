@@ -9,7 +9,6 @@ import { SafeUrlPipe } from './pipes/safe-url.pipe';
 
 import { CustomTextDirective } from './directives/custom-text/custom-text.directive';
 import { DataService } from './providers/data.service';
-import { FocusModule } from 'angular2-focus/src/focus.module';
 import { StudentAutocompleteComponent } from './widgets/student-autocomplete/student-autocomplete.component';
 import { StudentService } from './providers/student.service';
 import { CheckboxInputComponent } from './widgets/checkbox/checkbox-input.component';
@@ -18,9 +17,10 @@ import { TimestampPickerComponent } from './widgets/timestamp-picker/timestamp-p
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { DisplayFieldComponent } from './widgets/display-field/display-field.component';
 import { ProgressService } from './providers/progress.service';
+import { FocusModule } from 'angular-focus-directive';
 
 @NgModule({
-  imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule, FocusModule.forRoot()],
+  imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule, FocusModule],
   exports: [
     CommonModule,
     CustomTextDirective,

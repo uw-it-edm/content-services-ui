@@ -6,7 +6,6 @@ import { ContentViewComponent } from '../content-view/content-view.component';
 import { ActivatedRoute } from '@angular/router';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ContentService } from '../shared/content.service';
-import { HttpModule } from '@angular/http';
 import { ActivatedRouteStub } from '../../../testing/router-stubs';
 import { ContentItem } from '../shared/model/content-item';
 import { Observable } from 'rxjs/Observable';
@@ -25,6 +24,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ProgressService } from '../../shared/providers/progress.service';
 import { ContentObject } from '../shared/model/content-object';
 import { ContentObjectListComponent } from '../content-object-list/content-object-list.component';
+import { HttpClientModule } from '@angular/common/http';
 
 class MockContentService {
   read(itemId: string): Observable<ContentItem> {
@@ -77,7 +77,7 @@ describe('EditPageComponent', () => {
     async(() => {
       TestBed.configureTestingModule({
         imports: [
-          HttpModule,
+          HttpClientModule,
           MaterialConfigModule,
           MatAutocompleteModule,
           MatDatepickerModule,

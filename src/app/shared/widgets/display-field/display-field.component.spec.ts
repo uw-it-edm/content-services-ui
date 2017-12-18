@@ -36,7 +36,7 @@ describe('DisplayFieldComponent', () => {
     const span = fixture.debugElement.query(By.css('span span'));
     const el = span.nativeElement;
 
-    expect(el.innerHTML.trim()).toBe('11/21/2017');
+    expect(el.innerHTML.trim()).toBe('11/21/17');
   });
   it('should display a dateTime', () => {
     const date = new Date();

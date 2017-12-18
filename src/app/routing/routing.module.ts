@@ -15,13 +15,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { environment } from '../../environments/environment';
 import { AppComponent } from '../app.component';
-import { HttpModule } from '@angular/http';
 import { EditPageComponent } from '../content/edit-page/edit-page.component';
 import { SearchModule } from '../search/search.module';
 import { ContentModule } from '../content/content.module';
 import { SharedModule } from '../shared/shared.module';
 import { UserModule } from '../user/user.module';
 import { CreatePageComponent } from '../content/create-page/create-page.component';
+import { HttpClientModule } from '@angular/common/http';
 
 let enableRouterTracing = true;
 if (environment.production) {
@@ -84,7 +84,7 @@ const appRoutes: Routes = [
     BrowserModule,
     BrowserAnimationsModule,
     MaterialConfigModule,
-    HttpModule,
+    HttpClientModule,
     SearchModule,
     ContentModule,
     SharedModule,
