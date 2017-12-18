@@ -204,18 +204,20 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
     const numberOfUpdatedItems = this.updatedItems.length;
     const numberOfFailures = this.failures.length;
 
-    let message = numberOfCreatedItems + ' items created';
+    const numberOfSavedItems = numberOfCreatedItems + numberOfUpdatedItems;
+
+    let message = numberOfSavedItems + ' items saved';
     if (numberOfCreatedItems === 1) {
       const item = this.createdItems[0];
-      message = 'Created new item ' + item.id;
+      message = 'Saved item ' + item.id;
     } else if (numberOfUpdatedItems === 1) {
       const item = this.updatedItems[0];
-      message = 'Updated item ' + item.id;
+      message = 'Saved item ' + item.id;
     }
 
     if (numberOfFailures > 0) {
-      if (numberOfCreatedItems) {
-        message = numberOfCreatedItems + ' saved and ' + numberOfFailures + ' failed';
+      if (numberOfSavedItems) {
+        message = numberOfSavedItems + ' saved and ' + numberOfFailures + ' failed';
       } else {
         message = 'Failed to save ' + numberOfFailures + ' items';
       }
@@ -298,6 +300,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
       console.log('Item Created: ' + item.id);
       this.createdItems.push(item);
     } else {
+      console.log('Item Updated: ' + item.id);
       this.updatedItems.push(item);
     }
   }
