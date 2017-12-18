@@ -41,6 +41,9 @@ module.exports = function (config) {
                logLevel: config.LOG_INFO,
                autoWatch: true,
                browsers: ['ChromeHeadless'],
-               singleRun: false
+               singleRun: false,
+               browserNoActivityTimeout: 100000,     // default 10,000ms
+               browserDisconnectTolerance: 5,        // default 0
+               retryLimit: 5                         // default 2
              });
 };

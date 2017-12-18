@@ -6,6 +6,7 @@ import { ProgressService } from '../../shared/providers/progress.service';
 import { UserService } from '../../user/shared/user.service';
 import { Observable } from 'rxjs/Observable';
 import { TenantConfigInfo } from './model/tenant-config-info';
+
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/publishReplay';
 
@@ -29,24 +30,30 @@ export class ConfigService {
             return tenantInList.tenantName === requestedTenant;
           });
 
-          if (this.configs.has(tenantInfo.tenantName)) {
-            console.log('getConfigForTenant from cache');
-            return Promise.resolve(this.configs.get(tenantInfo.tenantName));
-          } else {
-            console.log('getConfigForTenant');
-            const requestOptions = this.buildRequestOptions();
-            return this.http
-              .get<Config>(tenantInfo.downloadUrl, requestOptions)
-              .do(config => this.configs.set(tenantInfo.tenantName, config))
-              .publishReplay(1)
-              .refCount()
-              .toPromise();
-          }
+          const config = this.retrieveConfig(tenantInfo);
+          return config;
         },
-        () => {
+        err => {
           this.progressService.end();
+          return Promise.reject(err);
         }
       );
+  }
+
+  private retrieveConfig(tenantInfo: TenantConfigInfo): Promise<Config> {
+    if (this.configs.has(tenantInfo.tenantName)) {
+      console.log('getConfigForTenant from cache');
+      return Promise.resolve(this.configs.get(tenantInfo.tenantName));
+    } else {
+      console.log('getConfigForTenant');
+      const requestOptions = this.buildRequestOptions();
+      return this.http
+        .get<Config>(tenantInfo.downloadUrl, requestOptions)
+        .do(config => this.configs.set(tenantInfo.tenantName, config))
+        .publishReplay(1)
+        .refCount()
+        .toPromise();
+    }
   }
 
   getTenantList(): Observable<TenantConfigInfo[]> {
