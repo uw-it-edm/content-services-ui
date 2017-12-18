@@ -14,7 +14,6 @@ import {
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
-import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from '../../user/shared/user.service';
 import { User } from '../../user/shared/user';
@@ -24,7 +23,7 @@ import { TimestampPickerComponent } from '../../shared/widgets/timestamp-picker/
 
 class UserServiceMock extends UserService {
   constructor() {
-    super(null);
+    super(null, null);
   }
 
   getUser(): User {
@@ -93,7 +92,7 @@ describe('ContentMetadataComponent', () => {
     defaultContentItem.metadata['b'] = 'asdf';
     defaultContentItem.metadata['t'] = 't';
     defaultContentItem.metadata['d'] = 1509519600000;
-    component.contentItem$ = Observable.of(defaultContentItem);
+    component.contentItem = defaultContentItem;
     component.formGroup = new FormGroup({});
 
     fixture.detectChanges();

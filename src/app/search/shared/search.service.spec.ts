@@ -13,7 +13,7 @@ import { DataService } from '../../shared/providers/data.service';
 
 class UserServiceMock extends UserService {
   constructor() {
-    super(null);
+    super(null, null);
   }
 
   getUser(): User {

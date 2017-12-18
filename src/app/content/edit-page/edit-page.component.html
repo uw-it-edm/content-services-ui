@@ -1,52 +1,55 @@
-<div [ngClass]="pageConfig?.theme" *ngIf="contentItem">
+<div [ngClass]="pageConfig?.theme" *ngIf="contentItem && pageConfig">
   <div class="cs-content-page">
     <mat-toolbar class="secondary-toolbar">
-      <a routerLink="/{{config.tenant}}">Return to Results</a>
+      <span class="button-row">
+        <button mat-icon-button routerLink="/{{config.tenant}}" matTooltip="Return to Results">
+          <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+      </span>
       <span class="cs-fill-remaining-space"></span>
       <span class="button-row">
         <app-content-pager
           [nextBaseUrl]=" config.tenant + '/edit/'"
-          [contentItem$]="contentItem$"></app-content-pager>
+          [contentItem]="contentItem"></app-content-pager>
       </span>
     </mat-toolbar>
-    <form [formGroup]="editContentItemForm">
+    <form [formGroup]="form">
 
       <div *ngIf="contentItem" class="content-area">
         <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
-          <div fxFlex="30">
-            <app-file-upload
-              [fieldName]="'updateFile'"
-              (fileSelected)="fileSelected($event)"
-              [(formGroup)]="editContentItemForm"
-            >
-            </app-file-upload>
+          <div fxFlex="40">
+
             <app-content-metadata
-              [formGroup]="editContentItemForm"
-              [contentItem$]="contentItem$"
-              [pageConfig]="pageConfig"
-            >
+                    [contentItem]="contentItem"
+                    [formGroup]="form"
+                    [pageConfig]="pageConfig">
             </app-content-metadata>
-            <div *ngIf="pageConfig?.buttons" class="button-row" style="margin-bottom: 1em">
+
+            <app-content-object-list
+                    [contentItem]="contentItem"
+                    [formGroup]="form"
+                    (remove)="removeFile($event)"
+                    (select)="selectObject($event)">
+            </app-content-object-list>
+
+            <div *ngIf="pageConfig?.buttons" class="button-row" style="margin: 2rem 25px 2rem 2rem;text-align: right">
               <button *ngFor="let button of pageConfig?.buttons" mat-raised-button
                       (click)="buttonPress(button)" [color]="button.color"
-                      [disabled]="editContentItemForm.pristine" [id]="button.command"
+                      [disabled]="!button.alwaysActive && form.pristine" [id]="button.command"
                       [type]="button.type">{{button.label}}
               </button>
             </div>
+
           </div>
-          <div fxFlex="auto">
-            <app-content-view
-              *ngIf="pageConfig.viewPanel"
-              [item$]="contentItem$"
-              [file$]="file$"
-            >
-            </app-content-view>
+          <div *ngIf="pageConfig?.viewPanel" fxFlex="auto" class="cs-content-view-wrapper">
+            <div class="cs-content-view-wrapper-insert">
+              <app-content-view [contentObject]="contentObject"></app-content-view>
+            </div>
           </div>
         </div>
       </div>
 
     </form>
-
   </div>
 </div>
 

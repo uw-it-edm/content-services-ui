@@ -45,3 +45,4 @@ Thumbs.db
 
 # Env files
 /src/environments/environment.*.ts
+start.sh

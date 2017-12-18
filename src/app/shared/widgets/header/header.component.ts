@@ -17,7 +17,7 @@ import { Title } from '@angular/platform-browser';
 export class HeaderComponent implements OnInit {
   tenant: string;
   title: string;
-  promiseUser: Promise<User>;
+  user$: Observable<User>;
   availableTenants$: Observable<TenantConfigInfo[]>;
 
   @ViewChild(MatMenu) accountMenu: MatMenu;
@@ -31,13 +31,20 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.promiseUser = this.userService.getAuthenticatedUser();
+    console.log('init header');
 
-    this.promiseUser.then(user => {
-      if (user) {
-        this.availableTenants$ = this.configService.getTenantList();
+    this.user$ = this.userService.getUserObservable();
+
+    this.user$.subscribe(
+      user => {
+        if (user) {
+          this.availableTenants$ = this.configService.getTenantList();
+        }
+      },
+      errorResponse => {
+        // FIXME: Handle error responses
       }
-    });
+    );
 
     this.eventsManager.tenantEmitter.subscribe(tenant => {
       this.tenant = tenant;

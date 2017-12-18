@@ -39,12 +39,6 @@ describe('ConfigResolverService', () => {
     })
   );
 
-  /*
-    beforeEach(inject([ConfigService], (_ConfigService) => {
-      mockConfigService = _ConfigService;
-    }));
-  */
-
   let mockConfigService: MockConfigService;
   beforeEach(
     inject([Injector], injector => {

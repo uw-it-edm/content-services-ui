@@ -8,8 +8,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class FileUploadComponent implements OnInit {
   @Input() fieldName: string;
+  @Input() label: string;
   @Input() formGroup: FormGroup;
   @Input() autoFocus = false;
+  @Input() multiple = false;
+  @Input() dropzone;
   @Output() fileSelected: EventEmitter<File> = new EventEmitter();
 
   files: File[] = new Array<File>();
@@ -35,8 +38,10 @@ export class FileUploadComponent implements OnInit {
   private emitFiles() {
     if (this.files.length > 0) {
       this.formGroup.get(this.fieldName).markAsDirty();
-      const file = this.files[0];
-      this.fileSelected.emit(file);
+      for (const file of this.files) {
+        this.fileSelected.emit(file);
+      }
+      this.files = [];
     } else {
       this.fileSelected.emit(null);
       this.formGroup.get(this.fieldName).reset();

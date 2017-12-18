@@ -1,17 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Config } from './model/config';
-
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/toArray';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/mergeMap';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/publishReplay';
-import 'rxjs/add/operator/toPromise';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { TenantConfigInfo } from './model/tenant-config-info';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ProgressService } from '../../shared/providers/progress.service';
 import { UserService } from '../../user/shared/user.service';
+import { Observable } from 'rxjs/Observable';
+import { TenantConfigInfo } from './model/tenant-config-info';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/publishReplay';
 
 @Injectable()
 export class ConfigService {
@@ -20,35 +16,43 @@ export class ConfigService {
 
   private appConfigBaseUrl = environment.profile_api.url + environment.profile_api.context;
 
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(private http: HttpClient, private progressService: ProgressService, private userService: UserService) {}
 
   getConfigForTenant(requestedTenant: string): Promise<Config> {
+    this.progressService.start('query');
     return this.getTenantList()
       .toPromise()
-      .then(tenants => {
-        const tenantInfo = tenants.find(tenantInList => {
-          return tenantInList.tenantName === requestedTenant;
-        });
+      .then(
+        tenants => {
+          this.progressService.end();
+          const tenantInfo = tenants.find(tenantInList => {
+            return tenantInList.tenantName === requestedTenant;
+          });
 
-        if (this.configs.has(tenantInfo.tenantName)) {
-          console.log('getConfigForTenant from cache');
-          return Promise.resolve(this.configs.get(tenantInfo.tenantName));
-        } else {
-          console.log('getConfigForTenant');
-          const requestOptions = this.buildRequestOptions();
-          return this.http
-            .get<Config>(tenantInfo.downloadUrl, requestOptions)
-            .do(config => this.configs.set(tenantInfo.tenantName, config))
-            .publishReplay(1)
-            .refCount()
-            .toPromise();
+          if (this.configs.has(tenantInfo.tenantName)) {
+            console.log('getConfigForTenant from cache');
+            return Promise.resolve(this.configs.get(tenantInfo.tenantName));
+          } else {
+            console.log('getConfigForTenant');
+            const requestOptions = this.buildRequestOptions();
+            return this.http
+              .get<Config>(tenantInfo.downloadUrl, requestOptions)
+              .do(config => this.configs.set(tenantInfo.tenantName, config))
+              .publishReplay(1)
+              .refCount()
+              .toPromise();
+          }
+        },
+        () => {
+          this.progressService.end();
         }
-      });
+      );
   }
 
   getTenantList(): Observable<TenantConfigInfo[]> {
     if (this.tenantsConfig !== null) {
       console.log('getTenantList from cache');
+      this.progressService.end();
       return Observable.of(this.tenantsConfig);
     } else {
       console.log('getTenantList');
