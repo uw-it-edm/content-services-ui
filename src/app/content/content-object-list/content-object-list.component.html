@@ -1,0 +1,29 @@
+<mat-nav-list>
+
+    <mat-list-item *ngFor="let contentObject of contentObjects; let i = index" [ngClass]="selectedIndex > -1 && i == selectedIndex ? 'cs-selected' : ''">
+ 
+        <p matLine (click)="selectObject(i)">
+            <button mat-icon-button>
+                <mat-icon [ngClass]="contentObject.failed ? 'hasError' : ''">{{ contentObject.persisted ? 'cloud_circle' : 'description' }}</mat-icon>
+            </button>
+            <span>{{ contentObject.getOriginalFileName() }}</span>
+        </p>
+
+        <span [hidden]="!contentObject.item">
+            <app-file-upload
+                    [dropzone]="false"
+                    [fieldName]="'replaceFile'"
+                    label="Replace File"
+                    (fileSelected)="replace(contentObject, $event)"
+                    [(formGroup)]="formGroup">
+            </app-file-upload>
+        </span>
+
+        <span [hidden]="contentObject.item">
+          <button mat-icon-button (click)="removeObject(contentObject, i)" matTooltip="Undo">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </span>
+
+    </mat-list-item>
+</mat-nav-list>

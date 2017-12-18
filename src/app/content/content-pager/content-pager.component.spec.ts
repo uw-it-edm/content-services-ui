@@ -37,7 +37,7 @@ describe('ContentPagerComponent', () => {
     component.nextBaseUrl = '/test/edit/';
     const defaultContentItem = new ContentItem();
     defaultContentItem.id = '1';
-    component.contentItem$ = Observable.of(defaultContentItem);
+    component.contentItem = defaultContentItem;
 
     fixture.detectChanges();
   });

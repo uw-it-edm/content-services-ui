@@ -1,15 +1,52 @@
-
 .cs-content-view {
+
 }
 
-.cs-content-view .cs-preview-max-height {
-  max-height: 1056px;
-  overflow-x:scroll;
-  overflow-y:scroll;
-  display:block;
-  border: 1px solid #aaaaaa;
+.cs-content-view.full-screen .content-object-display {
+  height: calc(100vh - 160px) !important;
+  left: 0px;
+  margin: 0;
+  position: absolute;
+  top: 54px;
+  width: 100% !important;
 }
 
+.cs-text-file {
+  font-family: Courier;
+  font-size: 12pt;
+  margin: 2rem;
+}
+
+.content-object-display {
+  background-color: white;
+  color: black;
+  height: calc(100vh - 265px);
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.content-object-display img {
+  background-color: #ffffff;
+}
+
+.content-object-display p {
+  margin-top: 2rem;
+}
+
+.content-object-display img.center {
+  display: block;
+  margin: 0 auto;
+}
+
+.pdfViewer {
+
+}
+
+pdf-viewer {
+  background-color: #404040;
+  display: block;
+  min-height: calc(100vh - 265px);
+}
 
 .cs-content-view .ng2-pdf-viewer-container {
   margin: 0 4rem;

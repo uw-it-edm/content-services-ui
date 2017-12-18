@@ -20,17 +20,26 @@ import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { Config } from '../../core/shared/model/config';
 import { User } from '../../user/shared/user';
 import { FileUploadComponent } from '../../shared/widgets/file-upload/file-upload.component';
-import { MatAutocompleteModule, MatOptionModule } from '@angular/material';
+import { MatAutocompleteModule, MatOptionModule, MatSnackBar, MatSnackBarContainer } from '@angular/material';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
+import { MaterialConfigModule } from '../../routing/material-config.module';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ProgressService } from '../../shared/providers/progress.service';
 
 class MockContentService {
   create(contentItem: ContentItem, file: File): Observable<ContentItem> {
+    contentItem.id = '987';
     return Observable.of(contentItem);
+  }
+  getFileUrl(itemId: string, webViewable: boolean): string {
+    return 'testUrl/' + itemId;
   }
 }
 
 class MockUserService extends UserService {
   constructor() {
-    super(null);
+    super(null, null);
   }
 
   getUser(): User {
@@ -58,17 +67,32 @@ describe('CreatePageComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [HttpModule, RouterTestingModule, MatAutocompleteModule, MatOptionModule],
+        imports: [
+          HttpModule,
+          MaterialConfigModule,
+          RouterTestingModule,
+          MatAutocompleteModule,
+          MatOptionModule,
+          NoopAnimationsModule
+        ],
         declarations: [CreatePageComponent, ContentMetadataComponent, ContentViewComponent, SafeUrlPipe],
         providers: [
           { provide: ActivatedRoute, useValue: activatedRoute },
           { provide: ContentService, useValue: mockContentService },
           { provide: UserService, useValue: mockUserService },
+          ProgressService,
           Title,
-          FormBuilder
+          FormBuilder,
+          LiveAnnouncer,
+          MatSnackBar
         ],
         schemas: [NO_ERRORS_SCHEMA]
       })
+        .overrideModule(BrowserDynamicTestingModule, {
+          set: {
+            entryComponents: [ContentViewComponent]
+          }
+        })
         .compileComponents()
         .then(() => {
           fixture = TestBed.createComponent(CreatePageComponent);
@@ -124,37 +148,5 @@ describe('CreatePageComponent', () => {
   it('should have the title set to the page name', () => {
     const title = fixture.debugElement.injector.get(Title);
     expect(title.getTitle()).toEqual('test-create-page');
-  });
-
-  it('should correctly populate the profileId when preparing to save', () => {
-    const contentItem = component.prepareSaveContentItem();
-    expect(contentItem.metadata['ProfileId']).toBe('testProfile');
-  });
-  it('should populate the account when preparing to save', () => {
-    const contentItem = component.prepareSaveContentItem();
-    expect(contentItem.metadata['Account']).toBe('testAccount');
-  });
-  it('should populate the account replacing user template when preparing to save', () => {
-    component.config.contentConfig.account += '/${user}';
-    const contentItem = component.prepareSaveContentItem();
-    expect(contentItem.metadata['Account']).toBe('testAccount/testUser');
-  });
-  it('should add the specified onSave metadata when preparing to save', () => {
-    const contentItem = component.prepareSaveContentItem();
-    expect(contentItem.metadata['PublishStatus']).toBe('Published');
-    expect(contentItem.metadata['AnotherOnSave']).toBe('Value');
-  });
-  it('should reset fields', () => {
-    component.fileUploadComponent = new MockFileUploadComponent();
-    component.createContentItemForm
-      .get('metadata')
-      .get('1')
-      .patchValue('asdf');
-    let contentItem = component.prepareSaveContentItem();
-    expect(contentItem.metadata['1']).toBe('asdf');
-    component.reset();
-    contentItem = component.prepareSaveContentItem();
-    expect(contentItem.metadata.hasOwnProperty('1')).toBe(true);
-    expect(contentItem.metadata['1']).toBe(null);
   });
 });
