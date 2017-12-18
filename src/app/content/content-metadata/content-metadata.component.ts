@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { ContentItem } from '../shared/model/content-item';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { isNullOrUndefined } from 'util';
@@ -16,20 +16,13 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
   private componentDestroyed = new Subject();
 
   @Input() pageConfig: ContentPageConfig;
-  @Input() contentItem$: Observable<ContentItem>;
   @Input() formGroup: FormGroup;
 
-  contentItem: ContentItem;
+  @Input() contentItem: ContentItem;
 
   constructor() {}
 
   ngOnInit() {
-    if (!isNullOrUndefined(this.contentItem$)) {
-      this.contentItem$.takeUntil(this.componentDestroyed).subscribe(item => {
-        this.contentItem = item;
-        this.ngOnChanges();
-      });
-    }
     this.createForm();
     this.ngOnChanges();
   }
@@ -51,9 +44,9 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
         field.filteredOptions = fc.valueChanges
           .startWith(null)
           .map(x => (x ? this.filterOptions(x, field.options) : field.options.slice()));
-        group[field.name] = fc;
+        group[field.key] = fc;
       } else {
-        group[field.name] = new FormControl('');
+        group[field.key] = new FormControl('');
       }
     });
     return new FormGroup(group);
@@ -69,11 +62,7 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
       const metaDataForm: FormGroup = <FormGroup>this.formGroup.controls['metadata'];
       if (!isNullOrUndefined(metaDataForm)) {
         this.pageConfig.fieldsToDisplay.map(field => {
-          if (field.displayType === 'date') {
-            metaDataForm.get(field.name).patchValue(new Date(this.contentItem.metadata[field.name]));
-          } else {
-            metaDataForm.get(field.name).patchValue(this.contentItem.metadata[field.name]);
-          }
+          metaDataForm.get(field.key).patchValue(this.contentItem.metadata[field.key]);
         });
       }
     }

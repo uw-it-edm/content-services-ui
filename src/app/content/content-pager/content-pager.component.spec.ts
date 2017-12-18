@@ -8,22 +8,24 @@ import { ContentItem } from '../shared/model/content-item';
 import { Observable } from 'rxjs/Observable';
 import createSpy = jasmine.createSpy;
 
-class MockDataService {
-  storage = ['123', '1', '456'];
-}
-
 describe('ContentPagerComponent', () => {
   let component: ContentPagerComponent;
   let fixture: ComponentFixture<ContentPagerComponent>;
+  let dataService: DataService;
   const mockRouter = {
     navigate: createSpy('navigate')
   };
+
+  beforeEach(() => {
+    dataService = new DataService();
+    dataService.set('adjacentIds', ['123', '1', '456']);
+  });
 
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
         imports: [MatButtonModule],
-        providers: [{ provide: Router, useValue: mockRouter }, { provide: DataService, useClass: MockDataService }],
+        providers: [{ provide: Router, useValue: mockRouter }, { provide: DataService, useValue: dataService }],
         declarations: [ContentPagerComponent]
       }).compileComponents();
     })
@@ -35,7 +37,7 @@ describe('ContentPagerComponent', () => {
     component.nextBaseUrl = '/test/edit/';
     const defaultContentItem = new ContentItem();
     defaultContentItem.id = '1';
-    component.contentItem$ = Observable.of(defaultContentItem);
+    component.contentItem = defaultContentItem;
 
     fixture.detectChanges();
   });

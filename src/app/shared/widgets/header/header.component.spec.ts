@@ -9,8 +9,8 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ConfigResolver } from '../../../routing/shared/config-resolver.service';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { ActivatedRouteStub } from '../../../../testing/router-stubs';
-import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
+import { ProgressService } from '../../providers/progress.service';
 
 class RouterStub {
   navigate(url: string) {
@@ -38,14 +38,15 @@ describe('HeaderComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [MaterialConfigModule, HttpClientModule, HttpModule],
+        imports: [MaterialConfigModule, HttpClientModule],
         declarations: [HeaderComponent],
         providers: [
-          {provide: ActivatedRoute, useValue: activatedRoute},
-          {provide: Router, useClass: RouterStub},
-          {provide: ConfigService, useValue: configServiceStub},
+          { provide: ActivatedRoute, useValue: activatedRoute },
+          { provide: Router, useClass: RouterStub },
+          { provide: ConfigService, useValue: configServiceStub },
           ConfigResolver,
           GlobalEventsManagerService,
+          ProgressService,
           UserService
         ],
         schemas: [NO_ERRORS_SCHEMA]
@@ -65,7 +66,7 @@ describe('HeaderComponent', () => {
 
   it('should contain accounts in the account menu', () => {
     const route = new ActivatedRouteSnapshot();
-    const routeParams = {tenant: 'test-tenant'};
+    const routeParams = { tenant: 'test-tenant' };
     route.params = routeParams;
     inject([ConfigResolver], (service: ConfigResolver) => {
       service.resolve(route, null).then(config => {

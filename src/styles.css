@@ -39,14 +39,6 @@
     }
 }
 
-/*.cs-file-upload input[type="file"] {*/
-    /*display: none;*/
-/*}*/
-
-.cs-file-upload {
-    margin-bottom: 1rem;
-}
-
 .uwit-cs-appbar .mat-toolbar {
     background: transparent;
     color: whitesmoke;
@@ -71,7 +63,7 @@
 }
 
 .uw-body {
-    margin: 2rem 4rem;
+    margin: 1rem 0rem;
 }
 
 .uw-default {
@@ -81,12 +73,6 @@
 .uw-default .cs-content-metadata ul {
     list-style-type: none;
     padding-left: 0;
-}
-
-.uw-default .cs-content-view .ng2-pdf-viewer-container {
-    border: 1px solid #aaaaaa;
-    margin: 0 4rem;
-    width: 100%;
 }
 
 .uw-default .cs-content-view iframe {

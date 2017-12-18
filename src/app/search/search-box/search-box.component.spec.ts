@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { SearchModel } from '../shared/model/search-model';
 import 'rxjs/add/observable/of';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { PageConfig } from '../../core/shared/model/page-config';
+import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 
 describe('SearchBoxComponent', () => {
   let component: SearchBoxComponent;
@@ -28,7 +28,7 @@ describe('SearchBoxComponent', () => {
     const searchModel = new SearchModel();
     searchModel.stringQuery = 'iSearch';
     component.searchModel$ = Observable.of(searchModel);
-    component.pageConfig = new PageConfig();
+    component.pageConfig = new SearchPageConfig();
     fixture.detectChanges();
   });
 

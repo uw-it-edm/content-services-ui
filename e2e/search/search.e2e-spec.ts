@@ -1,4 +1,7 @@
+///<reference path="../../node_modules/@types/jasminewd2/index.d.ts"/>
 import { SearchPage } from './search.po';
+import { CreatePage } from '../create/create.po';
+import { browser } from 'protractor';
 
 describe('content-services-ui Search Page', () => {
   let page: SearchPage;
@@ -6,9 +9,6 @@ describe('content-services-ui Search Page', () => {
 
   beforeAll(() => {
     page = new SearchPage();
-  });
-
-  beforeEach(() => {
     page.navigateTo();
   });
 
@@ -26,22 +26,15 @@ describe('content-services-ui Search Page', () => {
     expect(page.getPaginators().count()).toEqual(2);
   });
 
-  it('should default page paginators size to 10', () => {
-    expect(page.getPaginatorSelectedTexts()).toEqual(['10', '10']);
-  });
+  it('should navigate to Upload page when upload button is clicked', () => {
+    page.clickUploadButton();
 
-  it('should display page size options when page paginator selector is clicked', () => {
-    page.clickPaginatorArrow();
-    page.waitForElementToBeVisible(page.getPaginatorOptionsPanel());
+    const actualUrl = browser.getCurrentUrl().then(url => {
+      return url.toLowerCase();
+    });
 
-    expect(page.getPaginatorOptionsTexts()).toEqual(['5', '10', '25', '100']);
-  });
-
-  it('should display page size of 100 when that page size is selected', () => {
-    page.clickPaginatorArrow();
-    page.waitForElementToBeVisible(page.getPaginatorOptionsPanel());
-    page.clickPaginatorSize(3);
-
-    expect(page.getPaginatorSelectedTexts()).toEqual(['100', '100']);
+    let createPage: CreatePage;
+    createPage = new CreatePage();
+    expect(actualUrl).toMatch(createPage.pageUrl.toLowerCase());
   });
 });

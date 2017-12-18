@@ -2,10 +2,11 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FileUploadComponent } from './file-upload.component';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material';
+import { MatButtonModule, MatTooltipModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { FocusModule } from 'angular2-focus/src/focus.module';
+import { TruncatePipe } from '../../pipes/truncate.pipe';
 
 function getFakeEventData(): any {
   return {
@@ -30,8 +31,8 @@ describe('FileUploadComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [MatButtonModule, ReactiveFormsModule, FocusModule.forRoot()],
-        declarations: [FileUploadComponent]
+        imports: [MatButtonModule, MatTooltipModule, ReactiveFormsModule, FocusModule.forRoot()],
+        declarations: [FileUploadComponent, TruncatePipe]
       }).compileComponents();
     })
   );
@@ -41,8 +42,9 @@ describe('FileUploadComponent', () => {
     component = fixture.componentInstance;
     component.fieldName = 'upload';
     component.formGroup = new FormGroup({});
-    dropZone = fixture.debugElement.query(By.css('#drop-zone'));
+    component.dropzone = true;
     fixture.detectChanges();
+    dropZone = fixture.debugElement.query(By.css('#drop-zone'));
   });
 
   it('should be created', () => {

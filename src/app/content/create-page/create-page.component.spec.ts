@@ -17,21 +17,29 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { UserService } from '../../user/shared/user.service';
 import { ButtonConfig } from '../../core/shared/model/button-config';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
-import { PageConfig } from '../../core/shared/model/page-config';
 import { Config } from '../../core/shared/model/config';
 import { User } from '../../user/shared/user';
 import { FileUploadComponent } from '../../shared/widgets/file-upload/file-upload.component';
-import { MatAutocompleteModule, MatOptionModule } from '@angular/material';
+import { MatAutocompleteModule, MatOptionModule, MatSnackBar, MatSnackBarContainer } from '@angular/material';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
+import { MaterialConfigModule } from '../../routing/material-config.module';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ProgressService } from '../../shared/providers/progress.service';
 
 class MockContentService {
   create(contentItem: ContentItem, file: File): Observable<ContentItem> {
+    contentItem.id = '987';
     return Observable.of(contentItem);
+  }
+  getFileUrl(itemId: string, webViewable: boolean): string {
+    return 'testUrl/' + itemId;
   }
 }
 
 class MockUserService extends UserService {
   constructor() {
-    super(null);
+    super(null, null);
   }
 
   getUser(): User {
@@ -59,17 +67,32 @@ describe('CreatePageComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [HttpModule, RouterTestingModule, MatAutocompleteModule, MatOptionModule],
+        imports: [
+          HttpModule,
+          MaterialConfigModule,
+          RouterTestingModule,
+          MatAutocompleteModule,
+          MatOptionModule,
+          NoopAnimationsModule
+        ],
         declarations: [CreatePageComponent, ContentMetadataComponent, ContentViewComponent, SafeUrlPipe],
         providers: [
           { provide: ActivatedRoute, useValue: activatedRoute },
           { provide: ContentService, useValue: mockContentService },
           { provide: UserService, useValue: mockUserService },
+          ProgressService,
           Title,
-          FormBuilder
+          FormBuilder,
+          LiveAnnouncer,
+          MatSnackBar
         ],
         schemas: [NO_ERRORS_SCHEMA]
       })
+        .overrideModule(BrowserDynamicTestingModule, {
+          set: {
+            entryComponents: [ContentViewComponent]
+          }
+        })
         .compileComponents()
         .then(() => {
           fixture = TestBed.createComponent(CreatePageComponent);
@@ -87,28 +110,23 @@ describe('CreatePageComponent', () => {
 
     const createPageConfig = new ContentPageConfig();
     createPageConfig.fieldsToDisplay = [
-      { name: '1', label: '1' },
-      { name: '2', label: '2' },
-      { name: '3', label: '3' },
-      { name: 'a', label: 'a' }
+      { key: '1', label: '1' },
+      { key: '2', label: '2' },
+      { key: '3', label: '3' },
+      { key: 'a', label: 'a' }
     ];
     createPageConfig.buttons = [saveButton];
-    createPageConfig.onSave = [
-      { name: 'PublishStatus', value: 'Published' },
-      { name: 'AnotherOnSave', value: 'Value' }
-    ];
+    createPageConfig.onSave = [{ key: 'PublishStatus', value: 'Published' }, { key: 'AnotherOnSave', value: 'Value' }];
     createPageConfig.pageName = 'test-create-page';
     createPageConfig.viewPanel = true;
 
-    const searchPageConfig = new PageConfig();
-    searchPageConfig.pageName = 'test-page';
-    searchPageConfig.createPageConfig = createPageConfig;
-
     const config = new Config();
     config.tenant = 'test-tenant';
-    config.pages['test-page'] = searchPageConfig;
-    config.profile = 'testProfile';
-    config.account = 'testAccount';
+    config.pages['create'] = createPageConfig;
+    config.contentConfig = {
+      account: 'testAccount',
+      profile: 'testProfile'
+    };
 
     activatedRoute.testData = { config: config };
 
@@ -130,37 +148,5 @@ describe('CreatePageComponent', () => {
   it('should have the title set to the page name', () => {
     const title = fixture.debugElement.injector.get(Title);
     expect(title.getTitle()).toEqual('test-create-page');
-  });
-
-  it('should correctly populate the profileId when preparing to save', () => {
-    const contentItem = component.prepareSaveContentItem();
-    expect(contentItem.metadata['ProfileId']).toBe('testProfile');
-  });
-  it('should populate the account when preparing to save', () => {
-    const contentItem = component.prepareSaveContentItem();
-    expect(contentItem.metadata['Account']).toBe('testAccount');
-  });
-  it('should populate the account replacing user template when preparing to save', () => {
-    component.config.account += '/${user}';
-    const contentItem = component.prepareSaveContentItem();
-    expect(contentItem.metadata['Account']).toBe('testAccount/testUser');
-  });
-  it('should add the specified onSave metadata when preparing to save', () => {
-    const contentItem = component.prepareSaveContentItem();
-    expect(contentItem.metadata['PublishStatus']).toBe('Published');
-    expect(contentItem.metadata['AnotherOnSave']).toBe('Value');
-  });
-  it('should reset fields', () => {
-    component.fileUploadComponent = new MockFileUploadComponent();
-    component.createContentItemForm
-      .get('metadata')
-      .get('1')
-      .patchValue('asdf');
-    let contentItem = component.prepareSaveContentItem();
-    expect(contentItem.metadata['1']).toBe('asdf');
-    component.reset();
-    contentItem = component.prepareSaveContentItem();
-    expect(contentItem.metadata.hasOwnProperty('1')).toBe(true);
-    expect(contentItem.metadata['1']).toBe(null);
   });
 });

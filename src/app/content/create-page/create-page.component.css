@@ -1,0 +1,62 @@
+.cs-content-view-wrapper {
+    border: 1px solid #cccccc;
+    height: calc(100vh - 198px);
+    overflow: auto;
+}
+
+.cs-content-page {
+    margin: 0rem 2rem;
+}
+
+.hasError {
+    color: red;
+}
+
+.mat-card {
+    margin-bottom: 1rem;
+}
+
+.uw-default .cs-content-page .mat-form-field {
+    padding-right: 1rem;
+}
+
+.mat-selection-list .mat-list-option .mat-list-text {
+    padding: 0 !important;
+}
+
+.mat-list .mat-list-option .mat-list-item-content-reverse,
+.mat-nav-list .mat-list-option .mat-list-item-content-reverse,
+.mat-selection-list .mat-list-option .mat-list-item-content-reverse {
+    padding-right: 0;
+}
+
+.mat-list .mat-list-item .mat-list-item-content {
+    padding: 0 !important;
+}
+
+.mat-form-field-infix {
+    margin: 0;
+    padding: 0;
+}
+
+.mat-form-field-infix {
+    border-top: 0;
+}
+
+.mat-form-field-wrapper {
+    padding-bottom: 0;
+}
+
+.mat-list-item {
+    margin: 0 35px 0 0;
+    padding: 0;
+}
+
+.mat-list-text {
+    padding: 0;
+}
+
+.mat-subheader {
+    height: 28px;
+    padding: 0;
+}

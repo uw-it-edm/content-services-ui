@@ -1,0 +1,153 @@
+{
+  "account": "demo-account",
+  "tenant": "Demo",
+  "appName": "My demo app",
+  "customText": {
+    "addContentItemButton": {
+      "label": "Add Item",
+      "description": "Upload a new content item"
+    },
+    "nextContentItemButton": {
+      "label": "Next",
+      "description": "Move down to next content item"
+    },
+    "previousContentItemButton": {
+      "label": "Previous",
+      "description": "Move up to previous content item"
+    }
+  },
+  "pages": {
+    "tab-search": {
+      "pageName": "Demonstration Search",
+      "theme": "uw-default",
+      "fieldsToDisplay": [
+        {
+          "key": "Description",
+          "label": "Description"
+        },
+        {
+          "key": "ProfileId",
+          "label": "Profile Id"
+        },
+        {
+          "key": "Filer",
+          "label": "Filer"
+        },
+        {
+          "key": "PublishStatus",
+          "label": "Publish Status"
+        },
+        {
+          "key": "LastModifiedDate",
+          "label": "Last Modified Date"
+        }
+      ],
+
+      "searchConfig": {
+        "directions": "Type a budget number, vendor name, amount, or other info",
+        "label": "",
+        "placeholder": "Search for documents",
+        "indexName": "documents-demo"
+      },
+      "facetsConfig": {
+        "active": true,
+        "facets": {
+          "metadata.DocumentType.label.raw": {
+            "key": "metadata.DocumentType.label.raw",
+            "label": "Document Type",
+            "order": "asc",
+            "size": 5
+          },
+          "metadata.DocumentYear": {
+            "key": "metadata.PublishStatus.raw",
+            "label": "Publish Status",
+            "order": "asc",
+            "size": 10
+          },
+          "metadata.Filer": {
+            "key": "metadata.Filer.raw",
+            "label": "Filer",
+            "order": "asc",
+            "size": 10
+          }
+        }
+      }
+    },
+    "edit": {
+      "theme": "uw-default",
+      "pageName": "Edit Content Item",
+      "fieldsToDisplay": [
+        {
+          "key": "Description",
+          "label": "Description"
+        },
+        {
+          "key": "Filer",
+          "label": "Filer"
+        },
+        {
+          "key": "PublishStatus",
+          "label": "Publish Status"
+        },
+        {
+          "key": "LastModifiedDate",
+          "label": "Last Modified Date",
+          "dataType": "date"
+        }
+      ],
+      "buttons": [
+        {
+          "label": "Void",
+          "command": "voidItem"
+        },
+        {
+          "label": "Publish",
+          "command": "publishItem"
+        },
+        {
+          "label": "Save",
+          "color": "primary",
+          "command": "saveItem"
+        }
+      ],
+      "viewPanel": true
+    },
+    "create": {
+      "theme": "uw-default",
+      "pageName": "Create Content Item",
+      "fieldsToDisplay": [
+        {
+          "key": "Description",
+          "label": "Description"
+        },
+        {
+          "key": "Filer",
+          "label": "Filer"
+        },
+        {
+          "key": "PublishStatus",
+          "label": "Publish Status"
+        },
+        {
+          "key": "LastModifiedDate",
+          "label": "Last Modified Date",
+          "dataType": "date"
+        }
+      ],
+      "buttons": [
+        {
+          "label": "Save",
+          "color": "primary",
+          "command": "saveItem"
+        },
+        {
+          "label": "Cancel",
+          "alwaysActive": true,
+          "command": "cancel"
+        }
+      ],
+      "viewPanel": true,
+      "uploadAnother": true
+    }
+  }
+}

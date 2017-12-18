@@ -1,0 +1,47 @@
+.cs-content-toolbar.full-screen {
+    left: 0px;
+    position: absolute;
+    top: -10px !important;
+    width: 100% !important;
+}
+
+.cs-content-toolbar .mat-toolbar {
+    background-color: #eeeeee;
+}
+
+input.mat-input-element {
+    text-align: right;
+}
+
+.content-paginator {
+    font-size: 12pt;
+}
+
+.medium-field {
+    width: 12rem !important;
+    text-align: center;
+    font-size: 12pt;
+    padding: 0 !important;
+}
+
+.narrow-field {
+    width: 3rem !important;
+    text-align: right;
+    font-size: 12pt;
+    padding: 0 !important;
+}
+
+.mat-toolbar {
+    background: #ffffff;
+    border-bottom: 1px solid #cccccc;
+    color: rgba(0,0,0,.87);
+    min-height: 34px;
+}
+
+.mat-toolbar-row {
+    height: 34px;
+}
+
+.uw-default .cs-content-page .mat-form-field {
+
+}

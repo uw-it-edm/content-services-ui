@@ -1,8 +1,10 @@
 import { browser, by, element, ExpectedConditions } from 'protractor';
 
 export class SearchPage {
+  public pageUrl = '/demo/tab-search';
+
   navigateTo() {
-    return browser.get('/demo/tab-search');
+    return browser.get(this.pageUrl);
   }
 
   getPageTitle() {
@@ -10,11 +12,11 @@ export class SearchPage {
   }
 
   getSearchBox() {
-    return element(by.id('md-input-0'));
+    return element(by.id('mat-input-0'));
   }
 
   getSearchBoxInputText() {
-    return this.getSearchBox().getAttribute('ng-reflect-model');
+    return this.getSearchBox().getAttribute('value');
   }
 
   getPaginators() {
@@ -45,7 +47,11 @@ export class SearchPage {
   }
 
   clickPaginatorSize(index) {
-    const id = 'md-option-' + index;
+    const id = 'mat-option-' + index;
     element(by.id(id)).click();
+  }
+
+  clickUploadButton() {
+    element(by.css('[appcustomtext=\'addContentItemButton\']')).click();
   }
 }

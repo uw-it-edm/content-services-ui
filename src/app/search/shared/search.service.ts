@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http, RequestOptions, RequestOptionsArgs } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { SearchModel } from './model/search-model';
 import 'rxjs/add/operator/debounceTime';
@@ -11,52 +10,54 @@ import 'rxjs/add/observable/from';
 import { environment } from '../../../environments/environment';
 import { UserService } from '../../user/shared/user.service';
 import { SearchFilter } from './model/search-filter';
-import { PageConfig } from '../../core/shared/model/page-config';
+import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { FacetConfig } from '../../core/shared/model/facet-config';
 import { SearchOrder } from './model/search-order';
 import { Field } from '../../core/shared/model/field';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { DataService } from '../../shared/providers/data.service';
 
 @Injectable()
 export class SearchService {
   baseUrl = environment.search_api.url + environment.search_api.context;
 
-  constructor(private http: Http, private userService: UserService) {}
+  constructor(private http: HttpClient, private userService: UserService, private dataService: DataService) {}
 
-  search(terms: Observable<SearchModel>, pageConfig: PageConfig): Observable<SearchResults> {
+  search(terms: Observable<SearchModel>, pageConfig: SearchPageConfig): Observable<SearchResults> {
     return terms
       .debounceTime(400)
       .distinctUntilChanged()
       .switchMap(term => {
         console.log('processing search request');
+
+        this.dataService.set('currentSearch', term);
+
         return this.searchEntries(term, pageConfig);
       });
   }
 
-  private searchEntries(term: SearchModel, pageConfig: PageConfig): Observable<SearchResults> {
+  private searchEntries(term: SearchModel, pageConfig: SearchPageConfig): Observable<SearchResults> {
     const indexName = pageConfig.searchConfig.indexName;
     const searchPayload = this.buildSearchPayload(term, pageConfig);
     const options = this.buildRequestOptions();
 
     console.log('searching "' + indexName + '" with ' + JSON.stringify(searchPayload));
     return this.http.post(this.baseUrl + indexName, searchPayload, options).map(response => {
-      return this.convertSearchApiResultsToSearchResults(response.json());
+      return this.convertSearchApiResultsToSearchResults(response);
     });
   }
 
   private buildRequestOptions() {
-    const requestOptionsArgs = <RequestOptionsArgs>{};
+    const requestOptionsArgs = {};
     if (environment.search_api.authenticationHeader) {
       const user = this.userService.getUser();
-
-      const authenticationHeaders = new Headers();
-      authenticationHeaders.append(environment.search_api.authenticationHeader, user.actAs);
-
-      requestOptionsArgs.headers = authenticationHeaders;
+      requestOptionsArgs['headers'] = new HttpHeaders().append(environment.search_api.authenticationHeader, user.actAs);
     }
-    return new RequestOptions(requestOptionsArgs);
+
+    return requestOptionsArgs;
   }
 
-  private buildSearchPayload(term: SearchModel, pageConfig: PageConfig) {
+  private buildSearchPayload(term: SearchModel, pageConfig: SearchPageConfig) {
     const searchPayload = {
       query: term.stringQuery
     };
@@ -112,7 +113,7 @@ export class SearchService {
     searchPayload['pageSize'] = term.pagination.pageSize;
   }
 
-  private addFacetsToSearchPayload(searchPayload: any, pageConfig: PageConfig) {
+  private addFacetsToSearchPayload(searchPayload: any, pageConfig: SearchPageConfig) {
     const facets = [];
 
     Object.keys(pageConfig.facetsConfig.facets)
@@ -130,10 +131,10 @@ export class SearchService {
     searchPayload['facets'] = facets;
   }
 
-  private addOrderingToSearchPayload(searchPayload: any, order: SearchOrder, pageConfig: PageConfig) {
+  private addOrderingToSearchPayload(searchPayload: any, order: SearchOrder, pageConfig: SearchPageConfig) {
     if (order && order.term && order.order) {
       const newOrder: SearchOrder = Object.assign(new SearchOrder(), order);
-      const fieldConfig: Field = pageConfig.fieldsToDisplay.find(field => field.name === newOrder.term);
+      const fieldConfig: Field = pageConfig.fieldsToDisplay.find(field => field.key === newOrder.term);
 
       if (newOrder.term !== 'id' && newOrder.term !== 'label') {
         newOrder.term = 'metadata.' + newOrder.term;
@@ -144,7 +145,7 @@ export class SearchService {
       if (
         fieldConfig &&
         (!fieldConfig.dataType || fieldConfig.dataType === 'string') &&
-        !fieldConfig.name.endsWith('Date')
+        !fieldConfig.key.endsWith('Date')
       ) {
         newOrder.term += '.lowercase';
       }

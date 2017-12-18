@@ -1,10 +1,10 @@
 <div>
   <mat-paginator #topPaginator
-                [pageIndex]="paginatorConfig.pageIndex"
-                [pageSize]="paginatorConfig.pageSize"
-                [pageSizeOptions]="paginatorConfig.pageSizeOptions"
-                [length]="paginatorConfig.numberOfResults"
-                (page)="onPageEvent($event)">
+                 [pageIndex]="paginatorConfig.pageIndex"
+                 [pageSize]="paginatorConfig.pageSize"
+                 [pageSizeOptions]="paginatorConfig.pageSizeOptions"
+                 [length]="paginatorConfig.numberOfResults"
+                 (page)="onPageEvent($event)">
   </mat-paginator>
 
   <mat-table #table [dataSource]="dataSource" matSort>
@@ -14,19 +14,32 @@
 
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Id</mat-header-cell>
-      <mat-cell *matCellDef="let element">{{element.id}}</mat-cell>
+      <mat-cell *matCellDef="let element"><a routerLink="../edit/{{element.id}}"
+                                             queryParamsHandling="merge">{{element.id}}</a>
+      </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="label">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Name</mat-header-cell>
-      <mat-cell *matCellDef="let element"><a routerLink="edit/{{element.id}}"
-                                           queryParamsHandling="merge">{{element.label}}</a>
-      </mat-cell>
+      <mat-cell *matCellDef="let element">{{element.label}}</mat-cell>
+
     </ng-container>
 
-    <ng-container *ngFor="let col of pageConfig.fieldsToDisplay" matColumnDef={{col.name}}>
-      <mat-header-cell *matHeaderCellDef mat-sort-header>{{ col.label }}</mat-header-cell>
-      <mat-cell *matCellDef="let element">{{element.metadata[col.name]}}</mat-cell>
+    <ng-container *ngFor="let col of pageConfig.fieldsToDisplay" matColumnDef={{col.key}}>
+      <span [ngSwitch]="col.sortable">
+         <span *ngSwitchCase="false">
+          <mat-header-cell *matHeaderCellDef>{{ col.label }}</mat-header-cell>
+        </span>
+        <span *ngSwitchDefault>
+         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ col.label }}</mat-header-cell>
+        </span>
+      </span>
+
+      <mat-cell *matCellDef="let element">
+        <app-display-field [field]="col" [value]="element.metadata[col.key]"></app-display-field>
+      </mat-cell>
+
+
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -34,10 +47,10 @@
   </mat-table>
 
   <mat-paginator #bottomPaginator
-                [pageIndex]="paginatorConfig.pageIndex"
-                [pageSize]="paginatorConfig.pageSize"
-                [pageSizeOptions]="paginatorConfig.pageSizeOptions"
-                [length]="paginatorConfig.numberOfResults"
-                (page)="onPageEvent($event)">
+                 [pageIndex]="paginatorConfig.pageIndex"
+                 [pageSize]="paginatorConfig.pageSize"
+                 [pageSizeOptions]="paginatorConfig.pageSizeOptions"
+                 [length]="paginatorConfig.numberOfResults"
+                 (page)="onPageEvent($event)">
   </mat-paginator>
 </div>

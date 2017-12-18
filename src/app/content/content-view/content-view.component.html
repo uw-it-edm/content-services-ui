@@ -1,39 +1,78 @@
-<div class="cs-content-view"
-     fxLayout="row"
-     fxLayoutAlign="center center"
-    >
-  <div [ngSwitch]="dataType">
-    <div *ngSwitchCase="'blank'">
-    </div>
-    <div *ngSwitchCase="'pdfData'">
-      <pdf-viewer [src]="pdfDataSource"
-                  [page]="pageNumber"
-                  [render-text]="true"
-      ></pdf-viewer>
-    </div>
+<div *ngIf="contentObject" [ngClass]="fullScreen ? 'full-screen' : ''" class="cs-content-view">
 
-    <div *ngSwitchCase="'pdfUrl'">
-      <pdf-viewer [src]="url"
-                  [page]="pageNumber"
-                  [render-text]="true"
-      ></pdf-viewer>
-    </div>
+  <app-content-toolbar
+    [contentType]="contentObject.contentType"
+    (fullScreenChange)="onFullScreenChanged($event)"
+    (page)="onPageChanged($event)"
+    [pageCount]="pageCount"
+    [(pageNumber)]="pageNumber"
+    [(showAll)]="showAll"
+    (zoom)="onZoomFactorChanged($event)">
+  </app-content-toolbar>
+  <div class="content-object-display">
+    <div [ngSwitch]="contentObject.displayType">
+      <div *ngSwitchCase="'blank'">
+      </div>
+      <div *ngSwitchCase="'pdfData'">
+        <pdf-viewer [src]="contentObject.pdfDataSource"
+                    [(page)]="pageNumber"
+                    [external-link-target]="'blank'"
+                    [autoresize]="autoResize"
+                    [render-text]="renderText"
+                    [show-all]="showAll"
+                    [original-size]="originalSize"
+                    [fit-to-page]="fitToPage"
+                    [stick-to-page]="stickToPage"
+                    [zoom]="zoom"
+                    (after-load-complete)="onDisplayComplete($event)"
+                    (on-progress)="onDisplayProgress($event)"
+                    (error)="onDisplayError($event)"
+                    class="cs-preview-max-height">
+        </pdf-viewer>
+      </div>
 
-    <div *ngSwitchCase="'image'">
-      <img [src]="url | safeUrl"/>
-    </div>
+      <div *ngSwitchCase="'pdfUrl'">
+        <pdf-viewer [src]="contentObject.url"
+                    [(page)]="pageNumber"
+                    [external-link-target]="'blank'"
+                    [autoresize]="autoResize"
+                    [render-text]="renderText"
+                    [show-all]="showAll"
+                    [original-size]="originalSize"
+                    [fit-to-page]="fitToPage"
+                    [stick-to-page]="stickToPage"
+                    [zoom]="zoom"
+                    (after-load-complete)="onDisplayComplete($event)"
+                    (on-progress)="onDisplayProgress($event)"
+                    (error)="onDisplayError($event)"
+                    class="cs-preview-max-height"
+        ></pdf-viewer>
+      </div>
 
+      <div *ngSwitchCase="'image'">
+        <img (load)="onImageLoaded()" [src]="contentObject.url | safeUrl"
+             class="cs-preview-max-height center"/>
+      </div>
 
-    <div *ngSwitchCase="'unknown-dataURI'" layout="row">
-      <p appCustomText="previewUnknownDataURI" defaultValue="Unable to display Content Preview."></p>
-    </div>
-    <div *ngSwitchCase="'unknown'" layout="row">
-      <p >Unable to display Content Preview.</p>
-      <div align="center">
-        <button autofocus mat-raised-button (click)="download()" >
-          <mat-icon class="cs-icon">file_download</mat-icon>
-          <span>Download</span>
-        </button>
+      <div *ngSwitchCase="'text'">
+        <div class="cs-text-file">{{contentObject.text}}</div>
+      </div>
+
+      <div *ngSwitchCase="'unknown-dataURI'">
+        <div align="center">
+          <p appCustomText="previewUnknownDataURI"
+             defaultValue="Unable to display Content Preview."></p>
+        </div>
+      </div>
+      <div *ngSwitchCase="'unknown'">
+        <div align="center">
+          <p appCustomText="previewUnknownDataURI"
+             defaultValue="Unable to display Content Preview."></p>
+          <button autofocus mat-raised-button (click)="download(contentObject.itemId)">
+            <mat-icon class="cs-icon">file_download</mat-icon>
+            <span>Download</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>

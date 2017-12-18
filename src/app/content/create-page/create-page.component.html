@@ -1,54 +1,66 @@
 <div [ngClass]="pageConfig?.theme" >
   <div class="cs-content-page">
     <mat-toolbar class="secondary-toolbar">
-      <a routerLink="/{{config.tenant}}/{{page}}">Return to Results</a>
+      <span class="button-row">
+        <button mat-icon-button routerLink="/{{config.tenant}}" matTooltip="Return to Results">
+          <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+      </span>
       <span class="cs-fill-remaining-space"></span>
-    </mat-toolbar>
-    <form [formGroup]="createContentItemForm">
-      <div fxLayout="row">
-        <div fxFlex="30">
+      <span class="button-row">
           <app-file-upload
-            [fieldName]="'updateFile'"
-            (fileSelected)="fileSelected($event)"
-            [(formGroup)]="createContentItemForm"
-            [autoFocus]="true"
-          >
-          </app-file-upload>
-
-        </div>
-      </div>
-
+                  [fieldName]="'addFile'"
+                  label="Add Files"
+                  (fileSelected)="addFile($event)"
+                  [(formGroup)]="form"
+                  [autoFocus]="true"
+                  multiple="true">
+            </app-file-upload>
+      </span>
+    </mat-toolbar>
+    <form [formGroup]="form">
       <div class="content-area">
-        <div fxLayout="row">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
           <div fxFlex="30">
             <app-content-metadata
-              [formGroup]="createContentItemForm"
-              [contentItem$]=""
-              [pageConfig]="pageConfig"
-
-            ></app-content-metadata>
+              [formGroup]="form"
+              [contentItem]="contentItem"
+              [pageConfig]="pageConfig">
+            </app-content-metadata>
+            <app-content-object-list
+              [formGroup]="form"
+              (remove)="removeFile($event)"
+              (select)="selectObject($event)">
+            </app-content-object-list>
+            <div *ngIf="pageConfig?.buttons" class="button-row" style="margin: 2rem 0 1rem;text-align: right">
+              <button *ngFor="let button of pageConfig?.buttons" mat-raised-button
+                      (click)="buttonPress(button)" [color]="button.color"
+                      [disabled]="!button.alwaysActive && form.pristine" [id]="button.command"
+                      [type]="button.type">{{button.label}}
+              </button>
+              <span *ngIf="pageConfig?.uploadAnother && form.controls['uploadAnother']">
+                <mat-checkbox [(formGroup)]="form"
+                              formControlName="uploadAnother"
+                              name="uploadAnother" >Upload another</mat-checkbox>
+              </span>
+            </div>
           </div>
-          <div fxFlex="70">
-            <app-content-view
-              *ngIf="pageConfig.viewPanel"
-              [item$]=""
-              [file$]="file$"
-            >
-            </app-content-view>
+          <div fxFlex="auto" class="cs-content-view-wrapper">
+            <app-content-view [contentObject]="contentObject"></app-content-view>
+            <div *ngIf="!previewing">
+              <app-file-upload
+                      [fieldName]="'dragFiles'"
+                      label="Add Files"
+                      (fileSelected)="addFile($event)"
+                      [(formGroup)]="form"
+                      [autoFocus]="true"
+                      [dropzone]="true"
+                      multiple="true">
+              </app-file-upload>
+            </div>
           </div>
         </div>
       </div>
-      <div *ngIf="pageConfig?.buttons" class="button-row" style="margin-bottom: 1em">
-        <button *ngFor="let button of pageConfig?.buttons" mat-raised-button
-                (click)="buttonPress(button)" [color]="button.color"
-                [disabled]="!button.alwaysActive && createContentItemForm.pristine" [id]="button.command"
-                [type]="button.type">{{button.label}}
-        </button>
-        <mat-checkbox [(formGroup)]="createContentItemForm"
-                      formControlName="uploadAnother"
-                      name="uploadAnother" >Upload another</mat-checkbox>
-      </div>
     </form>
-
   </div>
 </div>

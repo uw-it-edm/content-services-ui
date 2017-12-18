@@ -7,9 +7,11 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import { RouterModule } from '@angular/router';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { PageConfig } from '../../core/shared/model/page-config';
+import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { SearchResults } from '../shared/model/search-result';
 import { DataService } from '../../shared/providers/data.service';
+import { SharedModule } from '../../shared/shared.module';
+import { ActivatedRouteStub } from '../../../testing/router-stubs';
 
 class MockDataService {
   storage = ['123', '456'];
@@ -17,13 +19,19 @@ class MockDataService {
 
 describe('SearchResultsComponent', () => {
   let component: SearchResultsComponent;
+  let dataService: DataService;
   let fixture: ComponentFixture<SearchResultsComponent>;
+
+  beforeEach(() => {
+    dataService = new DataService();
+    dataService.set('adjacentIds', ['123', '456']);
+  });
 
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [MaterialConfigModule, NoopAnimationsModule, RouterModule],
-        providers: [{ provide: DataService, useClass: MockDataService }],
+        imports: [MaterialConfigModule, NoopAnimationsModule, RouterModule, SharedModule],
+        providers: [{ provide: DataService, useValue: dataService }],
         declarations: [SearchResultsComponent]
       }).compileComponents();
     })
@@ -35,7 +43,7 @@ describe('SearchResultsComponent', () => {
     const searchModel = new SearchModel();
     searchModel.stringQuery = 'iSearch';
     component.searchModel$ = Observable.of(searchModel);
-    component.pageConfig = new PageConfig();
+    component.pageConfig = new SearchPageConfig();
     const searchResults = new SearchResults();
     component.searchResults$ = Observable.of(searchResults);
 

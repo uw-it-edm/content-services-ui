@@ -1,30 +1,44 @@
-<div [formGroup]="formGroup" class="cs-file-upload">
-  <div class="mat-input-container mat-form-field">
-    <div class="mat-input-wrapper mat-form-field-wrapper">
-      <div class="mat-input-flex mat-form-field-flex">
-        <div class="mat-input-infix mat-form-field-infix">
-          <div [ngClass]="files.length > 0 ? 'hidden' : 'drop-zone'" id="drop-zone"
-                (drop)="onDrop($event)"
-                (dragover)="onDragOver($event)">
-            <p>Drag and drop, or</p>
-            <input class="inputfile"
-                   id="attach-files"
-                   [name]="fieldName"
-                   type="file"
-                   (change)="onFileChange($event)"
-                   [formControlName]="fieldName">
+<span *ngIf="!dropzone">
+    <span [formGroup]="formGroup">
+        <input class="inputfile"
+               [id]="fieldName"
+               [name]="fieldName"
+               type="file"
+               (change)="onFileChange($event)"
+               [formControlName]="fieldName"
+               [multiple]="multiple">
+        <label [for]="fieldName" class="mat-icon-button" [focus]="autoFocus" [matTooltip]="label">
+            <span class="mat-button-wrapper">
+                <mat-icon>file_upload</mat-icon>
+            </span>
+        </label>
+    </span>
+</span>
 
-            <label for="attach-files" class="mat-raised-button mat-button" [focus]="autoFocus">
-              <mat-icon class="cs-icon">cloud_upload</mat-icon>
-              Choose Files</label>
+<div *ngIf="dropzone" class="cs-file-upload">
+  <div [formGroup]="formGroup">
+    <div class="mat-input-container mat-form-field">
+      <div class="mat-input-wrapper mat-form-field-wrapper">
+        <div class="mat-input-flex mat-form-field-flex">
+          <div class="mat-input-infix mat-form-field-infix">
+            <div [ngClass]="'drop-zone'" id="drop-zone"
+                  (drop)="onDrop($event)"
+                  (dragover)="onDragOver($event)">
+              <p>Drag and drop, or</p>
+              <input class="inputfile"
+                     id="attach-files"
+                     [name]="fieldName"
+                     type="file"
+                     (change)="onFileChange($event)"
+                     [formControlName]="fieldName"
+                     multiple="true">
+
+              <label for="attach-files" class="mat-raised-button mat-button" [focus]="autoFocus">
+                <mat-icon class="cs-icon">cloud_upload</mat-icon>
+                <span>Choose Files</span></label>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-<div *ngFor="let file of files">
-  <button mat-button role="button" (click)="removeFile(file)" [title]="'Remove ' + file.name">
-    {{(file.name.length>20)? (file.name | slice:0:20)+'...':(file.name)}} <mat-icon>delete</mat-icon>
-  </button>
 </div>

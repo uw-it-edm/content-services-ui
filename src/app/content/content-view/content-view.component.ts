@@ -1,121 +1,125 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
-import { Observable } from 'rxjs/Observable';
-import { ContentItem } from '../shared/model/content-item';
-import { isNullOrUndefined } from 'util';
 import { Subject } from 'rxjs/Subject';
 import { ContentService } from '../shared/content.service';
+import 'rxjs/add/operator/takeUntil';
+import { ProgressService } from '../../shared/providers/progress.service';
+import { ContentObject } from '../shared/model/content-object';
+import { PdfViewerComponent } from 'ng2-pdf-viewer/dist/pdf-viewer.component';
+import { ContentToolbarComponent } from '../content-toolbar/content-toolbar.component';
 
 @Component({
   selector: 'app-content-view',
   templateUrl: './content-view.component.html',
   styleUrls: ['./content-view.component.css']
 })
-export class ContentViewComponent implements OnInit, OnDestroy {
+export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   private componentDestroyed = new Subject();
-  private defaultUrl: string;
-  private defaultItemType: string;
 
-  url: SafeUrl;
-  item: ContentItem;
-  dataType: string;
-  pdfDataSource: Object; // ng2-pdf-preview does not accept DataUrl
+  @Input() contentObject: ContentObject;
 
-  @Input() item$: Observable<ContentItem>;
-  @Input() file$: Observable<File>;
+  autoResize = false;
+  fitToPage = true;
+  fullScreen = false;
+  originalSize = false;
+  pageCount = 1;
+  pageNumber = 1;
+  renderText = true;
+  showAll = false;
+  stickToPage = false;
+  zoom = 1.0;
 
-  pageNumber: number;
+  constructor(private contentService: ContentService, public progressService: ProgressService) {}
 
-  constructor(private contentService: ContentService) {}
+  @ViewChild(ContentToolbarComponent) contentToolbarComponent;
+  @ViewChild(PdfViewerComponent) pdfViewer: PdfViewerComponent;
 
   ngOnInit() {
+    this.pageCount = 1;
+    this.pageNumber = 1;
+    if (this.contentObject) {
+      this.onContentObjectChanged(this.contentObject);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.pageCount = 1;
     this.pageNumber = 1;
 
-    this.file$.takeUntil(this.componentDestroyed).subscribe((file: File) => {
-      if (!isNullOrUndefined(file)) {
-        this.displayFilePreview(file);
-      } else {
-        this.setUrlToDefault();
-      }
-    });
-    if (!isNullOrUndefined(this.item$)) {
-      this.item$.takeUntil(this.componentDestroyed).subscribe((contentItem: ContentItem) => {
-        this.item = contentItem;
-        this.defaultUrl = this.getUrl();
-        this.setUrlToDefault();
-      });
+    if (changes.contentObject) {
+      this.onContentObjectChanged(changes.contentObject.currentValue);
     }
   }
 
-  private setUrlToDefault(): void {
-    this.url = this.defaultUrl;
-    this.determineItemType();
-  }
+  public reset() {}
 
-  private getUrl(isWebViewable = true, disposition?: string) {
-    return this.contentService.getFileUrl(this.item.id, isWebViewable, disposition);
-  }
-
-  // TODO: type detection should be improved
-  private determineItemType(): void {
-    if (!isNullOrUndefined(this.item)) {
-      // const webExtension = this.item.metadata['WebExtension'];
-      const mimeType = this.item.metadata['MimeType'];
-      if (mimeType && mimeType === 'application/pdf') {
-        this.dataType = 'pdfUrl';
-      } else if (mimeType && mimeType.startsWith('image')) {
-        this.dataType = 'image';
-      } else {
-        this.dataType = 'unknown';
+  onContentObjectChanged(contentObject: ContentObject) {
+    this.pageCount = 1;
+    if (contentObject) {
+      const mode = contentObject.contentType === 'application/pdf' ? 'determinate' : 'indeterminate';
+      const displayType = contentObject.displayType;
+      console.log('Display type: ' + displayType);
+      if (displayType === 'application/pdf' || displayType.startsWith('image/')) {
+        this.progressService.start(mode, 'primary', contentObject.contentLength);
       }
     } else {
-      this.dataType = 'blank';
-    }
-    this.defaultItemType = this.dataType;
-  }
-
-  private displayFilePreview(file: File) {
-    const mimeType = file.type;
-    const reader = new FileReader();
-    reader.onload = this._whenPreviewFileLoaded.bind(this);
-
-    if (mimeType === 'application/pdf') {
-      reader.readAsArrayBuffer(file); // ng2-pdf-preview does not accept DataUrl
-    } else {
-      reader.readAsDataURL(file);
+      this.progressService.end();
     }
   }
 
-  private _whenPreviewFileLoaded(e) {
-    const reader = e.target;
-    const data = reader.result;
-
-    if (data instanceof ArrayBuffer) {
-      this.url = '';
-      this.pdfDataSource = { data: data };
-    } else {
-      this.pdfDataSource = null;
-      this.url = data;
-    }
-    this.determineUrlType();
+  onDisplayComplete(pdf: any) {
+    this.progressService.end();
+    this.pageCount = pdf.numPages;
+    // this.contentToolbarComponent.pageCount = pdf.numPages;
+    this.onZoomFactorChanged('automatic-zoom');
   }
 
-  // TODO: type detection should be improved
-  determineUrlType(): void {
-    const url = this.url.toString();
-    if (!isNullOrUndefined(this.pdfDataSource)) {
-      this.dataType = 'pdfData';
-    } else if (url.startsWith('http')) {
-      this.dataType = this.defaultItemType;
-    } else if (url.startsWith('data:image')) {
-      this.dataType = 'image';
-    } else if (url.startsWith('data:application/pdf')) {
-      this.dataType = 'pdf';
-    } else if (url.startsWith('data:')) {
-      this.dataType = 'unknown-dataURI';
+  onDisplayError() {
+    this.progressService.end();
+  }
+
+  onDisplayProgress(progressData: any) {
+    console.log('Progress: ' + JSON.stringify(progressData));
+
+    const loaded = progressData.loaded;
+    this.progressService.progress(loaded);
+  }
+
+  onFullScreenChanged(fullScreen: boolean) {
+    this.fullScreen = fullScreen;
+  }
+
+  onImageLoaded() {
+    this.progressService.end();
+  }
+
+  onPageChanged(pageNumber: number) {
+    this.pageNumber = pageNumber;
+  }
+
+  onZoomFactorChanged(zoomFactor: string) {
+    console.log(zoomFactor);
+    this.autoResize = false;
+    this.fitToPage = false;
+    this.originalSize = false;
+    this.stickToPage = false;
+    this.zoom = 1.0;
+
+    if (zoomFactor === 'actual-size') {
+      this.originalSize = true;
+      this.fitToPage = true;
+    } else if (zoomFactor === 'automatic-zoom') {
+      this.autoResize = true;
+    } else if (zoomFactor === 'page-width') {
+      this.fitToPage = true;
     } else {
-      this.dataType = 'unknown';
+      this.originalSize = false;
+      this.zoom = parseFloat(zoomFactor);
     }
+  }
+
+  buildUrl(id: string, isWebViewable = true, disposition?: string) {
+    return this.contentService.getFileUrl(id, isWebViewable, disposition);
   }
 
   ngOnDestroy(): void {
@@ -123,7 +127,7 @@ export class ContentViewComponent implements OnInit, OnDestroy {
     this.componentDestroyed.complete();
   }
 
-  download() {
-    window.location.href = this.getUrl(false, 'attachment');
+  download(id: string) {
+    window.location.href = this.buildUrl(id, false, 'attachment');
   }
 }

@@ -4,17 +4,32 @@ import { ContentMetadataComponent } from './content-metadata.component';
 import { ContentItem } from '../shared/model/content-item';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
+  MatAutocompleteModule,
   MatButtonModule,
   MatDatepickerModule,
-  MatNativeDateModule,
   MatFormFieldModule,
   MatInputModule,
-  MatOptionModule,
-  MatAutocompleteModule
+  MatNativeDateModule,
+  MatOptionModule
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
-import { Observable } from 'rxjs/Observable';
+import { HttpClient } from '@angular/common/http';
+import { UserService } from '../../user/shared/user.service';
+import { User } from '../../user/shared/user';
+import { StudentAutocompleteComponent } from '../../shared/widgets/student-autocomplete/student-autocomplete.component';
+import { CheckboxInputComponent } from '../../shared/widgets/checkbox/checkbox-input.component';
+import { TimestampPickerComponent } from '../../shared/widgets/timestamp-picker/timestamp-picker.component';
+
+class UserServiceMock extends UserService {
+  constructor() {
+    super(null, null);
+  }
+
+  getUser(): User {
+    return new User('test');
+  }
+}
 
 describe('ContentMetadataComponent', () => {
   let component: ContentMetadataComponent;
@@ -34,7 +49,16 @@ describe('ContentMetadataComponent', () => {
           MatOptionModule,
           MatAutocompleteModule
         ],
-        declarations: [ContentMetadataComponent]
+        declarations: [
+          ContentMetadataComponent,
+          CheckboxInputComponent,
+          StudentAutocompleteComponent,
+          TimestampPickerComponent
+        ],
+        providers: [
+          { provide: UserService, useValue: new UserServiceMock() },
+          { provide: HttpClient, useValue: new HttpClient(null) }
+        ]
       })
         .compileComponents()
         .then(() => {
@@ -48,12 +72,12 @@ describe('ContentMetadataComponent', () => {
     const editPageConfig = new ContentPageConfig();
     editPageConfig.pageName = 'test-edit-page';
     editPageConfig.fieldsToDisplay = [
-      { name: '1', label: 'First' },
-      { name: '2', label: 'Second' },
-      { name: '3', label: 'Third' },
-      { name: 'a', label: 'a' },
-      { name: 'd', label: 'd', displayType: 'date' },
-      { name: 't', label: 't', displayType: 'autocomplete', options: ['o1', 'o2', 'o3'] }
+      { key: '1', label: 'First' },
+      { key: '2', label: 'Second' },
+      { key: '3', label: 'Third' },
+      { key: 'a', label: 'a' },
+      { key: 'd', label: 'd', displayType: 'date' },
+      { key: 't', label: 't', displayType: 'autocomplete', options: ['o1', 'o2', 'o3'] }
     ];
     editPageConfig.viewPanel = false;
     component.pageConfig = editPageConfig;
@@ -68,7 +92,7 @@ describe('ContentMetadataComponent', () => {
     defaultContentItem.metadata['b'] = 'asdf';
     defaultContentItem.metadata['t'] = 't';
     defaultContentItem.metadata['d'] = 1509519600000;
-    component.contentItem$ = Observable.of(defaultContentItem);
+    component.contentItem = defaultContentItem;
     component.formGroup = new FormGroup({});
 
     fixture.detectChanges();
@@ -111,7 +135,7 @@ describe('ContentMetadataComponent', () => {
       '3': 'three',
       a: 'a',
       t: 't',
-      d: new Date(1509519600000)
+      d: 1509519600000
     });
   });
 });

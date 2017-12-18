@@ -12,13 +12,13 @@
     <mat-menu #accountMenu="matMenu" xPosition="before" yPosition="below">
       <button mat-menu-item
               *ngFor="let availableTenant of availableTenants$ | async"
-              routerLink="/{{availableTenant['tenantName']}}/"å
+              routerLink="/{{availableTenant['tenantName']}}/"
               routerLinkActive="active">
         <span>{{availableTenant['tenantName']}}</span>
       </button>
     </mat-menu>
     <button mat-button [matMenuTriggerFor]="userMenu">
-      <mat-icon>account_box</mat-icon>&nbsp;<span *ngIf="promiseUser | async as user">{{user.userName}}</span>
+      <mat-icon>account_box</mat-icon>&nbsp;<span *ngIf="user$ | async as user">{{user.userName}}</span>
     </button>
     <mat-menu #userMenu="matMenu" xPosition="before" yPosition="below">
       <button mat-menu-item
