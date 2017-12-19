@@ -13,14 +13,14 @@ import { UserService } from '../../user/shared/user.service';
 import { Title } from '@angular/platform-browser';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MaterialConfigModule } from '../../routing/material-config.module';
-import { FocusModule } from 'angular2-focus/src/focus.module';
 import { FileUploadComponent } from '../../shared/widgets/file-upload/file-upload.component';
 import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
 import { ActivatedRouteStub } from '../../../testing/router-stubs';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpModule } from '@angular/http';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
+import { FocusModule } from 'angular-focus-directive';
 
 class MockContentService extends ContentService {
   constructor() {
@@ -74,14 +74,14 @@ describe('ContentObjectList', () => {
     TestBed.configureTestingModule({
       imports: [
         FormsModule,
-        HttpModule,
+        HttpClientModule,
         MaterialConfigModule,
         MatButtonModule,
         MatTooltipModule,
         ReactiveFormsModule,
         RouterTestingModule,
         NoopAnimationsModule,
-        FocusModule.forRoot()
+        FocusModule
       ],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },
