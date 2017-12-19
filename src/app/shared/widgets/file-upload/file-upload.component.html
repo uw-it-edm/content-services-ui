@@ -7,7 +7,8 @@
                (change)="onFileChange($event)"
                [formControlName]="fieldName"
                [multiple]="multiple">
-        <label [for]="fieldName" class="mat-icon-button" [focus]="autoFocus" [matTooltip]="label">
+        <label [for]="fieldName" class="mat-icon-button" [appFocus]="autoFocus"
+               [matTooltip]="label">
             <span class="mat-button-wrapper">
                 <mat-icon>file_upload</mat-icon>
             </span>
@@ -22,8 +23,8 @@
         <div class="mat-input-flex mat-form-field-flex">
           <div class="mat-input-infix mat-form-field-infix">
             <div [ngClass]="'drop-zone'" id="drop-zone"
-                  (drop)="onDrop($event)"
-                  (dragover)="onDragOver($event)">
+                 (drop)="onDrop($event)"
+                 (dragover)="onDragOver($event)">
               <p>Drag and drop, or</p>
               <input class="inputfile"
                      id="attach-files"
@@ -33,7 +34,7 @@
                      [formControlName]="fieldName"
                      multiple="true">
 
-              <label for="attach-files" class="mat-raised-button mat-button" [focus]="autoFocus">
+              <label for="attach-files" class="mat-raised-button mat-button" [appFocus]="autoFocus">
                 <mat-icon class="cs-icon">cloud_upload</mat-icon>
                 <span>Choose Files</span></label>
             </div>
@@ -41,4 +42,5 @@
         </div>
       </div>
     </div>
+  </div>
 </div>
