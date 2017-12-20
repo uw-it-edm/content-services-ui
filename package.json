@@ -41,7 +41,6 @@
     "@angular/platform-server": "^5.0.0",
     "@angular/router": "^5.0.0",
     "@types/lodash": "^4.14.80",
-    "angular-focus-directive": "^1.0.1",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.4.1",
     "coveralls": "^2.13.1",
@@ -77,8 +76,8 @@
     "npm-run-all": "^4.0.2",
     "prettier": "^1.5.3",
     "protractor": "^5.2.2",
-    "tslint": "~5.3.2",
     "ts-node": "^4.0.2",
+    "tslint": "~5.3.2",
     "typescript": "2.4.2"
   }
 }
