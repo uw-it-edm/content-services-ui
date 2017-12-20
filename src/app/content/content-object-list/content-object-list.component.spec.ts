@@ -20,7 +20,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
-import { FocusModule } from 'angular-focus-directive';
+import { FocusDirective } from '../../shared/directives/focus/focus.directive';
 
 class MockContentService extends ContentService {
   constructor() {
@@ -80,8 +80,7 @@ describe('ContentObjectList', () => {
         MatTooltipModule,
         ReactiveFormsModule,
         RouterTestingModule,
-        NoopAnimationsModule,
-        FocusModule
+        NoopAnimationsModule
       ],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },
@@ -92,7 +91,7 @@ describe('ContentObjectList', () => {
         LiveAnnouncer,
         MatSnackBar
       ],
-      declarations: [FileUploadComponent, ContentObjectListComponent, TruncatePipe]
+      declarations: [FileUploadComponent, ContentObjectListComponent, TruncatePipe, FocusDirective]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ContentObjectListComponent);

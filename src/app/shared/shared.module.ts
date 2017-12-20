@@ -17,10 +17,10 @@ import { TimestampPickerComponent } from './widgets/timestamp-picker/timestamp-p
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { DisplayFieldComponent } from './widgets/display-field/display-field.component';
 import { ProgressService } from './providers/progress.service';
-import { FocusModule } from 'angular-focus-directive';
+import { FocusDirective } from './directives/focus/focus.directive';
 
 @NgModule({
-  imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule, FocusModule],
+  imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule],
   exports: [
     CommonModule,
     CustomTextDirective,
@@ -34,7 +34,8 @@ import { FocusModule } from 'angular-focus-directive';
     StudentDisplayComponent,
     TimestampPickerComponent,
     TruncatePipe,
-    DisplayFieldComponent
+    DisplayFieldComponent,
+    FocusDirective
   ],
   declarations: [
     CustomTextDirective,
@@ -46,7 +47,8 @@ import { FocusModule } from 'angular-focus-directive';
     StudentDisplayComponent,
     TimestampPickerComponent,
     TruncatePipe,
-    DisplayFieldComponent
+    DisplayFieldComponent,
+    FocusDirective
   ],
   providers: [DataService, ProgressService, StudentService]
 })
