@@ -1,8 +1,8 @@
-import { browser, by, element } from 'protractor';
+import {browser, by, element} from 'protractor';
 import * as path from 'path';
 
 export class EditPage {
-  uploadButton = element(by.id('attach-files'));
+  uploadButton = element(by.id('replaceFile'));
 
   navigateTo() {
     return browser.get('/demo/edit/123456');
@@ -13,10 +13,10 @@ export class EditPage {
   }
 
   clickReturnToResultsLink() {
-    element(by.css('.cs-content-page .mat-toolbar-row a')).click();
+    element(by.css('[mattooltip=\'Return to Results\']')).click();
   }
 
-  uploadFile() {
+  replaceFile() {
     const pdfFilePath = '../sample-file.pdf';
     const absolutePath = path.resolve(__dirname, pdfFilePath);
     this.uploadButton.sendKeys(absolutePath);

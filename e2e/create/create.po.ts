@@ -1,8 +1,10 @@
-import { browser, by, element } from 'protractor';
+import {browser, by, element} from 'protractor';
 import * as path from 'path';
 
 export class CreatePage {
   public pageUrl = '/demo/create';
+  private pdfFilePath = path.resolve(__dirname, '../sample-file.pdf');
+  private docFilePath = path.resolve(__dirname, '../sample-file.docx');
 
   navigateTo() {
     return browser.get(this.pageUrl);
@@ -12,10 +14,12 @@ export class CreatePage {
     return browser.getTitle();
   }
 
-  uploadFile() {
-    const pdfFilePath = '../sample-file.pdf';
-    const absolutePath = path.resolve(__dirname, pdfFilePath);
-    element(by.id('attach-files')).sendKeys(absolutePath);
+  addFile() {
+    element(by.id('addFile')).sendKeys(this.pdfFilePath);
+  }
+
+  chooseFile() {
+    element(by.id('attach-files')).sendKeys(this.pdfFilePath);
   }
 
   getPdfViewer() {
@@ -26,7 +30,7 @@ export class CreatePage {
     element(by.id('cancel')).click();
   }
 
-  clickReturnToResultsLink() {
-    element(by.css('.cs-content-page .mat-toolbar-row a')).click();
+  clickReturnToResultsButton() {
+    element(by.css('.mat-icon-button[mattooltip=\'Return to Results\']')).click();
   }
 }

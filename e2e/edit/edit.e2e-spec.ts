@@ -1,6 +1,6 @@
-import { EditPage } from './edit.po';
-import { browser } from 'protractor';
-import { SearchPage } from '../search/search.po';
+import {EditPage} from './edit.po';
+import {browser} from 'protractor';
+import {SearchPage} from '../search/search.po';
 
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
@@ -26,14 +26,14 @@ describe('content-services-ui Edit Page', () => {
     expect(page.getPageTitle()).toEqual(demoConfig.pages.edit.pageName);
   });
 
-  it('should display pdf viewer when pdf file is uploaded', () => {
-    page.uploadFile();
+  it('should display pdf viewer when file is replaced with pdf file', () => {
+    page.replaceFile();
 
     expect(page.getPdfViewer().isDisplayed());
   });
 
   it('should re-display file upload panel after uploaded file is removed', () => {
-    page.uploadFile();
+    page.replaceFile();
     page.removeFile();
 
     expect(page.uploadButton.isDisplayed());

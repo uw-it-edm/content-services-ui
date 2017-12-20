@@ -78,10 +78,6 @@
       "pageName": "Edit Content Item",
       "fieldsToDisplay": [
         {
-          "key": "Description",
-          "label": "Description"
-        },
-        {
           "key": "Filer",
           "label": "Filer"
         },
@@ -116,10 +112,6 @@
       "theme": "uw-default",
       "pageName": "Create Content Item",
       "fieldsToDisplay": [
-        {
-          "key": "Description",
-          "label": "Description"
-        },
         {
           "key": "Filer",
           "label": "Filer"

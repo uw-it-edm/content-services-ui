@@ -1,6 +1,6 @@
-import { CreatePage } from './create.po';
-import { SearchPage } from '../search/search.po';
-import { browser } from 'protractor';
+import {CreatePage} from './create.po';
+import {SearchPage} from '../search/search.po';
+import {browser} from 'protractor';
 
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
@@ -33,5 +33,23 @@ describe('content-services-ui Create Page', () => {
     page.clickCancelButton();
 
     expect(getCurrentUrl()).toMatch(getSearchPageUrl());
+  });
+
+  it('should navigate to Search page when Return to Results button is clicked', () => {
+    page.clickReturnToResultsButton();
+
+    expect(getCurrentUrl()).toMatch(getSearchPageUrl());
+  });
+
+  it('should display pdf viewer when 1 pdf file is uploaded with Add File button', () => {
+    page.addFile();
+
+    expect(page.getPdfViewer().isDisplayed());
+  });
+
+  it('should display pdf viewer when 1 pdf file is uploaded with Choose Files button', () => {
+    page.chooseFile();
+
+    expect(page.getPdfViewer().isDisplayed());
   });
 });
