@@ -1,5 +1,5 @@
 <div [ngClass]="pageConfig?.theme" >
-  <div class="cs-content-page" role="main">
+  <div class="cs-content-page">
 
     <mat-toolbar class="secondary-toolbar"  >
       <span class="button-row" role="navigation">
@@ -20,7 +20,7 @@
       </span>
     </mat-toolbar>
     <h2>{{pageConfig.pageName}}</h2>
-    <form [formGroup]="form" >
+    <form [formGroup]="form"  role="main">
       <div class="content-area">
         <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
           <div fxFlex="30">
