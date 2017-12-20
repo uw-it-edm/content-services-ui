@@ -41,7 +41,9 @@
           <mat-form-field *ngSwitchDefault>
             <input matInput [formControlName]="fieldToDisplay.key"
                    [name]="fieldToDisplay.key"
-                   [placeholder]="fieldToDisplay.label">
+                   [placeholder]="fieldToDisplay.label"
+                   [attr.aria-labe]l="fieldToDisplay.label"
+            >
           </mat-form-field>
         </div>
       </li>

@@ -3,6 +3,7 @@
          formControlName="internalDate"
          [matDatepicker]="picker"
          [placeholder]="placeholder"
+         [attr.aria-label]="placeholder"
   >
   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
   <mat-datepicker #picker></mat-datepicker>
