@@ -1,15 +1,10 @@
-<div class="cs-facet-box">
-
+<div class="cs-facet-box" aria-label="Search facets">
   <div *ngFor="let facetConfig of getFacetsConfig()">
-    <mat-card *ngIf="searchResults?.facets.get(facetConfig.key)" class="facet-card">
-      <mat-card-header>
-        <mat-card-title>{{facetConfig.label}}</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
+    <fieldset *ngIf="searchResults?.facets.get(facetConfig.key)" >
+      <legend>{{facetConfig.label}}</legend>
         <mat-list dense>
           <mat-list-item
             *ngFor="let facetResult of searchResults?.facets.get(facetConfig.key).buckets">
-
             <span *ngIf="hasSelectedFacet(facetConfig.key); else showLink">
               {{facetResult.key}} ({{facetResult.count}})
             </span>
@@ -19,8 +14,6 @@
             </ng-template>
           </mat-list-item>
         </mat-list>
-      </mat-card-content>
-    </mat-card>
+    </fieldset>
   </div>
-
 </div>

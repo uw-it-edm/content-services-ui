@@ -1,0 +1,34 @@
+.cs-facet-box fieldset {
+  padding: 24px;
+}
+
+.cs-facet-box fieldset legend {
+  font-size: inherit;
+  padding: 0px;
+  margin: 0px;
+}
+
+
+.uw-default .cs-facet-box .mat-card {
+  margin: 0;
+}
+
+.uw-default .cs-facet-box .mat-list .mat-list-option .mat-list-text,
+.uw-default .cs-facet-box .mat-nav-list .mat-list-option .mat-list-text,
+.uw-default .cs-facet-box .mat-selection-list .mat-list-option .mat-list-text {
+  padding: 0;
+}
+
+.uw-default .cs-facet-box .mat-selection-list .mat-list-option {
+  font-size: 1.25rem;
+  padding: 0;
+}
+
+.uw-default .cs-facet-box .mat-list[dense] .mat-list-item .mat-list-item-content {
+  height: 2.5rem;
+  line-height: 1.25rem;
+}
+
+.uw-default .cs-facet-box .mat-card:not([class*=mat-elevation-z]) {
+  box-shadow: none;
+}

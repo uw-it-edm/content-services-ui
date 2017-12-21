@@ -12,7 +12,7 @@ export class SearchPage {
   }
 
   getSearchBox() {
-    return element(by.id('mat-input-0'));
+    return element(by.id('search-field'));
   }
 
   getSearchBoxInputText() {
@@ -52,6 +52,6 @@ export class SearchPage {
   }
 
   clickUploadButton() {
-    element(by.css('[appcustomtext=\'addContentItemButton\']')).click();
+    element(by.css('[appcustomtext="addContentItemButton"]')).click();
   }
 }

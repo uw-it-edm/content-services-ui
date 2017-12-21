@@ -6,7 +6,7 @@ export class ContentServicesUiPage {
   }
 
   getParagraphText() {
-    return element(by.css('app-root h1')).getText();
+    return element(by.css('app-404 h1')).getText();
   }
 
   getPageTitle() {

@@ -3,8 +3,10 @@
     <span class="mat-button-wrapper">
       <a class="uw-patch" href="http://uw.edu" title="University of Washington Home">University of Washington</a>
     </span>
-    <span *ngIf="title"><a routerLink="/" class="cs-title">{{title}}</a></span>
-    <span *ngIf="!title"><a routerLink="/" class="cs-title">Content Services</a></span>
+    <h1>
+      <span *ngIf="title"><a routerLink="/" class="cs-title">{{title}}</a></span>
+      <span *ngIf="!title"><a routerLink="/" class="cs-title">Content Services</a></span>
+    </h1>
     <span class="cs-spacer"></span>
     <button mat-icon-button [matMenuTriggerFor]="accountMenu">
       <mat-icon class="cs-icon">apps</mat-icon>

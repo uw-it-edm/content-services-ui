@@ -1,6 +1,6 @@
 <div [formGroup]="formGroup">
-  <input type="text"  matInput formControlName="studentAutocomplete" [matAutocomplete]="auto">
-  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onSelect($event)">
+  <input type="text"  matInput formControlName="studentAutocomplete" [matAutocomplete]="auto" [attr.aria-label]="placeholder">
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onSelect($event)" >
     <mat-option *ngFor="let student of filteredOptions " [value]="student.studentNumber">
       <span>{{ student.displayName }}</span>
     </mat-option>
