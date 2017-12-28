@@ -38,6 +38,7 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
   private generateDisplayedMetadataGroup(): FormGroup {
     const group: any = {};
     this.pageConfig.fieldsToDisplay.map(field => {
+      // TODO This is currently not used/working. It'll need to be moved in the app-options-input component
       if (field.displayType === 'autocomplete' && field.options && field.options.length > 0) {
         field.filteredOptions = new Observable<any[]>();
         const fc = new FormControl('');

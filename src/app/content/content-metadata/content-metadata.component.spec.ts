@@ -6,11 +6,13 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   MatAutocompleteModule,
   MatButtonModule,
+  MatCheckboxModule,
   MatDatepickerModule,
   MatFormFieldModule,
   MatInputModule,
   MatNativeDateModule,
-  MatOptionModule
+  MatOptionModule,
+  MatSelectModule
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
@@ -20,6 +22,8 @@ import { User } from '../../user/shared/user';
 import { StudentAutocompleteComponent } from '../../shared/widgets/student-autocomplete/student-autocomplete.component';
 import { CheckboxInputComponent } from '../../shared/widgets/checkbox/checkbox-input.component';
 import { TimestampPickerComponent } from '../../shared/widgets/timestamp-picker/timestamp-picker.component';
+import { FieldOption } from '../../core/shared/model/field/field-option';
+import { OptionsInputComponent } from '../../shared/widgets/options-input/options-input.component';
 
 class UserServiceMock extends UserService {
   constructor() {
@@ -42,16 +46,19 @@ describe('ContentMetadataComponent', () => {
           NoopAnimationsModule,
           MatFormFieldModule,
           MatInputModule,
+          MatCheckboxModule,
           MatButtonModule,
           MatDatepickerModule,
           MatNativeDateModule,
           ReactiveFormsModule,
           MatOptionModule,
-          MatAutocompleteModule
+          MatAutocompleteModule,
+          MatSelectModule
         ],
         declarations: [
           ContentMetadataComponent,
           CheckboxInputComponent,
+          OptionsInputComponent,
           StudentAutocompleteComponent,
           TimestampPickerComponent
         ],
@@ -77,7 +84,12 @@ describe('ContentMetadataComponent', () => {
       { key: '3', label: 'Third' },
       { key: 'a', label: 'a' },
       { key: 'd', label: 'd', displayType: 'date' },
-      { key: 't', label: 't', displayType: 'autocomplete', options: ['o1', 'o2', 'o3'] }
+      {
+        key: 't',
+        label: 't',
+        displayType: 'select',
+        options: [new FieldOption('o1'), new FieldOption('o2'), new FieldOption('o3')]
+      }
     ];
     editPageConfig.viewPanel = false;
     component.pageConfig = editPageConfig;
@@ -117,8 +129,8 @@ describe('ContentMetadataComponent', () => {
     expect(input[2].placeholder).toBe('Third');
     expect(input[3].placeholder).toBe('a');
   });
-  it('should contain mat-autocomplete', () => {
-    const el = fixture.debugElement.nativeElement.querySelectorAll('mat-autocomplete');
+  it('should contain mat-select', () => {
+    const el = fixture.debugElement.nativeElement.querySelectorAll('mat-select');
     expect(el.length).toBe(1);
   });
 

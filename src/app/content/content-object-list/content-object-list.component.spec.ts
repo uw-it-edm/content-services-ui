@@ -21,6 +21,7 @@ import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { FocusDirective } from '../../shared/directives/focus/focus.directive';
+import { FieldOption } from '../../core/shared/model/field/field-option';
 
 class MockContentService extends ContentService {
   constructor() {
@@ -108,7 +109,12 @@ describe('ContentObjectList', () => {
       { key: '3', label: 'Third' },
       { key: 'a', label: 'a' },
       { key: 'd', label: 'd', displayType: 'date' },
-      { key: 't', label: 't', displayType: 'autocomplete', options: ['o1', 'o2', 'o3'] }
+      {
+        key: 't',
+        label: 't',
+        displayType: 'autocomplete',
+        options: [new FieldOption('o1'), new FieldOption('o2'), new FieldOption('o3')]
+      }
     ];
     editPageConfig.viewPanel = false;
     config.pages['edit'] = editPageConfig;

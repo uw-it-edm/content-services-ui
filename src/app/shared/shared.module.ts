@@ -18,6 +18,7 @@ import { TruncatePipe } from './pipes/truncate.pipe';
 import { DisplayFieldComponent } from './widgets/display-field/display-field.component';
 import { ProgressService } from './providers/progress.service';
 import { FocusDirective } from './directives/focus/focus.directive';
+import { OptionsInputComponent } from './widgets/options-input/options-input.component';
 
 @NgModule({
   imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule],
@@ -30,6 +31,7 @@ import { FocusDirective } from './directives/focus/focus.directive';
     FileUploadComponent,
     SafeUrlPipe,
     CheckboxInputComponent,
+    OptionsInputComponent,
     StudentAutocompleteComponent,
     StudentDisplayComponent,
     TimestampPickerComponent,
@@ -43,6 +45,7 @@ import { FocusDirective } from './directives/focus/focus.directive';
     FileUploadComponent,
     SafeUrlPipe,
     CheckboxInputComponent,
+    OptionsInputComponent,
     StudentAutocompleteComponent,
     StudentDisplayComponent,
     TimestampPickerComponent,

@@ -11,24 +11,24 @@ export const environment = {
   testUser: null,
 
   search_api: {
-    url: 'http://localhost:8080',
+    url: 'http://localhost:12345',
     context: '/search',
     method: 'POST',
     authenticationHeader: null
   },
   content_api: {
-    url: 'http://localhost:8080',
+    url: 'http://localhost:12345',
     contextV3: '/content/v3',
     contextV4: '/content/v4',
     authenticationHeader: null
   },
   profile_api: {
-    url: 'http://localhost:8080',
+    url: 'http://localhost:12345',
     context: '/profile/v1',
     authenticationHeader: null
   },
   data_api: {
-    url: 'http://localhost:8080',
+    url: 'http://localhost:12345',
     context: '/students/v1',
     authenticationHeader: null
   }
