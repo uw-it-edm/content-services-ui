@@ -18,6 +18,8 @@ import { TruncatePipe } from './pipes/truncate.pipe';
 import { DisplayFieldComponent } from './widgets/display-field/display-field.component';
 import { ProgressService } from './providers/progress.service';
 import { FocusDirective } from './directives/focus/focus.directive';
+import { NotificationComponent } from './widgets/notification/notification.component';
+import { NotificationService } from './providers/notification.service';
 
 @NgModule({
   imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule],
@@ -48,8 +50,10 @@ import { FocusDirective } from './directives/focus/focus.directive';
     TimestampPickerComponent,
     TruncatePipe,
     DisplayFieldComponent,
-    FocusDirective
+    FocusDirective,
+    NotificationComponent
   ],
-  providers: [DataService, ProgressService, StudentService]
+  providers: [DataService, ProgressService, StudentService, NotificationService],
+  entryComponents: [NotificationComponent]
 })
 export class SharedModule {}
