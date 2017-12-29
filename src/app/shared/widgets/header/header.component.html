@@ -1,11 +1,11 @@
 <header class="uwit-cs-appbar uw-thinstrip">
   <mat-toolbar>
     <span class="mat-button-wrapper">
-      <a class="uw-patch" href="http://uw.edu" title="University of Washington Home">University of Washington</a>
+      <a class="uw-patch" href="http://uw.edu" target="_blank" title="University of Washington Home">University of Washington</a>
     </span>
     <h1>
-      <span *ngIf="title"><a routerLink="/" class="cs-title">{{title}}</a></span>
-      <span *ngIf="!title"><a routerLink="/" class="cs-title">Content Services</a></span>
+      <span *ngIf="title"><a routerLink="/{{tenant}}" class="cs-title">{{title}}</a></span>
+      <span *ngIf="!title"><a routerLink="/" class="cs-title">&nbsp;</a></span>
     </h1>
     <span class="cs-spacer"></span>
     <button mat-icon-button [matMenuTriggerFor]="accountMenu" id="tenant-menu">
