@@ -16,8 +16,7 @@ before_install:
   - docker run --name content-services-api --rm -d -p 12345:80 -v ${PWD}/e2e/mocks:/usr/share/nginx/html/ content-services-api-mock
   - yarn global add greenkeeper-lockfile@1
 
-before_script: greenkeeper-lockfile-update
-after_script: greenkeeper-lockfile-upload
+
 
 jobs:
   include:
@@ -27,6 +26,8 @@ jobs:
         - job=yarn run test-cover
         - TZ=America/Los_Angeles
     - stage: test
+      before_script: greenkeeper-lockfile-update
+      after_script: greenkeeper-lockfile-upload
       script: yarn test
       env:
         - job=yarn test
