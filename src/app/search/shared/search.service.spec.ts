@@ -199,7 +199,6 @@ describe('SearchService', () => {
     const pageConfig = new SearchPageConfig();
     const field = new Field();
     field.key = 'myfield';
-    field.displayType = 'string';
     pageConfig.fieldsToDisplay.push(field);
 
     httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(new Response(new ResponseOptions())));
@@ -210,6 +209,54 @@ describe('SearchService', () => {
       const payload = httpSpy.calls.first().args[1];
       expect(payload['query']).toBe('iSearch');
       expect(payload.searchOrder.term).toEqual('metadata.myfield.lowercase');
+      expect(payload.searchOrder.order).toEqual('desc');
+    });
+  });
+
+  it('shouldnt add .lowercase to number field Ordering to the query payload', () => {
+    const searchModel = new SearchModel();
+    searchModel.stringQuery = 'iSearch';
+    searchModel.order.term = 'myIntegerField';
+    searchModel.order.order = 'desc';
+
+    const pageConfig = new SearchPageConfig();
+    const field = new Field();
+    field.key = 'myIntegerField';
+    field.dataType = 'number';
+    pageConfig.fieldsToDisplay.push(field);
+
+    httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(new Response(new ResponseOptions())));
+
+    searchService.search(Observable.of(searchModel), pageConfig).subscribe(result => {
+      expect(httpSpy).toHaveBeenCalledTimes(1);
+      // args[1] is the payload
+      const payload = httpSpy.calls.first().args[1];
+      expect(payload['query']).toBe('iSearch');
+      expect(payload.searchOrder.term).toEqual('metadata.myIntegerField');
+      expect(payload.searchOrder.order).toEqual('desc');
+    });
+  });
+
+  it('shouldnt add .lowercase to date field Ordering to the query payload', () => {
+    const searchModel = new SearchModel();
+    searchModel.stringQuery = 'iSearch';
+    searchModel.order.term = 'myDateField';
+    searchModel.order.order = 'desc';
+
+    const pageConfig = new SearchPageConfig();
+    const field = new Field();
+    field.key = 'myDateField';
+    field.dataType = 'date';
+    pageConfig.fieldsToDisplay.push(field);
+
+    httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(new Response(new ResponseOptions())));
+
+    searchService.search(Observable.of(searchModel), pageConfig).subscribe(result => {
+      expect(httpSpy).toHaveBeenCalledTimes(1);
+      // args[1] is the payload
+      const payload = httpSpy.calls.first().args[1];
+      expect(payload['query']).toBe('iSearch');
+      expect(payload.searchOrder.term).toEqual('metadata.myDateField');
       expect(payload.searchOrder.order).toEqual('desc');
     });
   });
