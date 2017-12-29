@@ -6,7 +6,7 @@ import { isNullOrUndefined } from 'util';
 export class NotificationOptions {
   constructor(
     public detailedMessage?: any,
-    public duration: number = 0,
+    public duration: number = 5000,
     public ariaLiveMessage?: string,
     public dismissText: string = 'Dismiss',
     public verticalPosition: MatSnackBarVerticalPosition = 'top'
@@ -35,7 +35,7 @@ export class NotificationService {
 
   warn(message: string, options: NotificationOptions = new NotificationOptions()) {
     console.warn(isNullOrUndefined(options.detailedMessage) ? message : options.detailedMessage);
-    this.openSnackBar(message, NotificationType.WARN, new NotificationOptions());
+    this.openSnackBar(message, NotificationType.WARN, options);
   }
 
   private openSnackBar(message: string, type: string, options: NotificationOptions) {

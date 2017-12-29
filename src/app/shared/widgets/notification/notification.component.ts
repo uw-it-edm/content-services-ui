@@ -13,7 +13,6 @@ export class NotificationComponent {
   dismissText: string;
 
   constructor(public snackBarRef: MatSnackBarRef<NotificationComponent>, @Inject(MAT_SNACK_BAR_DATA) public data: any) {
-    // TODO: should data be change to an object?
     if (!isNullOrUndefined(data)) {
       this.message = data.message;
       this.type = isNullOrUndefined(data.type) ? 'info' : data.type;
