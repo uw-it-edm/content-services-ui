@@ -21,7 +21,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   paginatorConfig: PaginatorConfig = new PaginatorConfig();
 
   dataSource: SearchDataSource;
-  displayedColumns = ['id', 'label'];
+  displayedColumns = ['id'];
   hasResults = false;
 
   @Input() searchModel$: Observable<SearchModel>;
@@ -50,15 +50,22 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
 
       this.data.set('adjacentIds', adjacentIds);
     });
-    for (const field of this.pageConfig.fieldsToDisplay) {
-      this.displayedColumns.push(field.key);
-    }
 
+    this.configureTableColumns();
     this.sort.sortChange.subscribe((sort: Sort) => {
       this.searchModel.order.order = sort.direction;
       this.searchModel.order.term = sort.active;
       this.search.next(this.searchModel);
     });
+  }
+
+  private configureTableColumns() {
+    if (this.pageConfig.displayDocumentLabelField) {
+      this.displayedColumns.push('label');
+    }
+    for (const field of this.pageConfig.fieldsToDisplay) {
+      this.displayedColumns.push(field.key);
+    }
   }
 
   onPageEvent(pageEvent: PageEvent) {
