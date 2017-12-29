@@ -16,21 +16,23 @@ describe('NotificationService', () => {
 
   it('should set default options', () => {
     const message = 'testMessage';
-    const type = 'warn';
+    const type = 'error';
+
+    const defaultNotificationOptions = new NotificationOptions();
 
     const expectedSnackBarConfig = <MatSnackBarConfig>{
-      verticalPosition: 'top',
-      duration: 5000,
+      verticalPosition: defaultNotificationOptions.verticalPosition,
+      duration: defaultNotificationOptions.duration,
       announcementMessage: message,
       data: {
         message: message,
         type: type,
-        dismissText: 'Dismiss'
+        dismissText: defaultNotificationOptions.dismissText
       }
     };
 
     const spy = spyOn(snackBar, 'openFromComponent');
-    notificationService.warn(message);
+    notificationService.error(message);
 
     expect(spy).toHaveBeenCalledTimes(1);
     const actualSnackBarConfig: MatSnackBarConfig = spy.calls.first().args[1];
@@ -46,12 +48,11 @@ describe('NotificationService', () => {
     const options = new NotificationOptions();
     options.verticalPosition = 'bottom';
     options.ariaLiveMessage = 'live message';
-    options.detailedMessage = 'a longer error message';
     options.dismissText = 'Close';
     options.duration = 0;
 
     const spy = spyOn(snackBar, 'openFromComponent');
-    notificationService.warn('testMessage', options);
+    notificationService.warn('testMessage', 'a long error message to be logged to the console.', options);
 
     expect(spy).toHaveBeenCalledTimes(1);
     const actualSnackBarConfig: MatSnackBarConfig = spy.calls.first().args[1];

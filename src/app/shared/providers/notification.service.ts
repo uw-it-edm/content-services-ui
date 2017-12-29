@@ -5,8 +5,7 @@ import { isNullOrUndefined } from 'util';
 
 export class NotificationOptions {
   constructor(
-    public detailedMessage?: any,
-    public duration: number = 5000,
+    public duration: number = 4000,
     public ariaLiveMessage?: string,
     public dismissText: string = 'Dismiss',
     public verticalPosition: MatSnackBarVerticalPosition = 'top'
@@ -23,18 +22,18 @@ export class NotificationType {
 export class NotificationService {
   constructor(private snackBar: MatSnackBar) {}
 
-  error(message: string, options: NotificationOptions = new NotificationOptions()) {
-    console.error(isNullOrUndefined(options.detailedMessage) ? message : options.detailedMessage);
+  error(message: string, detailedMessage?: any, options: NotificationOptions = new NotificationOptions()) {
+    console.error(isNullOrUndefined(detailedMessage) ? message : detailedMessage);
     this.openSnackBar(message, NotificationType.ERROR, options);
   }
 
-  info(message: string, options: NotificationOptions = new NotificationOptions()) {
-    console.log(isNullOrUndefined(options.detailedMessage) ? message : options.detailedMessage);
+  info(message: string, detailedMessage?: any, options: NotificationOptions = new NotificationOptions(2000)) {
+    console.log(isNullOrUndefined(detailedMessage) ? message : detailedMessage);
     this.openSnackBar(message, NotificationType.INFO, options);
   }
 
-  warn(message: string, options: NotificationOptions = new NotificationOptions()) {
-    console.warn(isNullOrUndefined(options.detailedMessage) ? message : options.detailedMessage);
+  warn(message: string, detailedMessage?: any, options: NotificationOptions = new NotificationOptions()) {
+    console.warn(isNullOrUndefined(detailedMessage) ? message : detailedMessage);
     this.openSnackBar(message, NotificationType.WARN, options);
   }
 
