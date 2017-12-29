@@ -5,7 +5,7 @@ export class Field {
   public key: string;
   public label: string;
 
-  public dataType?: string;
+  public dataType? = 'string';
   public displayType?: string;
 
   public options?: FieldOption[] = [];

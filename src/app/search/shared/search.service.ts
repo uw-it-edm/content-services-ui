@@ -142,12 +142,16 @@ export class SearchService {
         newOrder.term += '.lowercase';
       }
 
-      if (
-        fieldConfig &&
-        (!fieldConfig.dataType || fieldConfig.dataType === 'string') &&
-        !fieldConfig.key.endsWith('Date')
-      ) {
-        newOrder.term += '.lowercase';
+      if (fieldConfig) {
+        if (fieldConfig.dataType) {
+          if (fieldConfig.dataType === 'string' && !fieldConfig.key.endsWith('Date')) {
+            newOrder.term += '.lowercase';
+          } else if (fieldConfig.dataType === 'number') {
+            // NOOP
+          } else if (fieldConfig.dataType === 'date') {
+            // NOOP
+          }
+        }
       }
 
       searchPayload['searchOrder'] = newOrder;
