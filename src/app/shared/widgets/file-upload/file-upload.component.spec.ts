@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FileUploadComponent } from './file-upload.component';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule, MatTooltipModule } from '@angular/material';
+import { MatButtonModule, MatIconModule, MatTooltipModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
@@ -31,7 +31,7 @@ describe('FileUploadComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [MatButtonModule, MatTooltipModule, ReactiveFormsModule],
+        imports: [MatButtonModule, MatIconModule, MatTooltipModule, ReactiveFormsModule],
         declarations: [FileUploadComponent, TruncatePipe, FocusDirective]
       }).compileComponents();
     })

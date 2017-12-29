@@ -25,6 +25,7 @@ import { ProgressService } from '../../shared/providers/progress.service';
 import { ContentObject } from '../shared/model/content-object';
 import { ContentObjectListComponent } from '../content-object-list/content-object-list.component';
 import { HttpClientModule } from '@angular/common/http';
+import { FieldOption } from '../../core/shared/model/field/field-option';
 
 class MockContentService {
   read(itemId: string): Observable<ContentItem> {
@@ -127,7 +128,13 @@ describe('EditPageComponent', () => {
       { key: '3', label: '3' },
       { key: 'a', label: 'a' },
       { key: 'd', label: 'd', dataType: 'date' },
-      { key: 't', label: 't', dataType: 'string', displayType: 'typeahead', options: ['o1', 'o2'] }
+      {
+        key: 't',
+        label: 't',
+        dataType: 'string',
+        displayType: 'typeahead',
+        options: [new FieldOption('o1'), new FieldOption('o2')]
+      }
     ];
     editPageConfig.buttons = [deleteButton, saveButton];
 
