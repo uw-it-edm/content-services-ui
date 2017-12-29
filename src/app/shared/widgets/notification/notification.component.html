@@ -1,0 +1,20 @@
+<span [ngSwitch]="type" aria-hidden="true">
+  <span *ngSwitchCase="'info'">
+    <mat-icon class="info">info_outline</mat-icon>
+  </span>
+  <span *ngSwitchCase="'warn'">
+    <mat-icon class="warn">warning</mat-icon>
+   </span>
+  <span *ngSwitchCase="'error'">
+    <mat-icon class="error">error_outline</mat-icon>
+  </span>
+  <span *ngSwitchDefault>
+  </span>
+</span>
+
+{{message}}
+
+<button mat-button class="dismiss-button"
+        color="accent"
+        (click)="onDismiss()">{{ dismissText }}
+</button>

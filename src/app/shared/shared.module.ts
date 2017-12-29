@@ -19,6 +19,8 @@ import { DisplayFieldComponent } from './widgets/display-field/display-field.com
 import { ProgressService } from './providers/progress.service';
 import { FocusDirective } from './directives/focus/focus.directive';
 import { OptionsInputComponent } from './widgets/options-input/options-input.component';
+import { NotificationComponent } from './widgets/notification/notification.component';
+import { NotificationService } from './providers/notification.service';
 
 @NgModule({
   imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule],
@@ -51,8 +53,10 @@ import { OptionsInputComponent } from './widgets/options-input/options-input.com
     TimestampPickerComponent,
     TruncatePipe,
     DisplayFieldComponent,
-    FocusDirective
+    FocusDirective,
+    NotificationComponent
   ],
-  providers: [DataService, ProgressService, StudentService]
+  providers: [DataService, ProgressService, StudentService, NotificationService],
+  entryComponents: [NotificationComponent]
 })
 export class SharedModule {}
