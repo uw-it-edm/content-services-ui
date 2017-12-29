@@ -23,7 +23,7 @@ describe('content-services-ui App', () => {
   });
 
   it('should display title in header toolbar', () => {
-    expect(page.getHeaderToolbarText()).toEqual(TITLE);
+    expect(page.getHeaderToolbarText()).toEqual(' ');
   });
 
   it('should display UW logo with href link in header toolbar', () => {
