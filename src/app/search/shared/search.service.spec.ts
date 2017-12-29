@@ -57,7 +57,7 @@ describe('SearchService', () => {
         facets: [],
         from: 0,
         page: 0,
-        pageSize: 10,
+        pageSize: 50,
         totalCount: 155249,
         timeTaken: '13.0'
       });
@@ -68,7 +68,7 @@ describe('SearchService', () => {
 
       // args[1] is the payload
       expect(JSON.stringify(httpSpy.calls.first().args[1])).toBe(
-        '{"query":"iSearch","facets":[],"filters":[],"from":0,"page":0,"pageSize":10}'
+        '{"query":"iSearch","facets":[],"filters":[],"from":0,"page":0,"pageSize":50}'
       );
       expect(result.results.length).toBe(2);
       expect(result.results[1].metadata['id']).toBe('2');
