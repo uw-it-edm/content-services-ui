@@ -18,6 +18,7 @@ import { TruncatePipe } from './pipes/truncate.pipe';
 import { DisplayFieldComponent } from './widgets/display-field/display-field.component';
 import { ProgressService } from './providers/progress.service';
 import { FocusDirective } from './directives/focus/focus.directive';
+import { OptionsInputComponent } from './widgets/options-input/options-input.component';
 import { NotificationComponent } from './widgets/notification/notification.component';
 import { NotificationService } from './providers/notification.service';
 
@@ -32,6 +33,7 @@ import { NotificationService } from './providers/notification.service';
     FileUploadComponent,
     SafeUrlPipe,
     CheckboxInputComponent,
+    OptionsInputComponent,
     StudentAutocompleteComponent,
     StudentDisplayComponent,
     TimestampPickerComponent,
@@ -45,6 +47,7 @@ import { NotificationService } from './providers/notification.service';
     FileUploadComponent,
     SafeUrlPipe,
     CheckboxInputComponent,
+    OptionsInputComponent,
     StudentAutocompleteComponent,
     StudentDisplayComponent,
     TimestampPickerComponent,

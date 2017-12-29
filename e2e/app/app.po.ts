@@ -26,11 +26,16 @@ export class ContentServicesUiPage {
   }
 
   clickAppMenuIcon() {
-    element(by.className('mat-icon-button')).click();
+    const tenantMenuButton = element(by.id('tenant-menu'));
+
+    expect(tenantMenuButton).toBeTruthy();
+    browser.wait(ExpectedConditions.elementToBeClickable(tenantMenuButton), 5000);
+    tenantMenuButton.click();
   }
 
   clickAppMenuItem(itemIndex: number) {
-    const menuItem = element.all(by.className('mat-menu-ripple')).get(itemIndex);
+    const menuItem = element.all(by.className('tenant-menu-button')).get(itemIndex);
+
     browser.wait(ExpectedConditions.elementToBeClickable(menuItem), 500);
     menuItem.click();
   }

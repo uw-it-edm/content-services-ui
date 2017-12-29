@@ -1,13 +1,16 @@
 import { NotificationOptions, NotificationService } from './notification.service';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
+import Spy = jasmine.Spy;
 
 let notificationService: NotificationService;
 let snackBar: MatSnackBar;
+let snackBarSpy: Spy;
 
 describe('NotificationService', () => {
   beforeEach(() => {
-    snackBar = new MatSnackBar(null, null, null, null);
+    snackBar = new MatSnackBar(null, null, null, null, null);
     notificationService = new NotificationService(snackBar);
+    snackBarSpy = spyOn(snackBar, 'openFromComponent');
   });
 
   it('should be created', () => {
@@ -31,11 +34,10 @@ describe('NotificationService', () => {
       }
     };
 
-    const spy = spyOn(snackBar, 'openFromComponent');
     notificationService.error(message);
 
-    expect(spy).toHaveBeenCalledTimes(1);
-    const actualSnackBarConfig: MatSnackBarConfig = spy.calls.first().args[1];
+    expect(snackBarSpy).toHaveBeenCalledTimes(1);
+    const actualSnackBarConfig: MatSnackBarConfig = snackBarSpy.calls.first().args[1];
     expect(actualSnackBarConfig.verticalPosition).toBe(expectedSnackBarConfig.verticalPosition);
     expect(actualSnackBarConfig.duration).toBe(expectedSnackBarConfig.duration);
     expect(actualSnackBarConfig.announcementMessage).toBe(expectedSnackBarConfig.announcementMessage);
@@ -51,11 +53,10 @@ describe('NotificationService', () => {
     options.dismissText = 'Close';
     options.duration = 0;
 
-    const spy = spyOn(snackBar, 'openFromComponent');
     notificationService.warn('testMessage', 'a long error message to be logged to the console.', options);
 
-    expect(spy).toHaveBeenCalledTimes(1);
-    const actualSnackBarConfig: MatSnackBarConfig = spy.calls.first().args[1];
+    expect(snackBarSpy).toHaveBeenCalledTimes(1);
+    const actualSnackBarConfig: MatSnackBarConfig = snackBarSpy.calls.first().args[1];
     expect(actualSnackBarConfig.verticalPosition).toBe(options.verticalPosition);
     expect(actualSnackBarConfig.duration).toBe(options.duration);
     expect(actualSnackBarConfig.announcementMessage).toBe(options.ariaLiveMessage);
@@ -63,24 +64,21 @@ describe('NotificationService', () => {
   });
 
   it('should be set type to warn', () => {
-    const spy = spyOn(snackBar, 'openFromComponent');
     notificationService.warn('testMessage');
 
-    const actualSnackBarConfig: MatSnackBarConfig = spy.calls.first().args[1];
+    const actualSnackBarConfig: MatSnackBarConfig = snackBarSpy.calls.first().args[1];
     expect(actualSnackBarConfig.data.type).toBe('warn');
   });
   it('should be set type to error', () => {
-    const spy = spyOn(snackBar, 'openFromComponent');
     notificationService.error('testMessage');
 
-    const actualSnackBarConfig: MatSnackBarConfig = spy.calls.first().args[1];
+    const actualSnackBarConfig: MatSnackBarConfig = snackBarSpy.calls.first().args[1];
     expect(actualSnackBarConfig.data.type).toBe('error');
   });
   it('should be set type to info', () => {
-    const spy = spyOn(snackBar, 'openFromComponent');
     notificationService.info('testMessage');
 
-    const actualSnackBarConfig: MatSnackBarConfig = spy.calls.first().args[1];
+    const actualSnackBarConfig: MatSnackBarConfig = snackBarSpy.calls.first().args[1];
     expect(actualSnackBarConfig.data.type).toBe('info');
   });
 });
