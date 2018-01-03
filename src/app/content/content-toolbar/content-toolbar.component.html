@@ -33,7 +33,7 @@
         </span>
         <span *ngIf="contentType === 'application/pdf'" class="cs-fill-remaining-space"></span>
 
-        <span *ngIf="pageCount && !showAllValue && contentType === 'application/pdf'" class="content-paginator">
+        <span *ngIf="pageCount && !showAllValue && contentType === 'application/pdf'" class="content-paginator" aria-label="Page within Document">
             <span>
                 <mat-form-field class="narrow-field">
                     <input matInput [(ngModel)]="pageNumberEntry" (ngModelChange)="changePageNumber($event)" ngDefaultControl name="pageNumber" type="text">

@@ -1,11 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ContentPagerComponent } from './content-pager.component';
-import { MatButtonModule } from '@angular/material';
 import { Router } from '@angular/router';
 import { DataService } from '../../shared/providers/data.service';
 import { ContentItem } from '../shared/model/content-item';
-import { Observable } from 'rxjs/Observable';
+import { MaterialConfigModule } from '../../routing/material-config.module';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import createSpy = jasmine.createSpy;
 
 describe('ContentPagerComponent', () => {
@@ -24,7 +24,7 @@ describe('ContentPagerComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [MatButtonModule],
+        imports: [MaterialConfigModule, NoopAnimationsModule],
         providers: [{ provide: Router, useValue: mockRouter }, { provide: DataService, useValue: dataService }],
         declarations: [ContentPagerComponent]
       }).compileComponents();

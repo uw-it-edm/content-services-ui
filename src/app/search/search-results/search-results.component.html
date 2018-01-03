@@ -7,14 +7,14 @@
                  (page)="onPageEvent($event)">
   </mat-paginator>
 
-  <mat-table #table [dataSource]="dataSource" matSort>
+  <mat-table #table [dataSource]="dataSource" matSort aria-label="Search Results">
 
     <!--- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
 
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Id</mat-header-cell>
-      <mat-cell *matCellDef="let element"><a routerLink="../edit/{{element.id}}"
+      <mat-cell  *matCellDef="let element"><a routerLink="../edit/{{element.id}}"
                                              queryParamsHandling="merge">{{element.id}}</a>
       </mat-cell>
     </ng-container>
@@ -51,6 +51,7 @@
                  [pageSize]="paginatorConfig.pageSize"
                  [pageSizeOptions]="paginatorConfig.pageSizeOptions"
                  [length]="paginatorConfig.numberOfResults"
-                 (page)="onPageEvent($event)">
+                 (page)="onPageEvent($event)"
+                  >
   </mat-paginator>
 </div>

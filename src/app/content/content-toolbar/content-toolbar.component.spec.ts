@@ -1,9 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SafeUrlPipe } from '../../shared/pipes/safe-url.pipe';
-import { MatButtonModule, MatTooltipModule } from '@angular/material';
 import { ContentToolbarComponent } from '../content-toolbar/content-toolbar.component';
 import { FormsModule } from '@angular/forms';
+import { MaterialConfigModule } from '../../routing/material-config.module';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ContentToolbarComponent', () => {
   let component: ContentToolbarComponent;
@@ -11,7 +12,7 @@ describe('ContentToolbarComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, MatButtonModule, MatTooltipModule],
+      imports: [FormsModule, MaterialConfigModule, NoopAnimationsModule],
       providers: [],
       declarations: [ContentToolbarComponent, SafeUrlPipe]
     }).compileComponents();

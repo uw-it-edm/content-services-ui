@@ -3,7 +3,6 @@ import { TimestampPickerComponent } from './timestamp-picker.component';
 import { SharedModule } from '../../shared.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
-import * as moment from 'moment';
 
 describe('TimestampPickerComponent', () => {
   let component: TimestampPickerComponent;

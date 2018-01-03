@@ -1,18 +1,18 @@
-<div [ngClass]="pageConfig?.theme">
+<div role="main" [ngClass]="pageConfig?.theme">
   <div fxLayout="row" class="cs-generic-header">
     <div fxFlex="20">
+      <h2>{{pageConfig.pageName}}</h2>
     </div>
     <div fxFlex="70">
       <app-search-box
         [searchModel$]="searchModel$"
         [pageConfig]="pageConfig"
         (searchEvent)="onSearch($event)"
-
       >
       </app-search-box>
     </div>
     <div fxFlex="10" style="text-align: right">
-      <button mat-button role="button" (click)="navigateToCreate()">
+      <button mat-button (click)="navigateToCreate()" aria-label="Upload new document">
           <span appCustomText="addContentItemButton" defaultValue="Upload"></span>&nbsp;<mat-icon>backup</mat-icon>
       </button>
     </div>

@@ -2,6 +2,7 @@
   <mat-checkbox
     formControlName="internalCheckbox"
     (change)="refreshValue($event)"
+    [attr.aria-label]="placeholder"
   >
   </mat-checkbox>
 </div>
