@@ -15,12 +15,14 @@ export class FileUploadComponent implements OnInit {
   @Input() dropzone;
   @Output() fileSelected: EventEmitter<File> = new EventEmitter();
 
+  fieldId: string;
   files: File[] = new Array<File>();
 
   constructor() {}
 
   ngOnInit() {
     this.formGroup.setControl(this.fieldName, new FormControl('', Validators.required));
+    this.fieldId = this.fieldName + '_' + Math.random().toString();
   }
 
   onFileChange(event) {

@@ -1,13 +1,13 @@
 <span *ngIf="!dropzone">
     <span [formGroup]="formGroup">
         <input class="inputfile"
-               [id]="fieldName"
+               [id]="fieldId"
                [name]="fieldName"
                type="file"
                (change)="onFileChange($event)"
                [formControlName]="fieldName"
                [multiple]="multiple">
-        <label [for]="fieldName" class="mat-icon-button" [appFocus]="autoFocus"
+        <label [for]="fieldId" class="mat-icon-button" [appFocus]="autoFocus"
                [matTooltip]="label">
             <span class="mat-button-wrapper">
                 <mat-icon>file_upload</mat-icon>
