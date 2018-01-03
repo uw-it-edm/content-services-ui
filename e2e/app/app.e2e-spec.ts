@@ -1,5 +1,5 @@
-import { ContentServicesUiPage } from './app.po';
-import { SearchPage } from '../search/search.po';
+import {ContentServicesUiPage} from './app.po';
+import {SearchPage} from '../search/search.po';
 
 describe('content-services-ui App', () => {
   let page: ContentServicesUiPage;
@@ -8,10 +8,6 @@ describe('content-services-ui App', () => {
   beforeAll(() => {
     page = new ContentServicesUiPage();
     page.navigateTo();
-  });
-
-  it('should display welcome message', () => {
-    expect(page.getParagraphText()).toEqual('Inconceivable!');
   });
 
   it('should display page title', () => {

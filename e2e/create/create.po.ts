@@ -1,10 +1,9 @@
 import {browser, by, element} from 'protractor';
-import * as path from 'path';
 
 export class CreatePage {
   public pageUrl = '/demo/create';
-  private pdfFilePath = path.resolve(__dirname, '../sample-file.pdf');
-  private docFilePath = path.resolve(__dirname, '../sample-file.docx');
+  public uploadFilePanel = element(by.id('drop-zone'));
+  public fileList = element.all(by.tagName('mat-list-item'));
 
   navigateTo() {
     return browser.get(this.pageUrl);
@@ -14,12 +13,12 @@ export class CreatePage {
     return browser.getTitle();
   }
 
-  addFile() {
-    element(by.id('addFile')).sendKeys(this.pdfFilePath);
+  addFile(filePath) {
+    element(by.name('addFile')).sendKeys(filePath);
   }
 
-  chooseFile() {
-    element(by.id('attach-files')).sendKeys(this.pdfFilePath);
+  chooseFile(filePath) {
+    element(by.id('attach-files')).sendKeys(filePath);
   }
 
   getPdfViewer() {
@@ -32,5 +31,13 @@ export class CreatePage {
 
   clickReturnToResultsButton() {
     element(by.css('.mat-icon-button[mattooltip=\'Return to Results\']')).click();
+  }
+
+  getContentViewerText() {
+    return element(by.css('.content-object-display .custom-text-rendered')).getText();
+  }
+
+  undoFile() {
+    element(by.css('.mat-list-item-content .mat-icon-button[mattooltip=\'Undo\']')).click();
   }
 }

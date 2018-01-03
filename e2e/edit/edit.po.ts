@@ -2,7 +2,7 @@ import {browser, by, element} from 'protractor';
 import * as path from 'path';
 
 export class EditPage {
-  uploadButton = element(by.id('replaceFile'));
+  uploadButton = element(by.name('replaceFile'));
 
   navigateTo() {
     return browser.get('/demo/edit/123456');
