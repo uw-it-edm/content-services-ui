@@ -59,6 +59,7 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
 
   private updateMetadataGroupValues() {
     if (this.formGroup && this.contentItem) {
+      this.formGroup.reset();
       this.formGroup.patchValue({ label: this.contentItem.label });
       const metaDataForm: FormGroup = <FormGroup>this.formGroup.controls['metadata'];
       if (!isNullOrUndefined(metaDataForm)) {
