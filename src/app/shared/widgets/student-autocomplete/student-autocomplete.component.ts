@@ -102,10 +102,8 @@ export class StudentAutocompleteComponent
 
   writeValue(value: any): void {
     console.log('write :' + value);
-    if (value !== undefined) {
-      this._value = value;
-      this.populateInitialValue(this.value);
-    }
+    this._value = value;
+    this.populateInitialValue(this.value);
   }
 
   private populateInitialValue(studentNumber: string) {
@@ -117,6 +115,8 @@ export class StudentAutocompleteComponent
           this.filteredOptions = [result];
           this.formGroup.controls['studentAutocomplete'].patchValue(studentNumber);
         });
+    } else {
+      this.formGroup.controls['studentAutocomplete'].reset();
     }
   }
 

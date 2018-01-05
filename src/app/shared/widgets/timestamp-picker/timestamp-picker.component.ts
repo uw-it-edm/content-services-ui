@@ -3,6 +3,7 @@ import { Subject } from 'rxjs/Subject';
 import { ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import * as moment from 'moment-timezone';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-timestamp-picker',
@@ -72,6 +73,8 @@ export class TimestampPickerComponent implements ControlValueAccessor, OnInit, O
         .add(shift, 'minutes')
         .toDate();
       this.formGroup.controls['internalDate'].patchValue(date);
+    } else if (isNullOrUndefined(value)) {
+      this.formGroup.controls['internalDate'].reset();
     }
   }
 
