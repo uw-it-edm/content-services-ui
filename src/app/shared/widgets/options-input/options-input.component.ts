@@ -80,7 +80,11 @@ export class OptionsInputComponent implements ControlValueAccessor, MatFormField
   }
 
   private populateInitialValue(initialValue: string) {
-    this.formGroup.controls['optionsForm'].patchValue(initialValue);
+    if (!isNullOrUndefined(initialValue)) {
+      this.formGroup.controls['optionsForm'].patchValue(initialValue);
+    } else {
+      this.formGroup.controls['optionsForm'].reset();
+    }
   }
 
   propagateChange = (_: any) => {};
