@@ -75,15 +75,15 @@ export class OptionsInputComponent implements ControlValueAccessor, MatFormField
 
   writeValue(value: any): void {
     console.log('write :' + value);
-    if (value !== undefined) {
-      this._value = value;
-      this.populateInitialValue(this.value);
-    }
+    this._value = value;
+    this.populateInitialValue(this.value);
   }
 
   private populateInitialValue(initialValue: string) {
     if (!isNullOrUndefined(initialValue)) {
       this.formGroup.controls['optionsForm'].patchValue(initialValue);
+    } else {
+      this.formGroup.controls['optionsForm'].reset();
     }
   }
 
