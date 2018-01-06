@@ -237,9 +237,9 @@
   version "8.5.2"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.5.2.tgz#83b8103fa9a2c2e83d78f701a9aa7c9539739aa5"
 
-"@types/pdf@0.0.31":
-  version "0.0.31"
-  resolved "https://registry.yarnpkg.com/@types/pdf/-/pdf-0.0.31.tgz#c0b210ce752fd59ad8331be5d4b55cf369141b93"
+"@types/pdfjs-dist@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@types/pdfjs-dist/-/pdfjs-dist-0.1.1.tgz#be5ee24fcaece186b25ce11fb1e9aec1087e2c1f"
 
 "@types/q@^0.0.32":
   version "0.0.32"
@@ -4472,11 +4472,11 @@ netmask@~1.0.4:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/netmask/-/netmask-1.0.6.tgz#20297e89d86f6f6400f250d9f4f6b4c1945fcd35"
 
-ng2-pdf-viewer@3.0.5:
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/ng2-pdf-viewer/-/ng2-pdf-viewer-3.0.5.tgz#d4f29f3dca7a8d4ab11785ae7277395d0dcda633"
+ng2-pdf-viewer@3.0.6:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/ng2-pdf-viewer/-/ng2-pdf-viewer-3.0.6.tgz#8d6b70cce357b19e98501442d4a42e94efaa0267"
   dependencies:
-    "@types/pdf" "0.0.31"
+    "@types/pdfjs-dist" "^0.1.1"
     pdfjs-dist "1.9.489"
 
 no-case@^2.2.0:
