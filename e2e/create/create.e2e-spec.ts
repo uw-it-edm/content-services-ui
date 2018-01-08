@@ -44,6 +44,12 @@ describe('content-services-ui Create Page', () => {
     expect(getCurrentUrl()).toMatch(getSearchPageUrl());
   });
 
+  it('should navigate to Search page when App Name link is clicked', () => {
+    page.clickAppName();
+
+    expect(getCurrentUrl()).toMatch(getSearchPageUrl());
+  });
+
   it('should display pdf viewer when 1 pdf file is uploaded with Add File button', () => {
     page.addFile(pdfFilePath);
 
@@ -60,6 +66,10 @@ describe('content-services-ui Create Page', () => {
     page.chooseFile(pdfFilePath + '\n' + docFilePath);
 
     expect(page.fileList.count()).toEqual(2);
+
+    const pdfFileName = path.parse(pdfFilePath).base;
+    const docFileName = path.parse(docFilePath).base;
+    expect(page.getFileNames()).toEqual([pdfFileName.trim(), docFileName.trim()]);
   });
 
   it('should display default message when non viewable file is uploaded', () => {

@@ -3,6 +3,7 @@ import * as path from 'path';
 
 export class EditPage {
   uploadButton = element(by.name('replaceFile'));
+  headerTitle = element(by.className('cs-title'));
 
   navigateTo() {
     return browser.get('/demo/edit/123456');
@@ -13,7 +14,7 @@ export class EditPage {
   }
 
   clickReturnToResultsLink() {
-    element(by.css('[mattooltip=\'Return to Results\']')).click();
+    element(by.css('[mattooltip=\'Return to Result\']')).click();
   }
 
   replaceFile() {

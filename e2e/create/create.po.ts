@@ -33,11 +33,19 @@ export class CreatePage {
     element(by.css('.mat-icon-button[mattooltip=\'Return to Results\']')).click();
   }
 
+  clickAppName() {
+    element(by.className('cs-title')).click();
+  }
+
   getContentViewerText() {
     return element(by.css('.content-object-display .custom-text-rendered')).getText();
   }
 
   undoFile() {
     element(by.css('.mat-list-item-content .mat-icon-button[mattooltip=\'Undo\']')).click();
+  }
+
+  getFileNames() {
+    return this.fileList.all(by.css('.mat-list-text p > span')).getText();
   }
 }

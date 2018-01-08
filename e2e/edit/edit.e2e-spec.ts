@@ -1,6 +1,7 @@
 import {EditPage} from './edit.po';
 import {browser} from 'protractor';
 import {SearchPage} from '../search/search.po';
+import {ContentServicesUiPage} from '../app/app.po';
 
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
@@ -8,17 +9,16 @@ const getCurrentUrl = function() {
   });
 };
 
-const getSearchPageUrl = function() {
-  const searchPage = new SearchPage();
-  return searchPage.pageUrl;
-};
-
 describe('content-services-ui Edit Page', () => {
   let page: EditPage;
   const demoConfig = require('../mocks/profile-api/demo.json');
+  const searchPage = new SearchPage();
 
   beforeAll(() => {
     page = new EditPage();
+  });
+
+  beforeEach(() => {
     page.navigateTo();
   });
 
@@ -35,6 +35,13 @@ describe('content-services-ui Edit Page', () => {
   it('should navigate to Search page when Return to Results link is clicked', () => {
     page.clickReturnToResultsLink();
 
-    expect(getCurrentUrl()).toMatch(getSearchPageUrl());
+    expect(getCurrentUrl()).toMatch(searchPage.pageUrl);
+  });
+
+  it('should navigate to Search page when header App Name link is clicked', () => {
+    const appPage = new ContentServicesUiPage();
+    appPage.headerTitle.click();
+
+    expect(getCurrentUrl()).toMatch(searchPage.pageUrl);
   });
 });
