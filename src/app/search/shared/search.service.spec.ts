@@ -57,7 +57,7 @@ describe('SearchService', () => {
         facets: [],
         from: 0,
         page: 0,
-        pageSize: 10,
+        pageSize: 50,
         totalCount: 155249,
         timeTaken: '13.0'
       });
@@ -68,7 +68,7 @@ describe('SearchService', () => {
 
       // args[1] is the payload
       expect(JSON.stringify(httpSpy.calls.first().args[1])).toBe(
-        '{"query":"iSearch","facets":[],"filters":[],"from":0,"page":0,"pageSize":10}'
+        '{"query":"iSearch","facets":[],"filters":[],"from":0,"page":0,"pageSize":50}'
       );
       expect(result.results.length).toBe(2);
       expect(result.results[1].metadata['id']).toBe('2');
@@ -199,7 +199,6 @@ describe('SearchService', () => {
     const pageConfig = new SearchPageConfig();
     const field = new Field();
     field.key = 'myfield';
-    field.displayType = 'string';
     pageConfig.fieldsToDisplay.push(field);
 
     httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(new Response(new ResponseOptions())));
@@ -210,6 +209,54 @@ describe('SearchService', () => {
       const payload = httpSpy.calls.first().args[1];
       expect(payload['query']).toBe('iSearch');
       expect(payload.searchOrder.term).toEqual('metadata.myfield.lowercase');
+      expect(payload.searchOrder.order).toEqual('desc');
+    });
+  });
+
+  it('shouldnt add .lowercase to number field Ordering to the query payload', () => {
+    const searchModel = new SearchModel();
+    searchModel.stringQuery = 'iSearch';
+    searchModel.order.term = 'myIntegerField';
+    searchModel.order.order = 'desc';
+
+    const pageConfig = new SearchPageConfig();
+    const field = new Field();
+    field.key = 'myIntegerField';
+    field.dataType = 'number';
+    pageConfig.fieldsToDisplay.push(field);
+
+    httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(new Response(new ResponseOptions())));
+
+    searchService.search(Observable.of(searchModel), pageConfig).subscribe(result => {
+      expect(httpSpy).toHaveBeenCalledTimes(1);
+      // args[1] is the payload
+      const payload = httpSpy.calls.first().args[1];
+      expect(payload['query']).toBe('iSearch');
+      expect(payload.searchOrder.term).toEqual('metadata.myIntegerField');
+      expect(payload.searchOrder.order).toEqual('desc');
+    });
+  });
+
+  it('shouldnt add .lowercase to date field Ordering to the query payload', () => {
+    const searchModel = new SearchModel();
+    searchModel.stringQuery = 'iSearch';
+    searchModel.order.term = 'myDateField';
+    searchModel.order.order = 'desc';
+
+    const pageConfig = new SearchPageConfig();
+    const field = new Field();
+    field.key = 'myDateField';
+    field.dataType = 'date';
+    pageConfig.fieldsToDisplay.push(field);
+
+    httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(new Response(new ResponseOptions())));
+
+    searchService.search(Observable.of(searchModel), pageConfig).subscribe(result => {
+      expect(httpSpy).toHaveBeenCalledTimes(1);
+      // args[1] is the payload
+      const payload = httpSpy.calls.first().args[1];
+      expect(payload['query']).toBe('iSearch');
+      expect(payload.searchOrder.term).toEqual('metadata.myDateField');
       expect(payload.searchOrder.order).toEqual('desc');
     });
   });

@@ -13,7 +13,11 @@ before_install:
   - export PATH="$HOME/.yarn/bin:$PATH"
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
   - docker build -t content-services-api-mock ./e2e/mocks
-  - docker run --name content-services-api --rm -d -p 8080:80 -v ${PWD}/e2e/mocks:/usr/share/nginx/html/ content-services-api-mock
+  - docker run --name content-services-api --rm -d -p 12345:80 -v ${PWD}/e2e/mocks:/usr/share/nginx/html/ content-services-api-mock
+  - yarn global add greenkeeper-lockfile@1
+
+before_script: greenkeeper-lockfile-update
+after_script: greenkeeper-lockfile-upload
 
 jobs:
   include:
@@ -44,5 +48,5 @@ notifications:
   hipchat:
     rooms:
       secure: 0A+iTvvZVvchTR6zEaSeCyhQo8fQ1NHTzaNomi4zifSrUIfdl4t4rf1SEqkuHgJINYnrUWtqjP120okhW4s+qDKgNeI/aYHC2pm1BfMx+F0+++pMPfU4kQ8Hzokgb3lfVNAidncTANZJhUbzJvR/HD57kFAd2fZLin9Clvf2/bbEuvvZZKVAdu+UIaudzSXk6CxuLOXOB/oPfX0JAPQpr+15Maj62EY8IzGom4XUIcOs1oNZwipQkz3x30qB3Oeil4M6/uAr2v6973G/1x29pOx5smFOeRFOYVYxAg3SS6ELkfdjIWkCNKjHiQKSYOmu9h652tkZ9CSiOS5NyUEvhtnLsUOXSrBXUy4qWJlrqIJEkc5ZER4/Gy5NfNMRLaWPdDq5am52C94FU9ngnS0OjqXL1xTrQQOxKDO5TUEUoK9gHqlpoZC+quoTX40C6DYocHs4ylCYtFRVdtMxdu1gqKlc9/lPMKds1zoq3cQqKB9PpLBeAOCDYtB9b/nddLE4Oy3yZiqcb3WO/SSje9gv/Jh5ktOXO2K4hO4HiFtQQ3LQ8tuoJgY8TBK9Mj0DKeRJ9JuwmeQdocunre7lxPBR8MIY14Vo+TNrFIzTeIdU1oUeUQF9UUT20OWGcLblbB84awdKkS5fhyAF+rrsPPAnIYXVyWNXTp1dFdUYPh+DTdY=
-  slack: 
+  slack:
     secure: e3hlzMdp5NYvuXG3vU76d9ksInTV36CPEOGVD/Nw7+Og12UM1pquYOr21OvJ0S4wtLx8EdC29fP9eQZQFUeEypmhlNzQl13+3ZzrHjcHPtjFHMVAv0BxFhneeDSY9QOafQElEC05HQ+51fay8DfEhwuEaYUiNcII095rCW3IYyv67ezURPTtUWjNSxn3nU4/yFPgJ4skSv1Mu41Dm7IHJawIR5tOos7CNi/oT8PLt145Lux/vpaG4uskZWVj33E0sWsS0OYZVVdF+WTRQGIskuZ+9klHt+A2su07QxRzs7ERcCaSYSP4mRBeRQM16RM5QXbdsaX0l7D6MFQEhUisdE0mmrRWAbu8VzOplLGoCDf1gOhItOuZIb5tftIMI+H67mrS9B3EEpuZktE+v6E8aWK/mGEreB6J0o8upJSb6TH8hIoHJneb6BHJD8+Vk29sPPD1J+VGtXDx0lvYPrBYrbYv7nGy3XExMfb88pjExOxXcYSjrdyeAkAcHT4EAODuKmc8LqG4zX9hDpbZ91LIo8e6exWiTp174vNIZdwcUwp1ddJo/lxLv3C7RcjdKqgVEwlQGFrBBcgQ45/PqPzzxPomJLgeirOVLOl/ig8eL20YXEnIWkUeAA9OWqX2Cur/LBMl0y1WD1DhhhwUBtv2OOFpOhB4H7+sqi840TvddG8=

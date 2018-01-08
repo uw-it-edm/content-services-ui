@@ -5,6 +5,8 @@ import { StudentService } from '../../providers/student.service';
 import { Observable } from 'rxjs/Observable';
 import { Student } from '../../shared/model/student';
 import { By } from '@angular/platform-browser';
+import { NotificationService } from '../../providers/notification.service';
+import { MatSnackBarModule } from '@angular/material';
 
 class MockStudentService extends StudentService {
   constructor() {
@@ -28,8 +30,9 @@ describe('StudentDisplayComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
+        imports: [MatSnackBarModule],
         declarations: [StudentDisplayComponent],
-        providers: [{ provide: StudentService, useValue: new MockStudentService() }]
+        providers: [{ provide: StudentService, useValue: new MockStudentService() }, NotificationService]
       }).compileComponents();
     })
   );

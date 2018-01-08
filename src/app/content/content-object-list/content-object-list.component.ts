@@ -26,7 +26,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
   @Input() page: string;
 
   @Output() remove = new EventEmitter<number>();
-  @Output() select = new EventEmitter<ContentObject>();
+  @Output() select = new EventEmitter<ContentObject>(true);
 
   config: Config;
   contentObjects = new Array<ContentObject>();
@@ -186,7 +186,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
       const message = this.createUpdateSnackBarMessage();
       const snackBarRef = this.snackBar.open(message, 'Dismiss', this.snackBarConfig);
 
-      if (this.formGroup && this.formGroup.controls.uploadAnother) {
+      if (this.formGroup && this.formGroup.controls['uploadAnother']) {
         snackBarRef.onAction().subscribe(() => {
           const ctrl = this.formGroup.get('uploadAnother');
           if (ctrl && ctrl.value) {

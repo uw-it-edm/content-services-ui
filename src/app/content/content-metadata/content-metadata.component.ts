@@ -38,6 +38,7 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
   private generateDisplayedMetadataGroup(): FormGroup {
     const group: any = {};
     this.pageConfig.fieldsToDisplay.map(field => {
+      // TODO This is currently not used/working. It'll need to be moved in the app-options-input component
       if (field.displayType === 'autocomplete' && field.options && field.options.length > 0) {
         field.filteredOptions = new Observable<any[]>();
         const fc = new FormControl('');
@@ -58,6 +59,7 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
 
   private updateMetadataGroupValues() {
     if (this.formGroup && this.contentItem) {
+      this.formGroup.reset();
       this.formGroup.patchValue({ label: this.contentItem.label });
       const metaDataForm: FormGroup = <FormGroup>this.formGroup.controls['metadata'];
       if (!isNullOrUndefined(metaDataForm)) {

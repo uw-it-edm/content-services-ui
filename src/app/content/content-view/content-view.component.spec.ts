@@ -4,13 +4,13 @@ import { ContentViewComponent } from './content-view.component';
 import { SafeUrlPipe } from '../../shared/pipes/safe-url.pipe';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { ContentItem } from '../shared/model/content-item';
-import { Observable } from 'rxjs/Observable';
 import { ContentService } from '../shared/content.service';
-import { MatButtonModule, MatTooltipModule } from '@angular/material';
 import { ContentObject } from '../shared/model/content-object';
 import { ContentToolbarComponent } from '../content-toolbar/content-toolbar.component';
 import { FormsModule } from '@angular/forms';
 import { ProgressService } from '../../shared/providers/progress.service';
+import { MaterialConfigModule } from '../../routing/material-config.module';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 class MockContentService {
   getFileUrl(itemId: string, webViewable: boolean): string {
@@ -26,7 +26,7 @@ describe('ContentViewComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, MatButtonModule, MatTooltipModule, PdfViewerModule],
+      imports: [FormsModule, MaterialConfigModule, PdfViewerModule, NoopAnimationsModule],
       providers: [{ provide: ContentService, useClass: MockContentService }, ProgressService],
       declarations: [ContentToolbarComponent, ContentViewComponent, SafeUrlPipe]
     }).compileComponents();

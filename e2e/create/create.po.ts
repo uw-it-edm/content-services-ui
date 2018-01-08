@@ -1,8 +1,9 @@
-import { browser, by, element } from 'protractor';
-import * as path from 'path';
+import {browser, by, element} from 'protractor';
 
 export class CreatePage {
   public pageUrl = '/demo/create';
+  public uploadFilePanel = element(by.id('drop-zone'));
+  public fileList = element.all(by.tagName('mat-list-item'));
 
   navigateTo() {
     return browser.get(this.pageUrl);
@@ -12,10 +13,12 @@ export class CreatePage {
     return browser.getTitle();
   }
 
-  uploadFile() {
-    const pdfFilePath = '../sample-file.pdf';
-    const absolutePath = path.resolve(__dirname, pdfFilePath);
-    element(by.id('attach-files')).sendKeys(absolutePath);
+  addFile(filePath) {
+    element(by.name('addFile')).sendKeys(filePath);
+  }
+
+  chooseFile(filePath) {
+    element(by.id('attach-files')).sendKeys(filePath);
   }
 
   getPdfViewer() {
@@ -26,7 +29,15 @@ export class CreatePage {
     element(by.id('cancel')).click();
   }
 
-  clickReturnToResultsLink() {
-    element(by.css('.cs-content-page .mat-toolbar-row a')).click();
+  clickReturnToResultsButton() {
+    element(by.css('.mat-icon-button[mattooltip=\'Return to Results\']')).click();
+  }
+
+  getContentViewerText() {
+    return element(by.css('.content-object-display .custom-text-rendered')).getText();
+  }
+
+  undoFile() {
+    element(by.css('.mat-list-item-content .mat-icon-button[mattooltip=\'Undo\']')).click();
   }
 }

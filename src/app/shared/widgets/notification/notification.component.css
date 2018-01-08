@@ -1,0 +1,21 @@
+* {
+  color: white;
+}
+
+button {
+  float: right;
+}
+
+mat-icon {
+  vertical-align: middle;
+}
+.error {
+  color: red;
+}
+.info {
+  color: white;
+}
+.warn {
+  color: orange;
+}
+

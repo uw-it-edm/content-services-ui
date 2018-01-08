@@ -3,6 +3,7 @@ import { StudentService } from '../../providers/student.service';
 import { Student } from '../../shared/model/student';
 import { Subject } from 'rxjs/Subject';
 import { isNumeric } from 'rxjs/util/isNumeric';
+import { NotificationService } from '../../providers/notification.service';
 
 @Component({
   selector: 'app-student-display',
@@ -17,7 +18,7 @@ export class StudentDisplayComponent implements OnInit, OnDestroy {
   displayName: string;
   invalidStudentNumber: boolean;
 
-  constructor(private studentService: StudentService) {}
+  constructor(private studentService: StudentService, private notificationService: NotificationService) {}
 
   ngOnInit() {
     if (isNumeric(this.value)) {
@@ -30,6 +31,7 @@ export class StudentDisplayComponent implements OnInit, OnDestroy {
             this.invalidStudentNumber = false;
           },
           err => {
+            this.notificationService.warn(err.message, err);
             this.invalidUser();
           }
         );
