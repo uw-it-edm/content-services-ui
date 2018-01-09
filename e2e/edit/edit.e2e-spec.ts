@@ -10,13 +10,9 @@ const getCurrentUrl = function() {
 };
 
 describe('content-services-ui Edit Page', () => {
-  let page: EditPage;
+  const page = new EditPage();
   const demoConfig = require('../mocks/profile-api/demo.json');
   const searchPage = new SearchPage();
-
-  beforeAll(() => {
-    page = new EditPage();
-  });
 
   beforeEach(() => {
     page.navigateTo();

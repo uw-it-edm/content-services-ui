@@ -1,5 +1,6 @@
 import {ContentServicesUiPage} from './app.po';
 import {SearchPage} from '../search/search.po';
+import {browser} from 'protractor';
 
 const page = new ContentServicesUiPage();
 const TITLE = 'Content Services';
@@ -31,6 +32,10 @@ describe('content-services-ui App', () => {
 describe('content-services-ui App navigation', () => {
   beforeEach(() => {
     page.navigateTo();
+  });
+
+  afterEach(() => {
+    browser.waitForAngularEnabled(true);
   });
 
   it('should navigate to search page when tenant is selected on app menu icon', () => {
