@@ -1,8 +1,7 @@
 import {ContentServicesUiPage} from './app.po';
 import {SearchPage} from '../search/search.po';
 
-let page: ContentServicesUiPage;
-page = new ContentServicesUiPage();
+const page = new ContentServicesUiPage();
 const TITLE = 'Content Services';
 
 describe('content-services-ui App', () => {

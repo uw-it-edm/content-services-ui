@@ -2,6 +2,7 @@ import {CreatePage} from './create.po';
 import {SearchPage} from '../search/search.po';
 import {browser} from 'protractor';
 import * as path from 'path';
+import {until} from 'selenium-webdriver';
 
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
@@ -9,20 +10,13 @@ const getCurrentUrl = function() {
   });
 };
 
-const getSearchPageUrl = function() {
-  const searchPage = new SearchPage();
-  return searchPage.pageUrl;
-};
-
 describe('content-services-ui Create Page', () => {
-  let page: CreatePage;
+  const page = new CreatePage();
+  const searchPage = new SearchPage();
   const demoConfig = require('../mocks/profile-api/demo.json');
   const pdfFilePath = path.resolve(__dirname, '../sample-file.pdf');
   const docFilePath = path.resolve(__dirname, '../sample-file.docx');
-
-  beforeAll(() => {
-    page = new CreatePage();
-  });
+  const textFilePath = path.resolve(__dirname, '../sample-file.txt');
 
   beforeEach(() => {
     page.navigateTo();
@@ -32,22 +26,34 @@ describe('content-services-ui Create Page', () => {
     expect(page.getPageTitle()).toEqual(demoConfig.pages.create.pageName);
   });
 
+  it('should replace the correct file when 1 of many files is replaced', () => {
+    const contentItem = require('../mocks/content-api/item.json');
+    const textFileName = path.parse(textFilePath).base;
+
+    page.chooseFile(pdfFilePath + '\n' + docFilePath);
+    page.clickSave();
+    expect(until.alertIsPresent());
+
+    page.replaceFile(1, textFilePath);
+    expect(page.getFileNames()).toEqual([contentItem.label, textFileName]);
+  });
+
   it('should navigate to Search page when Cancel button is clicked', () => {
     page.clickCancelButton();
 
-    expect(getCurrentUrl()).toMatch(getSearchPageUrl());
+    expect(getCurrentUrl()).toMatch(searchPage.pageUrl);
   });
 
   it('should navigate to Search page when Return to Results button is clicked', () => {
     page.clickReturnToResultsButton();
 
-    expect(getCurrentUrl()).toMatch(getSearchPageUrl());
+    expect(getCurrentUrl()).toMatch(searchPage.pageUrl);
   });
 
   it('should navigate to Search page when App Name link is clicked', () => {
     page.clickAppName();
 
-    expect(getCurrentUrl()).toMatch(getSearchPageUrl());
+    expect(getCurrentUrl()).toMatch(searchPage.pageUrl);
   });
 
   it('should display pdf viewer when 1 pdf file is uploaded with Add File button', () => {

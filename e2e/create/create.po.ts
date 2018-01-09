@@ -13,11 +13,11 @@ export class CreatePage {
     return browser.getTitle();
   }
 
-  addFile(filePath) {
+  addFile(filePath: string) {
     element(by.name('addFile')).sendKeys(filePath);
   }
 
-  chooseFile(filePath) {
+  chooseFile(filePath: string) {
     element(by.id('attach-files')).sendKeys(filePath);
   }
 
@@ -46,6 +46,17 @@ export class CreatePage {
   }
 
   getFileNames() {
-    return this.fileList.all(by.css('.mat-list-text p > span')).getText();
+    return element.all(by.css('.mat-list-item-content .mat-list-text p > span')).getText();
+  }
+
+  clickSave() {
+    element(by.id('saveItem')).click();
+  }
+
+  replaceFile(fileIndex: number, filePath: string) {
+    element
+      .all(by.name('replaceFile'))
+      .get(fileIndex)
+      .sendKeys(filePath);
   }
 }

@@ -2,9 +2,6 @@ import {browser, by, element} from 'protractor';
 import * as path from 'path';
 
 export class EditPage {
-  uploadButton = element(by.name('replaceFile'));
-  headerTitle = element(by.className('cs-title'));
-
   navigateTo() {
     return browser.get('/demo/edit/123456');
   }
@@ -14,13 +11,12 @@ export class EditPage {
   }
 
   clickReturnToResultsLink() {
-    element(by.css('[mattooltip=\'Return to Result\']')).click();
+    element(by.css('[mattooltip=\'Return to Results\']')).click();
   }
 
   replaceFile() {
-    const pdfFilePath = '../sample-file.pdf';
-    const absolutePath = path.resolve(__dirname, pdfFilePath);
-    this.uploadButton.sendKeys(absolutePath);
+    const pdfFilePath = path.resolve(__dirname, '../sample-file.pdf');
+    element(by.name('replaceFile')).sendKeys(pdfFilePath);
   }
 
   getPdfViewer() {
