@@ -11,7 +11,7 @@ const getCurrentUrl = function() {
 };
 
 describe('content-services-ui Create Page', () => {
-  const page = new CreatePage();
+  let page: CreatePage;
   const searchPage = new SearchPage();
   const demoConfig = require('../mocks/profile-api/demo.json');
   const pdfFilePath = path.resolve(__dirname, '../sample-file.pdf');
@@ -19,23 +19,12 @@ describe('content-services-ui Create Page', () => {
   const textFilePath = path.resolve(__dirname, '../sample-file.txt');
 
   beforeEach(() => {
+    page = new CreatePage();
     page.navigateTo();
   });
 
   it('should display page title that matches config file', () => {
     expect(page.getPageTitle()).toEqual(demoConfig.pages.create.pageName);
-  });
-
-  it('should replace the correct file when 1 of many files is replaced', () => {
-    const contentItem = require('../mocks/content-api/item.json');
-    const textFileName = path.parse(textFilePath).base;
-
-    page.chooseFile(pdfFilePath + '\n' + docFilePath);
-    page.clickSave();
-    expect(until.alertIsPresent());
-
-    page.replaceFile(1, textFilePath);
-    expect(page.getFileNames()).toEqual([contentItem.label, textFileName]);
   });
 
   it('should navigate to Search page when Cancel button is clicked', () => {
@@ -75,7 +64,8 @@ describe('content-services-ui Create Page', () => {
 
     const pdfFileName = path.parse(pdfFilePath).base;
     const docFileName = path.parse(docFilePath).base;
-    expect(page.getFileNames()).toEqual([pdfFileName.trim(), docFileName.trim()]);
+    expect(page.getFileName(0)).toEqual(pdfFileName);
+    expect(page.getFileName(1)).toEqual(docFileName);
   });
 
   it('should display default message when non viewable file is uploaded', () => {
@@ -89,5 +79,14 @@ describe('content-services-ui Create Page', () => {
     page.undoFile();
 
     expect(page.uploadFilePanel.isDisplayed());
+  });
+
+  it('should replace the correct file when 1 of many files is replaced', () => {
+    page.chooseFile(pdfFilePath + '\n' + docFilePath);
+    page.clickSave();
+    expect(until.alertIsPresent());
+
+    page.replaceFile(1, textFilePath);
+    expect(page.getFileName(1)).toEqual(path.parse(textFilePath).base);
   });
 });

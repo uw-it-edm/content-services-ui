@@ -30,7 +30,7 @@ export class CreatePage {
   }
 
   clickReturnToResultsButton() {
-    element(by.css('.mat-icon-button[mattooltip=\'Return to Results\']')).click();
+    element(by.css('[mattooltip=\'Return to Results\']')).click();
   }
 
   clickAppName() {
@@ -42,11 +42,13 @@ export class CreatePage {
   }
 
   undoFile() {
-    element(by.css('.mat-list-item-content .mat-icon-button[mattooltip=\'Undo\']')).click();
+    element(by.css('[mattooltip=\'Undo\']')).click();
   }
 
-  getFileNames() {
-    return element.all(by.css('.mat-list-item-content .mat-list-text p > span')).getText();
+  getFileName(fileIndex: number) {
+    return element.all(by.css('.mat-list-item-content .mat-list-text p > span')).then(names => {
+      return names[fileIndex].getText();
+    });
   }
 
   clickSave() {
@@ -54,9 +56,8 @@ export class CreatePage {
   }
 
   replaceFile(fileIndex: number, filePath: string) {
-    element
-      .all(by.name('replaceFile'))
-      .get(fileIndex)
-      .sendKeys(filePath);
+    element.all(by.name('replaceFile')).then(replaceButtons => {
+      replaceButtons[fileIndex].sendKeys(filePath);
+    });
   }
 }
