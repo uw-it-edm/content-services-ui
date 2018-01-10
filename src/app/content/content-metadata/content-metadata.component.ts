@@ -1,11 +1,12 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { ContentItem } from '../shared/model/content-item';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { isNullOrUndefined } from 'util';
 import 'rxjs/add/operator/startWith';
+import { Field } from '../../core/shared/model/field';
 
 @Component({
   selector: 'app-content-metadata',
@@ -35,19 +36,32 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
     return options.filter(option => option.toLowerCase().indexOf(name.toLowerCase()) >= 0);
   }
 
+  private initFormState(field: Field) {
+    return { value: '', disabled: field.disabled };
+  }
+
   private generateDisplayedMetadataGroup(): FormGroup {
     const group: any = {};
     this.pageConfig.fieldsToDisplay.map(field => {
+      const formState = this.initFormState(field);
+
       // TODO This is currently not used/working. It'll need to be moved in the app-options-input component
       if (field.displayType === 'autocomplete' && field.options && field.options.length > 0) {
         field.filteredOptions = new Observable<any[]>();
-        const fc = new FormControl('');
+        const fc = new FormControl(formState);
         field.filteredOptions = fc.valueChanges
           .startWith(null)
           .map(x => (x ? this.filterOptions(x, field.options) : field.options.slice()));
         group[field.key] = fc;
       } else {
-        group[field.key] = new FormControl('');
+        const formControl = new FormControl(formState);
+
+        // this is where we should handle different type of validation
+        if (field.required) {
+          formControl.setValidators(Validators.required);
+        }
+
+        group[field.key] = formControl;
       }
     });
     return new FormGroup(group);
@@ -73,5 +87,11 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy(): void {
     this.componentDestroyed.next();
     this.componentDestroyed.complete();
+  }
+
+  getErrorMessage(formControlName: string) {
+    // this should probably be improved to handle different error type
+    // return this.formGroup.controls['metadata'].controls[formControlName].hasError('required') ? 'You must enter a value' : '';
+    return 'You must enter a value';
   }
 }

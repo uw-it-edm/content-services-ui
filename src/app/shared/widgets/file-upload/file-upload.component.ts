@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-file-upload',
@@ -21,7 +21,8 @@ export class FileUploadComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.formGroup.setControl(this.fieldName, new FormControl('', Validators.required));
+    // TODO validator
+    this.formGroup.setControl(this.fieldName, new FormControl(''));
     this.fieldId = this.fieldName + '_' + Math.random().toString();
   }
 

@@ -5,6 +5,9 @@ export class Field {
   public key: string;
   public label: string;
 
+  public required = false;
+  public disabled = false;
+
   public dataType? = 'string';
   public displayType?: string;
 

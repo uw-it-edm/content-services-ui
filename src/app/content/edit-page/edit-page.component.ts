@@ -8,7 +8,7 @@ import { Title } from '@angular/platform-browser';
 import 'rxjs/add/operator/takeUntil';
 import { Subject } from 'rxjs/Subject';
 import { ContentItem } from '../shared/model/content-item';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import 'rxjs/add/observable/of';
 import { MatSnackBar } from '@angular/material';
 import { ContentViewComponent } from '../content-view/content-view.component';
@@ -18,6 +18,7 @@ import { UserService } from '../../user/shared/user.service';
 import { ContentObject } from '../shared/model/content-object';
 import { ContentObjectListComponent } from '../content-object-list/content-object-list.component';
 import { isNullOrUndefined } from 'util';
+import { NotificationService } from '../../shared/providers/notification.service';
 
 @Component({
   selector: 'app-edit-page',
@@ -47,7 +48,8 @@ export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
     private snackBar: MatSnackBar,
     private titleService: Title,
     private fb: FormBuilder,
-    private userService: UserService
+    private userService: UserService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -135,7 +137,18 @@ export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
     const formModel = this.form.value;
     const metadataOverrides = this.pageConfig.onSave;
 
-    this.contentObjectListComponent.saveItem(fields, formModel, metadataOverrides);
+    if (this.form.valid) {
+      this.contentObjectListComponent.saveItem(fields, formModel, metadataOverrides);
+    } else {
+      const invalid = <FormControl[]>Object.keys(this.form.controls)
+        .map(key => this.form.controls[key])
+        .filter(ctl => ctl.invalid);
+      if (invalid.length > 0) {
+        const invalidElem: any = invalid[0];
+        invalidElem.nativeElement.focus();
+      }
+      this.notificationService.error('Invalid Form');
+    }
   }
 
   private createForm(): FormGroup {
