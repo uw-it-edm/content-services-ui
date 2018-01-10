@@ -1,8 +1,8 @@
-import {CreatePage} from './create.po';
-import {SearchPage} from '../search/search.po';
-import {browser} from 'protractor';
+import { CreatePage } from './create.po';
+import { SearchPage } from '../search/search.po';
+import { browser } from 'protractor';
 import * as path from 'path';
-import {until} from 'selenium-webdriver';
+import { until } from 'selenium-webdriver';
 
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
@@ -87,6 +87,8 @@ describe('content-services-ui Create Page', () => {
     expect(until.alertIsPresent());
 
     page.replaceFile(1, textFilePath);
+    browser.waitForAngularEnabled(false);
     expect(page.getFileName(1)).toEqual(path.parse(textFilePath).base);
+    browser.waitForAngularEnabled(true);
   });
 });
