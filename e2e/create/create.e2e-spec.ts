@@ -1,7 +1,8 @@
-import {CreatePage} from './create.po';
-import {SearchPage} from '../search/search.po';
-import {browser} from 'protractor';
+import { CreatePage } from './create.po';
+import { SearchPage } from '../search/search.po';
+import { browser } from 'protractor';
 import * as path from 'path';
+import { until } from 'selenium-webdriver';
 
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
@@ -9,22 +10,16 @@ const getCurrentUrl = function() {
   });
 };
 
-const getSearchPageUrl = function() {
-  const searchPage = new SearchPage();
-  return searchPage.pageUrl;
-};
-
 describe('content-services-ui Create Page', () => {
   let page: CreatePage;
+  const searchPage = new SearchPage();
   const demoConfig = require('../mocks/profile-api/demo.json');
   const pdfFilePath = path.resolve(__dirname, '../sample-file.pdf');
   const docFilePath = path.resolve(__dirname, '../sample-file.docx');
-
-  beforeAll(() => {
-    page = new CreatePage();
-  });
+  const textFilePath = path.resolve(__dirname, '../sample-file.txt');
 
   beforeEach(() => {
+    page = new CreatePage();
     page.navigateTo();
   });
 
@@ -35,13 +30,19 @@ describe('content-services-ui Create Page', () => {
   it('should navigate to Search page when Cancel button is clicked', () => {
     page.clickCancelButton();
 
-    expect(getCurrentUrl()).toMatch(getSearchPageUrl());
+    expect(getCurrentUrl()).toMatch(searchPage.pageUrl);
   });
 
   it('should navigate to Search page when Return to Results button is clicked', () => {
     page.clickReturnToResultsButton();
 
-    expect(getCurrentUrl()).toMatch(getSearchPageUrl());
+    expect(getCurrentUrl()).toMatch(searchPage.pageUrl);
+  });
+
+  it('should navigate to Search page when App Name link is clicked', () => {
+    page.clickAppName();
+
+    expect(getCurrentUrl()).toMatch(searchPage.pageUrl);
   });
 
   it('should display pdf viewer when 1 pdf file is uploaded with Add File button', () => {
@@ -60,6 +61,11 @@ describe('content-services-ui Create Page', () => {
     page.chooseFile(pdfFilePath + '\n' + docFilePath);
 
     expect(page.fileList.count()).toEqual(2);
+
+    const pdfFileName = path.parse(pdfFilePath).base;
+    const docFileName = path.parse(docFilePath).base;
+    expect(page.getFileName(0)).toEqual(pdfFileName);
+    expect(page.getFileName(1)).toEqual(docFileName);
   });
 
   it('should display default message when non viewable file is uploaded', () => {
@@ -73,5 +79,16 @@ describe('content-services-ui Create Page', () => {
     page.undoFile();
 
     expect(page.uploadFilePanel.isDisplayed());
+  });
+
+  it('should replace the correct file when 1 of many files is replaced', () => {
+    page.chooseFile(pdfFilePath + '\n' + docFilePath);
+    page.clickSave();
+    expect(until.alertIsPresent());
+
+    page.replaceFile(1, textFilePath);
+    browser.waitForAngularEnabled(false);
+    expect(page.getFileName(1)).toEqual(path.parse(textFilePath).base);
+    browser.waitForAngularEnabled(true);
   });
 });
