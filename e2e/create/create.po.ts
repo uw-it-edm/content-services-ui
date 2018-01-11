@@ -13,11 +13,11 @@ export class CreatePage {
     return browser.getTitle();
   }
 
-  addFile(filePath) {
+  addFile(filePath: string) {
     element(by.name('addFile')).sendKeys(filePath);
   }
 
-  chooseFile(filePath) {
+  chooseFile(filePath: string) {
     element(by.id('attach-files')).sendKeys(filePath);
   }
 
@@ -30,7 +30,11 @@ export class CreatePage {
   }
 
   clickReturnToResultsButton() {
-    element(by.css('.mat-icon-button[mattooltip=\'Return to Results\']')).click();
+    element(by.css('[mattooltip=\'Return to Results\']')).click();
+  }
+
+  clickAppName() {
+    element(by.className('cs-title')).click();
   }
 
   getContentViewerText() {
@@ -38,6 +42,22 @@ export class CreatePage {
   }
 
   undoFile() {
-    element(by.css('.mat-list-item-content .mat-icon-button[mattooltip=\'Undo\']')).click();
+    element(by.css('[mattooltip=\'Undo\']')).click();
+  }
+
+  getFileName(fileIndex: number) {
+    return element.all(by.css('.mat-list-item-content .mat-list-text p > span')).then(names => {
+      return names[fileIndex].getText();
+    });
+  }
+
+  clickSave() {
+    element(by.id('saveItem')).click();
+  }
+
+  replaceFile(fileIndex: number, filePath: string) {
+    element.all(by.name('replaceFile')).then(replaceButtons => {
+      replaceButtons[fileIndex].sendKeys(filePath);
+    });
   }
 }
