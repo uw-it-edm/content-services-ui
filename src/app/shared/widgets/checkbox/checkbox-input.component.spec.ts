@@ -36,22 +36,22 @@ describe('CheckboxInput', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have the correct checked/unchecked values', () => {
-    expect(component.checkedValue).toEqual('checked');
-    expect(component.uncheckedValue).toEqual('notchecked');
-  });
+  /*  it('should have the correct checked/unchecked values', () => {
+    expect(component._checkedValue).toEqual('checked');
+    expect(component._uncheckedValue).toEqual('notchecked');
+  });*/
 
   it('should have the specified not checked value when checkbox is unchecked', () => {
     const matCheckboxChange = new MatCheckboxChange();
     matCheckboxChange.checked = false;
-    component.refreshValue(matCheckboxChange);
+    component.internalCheckboxUpdated(matCheckboxChange);
     expect(component.value).toEqual('notchecked');
   });
 
   it('should have the specified  checked value when checkbox is checked', () => {
     const matCheckboxChange = new MatCheckboxChange();
     matCheckboxChange.checked = true;
-    component.refreshValue(matCheckboxChange);
+    component.internalCheckboxUpdated(matCheckboxChange);
     expect(component.value).toEqual('checked');
   });
 });

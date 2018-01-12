@@ -56,15 +56,19 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
       } else {
         const formControl = new FormControl(formState);
 
-        // this is where we should handle different type of validation
-        if (field.required) {
-          formControl.setValidators(Validators.required);
-        }
+        this.addValidation(field, formControl);
 
         group[field.key] = formControl;
       }
     });
     return new FormGroup(group);
+  }
+
+  private addValidation(field, formControl: FormControl) {
+    // this is where we should handle different type of validation
+    if (field.required) {
+      formControl.setValidators(Validators.required);
+    }
   }
 
   ngOnChanges() {

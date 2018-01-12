@@ -26,6 +26,8 @@ import { ContentObject } from '../shared/model/content-object';
 import { ContentObjectListComponent } from '../content-object-list/content-object-list.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FieldOption } from '../../core/shared/model/field/field-option';
+import { Field } from '../../core/shared/model/field';
+import { NotificationService } from '../../shared/providers/notification.service';
 
 class MockContentService {
   read(itemId: string): Observable<ContentItem> {
@@ -93,6 +95,7 @@ describe('EditPageComponent', () => {
           FormBuilder,
           MatSnackBar,
           ProgressService,
+          NotificationService,
           { provide: UserService, useValue: mockUserService }
         ],
         schemas: [NO_ERRORS_SCHEMA]
@@ -123,18 +126,18 @@ describe('EditPageComponent', () => {
 
     editPageConfig = new ContentPageConfig();
     editPageConfig.fieldsToDisplay = [
-      { key: '1', label: '1' },
-      { key: '2', label: '2' },
-      { key: '3', label: '3' },
-      { key: 'a', label: 'a' },
-      { key: 'd', label: 'd', dataType: 'date' },
-      {
+      Object.assign(new Field(), { key: '1', label: '1' }),
+      Object.assign(new Field(), { key: '2', label: '2' }),
+      Object.assign(new Field(), { key: '3', label: '3' }),
+      Object.assign(new Field(), { key: 'a', label: 'a' }),
+      Object.assign(new Field(), { key: 'd', label: 'd', dataType: 'date' }),
+      Object.assign(new Field(), {
         key: 't',
         label: 't',
         dataType: 'string',
         displayType: 'typeahead',
         options: [new FieldOption('o1'), new FieldOption('o2')]
-      }
+      })
     ];
     editPageConfig.buttons = [deleteButton, saveButton];
 

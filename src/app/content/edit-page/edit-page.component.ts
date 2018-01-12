@@ -140,11 +140,11 @@ export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.form.valid) {
       this.contentObjectListComponent.saveItem(fields, formModel, metadataOverrides);
     } else {
-      const invalid = <FormControl[]>Object.keys(this.form.controls)
+      const invalidFields = <FormControl[]>Object.keys(this.form.controls)
         .map(key => this.form.controls[key])
         .filter(ctl => ctl.invalid);
-      if (invalid.length > 0) {
-        const invalidElem: any = invalid[0];
+      if (invalidFields.length > 0) {
+        const invalidElem: any = invalidFields[0];
         invalidElem.nativeElement.focus();
       }
       this.notificationService.error('Invalid Form');

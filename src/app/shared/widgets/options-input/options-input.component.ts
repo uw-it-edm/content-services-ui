@@ -4,9 +4,10 @@ import {
   Component,
   DoCheck,
   ElementRef,
+  HostBinding,
+  HostListener,
   Input,
   OnDestroy,
-  OnInit,
   Optional,
   Self
 } from '@angular/core';
@@ -33,7 +34,7 @@ import { Field } from '../../../core/shared/model/field';
 import { FieldOption } from '../../../core/shared/model/field/field-option';
 import { FocusMonitor } from '@angular/cdk/a11y';
 
-// Boilerplate for applying mixins to MatChipList.
+// Boilerplate for applying mixins to OptionsInputComponent.
 /** @docs-private */
 export class OptionsInputComponentBase {
   constructor(
@@ -55,13 +56,9 @@ const INTERNAL_FIELD_NAME = 'optionsForm';
   templateUrl: './options-input.component.html',
   styleUrls: ['./options-input.component.css'],
   host: {
-    '[attr.aria-describedby]': '_ariaDescribedby || null',
     '[attr.aria-required]': 'required.toString()',
     '[attr.aria-disabled]': 'disabled.toString()',
-    '[attr.aria-invalid]': 'errorState',
-    '[attr.role]': 'role',
-    '(focus)': 'focus()',
-    '(blur)': '_blur()'
+    '[attr.aria-invalid]': 'errorState'
   },
   providers: [
     {
@@ -74,7 +71,6 @@ const INTERNAL_FIELD_NAME = 'optionsForm';
 export class OptionsInputComponent extends _OptionsInputComponentBase
   implements ControlValueAccessor,
     MatFormFieldControl<string>,
-    OnInit,
     CanUpdateErrorState,
     AfterContentInit,
     DoCheck,
@@ -84,6 +80,11 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
   onSelect(event: MatSelectChange) {
     // TODO needed ?
     console.log(JSON.stringify(event.value));
+    this._propagateChanges(event.value);
+  }
+
+  get internalFieldName(): string {
+    return INTERNAL_FIELD_NAME;
   }
 
   @Input() fieldConfig: Field;
@@ -92,8 +93,9 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
 
   private initComponent() {
     this.initInternalForm();
-
     this.initOptions();
+    this.initializeValue();
+    this.setInnerInputDisableState();
   }
 
   private initInternalForm() {
@@ -107,10 +109,20 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
     });
   }
 
+  private initializeValue(): void {
+    // Defer setting the value in order to avoid the "Expression
+    // has changed after it was checked" errors from Angular.
+    Promise.resolve().then(() => {
+      if (this.ngControl || this._value) {
+        this.setInternalValue(this.ngControl ? this.ngControl.value : this._value);
+        this.stateChanges.next();
+      }
+    });
+  }
+
   private setInnerInputDisableState() {
     if (this.formGroup && this.formGroup.controls[INTERNAL_FIELD_NAME]) {
       if (this.disabled) {
-        console.log('disabling it');
         this.formGroup.controls[INTERNAL_FIELD_NAME].disable();
       } else {
         this.formGroup.controls[INTERNAL_FIELD_NAME].enable();
@@ -118,19 +130,13 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
     }
   }
 
-  private _internalChangeSubscription;
-
-  _listenToInternalChange() {
-    this._internalChangeSubscription = this.formGroup.controls[INTERNAL_FIELD_NAME].valueChanges.subscribe(value => {
-      this._propagateChanges(value);
-    });
-  }
-
-  private populateInitialValue(initialValue: string) {
-    if (!isNullOrUndefined(initialValue)) {
-      this.formGroup.controls[INTERNAL_FIELD_NAME].patchValue(initialValue);
+  private setInternalValue(value: string) {
+    if (!isNullOrUndefined(value)) {
+      if (this.formGroup && this.formGroup.controls[INTERNAL_FIELD_NAME]) {
+        this.formGroup.controls[INTERNAL_FIELD_NAME].patchValue(value);
+      }
     } else {
-        this.formGroup.controls[INTERNAL_FIELD_NAME].reset();
+      this.formGroup.controls[INTERNAL_FIELD_NAME].reset();
     }
   }
 
@@ -160,7 +166,13 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
   protected _placeholder: string;
 
   /** The aria-describedby attribute on the chip list for improved a11y. */
-  _ariaDescribedby: string;
+  @HostBinding('attr.aria-describedby') _ariaDescribedby: string;
+
+  @HostBinding('attr.aria-role')
+  /** https://www.w3.org/TR/wai-aria/roles#listbox */
+  get role(): string | null {
+    return this.empty ? null : 'listbox';
+  }
 
   /** An object used to control when error messages are shown. */
   @Input() errorStateMatcher: ErrorStateMatcher;
@@ -210,14 +222,14 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
   }
 
   get empty() {
-    const n = this.formGroup.value;
-    return !n.optionsForm;
+    const value = this.formGroup.controls[INTERNAL_FIELD_NAME].value;
+    return !value;
   }
 
   focused = false;
 
   get shouldLabelFloat(): boolean {
-    return this.focused;
+    return this.focused || !this.empty;
   }
 
   /** Whether this input is disabled. */
@@ -250,15 +262,10 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     }
-    // This might need to be moved in ngInit or ngAfterContentInit
-    this.initInternalForm();
   }
 
-  ngAfterContentInit(): void {}
-
-  ngOnInit() {
-    this.initOptions();
-    this._listenToInternalChange();
+  ngAfterContentInit(): void {
+    this.initComponent();
     this.stateChanges.next();
   }
 
@@ -279,8 +286,8 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
     this.stateChanges.complete();
     this.fm.stopMonitoring(this._elementRef.nativeElement);
 
-    this._internalChangeSubscription.unsubscribe();
-    this._internalChangeSubscription = null;
+    /*    this._internalChangeSubscription.unsubscribe();
+    this._internalChangeSubscription = null;*/
   }
 
   // Implemented as part of MatFormFieldControl.
@@ -291,7 +298,7 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
   // Implemented as part of ControlValueAccessor
   writeValue(value: any): void {
     if (value !== undefined) {
-      this.populateInitialValue(value);
+      this.setInternalValue(value);
     }
   }
 
@@ -319,6 +326,7 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
     this._markAsTouched();
   }
 
+  @HostListener('focus')
   focus() {
     // TODO
     /* if ((event.target as Element).tagName.toLowerCase() !== 'input') {
@@ -341,7 +349,8 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
   }
 
   /** When blurred, mark the field as touched when focus moved outside the chip list. */
-  _blur() {
+  @HostListener('blur')
+  blur() {
     if (!this.disabled) {
       this._markAsTouched();
     }

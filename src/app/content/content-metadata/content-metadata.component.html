@@ -41,7 +41,7 @@
               [formControlName]="fieldToDisplay.key"
               [placeholder]="fieldToDisplay.label"
             ></app-checkbox-input>
-
+            <mat-error> {{getErrorMessage(fieldToDisplay.key)}}</mat-error>
           </mat-form-field>
 
           <mat-form-field *ngSwitchCase="'student-autocomplete'">
@@ -50,7 +50,7 @@
               [placeholder]="fieldToDisplay.label"
             >
             </app-student-autocomplete>
-
+            <mat-error> {{getErrorMessage(fieldToDisplay.key)}}</mat-error>
           </mat-form-field>
 
           <mat-form-field *ngSwitchDefault>
