@@ -348,7 +348,7 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
     this.stateChanges.next();
   }
 
-  /** When blurred, mark the field as touched when focus moved outside the chip list. */
+  /** When blurred, mark the field as touched when focus moved outside the Input. */
   @HostListener('blur')
   blur() {
     if (!this.disabled) {

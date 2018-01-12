@@ -95,9 +95,8 @@ export class CheckboxInputComponent extends _CheckboxInputComponentBase
   }
 
   private initInternalForm() {
-    this.formGroup = this.fb.group({
-      internalCheckbox: new FormControl()
-    });
+    this.formGroup = this.fb.group({});
+    this.formGroup.controls[INTERNAL_FIELD_NAME] = new FormControl();
   }
 
   private updateInternalValue(externalValue: string) {
@@ -234,8 +233,8 @@ export class CheckboxInputComponent extends _CheckboxInputComponentBase
   }
 
   get empty() {
-    const n = this.formGroup.value;
-    return !n.optionsForm;
+    const value = this.formGroup.controls[INTERNAL_FIELD_NAME].value;
+    return !value;
   }
 
   focused = false;
