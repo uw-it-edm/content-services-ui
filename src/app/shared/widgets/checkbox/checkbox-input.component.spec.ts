@@ -36,11 +36,6 @@ describe('CheckboxInput', () => {
     expect(component).toBeTruthy();
   });
 
-  /*  it('should have the correct checked/unchecked values', () => {
-    expect(component._checkedValue).toEqual('checked');
-    expect(component._uncheckedValue).toEqual('notchecked');
-  });*/
-
   it('should have the specified not checked value when checkbox is unchecked', () => {
     const matCheckboxChange = new MatCheckboxChange();
     matCheckboxChange.checked = false;

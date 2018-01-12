@@ -75,9 +75,9 @@ describe('StudentAutocompleteComponent', () => {
   });
 
   it('should populate the initial value when provided', () => {
+    component.ngAfterContentInit();
     component.writeValue('1234');
 
-    expect(component._value).toBe('1234');
     expect(component.formGroup.controls['studentAutocomplete'].value).toBe('1234');
   });
 
