@@ -104,17 +104,17 @@ describe('ContentObjectList', () => {
     const editPageConfig = new ContentPageConfig();
     editPageConfig.pageName = 'test-edit-page';
     editPageConfig.fieldsToDisplay = [
-      { key: '1', label: 'First' },
-      { key: '2', label: 'Second' },
-      { key: '3', label: 'Third' },
-      { key: 'a', label: 'a' },
-      { key: 'd', label: 'd', displayType: 'date' },
-      {
+      Object.assign(new Field(), { key: '1', label: 'First' }),
+      Object.assign(new Field(), { key: '2', label: 'Second' }),
+      Object.assign(new Field(), { key: '3', label: 'Third' }),
+      Object.assign(new Field(), { key: 'a', label: 'a' }),
+      Object.assign(new Field(), { key: 'd', label: 'd', displayType: 'date' }),
+      Object.assign(new Field(), {
         key: 't',
         label: 't',
         displayType: 'autocomplete',
         options: [new FieldOption('o1'), new FieldOption('o2'), new FieldOption('o3')]
-      }
+      })
     ];
     editPageConfig.viewPanel = false;
     config.pages['edit'] = editPageConfig;

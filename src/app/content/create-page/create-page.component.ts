@@ -2,7 +2,6 @@ import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } fro
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { Config } from '../../core/shared/model/config';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ContentService } from '../shared/content.service';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
@@ -12,9 +11,6 @@ import { UserService } from '../../user/shared/user.service';
 import { ContentViewComponent } from '../content-view/content-view.component';
 import { DynamicComponentDirective } from '../shared/directive/dynamic-component.directive';
 import { ContentObject } from '../shared/model/content-object';
-import { Observable } from 'rxjs/Observable';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ContentObjectListComponent } from '../content-object-list/content-object-list.component';
 import { isNullOrUndefined } from 'util';
 

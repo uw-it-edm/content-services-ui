@@ -24,6 +24,7 @@ import { CheckboxInputComponent } from '../../shared/widgets/checkbox/checkbox-i
 import { TimestampPickerComponent } from '../../shared/widgets/timestamp-picker/timestamp-picker.component';
 import { FieldOption } from '../../core/shared/model/field/field-option';
 import { OptionsInputComponent } from '../../shared/widgets/options-input/options-input.component';
+import { Field } from '../../core/shared/model/field';
 
 class UserServiceMock extends UserService {
   constructor() {
@@ -79,17 +80,17 @@ describe('ContentMetadataComponent', () => {
     const editPageConfig = new ContentPageConfig();
     editPageConfig.pageName = 'test-edit-page';
     editPageConfig.fieldsToDisplay = [
-      { key: '1', label: 'First' },
-      { key: '2', label: 'Second' },
-      { key: '3', label: 'Third' },
-      { key: 'a', label: 'a' },
-      { key: 'd', label: 'd', displayType: 'date' },
-      {
+      Object.assign(new Field(), { key: '1', label: 'First' }),
+      Object.assign(new Field(), { key: '2', label: 'Second' }),
+      Object.assign(new Field(), { key: '3', label: 'Third' }),
+      Object.assign(new Field(), { key: 'a', label: 'a' }),
+      Object.assign(new Field(), { key: 'd', label: 'd', displayType: 'date' }),
+      Object.assign(new Field(), {
         key: 't',
         label: 't',
         displayType: 'select',
         options: [new FieldOption('o1'), new FieldOption('o2'), new FieldOption('o3')]
-      }
+      })
     ];
     editPageConfig.viewPanel = false;
     component.pageConfig = editPageConfig;
@@ -102,7 +103,7 @@ describe('ContentMetadataComponent', () => {
     defaultContentItem.metadata['3'] = 'three';
     defaultContentItem.metadata['a'] = 'a';
     defaultContentItem.metadata['b'] = 'asdf';
-    defaultContentItem.metadata['t'] = 't';
+    defaultContentItem.metadata['t'] = 'o2';
     defaultContentItem.metadata['d'] = 1509519600000;
     component.contentItem = defaultContentItem;
     component.formGroup = new FormGroup({});
@@ -146,7 +147,7 @@ describe('ContentMetadataComponent', () => {
       '2': 'two',
       '3': 'three',
       a: 'a',
-      t: 't',
+      t: 'o2',
       d: 1509519600000
     });
   });
