@@ -11,6 +11,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Injectable()
 export class ContentService {
+  searchIndexUpdateDelay = 3000; // ms delay for updates to be available in the search-api index
   itemPathFragment = '/item/';
   filePathFragment = '/file/';
   baseUrl = environment.content_api.url + environment.content_api.contextV3;
@@ -70,10 +71,13 @@ export class ContentService {
     const contentItem$ = new ReplaySubject<ContentItem>();
     response.subscribe(
       item => {
-        if (this.progressService != null) {
-          this.progressService.end();
-        }
-        contentItem$.next(item);
+        setTimeout(() => {
+          // Delay notifying the user about a successful update so that the search index is updated
+          if (this.progressService != null) {
+            this.progressService.end();
+          }
+          contentItem$.next(item);
+        }, this.searchIndexUpdateDelay);
       },
       err => {
         err.item = contentItem;
