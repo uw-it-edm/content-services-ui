@@ -210,7 +210,7 @@ export class CheckboxInputComponent extends _CheckboxInputComponentBase
     return this._id || this._uid;
   }
 
-  /** Required for FormFieldControl. Whether the chip list is required. */
+  /** Required for FormFieldControl. Whether the Input is required. */
   @Input()
   set required(value: any) {
     this._required = coerceBooleanProperty(value);

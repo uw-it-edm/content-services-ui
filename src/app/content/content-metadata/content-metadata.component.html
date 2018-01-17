@@ -22,6 +22,7 @@
               [formControlName]="fieldToDisplay.key"
               [placeholder]="fieldToDisplay.label"
               [fieldConfig]="fieldToDisplay"
+              [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
             >
             </app-options-input>
             <mat-error>
@@ -40,6 +41,7 @@
               [fieldConfig]="fieldToDisplay"
               [formControlName]="fieldToDisplay.key"
               [placeholder]="fieldToDisplay.label"
+              [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
             ></app-checkbox-input>
             <mat-error> {{getErrorMessage(fieldToDisplay.key)}}</mat-error>
           </mat-form-field>
@@ -48,6 +50,7 @@
             <app-student-autocomplete
               [formControlName]="fieldToDisplay.key"
               [placeholder]="fieldToDisplay.label"
+              [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
             >
             </app-student-autocomplete>
             <mat-error> {{getErrorMessage(fieldToDisplay.key)}}</mat-error>
@@ -58,6 +61,7 @@
                    [name]="fieldToDisplay.key"
                    [placeholder]="fieldToDisplay.label"
                    [attr.aria-label]="fieldToDisplay.label"
+                   [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
             >
             <mat-error> {{getErrorMessage(fieldToDisplay.key)}}</mat-error>
           </mat-form-field>
