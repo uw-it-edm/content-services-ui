@@ -1,167 +1,360 @@
-import { Component, ElementRef, forwardRef, HostBinding, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterContentInit,
+  ChangeDetectorRef,
+  Component,
+  DoCheck,
+  ElementRef,
+  HostBinding,
+  HostListener,
+  Input,
+  OnDestroy,
+  Optional,
+  Self
+} from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-import { ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormGroupDirective,
+  NgControl,
+  NgForm
+} from '@angular/forms';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { MatFormFieldControl, MatSelectChange } from '@angular/material';
-import { FocusMonitor } from '@angular/cdk/a11y';
+import {
+  CanUpdateErrorState,
+  ErrorStateMatcher,
+  MatFormFieldControl,
+  MatSelectChange,
+  mixinErrorState
+} from '@angular/material';
 import { isNullOrUndefined } from 'util';
 import { Field } from '../../../core/shared/model/field';
 import { FieldOption } from '../../../core/shared/model/field/field-option';
+import { FocusMonitor } from '@angular/cdk/a11y';
 
+// Boilerplate for applying mixins to OptionsInputComponent.
+/** @docs-private */
+export class OptionsInputComponentBase {
+  constructor(
+    public _defaultErrorStateMatcher: ErrorStateMatcher,
+    public _parentForm: NgForm,
+    public _parentFormGroup: FormGroupDirective,
+    public ngControl: NgControl
+  ) {}
+}
+
+export const _OptionsInputComponentBase = mixinErrorState(OptionsInputComponentBase);
+
+let nextUniqueId = 0;
+const INTERNAL_FIELD_NAME = 'optionsForm';
+
+/* tslint:disable:member-ordering use-host-property-decorator*/
 @Component({
   selector: 'app-options-input',
   templateUrl: './options-input.component.html',
   styleUrls: ['./options-input.component.css'],
+  host: {
+    '[attr.aria-required]': 'required.toString()',
+    '[attr.aria-disabled]': 'disabled.toString()',
+    '[attr.aria-invalid]': 'errorState'
+  },
   providers: [
     {
       provide: MatFormFieldControl,
       useExisting: OptionsInputComponent
     },
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => OptionsInputComponent),
-      multi: true
-    }
+    ErrorStateMatcher
   ]
 })
-export class OptionsInputComponent implements ControlValueAccessor, MatFormFieldControl<string>, OnInit, OnDestroy {
-  static nextId = 0;
+export class OptionsInputComponent extends _OptionsInputComponentBase
+  implements ControlValueAccessor,
+    MatFormFieldControl<string>,
+    CanUpdateErrorState,
+    AfterContentInit,
+    DoCheck,
+    OnDestroy {
+  // Component logic
 
-  @HostBinding() id = `app-options-input-${OptionsInputComponent.nextId++}`;
-  @HostBinding('attr.aria-describedby') describedBy = '';
+  onSelect(event: MatSelectChange) {
+    // TODO needed ?
+    console.log(JSON.stringify(event.value));
+    this._propagateChanges(event.value);
+  }
 
-  @Input() _value = null;
+  get internalFieldName(): string {
+    return INTERNAL_FIELD_NAME;
+  }
+
   @Input() fieldConfig: Field;
-
-  stateChanges = new Subject<void>();
-
-  private _required = false;
-  private _disabled = false;
-  private _placeholder: string;
-
-  controlType = 'app-options-input';
-  errorState = false;
-  ngControl = null;
-  focused = false;
-
-  private componentDestroyed = new Subject();
-
   options: FieldOption[] = [];
   formGroup: FormGroup;
 
-  constructor(private fb: FormBuilder, private fm: FocusMonitor, private elRef: ElementRef) {
-    fm.monitor(elRef.nativeElement, true).subscribe(origin => {
-      this.focused = !!origin;
-      this.stateChanges.next();
-    });
+  private initComponent() {
+    this.initInternalForm();
+    this.initOptions();
+    this.initializeValue();
+    this.setInnerInputDisableState();
   }
 
-  ngOnInit() {
-    this.formGroup = this.fb.group({
-      optionsForm: new FormControl()
-    });
+  private initInternalForm() {
+    this.formGroup = this.fb.group({});
+    this.formGroup.controls[INTERNAL_FIELD_NAME] = new FormControl();
+  }
 
+  private initOptions() {
     this.options = this.fieldConfig.options.map(option => {
       return Object.assign(new FieldOption(), option);
     });
   }
 
-  ngOnDestroy() {
-    this.componentDestroyed.next();
-    this.componentDestroyed.complete();
-    this.stateChanges.complete();
-    this.fm.stopMonitoring(this.elRef.nativeElement);
+  private initializeValue(): void {
+    // Defer setting the value in order to avoid the "Expression
+    // has changed after it was checked" errors from Angular.
+    Promise.resolve().then(() => {
+      if (this.ngControl || this._value) {
+        this.setInternalValue(this.ngControl ? this.ngControl.value : this._value);
+        this.stateChanges.next();
+      }
+    });
   }
 
-  writeValue(value: any): void {
-    console.log('write :' + value);
-    this._value = value;
-    this.populateInitialValue(this.value);
-  }
-
-  private populateInitialValue(initialValue: string) {
-    if (!isNullOrUndefined(initialValue)) {
-      this.formGroup.controls['optionsForm'].patchValue(initialValue);
-    } else {
-      this.formGroup.controls['optionsForm'].reset();
+  private setInnerInputDisableState() {
+    if (this.formGroup && this.formGroup.controls[INTERNAL_FIELD_NAME]) {
+      if (this.disabled) {
+        this.formGroup.controls[INTERNAL_FIELD_NAME].disable();
+      } else {
+        this.formGroup.controls[INTERNAL_FIELD_NAME].enable();
+      }
     }
   }
 
-  propagateChange = (_: any) => {};
-
-  registerOnChange(fn: any): void {
-    this.propagateChange = fn;
+  private setInternalValue(value: string) {
+    if (!isNullOrUndefined(value)) {
+      if (this.formGroup && this.formGroup.controls[INTERNAL_FIELD_NAME]) {
+        this.formGroup.controls[INTERNAL_FIELD_NAME].patchValue(value);
+      }
+    } else {
+      this.formGroup.controls[INTERNAL_FIELD_NAME].reset();
+    }
   }
 
-  registerOnTouched() {}
+  // End Component logic
 
-  setDisabledState(isDisabled: boolean): void {
-    this._disabled = coerceBooleanProperty(isDisabled);
-    this.stateChanges.next();
+  // MatFormField boilerplate
+
+  /** Function when touched */
+  _onTouched = () => {};
+
+  /** Function when changed */
+  _onChange: (value: any) => void = () => {};
+
+  /** Uid of the chip list */
+  protected _uid = `custom-input-${nextUniqueId++}`;
+  protected _id: string;
+
+  /** Whether this is required */
+  protected _required = false;
+
+  /** Whether this is disabled */
+  protected _disabled = false;
+
+  protected _value: any;
+
+  /** Placeholder for the chip list. Alternatively, placeholder can be set on MatChipInput */
+  protected _placeholder: string;
+
+  /** The aria-describedby attribute on the chip list for improved a11y. */
+  @HostBinding('attr.aria-describedby') _ariaDescribedby: string;
+
+  @HostBinding('attr.aria-role')
+  /** https://www.w3.org/TR/wai-aria/roles#listbox */
+  get role(): string | null {
+    return this.empty ? null : 'listbox';
   }
 
-  get value(): string {
+  /** An object used to control when error messages are shown. */
+  @Input() errorStateMatcher: ErrorStateMatcher;
+
+  /** Required for FormFieldControl */
+  @Input()
+  get value() {
     return this._value;
   }
 
-  set value(value: string) {
-    this._value = value;
-    this.propagateChange(this._value);
+  set value(newValue: any) {
+    this.writeValue(newValue);
+    this._value = newValue;
+  }
+
+  /** Required for FormFieldControl. The ID of the chip list */
+  @Input()
+  set id(value: string) {
+    this._id = value;
     this.stateChanges.next();
   }
 
-  @Input()
-  get placeholder() {
-    return this._placeholder;
+  get id() {
+    return this._id || this._uid;
   }
 
-  set placeholder(plh) {
-    this._placeholder = plh;
+  /** Required for FormFieldControl. Whether the chip list is required. */
+  @Input()
+  set required(value: any) {
+    this._required = coerceBooleanProperty(value);
     this.stateChanges.next();
   }
 
-  @Input()
   get required() {
     return this._required;
   }
 
-  set required(req) {
-    this._required = coerceBooleanProperty(req);
-    this.stateChanges.next();
-  }
-
+  /** For FormFieldControl. Use chip input's placholder if there's a chip input */
   @Input()
-  get disabled() {
-    return this._disabled;
-  }
-
-  set disabled(dis) {
-    this._disabled = coerceBooleanProperty(dis);
+  set placeholder(value: string) {
+    this._placeholder = value;
     this.stateChanges.next();
   }
 
-  @HostBinding('class.floating')
-  get shouldPlaceholderFloat() {
-    return this.focused || !this.empty;
+  get placeholder() {
+    return this._placeholder;
   }
 
   get empty() {
-    const n = this.formGroup.value;
-    return !n.optionsForm;
+    const value = this.formGroup.controls[INTERNAL_FIELD_NAME].value;
+    return !value;
   }
 
+  focused = false;
+
+  get shouldLabelFloat(): boolean {
+    return this.focused || !this.empty;
+  }
+
+  /** Whether this input is disabled. */
+  @Input()
+  get disabled() {
+    return this.ngControl ? this.ngControl.disabled : this._disabled;
+  }
+
+  set disabled(value: any) {
+    // this need to be implemented if you want to disable the internal input
+
+    this._disabled = coerceBooleanProperty(value);
+    this.setInnerInputDisableState();
+  }
+
+  constructor(
+    private fb: FormBuilder,
+    private fm: FocusMonitor,
+    protected _elementRef: ElementRef,
+    private _changeDetectorRef: ChangeDetectorRef,
+    @Optional() _parentForm: NgForm,
+    @Optional() _parentFormGroup: FormGroupDirective,
+    _defaultErrorStateMatcher: ErrorStateMatcher,
+    @Optional()
+    @Self()
+    public ngControl: NgControl
+  ) {
+    super(_defaultErrorStateMatcher, _parentForm, _parentFormGroup, ngControl);
+
+    if (this.ngControl) {
+      this.ngControl.valueAccessor = this;
+    }
+  }
+
+  ngAfterContentInit(): void {
+    this.initComponent();
+    this.stateChanges.next();
+  }
+
+  ngDoCheck() {
+    if (this.ngControl) {
+      // We need to re-evaluate this on every change detection cycle, because there are some
+      // error triggers that we can't subscribe to (e.g. parent form submissions). This means
+      // that whatever logic is in here has to be super lean or we risk destroying the performance.
+      this.updateErrorState();
+    }
+  }
+
+  private componentDestroyed = new Subject();
+
+  ngOnDestroy() {
+    this.componentDestroyed.next();
+    this.componentDestroyed.complete();
+    this.stateChanges.complete();
+    this.fm.stopMonitoring(this._elementRef.nativeElement);
+
+    /*    this._internalChangeSubscription.unsubscribe();
+    this._internalChangeSubscription = null;*/
+  }
+
+  // Implemented as part of MatFormFieldControl.
   setDescribedByIds(ids: string[]) {
-    this.describedBy = ids.join(' ');
+    this._ariaDescribedby = ids.join(' ');
   }
 
-  onContainerClick(event: MouseEvent) {
-    /*   if ((event.target as Element).tagName.toLowerCase() !== 'input') {
-         this.elRef.nativeElement.querySelector('input').focus();
-       }*/
+  // Implemented as part of ControlValueAccessor
+  writeValue(value: any): void {
+    if (value !== undefined) {
+      this.setInternalValue(value);
+    }
   }
 
-  onSelect(event: MatSelectChange) {
-    console.log(JSON.stringify(event.value));
-    this.value = event.value;
+  // Implemented as part of ControlValueAccessor
+  registerOnChange(fn: (value: any) => void): void {
+    this._onChange = fn;
   }
+
+  // Implemented as part of ControlValueAccessor
+  registerOnTouched(fn: () => void): void {
+    this._onTouched = fn;
+  }
+
+  // Implemented as part of ControlValueAccessor
+  setDisabledState(disabled: boolean): void {
+    this.disabled = disabled;
+
+    // not sure this one is needed as the inner input should rely on the disabled state of the model
+    this._elementRef.nativeElement.disabled = disabled;
+    this.stateChanges.next();
+  }
+
+  onContainerClick() {
+    this.focus();
+    this._markAsTouched();
+  }
+
+  @HostListener('focus')
+  focus() {
+    // TODO
+    /* if ((event.target as Element).tagName.toLowerCase() !== 'input') {
+      this._elementRef.nativeElement.querySelector('select').focus();
+    }*/
+  }
+
+  /** Emits change event to set the model value. */
+  private _propagateChanges(valueToEmit: any): void {
+    this._value = valueToEmit;
+    this._onChange(valueToEmit);
+    this._changeDetectorRef.markForCheck();
+  }
+
+  /** Mark the field as touched */
+  _markAsTouched() {
+    this._onTouched();
+    this._changeDetectorRef.markForCheck();
+    this.stateChanges.next();
+  }
+
+  /** When blurred, mark the field as touched when focus moved outside the Input. */
+  @HostListener('blur')
+  blur() {
+    if (!this.disabled) {
+      this._markAsTouched();
+    }
+  }
+
+  // End boilerplate
 }
