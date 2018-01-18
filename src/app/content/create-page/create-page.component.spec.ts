@@ -26,6 +26,7 @@ import { MaterialConfigModule } from '../../routing/material-config.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ProgressService } from '../../shared/providers/progress.service';
 import { HttpClientModule } from '@angular/common/http';
+import { Field } from '../../core/shared/model/field';
 
 class MockContentService {
   create(contentItem: ContentItem, file: File): Observable<ContentItem> {
@@ -111,10 +112,10 @@ describe('CreatePageComponent', () => {
 
     const createPageConfig = new ContentPageConfig();
     createPageConfig.fieldsToDisplay = [
-      { key: '1', label: '1' },
-      { key: '2', label: '2' },
-      { key: '3', label: '3' },
-      { key: 'a', label: 'a' }
+      Object.assign(new Field(), { key: '1', label: '1' }),
+      Object.assign(new Field(), { key: '2', label: '2' }),
+      Object.assign(new Field(), { key: '3', label: '3' }),
+      Object.assign(new Field(), { key: 'a', label: 'a' })
     ];
     createPageConfig.buttons = [saveButton];
     createPageConfig.onSave = [{ key: 'PublishStatus', value: 'Published' }, { key: 'AnotherOnSave', value: 'Value' }];

@@ -1,6 +1,9 @@
-import { browser, by, element, ExpectedConditions } from 'protractor';
+import {browser, by, element, ExpectedConditions} from 'protractor';
 
 export class ContentServicesUiPage {
+  public uwLogo = element(by.className('uw-patch'));
+  public headerTitle = element(by.className('cs-title'));
+
   navigateTo() {
     return browser.get('/');
   }
@@ -17,12 +20,8 @@ export class ContentServicesUiPage {
     return element(by.css('header.uwit-cs-appbar.uw-thinstrip')).getCssValue('background-color');
   }
 
-  getUWLogoElement() {
-    return element(by.className('uw-patch'));
-  }
-
   getHeaderToolbarText() {
-    return element(by.className('cs-title')).getText();
+    return this.headerTitle.getText();
   }
 
   clickAppMenuIcon() {
@@ -42,5 +41,12 @@ export class ContentServicesUiPage {
 
   getCurrentUrl() {
     return browser.getCurrentUrl();
+  }
+
+  switchTab(tabIndex = 1) {
+    browser.waitForAngularEnabled(false);
+    browser.getAllWindowHandles().then(windowHandle => {
+      browser.switchTo().window(windowHandle[tabIndex]);
+    });
   }
 }

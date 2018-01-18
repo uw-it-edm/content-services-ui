@@ -4,27 +4,31 @@
       <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
         <div [ngSwitch]="fieldToDisplay.displayType">
 
-<!--         //TODO This is currently not used/working working. It'll need to be moved in the app-options-input component -->
-        <!--  <mat-form-field *ngSwitchCase="'autocomplete'">
-            <input type="text" matInput [formControlName]="fieldToDisplay.key"
-                   [name]="fieldToDisplay.key"
-                   [placeholder]="fieldToDisplay.label" [matAutocomplete]="auto">
-            <mat-autocomplete #auto="matAutocomplete">
-              <mat-option *ngFor="let option of fieldToDisplay.options | async "
-                          [value]="option">{{option}}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
--->
+          <!--         //TODO This is currently not used/working. It'll need to be moved in the app-options-input component -->
+          <!--  <mat-form-field *ngSwitchCase="'autocomplete'">
+              <input type="text" matInput [formControlName]="fieldToDisplay.key"
+                     [name]="fieldToDisplay.key"
+                     [placeholder]="fieldToDisplay.label" [matAutocomplete]="auto">
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let option of fieldToDisplay.options | async "
+                            [value]="option">{{option}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+  -->
 
           <mat-form-field *ngSwitchCase="'select'">
             <app-options-input
               [formControlName]="fieldToDisplay.key"
               [placeholder]="fieldToDisplay.label"
               [fieldConfig]="fieldToDisplay"
+              [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
             >
             </app-options-input>
+            <mat-error>
+              {{getErrorMessage(fieldToDisplay.key)}}
 
+            </mat-error>
           </mat-form-field>
           <app-timestamp-picker *ngSwitchCase="'date'"
                                 [formControlName]="fieldToDisplay.key"
@@ -37,16 +41,19 @@
               [fieldConfig]="fieldToDisplay"
               [formControlName]="fieldToDisplay.key"
               [placeholder]="fieldToDisplay.label"
+              [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
             ></app-checkbox-input>
+            <mat-error> {{getErrorMessage(fieldToDisplay.key)}}</mat-error>
           </mat-form-field>
 
           <mat-form-field *ngSwitchCase="'student-autocomplete'">
             <app-student-autocomplete
               [formControlName]="fieldToDisplay.key"
               [placeholder]="fieldToDisplay.label"
+              [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
             >
             </app-student-autocomplete>
-
+            <mat-error> {{getErrorMessage(fieldToDisplay.key)}}</mat-error>
           </mat-form-field>
 
           <mat-form-field *ngSwitchDefault>
@@ -54,7 +61,9 @@
                    [name]="fieldToDisplay.key"
                    [placeholder]="fieldToDisplay.label"
                    [attr.aria-label]="fieldToDisplay.label"
+                   [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
             >
+            <mat-error> {{getErrorMessage(fieldToDisplay.key)}}</mat-error>
           </mat-form-field>
         </div>
       </li>

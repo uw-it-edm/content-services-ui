@@ -1,12 +1,12 @@
 import {ContentServicesUiPage} from './app.po';
 import {SearchPage} from '../search/search.po';
+import {browser} from 'protractor';
+
+const page = new ContentServicesUiPage();
+const TITLE = 'Content Services';
 
 describe('content-services-ui App', () => {
-  let page: ContentServicesUiPage;
-  const TITLE = 'Content Services';
-
   beforeAll(() => {
-    page = new ContentServicesUiPage();
     page.navigateTo();
   });
 
@@ -23,9 +23,19 @@ describe('content-services-ui App', () => {
   });
 
   it('should display UW logo with href link in header toolbar', () => {
-    expect(page.getUWLogoElement().isDisplayed()).toBe(true);
-    expect(page.getUWLogoElement().getAttribute('href')).toContain('uw.edu');
-    expect(page.getUWLogoElement().getAttribute('title')).toEqual('University of Washington Home');
+    expect(page.uwLogo.isDisplayed());
+    expect(page.uwLogo.getAttribute('href')).toContain('uw.edu');
+    expect(page.uwLogo.getAttribute('title')).toEqual('University of Washington Home');
+  });
+});
+
+describe('content-services-ui App navigation', () => {
+  beforeEach(() => {
+    page.navigateTo();
+  });
+
+  afterEach(() => {
+    browser.waitForAngularEnabled(true);
   });
 
   it('should navigate to search page when tenant is selected on app menu icon', () => {
@@ -36,5 +46,15 @@ describe('content-services-ui App', () => {
     searchPage = new SearchPage();
 
     expect(page.getCurrentUrl()).toContain(searchPage.pageUrl);
+  });
+
+  it('should navigate to UW home page on a new tab when UW logo is clicked', () => {
+    page.uwLogo.click();
+
+    page.switchTab(1);
+    expect(page.getPageTitle()).toContain('UW Homepage');
+
+    page.switchTab(0);
+    expect(page.getPageTitle()).toEqual(TITLE);
   });
 });
