@@ -15,6 +15,6 @@ export class SearchFilter {
     if (!b) {
       return false;
     }
-    return this.key === b.key && this.value === b.value && this.label === b.label;
+    return this.key === b.key && this.value === b.value;
   }
 }

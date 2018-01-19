@@ -47,8 +47,8 @@ describe('FacetsBoxComponent', () => {
   });
 
   it('should add filters to searchModel', () => {
-    const searchFilter = new SearchFilter('testKey', 'testString');
-    component.addFacetFilter(searchFilter.key, searchFilter.value);
+    const searchFilter = new SearchFilter('testKey', 'testString', 'testLabel');
+    component.addFacetFilter(searchFilter.key, searchFilter.value, searchFilter.label);
     expect(component.searchModel.filters).toEqual([searchFilter]);
   });
 });
