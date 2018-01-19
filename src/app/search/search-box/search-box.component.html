@@ -2,16 +2,20 @@
     <div class="search-form-group">
         <label for="search-field" *ngIf="pageConfig?.searchConfig?.label">{{pageConfig.searchConfig.label}}</label>
         <mat-form-field >
-            <input id="search-field" matInput [(ngModel)]="searchModel.stringQuery" (search)="updateSearch()" (ngModelChange)="updateSearch()" placeholder="{{pageConfig?.searchConfig?.placeholder}}" type="search">
-            <!--<mat-icon MatSuffix>search</mat-icon>-->
+            <input id="search-field" matInput [(ngModel)]="searchModel.stringQuery" (search)="updateSearch()" (ngModelChange)="updateSearch()" placeholder="{{pageConfig?.searchConfig?.placeholder}}" type="search" [matAutocomplete]="autocomplete">
 
             <mat-hint id="search-hint" *ngIf="pageConfig?.searchConfig?.directions" align="start">{{pageConfig?.searchConfig?.directions}}</mat-hint>
+            <mat-autocomplete #autocomplete="matAutocomplete" (optionSelected)="onSelectFilter($event)">
+              <mat-option *ngFor="let option of filteredOptions " [value]="option.getFilterableValue()">
+                <span>{{ option.getFilterableDisplay() }}</span>
+              </mat-option>
+            </mat-autocomplete>
         </mat-form-field>
     </div>
     <div class="selected-facets-form-group selected-facets" *ngIf="pageConfig?.facetsConfig?.active">
         <mat-chip-list aria-label="Search filters">
             <mat-chip *ngFor="let filter of searchModel.filters">
-                {{pageConfig.facetsConfig.facets[filter.key].label}}: {{filter.value}}
+                {{filter.label}}: {{filter.value}}
                 <button (click)="removeFilter(filter)" mat-icon-button aria-label="Remove filter">
                     <mat-icon>clear</mat-icon>
                 </button>
