@@ -8,6 +8,8 @@ import { SearchResults } from '../shared/model/search-result';
 import { SearchService } from '../shared/search.service';
 import { Subject } from 'rxjs/Subject';
 import { DataService } from '../../shared/providers/data.service';
+import { SearchOrder } from '../shared/model/search-order';
+import { isNullOrUndefined } from 'util';
 import { StudentSearchAutocomplete } from '../shared/search-autocomplete/student-search-autocomplete';
 import { StudentService } from '../../shared/providers/student.service';
 import { SearchAutocomplete } from '../shared/search-autocomplete/search-autocomplete';
@@ -51,6 +53,13 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
       this.route.data.takeUntil(this.componentDestroyed).subscribe((data: { config: Config }) => {
         this.config = data.config;
         this.pageConfig = data.config.pages[this.page.toLowerCase()];
+        if (
+          isNullOrUndefined(this.pageConfig.defaultOrder) ||
+          isNullOrUndefined(this.pageConfig.defaultOrder.term) ||
+          isNullOrUndefined(this.pageConfig.defaultOrder.order)
+        ) {
+          this.pageConfig.defaultOrder = new SearchOrder('id', 'desc');
+        }
         this.titleService.setTitle(this.pageConfig.pageName);
         if (this.pageConfig.autocompleteConfig) {
           this.searchAutocomplete = new StudentSearchAutocomplete(

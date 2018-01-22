@@ -52,6 +52,11 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     });
 
     this.configureTableColumns();
+    const defaultOrder = !isNullOrUndefined(this.pageConfig) ? this.pageConfig.defaultOrder : null;
+    if (!isNullOrUndefined(defaultOrder)) {
+      this.sort.direction = !isNullOrUndefined(defaultOrder.order) && defaultOrder.order === 'asc' ? 'asc' : 'desc';
+      this.sort.active = defaultOrder.term;
+    }
     this.sort.sortChange.subscribe((sort: Sort) => {
       this.searchModel.order.order = sort.direction;
       this.searchModel.order.term = sort.active;

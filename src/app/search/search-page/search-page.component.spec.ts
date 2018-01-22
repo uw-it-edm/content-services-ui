@@ -101,4 +101,9 @@ describe('SearchPageComponent', () => {
     const title = fixture.debugElement.injector.get(Title);
     expect(title.getTitle()).toBe('test-page');
   });
+
+  it('should add default sort order if none is defined in the pageConfig', () => {
+    expect(component.pageConfig.defaultOrder.term).toBe('id');
+    expect(component.pageConfig.defaultOrder.order).toBe('desc');
+  });
 });

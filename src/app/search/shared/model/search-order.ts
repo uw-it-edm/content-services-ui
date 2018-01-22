@@ -1,3 +1,5 @@
+import { isNullOrUndefined } from 'util';
+
 export class SearchOrder {
   term: string;
   /**
@@ -10,4 +12,9 @@ export class SearchOrder {
    * asc/desc
    */
   order: string;
+
+  constructor(term?: string, order?: string) {
+    this.term = term;
+    this.order = order;
+  }
 }

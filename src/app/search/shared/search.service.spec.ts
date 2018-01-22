@@ -10,6 +10,7 @@ import { SearchFilter } from './model/search-filter';
 import { Field } from '../../core/shared/model/field';
 import { HttpClient } from '@angular/common/http';
 import { DataService } from '../../shared/providers/data.service';
+import { SearchOrder } from './model/search-order';
 
 class UserServiceMock extends UserService {
   constructor() {
@@ -187,6 +188,44 @@ describe('SearchService', () => {
       expect(payload['query']).toBe('iSearch');
       expect(payload.searchOrder.term).toEqual('label.lowercase');
       expect(payload.searchOrder.order).toEqual('desc');
+    });
+  });
+
+  it('should add default metadata Ordering to the query payload if no metadata ordering is defined', () => {
+    const searchModel = new SearchModel();
+    searchModel.stringQuery = 'iSearch';
+
+    httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(new Response(new ResponseOptions())));
+
+    const searchPageConfig = new SearchPageConfig();
+    searchPageConfig.defaultOrder = new SearchOrder('mydefaultfield', 'desc');
+    searchService.search(Observable.of(searchModel), searchPageConfig).subscribe(result => {
+      expect(httpSpy).toHaveBeenCalledTimes(1);
+      // args[1] is the payload
+      const payload = httpSpy.calls.first().args[1];
+      expect(payload['query']).toBe('iSearch');
+      expect(payload.searchOrder.term).toEqual('metadata.mydefaultfield');
+      expect(payload.searchOrder.order).toEqual('desc');
+    });
+  });
+
+  it('should not add default metadata Ordering to the query payload if metadata ordering is defined', () => {
+    const searchModel = new SearchModel();
+    searchModel.stringQuery = 'iSearch';
+    searchModel.order.term = 'myfield';
+    searchModel.order.order = 'asc';
+
+    httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(new Response(new ResponseOptions())));
+
+    const searchPageConfig = new SearchPageConfig();
+    searchPageConfig.defaultOrder = new SearchOrder('mydefaultfield', 'desc');
+    searchService.search(Observable.of(searchModel), searchPageConfig).subscribe(result => {
+      expect(httpSpy).toHaveBeenCalledTimes(1);
+      // args[1] is the payload
+      const payload = httpSpy.calls.first().args[1];
+      expect(payload['query']).toBe('iSearch');
+      expect(payload.searchOrder.term).toEqual('metadata.myfield');
+      expect(payload.searchOrder.order).toEqual('asc');
     });
   });
 

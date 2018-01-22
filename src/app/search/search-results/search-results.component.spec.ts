@@ -12,6 +12,7 @@ import { SearchResults } from '../shared/model/search-result';
 import { DataService } from '../../shared/providers/data.service';
 import { SharedModule } from '../../shared/shared.module';
 import { ActivatedRouteStub } from '../../../testing/router-stubs';
+import { SearchOrder } from '../shared/model/search-order';
 
 class MockDataService {
   storage = ['123', '456'];
@@ -44,6 +45,7 @@ describe('SearchResultsComponent', () => {
     searchModel.stringQuery = 'iSearch';
     component.searchModel$ = Observable.of(searchModel);
     component.pageConfig = new SearchPageConfig();
+    component.pageConfig.defaultOrder = new SearchOrder('myfield', 'asc');
     const searchResults = new SearchResults();
     component.searchResults$ = Observable.of(searchResults);
 
@@ -52,5 +54,10 @@ describe('SearchResultsComponent', () => {
 
   it('should be created', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should set sort order if defaultOrder is defined in the pageConfig', () => {
+    expect(component.sort.active).toBe('myfield');
+    expect(component.sort.direction).toBe('asc');
   });
 });
