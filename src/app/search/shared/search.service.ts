@@ -16,6 +16,7 @@ import { SearchOrder } from './model/search-order';
 import { Field } from '../../core/shared/model/field';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DataService } from '../../shared/providers/data.service';
+import { isNullOrUndefined } from 'util';
 
 @Injectable()
 export class SearchService {
@@ -132,6 +133,9 @@ export class SearchService {
   }
 
   private addOrderingToSearchPayload(searchPayload: any, order: SearchOrder, pageConfig: SearchPageConfig) {
+    if (isNullOrUndefined(order) || isNullOrUndefined(order.term) || isNullOrUndefined(order.order)) {
+      order = pageConfig.defaultOrder;
+    }
     if (order && order.term && order.order) {
       const newOrder: SearchOrder = Object.assign(new SearchOrder(), order);
       const fieldConfig: Field = pageConfig.fieldsToDisplay.find(field => field.key === newOrder.term);
