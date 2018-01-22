@@ -4,6 +4,7 @@ import { DisplayFieldComponent } from './display-field.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { DatePipe } from '@angular/common';
+import { Field } from '../../../core/shared/model/field';
 
 describe('DisplayFieldComponent', () => {
   let component: DisplayFieldComponent;
@@ -29,7 +30,7 @@ describe('DisplayFieldComponent', () => {
   });
   it('should display a date', () => {
     component.value = 1511292577000;
-    component.field = { key: 'displayDate', label: 'displayDate', displayType: 'date' };
+    component.field = Object.assign(new Field(), { key: 'displayDate', label: 'displayDate', displayType: 'date' });
 
     fixture.detectChanges();
 
@@ -42,7 +43,7 @@ describe('DisplayFieldComponent', () => {
     const date = new Date();
 
     component.value = date.getTime();
-    component.field = { key: 'displayDate', label: 'displayDate', displayType: 'dateTime' };
+    component.field = Object.assign(new Field(), { key: 'displayDate', label: 'displayDate', displayType: 'dateTime' });
 
     fixture.detectChanges();
 
@@ -55,7 +56,7 @@ describe('DisplayFieldComponent', () => {
   });
   it('should use the student-display componenent when a student', () => {
     component.value = '1234';
-    component.field = { key: 'displayDate', label: 'displayDate', displayType: 'student' };
+    component.field = Object.assign(new Field(), { key: 'displayDate', label: 'displayDate', displayType: 'student' });
 
     fixture.detectChanges();
 
@@ -65,7 +66,11 @@ describe('DisplayFieldComponent', () => {
   });
   it('should default to displaying the passed in value', () => {
     component.value = 1511292577000;
-    component.field = { key: 'displayDate', label: 'displayDate', displayType: 'aFakeType' };
+    component.field = Object.assign(new Field(), {
+      key: 'displayDate',
+      label: 'displayDate',
+      displayType: 'aFakeType'
+    });
 
     fixture.detectChanges();
 

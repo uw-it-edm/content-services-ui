@@ -54,8 +54,8 @@ export class FacetsBoxComponent implements OnInit, OnDestroy {
     });
   }
 
-  addFacetFilter(key: string, value: string) {
-    const searchFilter = new SearchFilter(key, value);
+  addFacetFilter(key: string, value: string, label: string) {
+    const searchFilter = new SearchFilter(key, value, label);
     console.log('adding new facet : ' + JSON.stringify(searchFilter));
 
     this.searchModel.addFilterIfNotThere(searchFilter);

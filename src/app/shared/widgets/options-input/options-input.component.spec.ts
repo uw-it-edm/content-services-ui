@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { OptionsInputComponent } from './options-input.component';
 import { FieldOption } from '../../../core/shared/model/field/field-option';
-import { By } from '@angular/platform-browser';
 import { Field } from '../../../core/shared/model/field';
 import { SharedModule } from '../../shared.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -43,11 +42,9 @@ describe('OptionsInputComponent', () => {
   });
 
   it('should update the model when a value is selected', () => {
-    spyOn(component, 'propagateChange').and.callThrough();
-
     component.onSelect(new MatSelectChange(null, 'val2'));
 
-    expect(component.propagateChange).toHaveBeenCalledWith('val2');
+    expect(component.value).toBe('val2');
   });
 
   it('should have a correct list of options', () => {
