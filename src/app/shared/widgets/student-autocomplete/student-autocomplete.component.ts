@@ -84,12 +84,14 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
   }
 
   filteredOptions: Student[] = [];
+  initialized = false;
 
   private initComponent() {
     this.initInternalForm();
     this.initInternalFormUpdateListener();
     this.initializeValue();
     this.setInnerInputDisableState();
+    this.initialized = true;
   }
 
   private initInternalFormUpdateListener() {
@@ -97,16 +99,18 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
       .startWith(null)
       .takeUntil(this.componentDestroyed)
       .subscribe((term: string) => {
-        if (term && term.trim().length > 1) {
-          this.studentService
-            .autocomplete(term)
-            .takeUntil(this.componentDestroyed)
-            .subscribe((results: StudentSearchResults) => {
-              this.filteredOptions = results.content;
-            });
-        } else {
-          // if empty, the user probably wants to delete the value
-          this._propagateChanges(term);
+        if (this.initialized) {
+          if (term && term.trim().length > 1) {
+            this.studentService
+              .autocomplete(term)
+              .takeUntil(this.componentDestroyed)
+              .subscribe((results: StudentSearchResults) => {
+                this.filteredOptions = results.content;
+              });
+          } else {
+            // if empty, the user probably wants to delete the value
+            this._propagateChanges(term);
+          }
         }
       });
   }
