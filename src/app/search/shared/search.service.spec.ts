@@ -118,8 +118,8 @@ describe('SearchService', () => {
   it('should add filter to the query payload', () => {
     const searchModel = new SearchModel();
     searchModel.stringQuery = 'iSearch';
-    searchModel.filters.push(new SearchFilter('my-filter', 'value'));
-    searchModel.filters.push(new SearchFilter('my-second-filter', 'value2'));
+    searchModel.filters.push(new SearchFilter('my-filter', 'value', 'my-label'));
+    searchModel.filters.push(new SearchFilter('my-second-filter', 'value2', 'my-label'));
 
     httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(new Response(new ResponseOptions())));
 

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Config } from '../../core/shared/model/config';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { Title } from '@angular/platform-browser';
@@ -10,6 +10,9 @@ import { Subject } from 'rxjs/Subject';
 import { DataService } from '../../shared/providers/data.service';
 import { SearchOrder } from '../shared/model/search-order';
 import { isNullOrUndefined } from 'util';
+import { StudentSearchAutocomplete } from '../shared/search-autocomplete/student-search-autocomplete';
+import { StudentService } from '../../shared/providers/student.service';
+import { SearchAutocomplete } from '../shared/search-autocomplete/search-autocomplete';
 
 @Component({
   selector: 'app-search-page',
@@ -25,12 +28,15 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   searchModel$ = new Subject<SearchModel>();
   searchResults$ = new Subject<SearchResults>();
 
+  searchAutocomplete: SearchAutocomplete;
+
   constructor(
     private route: ActivatedRoute,
     private titleService: Title,
     private searchService: SearchService,
     private dataService: DataService,
-    private router: Router
+    private router: Router,
+    private studentService: StudentService // TODO: this should be passed in as an input?
   ) {}
 
   ngAfterViewInit(): void {
@@ -55,6 +61,13 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
           this.pageConfig.defaultOrder = new SearchOrder('id', 'desc');
         }
         this.titleService.setTitle(this.pageConfig.pageName);
+        if (this.pageConfig.autocompleteConfig) {
+          this.searchAutocomplete = new StudentSearchAutocomplete(
+            this.studentService,
+            this.pageConfig.autocompleteConfig.filterKey,
+            this.pageConfig.autocompleteConfig.filterLabel
+          );
+        }
         this.searchService.search(this.searchModel$, this.pageConfig).subscribe((searchResults: SearchResults) => {
           /* we are not sending the search results observable
              directly to the underlying components
