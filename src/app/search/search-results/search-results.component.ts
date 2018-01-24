@@ -4,11 +4,12 @@ import { SearchResults } from '../shared/model/search-result';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { Observable } from 'rxjs/Observable';
 import { SearchDataSource } from '../shared/model/search-datasource.model';
-import { MatPaginator, MatSort, PageEvent, Sort } from '@angular/material';
+import { MatPaginator, MatSort, PageEvent, Sort, SortDirection } from '@angular/material';
 import { isNullOrUndefined } from 'util';
 import { PaginatorConfig } from '../shared/model/paginator-config';
 import { Subject } from 'rxjs/Subject';
 import { DataService } from '../../shared/providers/data.service';
+import { SearchUtility } from '../shared/search-utility';
 
 @Component({
   selector: 'app-search-results',
@@ -24,8 +25,14 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   displayedColumns = ['id'];
   hasResults = false;
 
+  // It seems to be necessary to data-bind these to the mat-table instead of just manipulating
+  // the existing MatSort ViewChild because of how Angular times the rendering of the sort arrows
+  // and orders its digestion of events
+  sortTerm: string;
+  sortDirection: SortDirection;
+
   @Input() searchModel$: Observable<SearchModel>;
-  @Input() searchResults$: Observable<SearchResults>;
+  @Input() searchResults$: Subject<SearchResults>;
   @Input() pageConfig: SearchPageConfig;
   @Output() search = new EventEmitter<SearchModel>();
 
@@ -39,7 +46,10 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     this.searchModel$.takeUntil(this.componentDestroyed).subscribe(searchModel => {
       this.searchModel = searchModel;
     });
-    this.dataSource = new SearchDataSource(this.searchResults$, this.sort, [this.topPaginator, this.bottomPaginator]);
+    this.dataSource = new SearchDataSource(this.searchModel$, this.searchResults$, this.sort, [
+      this.topPaginator,
+      this.bottomPaginator
+    ]);
     this.searchResults$.takeUntil(this.componentDestroyed).subscribe(results => {
       this.hasResults = !isNullOrUndefined(results) && results.total > 0;
       if (this.hasResults) {
@@ -47,16 +57,11 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
       }
 
       const adjacentIds = results.results.map(result => result['id']); // store a list of result ids to be passed to edit page
-
+      this.initializeSort(results.sort);
       this.data.set('adjacentIds', adjacentIds);
     });
 
     this.configureTableColumns();
-    const defaultOrder = !isNullOrUndefined(this.pageConfig) ? this.pageConfig.defaultOrder : null;
-    if (!isNullOrUndefined(defaultOrder)) {
-      this.sort.direction = !isNullOrUndefined(defaultOrder.order) && defaultOrder.order === 'asc' ? 'asc' : 'desc';
-      this.sort.active = defaultOrder.term;
-    }
     this.sort.sortChange.subscribe((sort: Sort) => {
       this.searchModel.order.order = sort.direction;
       this.searchModel.order.term = sort.active;
@@ -83,5 +88,22 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.componentDestroyed.next();
     this.componentDestroyed.complete();
+  }
+
+  /*
+   * Called to ensure that the sorting arrows reflect the actual sort of the search
+   */
+  private initializeSort(sort: any) {
+    const defaultSort = !isNullOrUndefined(this.pageConfig) ? this.pageConfig.defaultSort : undefined;
+    if (!isNullOrUndefined(sort) && !isNullOrUndefined(sort.term)) {
+      this.sortTerm = sort.term;
+    } else if (!isNullOrUndefined(defaultSort) && !isNullOrUndefined(defaultSort.term)) {
+      this.sortTerm = defaultSort.term;
+    }
+    if (!isNullOrUndefined(sort) && !isNullOrUndefined(sort.order)) {
+      this.sortDirection = SearchUtility.castSortDirection(sort.order);
+    } else if (!isNullOrUndefined(defaultSort) && !isNullOrUndefined(defaultSort.order)) {
+      this.sortDirection = SearchUtility.castSortDirection(defaultSort.order);
+    }
   }
 }

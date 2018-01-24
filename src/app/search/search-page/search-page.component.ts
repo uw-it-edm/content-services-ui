@@ -8,7 +8,7 @@ import { SearchResults } from '../shared/model/search-result';
 import { SearchService } from '../shared/search.service';
 import { Subject } from 'rxjs/Subject';
 import { DataService } from '../../shared/providers/data.service';
-import { SearchOrder } from '../shared/model/search-order';
+import { Sort } from '../shared/model/sort';
 import { isNullOrUndefined } from 'util';
 
 @Component({
@@ -34,8 +34,9 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    if (this.dataService.get('currentSearch')) {
-      this.searchModel$.next(Object.assign(new SearchModel(), this.dataService.get('currentSearch')));
+    const cachedSearch = this.dataService.get('currentSearch');
+    if (cachedSearch) {
+      this.searchModel$.next(Object.assign(new SearchModel(), cachedSearch));
     }
   }
 
@@ -48,11 +49,11 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
         this.config = data.config;
         this.pageConfig = data.config.pages[this.page.toLowerCase()];
         if (
-          isNullOrUndefined(this.pageConfig.defaultOrder) ||
-          isNullOrUndefined(this.pageConfig.defaultOrder.term) ||
-          isNullOrUndefined(this.pageConfig.defaultOrder.order)
+          isNullOrUndefined(this.pageConfig.defaultSort) ||
+          isNullOrUndefined(this.pageConfig.defaultSort.term) ||
+          isNullOrUndefined(this.pageConfig.defaultSort.order)
         ) {
-          this.pageConfig.defaultOrder = new SearchOrder('id', 'desc');
+          this.pageConfig.defaultSort = new Sort('id', 'desc');
         }
         this.titleService.setTitle(this.pageConfig.pageName);
         this.searchService.search(this.searchModel$, this.pageConfig).subscribe((searchResults: SearchResults) => {
