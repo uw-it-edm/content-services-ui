@@ -59,6 +59,12 @@ describe('SearchResultsComponent', () => {
   });
 
   it('should set sort order if defaultSort is defined in the pageConfig', () => {
+    component.searchResults$.next(new SearchResults());
+    fixture.detectChanges();
+    expect(component.sortTerm).toBe('myfield');
+    expect(component.sortDirection).toBe('asc');
+    // This verifies that the change is being passed successfully through the databinding and that the
+    // event on the matSort object is being digested correctly
     expect(component.sort.active).toBe('myfield');
     expect(component.sort.direction).toBe('asc');
   });
