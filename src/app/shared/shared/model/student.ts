@@ -1,4 +1,6 @@
-export class Student {
+import { SearchFilterableResult } from './search-filterable-result';
+
+export class Student implements SearchFilterableResult {
   public birthdate?;
   public displayName: string;
   public email?: string;
@@ -8,7 +10,17 @@ export class Student {
   public studentNumber: string;
   public studentSystemKey: string;
 
+  constructor() {}
+
   static convertToDisplayName(student: Student) {
     return student.lastName + ', ' + student.firstName + ' (' + student.studentNumber + ')';
+  }
+
+  getFilterableValue(): string {
+    return this.studentNumber;
+  }
+
+  getFilterableDisplay(): string {
+    return this.displayName;
   }
 }

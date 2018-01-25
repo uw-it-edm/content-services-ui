@@ -6,8 +6,8 @@ describe('SearchModel', () => {
 
   beforeEach(() => {
     searchModel = new SearchModel();
-    const searchFilter1 = new SearchFilter('filter1', 'value1');
-    const searchFilter2 = new SearchFilter('filter2', 'value2');
+    const searchFilter1 = new SearchFilter('filter1', 'value1', 'testLabel');
+    const searchFilter2 = new SearchFilter('filter2', 'value2', 'testLabel');
     searchModel.addFilterIfNotThere(searchFilter1);
     searchModel.addFilterIfNotThere(searchFilter2);
   });
@@ -24,7 +24,7 @@ describe('SearchModel', () => {
   });
 
   it('should not add filter if it is there', () => {
-    const searchFilter2 = new SearchFilter('filter2', 'value2');
+    const searchFilter2 = new SearchFilter('filter2', 'value2', 'testLabel');
 
     searchModel.addFilterIfNotThere(searchFilter2);
 
@@ -39,7 +39,7 @@ describe('SearchModel', () => {
   });
 
   it('should remove filter', () => {
-    const searchFilter2 = new SearchFilter('filter2', 'value2');
+    const searchFilter2 = new SearchFilter('filter2', 'value2', 'testLabel');
     searchModel.removeFilter(searchFilter2);
     expect(searchModel.filters.length).toBe(1);
 
