@@ -54,7 +54,7 @@ class MockContentService {
 
 class MockUserService extends UserService {
   constructor() {
-    super(null, null);
+    super(null, null, null);
   }
 
   getUser(): User {
@@ -213,7 +213,7 @@ describe('EditPageComponent', () => {
     const metataDataGroup = component.form.controls['metadata'];
     metataDataGroup.patchValue({ '1': 'a spec title' });
     fixture.detectChanges();
-    component.contentObjectListComponent = new ContentObjectListComponent(null, null, null, null, null);
+    component.contentObjectListComponent = new ContentObjectListComponent(null, null, null, null, null, null);
 
     const spy = spyOn(component.contentObjectListComponent, 'saveItem');
 

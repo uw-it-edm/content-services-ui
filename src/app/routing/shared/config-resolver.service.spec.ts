@@ -5,6 +5,8 @@ import { ConfigService } from '../../core/shared/config.service';
 import { Config } from '../../core/shared/model/config';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Injector } from '@angular/core';
+import { NotificationService } from '../../shared/providers/notification.service';
+import { MatSnackBarModule } from '@angular/material';
 
 class RouterStub {
   navigate(url: string) {
@@ -30,10 +32,12 @@ describe('ConfigResolverService', () => {
     async(() => {
       const _mockConfigService = new MockConfigService();
       TestBed.configureTestingModule({
+        imports: [MatSnackBarModule],
         providers: [
           ConfigResolver,
           { provide: ConfigService, useValue: _mockConfigService },
-          { provide: Router, useClass: RouterStub }
+          { provide: Router, useClass: RouterStub },
+          NotificationService
         ]
       });
     })

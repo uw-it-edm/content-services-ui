@@ -14,7 +14,7 @@ import { SearchOrder } from './model/search-order';
 
 class UserServiceMock extends UserService {
   constructor() {
-    super(null, null);
+    super(null, null, null);
   }
 
   getUser(): User {
