@@ -1,6 +1,4 @@
-import { isNullOrUndefined } from 'util';
-
-export class SearchOrder {
+export class Sort {
   term: string;
   /**
    * Sets the value when a field is missing in a doc.
