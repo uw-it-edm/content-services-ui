@@ -1,13 +1,13 @@
 import { SearchFilter } from './search-filter';
 import { PaginatorConfig } from './paginator-config';
-import { SearchOrder } from './search-order';
+import { Sort } from './sort';
 import { isNullOrUndefined } from 'util';
 
 export class SearchModel {
   stringQuery: string;
   private _filters: SearchFilter[] = [];
   pagination: PaginatorConfig = new PaginatorConfig();
-  order: SearchOrder = new SearchOrder();
+  order: Sort = new Sort();
 
   get filters(): SearchFilter[] {
     return this._filters;

@@ -7,7 +7,7 @@
                  (page)="onPageEvent($event)">
   </mat-paginator>
 
-  <mat-table #table [dataSource]="dataSource" matSort aria-label="Search Results">
+  <mat-table #table [dataSource]="dataSource" matSort [matSortActive]="sortTerm" [matSortDirection]="sortDirection" aria-label="Search Results">
 
     <!--- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->

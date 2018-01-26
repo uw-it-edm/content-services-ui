@@ -105,7 +105,7 @@ describe('SearchPageComponent', () => {
   });
 
   it('should add default sort order if none is defined in the pageConfig', () => {
-    expect(component.pageConfig.defaultOrder.term).toBe('id');
-    expect(component.pageConfig.defaultOrder.order).toBe('desc');
+    expect(component.pageConfig.defaultSort.term).toBe('id');
+    expect(component.pageConfig.defaultSort.order).toBe('desc');
   });
 });

@@ -10,7 +10,7 @@ import { SearchFilter } from './model/search-filter';
 import { Field } from '../../core/shared/model/field';
 import { HttpClient } from '@angular/common/http';
 import { DataService } from '../../shared/providers/data.service';
-import { SearchOrder } from './model/search-order';
+import { Sort } from './model/sort';
 
 class UserServiceMock extends UserService {
   constructor() {
@@ -198,7 +198,7 @@ describe('SearchService', () => {
     httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(new Response(new ResponseOptions())));
 
     const searchPageConfig = new SearchPageConfig();
-    searchPageConfig.defaultOrder = new SearchOrder('mydefaultfield', 'desc');
+    searchPageConfig.defaultSort = new Sort('mydefaultfield', 'desc');
     searchService.search(Observable.of(searchModel), searchPageConfig).subscribe(result => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       // args[1] is the payload
@@ -218,7 +218,7 @@ describe('SearchService', () => {
     httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(new Response(new ResponseOptions())));
 
     const searchPageConfig = new SearchPageConfig();
-    searchPageConfig.defaultOrder = new SearchOrder('mydefaultfield', 'desc');
+    searchPageConfig.defaultSort = new Sort('mydefaultfield', 'desc');
     searchService.search(Observable.of(searchModel), searchPageConfig).subscribe(result => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       // args[1] is the payload
