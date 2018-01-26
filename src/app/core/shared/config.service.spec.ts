@@ -26,7 +26,7 @@ const profileLinks = {
 describe('ConfigService', () => {
   class UserServiceMock extends UserService {
     constructor() {
-      super(null, null);
+      super(null, null, null);
     }
 
     getUser(): User {

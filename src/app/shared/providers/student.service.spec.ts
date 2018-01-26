@@ -11,7 +11,7 @@ import { StudentSearchResults } from '../shared/model/student-search-results';
 
 class UserServiceMock extends UserService {
   constructor() {
-    super(null, null);
+    super(null, null, null);
   }
 
   getUser(): User {

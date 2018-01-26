@@ -19,6 +19,7 @@ import { DataService } from '../../shared/providers/data.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { StudentService } from '../../shared/providers/student.service';
+import { NotificationService } from '../../shared/providers/notification.service';
 
 let studentService: StudentService;
 let dataService: DataService;
@@ -52,7 +53,8 @@ describe('SearchPageComponent', () => {
           { provide: SearchService, useValue: searchServiceSpy },
           { provide: DataService, useValue: dataService },
           { provide: StudentService, useValue: studentService },
-          Title
+          Title,
+          NotificationService
         ],
         schemas: [NO_ERRORS_SCHEMA]
       }).compileComponents();

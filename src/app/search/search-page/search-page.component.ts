@@ -13,6 +13,7 @@ import { isNullOrUndefined } from 'util';
 import { StudentSearchAutocomplete } from '../shared/search-autocomplete/student-search-autocomplete';
 import { StudentService } from '../../shared/providers/student.service';
 import { SearchAutocomplete } from '../shared/search-autocomplete/search-autocomplete';
+import { NotificationService } from '../../shared/providers/notification.service';
 
 @Component({
   selector: 'app-search-page',
@@ -36,7 +37,8 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
     private searchService: SearchService,
     private dataService: DataService,
     private router: Router,
-    private studentService: StudentService // TODO: this should be passed in as an input?
+    private studentService: StudentService, // TODO: this should be passed in as an input?
+    private notificationService: NotificationService
   ) {}
 
   ngAfterViewInit(): void {
@@ -69,14 +71,19 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.pageConfig.autocompleteConfig.filterLabel
           );
         }
-        this.searchService.search(this.searchModel$, this.pageConfig).subscribe((searchResults: SearchResults) => {
-          /* we are not sending the search results observable
-             directly to the underlying components
-             as doing so makes all the components subscribe
-             to the search service and execute multiple searches
-             */
-          this.searchResults$.next(searchResults);
-        });
+        this.searchService.search(this.searchModel$, this.pageConfig).subscribe(
+          (searchResults: SearchResults) => {
+            /* we are not sending the search results observable
+               directly to the underlying components
+               as doing so makes all the components subscribe
+               to the search service and execute multiple searches
+               */
+            this.searchResults$.next(searchResults);
+          },
+          err => {
+            this.notificationService.error('error while executing search', err);
+          }
+        );
       });
 
       this.searchModel$.next(new SearchModel());

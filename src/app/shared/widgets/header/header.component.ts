@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { ConfigResolver } from '../../../routing/shared/config-resolver.service';
 import { MatMenu } from '@angular/material';
 import { TenantConfigInfo } from '../../../core/shared/model/tenant-config-info';
+import { NotificationService } from '../../providers/notification.service';
 
 @Component({
   selector: 'app-header',

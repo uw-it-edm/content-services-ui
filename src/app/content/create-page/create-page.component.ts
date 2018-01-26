@@ -13,6 +13,7 @@ import { DynamicComponentDirective } from '../shared/directive/dynamic-component
 import { ContentObject } from '../shared/model/content-object';
 import { ContentObjectListComponent } from '../content-object-list/content-object-list.component';
 import { isNullOrUndefined } from 'util';
+import { NotificationService } from '../../shared/providers/notification.service';
 
 @Component({
   selector: 'app-create-page',
@@ -40,7 +41,8 @@ export class CreatePageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private titleService: Title,
     private fb: FormBuilder,
-    private userService: UserService
+    private userService: UserService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -106,7 +108,20 @@ export class CreatePageComponent implements OnInit, OnDestroy {
     const formModel = this.form.value;
     const metadataOverrides = this.pageConfig.onSave;
 
-    this.contentObjectListComponent.saveItem(fields, formModel, metadataOverrides);
+    if (!this.form.valid) {
+      const invalidFields = <FormControl[]>Object.keys(this.form.controls)
+        .map(key => this.form.controls[key])
+        .filter(ctl => ctl.invalid);
+      if (invalidFields.length > 0) {
+        const invalidElem: any = invalidFields[0];
+        invalidElem.nativeElement.focus();
+      }
+      this.notificationService.error('Invalid Form');
+    } else if (!this.contentObjectListComponent.hasContentObjects()) {
+      this.notificationService.error('No file attached');
+    } else {
+      this.contentObjectListComponent.saveItem(fields, formModel, metadataOverrides);
+    }
   }
 
   private createForm(): FormGroup {
