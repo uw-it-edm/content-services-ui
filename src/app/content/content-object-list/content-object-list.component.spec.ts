@@ -22,6 +22,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { FocusDirective } from '../../shared/directives/focus/focus.directive';
 import { FieldOption } from '../../core/shared/model/field/field-option';
+import { NotificationService } from '../../shared/providers/notification.service';
 
 class MockContentService extends ContentService {
   constructor() {
@@ -39,7 +40,7 @@ class MockContentService extends ContentService {
 
 class MockUserService extends UserService {
   constructor() {
-    super(null, null);
+    super(null, null, null);
   }
 
   getUser(): User {
@@ -90,7 +91,8 @@ describe('ContentObjectList', () => {
         Title,
         FormBuilder,
         LiveAnnouncer,
-        MatSnackBar
+        MatSnackBar,
+        NotificationService
       ],
       declarations: [FileUploadComponent, ContentObjectListComponent, TruncatePipe, FocusDirective]
     }).compileComponents();

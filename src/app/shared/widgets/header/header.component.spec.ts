@@ -11,6 +11,7 @@ import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router'
 import { ActivatedRouteStub } from '../../../../testing/router-stubs';
 import { HttpClientModule } from '@angular/common/http';
 import { ProgressService } from '../../providers/progress.service';
+import { NotificationService } from '../../providers/notification.service';
 
 class RouterStub {
   navigate(url: string) {
@@ -47,7 +48,8 @@ describe('HeaderComponent', () => {
           ConfigResolver,
           GlobalEventsManagerService,
           ProgressService,
-          UserService
+          UserService,
+          NotificationService
         ],
         schemas: [NO_ERRORS_SCHEMA]
       }).compileComponents();

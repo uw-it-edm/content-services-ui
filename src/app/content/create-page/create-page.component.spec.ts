@@ -27,6 +27,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ProgressService } from '../../shared/providers/progress.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Field } from '../../core/shared/model/field';
+import { NotificationService } from '../../shared/providers/notification.service';
 
 class MockContentService {
   create(contentItem: ContentItem, file: File): Observable<ContentItem> {
@@ -41,7 +42,7 @@ class MockContentService {
 
 class MockUserService extends UserService {
   constructor() {
-    super(null, null);
+    super(null, null, null);
   }
 
   getUser(): User {
@@ -86,7 +87,8 @@ describe('CreatePageComponent', () => {
           Title,
           FormBuilder,
           LiveAnnouncer,
-          MatSnackBar
+          MatSnackBar,
+          NotificationService
         ],
         schemas: [NO_ERRORS_SCHEMA]
       })

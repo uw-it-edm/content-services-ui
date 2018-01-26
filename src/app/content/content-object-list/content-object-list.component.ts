@@ -12,6 +12,7 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../user/shared/user.service';
 import { isUndefined } from 'util';
+import { NotificationService } from '../../shared/providers/notification.service';
 
 @Component({
   selector: 'app-content-object-list',
@@ -44,7 +45,8 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
     private route: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar,
-    private userService: UserService
+    private userService: UserService,
+    private notificationService: NotificationService
   ) {
     this.snackBarConfig.duration = 15000;
   }
@@ -288,6 +290,10 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
         }
       }
     }
+  }
+
+  hasContentObjects() {
+    return this.contentObjects && this.contentObjects.length > 0;
   }
 
   private updateComponentSavedItemLists(item: ContentItem) {

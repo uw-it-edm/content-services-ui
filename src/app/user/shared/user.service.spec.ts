@@ -5,12 +5,19 @@ import { User } from './user';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
 import { ProgressService } from '../../shared/providers/progress.service';
+import { NotificationService } from '../../shared/providers/notification.service';
+import { MaterialConfigModule } from '../../routing/material-config.module';
 
 describe('UserService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [],
-      providers: [ProgressService, UserService, { provide: HttpClient, useValue: new HttpClient(null) }]
+      imports: [MaterialConfigModule],
+      providers: [
+        NotificationService,
+        ProgressService,
+        UserService,
+        { provide: HttpClient, useValue: new HttpClient(null) }
+      ]
     });
   });
 
