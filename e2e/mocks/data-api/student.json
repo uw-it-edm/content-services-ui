@@ -1,0 +1,10 @@
+{
+  "displayName": "Jane Doe Smith",
+  "firstName": "Jane",
+  "lastName": "Smith",
+  "birthDate": "2000-10-01",
+  "email": "mynetid@uw.edu",
+  "studentNumber": "3333333",
+  "netId": "mynetid",
+  "studentSystemKey": "44444444"
+}

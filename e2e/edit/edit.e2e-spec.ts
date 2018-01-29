@@ -28,6 +28,27 @@ describe('content-services-ui Edit Page', () => {
     expect(page.getPdfViewer().isDisplayed());
   });
 
+  it('should display date field in correct format', () => {
+    expect(page.getLastModifiedDateText()).toEqual('6/12/2017');
+  });
+
+  it('should display Student name in correct format', () => {
+    const studentData = require('../mocks/data-api/student.json');
+    const student = `${studentData.lastName}, ${studentData.firstName} (${studentData.studentNumber})`;
+
+    expect(page.getStudentText()).toEqual(student);
+  });
+
+  it('should enable Save button when metadata is edited', () => {
+    // TODO
+    throw new Error('not implemented');
+  });
+
+  it('should display field validation error when required field is not populated', () => {
+    // TODO
+    throw new Error('not implemented');
+  });
+
   it('should navigate to Search page when Return to Results link is clicked', () => {
     page.clickReturnToResultsLink();
 

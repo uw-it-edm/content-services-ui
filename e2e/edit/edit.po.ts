@@ -26,4 +26,12 @@ export class EditPage {
   removeFile() {
     element(by.css('app-file-upload button.mat-button')).click();
   }
+
+  getLastModifiedDateText() {
+    return element(by.css('[placeholder=\'Last Modified Date\']')).getAttribute('value');
+  }
+
+  getStudentText() {
+    return element(by.id('mat-input-3')).getAttribute('value');
+  }
 }

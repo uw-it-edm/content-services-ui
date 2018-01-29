@@ -34,4 +34,12 @@ export class SearchPage {
   getHeaderToolbarText() {
     return element(by.className('cs-title')).getText();
   }
+
+  isSortIndicatorDesc() {
+    return element(by.className('mat-sort-header-indicator'))
+      .getAttribute('style')
+      .then(attr => {
+        return attr === 'transform: translateY(10px)';
+      });
+  }
 }

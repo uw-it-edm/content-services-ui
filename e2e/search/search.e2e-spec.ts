@@ -30,6 +30,10 @@ describe('content-services-ui Search Page', () => {
     expect(page.getPaginators().count()).toEqual(2);
   });
 
+  it('should display Id column with descending sort arrow by default', () => {
+    expect(page.isSortIndicatorDesc);
+  });
+
   it('should navigate to Upload page when upload button is clicked', () => {
     page.clickUploadButton();
 
