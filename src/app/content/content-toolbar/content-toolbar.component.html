@@ -12,12 +12,13 @@
                     <mat-icon>arrow_drop_up</mat-icon>
                 </button>
             </span>
-        </span>
-        <span *ngIf="downloadUrl">
+           <span *ngIf="downloadUrl">
             <button mat-icon-button (click)="download()" matTooltip="Download" role="button" aria-label="Download">
                 <mat-icon>file_download</mat-icon>
             </button>
         </span>
+        </span>
+
         <span class="cs-fill-remaining-space"></span>
         <span *ngIf="contentType === 'application/pdf'">
             <mat-form-field class="medium-field">
