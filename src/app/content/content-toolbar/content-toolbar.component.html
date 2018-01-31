@@ -1,8 +1,8 @@
 <div [ngClass]="fullScreen ? 'full-screen' : ''" class="cs-content-toolbar">
     <mat-toolbar aria-label="Navigation of document content" role="toolbar">
         <span *ngIf="contentType === 'application/pdf'" class="button-row">
-            <button mat-icon-button (click)="toggleShowAll()" [matTooltip]="showAllValue ? 'Page by Page Mode' : 'Continuous Scrolling Mode'" role="button">
-                <mat-icon>{{showAllValue ? 'note' : 'vertical_align_bottom'}}</mat-icon>
+            <button mat-icon-button (click)="toggleShowAll()" [matTooltip]="showAllValue ? 'Page by Page Mode' : 'Continuous Scrolling Mode'" role="button" >
+                <mat-icon>{{showAllValue ? 'tab' : 'system_update_alt'}}</mat-icon>
             </button>
             <span *ngIf="!showAllValue">
                 <button mat-icon-button (click)="pageDown()" role="button">
@@ -12,6 +12,11 @@
                     <mat-icon>arrow_drop_up</mat-icon>
                 </button>
             </span>
+        </span>
+        <span *ngIf="downloadUrl">
+            <button mat-icon-button (click)="download()" matTooltip="Download" role="button" aria-label="Download">
+                <mat-icon>file_download</mat-icon>
+            </button>
         </span>
         <span class="cs-fill-remaining-space"></span>
         <span *ngIf="contentType === 'application/pdf'">
