@@ -1,5 +1,4 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { SafeUrl } from '@angular/platform-browser';
 import { Subject } from 'rxjs/Subject';
 import { ContentService } from '../shared/content.service';
 import 'rxjs/add/operator/takeUntil';
@@ -28,6 +27,7 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   showAll = false;
   stickToPage = false;
   zoom = 1.0;
+  downloadUrl: string;
 
   constructor(private contentService: ContentService, public progressService: ProgressService) {}
 
@@ -65,9 +65,19 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       this.progressService.end();
     }
+    this.updateDownloadUrl();
+  }
+
+  private updateDownloadUrl(): void {
+    if (this.contentObject && this.contentObject.itemId && this.contentObject.url !== '') {
+      this.downloadUrl = this.buildUrl(this.contentObject.itemId, true, 'attachment');
+    } else {
+      this.downloadUrl = undefined;
+    }
   }
 
   onDisplayComplete(pdf: any) {
+    this.updateDownloadUrl();
     this.progressService.end();
     this.pageCount = pdf.numPages;
     // this.contentToolbarComponent.pageCount = pdf.numPages;
