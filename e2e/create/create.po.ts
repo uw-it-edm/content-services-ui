@@ -4,6 +4,8 @@ export class CreatePage {
   public pageUrl = '/demo/create';
   public uploadFilePanel = element(by.id('drop-zone'));
   public fileList = element.all(by.tagName('mat-list-item'));
+  public inputField = element(by.id('mat-input-0'));
+  public errorNotification = element(by.className('error'));
 
   navigateTo() {
     return browser.get(this.pageUrl);

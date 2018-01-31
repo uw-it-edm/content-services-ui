@@ -39,14 +39,14 @@ describe('content-services-ui Edit Page', () => {
     expect(page.getStudentText()).toEqual(student);
   });
 
-  it('should enable Save button when metadata is edited', () => {
-    // TODO
-    throw new Error('not implemented');
+  it('should disable Save button by default', () => {
+    expect(page.saveButton.isEnabled()).toBeFalsy();
   });
 
-  it('should display field validation error when required field is not populated', () => {
-    // TODO
-    throw new Error('not implemented');
+  it('should enable Save button when metadata is edited', () => {
+    page.studentInputField.sendKeys('any text');
+
+    expect(page.saveButton.isEnabled());
   });
 
   it('should navigate to Search page when Return to Results link is clicked', () => {

@@ -152,13 +152,11 @@
       "fieldsToDisplay": [
         {
           "key": "Filer",
-          "label": "Filer",
-          "required": true
+          "label": "Filer"
         },
         {
           "key": "PublishStatus",
           "label": "Publish Status",
-          "required": true,
           "displayType": "select",
           "options": [
             {

@@ -1,8 +1,8 @@
-import { CreatePage } from './create.po';
-import { SearchPage } from '../search/search.po';
-import { browser } from 'protractor';
+import {CreatePage} from './create.po';
+import {SearchPage} from '../search/search.po';
+import {browser} from 'protractor';
 import * as path from 'path';
-import { until } from 'selenium-webdriver';
+import {until} from 'selenium-webdriver';
 
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
@@ -90,5 +90,12 @@ describe('content-services-ui Create Page', () => {
     browser.waitForAngularEnabled(false);
     expect(page.getFileName(1)).toEqual(path.parse(textFilePath).base);
     browser.waitForAngularEnabled(true);
+  });
+
+  it('should display error message when no file is attached', () => {
+    page.inputField.sendKeys('any text');
+    page.clickSave();
+
+    expect(page.errorNotification.isDisplayed());
   });
 });

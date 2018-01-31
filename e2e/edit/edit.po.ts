@@ -2,6 +2,9 @@ import {browser, by, element} from 'protractor';
 import * as path from 'path';
 
 export class EditPage {
+  public saveButton = element(by.id('saveItem'));
+  public studentInputField = element(by.id('mat-input-3'));
+
   navigateTo() {
     return browser.get('/demo/edit/123456');
   }
@@ -32,6 +35,6 @@ export class EditPage {
   }
 
   getStudentText() {
-    return element(by.id('mat-input-3')).getAttribute('value');
+    return this.studentInputField.getAttribute('value');
   }
 }
