@@ -1,7 +1,7 @@
 import {browser, by, element, ExpectedConditions} from 'protractor';
 
 export class SearchPage {
-  public pageUrl = '/demo/tab-search';
+  public pageUrl = browser.baseUrl + '/demo/tab-search';
 
   navigateTo() {
     return browser.get(this.pageUrl);
