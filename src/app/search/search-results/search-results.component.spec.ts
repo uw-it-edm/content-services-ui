@@ -12,6 +12,9 @@ import { SearchResults } from '../shared/model/search-result';
 import { DataService } from '../../shared/providers/data.service';
 import { SharedModule } from '../../shared/shared.module';
 import { ActivatedRouteStub } from '../../../testing/router-stubs';
+import { Sort } from '../shared/model/sort';
+import { Subject } from 'rxjs/Subject';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 class MockDataService {
   storage = ['123', '456'];
@@ -44,13 +47,38 @@ describe('SearchResultsComponent', () => {
     searchModel.stringQuery = 'iSearch';
     component.searchModel$ = Observable.of(searchModel);
     component.pageConfig = new SearchPageConfig();
-    const searchResults = new SearchResults();
-    component.searchResults$ = Observable.of(searchResults);
+    component.pageConfig.defaultSort = new Sort('myfield', 'asc');
+    component.searchResults$ = new Subject<SearchResults>();
+    component.searchResults$.next(new SearchResults());
 
     fixture.detectChanges();
   });
 
   it('should be created', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should set sort order if defaultSort is defined in the pageConfig', () => {
+    component.searchResults$.next(new SearchResults());
+    fixture.detectChanges();
+    expect(component.sortTerm).toBe('myfield');
+    expect(component.sortDirection).toBe('asc');
+    // This verifies that the change is being passed successfully through the databinding and that the
+    // event on the matSort object is being digested correctly
+    expect(component.sort.active).toBe('myfield');
+    expect(component.sort.direction).toBe('asc');
+  });
+
+  it('should change sort order when a new sort is defined in the search results', () => {
+    const sort = new Sort('newfield', 'desc');
+    component.searchResults$.next(new SearchResults(sort));
+    fixture.detectChanges();
+    // This verifies that the variables are being directly set in the subscription method
+    expect(component.sortTerm).toBe('newfield');
+    expect(component.sortDirection).toBe('desc');
+    // This verifies that the change is being passed successfully through the databinding and that the
+    // event on the matSort object is being digested correctly
+    expect(component.sort.active).toBe('newfield');
+    expect(component.sort.direction).toBe('desc');
   });
 });

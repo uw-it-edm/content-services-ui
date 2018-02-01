@@ -5,6 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ProgressService } from '../../shared/providers/progress.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
+import { NotificationService } from '../../shared/providers/notification.service';
 
 @Injectable()
 export class UserService {
@@ -14,7 +15,11 @@ export class UserService {
   private user: User;
   private user$ = new ReplaySubject<User>();
 
-  constructor(private http: HttpClient, private progressService: ProgressService) {}
+  constructor(
+    private http: HttpClient,
+    private progressService: ProgressService,
+    private notificationService: NotificationService
+  ) {}
 
   getAuthenticatedObservable(): Observable<boolean> {
     return this.loggedIn$;
@@ -40,6 +45,7 @@ export class UserService {
         this.loggedIn$.next(true);
       },
       () => {
+        this.notificationService.error('Cannot load user');
         this.loggedIn$.next(false);
         if (this.progressService != null) {
           this.progressService.end();

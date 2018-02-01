@@ -18,7 +18,10 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DataService } from '../../shared/providers/data.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientModule } from '@angular/common/http';
+import { StudentService } from '../../shared/providers/student.service';
+import { NotificationService } from '../../shared/providers/notification.service';
 
+let studentService: StudentService;
 let dataService: DataService;
 let activatedRoute: ActivatedRouteStub;
 let searchServiceSpy: MockSearchService;
@@ -37,6 +40,7 @@ describe('SearchPageComponent', () => {
     searchServiceSpy = new MockSearchService();
     dataService = new DataService();
     dataService.set('adjacentIds', ['123', '456']);
+    studentService = new StudentService(null, null);
   });
 
   beforeEach(
@@ -48,7 +52,9 @@ describe('SearchPageComponent', () => {
           { provide: ActivatedRoute, useValue: activatedRoute },
           { provide: SearchService, useValue: searchServiceSpy },
           { provide: DataService, useValue: dataService },
-          Title
+          { provide: StudentService, useValue: studentService },
+          Title,
+          NotificationService
         ],
         schemas: [NO_ERRORS_SCHEMA]
       }).compileComponents();
@@ -96,5 +102,10 @@ describe('SearchPageComponent', () => {
   it('should have the title set to the page name', () => {
     const title = fixture.debugElement.injector.get(Title);
     expect(title.getTitle()).toBe('test-page');
+  });
+
+  it('should add default sort order if none is defined in the pageConfig', () => {
+    expect(component.pageConfig.defaultSort.term).toBe('id');
+    expect(component.pageConfig.defaultSort.order).toBe('desc');
   });
 });

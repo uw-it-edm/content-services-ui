@@ -8,7 +8,7 @@ export class Field {
   public required = false;
   public disabled = false;
 
-  public dataType? = 'string';
+  public dataType = 'string';
   public displayType?: string;
 
   public options?: FieldOption[] = [];

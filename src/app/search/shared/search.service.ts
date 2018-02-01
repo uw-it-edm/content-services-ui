@@ -12,10 +12,11 @@ import { UserService } from '../../user/shared/user.service';
 import { SearchFilter } from './model/search-filter';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { FacetConfig } from '../../core/shared/model/facet-config';
-import { SearchOrder } from './model/search-order';
+import { Sort } from './model/sort';
 import { Field } from '../../core/shared/model/field';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DataService } from '../../shared/providers/data.service';
+import { isNullOrUndefined } from 'util';
 
 @Injectable()
 export class SearchService {
@@ -23,27 +24,27 @@ export class SearchService {
 
   constructor(private http: HttpClient, private userService: UserService, private dataService: DataService) {}
 
-  search(terms: Observable<SearchModel>, pageConfig: SearchPageConfig): Observable<SearchResults> {
-    return terms
+  search(searchModel$: Observable<SearchModel>, pageConfig: SearchPageConfig): Observable<SearchResults> {
+    return searchModel$
       .debounceTime(400)
       .distinctUntilChanged()
-      .switchMap(term => {
+      .switchMap(searchModel => {
         console.log('processing search request');
 
-        this.dataService.set('currentSearch', term);
+        this.dataService.set('currentSearch', searchModel);
 
-        return this.searchEntries(term, pageConfig);
+        return this.searchEntries(searchModel, pageConfig);
       });
   }
 
-  private searchEntries(term: SearchModel, pageConfig: SearchPageConfig): Observable<SearchResults> {
+  private searchEntries(searchModel: SearchModel, pageConfig: SearchPageConfig): Observable<SearchResults> {
     const indexName = pageConfig.searchConfig.indexName;
-    const searchPayload = this.buildSearchPayload(term, pageConfig);
+    const searchPayload = this.buildSearchPayload(searchModel, pageConfig);
     const options = this.buildRequestOptions();
 
     console.log('searching "' + indexName + '" with ' + JSON.stringify(searchPayload));
     return this.http.post(this.baseUrl + indexName, searchPayload, options).map(response => {
-      return this.convertSearchApiResultsToSearchResults(response);
+      return this.convertSearchApiResultsToSearchResults(searchModel, response);
     });
   }
 
@@ -65,12 +66,12 @@ export class SearchService {
     this.addFacetsToSearchPayload(searchPayload, pageConfig);
     this.addFiltersToSearchPayload(searchPayload, term);
     this.addPaginationToSearchPayload(searchPayload, term);
-    this.addOrderingToSearchPayload(searchPayload, term.order, pageConfig);
+    this.addSortToSearchPayload(searchPayload, term.order, pageConfig);
     return searchPayload;
   }
 
-  convertSearchApiResultsToSearchResults(apiResult: any) {
-    const results = new SearchResults();
+  convertSearchApiResultsToSearchResults(searchModel: SearchModel, apiResult: any) {
+    const results = new SearchResults(searchModel.order);
 
     if (apiResult !== null) {
       if ('totalCount' in apiResult) {
@@ -131,21 +132,24 @@ export class SearchService {
     searchPayload['facets'] = facets;
   }
 
-  private addOrderingToSearchPayload(searchPayload: any, order: SearchOrder, pageConfig: SearchPageConfig) {
-    if (order && order.term && order.order) {
-      const newOrder: SearchOrder = Object.assign(new SearchOrder(), order);
-      const fieldConfig: Field = pageConfig.fieldsToDisplay.find(field => field.key === newOrder.term);
+  private addSortToSearchPayload(searchPayload: any, sort: Sort, pageConfig: SearchPageConfig) {
+    if (isNullOrUndefined(sort) || isNullOrUndefined(sort.term) || isNullOrUndefined(sort.order)) {
+      sort = pageConfig.defaultSort;
+    }
+    if (sort && sort.term && sort.order) {
+      const newSort: Sort = Object.assign(new Sort(), sort);
+      const fieldConfig: Field = pageConfig.fieldsToDisplay.find(field => field.key === newSort.term);
 
-      if (newOrder.term !== 'id' && newOrder.term !== 'label') {
-        newOrder.term = 'metadata.' + newOrder.term;
-      } else if (newOrder.term !== 'id') {
-        newOrder.term += '.lowercase';
+      if (newSort.term !== 'id' && newSort.term !== 'label') {
+        newSort.term = 'metadata.' + newSort.term;
+      } else if (newSort.term !== 'id') {
+        newSort.term += '.lowercase';
       }
 
       if (fieldConfig) {
         if (fieldConfig.dataType) {
           if (fieldConfig.dataType === 'string' && !fieldConfig.key.endsWith('Date')) {
-            newOrder.term += '.lowercase';
+            newSort.term += '.lowercase';
           } else if (fieldConfig.dataType === 'number') {
             // NOOP
           } else if (fieldConfig.dataType === 'date') {
@@ -154,7 +158,7 @@ export class SearchService {
         }
       }
 
-      searchPayload['searchOrder'] = newOrder;
+      searchPayload['searchOrder'] = newSort;
     }
   }
 }
