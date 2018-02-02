@@ -12,10 +12,17 @@ exports.config = {
   specs: [
     './e2e/**/*.e2e-spec.ts'
   ],
-  capabilities: {
-    'browserName': 'chrome'
-  },
-  seleniumAddress: 'http://localhost:4444/wd/hub',
+  multiCapabilities: [
+    {
+      'browserName': 'chrome'
+    },
+    {
+      'browserName': 'firefox',
+      'marionnette': true
+    }
+  ],
+  seleniumAddress: 'http://localhost:4444/wd/hub', //TODO: change to edm-seleniumhub
+  baseUrl: process.env.baseUrl,
   framework: 'jasmine2',
   jasmineNodeOpts: {
     showColors: true,
@@ -24,8 +31,6 @@ exports.config = {
     }
   },
   beforeLaunch: function () {
-    require('ts-node').register({project: 'e2e/tsconfig.e2e.json'});
-
     //clean up any residual/leftover from a previous run. Ensure we have clean
     //files for both locking and merging.
     if (fs.existsSync(jasmineResultsLockFile)) {
@@ -36,6 +41,8 @@ exports.config = {
     }
   },
   onPrepare() {
+    require('ts-node').register({project: 'e2e/tsconfig.e2e.json'});
+
     jasmine.getEnv().addReporter(new SpecReporter({spec: {displayStacktrace: true}}));
 
     jasmine.getEnv().addReporter(new JSONReporter({
@@ -44,9 +51,17 @@ exports.config = {
                                                     indentationLevel: 4 // used if beautify === true
                                                   }));
 
+    browser.driver.manage().window().maximize();
     browser.driver.get(browser.baseUrl);
     browser.driver.findElement(by.id('weblogin_netid')).sendKeys(process.env.userId);
     browser.driver.findElement(by.id('weblogin_password')).sendKeys(process.env.password);
-    browser.driver.findElement(by.name('submit')).submit();
+    browser.driver.findElement(by.css('[value=\'Sign in\']')).click();
+
+    // wait until page is redirected
+    return browser.driver.wait(function () {
+      return browser.driver.getCurrentUrl().then(function (url) {
+        return url.startsWith(browser.baseUrl);
+      });
+    }, 10000);
   }
 };

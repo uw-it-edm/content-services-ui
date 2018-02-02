@@ -1,7 +1,7 @@
 import {browser, by, element} from 'protractor';
 
 export class CreatePage {
-  public pageUrl = '/demo/create';
+  public pageUrl = browser.baseUrl + '/demo/create';
   public uploadFilePanel = element(by.id('drop-zone'));
   public fileList = element.all(by.tagName('mat-list-item'));
   public inputField = element(by.id('mat-input-0'));

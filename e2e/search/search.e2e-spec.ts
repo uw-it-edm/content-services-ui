@@ -3,7 +3,7 @@ import {SearchPage} from './search.po';
 import {browser} from 'protractor';
 import {until} from 'selenium-webdriver';
 
-describe('content-services-ui Search Page', () => {
+describe('content-services-ui e2e Search Page', () => {
   let page: SearchPage;
 
   beforeAll(() => {
@@ -15,5 +15,4 @@ describe('content-services-ui Search Page', () => {
   it('should display page title', () => {
     expect(page.getPageTitle()).toEqual('Demonstration Search');
   });
-
 });
