@@ -2,10 +2,26 @@
 // https://github.com/angular/protractor/blob/master/lib/config.ts
 
 const SpecReporter = require('jasmine-spec-reporter').SpecReporter;
-const JSONReporter = require('jasmine-bamboo-reporter');
-const fs = require('fs');
-const jasmineResultsFile = './e2e/jasmine-results.json';
-const jasmineResultsLockFile = './e2e/jasmine-results.json.lock';
+const testResultsPath = './e2e/test-results';
+
+const setJasmineReporter = function () {
+  let jasmineReporters = require('jasmine-reporters');
+  return browser.getProcessedConfig().then(function (config) {
+    let browserName = config.capabilities.browserName;
+    let junitReporter = new jasmineReporters.JUnitXmlReporter({
+                                                                consolidateAll: true,
+                                                                savePath: testResultsPath,
+                                                                filePrefix: browserName
+                                                                            + '-xmloutput',
+                                                                modifySuiteName: function (generatedSuiteName,
+                                                                                           suite) {
+                                                                  return browserName + '.'
+                                                                         + generatedSuiteName;
+                                                                }
+                                                              });
+    jasmine.getEnv().addReporter(junitReporter);
+  });
+};
 
 exports.config = {
   allScriptsTimeout: 11000,
@@ -30,29 +46,26 @@ exports.config = {
     print: function () {
     }
   },
+
   beforeLaunch: function () {
-    //clean up any residual/leftover from a previous run. Ensure we have clean
-    //files for both locking and merging.
-    if (fs.existsSync(jasmineResultsLockFile)) {
-      fs.unlinkSync(jasmineResultsLockFile);
-    }
-    if (fs.existsSync(jasmineResultsFile)) {
-      fs.unlink(jasmineResultsFile);
+    //clean up any residual/leftover from a previous run.
+    let fs = require('fs');
+    let testResultsFile = testResultsPath + '/*.xml';
+    if (fs.existsSync(testResultsFile)) {
+      fs.unlink(testResultsFile);
     }
   },
+
   onPrepare() {
     require('ts-node').register({project: 'e2e/tsconfig.e2e.json'});
 
     jasmine.getEnv().addReporter(new SpecReporter({spec: {displayStacktrace: true}}));
 
-    jasmine.getEnv().addReporter(new JSONReporter({
-                                                    file: jasmineResultsFile,
-                                                    beautify: true,
-                                                    indentationLevel: 4 // used if beautify === true
-                                                  }));
+    setJasmineReporter();
 
-    browser.driver.manage().window().maximize();
+    //login to netid
     browser.driver.get(browser.baseUrl);
+    browser.driver.manage().window().maximize();
     browser.driver.findElement(by.id('weblogin_netid')).sendKeys(process.env.userId);
     browser.driver.findElement(by.id('weblogin_password')).sendKeys(process.env.password);
     browser.driver.findElement(by.css('[value=\'Sign in\']')).click();
@@ -63,5 +76,6 @@ exports.config = {
         return url.startsWith(browser.baseUrl);
       });
     }, 10000);
+
   }
 };
