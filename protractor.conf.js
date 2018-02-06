@@ -15,7 +15,7 @@ const setJasmineReporter = function () {
                                                                             + '-xmloutput',
                                                                 modifySuiteName: function (generatedSuiteName,
                                                                                            suite) {
-                                                                  return browserName + '.'
+                                                                  return browserName + ' - '
                                                                          + generatedSuiteName;
                                                                 }
                                                               });
