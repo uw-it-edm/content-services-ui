@@ -2,7 +2,7 @@
 // https://github.com/angular/protractor/blob/master/lib/config.ts
 
 const SpecReporter = require('jasmine-spec-reporter').SpecReporter;
-const testResultsPath = './e2e/test-results';
+const testReportsPath = './e2e/test-reports';
 
 const setJasmineReporter = function () {
   let jasmineReporters = require('jasmine-reporters');
@@ -10,7 +10,7 @@ const setJasmineReporter = function () {
     let browserName = config.capabilities.browserName;
     let junitReporter = new jasmineReporters.JUnitXmlReporter({
                                                                 consolidateAll: true,
-                                                                savePath: testResultsPath,
+                                                                savePath: testReportsPath,
                                                                 filePrefix: browserName
                                                                             + '-xmloutput',
                                                                 modifySuiteName: function (generatedSuiteName,
@@ -50,9 +50,9 @@ exports.config = {
   beforeLaunch: function () {
     //clean up any residual/leftover from a previous run.
     let fs = require('fs');
-    let testResultsFile = testResultsPath + '/*.xml';
-    if (fs.existsSync(testResultsFile)) {
-      fs.unlink(testResultsFile);
+    let testReportsFile = testReportsPath + '/*.xml';
+    if (fs.existsSync(testReportsFile)) {
+      fs.unlink(testReportsFile);
     }
   },
 

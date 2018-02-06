@@ -38,7 +38,7 @@ yarn-error.log
 # e2e
 /e2e/*.js
 /e2e/*.map
-/e2e/jasmine-results.json
+/e2e/test-reports
 
 # System Files
 .DS_Store
