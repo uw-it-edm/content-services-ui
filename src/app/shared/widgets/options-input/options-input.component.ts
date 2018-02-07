@@ -328,7 +328,7 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
 
   @HostListener('focus')
   focus() {
-    // TODO
+    // TODO CAB-2753
     /* if ((event.target as Element).tagName.toLowerCase() !== 'input') {
       this._elementRef.nativeElement.querySelector('select').focus();
     }*/
