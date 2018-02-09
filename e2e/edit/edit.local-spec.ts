@@ -9,7 +9,7 @@ const getCurrentUrl = function() {
   });
 };
 
-describe('content-services-ui Edit Page', () => {
+describe('Edit Page', () => {
   const page = new EditPage();
   const demoConfig = require('../mocks/profile-api/demo.json');
   const searchPage = new SearchPage();

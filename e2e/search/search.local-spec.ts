@@ -3,7 +3,7 @@ import {SearchPage} from './search.po';
 import {CreatePage} from '../create/create.po';
 import {browser} from 'protractor';
 
-describe('content-services-ui Search Page', () => {
+describe('Search Page', () => {
   let page: SearchPage;
   const demoConfig = require('../mocks/profile-api/demo.json');
 
@@ -22,7 +22,7 @@ describe('content-services-ui Search Page', () => {
 
   it('should accept text input in searchbox and retains the value', () => {
     const searchText = 'this is a sample test';
-    page.getSearchBox().sendKeys(searchText);
+    page.searchBox().sendKeys(searchText);
     expect(page.getSearchBoxInputText()).toEqual(searchText);
   });
 

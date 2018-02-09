@@ -5,7 +5,7 @@ import {browser} from 'protractor';
 const page = new ContentServicesUiPage();
 const TITLE = 'Content Services';
 
-describe('content-services-ui App', () => {
+describe('App Landing Page', () => {
   beforeAll(() => {
     page.navigateTo();
   });
@@ -29,7 +29,7 @@ describe('content-services-ui App', () => {
   });
 });
 
-describe('content-services-ui App navigation', () => {
+describe('App navigation', () => {
   beforeEach(() => {
     page.navigateTo();
   });

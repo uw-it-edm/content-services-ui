@@ -3,7 +3,7 @@ import {CreatePage} from './create.po';
 import {browser} from 'protractor';
 import {until} from 'selenium-webdriver';
 
-describe('content-services-ui e2e Create Page', () => {
+describe('Create Page', () => {
   let page: CreatePage;
 
   beforeAll(() => {
