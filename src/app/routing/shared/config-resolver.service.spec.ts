@@ -72,7 +72,6 @@ describe('ConfigResolverService', () => {
   it(
     'should return null if tenant doesnt exist',
     inject([ConfigResolver], (service: ConfigResolver) => {
-      // TODO spyOn router and check that we call router.navigate
       const route = new ActivatedRouteSnapshot();
       const routeParams = { tenant: 'fsdfsd-tenant' };
       route.params = routeParams;

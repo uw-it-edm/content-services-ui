@@ -44,22 +44,9 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
     const group: any = {};
     this.pageConfig.fieldsToDisplay.map(field => {
       const formState = this.initFormState(field);
-
-      // TODO CAB-2784 This is currently not used/working. It'll need to be moved in the app-options-input component
-      if (field.displayType === 'autocomplete' && field.options && field.options.length > 0) {
-        field.filteredOptions = new Observable<any[]>();
-        const fc = new FormControl(formState);
-        field.filteredOptions = fc.valueChanges
-          .startWith(null)
-          .map(x => (x ? this.filterOptions(x, field.options) : field.options.slice()));
-        group[field.key] = fc;
-      } else {
-        const formControl = new FormControl(formState);
-
-        this.addValidation(field, formControl);
-
-        group[field.key] = formControl;
-      }
+      const formControl = new FormControl(formState);
+      this.addValidation(field, formControl);
+      group[field.key] = formControl;
     });
     return new FormGroup(group);
   }
