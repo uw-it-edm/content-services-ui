@@ -111,8 +111,16 @@
     /*border-radius: 4px;*/
 }
 
+.uw-default .cs-main {
+    margin: 2rem;
+}
+
 .uw-default .cs-generic-body {
     margin-top: 0;
+}
+
+.uw-default .cs-generic-header {
+    padding: 0rem 2rem;
 }
 
 .uw-default .cs-search-box .search-form-group .mat-form-field {

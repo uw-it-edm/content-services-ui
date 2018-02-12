@@ -152,7 +152,6 @@ export class ContentObject {
     this.setUrl(url);
   }
 
-  // TODO: type detection should be improved
   public determineUrlType(url: string): void {
     // const url = this.url.toString();
     let displayType = 'blank';
