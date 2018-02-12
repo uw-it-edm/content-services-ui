@@ -8,6 +8,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class ContentToolbarComponent {
   @Input() contentType: string;
   @Input() pageCount: number;
+  @Input() downloadUrl?: string;
 
   @Output() fullScreenChange = new EventEmitter<boolean>();
   @Output() pageNumberChange = new EventEmitter<number>();
@@ -77,5 +78,9 @@ export class ContentToolbarComponent {
 
   toggleShowAll() {
     this.showAll = !this.showAll;
+  }
+
+  download() {
+    window.location.href = this.downloadUrl;
   }
 }

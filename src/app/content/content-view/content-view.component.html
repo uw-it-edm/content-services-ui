@@ -7,10 +7,11 @@
     [pageCount]="pageCount"
     [(pageNumber)]="pageNumber"
     [(showAll)]="showAll"
+    [downloadUrl]="downloadUrl"
     (zoom)="onZoomFactorChanged($event)">
   </app-content-toolbar>
   <div class="content-object-display">
-    <div [ngSwitch]="contentObject.displayType">
+    <div [ngSwitch]="contentObject.displayType" >
       <div *ngSwitchCase="'blank'">
       </div>
       <div *ngSwitchCase="'pdfData'">
