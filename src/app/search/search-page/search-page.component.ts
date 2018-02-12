@@ -37,7 +37,7 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
     private searchService: SearchService,
     private dataService: DataService,
     private router: Router,
-    private studentService: StudentService, // TODO: this should be passed in as an input?
+    private studentService: StudentService,
     private notificationService: NotificationService
   ) {}
 

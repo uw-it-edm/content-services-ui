@@ -31,20 +31,13 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log('init header');
-
     this.user$ = this.userService.getUserObservable();
 
-    this.user$.subscribe(
-      user => {
-        if (user) {
-          this.availableTenants$ = this.configService.getTenantList();
-        }
-      },
-      errorResponse => {
-        // FIXME: Handle error responses
+    this.user$.subscribe(user => {
+      if (user) {
+        this.availableTenants$ = this.configService.getTenantList();
       }
-    );
+    });
 
     this.eventsManager.tenantEmitter.subscribe(tenant => {
       this.tenant = tenant;

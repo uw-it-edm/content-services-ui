@@ -3,20 +3,7 @@
     <div formGroupName="metadata">
       <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
         <div [ngSwitch]="fieldToDisplay.displayType">
-
-          <!--         //TODO This is currently not used/working. It'll need to be moved in the app-options-input component -->
-          <!--  <mat-form-field *ngSwitchCase="'autocomplete'">
-              <input type="text" matInput [formControlName]="fieldToDisplay.key"
-                     [name]="fieldToDisplay.key"
-                     [placeholder]="fieldToDisplay.label" [matAutocomplete]="auto">
-              <mat-autocomplete #auto="matAutocomplete">
-                <mat-option *ngFor="let option of fieldToDisplay.options | async "
-                            [value]="option">{{option}}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
-  -->
-
+          
           <mat-form-field *ngSwitchCase="'select'">
             <app-options-input
               [formControlName]="fieldToDisplay.key"
