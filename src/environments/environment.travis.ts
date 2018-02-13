@@ -6,6 +6,8 @@
 export const environment = {
   production: true,
 
+  supportEmail: 'support@somedomain.com',
+
   tenantConfigGithubPath: '/uw-it-edm/content-services-ui-config/contents/dev',
 
   testUser: null,

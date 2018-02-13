@@ -1,7 +1,6 @@
 import { ContentItem } from './content-item';
 import { isNullOrUndefined } from 'util';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { FormGroup } from '@angular/forms';
 
 export class ContentObject {
   public contentLength: number;
@@ -152,7 +151,6 @@ export class ContentObject {
     this.setUrl(url);
   }
 
-  // TODO: type detection should be improved
   public determineUrlType(url: string): void {
     // const url = this.url.toString();
     let displayType = 'blank';

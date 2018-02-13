@@ -78,8 +78,6 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
   // Component logic
 
   onSelect(event: MatSelectChange) {
-    // TODO needed ?
-    console.log(JSON.stringify(event.value));
     this._propagateChanges(event.value);
   }
 
@@ -327,12 +325,7 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
   }
 
   @HostListener('focus')
-  focus() {
-    // TODO
-    /* if ((event.target as Element).tagName.toLowerCase() !== 'input') {
-      this._elementRef.nativeElement.querySelector('select').focus();
-    }*/
-  }
+  focus() {}
 
   /** Emits change event to set the model value. */
   private _propagateChanges(valueToEmit: any): void {

@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 
 import { TenantComponent } from '../user/tenant/tenant.component';
 import { SearchPageComponent } from '../search/search-page/search-page.component';
-import { PageNotFoundComponent } from './page-not-found-component';
+import { PageNotFoundComponent } from './page-not-found.component';
 import { ConfigResolver } from './shared/config-resolver.service';
 import { UserService } from '../user/shared/user.service';
 import { AuthGardService } from './shared/auth-gard.service';

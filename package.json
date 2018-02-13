@@ -28,7 +28,6 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^5.0.0",
-    "@angular/cdk": "^5.0.0",
     "@angular/common": "^5.0.0",
     "@angular/compiler": "^5.0.0",
     "@angular/core": "^5.0.0",
@@ -36,6 +35,7 @@
     "@angular/forms": "^5.0.0",
     "@angular/http": "^5.0.0",
     "@angular/material": "^5.0.0",
+    "@angular/cdk": "^5.0.0",
     "@angular/platform-browser": "^5.0.0",
     "@angular/platform-browser-dynamic": "^5.0.0",
     "@angular/platform-server": "^5.0.0",
@@ -56,7 +56,7 @@
     "zone.js": "^0.8.14"
   },
   "devDependencies": {
-    "@angular/cli": "1.6.6",
+    "@angular/cli": "1.6.8",
     "@angular/compiler-cli": "^5.0.0",
     "@angular/language-service": "^5.1.2",
     "@types/jasmine": "~2.8.3",
@@ -64,7 +64,7 @@
     "@types/node": "~9.4.0",
     "codelyzer": "~4.1.0",
     "husky": "^0.14.3",
-    "jasmine-core": "~2.9.0",
+    "jasmine-core": "~2.99.0",
     "jasmine-reporters": "^2.3.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~2.0.0",

@@ -40,6 +40,10 @@ export class ConfigService {
       );
   }
 
+  getSupportEmail(): string {
+    return environment.supportEmail;
+  }
+
   private retrieveConfig(tenantInfo: TenantConfigInfo): Promise<Config> {
     if (this.configs.has(tenantInfo.tenantName)) {
       console.log('getConfigForTenant from cache');

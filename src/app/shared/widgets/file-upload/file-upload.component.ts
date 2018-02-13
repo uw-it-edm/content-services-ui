@@ -16,12 +16,11 @@ export class FileUploadComponent implements OnInit {
   @Output() fileSelected: EventEmitter<File> = new EventEmitter();
 
   fieldId: string;
-  files: File[] = new Array<File>();
+  files: File[] = [];
 
   constructor() {}
 
   ngOnInit() {
-    // TODO validator
     this.formGroup.setControl(this.fieldName, new FormControl(''));
     this.fieldId = this.fieldName + '_' + Math.random().toString();
   }
