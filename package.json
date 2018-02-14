@@ -11,12 +11,12 @@
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "lint": "ng lint --type-check",
     "e2e": "ng e2e",
-    "e2e-local": "yarn mock-services && ng e2e --config=protractor.conf.local.js --environment=travis ; echo '------------------------\\nstopping mock containers' ; docker stop content-services-api-e2e-mock ; echo '------------------------'",
+    "e2e-local": "yarn mock-services && ng e2e --config=protractor.conf.local.js --environment=travis ; testStatus=$? ; docker stop content-services-api-e2e-mock ; exit $testStatus",
     "validate": "npm-run-all --parallel test lint",
     "prepush": "npm run validate",
     "precommit": "lint-staged",
     "pretty": "prettier --parser typescript --single-quote --print-width=120 --write",
-    "mock-services": "docker build -t content-services-api-e2e-mock ./e2e/mocks && docker run --name content-services-api-e2e-mock --rm -d -p 12345:80 -v ${PWD}/e2e/mocks:/usr/share/nginx/html/ content-services-api-e2e-mock"
+    "mock-services": "docker build -q -t content-services-api-e2e-mock ./e2e/mocks && docker run --name content-services-api-e2e-mock --rm -d -p 12345:80 -v ${PWD}/e2e/mocks:/usr/share/nginx/html/ content-services-api-e2e-mock"
   },
   "lint-staged": {
     "*.ts": [
