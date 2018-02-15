@@ -21,7 +21,6 @@ export class FileUploadComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    // TODO validator
     this.formGroup.setControl(this.fieldName, new FormControl(''));
     this.fieldId = this.fieldName + '_' + Math.random().toString();
   }

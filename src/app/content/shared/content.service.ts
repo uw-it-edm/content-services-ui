@@ -33,7 +33,7 @@ export class ContentService {
     const url: string = this.baseUrl + this.itemPathFragment + itemId;
     const options = this.buildRequestOptions();
 
-    return this.http.get<ContentItem>(url, options); // TODO: handle failure
+    return this.http.get<ContentItem>(url, options);
   }
 
   public update(item: ContentItem, file: File): Observable<ContentItem> {

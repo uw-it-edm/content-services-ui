@@ -2,25 +2,6 @@ import { NotificationComponent } from './notification.component';
 
 describe('NotificationComponent', () => {
   let component: NotificationComponent;
-  /*
-  TODO: Trouble  getting the snack-bar's providers working correctly
-
-  let fixture: ComponentFixture<NotificationComponent>;
-
-  beforeEach(
-    async(() => {
-      TestBed.configureTestingModule({
-        imports: [MaterialConfigModule],
-        declarations: [NotificationComponent]
-      }).compileComponents();
-    })
-  );
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(NotificationComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });*/
 
   it('should create', () => {
     component = new NotificationComponent(null, null);
