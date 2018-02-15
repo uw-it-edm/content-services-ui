@@ -37,7 +37,7 @@ exports.config = {
       'marionnette': true
     }
   ],
-  seleniumAddress: 'http://edm-seleniumhub.clients.uw.edu:4444/wd/hub',
+  seleniumAddress: process.env.seleniumAddress,
   baseUrl: process.env.baseUrl,
   framework: 'jasmine2',
   jasmineNodeOpts: {
