@@ -27,6 +27,10 @@ describe('App Landing Page', () => {
     expect(page.uwLogo.getAttribute('href')).toContain('uw.edu');
     expect(page.uwLogo.getAttribute('title')).toEqual('University of Washington Home');
   });
+
+  it('should display default instructions for user with access', () => {
+    expect(page.defaultMessage.getText()).toEqual('To access this service, please click a link below:');
+  });
 });
 
 describe('App navigation', () => {

@@ -1,11 +1,15 @@
-import {browser, by, element} from 'protractor';
+import {browser, by, element, ExpectedConditions} from 'protractor';
 
 export class CreatePage {
-  public pageUrl = browser.baseUrl + '/demo/create';
+  public pageUrl = `${browser.baseUrl}/${this.profile}/create`;
   public uploadFilePanel = element(by.id('drop-zone'));
   public fileList = element.all(by.tagName('mat-list-item'));
   public inputField = element(by.id('mat-input-0'));
   public errorNotification = element(by.className('error'));
+  public uploadAnotherCheckbox = element(by.id('mat-checkbox-2-input'));
+
+  constructor(private profile: string = 'demo') {
+  }
 
   navigateTo() {
     return browser.get(this.pageUrl);
@@ -61,5 +65,11 @@ export class CreatePage {
     element.all(by.name('replaceFile')).then(replaceButtons => {
       replaceButtons[fileIndex].sendKeys(filePath);
     });
+  }
+
+  getSnackBarText() {
+    const snackBar = element(by.className('mat-simple-snackbar'));
+    browser.wait(ExpectedConditions.visibilityOf(snackBar), 5000);
+    return snackBar.getText();
   }
 }

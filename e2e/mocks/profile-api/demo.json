@@ -175,6 +175,20 @@
           "label": "Last Modified Date",
           "dataType": "date",
           "displayType": "date"
+        },
+        {
+          "key": "Reconciled",
+          "label": "Reconciled",
+          "displayType": "checkbox",
+          "checkboxOptions": {
+            "checkedValue": "Yes",
+            "uncheckedValue": "No"
+          }
+        },
+        {
+          "key": "StudentId",
+          "label": "Student",
+          "displayType": "student-autocomplete"
         }
       ],
       "buttons": [

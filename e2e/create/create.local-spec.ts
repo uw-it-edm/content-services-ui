@@ -98,4 +98,9 @@ describe('Create Page', () => {
 
     expect(page.errorNotification.isDisplayed());
   });
+
+  it('should display Upload Another checkbox that is checked by default', () => {
+    expect(page.uploadAnotherCheckbox.isDisplayed());
+    expect(page.uploadAnotherCheckbox.isSelected());
+  });
 });

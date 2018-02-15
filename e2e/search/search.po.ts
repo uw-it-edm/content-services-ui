@@ -2,7 +2,7 @@ import {browser, by, element, ExpectedConditions} from 'protractor';
 
 export class SearchPage {
   autoCompletePanel = element(by.id('mat-autocomplete-0'));
-  autoCompletedOption = this.autoCompletePanel.element(by.css(' .mat-option-text'));
+  autoCompletedOption = this.autoCompletePanel.element(by.css('.mat-option-text'));
   pageUrl = `${browser.baseUrl}/${this.profile}/tab-search`;
   selectedFacet = element(by.className('mat-chip'));
   testStudentId = '9780100';

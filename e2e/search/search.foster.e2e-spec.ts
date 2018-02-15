@@ -43,7 +43,7 @@ describe('Foster Search Page', () => {
   it('should autocomplete Student Name when Student ID is entered in search box', () => {
     page.searchBox().sendKeys(page.testStudentId);
     expect(page.autoCompletePanel.isDisplayed());
-    expect(page.autoCompletedOption.getText()).toEqual(page.testStudentName);
+    expect(page.autoCompletedOption.getText()).toEqual(`${page.testStudentName} (${page.testStudentId})`);
 
     page.autoCompletedOption.click();
     expect(page.selectedFacet.isDisplayed());
