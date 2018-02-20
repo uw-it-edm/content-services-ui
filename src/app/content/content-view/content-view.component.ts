@@ -16,6 +16,7 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   private componentDestroyed = new Subject();
 
   @Input() contentObject: ContentObject;
+  @Input() allowPageByPageMode = false;
 
   autoResize = false;
   fitToPage = true;
