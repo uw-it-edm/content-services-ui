@@ -48,7 +48,7 @@
             </div>
           </div>
           <div fxFlex="auto" class="cs-content-view-wrapper">
-            <app-content-view [contentObject]="contentObject"></app-content-view>
+            <app-content-view [contentObject]="contentObject" [allowPageByPageMode]="pageConfig?.allowPageByPageMode"></app-content-view>
             <div *ngIf="!previewing">
               <app-file-upload
                       [fieldName]="'dragFiles'"

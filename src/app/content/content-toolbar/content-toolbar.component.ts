@@ -9,6 +9,7 @@ export class ContentToolbarComponent {
   @Input() contentType: string;
   @Input() pageCount: number;
   @Input() downloadUrl?: string;
+  @Input() allowPageByPageMode: boolean;
 
   @Output() fullScreenChange = new EventEmitter<boolean>();
   @Output() pageNumberChange = new EventEmitter<number>();
