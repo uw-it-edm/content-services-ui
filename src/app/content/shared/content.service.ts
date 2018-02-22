@@ -11,7 +11,9 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Injectable()
 export class ContentService {
-  searchIndexUpdateDelay = 3000; // ms delay for updates to be available in the search-api index
+  /* TODO: changing searchIndexUpdateDelay to 0 from 3000 so that there is no artificial delay
+           if we decide to not make this configurable we should remove the timeout in createOrUpdate */
+  searchIndexUpdateDelay = 0; // ms delay for updates to be available in the search-api index
   itemPathFragment = '/item/';
   filePathFragment = '/file/';
   baseUrl = environment.content_api.url + environment.content_api.contextV3;
