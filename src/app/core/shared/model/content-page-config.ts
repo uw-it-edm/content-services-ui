@@ -9,6 +9,8 @@ export class ContentPageConfig implements PageConfig {
 
   viewPanel: boolean;
   uploadAnother: boolean;
+  allowPageByPageMode: boolean;
+
   onSave: Array<any> = [];
   buttons: Array<ButtonConfig> = [];
 }
