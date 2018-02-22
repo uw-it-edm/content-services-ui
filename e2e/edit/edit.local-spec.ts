@@ -2,6 +2,7 @@ import {EditPage} from './edit.po';
 import {browser} from 'protractor';
 import {SearchPage} from '../search/search.po';
 import {ContentServicesUiPage} from '../app/app.po';
+import {until} from 'selenium-webdriver';
 
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
@@ -22,14 +23,17 @@ describe('Edit Page', () => {
     expect(page.getPageTitle()).toEqual(demoConfig.pages.edit.pageName);
   });
 
-  it('should display pdf viewer when file is replaced with pdf file', () => {
+  it('should display pdf viewer with download button when file is replaced with pdf file', () => {
     page.replaceFile();
+    page.saveButton.click();
 
-    expect(page.getPdfViewer().isDisplayed());
+    expect(until.alertIsPresent()).toBeTruthy();
+    expect(page.getPdfViewer().isDisplayed()).toBeTruthy();
+    expect(page.downloadButton.isEnabled()).toBeTruthy();
   });
 
   it('should display date field in correct format', () => {
-    expect(page.getLastModifiedDateText()).toEqual('6/12/2017');
+    expect(page.getLastModifiedDateText()).toEqual('2/20/2018');
   });
 
   it('should display Student name in correct format', () => {
@@ -44,9 +48,9 @@ describe('Edit Page', () => {
   });
 
   it('should enable Save button when metadata is edited', () => {
-    page.studentInputField.sendKeys('any text');
+    page.inputField.sendKeys('any text');
 
-    expect(page.saveButton.isEnabled());
+    expect(page.saveButton.isEnabled()).toBeTruthy();
   });
 
   it('should navigate to Search page when Return to Results link is clicked', () => {

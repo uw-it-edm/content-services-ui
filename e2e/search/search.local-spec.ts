@@ -34,6 +34,19 @@ describe('Search Page', () => {
     expect(page.isSortIndicatorDesc);
   });
 
+  it('should autocomplete Student Name when Student ID is entered in search box', () => {
+    const studentData = require('../mocks/data-api/student-query.json');
+    const testStudentId = studentData.content[0].studentNumber;
+
+    page.searchBox().sendKeys(testStudentId);
+    expect(page.autoCompletePanel.isDisplayed());
+    expect(page.autoCompletedOption.getText()).toEqual(studentData.content[0].displayName);
+
+    page.autoCompletedOption.click();
+    expect(page.selectedFacet.isDisplayed());
+    expect(page.selectedFacet.getText()).toContain('Student Number: ' + testStudentId);
+  });
+
   it('should navigate to Upload page when upload button is clicked', () => {
     page.clickUploadButton();
 

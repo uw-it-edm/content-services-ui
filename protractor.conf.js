@@ -31,10 +31,6 @@ exports.config = {
   multiCapabilities: [
     {
       'browserName': 'chrome'
-    },
-    {
-      'browserName': 'firefox',
-      'marionnette': true
     }
   ],
   seleniumAddress: process.env.seleniumAddress,

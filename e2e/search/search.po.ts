@@ -1,12 +1,12 @@
 import {browser, by, element, ExpectedConditions} from 'protractor';
+import {EditPage} from '../edit/edit.po';
+import {until} from 'selenium-webdriver';
 
 export class SearchPage {
-  autoCompletePanel = element(by.id('mat-autocomplete-0'));
+  autoCompletePanel = element(by.className('mat-autocomplete-panel'));
   autoCompletedOption = this.autoCompletePanel.element(by.css('.mat-option-text'));
   pageUrl = `${browser.baseUrl}/${this.profile}/tab-search`;
   selectedFacet = element(by.className('mat-chip'));
-  testStudentId = '9780100';
-  testStudentName = 'Adams, Margaret';
 
   constructor(private profile: string = 'demo') {
   }
@@ -51,7 +51,7 @@ export class SearchPage {
       });
   }
 
-  clickFacetText(facetText: string) {
+  clickPartialLinkText(facetText: string) {
     element(by.partialLinkText(facetText)).click();
   }
 
@@ -70,6 +70,24 @@ export class SearchPage {
     this.selectedFacet.element(by.className('mat-icon-button')).click();
   }
 
-  clickAutoCompletedText(text: string) {
+  goToEditPage(profile: string, editPageTitle: string, idRowIndex: number = 0) {
+    this.getResultsByColumn('id').then(ids => {
+      this.clickPartialLinkText(ids[idRowIndex]);
+      browser.wait(until.titleIs(editPageTitle));
+      const editPage = new EditPage(profile, ids[idRowIndex]);
+      expect(browser.getCurrentUrl()).toEqual(editPage.pageUrl);
+    });
+  }
+
+  clickFacetLink(facetIndex: number) {
+    this.getFacetText(facetIndex).then(text => {
+      this.clickPartialLinkText(text);
+    });
+  }
+
+  getFacetText(facetIndex: number) {
+    return element.all(by.css('.mat-list-item a')).then(items => {
+      return items[facetIndex].getText();
+    });
   }
 }

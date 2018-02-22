@@ -5,10 +5,10 @@ import {browser} from 'protractor';
 import {until} from 'selenium-webdriver';
 
 describe('Foster Search Page', () => {
-  let page: SearchPage;
+  const profile = 'foster';
+  const page = new SearchPage(profile);
 
   beforeEach(() => {
-    page = new SearchPage('foster');
     page.navigateTo();
     browser.wait(until.titleIs('Find Documents'));
   });
@@ -19,17 +19,20 @@ describe('Foster Search Page', () => {
   });
 
   it('should return selected facet in search results', () => {
-    const adviser = 'Aaron Robertson';
-    page.clickFacetText(adviser);
+    const facetIndex = 0;
+    page.getFacetText(facetIndex).then(expectedFacetText => {
+      expectedFacetText = expectedFacetText.split(' (')[0];
 
-    expect(page.selectedFacet.isDisplayed());
-    expect(page.selectedFacet.getText()).toContain('Adviser: ' + adviser);
-    expect(page.getDistinctResultsByColumn('Adviser')).toEqual([adviser]);
+      page.clickFacetLink(facetIndex);
+
+      expect(page.selectedFacet.isDisplayed());
+      expect(page.selectedFacet.getText()).toContain('Adviser: ' + expectedFacetText);
+      expect(page.getDistinctResultsByColumn('Adviser')).toEqual([expectedFacetText]);
+    });
   });
 
   it('should reset search results when selected facet is removed', () => {
-    const adviser = 'Aaron Robertson';
-    page.clickFacetText(adviser);
+    page.clickFacetLink(0);
     expect(page.selectedFacet.isDisplayed());
 
     page.removeSelectedFacet();
@@ -37,16 +40,10 @@ describe('Foster Search Page', () => {
       page.getDistinctResultsByColumn('Adviser').then(arr => {
         return arr.length;
       })
-    ).toBeGreaterThan(1);
+    ).toBeGreaterThanOrEqual(1);
   });
 
-  it('should autocomplete Student Name when Student ID is entered in search box', () => {
-    page.searchBox().sendKeys(page.testStudentId);
-    expect(page.autoCompletePanel.isDisplayed());
-    expect(page.autoCompletedOption.getText()).toEqual(`${page.testStudentName} (${page.testStudentId})`);
-
-    page.autoCompletedOption.click();
-    expect(page.selectedFacet.isDisplayed());
-    expect(page.selectedFacet.getText()).toContain('Student Number: ' + page.testStudentId);
+  it('should navigate to Edit page when Id link is clicked', () => {
+    page.goToEditPage(profile, 'View or Edit Document');
   });
 });

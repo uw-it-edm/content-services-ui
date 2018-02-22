@@ -14,9 +14,9 @@ describe('Create Page', () => {
   let page: CreatePage;
   const searchPage = new SearchPage();
   const demoConfig = require('../mocks/profile-api/demo.json');
-  const pdfFilePath = path.resolve(__dirname, '../sample-file.pdf');
-  const docFilePath = path.resolve(__dirname, '../sample-file.docx');
-  const textFilePath = path.resolve(__dirname, '../sample-file.txt');
+  const pdfFilePath = path.resolve(__dirname, '../mocks/files/sample-file.pdf');
+  const docFilePath = path.resolve(__dirname, '../mocks/files/sample-file.docx');
+  const textFilePath = path.resolve(__dirname, '../mocks/files/sample-file.txt');
 
   beforeEach(() => {
     page = new CreatePage();
@@ -84,7 +84,7 @@ describe('Create Page', () => {
   it('should replace the correct file when 1 of many files is replaced', () => {
     page.chooseFile(pdfFilePath + '\n' + docFilePath);
     page.clickSave();
-    expect(until.alertIsPresent());
+    expect(until.alertIsPresent()).toBeTruthy();
 
     page.replaceFile(1, textFilePath);
     browser.waitForAngularEnabled(false);
@@ -102,5 +102,18 @@ describe('Create Page', () => {
   it('should display Upload Another checkbox that is checked by default', () => {
     expect(page.uploadAnotherCheckbox.isDisplayed());
     expect(page.uploadAnotherCheckbox.isSelected());
+  });
+
+  it('should autocomplete Student Name when Student ID is entered in Student input field', () => {
+    const studentData = require('../mocks/data-api/student-query.json');
+    const testStudentId = studentData.content[0].studentNumber;
+    const studentName = studentData.content[0].displayName;
+
+    page.studentInput.sendKeys(testStudentId);
+    expect(searchPage.autoCompletePanel.isDisplayed());
+    expect(searchPage.autoCompletedOption.getText()).toEqual(studentName);
+
+    searchPage.autoCompletedOption.click();
+    expect(page.getStudentValue()).toEqual(studentName);
   });
 });

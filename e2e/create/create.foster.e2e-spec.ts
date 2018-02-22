@@ -4,32 +4,21 @@ import {browser} from 'protractor';
 import {until} from 'selenium-webdriver';
 import * as path from 'path';
 
-describe('Create Page', () => {
-  let page: CreatePage;
+describe('Foster Create Page', () => {
+  const profile = 'foster';
+  const page = new CreatePage(profile);
 
   beforeAll(() => {
-    page = new CreatePage('foster');
     page.navigateTo();
     browser.wait(until.titleIs('Upload Documents'));
   });
 
-  it('should create and replace file successfully', () => {
-    const textFilePath = path.resolve(__dirname, '../sample-file.txt');
-    page.chooseFile(textFilePath);
+  it('should create file successfully', () => {
+    const filePath = path.resolve(__dirname, '../mocks/files/sample-file.txt');
+    page.chooseFile(filePath);
     page.clickSave();
-    expect(until.alertIsPresent());
 
-    const snackBarMessage = page.getSnackBarText().then(msg => {
-      return msg;
-    });
-    expect(snackBarMessage).toContain('Saved item');
-
-    // let contentId = snackBarMessage.split(' ')[2];
-    // console.log('content id : ' + contentId);
-
-    // let pdfFilePath = path.resolve(__dirname, '../sample-file.pdf');
-    // browser.waitForAngularEnabled(false);
-    // page.replaceFile(0, pdfFilePath);
-    // browser.waitForAngularEnabled(true);
+    expect(until.alertIsPresent()).toBeTruthy();
+    expect(page.getSnackBarText()).toContain('Saved item');
   });
 });

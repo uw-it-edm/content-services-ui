@@ -6,7 +6,8 @@ export class CreatePage {
   public fileList = element.all(by.tagName('mat-list-item'));
   public inputField = element(by.id('mat-input-0'));
   public errorNotification = element(by.className('error'));
-  public uploadAnotherCheckbox = element(by.id('mat-checkbox-2-input'));
+  public uploadAnotherCheckbox = element.all(by.name('uploadAnother')).get(1);
+  public studentInput = element(by.css('app-student-autocomplete input'));
 
   constructor(private profile: string = 'demo') {
   }
@@ -69,7 +70,21 @@ export class CreatePage {
 
   getSnackBarText() {
     const snackBar = element(by.className('mat-simple-snackbar'));
-    browser.wait(ExpectedConditions.visibilityOf(snackBar), 5000);
+    browser.wait(ExpectedConditions.visibilityOf(snackBar), 10000);
     return snackBar.getText();
+  }
+
+  dismissSnackBar() {
+    element(by.buttonText('Dismiss')).click();
+  }
+
+  getStudentValue() {
+    return this.studentInput.getAttribute('value');
+  }
+
+  clickAutoCompletedOption() {
+    const autoCompletePanel = element(by.className('mat-autocomplete-panel'));
+    browser.wait(ExpectedConditions.visibilityOf(autoCompletePanel), 10000);
+    autoCompletePanel.element(by.css('.mat-option-text')).click();
   }
 }
