@@ -37,6 +37,7 @@ export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   id: string;
   previewing: boolean;
+  submitPending: boolean;
 
   @ViewChild(DynamicComponentDirective) contentViewDirective: DynamicComponentDirective;
   @ViewChild(ContentViewComponent) contentViewComponent: ContentViewComponent;
@@ -130,6 +131,10 @@ export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
       this.contentObject = undefined;
       this.previewing = false;
     }
+  }
+
+  updateSavingStatus(inProgress: boolean) {
+    this.submitPending = inProgress;
   }
 
   saveItem() {

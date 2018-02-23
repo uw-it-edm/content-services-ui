@@ -30,6 +30,7 @@ export class CreatePageComponent implements OnInit, OnDestroy {
   pageConfig: ContentPageConfig;
   form: FormGroup;
   previewing: boolean;
+  submitPending: boolean;
 
   @ViewChild(DynamicComponentDirective) contentViewDirective: DynamicComponentDirective;
   @ViewChild(ContentViewComponent) contentViewComponent: ContentViewComponent;
@@ -103,6 +104,9 @@ export class CreatePageComponent implements OnInit, OnDestroy {
     }
   }
 
+  updateSavingStatus(inProgress: boolean) {
+    this.submitPending = inProgress;
+  }
   saveItem() {
     const fields = this.pageConfig.fieldsToDisplay;
     const formModel = this.form.value;

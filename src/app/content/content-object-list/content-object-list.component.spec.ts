@@ -207,4 +207,18 @@ describe('ContentObjectList', () => {
     component.saveItem(fields, formData, metadataOverrides);
     expect(mockContentServiceCreate).toHaveBeenCalled();
   });
+
+  it('should emit saving event on save', () => {
+    const formData = {
+      metadata: {
+        1: 'asdf'
+      }
+    };
+    const metadataOverrides = new Array<any>();
+
+    spyOn(component.saving, 'emit');
+    component.saveItem(fields, formData, metadataOverrides);
+
+    expect(component.saving.emit).toHaveBeenCalledWith(true);
+  });
 });
