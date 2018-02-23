@@ -6,7 +6,8 @@ export class SearchPage {
   autoCompletePanel = element(by.className('mat-autocomplete-panel'));
   autoCompletedOption = this.autoCompletePanel.element(by.css('.mat-option-text'));
   pageUrl = `${browser.baseUrl}/${this.profile}/tab-search`;
-  selectedFacet = element(by.className('mat-chip'));
+  selectedFacet = element.all(by.className('mat-chip'));
+  idColumHeaderButton = element(by.buttonText('Id'));
 
   constructor(private profile: string = 'demo') {
   }
@@ -66,8 +67,11 @@ export class SearchPage {
     });
   }
 
-  removeSelectedFacet() {
-    this.selectedFacet.element(by.className('mat-icon-button')).click();
+  removeSelectedFacet(facetIndex: number = 0) {
+    this.selectedFacet
+      .get(facetIndex)
+      .element(by.className('mat-icon-button'))
+      .click();
   }
 
   goToEditPage(profile: string, editPageTitle: string, idRowIndex: number = 0) {

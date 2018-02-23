@@ -24,7 +24,7 @@ const setJasmineReporter = function () {
 };
 
 exports.config = {
-  allScriptsTimeout: 11000,
+  allScriptsTimeout: 60000,
   specs: [
     './e2e/**/*.e2e-spec.ts'
   ],

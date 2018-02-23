@@ -3,14 +3,17 @@ import {SearchPage} from './search.po';
 import {ContentServicesUiPage} from '../app/app.po';
 import {browser} from 'protractor';
 import {until} from 'selenium-webdriver';
+import {EditPage} from '../edit/edit.po';
 
 describe('Foster Search Page', () => {
   const profile = 'foster';
   const page = new SearchPage(profile);
+  const editPageTitle = 'View or Edit Document';
+  const pageTitle = 'Find Documents';
 
   beforeEach(() => {
     page.navigateTo();
-    browser.wait(until.titleIs('Find Documents'));
+    browser.wait(until.titleIs(pageTitle));
   });
 
   it('should display Foster header', () => {
@@ -26,7 +29,7 @@ describe('Foster Search Page', () => {
       page.clickFacetLink(facetIndex);
 
       expect(page.selectedFacet.isDisplayed());
-      expect(page.selectedFacet.getText()).toContain('Adviser: ' + expectedFacetText);
+      expect(page.selectedFacet.getText()).toMatch(new RegExp(expectedFacetText));
       expect(page.getDistinctResultsByColumn('Adviser')).toEqual([expectedFacetText]);
     });
   });
@@ -44,6 +47,25 @@ describe('Foster Search Page', () => {
   });
 
   it('should navigate to Edit page when Id link is clicked', () => {
-    page.goToEditPage(profile, 'View or Edit Document');
+    page.goToEditPage(profile, editPageTitle);
+  });
+
+  it('should retain search and sort criteria when returning from Edit page', () => {
+    page.clickFacetLink(0); // Adviser
+    page.clickFacetLink(1); // Form
+
+    page.idColumHeaderButton.click();
+    expect(page.isSortIndicatorDesc()).toBeFalsy();
+
+    page.selectedFacet.getText().then(selectedFacetTexts => {
+      page.goToEditPage(profile, editPageTitle);
+
+      const editPage = new EditPage(profile);
+      editPage.clickReturnToResultsLink();
+      browser.wait(until.titleIs(pageTitle));
+
+      expect(page.selectedFacet.getText()).toEqual(selectedFacetTexts);
+      expect(page.isSortIndicatorDesc()).toBeFalsy();
+    });
   });
 });

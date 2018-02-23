@@ -44,7 +44,7 @@ describe('Search Page', () => {
 
     page.autoCompletedOption.click();
     expect(page.selectedFacet.isDisplayed());
-    expect(page.selectedFacet.getText()).toContain('Student Number: ' + testStudentId);
+    expect(page.selectedFacet.getText()).toMatch(new RegExp(testStudentId));
   });
 
   it('should navigate to Upload page when upload button is clicked', () => {

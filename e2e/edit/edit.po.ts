@@ -8,6 +8,7 @@ export class EditPage {
   public pdfFilePath = path.resolve(__dirname, '../mocks/files/sample-file.pdf');
   public inputField = element(by.id('mat-input-0'));
   public downloadButton = element(by.buttonText('file_download'));
+  public nextItemButton = element(by.id('nextItem'));
 
   constructor(private profile: string = 'demo', private id: string = '123456') {
   }
@@ -46,7 +47,15 @@ export class EditPage {
 
   getSnackBarText() {
     const snackBar = element(by.className('mat-simple-snackbar'));
-    browser.wait(ExpectedConditions.visibilityOf(snackBar), 30000);
+    browser.wait(ExpectedConditions.visibilityOf(snackBar), 5000);
     return snackBar.getText();
+  }
+
+  getPaginatorText() {
+    return element(by.css('app-content-pager > span'))
+      .getText()
+      .then(text => {
+        return text.trim();
+      });
   }
 }

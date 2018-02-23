@@ -13,7 +13,7 @@ describe('Foster Create Page', () => {
     browser.wait(until.titleIs('Upload Documents'));
   });
 
-  it('should create file successfully', () => {
+  it('should create item successfully without any metadata', () => {
     const filePath = path.resolve(__dirname, '../mocks/files/sample-file.txt');
     page.chooseFile(filePath);
     page.clickSave();
