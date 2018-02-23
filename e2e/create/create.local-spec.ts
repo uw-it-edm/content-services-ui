@@ -1,8 +1,8 @@
-import {CreatePage} from './create.po';
-import {SearchPage} from '../search/search.po';
-import {browser} from 'protractor';
+import { CreatePage } from './create.po';
+import { SearchPage } from '../search/search.po';
+import { browser } from 'protractor';
 import * as path from 'path';
-import {until} from 'selenium-webdriver';
+import { until } from 'selenium-webdriver';
 
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
@@ -48,13 +48,13 @@ describe('Create Page', () => {
   it('should display pdf viewer when 1 pdf file is uploaded with Add File button', () => {
     page.addFile(pdfFilePath);
 
-    expect(page.getPdfViewer().isDisplayed());
+    expect(page.pdfViewer.isDisplayed());
   });
 
   it('should display pdf viewer when 1 pdf file is uploaded with Choose Files button', () => {
     page.chooseFile(pdfFilePath);
 
-    expect(page.getPdfViewer().isDisplayed());
+    expect(page.pdfViewer.isDisplayed());
   });
 
   it('should display the list of files uploaded when multiple files are uploaded', () => {
@@ -76,14 +76,14 @@ describe('Create Page', () => {
 
   it('should redisplay file upload panel when uploaded file is removed', () => {
     page.chooseFile(pdfFilePath);
-    page.undoFile();
+    page.clearButton.click();
 
     expect(page.uploadFilePanel.isDisplayed());
   });
 
   it('should replace the correct file when 1 of many files is replaced', () => {
     page.chooseFile(pdfFilePath + '\n' + docFilePath);
-    page.clickSave();
+    page.saveButton.click();
     expect(until.alertIsPresent()).toBeTruthy();
 
     page.replaceFile(1, textFilePath);
@@ -94,7 +94,7 @@ describe('Create Page', () => {
 
   it('should display error message when no file is attached', () => {
     page.inputField.sendKeys('any text');
-    page.clickSave();
+    page.saveButton.click();
 
     expect(page.errorNotification.isDisplayed());
   });

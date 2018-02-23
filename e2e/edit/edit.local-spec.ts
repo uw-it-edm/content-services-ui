@@ -1,8 +1,8 @@
-import {EditPage} from './edit.po';
-import {browser} from 'protractor';
-import {SearchPage} from '../search/search.po';
-import {ContentServicesUiPage} from '../app/app.po';
-import {until} from 'selenium-webdriver';
+import { EditPage } from './edit.po';
+import { browser } from 'protractor';
+import { SearchPage } from '../search/search.po';
+import { ContentServicesUiPage } from '../app/app.po';
+import { until } from 'selenium-webdriver';
 
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
@@ -33,7 +33,7 @@ describe('Edit Page', () => {
   });
 
   it('should display date field in correct format', () => {
-    expect(page.getLastModifiedDateText()).toEqual('2/20/2018');
+    expect(page.getDateText()).toEqual('2/20/2018');
   });
 
   it('should display Student name in correct format', () => {

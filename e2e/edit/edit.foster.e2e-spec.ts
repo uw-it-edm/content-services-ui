@@ -1,7 +1,7 @@
-import {EditPage} from './edit.po';
-import {browser, ExpectedConditions} from 'protractor';
-import {SearchPage} from '../search/search.po';
-import {until} from 'selenium-webdriver';
+import { EditPage } from './edit.po';
+import { browser, ExpectedConditions } from 'protractor';
+import { SearchPage } from '../search/search.po';
+import { until } from 'selenium-webdriver';
 import * as path from 'path';
 
 describe('Foster Edit Page', () => {
@@ -22,7 +22,7 @@ describe('Foster Edit Page', () => {
     searchPage.goToEditPage(profile, pageTitle);
   });
 
-  it('should replace file successfully', () => {
+  it('should persist replaced file', () => {
     const textFilePath = path.resolve(__dirname, '../mocks/files/sample-file.txt');
     page.replaceFile(textFilePath);
 
@@ -30,6 +30,11 @@ describe('Foster Edit Page', () => {
 
     expect(until.alertIsPresent()).toBeTruthy();
     expect(page.getSnackBarText()).toContain('Saved item');
+
+    browser.refresh();
+    browser.wait(until.titleIs(pageTitle));
+    browser.waitForAngular();
+    expect(page.getFileName(0)).toEqual(path.parse(textFilePath).base);
   });
 
   it(
@@ -56,7 +61,21 @@ describe('Foster Edit Page', () => {
     30000
   );
 
-  xit('should update metadata successfully', () => {
-    // TODO
+  it('should persist updated metadata', () => {
+    page.dateInputField.get(0).clear();
+
+    const date = new Date();
+    const month = date.getMonth() + 1;
+    const today = month + '/' + date.getDate() + '/' + date.getFullYear();
+    page.dateInputField.get(0).sendKeys(today);
+
+    page.saveButton.click();
+    expect(until.alertIsPresent()).toBeTruthy();
+    expect(page.getSnackBarText()).toContain('Saved item');
+
+    browser.refresh();
+    browser.wait(until.titleIs(pageTitle));
+    browser.waitForAngular();
+    expect(page.getDateText(0)).toEqual(today);
   });
 });

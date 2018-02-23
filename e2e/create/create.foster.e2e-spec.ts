@@ -1,7 +1,7 @@
 ///<reference path="../../node_modules/@types/jasminewd2/index.d.ts"/>
-import {CreatePage} from './create.po';
-import {browser} from 'protractor';
-import {until} from 'selenium-webdriver';
+import { CreatePage } from './create.po';
+import { browser } from 'protractor';
+import { until } from 'selenium-webdriver';
 import * as path from 'path';
 
 describe('Foster Create Page', () => {
@@ -13,10 +13,10 @@ describe('Foster Create Page', () => {
     browser.wait(until.titleIs('Upload Documents'));
   });
 
-  it('should create item successfully without any metadata', () => {
+  it('should create item without any metadata successfully ', () => {
     const filePath = path.resolve(__dirname, '../mocks/files/sample-file.txt');
     page.chooseFile(filePath);
-    page.clickSave();
+    page.saveButton.click();
 
     expect(until.alertIsPresent()).toBeTruthy();
     expect(page.getSnackBarText()).toContain('Saved item');

@@ -1,4 +1,4 @@
-import {browser, by, element, ExpectedConditions} from 'protractor';
+import { browser, by, element, ExpectedConditions } from 'protractor';
 import * as path from 'path';
 
 export class EditPage {
@@ -9,9 +9,9 @@ export class EditPage {
   public inputField = element(by.id('mat-input-0'));
   public downloadButton = element(by.buttonText('file_download'));
   public nextItemButton = element(by.id('nextItem'));
+  public dateInputField = element.all(by.css('app-timestamp-picker input'));
 
-  constructor(private profile: string = 'demo', private id: string = '123456') {
-  }
+  constructor(private profile: string = 'demo', private id: string = '123456') {}
 
   navigateTo() {
     return browser.get(this.pageUrl);
@@ -22,7 +22,7 @@ export class EditPage {
   }
 
   clickReturnToResultsLink() {
-    element(by.css('[mattooltip=\'Return to Results\']')).click();
+    element(by.buttonText('keyboard_arrow_left')).click();
   }
 
   replaceFile(filePath: string = this.pdfFilePath) {
@@ -37,8 +37,8 @@ export class EditPage {
     element(by.css('app-file-upload button.mat-button')).click();
   }
 
-  getLastModifiedDateText() {
-    return element(by.css('[placeholder=\'Last Modified Date\']')).getAttribute('value');
+  getDateText(dateInputFieldIndex: number = 0) {
+    return this.dateInputField.get(dateInputFieldIndex).getAttribute('value');
   }
 
   getStudentText() {
@@ -57,5 +57,11 @@ export class EditPage {
       .then(text => {
         return text.trim();
       });
+  }
+
+  getFileName(fileIndex: number) {
+    return element.all(by.css('.mat-list-item-content .mat-list-text p > span')).then(names => {
+      return names[fileIndex].getText();
+    });
   }
 }

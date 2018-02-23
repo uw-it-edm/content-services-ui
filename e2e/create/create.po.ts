@@ -1,4 +1,4 @@
-import {browser, by, element, ExpectedConditions} from 'protractor';
+import { browser, by, element, ExpectedConditions } from 'protractor';
 
 export class CreatePage {
   public pageUrl = `${browser.baseUrl}/${this.profile}/create`;
@@ -8,9 +8,11 @@ export class CreatePage {
   public errorNotification = element(by.className('error'));
   public uploadAnotherCheckbox = element.all(by.name('uploadAnother')).get(1);
   public studentInput = element(by.css('app-student-autocomplete input'));
+  public saveButton = element(by.id('saveItem'));
+  public clearButton = element(by.buttonText('clear'));
+  public pdfViewer = element(by.tagName('pdf-viewer'));
 
-  constructor(private profile: string = 'demo') {
-  }
+  constructor(private profile: string = 'demo') {}
 
   navigateTo() {
     return browser.get(this.pageUrl);
@@ -28,16 +30,12 @@ export class CreatePage {
     element(by.id('attach-files')).sendKeys(filePath);
   }
 
-  getPdfViewer() {
-    return element(by.tagName('pdf-viewer'));
-  }
-
   clickCancelButton() {
     element(by.id('cancel')).click();
   }
 
   clickReturnToResultsButton() {
-    element(by.css('[mattooltip=\'Return to Results\']')).click();
+    element(by.buttonText('keyboard_arrow_left')).click();
   }
 
   clickAppName() {
@@ -48,18 +46,10 @@ export class CreatePage {
     return element(by.css('.content-object-display .custom-text-rendered')).getText();
   }
 
-  undoFile() {
-    element(by.css('[mattooltip=\'Undo\']')).click();
-  }
-
   getFileName(fileIndex: number) {
     return element.all(by.css('.mat-list-item-content .mat-list-text p > span')).then(names => {
       return names[fileIndex].getText();
     });
-  }
-
-  clickSave() {
-    element(by.id('saveItem')).click();
   }
 
   replaceFile(fileIndex: number, filePath: string) {
