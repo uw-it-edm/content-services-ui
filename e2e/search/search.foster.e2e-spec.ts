@@ -1,9 +1,8 @@
 ///<reference path="../../node_modules/@types/jasminewd2/index.d.ts"/>
-import {SearchPage} from './search.po';
-import {ContentServicesUiPage} from '../app/app.po';
-import {browser} from 'protractor';
-import {until} from 'selenium-webdriver';
-import {EditPage} from '../edit/edit.po';
+import { SearchPage } from './search.po';
+import { browser } from 'protractor';
+import { until } from 'selenium-webdriver';
+import { EditPage } from '../edit/edit.po';
 
 describe('Foster Search Page', () => {
   const profile = 'foster';
@@ -14,11 +13,6 @@ describe('Foster Search Page', () => {
   beforeEach(() => {
     page.navigateTo();
     browser.wait(until.titleIs(pageTitle));
-  });
-
-  it('should display Foster header', () => {
-    const appPage = new ContentServicesUiPage();
-    expect(appPage.getHeaderToolbarText()).toEqual('Foster Undergraduate Program');
   });
 
   it('should return selected facet in search results', () => {

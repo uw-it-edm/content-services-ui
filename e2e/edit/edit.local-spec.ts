@@ -23,12 +23,15 @@ describe('Edit Page', () => {
     expect(page.getPageTitle()).toEqual(demoConfig.pages.edit.pageName);
   });
 
-  it('should display pdf viewer with download button when file is replaced with pdf file', () => {
+  it('should display pdf viewer when file is replaced with pdf file', () => {
     page.replaceFile();
     page.saveButton.click();
 
     expect(until.alertIsPresent()).toBeTruthy();
     expect(page.getPdfViewer().isDisplayed()).toBeTruthy();
+  });
+
+  it('should display download button for pdf file by default', () => {
     expect(page.downloadButton.isEnabled()).toBeTruthy();
   });
 
