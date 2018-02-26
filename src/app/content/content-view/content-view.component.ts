@@ -25,7 +25,7 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   pageCount = 1;
   pageNumber = 1;
   renderText = true;
-  showAll = false;
+  showAll = true;
   stickToPage = false;
   zoom = 1.0;
   downloadUrl: string;
