@@ -59,7 +59,11 @@ exports.config = {
 
     setJasmineReporter();
 
-    //login to netid
+    // remote access files for uploading in tests
+    let remote = require('selenium-webdriver/remote');
+    browser.setFileDetector(new remote.FileDetector());
+
+    // login to netid
     browser.driver.get(browser.baseUrl);
     browser.driver.manage().window().maximize();
     browser.driver.findElement(by.id('weblogin_netid')).sendKeys(process.env.userId);
