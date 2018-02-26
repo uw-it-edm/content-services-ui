@@ -16,7 +16,7 @@ export class FileUploadComponent implements OnInit {
   @Output() fileSelected: EventEmitter<File> = new EventEmitter();
 
   fieldId: string;
-  files: File[] = new Array<File>();
+  files: File[] = [];
 
   constructor() {}
 

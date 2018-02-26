@@ -1,0 +1,22 @@
+{
+  "content": [
+    {
+      "displayName": "Smith, Jane (3333333)",
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "birthDate": "2000-10-01",
+      "email": "mynetid@happyplace.com",
+      "studentNumber": "3333333",
+      "netId": "mynetid",
+      "studentSystemKey": "44444444"
+    }
+  ],
+  "last": true,
+  "totalPages": 1,
+  "totalElements": 1,
+  "sort": null,
+  "first": true,
+  "numberOfElements": 1,
+  "size": 100,
+  "number": 0
+}

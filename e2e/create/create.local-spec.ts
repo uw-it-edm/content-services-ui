@@ -10,13 +10,13 @@ const getCurrentUrl = function() {
   });
 };
 
-describe('content-services-ui Create Page', () => {
+describe('Create Page', () => {
   let page: CreatePage;
   const searchPage = new SearchPage();
   const demoConfig = require('../mocks/profile-api/demo.json');
-  const pdfFilePath = path.resolve(__dirname, '../sample-file.pdf');
-  const docFilePath = path.resolve(__dirname, '../sample-file.docx');
-  const textFilePath = path.resolve(__dirname, '../sample-file.txt');
+  const pdfFilePath = path.resolve(__dirname, '../mocks/files/sample-file.pdf');
+  const docFilePath = path.resolve(__dirname, '../mocks/files/sample-file.docx');
+  const textFilePath = path.resolve(__dirname, '../mocks/files/sample-file.txt');
 
   beforeEach(() => {
     page = new CreatePage();
@@ -48,13 +48,13 @@ describe('content-services-ui Create Page', () => {
   it('should display pdf viewer when 1 pdf file is uploaded with Add File button', () => {
     page.addFile(pdfFilePath);
 
-    expect(page.getPdfViewer().isDisplayed());
+    expect(page.pdfViewer.isDisplayed());
   });
 
   it('should display pdf viewer when 1 pdf file is uploaded with Choose Files button', () => {
     page.chooseFile(pdfFilePath);
 
-    expect(page.getPdfViewer().isDisplayed());
+    expect(page.pdfViewer.isDisplayed());
   });
 
   it('should display the list of files uploaded when multiple files are uploaded', () => {
@@ -76,19 +76,44 @@ describe('content-services-ui Create Page', () => {
 
   it('should redisplay file upload panel when uploaded file is removed', () => {
     page.chooseFile(pdfFilePath);
-    page.undoFile();
+    page.clearButton.click();
 
     expect(page.uploadFilePanel.isDisplayed());
   });
 
   it('should replace the correct file when 1 of many files is replaced', () => {
     page.chooseFile(pdfFilePath + '\n' + docFilePath);
-    page.clickSave();
-    expect(until.alertIsPresent());
+    page.saveButton.click();
+    expect(until.alertIsPresent()).toBeTruthy();
 
     page.replaceFile(1, textFilePath);
     browser.waitForAngularEnabled(false);
     expect(page.getFileName(1)).toEqual(path.parse(textFilePath).base);
     browser.waitForAngularEnabled(true);
+  });
+
+  it('should display error message when no file is attached', () => {
+    page.inputField.sendKeys('any text');
+    page.saveButton.click();
+
+    expect(page.errorNotification.isDisplayed());
+  });
+
+  it('should display Upload Another checkbox that is checked by default', () => {
+    expect(page.uploadAnotherCheckbox.isDisplayed());
+    expect(page.uploadAnotherCheckbox.isSelected());
+  });
+
+  it('should autocomplete Student Name when Student ID is entered in Student input field', () => {
+    const studentData = require('../mocks/data-api/student-query.json');
+    const testStudentId = studentData.content[0].studentNumber;
+    const studentName = studentData.content[0].displayName;
+
+    page.studentInput.sendKeys(testStudentId);
+    expect(searchPage.autoCompletePanel.isDisplayed());
+    expect(searchPage.autoCompletedOption.getText()).toEqual(studentName);
+
+    searchPage.autoCompletedOption.click();
+    expect(page.getStudentValue()).toEqual(studentName);
   });
 });

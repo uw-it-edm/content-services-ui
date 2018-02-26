@@ -1,9 +1,7 @@
-import { async, inject, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 
 import { PageNotFoundComponent } from './page-not-found.component';
 import { ConfigService } from '../core/shared/config.service';
-import { ComponentFixture } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { UserService } from '../user/shared/user.service';
 import { TenantConfigInfo } from '../core/shared/model/tenant-config-info';
 import { Injector } from '@angular/core';
@@ -24,6 +22,7 @@ describe('PageNotFoundComponent', () => {
     getSupportEmail(): string {
       return 'support@nowhere.com';
     }
+
     getTenantList(): Observable<TenantConfigInfo[]> {
       const tenant = new TenantConfigInfo('test', 'http://test.com/test');
       let tenants: TenantConfigInfo[];
