@@ -22,10 +22,6 @@
       "theme": "uw-default",
       "fieldsToDisplay": [
         {
-          "key": "Description",
-          "label": "Description"
-        },
-        {
           "key": "ProfileId",
           "label": "Profile Id"
         },
@@ -38,11 +34,15 @@
           "label": "Publish Status"
         },
         {
+          "key": "DocumentType",
+          "label": "Document Type"
+        },
+        {
           "key": "LastModifiedDate",
-          "label": "Last Modified Date"
+          "label": "Last Modified Date",
+          "displayType": "date"
         }
       ],
-
       "searchConfig": {
         "directions": "Type a budget number, vendor name, amount, or other info",
         "label": "",
@@ -71,6 +71,11 @@
             "size": 10
           }
         }
+      },
+      "autocompleteConfig": {
+        "type": "studentAutocomplete",
+        "filterKey": "metadata.StudentId",
+        "filterLabel": "Student Number"
       }
     },
     "edit": {
@@ -79,16 +84,49 @@
       "fieldsToDisplay": [
         {
           "key": "Filer",
-          "label": "Filer"
+          "label": "Filer",
+          "required": true
+        },
+        {
+          "key": "DocumentType",
+          "label": "Document Type"
         },
         {
           "key": "PublishStatus",
-          "label": "Publish Status"
+          "label": "Publish Status",
+          "required": true,
+          "displayType": "select",
+          "options": [
+            {
+              "value": ""
+            },
+            {
+              "value": "Draft"
+            },
+            {
+              "value": "Published"
+            }
+          ]
         },
         {
           "key": "LastModifiedDate",
           "label": "Last Modified Date",
-          "dataType": "date"
+          "dataType": "date",
+          "displayType": "date"
+        },
+        {
+          "key": "Reconciled",
+          "label": "Reconciled",
+          "displayType": "checkbox",
+          "checkboxOptions": {
+            "checkedValue": "Yes",
+            "uncheckedValue": "No"
+          }
+        },
+        {
+          "key": "StudentId",
+          "label": "Student",
+          "displayType": "student-autocomplete"
         }
       ],
       "buttons": [
@@ -118,12 +156,39 @@
         },
         {
           "key": "PublishStatus",
-          "label": "Publish Status"
+          "label": "Publish Status",
+          "displayType": "select",
+          "options": [
+            {
+              "value": ""
+            },
+            {
+              "value": "Draft"
+            },
+            {
+              "value": "Published"
+            }
+          ]
         },
         {
           "key": "LastModifiedDate",
           "label": "Last Modified Date",
-          "dataType": "date"
+          "dataType": "date",
+          "displayType": "date"
+        },
+        {
+          "key": "Reconciled",
+          "label": "Reconciled",
+          "displayType": "checkbox",
+          "checkboxOptions": {
+            "checkedValue": "Yes",
+            "uncheckedValue": "No"
+          }
+        },
+        {
+          "key": "StudentId",
+          "label": "Student",
+          "displayType": "student-autocomplete"
         }
       ],
       "buttons": [

@@ -3,6 +3,7 @@ import {browser, by, element, ExpectedConditions} from 'protractor';
 export class ContentServicesUiPage {
   public uwLogo = element(by.className('uw-patch'));
   public headerTitle = element(by.className('cs-title'));
+  public defaultMessage = element(by.css('.uw-default .cs-main h3'));
 
   navigateTo() {
     return browser.get('/');
@@ -35,7 +36,7 @@ export class ContentServicesUiPage {
   clickAppMenuItem(itemIndex: number) {
     const menuItem = element.all(by.className('tenant-menu-button')).get(itemIndex);
 
-    browser.wait(ExpectedConditions.elementToBeClickable(menuItem), 500);
+    browser.wait(ExpectedConditions.elementToBeClickable(menuItem), 5000);
     menuItem.click();
   }
 

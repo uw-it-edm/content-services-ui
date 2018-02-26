@@ -10,25 +10,25 @@ import { TenantConfigInfo } from '../core/shared/model/tenant-config-info';
   selector: 'app-404',
   template: `
     <article class="uw-default">
-        <div class="cs-main">
-          <div *ngIf="tenants">
-            <h3>To access this service, please click a link below:</h3>
-            <ul>
-              <li *ngFor="let availableTenant of tenants">
-                <a routerLink="/{{availableTenant['tenantName']}}/">
-                  {{availableTenant['tenantName']}}
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div *ngIf="! tenants">
-              <h3>
-                  You are not authorized to use this service or the service is not available.
-                  Please contact {{supportEmail}}
-                  if you believe you should be able to access this information.
-              </h3>
-          </div>
+      <div class="cs-main">
+        <div *ngIf="tenants">
+          <h3>To access this service, please click a link below:</h3>
+          <ul>
+            <li *ngFor="let availableTenant of tenants">
+              <a routerLink="/{{availableTenant['tenantName']}}/">
+                {{availableTenant['tenantName']}}
+              </a>
+            </li>
+          </ul>
         </div>
+        <div *ngIf="! tenants">
+          <h3>
+            You are not authorized to use this service or the service is not available.
+            Please contact {{supportEmail}}
+            if you believe you should be able to access this information.
+          </h3>
+        </div>
+      </div>
     </article>
   `
 })
@@ -36,6 +36,7 @@ export class PageNotFoundComponent implements OnInit {
   user$: Observable<User>;
   supportEmail: string;
   tenants: TenantConfigInfo[];
+
   constructor(private configService: ConfigService, private userService: UserService) {}
 
   ngOnInit() {
