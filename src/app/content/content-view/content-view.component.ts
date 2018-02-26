@@ -4,8 +4,8 @@ import { ContentService } from '../shared/content.service';
 import 'rxjs/add/operator/takeUntil';
 import { ProgressService } from '../../shared/providers/progress.service';
 import { ContentObject } from '../shared/model/content-object';
-import { PdfViewerComponent } from 'ng2-pdf-viewer/dist/pdf-viewer.component';
 import { ContentToolbarComponent } from '../content-toolbar/content-toolbar.component';
+import { PdfViewerComponent } from 'ng2-pdf-viewer';
 
 @Component({
   selector: 'app-content-view',

@@ -3841,6 +3841,13 @@ jasmine-core@~2.99.0:
   version "2.99.0"
   resolved "https://registry.yarnpkg.com/jasmine-core/-/jasmine-core-2.99.0.tgz#c105ab5222da45f1b0a10580383f5adbbff56d2c"
 
+jasmine-reporters@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/jasmine-reporters/-/jasmine-reporters-2.3.0.tgz#eb8cb7359658572a87eef4aa088a363036f3792a"
+  dependencies:
+    mkdirp "^0.5.1"
+    xmldom "^0.1.22"
+
 jasmine-spec-reporter@~4.2.1:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/jasmine-spec-reporter/-/jasmine-spec-reporter-4.2.1.tgz#1d632aec0341670ad324f92ba84b4b32b35e9e22"
@@ -4958,9 +4965,9 @@ netmask@~1.0.4:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/netmask/-/netmask-1.0.6.tgz#20297e89d86f6f6400f250d9f4f6b4c1945fcd35"
 
-ng2-pdf-viewer@3.0.8:
-  version "3.0.8"
-  resolved "https://registry.yarnpkg.com/ng2-pdf-viewer/-/ng2-pdf-viewer-3.0.8.tgz#23c3f55a4ba548b73a0717baf2d40c6a9cc9f3f9"
+ng2-pdf-viewer@4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/ng2-pdf-viewer/-/ng2-pdf-viewer-4.1.2.tgz#a2d6501fcf148e313f8712edf0e707b10e323528"
   dependencies:
     "@types/pdfjs-dist" "^0.1.1"
     pdfjs-dist "1.9.489"
@@ -7909,7 +7916,7 @@ xmlbuilder@>=1.0.0, xmlbuilder@~9.0.1:
   version "9.0.4"
   resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-9.0.4.tgz#519cb4ca686d005a8420d3496f3f0caeecca580f"
 
-xmldom@^0.1.19:
+xmldom@^0.1.19, xmldom@^0.1.22:
   version "0.1.27"
   resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.1.27.tgz#d501f97b3bdb403af8ef9ecc20573187aadac0e9"
 
