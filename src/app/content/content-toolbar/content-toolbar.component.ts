@@ -10,7 +10,7 @@ export class ContentToolbarComponent {
   @Input() pageCount: number;
   @Input() downloadUrl?: string;
   @Input() allowPageByPageMode: boolean;
-
+  @Input() zoomFactor = 'automatic-zoom';
   @Output() fullScreenChange = new EventEmitter<boolean>();
   @Output() pageNumberChange = new EventEmitter<number>();
   @Output() showAllChange = new EventEmitter<boolean>();
@@ -21,7 +21,6 @@ export class ContentToolbarComponent {
   pageNumberTimeout: any;
   pageNumberValue: number;
   showAllValue: boolean;
-  zoomFactor = 'automatic-zoom';
 
   constructor() {}
 
