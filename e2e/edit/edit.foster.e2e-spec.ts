@@ -13,7 +13,7 @@ describe('Foster Edit Page', () => {
 
   beforeEach(() => {
     searchPage.navigateTo();
-    browser.wait(until.titleIs('Find Documents'));
+    browser.wait(ExpectedConditions.titleIs('Find Documents'));
 
     searchPage.getResultsByColumn('id').then(ids => {
       expectedIds = ids;
@@ -28,7 +28,6 @@ describe('Foster Edit Page', () => {
 
     page.saveButton.click();
 
-    expect(until.alertIsPresent()).toBeTruthy();
     expect(page.getSnackBarText()).toContain('Saved item');
 
     browser.refresh();
@@ -70,7 +69,6 @@ describe('Foster Edit Page', () => {
     page.dateInputField.get(0).sendKeys(today);
 
     page.saveButton.click();
-    expect(until.alertIsPresent()).toBeTruthy();
     expect(page.getSnackBarText()).toContain('Saved item');
 
     browser.refresh();
