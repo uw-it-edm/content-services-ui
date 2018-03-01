@@ -1,7 +1,6 @@
 import { EditPage } from './edit.po';
 import { browser, ExpectedConditions } from 'protractor';
 import { SearchPage } from '../search/search.po';
-import { until } from 'selenium-webdriver';
 import * as path from 'path';
 
 describe('Foster Edit Page', () => {
@@ -31,7 +30,7 @@ describe('Foster Edit Page', () => {
     expect(page.getSnackBarText()).toContain('Saved item');
 
     browser.refresh();
-    browser.wait(until.titleIs(pageTitle));
+    browser.wait(ExpectedConditions.titleIs(pageTitle));
     browser.waitForAngular();
     expect(page.getFileName(0)).toEqual(path.parse(textFilePath).base);
   });
@@ -72,7 +71,7 @@ describe('Foster Edit Page', () => {
     expect(page.getSnackBarText()).toContain('Saved item');
 
     browser.refresh();
-    browser.wait(until.titleIs(pageTitle));
+    browser.wait(ExpectedConditions.titleIs(pageTitle));
     browser.waitForAngular();
     expect(page.getDateText(0)).toEqual(today);
   });

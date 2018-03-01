@@ -1,7 +1,6 @@
 ///<reference path="../../node_modules/@types/jasminewd2/index.d.ts"/>
 import { SearchPage } from './search.po';
 import { browser, ExpectedConditions } from 'protractor';
-import { until } from 'selenium-webdriver';
 import { EditPage } from '../edit/edit.po';
 
 describe('Foster Search Page', () => {
@@ -56,7 +55,7 @@ describe('Foster Search Page', () => {
 
       const editPage = new EditPage(profile);
       editPage.clickReturnToResultsLink();
-      browser.wait(until.titleIs(pageTitle));
+      browser.wait(ExpectedConditions.titleIs(pageTitle));
 
       expect(page.selectedFacet.getText()).toEqual(selectedFacetTexts);
       expect(page.isSortIndicatorDesc()).toBeFalsy();
