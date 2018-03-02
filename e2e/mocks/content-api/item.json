@@ -1,22 +1,23 @@
 {
   "id": "123456",
-  "label": "text-sample1.txt",
+  "label": "sample file",
   "metadata": {
     "ProfileId": "Demo",
     "Account": "demo-account",
-    "LastModifiedDate": 1497297151000,
+    "LastModifiedDate": 1519172295000,
     "LastModifier": "edm-tester",
     "OriginalFileName": "text-sample1.txt",
     "DocumentType": "Document",
     "ReleaseDate": 1496958226000,
     "WebExtension": "htm",
     "RevisionId": "1",
-    "MimeType": "idcmeta/html",
-    "LastRevisionDate": 1496958226000,
-    "FileExtension": "htm",
-    "RecordFilingDate": 1497269597000,
+    "MimeType": "application/pdf",
+    "LastRevisionDate": 1519172295000,
+    "FileExtension": "pdf",
+    "RecordFilingDate": 1519154994000,
     "Filer": "edm-tester",
-    "FileSize": "25956",
-    "PublishStatus": "Draft"
+    "FileSize": "35910",
+    "PublishStatus": "Published",
+    "StudentId": "3333333"
   }
 }

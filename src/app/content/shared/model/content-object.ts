@@ -1,7 +1,6 @@
 import { ContentItem } from './content-item';
 import { isNullOrUndefined } from 'util';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { FormGroup } from '@angular/forms';
 
 export class ContentObject {
   public contentLength: number;

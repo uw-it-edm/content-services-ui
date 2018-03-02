@@ -1,9 +1,20 @@
-import {browser, by, element} from 'protractor';
+import { browser, by, element, ExpectedConditions } from 'protractor';
 import * as path from 'path';
 
 export class EditPage {
+  public saveButton = element(by.id('saveItem'));
+  public studentInputField = element(by.css('app-student-autocomplete input'));
+  public pageUrl = `${browser.baseUrl}/${this.profile}/edit/${this.id}`;
+  public pdfFilePath = path.resolve(__dirname, '../mocks/files/sample-file.pdf');
+  public inputField = element(by.id('mat-input-0'));
+  public downloadButton = element(by.buttonText('file_download'));
+  public nextItemButton = element(by.id('nextItem'));
+  public dateInputField = element.all(by.css('app-timestamp-picker input'));
+
+  constructor(private profile: string = 'demo', private id: string = '123456') {}
+
   navigateTo() {
-    return browser.get('/demo/edit/123456');
+    return browser.get(this.pageUrl);
   }
 
   getPageTitle() {
@@ -11,12 +22,11 @@ export class EditPage {
   }
 
   clickReturnToResultsLink() {
-    element(by.css('[mattooltip=\'Return to Results\']')).click();
+    element(by.buttonText('keyboard_arrow_left')).click();
   }
 
-  replaceFile() {
-    const pdfFilePath = path.resolve(__dirname, '../sample-file.pdf');
-    element(by.name('replaceFile')).sendKeys(pdfFilePath);
+  replaceFile(filePath: string = this.pdfFilePath) {
+    element(by.name('replaceFile')).sendKeys(filePath);
   }
 
   getPdfViewer() {
@@ -25,5 +35,33 @@ export class EditPage {
 
   removeFile() {
     element(by.css('app-file-upload button.mat-button')).click();
+  }
+
+  getDateText(dateInputFieldIndex: number = 0) {
+    return this.dateInputField.get(dateInputFieldIndex).getAttribute('value');
+  }
+
+  getStudentText() {
+    return this.studentInputField.getAttribute('value');
+  }
+
+  getSnackBarText() {
+    const snackBar = element(by.className('mat-simple-snackbar'));
+    browser.wait(ExpectedConditions.visibilityOf(snackBar), 5000);
+    return snackBar.getText();
+  }
+
+  getPaginatorText() {
+    return element(by.css('app-content-pager > span'))
+      .getText()
+      .then(text => {
+        return text.trim();
+      });
+  }
+
+  getFileName(fileIndex: number) {
+    return element.all(by.css('.mat-list-item-content .mat-list-text p > span')).then(names => {
+      return names[fileIndex].getText();
+    });
   }
 }

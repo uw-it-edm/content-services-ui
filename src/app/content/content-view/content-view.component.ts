@@ -16,6 +16,7 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   private componentDestroyed = new Subject();
 
   @Input() contentObject: ContentObject;
+  @Input() allowPageByPageMode = false;
 
   autoResize = false;
   fitToPage = true;
@@ -68,20 +69,20 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
     this.updateDownloadUrl();
   }
 
-  private updateDownloadUrl(): void {
-    if (this.contentObject && this.contentObject.itemId && this.contentObject.url !== '') {
-      this.downloadUrl = this.buildUrl(this.contentObject.itemId, true, 'attachment');
-    } else {
-      this.downloadUrl = undefined;
-    }
-  }
-
   onDisplayComplete(pdf: any) {
     this.updateDownloadUrl();
     this.progressService.end();
     this.pageCount = pdf.numPages;
     // this.contentToolbarComponent.pageCount = pdf.numPages;
     this.onZoomFactorChanged('automatic-zoom');
+  }
+
+  private updateDownloadUrl(): void {
+    if (this.contentObject && this.contentObject.itemId && this.contentObject.url !== '') {
+      this.downloadUrl = this.buildUrl(this.contentObject.itemId, true, 'attachment');
+    } else {
+      this.downloadUrl = undefined;
+    }
   }
 
   onDisplayError() {

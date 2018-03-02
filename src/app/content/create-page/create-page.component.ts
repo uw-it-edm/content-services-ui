@@ -30,6 +30,7 @@ export class CreatePageComponent implements OnInit, OnDestroy {
   pageConfig: ContentPageConfig;
   form: FormGroup;
   previewing: boolean;
+  submitPending: boolean;
 
   @ViewChild(DynamicComponentDirective) contentViewDirective: DynamicComponentDirective;
   @ViewChild(ContentViewComponent) contentViewComponent: ContentViewComponent;
@@ -103,6 +104,9 @@ export class CreatePageComponent implements OnInit, OnDestroy {
     }
   }
 
+  updateSavingStatus(inProgress: boolean) {
+    this.submitPending = inProgress;
+  }
   saveItem() {
     const fields = this.pageConfig.fieldsToDisplay;
     const formModel = this.form.value;
@@ -126,9 +130,6 @@ export class CreatePageComponent implements OnInit, OnDestroy {
 
   private createForm(): FormGroup {
     const form = this.fb.group({});
-    if (this.pageConfig && this.pageConfig.uploadAnother) {
-      form.addControl('uploadAnother', new FormControl());
-    }
     return form;
   }
 
@@ -145,10 +146,14 @@ export class CreatePageComponent implements OnInit, OnDestroy {
 
   private setDefaults() {
     if (this.pageConfig && this.pageConfig.uploadAnother) {
-      const ctrl = this.form.get('uploadAnother');
-      if (ctrl) {
-        ctrl.patchValue(this.pageConfig.uploadAnother);
+      // moved creation of form control here from createForm
+      // as pageConfig was not set yet in createForm
+      let ctrl = this.form.get('uploadAnother');
+      if (!ctrl) {
+        ctrl = new FormControl();
+        this.form.addControl('uploadAnother', ctrl);
       }
+      ctrl.patchValue(this.pageConfig.uploadAnother);
     }
   }
 

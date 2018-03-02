@@ -28,6 +28,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
 
   @Output() remove = new EventEmitter<number>();
   @Output() select = new EventEmitter<ContentObject>(true);
+  @Output() saving = new EventEmitter<boolean>();
 
   config: Config;
   contentObjects = new Array<ContentObject>();
@@ -255,6 +256,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
       this.createdItems = new Array<ContentItem>();
       this.updatedItems = new Array<ContentItem>();
       this.failures = new Array<any>();
+      this.saving.emit(true); // saving item in progressing
 
       for (const contentObject of this.contentObjects) {
         const contentItem = this.prepareItem(
@@ -278,11 +280,13 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
               contentObject.onLoad(item);
               contentObject.failed = false;
               this.updateComponentSavedItemLists(item);
+              this.saving.emit(false); // item saving completed
               this.notify();
             },
             err => {
               this.failures.push(err);
               contentObject.failed = true;
+              this.saving.emit(false); // item saving failed
               this.notify();
             }
           );

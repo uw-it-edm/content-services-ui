@@ -11,12 +11,12 @@
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "lint": "ng lint --type-check",
     "e2e": "ng e2e",
-    "e2e-local": "yarn mock-services && ng e2e --environment=travis ; echo '------------------------\\nstopping mock containers' ; docker stop content-services-api-e2e-mock ; echo '------------------------'",
+    "e2e-local": "yarn mock-services && ng e2e --config=protractor.conf.local.js --environment=travis ; testStatus=$? ; docker stop content-services-api-e2e-mock ; exit $testStatus",
     "validate": "npm-run-all --parallel test lint",
     "prepush": "npm run validate",
     "precommit": "lint-staged",
     "pretty": "prettier --parser typescript --single-quote --print-width=120 --write",
-    "mock-services": "docker build -t content-services-api-e2e-mock ./e2e/mocks && docker run --name content-services-api-e2e-mock --rm -d -p 12345:80 -v ${PWD}/e2e/mocks:/usr/share/nginx/html/ content-services-api-e2e-mock"
+    "mock-services": "docker container inspect content-services-api-e2e-mock || (docker build -q -t content-services-api-e2e-mock ./e2e/mocks && docker run --name content-services-api-e2e-mock --rm -d -p 12345:80 -v ${PWD}/e2e/mocks:/usr/share/nginx/html/ content-services-api-e2e-mock)"
   },
   "lint-staged": {
     "*.ts": [
@@ -45,7 +45,7 @@
     "core-js": "^2.4.1",
     "coveralls": "^3.0.0",
     "directory-encoder": "0.9.2",
-    "lint-staged": "^6.0.0",
+    "lint-staged": "^7.0.0",
     "lodash": "^4.17.4",
     "moment": "^2.19.2",
     "moment-timezone": "^0.5.14",
@@ -56,7 +56,7 @@
     "zone.js": "^0.8.14"
   },
   "devDependencies": {
-    "@angular/cli": "1.6.8",
+    "@angular/cli": "1.7.1",
     "@angular/compiler-cli": "^5.0.0",
     "@angular/language-service": "^5.1.2",
     "@types/jasmine": "~2.8.3",
@@ -65,6 +65,7 @@
     "codelyzer": "~4.1.0",
     "husky": "^0.14.3",
     "jasmine-core": "~2.99.0",
+    "jasmine-reporters": "^2.3.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~2.0.0",
     "karma-chrome-launcher": "~2.2.0",
@@ -76,7 +77,7 @@
     "npm-run-all": "^4.0.2",
     "prettier": "^1.5.3",
     "protractor": "^5.2.2",
-    "ts-node": "^4.0.2",
+    "ts-node": "^5.0.0",
     "tslint": "~5.9.1",
     "typescript": "~2.5.3"
   }

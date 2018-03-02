@@ -75,6 +75,12 @@ export class StudentService {
     return searchModel;
   }
 
+  @CacheObservableDecorator
+  public read(studentNumber: string): Observable<Student> {
+    const options = this.buildRequestOptions();
+    return this.http.get<Student>(this.studentUrl + '/' + studentNumber, options);
+  }
+
   private searchStudent(searchModel: StudentSearchModel): Observable<StudentSearchResults> {
     let params = new HttpParams();
     if (searchModel.firstName) {
@@ -90,12 +96,6 @@ export class StudentService {
     const options = this.buildRequestOptions(params);
 
     return this.http.get<StudentSearchResults>(this.studentUrl, options);
-  }
-
-  @CacheObservableDecorator
-  public read(studentNumber: string): Observable<Student> {
-    const options = this.buildRequestOptions();
-    return this.http.get<Student>(this.studentUrl + '/' + studentNumber, options);
   }
 
   private buildRequestOptions(httpParams?: HttpParams) {

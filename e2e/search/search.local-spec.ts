@@ -3,7 +3,7 @@ import {SearchPage} from './search.po';
 import {CreatePage} from '../create/create.po';
 import {browser} from 'protractor';
 
-describe('content-services-ui Search Page', () => {
+describe('Search Page', () => {
   let page: SearchPage;
   const demoConfig = require('../mocks/profile-api/demo.json');
 
@@ -22,12 +22,29 @@ describe('content-services-ui Search Page', () => {
 
   it('should accept text input in searchbox and retains the value', () => {
     const searchText = 'this is a sample test';
-    page.getSearchBox().sendKeys(searchText);
+    page.searchBox().sendKeys(searchText);
     expect(page.getSearchBoxInputText()).toEqual(searchText);
   });
 
   it('should display 2 page paginators', () => {
     expect(page.getPaginators().count()).toEqual(2);
+  });
+
+  it('should display Id column with descending sort arrow by default', () => {
+    expect(page.isSortIndicatorDesc);
+  });
+
+  it('should autocomplete Student Name when Student ID is entered in search box', () => {
+    const studentData = require('../mocks/data-api/student-query.json');
+    const testStudentId = studentData.content[0].studentNumber;
+
+    page.searchBox().sendKeys(testStudentId);
+    expect(page.autoCompletePanel.isDisplayed());
+    expect(page.autoCompletedOption.getText()).toEqual(studentData.content[0].displayName);
+
+    page.autoCompletedOption.click();
+    expect(page.selectedFacet.isDisplayed());
+    expect(page.selectedFacet.getText()).toMatch(new RegExp(testStudentId));
   });
 
   it('should navigate to Upload page when upload button is clicked', () => {
