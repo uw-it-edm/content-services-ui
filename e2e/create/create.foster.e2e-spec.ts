@@ -1,7 +1,6 @@
 ///<reference path="../../node_modules/@types/jasminewd2/index.d.ts"/>
 import { CreatePage } from './create.po';
-import { browser } from 'protractor';
-import { until } from 'selenium-webdriver';
+import { browser, ExpectedConditions } from 'protractor';
 import * as path from 'path';
 
 describe('Foster Create Page', () => {
@@ -10,7 +9,7 @@ describe('Foster Create Page', () => {
 
   beforeAll(() => {
     page.navigateTo();
-    browser.wait(until.titleIs('Upload Documents'));
+    browser.wait(ExpectedConditions.titleIs('Upload Documents'));
   });
 
   it('should create item without any metadata successfully ', () => {
@@ -18,7 +17,6 @@ describe('Foster Create Page', () => {
     page.chooseFile(filePath);
     page.saveButton.click();
 
-    expect(until.alertIsPresent()).toBeTruthy();
     expect(page.getSnackBarText()).toContain('Saved item');
   });
 });
