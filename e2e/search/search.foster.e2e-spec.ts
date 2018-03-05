@@ -1,7 +1,6 @@
 ///<reference path="../../node_modules/@types/jasminewd2/index.d.ts"/>
 import { SearchPage } from './search.po';
-import { browser } from 'protractor';
-import { until } from 'selenium-webdriver';
+import { browser, ExpectedConditions } from 'protractor';
 import { EditPage } from '../edit/edit.po';
 
 describe('Foster Search Page', () => {
@@ -12,7 +11,7 @@ describe('Foster Search Page', () => {
 
   beforeEach(() => {
     page.navigateTo();
-    browser.wait(until.titleIs(pageTitle));
+    browser.wait(ExpectedConditions.titleIs(pageTitle));
   });
 
   it('should return selected facet in search results', () => {
@@ -56,7 +55,7 @@ describe('Foster Search Page', () => {
 
       const editPage = new EditPage(profile);
       editPage.clickReturnToResultsLink();
-      browser.wait(until.titleIs(pageTitle));
+      browser.wait(ExpectedConditions.titleIs(pageTitle));
 
       expect(page.selectedFacet.getText()).toEqual(selectedFacetTexts);
       expect(page.isSortIndicatorDesc()).toBeFalsy();
