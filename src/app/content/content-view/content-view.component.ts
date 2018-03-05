@@ -75,8 +75,6 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
     this.updateDownloadUrl();
     this.progressService.end();
     this.pageCount = pdf.numPages;
-    // this.contentToolbarComponent.pageCount = pdf.numPages;
-    // this.onZoomFactorChanged('automatic-zoom');
   }
 
   private updateDownloadUrl(): void {
