@@ -31,10 +31,6 @@ describe('Edit Page', () => {
     expect(page.getPdfViewer().isDisplayed()).toBeTruthy();
   });
 
-  it('should display download button for pdf file by default', () => {
-    expect(page.downloadButton.isEnabled()).toBeTruthy();
-  });
-
   it('should display date field in correct format', () => {
     expect(page.getDateText()).toEqual('2/20/2018');
   });
