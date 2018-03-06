@@ -1,5 +1,5 @@
 import { EditPage } from './edit.po';
-import { browser } from 'protractor';
+import { browser, ExpectedConditions } from 'protractor';
 import { SearchPage } from '../search/search.po';
 import { ContentServicesUiPage } from '../app/app.po';
 import { until } from 'selenium-webdriver';
@@ -63,5 +63,19 @@ describe('Edit Page', () => {
     appPage.headerTitle.click();
 
     expect(getCurrentUrl()).toMatch(searchPage.pageUrl);
+  });
+
+  it('should display download button for text file', () => {
+    page.navigateTo('item-txt');
+    browser.wait(ExpectedConditions.titleIs(demoConfig.pages.edit.pageName));
+
+    expect(page.downloadButton.isEnabled()).toBeTruthy();
+  });
+
+  fit('should display pdf viewer for web viewable eml file', () => {
+    page.navigateTo('item-eml');
+    browser.wait(ExpectedConditions.titleIs(demoConfig.pages.edit.pageName));
+
+    expect(page.getPdfViewer().isDisplayed()).toBeTruthy();
   });
 });

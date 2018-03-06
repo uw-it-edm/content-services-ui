@@ -4,17 +4,18 @@ import * as path from 'path';
 export class EditPage {
   public saveButton = element(by.id('saveItem'));
   public studentInputField = element(by.css('app-student-autocomplete input'));
-  public pageUrl = `${browser.baseUrl}/${this.profile}/edit/${this.id}`;
+  public profileUrl = `${browser.baseUrl}/${this.profile}/edit`;
+  public pageUrl = `${this.profileUrl}/${this.id}`;
   public pdfFilePath = path.resolve(__dirname, '../mocks/files/sample-file.pdf');
   public inputField = element(by.id('mat-input-0'));
-  public downloadButton = element(by.buttonText('file_download'));
+  public downloadButton = element(by.partialButtonText('file_download'));
   public nextItemButton = element(by.id('nextItem'));
   public dateInputField = element.all(by.css('app-timestamp-picker input'));
 
   constructor(private profile: string = 'demo', private id: string = '123456') {}
 
-  navigateTo() {
-    return browser.get(this.pageUrl);
+  navigateTo(itemId: string = this.id) {
+    return browser.get(this.profileUrl + '/' + itemId);
   }
 
   getPageTitle() {
