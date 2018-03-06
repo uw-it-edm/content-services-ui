@@ -72,7 +72,7 @@ describe('Edit Page', () => {
     expect(page.downloadButton.isEnabled()).toBeTruthy();
   });
 
-  fit('should display pdf viewer for web viewable eml file', () => {
+  it('should display pdf viewer for web viewable eml file', () => {
     page.navigateTo('item-eml');
     browser.wait(ExpectedConditions.titleIs(demoConfig.pages.edit.pageName));
 
