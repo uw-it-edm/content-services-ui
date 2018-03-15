@@ -3,13 +3,14 @@ import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ProgressService } from './shared/providers/progress.service';
+import { Angulartics2GoogleTagManager } from 'angulartics2/gtm';
 
 describe('AppComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
         declarations: [AppComponent],
-        providers: [ProgressService],
+        providers: [ProgressService, { provide: Angulartics2GoogleTagManager, useValue: {} }],
         schemas: [NO_ERRORS_SCHEMA]
       }).compileComponents();
     })
