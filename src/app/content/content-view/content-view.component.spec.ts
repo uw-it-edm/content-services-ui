@@ -65,7 +65,7 @@ describe('ContentViewComponent', () => {
     expect(component.pageNumber).toBe(1);
     expect(component.autoResize).toBeFalsy();
     expect(component.renderText).toBeTruthy();
-    expect(component.showAll).toBeFalsy();
+    expect(component.showAll).toBeTruthy();
     expect(component.stickToPage).toBeFalsy();
     expect(component.zoom).toBe(1.0);
   });
@@ -95,7 +95,7 @@ describe('ContentViewComponent', () => {
     expect(component.pageNumber).toBe(1);
     expect(component.autoResize).toBeFalsy();
     expect(component.renderText).toBeTruthy();
-    expect(component.showAll).toBeFalsy();
+    expect(component.showAll).toBeTruthy();
     expect(component.stickToPage).toBeFalsy();
     expect(component.zoom).toBe(1.0);
   });
@@ -110,7 +110,7 @@ describe('ContentViewComponent', () => {
     expect(component.pageNumber).toBe(1);
     expect(component.autoResize).toBeTruthy();
     expect(component.renderText).toBeTruthy();
-    expect(component.showAll).toBeFalsy();
+    expect(component.showAll).toBeTruthy();
     expect(component.stickToPage).toBeFalsy();
     expect(component.zoom).toBe(1.0);
   });
@@ -125,7 +125,7 @@ describe('ContentViewComponent', () => {
     expect(component.pageNumber).toBe(1);
     expect(component.autoResize).toBeFalsy();
     expect(component.renderText).toBeTruthy();
-    expect(component.showAll).toBeFalsy();
+    expect(component.showAll).toBeTruthy();
     expect(component.stickToPage).toBeFalsy();
     expect(component.zoom).toBe(0.75);
   });

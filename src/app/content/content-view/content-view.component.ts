@@ -4,8 +4,8 @@ import { ContentService } from '../shared/content.service';
 import 'rxjs/add/operator/takeUntil';
 import { ProgressService } from '../../shared/providers/progress.service';
 import { ContentObject } from '../shared/model/content-object';
-import { PdfViewerComponent } from 'ng2-pdf-viewer/dist/pdf-viewer.component';
 import { ContentToolbarComponent } from '../content-toolbar/content-toolbar.component';
+import { PdfViewerComponent } from 'ng2-pdf-viewer';
 
 @Component({
   selector: 'app-content-view',
@@ -25,9 +25,10 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   pageCount = 1;
   pageNumber = 1;
   renderText = true;
-  showAll = false;
+  showAll = true;
   stickToPage = false;
   zoom = 1.0;
+  zoomFactor = 'automatic-zoom';
   downloadUrl: string;
 
   constructor(private contentService: ContentService, public progressService: ProgressService) {}
@@ -49,6 +50,7 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
 
     if (changes.contentObject) {
       this.onContentObjectChanged(changes.contentObject.currentValue);
+      this.onZoomFactorChanged(this.zoomFactor);
     }
   }
 
@@ -73,8 +75,6 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
     this.updateDownloadUrl();
     this.progressService.end();
     this.pageCount = pdf.numPages;
-    // this.contentToolbarComponent.pageCount = pdf.numPages;
-    this.onZoomFactorChanged('automatic-zoom');
   }
 
   private updateDownloadUrl(): void {
@@ -115,7 +115,7 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
     this.originalSize = false;
     this.stickToPage = false;
     this.zoom = 1.0;
-
+    this.zoomFactor = zoomFactor;
     if (zoomFactor === 'actual-size') {
       this.originalSize = true;
       this.fitToPage = true;
