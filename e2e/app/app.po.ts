@@ -1,4 +1,4 @@
-import {browser, by, element, ExpectedConditions} from 'protractor';
+import { browser, by, element, ExpectedConditions } from 'protractor';
 
 export class ContentServicesUiPage {
   public uwLogo = element(by.className('uw-patch'));
@@ -29,14 +29,14 @@ export class ContentServicesUiPage {
     const tenantMenuButton = element(by.id('tenant-menu'));
 
     expect(tenantMenuButton).toBeTruthy();
-    browser.wait(ExpectedConditions.elementToBeClickable(tenantMenuButton), 5000);
+    browser.wait(ExpectedConditions.elementToBeClickable(tenantMenuButton), 10000);
     tenantMenuButton.click();
   }
 
   clickAppMenuItem(itemIndex: number) {
     const menuItem = element.all(by.className('tenant-menu-button')).get(itemIndex);
 
-    browser.wait(ExpectedConditions.elementToBeClickable(menuItem), 5000);
+    browser.wait(ExpectedConditions.elementToBeClickable(menuItem), 10000);
     menuItem.click();
   }
 

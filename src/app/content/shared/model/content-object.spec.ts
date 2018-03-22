@@ -2,16 +2,19 @@ import { ContentObject } from './content-object';
 import { ContentItem } from './content-item';
 
 describe('ContentObject', () => {
-  let defaultContentItem: ContentItem;
   let contentObject: ContentObject;
 
-  beforeEach(() => {
-    defaultContentItem = new ContentItem();
-    defaultContentItem.id = '1';
-    defaultContentItem.label = 'test label';
-    defaultContentItem.metadata['MimeType'] = 'application/pdf';
-
+  function generateContentObject(id: string, label: string, webExtension: string): ContentObject {
+    const defaultContentItem = new ContentItem();
+    defaultContentItem.id = id;
+    defaultContentItem.label = label;
+    defaultContentItem.metadata['WebExtension'] = webExtension;
     contentObject = new ContentObject(defaultContentItem);
+    return contentObject;
+  }
+
+  beforeEach(() => {
+    contentObject = generateContentObject('1', 'test label', 'pdf');
   });
 
   it('should have an identify pdf dataType from dataURI', () => {
@@ -42,21 +45,29 @@ describe('ContentObject', () => {
     expect(contentObject.displayType).toEqual('pdfUrl');
   });
 
-  it('should have an initialized image dataType', () => {
-    const contentItem2 = new ContentItem();
-    contentItem2.id = '2';
-    contentItem2.label = 'test label 2';
-    contentItem2.metadata['MimeType'] = 'image/jpg';
-    const imageObject = new ContentObject(contentItem2);
+  it('should have an initialized image dataType for jpg', () => {
+    const imageObject = generateContentObject('1', 'test label', 'jpg');
+    expect(imageObject.displayType).toEqual('image');
+  });
+  it('should have an initialized image dataType for jpeg', () => {
+    const imageObject = generateContentObject('1', 'test label', 'jpeg');
+    expect(imageObject.displayType).toEqual('image');
+  });
+  it('should have an initialized image dataType for png', () => {
+    const imageObject = generateContentObject('1', 'test label', 'png');
+    expect(imageObject.displayType).toEqual('image');
+  });
+  it('should have an initialized image dataType for bmp', () => {
+    const imageObject = generateContentObject('1', 'test label', 'bmp');
+    expect(imageObject.displayType).toEqual('image');
+  });
+  it('should have an initialized image dataType for gif', () => {
+    const imageObject = generateContentObject('1', 'test label', 'gif');
     expect(imageObject.displayType).toEqual('image');
   });
 
-  it('should have an initialized unknown dataType', () => {
-    const contentItem2 = new ContentItem();
-    contentItem2.id = '2';
-    contentItem2.label = 'test label 2';
-    contentItem2.metadata['MimeType'] = 'application/yml';
-    const unknownObject = new ContentObject(contentItem2);
+  it('should have an initialized unknown dataType for yml', () => {
+    const unknownObject = generateContentObject('1', 'test label', 'yml');
     expect(unknownObject.displayType).toEqual('unknown');
   });
 

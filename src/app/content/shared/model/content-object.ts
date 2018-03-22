@@ -48,7 +48,7 @@ export class ContentObject {
   public onLoad(item: ContentItem) {
     this.item = item;
     this.itemId = item.id;
-    this.contentType = item.metadata['MimeType'];
+    this.contentType = item.metadata['WebExtension'];
     this.contentLength = ContentObject.coerceToNumber(item.metadata['FileSize']);
     this.originalFileName = item.metadata['OriginalFileName'];
     this.persisted = true;
@@ -80,9 +80,9 @@ export class ContentObject {
   private determineDisplayType(): string {
     let displayType = 'blank';
     if (this.contentType && this.contentType !== null) {
-      if (this.contentType === 'application/pdf') {
+      if (this.contentType === 'pdf') {
         displayType = 'pdfUrl';
-      } else if (this.contentType.startsWith('image')) {
+      } else if (this.isWebViewableImage(this.contentType)) {
         displayType = 'image';
       } else {
         displayType = 'unknown';
@@ -94,6 +94,16 @@ export class ContentObject {
     this.displayType$.next(displayType);
     this.displayType = displayType;
     return displayType;
+  }
+
+  private isWebViewableImage(contentType: string): boolean {
+    return (
+      contentType === 'png' ||
+      contentType === 'gif' ||
+      contentType === 'jpg' ||
+      contentType === 'jpeg' ||
+      contentType === 'bmp'
+    );
   }
 
   public displayFilePreview(file: File) {

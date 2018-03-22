@@ -1,6 +1,5 @@
-import {browser, by, element, ExpectedConditions} from 'protractor';
-import {EditPage} from '../edit/edit.po';
-import {until} from 'selenium-webdriver';
+import { browser, by, element, ExpectedConditions } from 'protractor';
+import { EditPage } from '../edit/edit.po';
 
 export class SearchPage {
   autoCompletePanel = element(by.className('mat-autocomplete-panel'));
@@ -9,8 +8,7 @@ export class SearchPage {
   selectedFacet = element.all(by.className('mat-chip'));
   idColumHeaderButton = element(by.buttonText('Id'));
 
-  constructor(private profile: string = 'demo') {
-  }
+  constructor(private profile: string = 'demo') {}
 
   navigateTo() {
     return browser.get(this.pageUrl);
@@ -37,7 +35,7 @@ export class SearchPage {
   }
 
   clickUploadButton() {
-    element(by.css('[appcustomtext=\'addContentItemButton\']')).click();
+    element(by.css('.cs-generic-header .mat-button')).click();
   }
 
   getHeaderToolbarText() {
@@ -77,7 +75,7 @@ export class SearchPage {
   goToEditPage(profile: string, editPageTitle: string, idRowIndex: number = 0) {
     this.getResultsByColumn('id').then(ids => {
       this.clickPartialLinkText(ids[idRowIndex]);
-      browser.wait(until.titleIs(editPageTitle));
+      browser.wait(ExpectedConditions.titleIs(editPageTitle));
       const editPage = new EditPage(profile, ids[idRowIndex]);
       expect(browser.getCurrentUrl()).toEqual(editPage.pageUrl);
     });

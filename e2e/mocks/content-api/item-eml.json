@@ -1,0 +1,22 @@
+{
+  "id": "987654",
+  "label": "eml file",
+  "metadata": {
+    "ProfileId": "Demo",
+    "Account": "demo-account",
+    "LastModifiedDate": 1515193032000,
+    "LastModifier": "edm-tester",
+    "OriginalFileName": "sample-email.eml",
+    "DocumentType": "email",
+    "ReleaseDate": 1515191492000,
+    "WebExtension": "pdf",
+    "RevisionId": "1",
+    "MimeType": "message/rfc822",
+    "ReceivedDate": 1515191352000,
+    "LastRevisionDate": 1515191492000,
+    "FileExtension": "eml",
+    "Filer": "edm-tester",
+    "FileSize": "35737",
+    "PublishStatus": "Draft"
+  }
+}
