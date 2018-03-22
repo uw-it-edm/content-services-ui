@@ -24,24 +24,22 @@ export class TimestampPickerComponent implements ControlValueAccessor, OnInit, O
 
   private componentDestroyed = new Subject();
 
-  private userOffset = moment().utcOffset();
-
-  private seattleOffset;
+  private userTimeZone = moment.tz.guess();
 
   formGroup: FormGroup;
   onTouched = () => {};
 
   constructor(private fb: FormBuilder) {}
 
-  private getSeattleOffset(): number {
-    return moment()
-      .tz('America/Los_Angeles')
-      .utcOffset();
+  private getUserOffsetAtDate(date: Date): number {
+    return moment.tz(moment(date), this.userTimeZone).utcOffset();
+  }
+
+  private getSeattleOffset(date: Date): number {
+    return moment.tz(moment(date), 'America/Los_Angeles').utcOffset();
   }
 
   ngOnInit() {
-    this.seattleOffset = this.getSeattleOffset();
-
     this.formGroup = this.fb.group({
       internalDate: new FormControl()
     });
@@ -51,10 +49,14 @@ export class TimestampPickerComponent implements ControlValueAccessor, OnInit, O
       .takeUntil(this.componentDestroyed)
       .subscribe((date: Date) => {
         if (date) {
-          const shift = this.seattleOffset - this.userOffset;
+          // offset need to be calculated for the specified date date
+          const shift = this.getSeattleOffset(date) - this.getUserOffsetAtDate(date);
+
           const adjustedDate = moment(date)
+            .tz(this.userTimeZone)
             .subtract(shift, 'minutes')
             .valueOf();
+
           this.propagateChange(adjustedDate);
         }
       });
@@ -67,12 +69,12 @@ export class TimestampPickerComponent implements ControlValueAccessor, OnInit, O
 
   writeValue(value: any): void {
     if (value !== undefined && parseInt(value, 10) > 0) {
-      const shift = this.seattleOffset - this.userOffset;
-      const date = moment(value)
-        .utcOffset(this.getSeattleOffset())
-        .add(shift, 'minutes')
-        .toDate();
-      this.formGroup.controls['internalDate'].patchValue(date);
+      const date = moment(value);
+
+      const shift = this.getSeattleOffset(date) - this.getUserOffsetAtDate(date);
+
+      const shiftedDate = date.add(shift, 'minutes').toDate();
+      this.formGroup.controls['internalDate'].patchValue(shiftedDate);
     } else if (isNullOrUndefined(value)) {
       this.formGroup.controls['internalDate'].reset();
     }
