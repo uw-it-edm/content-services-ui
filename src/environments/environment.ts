@@ -6,6 +6,8 @@
 export const environment = {
   production: false,
 
+  GATracking: 'fakeCode',
+
   supportEmail: 'support@somedomain.com',
 
   tenantConfigGithubPath: '/uw-it-edm/content-services-ui-config/contents/dev',
