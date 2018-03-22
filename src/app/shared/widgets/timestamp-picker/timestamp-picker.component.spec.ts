@@ -3,6 +3,7 @@ import { TimestampPickerComponent } from './timestamp-picker.component';
 import { SharedModule } from '../../shared.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
+import * as moment from 'moment-timezone';
 
 describe('TimestampPickerComponent', () => {
   let component: TimestampPickerComponent;
@@ -58,6 +59,8 @@ describe('TimestampPickerComponent', () => {
 
     expect(el.value).toBe('11/21/2016');
 
-    expect(component.propagateChange).toHaveBeenCalledWith(1479715200000);
+    expect(component.propagateChange).toHaveBeenCalledWith(
+      moment.tz('2016-11-21 00:00', 'America/Los_Angeles').valueOf()
+    );
   });
 });
