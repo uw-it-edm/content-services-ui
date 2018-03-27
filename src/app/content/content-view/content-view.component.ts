@@ -59,10 +59,10 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   onContentObjectChanged(contentObject: ContentObject) {
     this.pageCount = 1;
     if (contentObject) {
-      const mode = contentObject.contentType === 'application/pdf' ? 'determinate' : 'indeterminate';
+      const mode = contentObject.contentType === 'pdf' ? 'determinate' : 'indeterminate';
       const displayType = contentObject.displayType;
       console.log('Display type: ' + displayType);
-      if (displayType === 'application/pdf' || displayType.startsWith('image/')) {
+      if (displayType === 'pdf' || displayType.startsWith('image/')) {
         this.progressService.start(mode, 'primary', contentObject.contentLength);
       }
     } else {

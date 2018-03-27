@@ -1,6 +1,6 @@
 <div [ngClass]="fullScreen ? 'full-screen' : ''" class="cs-content-toolbar">
     <mat-toolbar aria-label="Navigation of document content" role="toolbar">
-        <span *ngIf="contentType === 'application/pdf'" class="button-row">
+        <span *ngIf="contentType === 'pdf'" class="button-row">
             <span *ngIf="allowPageByPageMode">
               <button mat-icon-button (click)="toggleShowAll()" [matTooltip]="showAllValue ? 'Page by Page Mode' : 'Continuous Scrolling Mode'" role="button" >
                   <mat-icon>{{showAllValue ? 'tab' : 'system_update_alt'}}</mat-icon>
@@ -22,7 +22,7 @@
         </span>
 
         <span class="cs-fill-remaining-space"></span>
-        <span *ngIf="contentType === 'application/pdf'">
+        <span *ngIf="contentType === 'pdf'">
             <mat-form-field class="medium-field">
                 <mat-select [ngModel]="zoomFactor" (ngModelChange)="changeZoomFactor($event)" class="cs-zoom-factor-select" name="zoomFactor" ngDefaultControl>
                     <mat-option value="automatic-zoom">Automatic Zoom</mat-option>
@@ -39,9 +39,9 @@
                 </mat-select>
             </mat-form-field>
         </span>
-        <span *ngIf="contentType === 'application/pdf'" class="cs-fill-remaining-space"></span>
+        <span *ngIf="contentType === 'pdf'" class="cs-fill-remaining-space"></span>
 
-        <span *ngIf="pageCount && !showAllValue && contentType === 'application/pdf'" class="content-paginator" aria-label="Page within Document">
+        <span *ngIf="pageCount && !showAllValue && contentType === 'pdf'" class="content-paginator" aria-label="Page within Document">
             <span>
                 <mat-form-field class="narrow-field">
                     <input matInput [(ngModel)]="pageNumberEntry" (ngModelChange)="changePageNumber($event)" ngDefaultControl name="pageNumber" type="text">
