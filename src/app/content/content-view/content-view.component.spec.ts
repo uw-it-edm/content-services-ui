@@ -39,7 +39,7 @@ describe('ContentViewComponent', () => {
     defaultContentItem = new ContentItem();
     defaultContentItem.id = '1';
     defaultContentItem.label = 'test label';
-    defaultContentItem.metadata['MimeType'] = 'application/pdf';
+    defaultContentItem.metadata['WebExtension'] = 'pdf';
 
     contentObject = new ContentObject(defaultContentItem);
     component.contentObject = contentObject;

@@ -256,9 +256,9 @@
   version "6.0.94"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.94.tgz#70e509b07ed9f961c8f6f4a73a61d922be5029a7"
 
-"@types/node@~9.4.0":
-  version "9.4.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.4.0.tgz#b85a0bcf1e1cc84eb4901b7e96966aedc6f078d1"
+"@types/node@~9.6.0":
+  version "9.6.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.0.tgz#d3480ee666df9784b1001a1872a2f6ccefb6c2d7"
 
 "@types/pdfjs-dist@^0.1.1":
   version "0.1.1"
@@ -4164,9 +4164,9 @@ karma-coverage-istanbul-reporter@^1.2.1:
     istanbul-api "^1.1.8"
     minimatch "^3.0.4"
 
-karma-jasmine-html-reporter@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/karma-jasmine-html-reporter/-/karma-jasmine-html-reporter-0.2.2.tgz#48a8e5ef18807617ee2b5e33c1194c35b439524c"
+karma-jasmine-html-reporter@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/karma-jasmine-html-reporter/-/karma-jasmine-html-reporter-1.0.0.tgz#0515b9ea0440c038c2091b13802c8ea638cc847a"
   dependencies:
     karma-jasmine "^1.0.2"
 

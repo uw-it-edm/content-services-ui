@@ -8,7 +8,8 @@ export class EditPage {
   public pageUrl = `${this.profileUrl}/${this.id}`;
   public pdfFilePath = path.resolve(__dirname, '../mocks/files/sample-file.pdf');
   public inputField = element(by.id('mat-input-0'));
-  public downloadButton = element(by.partialButtonText('file_download'));
+  public pdfViewerDownloadButton = element(by.buttonText('file_download'));
+  public downloadButton = element(by.partialButtonText('Download'));
   public nextItemButton = element(by.id('nextItem'));
   public dateInputField = element.all(by.css('app-timestamp-picker input'));
 
