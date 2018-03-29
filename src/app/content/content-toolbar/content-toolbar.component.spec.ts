@@ -21,7 +21,7 @@ describe('ContentToolbarComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ContentToolbarComponent);
     component = fixture.componentInstance;
-    component.contentType = 'application/pdf';
+    component.contentType = 'pdf';
     component.pageCount = 10;
     fixture.detectChanges();
   });

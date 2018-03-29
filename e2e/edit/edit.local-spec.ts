@@ -72,10 +72,16 @@ describe('Edit Page', () => {
     expect(page.downloadButton.isEnabled()).toBeTruthy();
   });
 
-  it('should display pdf viewer for web viewable eml file', () => {
+  it('should display pdf viewer with download button for web viewable eml file', () => {
     page.navigateTo('item-eml');
     browser.wait(ExpectedConditions.titleIs(demoConfig.pages.edit.pageName));
 
     expect(page.getPdfViewer().isDisplayed()).toBeTruthy();
+    expect(page.pdfViewerDownloadButton.isEnabled()).toBeTruthy();
+  });
+
+  it('should display pdf viewer with download button for pdf file', () => {
+    expect(page.getPdfViewer().isDisplayed()).toBeTruthy();
+    expect(page.pdfViewerDownloadButton.isEnabled()).toBeTruthy();
   });
 });
