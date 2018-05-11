@@ -171,12 +171,12 @@
   dependencies:
     tslib "^1.7.1"
 
-"@angular/platform-server@^5.0.0":
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/@angular/platform-server/-/platform-server-5.1.1.tgz#f03cd86316a3dfd0f604dd9526fc983583366778"
+"@angular/platform-server@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@angular/platform-server/-/platform-server-6.0.1.tgz#90aeaa765bf44334561bc0a0209d3800e3881ae0"
   dependencies:
-    domino "^1.0.29"
-    tslib "^1.7.1"
+    domino "^2.0.1"
+    tslib "^1.9.0"
     xhr2 "^0.1.4"
 
 "@angular/router@^5.0.0":
@@ -2058,9 +2058,9 @@ domhandler@2.1:
   dependencies:
     domelementtype "1"
 
-domino@^1.0.29:
-  version "1.0.30"
-  resolved "https://registry.yarnpkg.com/domino/-/domino-1.0.30.tgz#54a4154ecae968616680f8feba3cedff355c71f4"
+domino@^2.0.1:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/domino/-/domino-2.0.2.tgz#fa2da6ace8381cf64089079470ee33c53901010f"
 
 domutils@1.1:
   version "1.1.6"
@@ -7341,6 +7341,10 @@ tsickle@^0.25.5:
 tslib@^1.7.1, tslib@^1.8.0, tslib@^1.8.1:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.8.1.tgz#6946af2d1d651a7b1863b531d6e5afa41aa44eac"
+
+tslib@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.9.0.tgz#e37a86fda8cbbaf23a057f473c9f4dc64e5fc2e8"
 
 tslint@~5.9.1:
   version "5.9.1"
