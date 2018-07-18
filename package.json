@@ -50,7 +50,7 @@
     "lodash": "^4.17.4",
     "moment": "^2.19.2",
     "moment-timezone": "^0.5.14",
-    "ng2-pdf-viewer": "5.1.0",
+    "ng2-pdf-viewer": "5.1.1",
     "pdfjs-dist": "^2.0.244",
     "rxjs": "^5.5.2",
     "web-animations-js": "^2.3.1",

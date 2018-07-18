@@ -5002,9 +5002,9 @@ netmask@~1.0.4:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/netmask/-/netmask-1.0.6.tgz#20297e89d86f6f6400f250d9f4f6b4c1945fcd35"
 
-ng2-pdf-viewer@5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/ng2-pdf-viewer/-/ng2-pdf-viewer-5.1.0.tgz#7a16910e5cfb73a0e0bc13b5b18e9013e983c5a8"
+ng2-pdf-viewer@5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/ng2-pdf-viewer/-/ng2-pdf-viewer-5.1.1.tgz#3e6b8f0bf5a757f7a273c3b13445085615f5434a"
   dependencies:
     "@types/pdfjs-dist" "^0.1.2"
     pdfjs-dist "2.0.550"
