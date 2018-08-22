@@ -141,6 +141,11 @@
           "options": {
             "protractorConfig": "./protractor.conf.js",
             "devServerTarget": "content-services-ui:serve"
+          },
+          "configurations": {
+            "travis": {
+              "devServerTarget": "content-services-ui:serve:travis"
+            }
           }
         },
         "lint": {
