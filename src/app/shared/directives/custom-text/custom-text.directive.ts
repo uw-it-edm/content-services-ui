@@ -5,8 +5,8 @@ import { isNullOrUndefined } from 'util';
 
 @Directive({ selector: '[appCustomText]' })
 export class CustomTextDirective implements OnChanges {
-  @Input('appCustomText') appCustomText: string;
-  @Input('defaultValue') defaultValue: string;
+  @Input() appCustomText: string;
+  @Input() defaultValue: string;
 
   customText: Map<string, CustomTextItem>;
 

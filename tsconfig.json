@@ -1,5 +1,8 @@
 {
   "compileOnSave": false,
+  "angularCompilerOptions": {
+    "preserveWhitespaces": false
+  },
   "compilerOptions": {
     "declaration": false,
     "emitDecoratorMetadata": true,
@@ -14,6 +17,8 @@
     "target": "es5",
     "typeRoots": [
       "node_modules/@types"
-    ]
+    ],
+    "module": "es2015",
+    "baseUrl": "./"
   }
 }

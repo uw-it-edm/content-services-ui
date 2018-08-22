@@ -266,6 +266,10 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
     return this.focused || !this.empty;
   }
 
+  get shouldLabelFloat() {
+    return this.focused || !this.empty;
+  }
+
   /** Whether this input is disabled. */
   get disabled() {
     return this.ngControl ? this.ngControl.disabled : this._disabled;
