@@ -4,10 +4,10 @@ import { Observable } from 'rxjs/Observable';
 import { environment } from '../../../environments/environment';
 import { UserService } from '../../user/shared/user.service';
 import { UrlUtilities } from '../../core/util/url-utilities';
-import { isNullOrUndefined } from 'util';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ProgressService } from '../../shared/providers/progress.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { isNullOrUndefined } from '../../core/util/node-utilities';
 
 @Injectable()
 export class ContentService {

@@ -9,11 +9,12 @@ import { SearchService } from '../shared/search.service';
 import { Subject } from 'rxjs/Subject';
 import { DataService } from '../../shared/providers/data.service';
 import { Sort } from '../shared/model/sort';
-import { isNullOrUndefined } from 'util';
+
 import { StudentSearchAutocomplete } from '../shared/search-autocomplete/student-search-autocomplete';
 import { StudentService } from '../../shared/providers/student.service';
 import { SearchAutocomplete } from '../shared/search-autocomplete/search-autocomplete';
 import { NotificationService } from '../../shared/providers/notification.service';
+import { isNullOrUndefined } from '../../core/util/node-utilities';
 
 @Component({
   selector: 'app-search-page',

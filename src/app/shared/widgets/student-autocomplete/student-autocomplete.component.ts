@@ -33,7 +33,7 @@ import {
   mixinErrorState
 } from '@angular/material';
 import { FocusMonitor } from '@angular/cdk/a11y';
-import { isNullOrUndefined } from 'util';
+import { isNullOrUndefined } from '../../../core/util/node-utilities';
 
 // Boilerplate for applying mixins to StudentAutocompleteComponent.
 /** @docs-private */

@@ -3,7 +3,7 @@ import { Subject } from 'rxjs/Subject';
 import { ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import * as moment from 'moment-timezone';
-import { isNullOrUndefined } from 'util';
+import { isNullOrUndefined } from '../../../core/util/node-utilities';
 
 @Component({
   selector: 'app-timestamp-picker',

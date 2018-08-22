@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { SearchResults } from '../shared/model/search-result';
 import { SearchFilter } from '../shared/model/search-filter';
 import { Subject } from 'rxjs/Subject';
-import { isUndefined } from 'util';
+import { isUndefined } from '../../core/util/node-utilities';
 
 @Component({
   selector: 'app-facets-box',

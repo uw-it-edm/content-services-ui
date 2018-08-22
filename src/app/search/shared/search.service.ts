@@ -16,7 +16,7 @@ import { Sort } from './model/sort';
 import { Field } from '../../core/shared/model/field';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DataService } from '../../shared/providers/data.service';
-import { isNullOrUndefined } from 'util';
+import { isNullOrUndefined } from '../../core/util/node-utilities';
 
 @Injectable()
 export class SearchService {
