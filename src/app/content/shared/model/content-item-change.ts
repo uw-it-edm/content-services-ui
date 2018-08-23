@@ -1,8 +1,7 @@
 import { ContentItem } from './content-item';
 import { Observable } from 'rxjs/Observable';
-import { isNullOrUndefined } from 'util';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Subject } from 'rxjs/Subject';
+import { isNullOrUndefined } from '../../../core/util/node-utilities';
 
 export class ContentItemChange {
   private item: ContentItem;

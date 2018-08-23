@@ -1,7 +1,7 @@
 import { SearchFilter } from './search-filter';
 import { PaginatorConfig } from './paginator-config';
 import { Sort } from './sort';
-import { isNullOrUndefined } from 'util';
+import { isNullOrUndefined } from '../../../core/util/node-utilities';
 
 export class SearchModel {
   stringQuery: string;
