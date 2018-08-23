@@ -1,4 +1,4 @@
-import { isNullOrUndefined } from 'util';
+import { isNullOrUndefined } from '../../../util/node-utilities';
 
 export class FieldOption {
   private _value: string;

@@ -6,7 +6,7 @@ import { SearchResults } from './search-result';
 import { ResultRow } from './result-row';
 import { MatPaginator, MatSort, SortDirection } from '@angular/material';
 import { SearchModel } from './search-model';
-import { isNullOrUndefined } from 'util';
+import { isNullOrUndefined } from '../../../core/util/node-utilities';
 
 export class SearchDataSource extends DataSource<ResultRow> {
   constructor(

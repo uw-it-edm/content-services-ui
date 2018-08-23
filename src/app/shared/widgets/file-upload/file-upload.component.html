@@ -18,10 +18,10 @@
 
 <div *ngIf="dropzone" class="cs-file-upload">
   <div [formGroup]="formGroup">
-    <div class="mat-input-container mat-form-field">
-      <div class="mat-input-wrapper mat-form-field-wrapper">
-        <div class="mat-input-flex mat-form-field-flex">
-          <div class="mat-input-infix mat-form-field-infix">
+    <div class="mat-form-field mat-form-field">
+      <div class="mat-form-field-wrapper mat-form-field-wrapper">
+        <div class="mat-form-field-flex mat-form-field-flex">
+          <div class="mat-form-field-infix mat-form-field-infix">
             <div [ngClass]="'drop-zone'" id="drop-zone"
                  (drop)="onDrop($event)"
                  (dragover)="onDragOver($event)">

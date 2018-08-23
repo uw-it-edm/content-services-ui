@@ -2,7 +2,6 @@ import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { DataService } from '../../shared/providers/data.service';
-import { isNullOrUndefined } from 'util';
 import { ContentItem } from '../shared/model/content-item';
 
 @Component({

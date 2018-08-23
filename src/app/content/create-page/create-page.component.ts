@@ -12,8 +12,8 @@ import { ContentViewComponent } from '../content-view/content-view.component';
 import { DynamicComponentDirective } from '../shared/directive/dynamic-component.directive';
 import { ContentObject } from '../shared/model/content-object';
 import { ContentObjectListComponent } from '../content-object-list/content-object-list.component';
-import { isNullOrUndefined } from 'util';
 import { NotificationService } from '../../shared/providers/notification.service';
+import { isNullOrUndefined } from '../../core/util/node-utilities';
 
 @Component({
   selector: 'app-create-page',

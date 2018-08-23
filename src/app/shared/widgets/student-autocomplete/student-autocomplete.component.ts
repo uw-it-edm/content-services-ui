@@ -33,7 +33,7 @@ import {
   mixinErrorState
 } from '@angular/material';
 import { FocusMonitor } from '@angular/cdk/a11y';
-import { isNullOrUndefined } from 'util';
+import { isNullOrUndefined } from '../../../core/util/node-utilities';
 
 // Boilerplate for applying mixins to StudentAutocompleteComponent.
 /** @docs-private */
@@ -263,6 +263,10 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
 
   @HostBinding('class.floating')
   get shouldPlaceholderFloat() {
+    return this.focused || !this.empty;
+  }
+
+  get shouldLabelFloat() {
     return this.focused || !this.empty;
   }
 

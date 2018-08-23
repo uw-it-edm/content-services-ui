@@ -4,12 +4,12 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { UserService } from '../../user/shared/user.service';
 import { Observable } from 'rxjs/Observable';
 import { StudentSearchResults } from '../shared/model/student-search-results';
-import { isNullOrUndefined } from 'util';
 import { StudentSearchModel } from '../shared/model/student-search-model';
 import { CacheObservableDecorator } from '../decorators/cache-observable.decorator';
 import { Student } from '../shared/model/student';
 import 'rxjs/add/operator/mergeMap';
 import { isNumeric } from 'rxjs/util/isNumeric';
+import { isNullOrUndefined } from '../../core/util/node-utilities';
 
 @Injectable()
 export class StudentService {

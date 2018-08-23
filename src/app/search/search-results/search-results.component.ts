@@ -5,11 +5,11 @@ import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { Observable } from 'rxjs/Observable';
 import { SearchDataSource } from '../shared/model/search-datasource.model';
 import { MatPaginator, MatSort, PageEvent, Sort, SortDirection } from '@angular/material';
-import { isNullOrUndefined } from 'util';
 import { PaginatorConfig } from '../shared/model/paginator-config';
 import { Subject } from 'rxjs/Subject';
 import { DataService } from '../../shared/providers/data.service';
 import { SearchUtility } from '../shared/search-utility';
+import { isNullOrUndefined } from '../../core/util/node-utilities';
 
 @Component({
   selector: 'app-search-results',
