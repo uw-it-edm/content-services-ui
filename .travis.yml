@@ -13,9 +13,6 @@ before_install:
   - export PATH="$HOME/.yarn/bin:$PATH"
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
-before_script: greenkeeper-lockfile-update
-after_script: greenkeeper-lockfile-upload
-
 jobs:
   include:
     - stage: test
