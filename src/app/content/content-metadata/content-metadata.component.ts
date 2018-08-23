@@ -3,9 +3,9 @@ import { ContentItem } from '../shared/model/content-item';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs/Subject';
-import { isNullOrUndefined } from 'util';
 import 'rxjs/add/operator/startWith';
 import { Field } from '../../core/shared/model/field';
+import { isNullOrUndefined } from '../../core/util/node-utilities';
 
 @Component({
   selector: 'app-content-metadata',

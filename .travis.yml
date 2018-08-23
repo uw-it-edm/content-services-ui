@@ -34,9 +34,9 @@ jobs:
       env:
         job=yarn e2e-local
     - stage: test
-      script: yarn build --prod --env=travis
+      script: yarn build --prod --configuration=travis
       env:
-        job=yarn build --prod --env=travis
+        job=yarn build --prod --configuration=travis
 
 after_success:
   - yarn run coveralls

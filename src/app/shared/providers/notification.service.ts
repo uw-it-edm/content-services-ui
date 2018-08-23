@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarVerticalPosition } from '@angular/material';
 import { NotificationComponent } from '../widgets/notification/notification.component';
-import { isNullOrUndefined } from 'util';
+import { isNullOrUndefined } from '../../core/util/node-utilities';
 
 export class NotificationOptions {
   constructor(

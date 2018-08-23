@@ -17,8 +17,8 @@ import { DynamicComponentDirective } from '../shared/directive/dynamic-component
 import { UserService } from '../../user/shared/user.service';
 import { ContentObject } from '../shared/model/content-object';
 import { ContentObjectListComponent } from '../content-object-list/content-object-list.component';
-import { isNullOrUndefined } from 'util';
 import { NotificationService } from '../../shared/providers/notification.service';
+import { isNullOrUndefined } from '../../core/util/node-utilities';
 
 @Component({
   selector: 'app-edit-page',

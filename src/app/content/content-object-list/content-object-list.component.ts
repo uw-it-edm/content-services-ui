@@ -11,7 +11,6 @@ import { Subject } from 'rxjs/Subject';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../user/shared/user.service';
-import { isUndefined } from 'util';
 import { NotificationService } from '../../shared/providers/notification.service';
 
 @Component({
