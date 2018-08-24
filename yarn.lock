@@ -3783,9 +3783,9 @@ jasmine-diff@^0.1.3:
   dependencies:
     diff "^3.2.0"
 
-jasmine-reporters@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/jasmine-reporters/-/jasmine-reporters-2.3.0.tgz#eb8cb7359658572a87eef4aa088a363036f3792a"
+jasmine-reporters@^2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/jasmine-reporters/-/jasmine-reporters-2.3.2.tgz#898818ffc234eb8b3f635d693de4586f95548d43"
   dependencies:
     mkdirp "^0.5.1"
     xmldom "^0.1.22"
