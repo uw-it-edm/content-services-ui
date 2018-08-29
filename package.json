@@ -52,7 +52,7 @@
     "lodash": "^4.17.10",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.14",
-    "ng2-pdf-viewer": "5.1.1",
+    "ng2-pdf-viewer": "5.1.2",
     "pdfjs-dist": "^2.0.550",
     "rxjs": "^6.2.2",
     "rxjs-compat": "^6.0.0-rc.0",
