@@ -1,4 +1,5 @@
 # Content Services UI
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=uw-it-edm/content-services-ui)](https://dependabot.com)
 
 develop: [![Build Status](https://travis-ci.org/uw-it-edm/content-services-ui.svg?branch=develop)](https://travis-ci.org/uw-it-edm/content-services-ui) [![Coverage Status](https://coveralls.io/repos/github/uw-it-edm/content-services-ui/badge.svg?branch=develop)](https://coveralls.io/github/uw-it-edm/content-services-ui?branch=develop) 
 master: [![Build Status](https://travis-ci.org/uw-it-edm/content-services-ui.svg?branch=master)](https://travis-ci.org/uw-it-edm/content-services-ui)
