@@ -506,9 +506,9 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
-angulartics2@^6.0.0:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/angulartics2/-/angulartics2-6.2.0.tgz#52eab311be74c9d055632e385988645c233a2c0f"
+angulartics2@^6.3.0:
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/angulartics2/-/angulartics2-6.3.0.tgz#85107238fe021e1e1e5cb492c5979aed829a1240"
   dependencies:
     tslib "^1.9.0"
 
