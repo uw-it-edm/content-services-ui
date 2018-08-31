@@ -185,9 +185,9 @@
   dependencies:
     tslib "^1.9.0"
 
-"@angular/language-service@^6.1.4":
-  version "6.1.4"
-  resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-6.1.4.tgz#946a70e1afbf83dbae4c31b64784a5a77ae07e53"
+"@angular/language-service@^6.1.6":
+  version "6.1.6"
+  resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-6.1.6.tgz#c9d549abd3f6ffcaad929fb0406b53314dd64ebc"
 
 "@angular/material@^6.4.6":
   version "6.4.6"
@@ -1598,18 +1598,9 @@ cosmiconfig@^4.0.0:
     parse-json "^4.0.0"
     require-from-string "^2.0.1"
 
-coveralls@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/coveralls/-/coveralls-3.0.2.tgz#f5a0bcd90ca4e64e088b710fa8dda640aea4884f"
-
 cosmiconfig@^5.0.2:
   version "5.0.6"
   resolved "https://registry.yarnpkg.com/cosmiconfig/-/cosmiconfig-5.0.6.tgz#dca6cf680a0bd03589aff684700858c81abeeb39"
-  dependencies:
-    is-directory "^0.3.1"
-    js-yaml "^3.9.0"
-    parse-json "^4.0.0"
-
   dependencies:
     growl "~> 1.10.0"
     js-yaml "^3.11.0"
@@ -1617,6 +1608,10 @@ cosmiconfig@^5.0.2:
     log-driver "^1.2.7"
     minimist "^1.2.0"
     request "^2.85.0"
+
+coveralls@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/coveralls/-/coveralls-3.0.2.tgz#f5a0bcd90ca4e64e088b710fa8dda640aea4884f"
 
 create-ecdh@^4.0.0:
   version "4.0.3"
