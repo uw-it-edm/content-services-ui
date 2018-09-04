@@ -161,9 +161,9 @@
   dependencies:
     tslib "^1.9.0"
 
-"@angular/core@^6.1.4":
-  version "6.1.4"
-  resolved "https://registry.yarnpkg.com/@angular/core/-/core-6.1.4.tgz#2602ecc031bbb4ad968a7db78786017e92d19b98"
+"@angular/core@^6.1.6":
+  version "6.1.6"
+  resolved "https://registry.yarnpkg.com/@angular/core/-/core-6.1.6.tgz#130758ad49cad5f6f075693f6496bbc7d510db3b"
   dependencies:
     tslib "^1.9.0"
 
