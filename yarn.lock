@@ -151,9 +151,9 @@
   dependencies:
     tslib "^1.9.0"
 
-"@angular/flex-layout@^6.0.0-beta.17":
-  version "6.0.0-beta.17"
-  resolved "https://registry.yarnpkg.com/@angular/flex-layout/-/flex-layout-6.0.0-beta.17.tgz#26a0ead768ac45d955501a1259f51f4451e8d4db"
+"@angular/flex-layout@^6.0.0-beta.18":
+  version "6.0.0-beta.18"
+  resolved "https://registry.yarnpkg.com/@angular/flex-layout/-/flex-layout-6.0.0-beta.18.tgz#fdf9d17a45989d0bf0dd1ad466eea503da618276"
   dependencies:
     tslib "^1.7.1"
 
