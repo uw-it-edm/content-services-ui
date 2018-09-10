@@ -35,7 +35,6 @@ exports.config = {
       }
     }
   ],
-  // seleniumAddress: process.env.seleniumAddress,
   directConnect: true,
   baseUrl: process.env.baseUrl,
   framework: 'jasmine2',
