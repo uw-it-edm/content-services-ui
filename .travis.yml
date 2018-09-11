@@ -36,8 +36,6 @@ jobs:
 
 after_success:
   - yarn run coveralls
-  - yarn mock-services
-  - yarn start --configuration=travis
   - yarn run lighthouse http://localhost:4200/demo/tab-search
 
 notifications:
