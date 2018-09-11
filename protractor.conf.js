@@ -29,10 +29,13 @@ exports.config = {
   ],
   multiCapabilities: [
     {
-      'browserName': 'chrome'
+      'browserName': 'chrome',
+      chromeOptions: {
+        args: ["--headless", "--disable-gpu", "--window-size=1280,1024"]
+      }
     }
   ],
-  seleniumAddress: process.env.seleniumAddress,
+  directConnect: true,
   baseUrl: process.env.baseUrl,
   framework: 'jasmine2',
   jasmineNodeOpts: {
