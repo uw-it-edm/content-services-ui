@@ -1660,16 +1660,20 @@ cosmiconfig@^5.0.2:
   version "5.0.6"
   resolved "https://registry.yarnpkg.com/cosmiconfig/-/cosmiconfig-5.0.6.tgz#dca6cf680a0bd03589aff684700858c81abeeb39"
   dependencies:
+    is-directory "^0.3.1"
+    js-yaml "^3.9.0"
+    parse-json "^4.0.0"
+
+coveralls@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/coveralls/-/coveralls-3.0.2.tgz#f5a0bcd90ca4e64e088b710fa8dda640aea4884f"
+  dependencies:
     growl "~> 1.10.0"
     js-yaml "^3.11.0"
     lcov-parse "^0.0.10"
     log-driver "^1.2.7"
     minimist "^1.2.0"
     request "^2.85.0"
-
-coveralls@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/coveralls/-/coveralls-3.0.2.tgz#f5a0bcd90ca4e64e088b710fa8dda640aea4884f"
 
 create-ecdh@^4.0.0:
   version "4.0.3"
@@ -4123,6 +4127,13 @@ lie@~3.1.0:
   dependencies:
     immediate "~3.0.5"
 
+"lighthouse-ci@git+https://github.com/ebidel/lighthouse-ci.git":
+  version "0.0.2"
+  resolved "git+https://github.com/ebidel/lighthouse-ci.git#94bb415ae380dc50383ad600d790738f8f8aef11"
+  dependencies:
+    minimist "^1.2.0"
+    node-fetch "^2.2.0"
+
 lint-staged@^7.2.2:
   version "7.2.2"
   resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-7.2.2.tgz#0983d55d497f19f36d11ff2c8242b2f56cc2dd05"
@@ -4751,6 +4762,10 @@ no-case@^2.2.0:
 node-ensure@^0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/node-ensure/-/node-ensure-0.0.0.tgz#ecae764150de99861ec5c810fd5d096b183932a7"
+
+node-fetch@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.2.0.tgz#4ee79bde909262f9775f731e3656d0db55ced5b5"
 
 node-forge@0.7.5:
   version "0.7.5"
