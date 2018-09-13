@@ -55,7 +55,7 @@
     "ng2-pdf-viewer": "5.1.2",
     "pdfjs-dist": "^2.0.550",
     "rxjs": "^6.2.2",
-    "rxjs-compat": "^6.0.0-rc.0",
+    "rxjs-compat": "^6.3.2",
     "web-animations-js": "^2.3.1",
     "zone.js": "^0.8.26"
   },
