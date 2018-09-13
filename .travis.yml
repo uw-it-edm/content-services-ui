@@ -13,6 +13,11 @@ before_install:
   - export PATH="$HOME/.yarn/bin:$PATH"
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
+stage:
+- test
+- coveralls
+- lighthouse
+
 jobs:
   include:
     - stage: test
@@ -33,10 +38,14 @@ jobs:
       script: yarn build --prod --configuration=travis
       env:
         job=yarn build --prod --configuration=travis
-
-after_success:
-  - yarn run coveralls
-  - ./run_lighthouse.sh
+    - stage: coveralls
+      script: yarn run coveralls
+      env:
+        job=yarn run coveralls
+    - stage: lighthouse
+      script: chmod +x run_lightouse.sh && ./run_lighthouse.sh
+      env:
+        job=chmod +x run_lightouse.sh && ./run_lighthouse.sh
 
 notifications:
   email: false
