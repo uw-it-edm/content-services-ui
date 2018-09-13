@@ -36,7 +36,7 @@ jobs:
 
 after_success:
   - yarn run coveralls
-  - yarn run lighthouse http://localhost:4200/demo/tab-search
+  - ./run_lighthouse.sh
 
 notifications:
   email: false
