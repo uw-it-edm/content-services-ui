@@ -8,7 +8,7 @@ let snackBarSpy: Spy;
 
 describe('NotificationService', () => {
   beforeEach(() => {
-    snackBar = new MatSnackBar(null, null, null, null, null);
+    snackBar = new MatSnackBar(null, null, null, null, null, null);
     notificationService = new NotificationService(snackBar);
     snackBarSpy = spyOn(snackBar, 'openFromComponent');
   });

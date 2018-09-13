@@ -1,12 +1,12 @@
 import { Directive, ElementRef, Input, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
 import { CustomTextItem } from '../../../core/shared/model/config';
 import { ConfigResolver } from '../../../routing/shared/config-resolver.service';
-import { isNullOrUndefined } from 'util';
+import { isNullOrUndefined } from '../../../core/util/node-utilities';
 
 @Directive({ selector: '[appCustomText]' })
 export class CustomTextDirective implements OnChanges {
-  @Input('appCustomText') appCustomText: string;
-  @Input('defaultValue') defaultValue: string;
+  @Input() appCustomText: string;
+  @Input() defaultValue: string;
 
   customText: Map<string, CustomTextItem>;
 

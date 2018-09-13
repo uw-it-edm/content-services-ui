@@ -7,7 +7,7 @@ export class FocusDirective implements AfterContentChecked {
   private element: HTMLElement;
   private hasFocused = false;
 
-  @Input('appFocus') appFocus: boolean;
+  @Input() appFocus: boolean;
 
   constructor(element: ElementRef) {
     this.element = element.nativeElement;

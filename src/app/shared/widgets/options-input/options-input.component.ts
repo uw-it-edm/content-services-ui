@@ -29,10 +29,10 @@ import {
   MatSelectChange,
   mixinErrorState
 } from '@angular/material';
-import { isNullOrUndefined } from 'util';
 import { Field } from '../../../core/shared/model/field';
 import { FieldOption } from '../../../core/shared/model/field/field-option';
 import { FocusMonitor } from '@angular/cdk/a11y';
+import { isNullOrUndefined } from '../../../core/util/node-utilities';
 
 // Boilerplate for applying mixins to OptionsInputComponent.
 /** @docs-private */

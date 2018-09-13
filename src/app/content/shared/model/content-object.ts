@@ -1,5 +1,5 @@
 import { ContentItem } from './content-item';
-import { isNullOrUndefined } from 'util';
+import { isNullOrUndefined } from '../../../core/util/node-utilities';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 export class ContentObject {

@@ -13,8 +13,7 @@ const setJasmineReporter = function () {
                                                                 savePath: testReportsPath,
                                                                 filePrefix: browserName
                                                                             + '-xmloutput',
-                                                                modifySuiteName: function (generatedSuiteName,
-                                                                                           suite) {
+                                                                modifySuiteName: function (generatedSuiteName) {
                                                                   return browserName + ' - '
                                                                          + generatedSuiteName;
                                                                 }
@@ -24,7 +23,7 @@ const setJasmineReporter = function () {
 };
 
 exports.config = {
-  allScriptsTimeout: 60000,
+  allScriptsTimeout: 1200000,
   specs: [
     './e2e/**/*.e2e-spec.ts'
   ],
