@@ -10,7 +10,7 @@ function wait_for_serve() {
   max_attempts=10
 
   echo "Waiting for app to launch..."
-  until $(curl --output /dev/null --silent --head --fail $HOST:$PORT); do
+  until $(curl --output /dev/null --silent --head --fail ${HOST}:${PORT}); do
       if [ ${attempt_counter} -eq ${max_attempts} ];then
         echo "App launch failed. Quiting."
         exit 1
@@ -36,8 +36,8 @@ ng serve --configuration=travis &
 wait_for_serve
 
 echo "Run lighthouse..."
-yarn run lighthouse $HOST:$PORT/demo/tab-search
-yarn run lighthouse $HOST:$PORT/demo/create
-yarn run lighthouse $HOST:$PORT/demo/edit/123456
+yarn run lighthouse ${HOST}:${PORT}/demo/tab-search
+yarn run lighthouse ${HOST}:${PORT}/demo/create
+yarn run lighthouse ${HOST}:${PORT}/demo/edit/123456
 
 exit
