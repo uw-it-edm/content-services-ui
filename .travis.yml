@@ -13,29 +13,34 @@ before_install:
   - export PATH="$HOME/.yarn/bin:$PATH"
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
+stage:
+- test
+- lighthouse
+
 jobs:
   include:
-    - stage: test
-      script: yarn run test-cover
+#    - stage: test
+#      script: yarn run test-cover && yarn run coveralls
+#      env:
+#        - job=yarn run test-cover && yarn run coveralls
+#        - TZ=America/Los_Angeles
+#    - stage: test
+#      script: yarn test
+#      env:
+#        - job=yarn test
+#        - TZ=Europe/Brussels
+#    - stage: test
+#      script: yarn e2e-local
+#      env:
+#        job=yarn e2e-local
+#    - stage: test
+#      script: yarn build --prod --configuration=travis
+#      env:
+#        job=yarn build --prod --configuration=travis
+    - stage: lighthouse
+      script: chmod +x run_lighthouse.sh && ./run_lighthouse.sh
       env:
-        - job=yarn run test-cover
-        - TZ=America/Los_Angeles
-    - stage: test
-      script: yarn test
-      env:
-        - job=yarn test
-        - TZ=Europe/Brussels
-    - stage: test
-      script: yarn e2e-local
-      env:
-        job=yarn e2e-local
-    - stage: test
-      script: yarn build --prod --configuration=travis
-      env:
-        job=yarn build --prod --configuration=travis
-
-after_success:
-  - yarn run coveralls
+        job=chmod +x run_lighthouse.sh && ./run_lighthouse.sh
 
 notifications:
   email: false
