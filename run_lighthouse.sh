@@ -16,7 +16,7 @@ function wait_for_serve() {
         exit 1
       fi
 
-      attempt_counter=$(($attempt_counter+1))
+      attempt_counter=$((attempt_counter+1))
       sleep 5
   done
   echo "App launched successfully."
