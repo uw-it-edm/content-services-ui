@@ -37,5 +37,7 @@ wait_for_serve
 
 echo "Run lighthouse..."
 yarn run lighthouse $HOST:$PORT/demo/tab-search
+yarn run lighthouse $HOST:$PORT/demo/create
+yarn run lighthouse $HOST:$PORT/demo/edit/123456
 
 exit
