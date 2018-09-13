@@ -15,15 +15,14 @@ before_install:
 
 stage:
 - test
-- coveralls
 - lighthouse
 
 jobs:
   include:
     - stage: test
-      script: yarn run test-cover
+      script: yarn run test-cover && yarn run coveralls 
       env:
-        - job=yarn run test-cover
+        - job=yarn run test-cover && yarn run coveralls
         - TZ=America/Los_Angeles
     - stage: test
       script: yarn test
@@ -38,10 +37,6 @@ jobs:
       script: yarn build --prod --configuration=travis
       env:
         job=yarn build --prod --configuration=travis
-    - stage: coveralls
-      script: yarn run coveralls
-      env:
-        job=yarn run coveralls
     - stage: lighthouse
       script: chmod +x run_lightouse.sh && ./run_lighthouse.sh
       env:
