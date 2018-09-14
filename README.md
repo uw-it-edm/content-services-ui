@@ -1,4 +1,5 @@
 # Content Services UI
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d024952d66a04338b330808b4b255048)](https://www.codacy.com/app/uw-it-edm/content-services-ui?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=uw-it-edm/content-services-ui&amp;utm_campaign=Badge_Grade)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=uw-it-edm/content-services-ui)](https://dependabot.com)
 
 develop: 
