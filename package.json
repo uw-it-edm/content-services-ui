@@ -5,6 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start-local": "ng serve --configuration=local --disable-host-check",
     "build": "ng build",
     "test": "ng test --watch=false --sourceMap=false",
     "test-cover": "rm -rf ./coverage && ng test --no-watch --code-coverage",

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -6,7 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  constructor() {}
+  constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.activatedRoute.queryParams.subscribe((params: Params) => {
+      const returnUrl = params['returnUrl'];
+
+      if (returnUrl !== '/') {
+        console.log('not root path, allowing redirect');
+      }
+    });
+  }
 }
