@@ -1,6 +1,6 @@
-import {ContentServicesUiPage} from './app.po';
-import {SearchPage} from '../search/search.po';
-import {browser} from 'protractor';
+import { ContentServicesUiPage } from './app.po';
+import { SearchPage } from '../search/search.po';
+import { browser } from 'protractor';
 
 const page = new ContentServicesUiPage();
 const TITLE = 'Content Services';
@@ -60,5 +60,15 @@ describe('App navigation', () => {
 
     page.switchTab(0);
     expect(page.getPageTitle()).toEqual(TITLE);
+  });
+
+  it('should redirect to returnUrl on login redirect', () => {
+    const profile = 'demo';
+    browser.get('/login?returnUrl=%2F' + profile + '%2Ftab-search');
+
+    let searchPage: SearchPage;
+    searchPage = new SearchPage(profile);
+
+    expect(page.getCurrentUrl()).toContain(searchPage.pageUrl);
   });
 });
