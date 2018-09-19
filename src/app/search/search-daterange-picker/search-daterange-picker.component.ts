@@ -47,12 +47,16 @@ export class SearchDaterangePickerComponent implements OnInit, OnDestroy {
       .takeUntil(this.componentDestroyed)
       .subscribe(selected => {
         if (selected) {
-          const startDate: Moment = selected.startDate;
-          const endDate: Moment = selected.endDate;
+          const startDate: Moment = this.createLosAngelesMoment(selected.startDate);
+          const endDate: Moment = this.createLosAngelesMoment(selected.endDate);
           this.addDateRangeFilter(startDate, endDate);
         }
       });
     this.loadPageConfig();
+  }
+
+  private createLosAngelesMoment(aMoment: Moment) {
+    return isNullOrUndefined(aMoment) ? null : moment.tz(aMoment.format('YYYY-MM-DD'), 'America/Los_Angeles');
   }
 
   private loadPageConfig(): void {
@@ -85,7 +89,7 @@ export class SearchDaterangePickerComponent implements OnInit, OnDestroy {
     const label = this.searchDaterangeConfig.filterLabel;
 
     if (!isNullOrUndefined(startDate) && !isNullOrUndefined(endDate)) {
-      const value = '[' + startDate.toISOString() + ' TO ' + endDate.toISOString() + ']';
+      const value = '[' + startDate.format('YYYY-MM-DD') + ' TO ' + endDate.format('YYYY-MM-DD') + ']';
       const searchFilter = new SearchFilter(key, value, label);
       console.log('adding new dateRangeFilter : ' + JSON.stringify(searchFilter));
 

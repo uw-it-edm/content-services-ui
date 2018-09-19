@@ -9,7 +9,7 @@ import { SearchDaterangeConfig } from '../../core/shared/model/search-daterange-
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Moment } from 'moment';
 import { SearchFilter } from '../shared/model/search-filter';
-import moment = require('moment');
+import * as moment from 'moment-timezone';
 
 describe('SearchDaterangePickerComponent', () => {
   let component: SearchDaterangePickerComponent;
@@ -49,7 +49,7 @@ describe('SearchDaterangePickerComponent', () => {
     fixture.detectChanges();
 
     expect(component.searchModel.filters.length).toBe(1);
-    expect(component.searchModel.filters[0].value).toBe('[2018-01-01T08:00:00.000Z TO 2018-02-01T08:00:00.000Z]');
+    expect(component.searchModel.filters[0].value).toBe('[2018-01-01 TO 2018-02-01]');
     expect(component.searchModel.filters[0].key).toBe('testKey');
     expect(component.searchModel.filters[0].label).toBe('testLabel');
   });
@@ -73,7 +73,7 @@ describe('SearchDaterangePickerComponent', () => {
     fixture.detectChanges();
 
     expect(component.searchModel.filters.length).toBe(1);
-    expect(component.searchModel.filters[0].value).toBe('[2018-01-01T08:00:00.000Z TO 2018-02-01T08:00:00.000Z]');
+    expect(component.searchModel.filters[0].value).toBe('[2018-01-01 TO 2018-02-01]');
     expect(component.searchModel.filters[0].key).toBe('testKey');
     expect(component.searchModel.filters[0].label).toBe('testLabel');
   });
@@ -81,7 +81,7 @@ describe('SearchDaterangePickerComponent', () => {
   it('should emit a searchModel', () => {
     component.dateRangeFilterAdded.subscribe((searchModel: SearchModel) => {
       expect(component.searchModel.filters.length).toBe(1);
-      expect(component.searchModel.filters[0].value).toBe('[2018-01-01T08:00:00.000Z TO 2018-02-01T08:00:00.000Z]');
+      expect(component.searchModel.filters[0].value).toBe('[2018-01-01 TO 2018-02-01]');
       expect(component.searchModel.filters[0].key).toBe('testKey');
       expect(component.searchModel.filters[0].label).toBe('testLabel');
     });
