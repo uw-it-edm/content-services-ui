@@ -43,13 +43,13 @@ describe('SearchDaterangePickerComponent', () => {
 
   it('should add daterange filter if not present', () => {
     const startDate: Moment = moment('01-01-2018', 'MM-DD-YYYY');
-    const endDate: Moment = moment('010-01-2018', 'MM-DD-YYYY');
+    const endDate: Moment = moment('02-01-2018', 'MM-DD-YYYY');
 
     component.formGroup.controls['internalDateRange'].patchValue({ startDate: startDate, endDate: endDate });
     fixture.detectChanges();
 
     expect(component.searchModel.filters.length).toBe(1);
-    expect(component.searchModel.filters[0].value).toBe('[2018-01-01T08:00:00.000Z TO 2018-01-01T08:00:00.000Z]');
+    expect(component.searchModel.filters[0].value).toBe('[2018-01-01T08:00:00.000Z TO 2018-02-01T08:00:00.000Z]');
     expect(component.searchModel.filters[0].key).toBe('testKey');
     expect(component.searchModel.filters[0].label).toBe('testLabel');
   });
@@ -68,12 +68,12 @@ describe('SearchDaterangePickerComponent', () => {
     component.searchModel.filters[0] = existingFilter;
 
     const startDate: Moment = moment('01-01-2018', 'MM-DD-YYYY');
-    const endDate: Moment = moment('010-01-2018', 'MM-DD-YYYY');
+    const endDate: Moment = moment('02-01-2018', 'MM-DD-YYYY');
     component.formGroup.controls['internalDateRange'].patchValue({ startDate: startDate, endDate: endDate });
     fixture.detectChanges();
 
     expect(component.searchModel.filters.length).toBe(1);
-    expect(component.searchModel.filters[0].value).toBe('[2018-01-01T08:00:00.000Z TO 2018-01-01T08:00:00.000Z]');
+    expect(component.searchModel.filters[0].value).toBe('[2018-01-01T08:00:00.000Z TO 2018-02-01T08:00:00.000Z]');
     expect(component.searchModel.filters[0].key).toBe('testKey');
     expect(component.searchModel.filters[0].label).toBe('testLabel');
   });
@@ -81,13 +81,13 @@ describe('SearchDaterangePickerComponent', () => {
   it('should emit a searchModel', () => {
     component.dateRangeFilterAdded.subscribe((searchModel: SearchModel) => {
       expect(component.searchModel.filters.length).toBe(1);
-      expect(component.searchModel.filters[0].value).toBe('[2018-01-01T08:00:00.000Z TO 2018-01-01T08:00:00.000Z]');
+      expect(component.searchModel.filters[0].value).toBe('[2018-01-01T08:00:00.000Z TO 2018-02-01T08:00:00.000Z]');
       expect(component.searchModel.filters[0].key).toBe('testKey');
       expect(component.searchModel.filters[0].label).toBe('testLabel');
     });
 
     const startDate: Moment = moment('01-01-2018', 'MM-DD-YYYY');
-    const endDate: Moment = moment('010-01-2018', 'MM-DD-YYYY');
+    const endDate: Moment = moment('02-01-2018', 'MM-DD-YYYY');
     component.formGroup.controls['internalDateRange'].patchValue({ startDate: startDate, endDate: endDate });
     fixture.detectChanges();
   });
