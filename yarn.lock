@@ -4786,6 +4786,12 @@ ng2-pdf-viewer@5.1.2:
     "@types/pdfjs-dist" "^0.1.2"
     pdfjs-dist "2.0.550"
 
+ngx-daterangepicker-material@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/ngx-daterangepicker-material/-/ngx-daterangepicker-material-1.2.3.tgz#9a78053af588d4a351dff74cbbf3a292daba7288"
+  dependencies:
+    tslib "^1.7.1"
+
 nice-try@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.4.tgz#d93962f6c52f2c1558c0fbda6d512819f1efe1c4"

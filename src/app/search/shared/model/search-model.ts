@@ -19,8 +19,17 @@ export class SearchModel {
     }
   }
 
+  addOrReplaceFilterForKey(newFilter: SearchFilter): void {
+    this.removeFilterForKey(newFilter.key);
+    this._filters.push(newFilter);
+  }
+
   removeFilter(filterToRemove: SearchFilter): void {
     this._filters = this._filters.filter(oldFilter => !oldFilter.equals(filterToRemove));
+  }
+
+  removeFilterForKey(keyToRemove: String) {
+    this._filters = this._filters.filter(oldFilter => !(oldFilter.key === keyToRemove));
   }
 
   hasFilterForKey(key: String): boolean {
