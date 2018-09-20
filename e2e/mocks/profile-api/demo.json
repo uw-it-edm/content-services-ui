@@ -58,7 +58,7 @@
             "order": "asc",
             "size": 5
           },
-          "metadata.DocumentYear": {
+          "metadata.PublishStatus": {
             "key": "metadata.PublishStatus.raw",
             "label": "Publish Status",
             "order": "asc",
