@@ -15,6 +15,7 @@ import { StudentService } from '../../shared/providers/student.service';
 import { SearchAutocomplete } from '../shared/search-autocomplete/search-autocomplete';
 import { NotificationService } from '../../shared/providers/notification.service';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-search-page',
@@ -27,10 +28,12 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   pageConfig: SearchPageConfig;
   page: string;
 
-  searchModel$ = new Subject<SearchModel>();
+  searchModel$;
   searchResults$ = new Subject<SearchResults>();
 
   searchAutocomplete: SearchAutocomplete;
+
+  initialSearchModel;
 
   constructor(
     private route: ActivatedRoute,
@@ -40,18 +43,31 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router,
     private studentService: StudentService,
     private notificationService: NotificationService
-  ) {}
+  ) {
+    this.searchModel$ = new BehaviorSubject<SearchModel>(new SearchModel());
+
+    console.log('init generic page component');
+    if (this.route.snapshot.queryParams != null) {
+      const initialSearch = this.route.snapshot.queryParams.s;
+      if (initialSearch != null) {
+        console.log('found initial search : ' + initialSearch);
+        this.initialSearchModel = SearchModel.fromJson(initialSearch);
+      }
+    } else {
+      this.initialSearchModel = new SearchModel();
+    }
+  }
 
   ngAfterViewInit(): void {
     const cachedSearch = this.dataService.get('currentSearch');
     if (cachedSearch) {
+      // TODO what is this ?
+      console.log('got cached search : ' + JSON.stringify(cachedSearch));
       this.searchModel$.next(Object.assign(new SearchModel(), cachedSearch));
     }
   }
 
   ngOnInit() {
-    console.log('init generic page component');
-
     this.route.paramMap.takeUntil(this.componentDestroyed).subscribe(params => {
       this.page = params.get('page');
       this.route.data.takeUntil(this.componentDestroyed).subscribe((data: { config: Config }) => {
@@ -87,7 +103,7 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
         );
       });
 
-      this.searchModel$.next(new SearchModel());
+      this.searchModel$.next(this.initialSearchModel);
     });
   }
 

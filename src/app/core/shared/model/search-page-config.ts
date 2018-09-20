@@ -12,6 +12,8 @@ export class SearchPageConfig implements PageConfig {
   fieldsToDisplay: Array<Field> = [];
   displayDocumentLabelField: boolean;
 
+  searchStateInURL = false;
+
   searchDaterangeConfig: SearchDaterangeConfig = new SearchDaterangeConfig();
   facetsConfig: FacetsConfig = new FacetsConfig();
   searchConfig: SearchConfig = new SearchConfig();
