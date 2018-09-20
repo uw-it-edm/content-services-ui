@@ -16,7 +16,7 @@ export const environment = {
 
   search_api: {
     url: 'http://localhost:12345',
-    context: '/search',
+    context: '/search/v1/',
     method: 'POST',
     authenticationHeader: null
   },
