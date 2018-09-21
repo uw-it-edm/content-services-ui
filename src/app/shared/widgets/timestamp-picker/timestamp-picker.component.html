@@ -4,6 +4,9 @@
          [matDatepicker]="picker"
          [placeholder]="placeholder"
          [attr.aria-label]="placeholder"
+         [attr.aria-disabled]="disabled"
+         [attr.aria-required]="required"
+
   >
   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
   <mat-datepicker #picker></mat-datepicker>
