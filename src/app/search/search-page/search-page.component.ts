@@ -28,12 +28,12 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   pageConfig: SearchPageConfig;
   page: string;
 
-  searchModel$;
+  searchModel$: BehaviorSubject<SearchModel>;
   searchResults$ = new Subject<SearchResults>();
 
   searchAutocomplete: SearchAutocomplete;
 
-  initialSearchModel;
+  initialSearchModel: SearchModel;
 
   constructor(
     private route: ActivatedRoute,
