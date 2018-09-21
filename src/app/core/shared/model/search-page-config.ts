@@ -8,9 +8,9 @@ import { SearchDaterangeConfig } from './search-daterange-config';
 
 export class SearchPageConfig implements PageConfig {
   pageName: string;
-  theme: string;
+  theme = 'uw-default';
   fieldsToDisplay: Array<Field> = [];
-  displayDocumentLabelField: boolean;
+  displayDocumentLabelField = false;
 
   searchStateInURL = false;
 
