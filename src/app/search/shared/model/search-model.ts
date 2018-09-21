@@ -33,7 +33,6 @@ export class SearchModel {
       console.log(
         'got pagination , page index : ' + json.pagination.pageIndex + ' page size :' + json.pagination.pageSize
       );
-      console.log('pageSizeOptions : ' + json.pagination.pageSizeOptions);
       const searchPagination = new SearchPagination();
       searchPagination.pageIndex = json.pagination.pageIndex;
       searchPagination.pageSize = json.pagination.pageSize;
