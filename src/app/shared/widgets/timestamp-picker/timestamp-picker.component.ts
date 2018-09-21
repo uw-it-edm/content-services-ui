@@ -20,7 +20,6 @@ const INTERNAL_FIELD_NAME = 'internalDate';
   ]
 })
 export class TimestampPickerComponent implements ControlValueAccessor, OnInit, OnDestroy {
-  c;
   private _required = false;
   private _disabled = false;
   private _placeholder: string;
