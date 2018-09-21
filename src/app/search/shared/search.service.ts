@@ -17,12 +17,19 @@ import { Field } from '../../core/shared/model/field';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DataService } from '../../shared/providers/data.service';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Injectable()
 export class SearchService {
   baseUrl = environment.search_api.url + environment.search_api.context;
 
-  constructor(private http: HttpClient, private userService: UserService, private dataService: DataService) {}
+  constructor(
+    private http: HttpClient,
+    private userService: UserService,
+    private dataService: DataService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) {}
 
   search(searchModel$: Observable<SearchModel>, pageConfig: SearchPageConfig): Observable<SearchResults> {
     return searchModel$
@@ -30,6 +37,14 @@ export class SearchService {
       .distinctUntilChanged()
       .switchMap(searchModel => {
         console.log('processing search request');
+
+        if (pageConfig.searchStateInURL) {
+          const queryParams: Params = Object.assign({}, this.activatedRoute.snapshot.queryParams);
+
+          queryParams['s'] = JSON.stringify(searchModel);
+
+          this.router.navigate([], { relativeTo: this.activatedRoute, queryParams: queryParams });
+        }
 
         this.dataService.set('currentSearch', searchModel);
 

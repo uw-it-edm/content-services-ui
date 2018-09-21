@@ -6,6 +6,8 @@
 export const environment = {
   production: false,
 
+  enableRouterTracing: false,
+
   GATracking: 'fakeCode',
 
   supportEmail: 'support@somedomain.com',

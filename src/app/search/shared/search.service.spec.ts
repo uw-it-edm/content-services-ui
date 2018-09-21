@@ -28,7 +28,13 @@ let http;
 describe('SearchService', () => {
   beforeEach(() => {
     http = new HttpClient(null);
-    searchService = new SearchService(http, new UserServiceMock(), new DataService());
+    searchService = new SearchService(
+      http,
+      new UserServiceMock(),
+      new DataService(),
+      null,
+      JSON.parse('{\n' + '  "snapshot": {\n' + '    "queryParams": {}\n' + '  }\n' + '}\n')
+    );
   });
 
   it('should be created', () => {

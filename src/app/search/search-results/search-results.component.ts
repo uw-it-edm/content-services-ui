@@ -10,6 +10,7 @@ import { Subject } from 'rxjs/Subject';
 import { DataService } from '../../shared/providers/data.service';
 import { SearchUtility } from '../shared/search-utility';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
+import { SearchPagination } from '../shared/model/search-pagination';
 
 @Component({
   selector: 'app-search-results',
@@ -31,20 +32,38 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   sortTerm: string;
   sortDirection: SortDirection;
 
-  @Input() searchModel$: Observable<SearchModel>;
-  @Input() searchResults$: Subject<SearchResults>;
-  @Input() pageConfig: SearchPageConfig;
-  @Output() search = new EventEmitter<SearchModel>();
+  @Input()
+  searchModel$: Observable<SearchModel>;
+  @Input()
+  searchResults$: Subject<SearchResults>;
+  @Input()
+  pageConfig: SearchPageConfig;
+  @Output()
+  search = new EventEmitter<SearchModel>();
 
-  @ViewChild(MatPaginator) topPaginator: MatPaginator;
-  @ViewChild(MatPaginator) bottomPaginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort = new MatSort();
+  @ViewChild(MatPaginator)
+  topPaginator: MatPaginator;
+  @ViewChild(MatPaginator)
+  bottomPaginator: MatPaginator;
+  @ViewChild(MatSort)
+  sort: MatSort = new MatSort();
 
   constructor(private data: DataService) {}
 
   ngOnInit(): void {
     this.searchModel$.takeUntil(this.componentDestroyed).subscribe(searchModel => {
       this.searchModel = searchModel;
+      if (this.searchModel.pagination != null) {
+        if (this.searchModel.pagination.pageIndex != null) {
+          this.paginatorConfig.pageIndex = this.searchModel.pagination.pageIndex;
+        }
+        if (this.searchModel.pagination.pageSize != null) {
+          this.paginatorConfig.pageSize = this.searchModel.pagination.pageSize;
+        }
+      }
+      if (this.searchModel.order != null) {
+        this.initializeSort(searchModel.order);
+      }
     });
     this.dataSource = new SearchDataSource(this.searchModel$, this.searchResults$, this.sort, [
       this.topPaginator,
@@ -79,9 +98,8 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   }
 
   onPageEvent(pageEvent: PageEvent) {
-    this.paginatorConfig.pageSize = pageEvent.pageSize;
-    this.paginatorConfig.pageIndex = pageEvent.pageIndex;
-    this.searchModel.pagination = this.paginatorConfig;
+    const searchPagination = new SearchPagination(pageEvent.pageIndex, pageEvent.pageSize);
+    this.searchModel.pagination = searchPagination;
     this.search.emit(this.searchModel);
   }
 
