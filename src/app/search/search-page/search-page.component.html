@@ -12,8 +12,8 @@
       >
       </app-search-box>
     </div>
-    <div fxFlex="10" style="text-align: right">
-      <button mat-button (click)="navigateToCreate()" aria-label="Upload new document">
+    <div fxFlex="10" style="text-align: right" *ngIf="pageConfig.enableUploadNewDocument">
+      <button class="cs-upload-new-document-button" mat-button (click)="navigateToCreate()" aria-label="Upload new document">
           <span appCustomText="addContentItemButton" defaultValue="Upload"></span>&nbsp;<mat-icon>backup</mat-icon>
       </button>
     </div>
