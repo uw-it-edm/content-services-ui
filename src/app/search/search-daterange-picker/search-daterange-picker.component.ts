@@ -18,7 +18,7 @@ export class SearchDaterangePickerComponent implements OnInit, OnDestroy {
   private componentDestroyed = new Subject();
   searchModel: SearchModel = new SearchModel();
   formGroup: FormGroup;
-  ranges: any;
+  ranges: any = null;
   showRangeLabelOnInput: boolean;
   showClearButton: boolean;
   showDropdowns: boolean;
