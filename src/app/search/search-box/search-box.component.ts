@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { SearchModel } from '../shared/model/search-model';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { Observable } from 'rxjs/Observable';
@@ -13,7 +13,7 @@ import { SearchFilterableResult } from '../../shared/shared/model/search-filtera
   templateUrl: './search-box.component.html',
   styleUrls: ['./search-box.component.css']
 })
-export class SearchBoxComponent implements OnDestroy, AfterViewInit, OnInit {
+export class SearchBoxComponent implements OnDestroy, OnInit {
   private componentDestroyed = new Subject();
   searchModel: SearchModel = new SearchModel();
 
@@ -39,8 +39,6 @@ export class SearchBoxComponent implements OnDestroy, AfterViewInit, OnInit {
       this.searchModel = searchModel;
     });
   }
-
-  ngAfterViewInit() {}
 
   removeFilter(filter: SearchFilter) {
     console.log('removing filter for ' + filter.key);

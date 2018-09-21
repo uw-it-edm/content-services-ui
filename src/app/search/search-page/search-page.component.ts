@@ -53,7 +53,9 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log('found initial search : ' + initialSearch);
         this.initialSearchModel = SearchModel.fromJson(initialSearch);
       }
-    } else {
+    }
+
+    if (this.initialSearchModel == null) {
       this.initialSearchModel = new SearchModel();
     }
   }
