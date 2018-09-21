@@ -17,7 +17,7 @@ describe('LoginComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            queryParams: Observable.of({ returnUrl: '/test' })
+            queryParams: Observable.of({ returnUrl: '/' })
           }
         }
       ]

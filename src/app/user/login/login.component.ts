@@ -13,8 +13,9 @@ export class LoginComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe((params: Params) => {
       const returnUrl = params['returnUrl'];
 
-      if (returnUrl !== '/') {
+      if (returnUrl != null && returnUrl !== '/') {
         console.log('not root path, allowing redirect');
+        this.router.navigateByUrl(returnUrl);
       }
     });
   }

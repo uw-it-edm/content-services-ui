@@ -23,9 +23,9 @@ import { UserModule } from '../user/user.module';
 import { CreatePageComponent } from '../content/create-page/create-page.component';
 import { HttpClientModule } from '@angular/common/http';
 
-let enableRouterTracing = true;
-if (environment.production) {
-  enableRouterTracing = false;
+let enableRouterTracing = false;
+if (environment.enableRouterTracing) {
+  enableRouterTracing = true;
 }
 
 const appRoutes: Routes = [

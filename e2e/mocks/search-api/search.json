@@ -1,0 +1,70 @@
+{
+  "searchResults": [
+    {
+      "id": "123",
+      "label": "sample-file.txt",
+      "metadata": {
+        "ProfileId": "Demo",
+        "Account": "DEMO-ACCOUNT",
+        "Filer": "me",
+        "PublishStatus": "published",
+        "DocumentType": "Type 1",
+        "LastModifiedDate": 1.537446824E12
+      },
+      "_score": 0.0,
+      "_indexName": "documents-demo"
+    },
+    {
+      "id": "234",
+      "label": "sample-file-2.txt",
+      "metadata": {
+        "ProfileId": "Demo",
+        "Account": "DEMO-ACCOUNT",
+        "Filer": "you",
+        "PublishStatus": "published",
+        "DocumentType": "Type 2",
+        "LastModifiedDate": 1.537446824E12
+      },
+      "_score": 0.0,
+      "_indexName": "documents-demo"
+    }
+  ],
+  "facets": [
+    {
+      "name": "metadata.Filer.raw",
+      "buckets": [
+        {
+          "count": 6,
+          "key": "Me"
+        },
+        {
+          "count": 23,
+          "key": "You"
+        }
+      ]
+    },    {
+      "name": "metadata.PublishStatus.raw",
+      "buckets": [
+        {
+          "count": 6,
+          "key": "Published"
+        }
+      ]
+    },
+    {
+      "name": "metadata.DocumentType.label.raw",
+      "buckets": [
+        {
+          "count": 12,
+          "key": "Type 1"
+        },
+        {
+          "count": 57,
+          "key": "Type 2"
+        }
+      ]
+    }
+  ],
+  "totalCount": 471,
+  "timeTaken": "1.0"
+}

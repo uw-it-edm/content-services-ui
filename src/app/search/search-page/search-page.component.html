@@ -18,6 +18,15 @@
       </button>
     </div>
   </div>
+  <div fxLayout="row" class="cs-generic-header"  *ngIf="pageConfig.searchDaterangeConfig && pageConfig.searchDaterangeConfig.active">
+    <div fxFlex="20"></div>
+    <div fxFlex>
+      <app-search-daterange-picker
+        [searchModel$]="searchModel$"
+        [searchDaterangeConfig]="pageConfig.searchDaterangeConfig"
+        (dateRangeFilterAdded)="onSearch($event)"></app-search-daterange-picker>
+    </div>
+  </div>
 
   <div fxLayout="row" class="cs-generic-body">
     <div fxFlex="20">
@@ -30,6 +39,7 @@
       >
       </app-facets-box>
     </div>
+
     <div fxFlex>
       <app-search-results
         [searchModel$]="searchModel$"
