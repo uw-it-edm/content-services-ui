@@ -43,39 +43,35 @@ describe('SearchPageComponent', () => {
     studentService = new StudentService(null, null);
   });
 
-  beforeEach(
-    async(() => {
-      TestBed.configureTestingModule({
-        imports: [NoopAnimationsModule, MaterialConfigModule, HttpClientModule, RouterTestingModule],
-        declarations: [SearchPageComponent, SearchBoxComponent, SearchResultsComponent],
-        providers: [
-          { provide: ActivatedRoute, useValue: activatedRoute },
-          { provide: SearchService, useValue: searchServiceSpy },
-          { provide: DataService, useValue: dataService },
-          { provide: StudentService, useValue: studentService },
-          Title,
-          NotificationService
-        ],
-        schemas: [NO_ERRORS_SCHEMA]
-      }).compileComponents();
-    })
-  );
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [NoopAnimationsModule, MaterialConfigModule, HttpClientModule, RouterTestingModule],
+      declarations: [SearchPageComponent, SearchBoxComponent, SearchResultsComponent],
+      providers: [
+        { provide: ActivatedRoute, useValue: activatedRoute },
+        { provide: SearchService, useValue: searchServiceSpy },
+        { provide: DataService, useValue: dataService },
+        { provide: StudentService, useValue: studentService },
+        Title,
+        NotificationService
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
+  }));
 
-  beforeEach(
-    async(() => {
-      activatedRoute.testParamMap = { page: 'test-page' };
+  beforeEach(async(() => {
+    activatedRoute.testParamMap = { page: 'test-page' };
 
-      const pageConfig = new SearchPageConfig();
-      pageConfig.pageName = 'test-page';
+    const pageConfig = new SearchPageConfig();
+    pageConfig.pageName = 'test-page';
 
-      const config = new Config();
-      config.tenant = 'test-tenant';
-      config.pages['test-page'] = pageConfig;
+    const config = new Config();
+    config.tenant = 'test-tenant';
+    config.pages['test-page'] = pageConfig;
 
-      console.log(JSON.stringify(config));
-      activatedRoute.testData = { config: config };
-    })
-  );
+    console.log(JSON.stringify(config));
+    activatedRoute.testData = { config: config };
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SearchPageComponent);
@@ -107,5 +103,22 @@ describe('SearchPageComponent', () => {
   it('should add default sort order if none is defined in the pageConfig', () => {
     expect(component.pageConfig.defaultSort.term).toBe('id');
     expect(component.pageConfig.defaultSort.order).toBe('desc');
+  });
+
+  it('should display the upload new document button when enabled', () => {
+    let uploadButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-upload-new-document-button');
+    expect(uploadButton.length).toEqual(1);
+
+    component.pageConfig.disableUploadNewDocument = true;
+    fixture.detectChanges();
+
+    uploadButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-upload-new-document-button');
+    expect(uploadButton.length).toEqual(0);
+
+    component.pageConfig.disableUploadNewDocument = false;
+    fixture.detectChanges();
+
+    uploadButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-upload-new-document-button');
+    expect(uploadButton.length).toEqual(1);
   });
 });
