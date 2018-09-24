@@ -5,6 +5,8 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import * as moment from 'moment-timezone';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
 
+const INTERNAL_FIELD_NAME = 'internalDate';
+
 @Component({
   selector: 'app-timestamp-picker',
   templateUrl: './timestamp-picker.component.html',
@@ -44,7 +46,7 @@ export class TimestampPickerComponent implements ControlValueAccessor, OnInit, O
       internalDate: new FormControl()
     });
 
-    this.formGroup.controls['internalDate'].valueChanges
+    this.formGroup.controls[INTERNAL_FIELD_NAME].valueChanges
       .startWith(null)
       .takeUntil(this.componentDestroyed)
       .subscribe((date: Date) => {
@@ -74,9 +76,9 @@ export class TimestampPickerComponent implements ControlValueAccessor, OnInit, O
       const shift = this.getSeattleOffset(date) - this.getUserOffsetAtDate(date);
 
       const shiftedDate = date.add(shift, 'minutes').toDate();
-      this.formGroup.controls['internalDate'].patchValue(shiftedDate);
+      this.formGroup.controls[INTERNAL_FIELD_NAME].patchValue(shiftedDate);
     } else if (isNullOrUndefined(value)) {
-      this.formGroup.controls['internalDate'].reset();
+      this.formGroup.controls[INTERNAL_FIELD_NAME].reset();
     }
   }
 
@@ -115,5 +117,21 @@ export class TimestampPickerComponent implements ControlValueAccessor, OnInit, O
 
   set disabled(dis) {
     this._disabled = coerceBooleanProperty(dis);
+    this.setInnerInputDisableState();
+  }
+
+  // Allows Angular to disable the input.
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
+
+  private setInnerInputDisableState() {
+    if (this.formGroup && this.formGroup.controls[INTERNAL_FIELD_NAME]) {
+      if (this.disabled) {
+        this.formGroup.controls[INTERNAL_FIELD_NAME].disable();
+      } else {
+        this.formGroup.controls[INTERNAL_FIELD_NAME].enable();
+      }
+    }
   }
 }
