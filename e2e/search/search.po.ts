@@ -7,6 +7,9 @@ export class SearchPage {
   pageUrl = `${browser.baseUrl}/${this.profile}/tab-search`;
   selectedFacet = element.all(by.className('mat-chip'));
   idColumHeaderButton = element(by.buttonText('Id'));
+  dateRangeInput = element(by.id('date-range-input'));
+  dateRangePicker = element(by.className('md-drppicker'));
+  clearDateButton = element(by.css(".clear[title='clear the date']"));
 
   constructor(private profile: string = 'demo') {}
 
@@ -91,5 +94,9 @@ export class SearchPage {
     return element.all(by.css('.mat-list-item a')).then(items => {
       return items[facetIndex].getText();
     });
+  }
+
+  getButtonByText(buttonText: string) {
+    return element(by.buttonText(buttonText));
   }
 }
