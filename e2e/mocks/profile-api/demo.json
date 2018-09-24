@@ -50,6 +50,16 @@
         "placeholder": "Search for documents",
         "indexName": "documents-demo"
       },
+      "searchDaterangeConfig": {
+        "active": true,
+        "filterKey": "metadata.ReceivedDate.raw",
+        "filterLabel": "ReceivedDate",
+        "showCalendar": true,
+        "showRelativeRange": true,
+        "placeholder": "Choose Received Date",
+        "displayRangeLabelInsteadOfDates": true,
+        "showDropdowns": true
+      },
       "facetsConfig": {
         "active": true,
         "facets": {

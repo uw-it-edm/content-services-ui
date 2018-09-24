@@ -54,15 +54,6 @@ describe('SearchDaterangePickerComponent', () => {
     expect(component.searchModel.filters[0].label).toBe('testLabel');
   });
 
-  it('should clear daterange filter', () => {
-    const existingFilter = new SearchFilter('testKey', 'testDateRange', 'testLabel');
-    component.searchModel.filters[0] = existingFilter;
-
-    component.formGroup.controls['internalDateRange'].patchValue({ startDate: null, endDate: null });
-    fixture.detectChanges();
-    expect(component.searchModel.filters.length).toBe(0);
-  });
-
   it('should replace existing daterange filter', () => {
     const existingFilter = new SearchFilter('testKey', 'testDateRange', 'testLabel');
     component.searchModel.filters[0] = existingFilter;
@@ -88,7 +79,7 @@ describe('SearchDaterangePickerComponent', () => {
 
     const startDate: Moment = moment('01-01-2018', 'MM-DD-YYYY');
     const endDate: Moment = moment('02-01-2018', 'MM-DD-YYYY');
-    component.formGroup.controls['internalDateRange'].patchValue({ startDate: startDate, endDate: endDate });
-    fixture.detectChanges();
+
+    component.datesUpdated({ startDate: startDate, endDate: endDate });
   });
 });
