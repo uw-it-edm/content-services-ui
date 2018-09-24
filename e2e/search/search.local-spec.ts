@@ -1,13 +1,13 @@
 ///<reference path="../../node_modules/@types/jasminewd2/index.d.ts"/>
-import {SearchPage} from './search.po';
-import {CreatePage} from '../create/create.po';
-import {browser} from 'protractor';
+import { SearchPage } from './search.po';
+import { CreatePage } from '../create/create.po';
+import { browser } from 'protractor';
 
 describe('Search Page', () => {
   let page: SearchPage;
   const demoConfig = require('../mocks/profile-api/demo.json');
 
-  beforeAll(() => {
+  beforeEach(() => {
     page = new SearchPage();
     page.navigateTo();
   });
@@ -57,5 +57,20 @@ describe('Search Page', () => {
     let createPage: CreatePage;
     createPage = new CreatePage();
     expect(actualUrl).toMatch(createPage.pageUrl.toLowerCase());
+  });
+
+  it('should produce sharable search parameters in url when search is performed', () => {
+    const expectedFacetText = 'Type 1';
+    page.clickFacetLink(0);
+    expect(page.selectedFacet.getText()).toMatch(new RegExp(expectedFacetText));
+
+    // Open sharable url in another browser
+    browser.getCurrentUrl().then(sharableUrl => {
+      browser.restart().then(() => {
+        browser.get(sharableUrl);
+        const page2: SearchPage = new SearchPage();
+        expect(page2.selectedFacet.getText()).toMatch(new RegExp(expectedFacetText));
+      });
+    });
   });
 });
