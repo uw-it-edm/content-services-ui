@@ -35,7 +35,7 @@ export class SearchPage {
   }
 
   clickUploadButton() {
-    element(by.css('.cs-generic-header .mat-button')).click();
+    element(by.className('cs-upload-new-document-button')).click();
   }
 
   getHeaderToolbarText() {
