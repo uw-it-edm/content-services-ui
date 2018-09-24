@@ -13,7 +13,7 @@ export class SearchPageConfig implements PageConfig {
   displayDocumentLabelField = false;
 
   searchStateInURL = false;
-  enableUploadNewDocument = true;
+  disableUploadNewDocument = false;
 
   searchDaterangeConfig: SearchDaterangeConfig = new SearchDaterangeConfig();
   facetsConfig: FacetsConfig = new FacetsConfig();

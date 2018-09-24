@@ -109,13 +109,13 @@ describe('SearchPageComponent', () => {
     let uploadButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-upload-new-document-button');
     expect(uploadButton.length).toEqual(1);
 
-    component.pageConfig.enableUploadNewDocument = false;
+    component.pageConfig.disableUploadNewDocument = true;
     fixture.detectChanges();
 
     uploadButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-upload-new-document-button');
     expect(uploadButton.length).toEqual(0);
 
-    component.pageConfig.enableUploadNewDocument = true;
+    component.pageConfig.disableUploadNewDocument = false;
     fixture.detectChanges();
 
     uploadButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-upload-new-document-button');

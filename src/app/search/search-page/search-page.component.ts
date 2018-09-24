@@ -30,7 +30,6 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   searchModel$: BehaviorSubject<SearchModel>;
   searchResults$ = new Subject<SearchResults>();
-
   searchAutocomplete: SearchAutocomplete;
 
   initialSearchModel: SearchModel;
