@@ -31,11 +31,11 @@
   "dependencies": {
     "@angular/animations": "^6.1.8",
     "@angular/cdk": "^6.4.7",
-    "@angular/common": "^6.1.7",
+    "@angular/common": "^6.1.8",
     "@angular/compiler": "^6.1.8",
     "@angular/core": "^6.1.8",
     "@angular/flex-layout": "^6.0.0-beta.18",
-    "@angular/forms": "^6.1.7",
+    "@angular/forms": "^6.1.8",
     "@angular/http": "^6.1.7",
     "@angular/material": "^6.4.7",
     "@angular/platform-browser": "^6.1.7",
@@ -64,7 +64,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.8.3",
-    "@angular/cli": "^6.2.2",
+    "@angular/cli": "^6.2.3",
     "@angular/compiler-cli": "^6.1.7",
     "@angular/language-service": "^6.1.7",
     "@types/jasmine": "~2.8.8",
