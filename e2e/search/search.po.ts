@@ -9,7 +9,7 @@ export class SearchPage {
   idColumHeaderButton = element(by.buttonText('Id'));
   dateRangeInput = element(by.id('date-range-input'));
   dateRangePicker = element(by.className('md-drppicker'));
-  clearDateButton = element(by.css(".clear[title='clear the date']"));
+  searchBox = element(by.id('search-field'));
 
   constructor(private profile: string = 'demo') {}
 
@@ -21,12 +21,8 @@ export class SearchPage {
     return browser.getTitle();
   }
 
-  searchBox() {
-    return element(by.id('search-field'));
-  }
-
   getSearchBoxInputText() {
-    return this.searchBox().getAttribute('value');
+    return this.searchBox.getAttribute('value');
   }
 
   getPaginators() {
@@ -98,5 +94,9 @@ export class SearchPage {
 
   getButtonByText(buttonText: string) {
     return element(by.buttonText(buttonText));
+  }
+
+  getDateRangeInputText() {
+    return this.dateRangeInput.getAttribute('value');
   }
 }

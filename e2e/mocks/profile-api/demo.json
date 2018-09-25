@@ -52,11 +52,11 @@
       },
       "searchDaterangeConfig": {
         "active": true,
-        "filterKey": "metadata.ReceivedDate.raw",
-        "filterLabel": "ReceivedDate",
+        "filterKey": "metadata.LastModifiedDate.raw",
+        "filterLabel": "Last Modified Date",
         "showCalendar": true,
         "showRelativeRange": true,
-        "placeholder": "Choose Received Date",
+        "placeholder": "Choose Date Range",
         "displayRangeLabelInsteadOfDates": true,
         "showDropdowns": true
       },
