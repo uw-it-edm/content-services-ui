@@ -7,7 +7,7 @@ export class SearchPage {
   pageUrl = `${browser.baseUrl}/${this.profile}/tab-search`;
   selectedFacet = element.all(by.className('mat-chip'));
   idColumHeaderButton = element(by.buttonText('Id'));
-  dateRangeInput = element(by.id('date-range-input'));
+  dateRangeInput = element(by.css('.cs-search-daterange-picker input'));
   dateRangePicker = element(by.className('md-drppicker'));
   searchBox = element(by.id('search-field'));
 
