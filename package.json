@@ -39,7 +39,7 @@
     "@angular/http": "^6.1.7",
     "@angular/material": "^6.4.7",
     "@angular/platform-browser": "^6.1.7",
-    "@angular/platform-browser-dynamic": "^6.1.7",
+    "@angular/platform-browser-dynamic": "^6.1.8",
     "@angular/platform-server": "^6.1.7",
     "@angular/router": "^6.1.7",
     "@types/lodash": "^4.14.116",
