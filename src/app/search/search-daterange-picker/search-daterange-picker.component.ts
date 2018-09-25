@@ -35,24 +35,26 @@ export class SearchDaterangePickerComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
-    this.formGroup = this.fb.group({
-      internalDateRange: new FormControl()
-    });
+    this.formGroup = this.fb.group({});
+    this.formGroup.controls['internalDateRange'] = new FormControl();
     this.searchModel$.takeUntil(this.componentDestroyed).subscribe(searchModel => {
       this.searchModel = searchModel;
+      // TODO: if filter is removed, clear daterange-picker textfield
     });
 
-    this.formGroup.controls['internalDateRange'].valueChanges
-      .startWith(null)
-      .takeUntil(this.componentDestroyed)
-      .subscribe(selected => {
-        if (selected) {
-          const startDate: Moment = this.createLosAngelesMoment(selected.startDate);
-          const endDate: Moment = this.createLosAngelesMoment(selected.endDate);
-          this.addDateRangeFilter(startDate, endDate);
-        }
-      });
     this.loadPageConfig();
+  }
+
+  datesUpdated(selected) {
+    if (
+      selected &&
+      ((selected.startDate && selected.endDate) ||
+        (isNullOrUndefined(selected.startDate) && isNullOrUndefined(selected.endDate)))
+    ) {
+      const startDate: Moment = this.createLosAngelesMoment(selected.startDate);
+      const endDate: Moment = this.createLosAngelesMoment(selected.endDate);
+      this.addDateRangeFilter(startDate, endDate);
+    }
   }
 
   private createLosAngelesMoment(aMoment: Moment) {
