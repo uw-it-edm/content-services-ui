@@ -6,8 +6,10 @@
          [showRangeLabelOnInput]="showRangeLabelOnInput"
          [alwaysShowCalendars]="alwaysShowCalendars"
          [placeholder]="placeholder"
-         [showClearButton]="showClearButton"
          [showDropdowns]="showDropdowns"
          [attr.aria-label]="placeholder"
+         (datesUpdated)="datesUpdated($event)"
+         (rangeClicked)="datesUpdated($event)"
+         autoApply="false"
          />
 </mat-form-field>
