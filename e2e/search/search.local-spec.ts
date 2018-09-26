@@ -2,10 +2,61 @@
 import { SearchPage } from './search.po';
 import { CreatePage } from '../create/create.po';
 import { browser } from 'protractor';
+import * as moment from 'moment-timezone';
+
+let page: SearchPage;
 
 describe('Search Page', () => {
-  let page: SearchPage;
   const demoConfig = require('../mocks/profile-api/demo.json');
+
+  const selectAndVerifyDateRange = function(dateRangeText = 'Today') {
+    const getExpectedDateRange = function(range: string = 'Today'): string {
+      let startDate;
+      let endDate;
+
+      switch (range) {
+        case 'Today':
+          startDate = moment();
+          endDate = startDate;
+          break;
+        case 'Yesterday':
+          startDate = moment().subtract(1, 'days');
+          endDate = startDate;
+          break;
+        case 'Last 7 Days':
+          startDate = moment().subtract(6, 'days');
+          endDate = moment();
+          break;
+        case 'Last 30 Days':
+          startDate = moment().subtract(29, 'days');
+          endDate = moment();
+          break;
+        case 'This Month':
+          startDate = moment().startOf('month');
+          endDate = moment().endOf('month');
+          break;
+        case 'Last Month':
+          startDate = moment()
+            .subtract(1, 'month')
+            .startOf('month');
+          endDate = moment()
+            .subtract(1, 'month')
+            .endOf('month');
+          break;
+      }
+
+      startDate = startDate.format('YYYY-MM-DD');
+      endDate = endDate.format('YYYY-MM-DD');
+      return `Last Modified Date: \\[${startDate} TO ${endDate}\\]`;
+    };
+
+    page.dateRangeInput.click();
+    page.getButtonByText(dateRangeText).click();
+
+    expect(page.dateRangePicker.isDisplayed()).toBeFalsy();
+    expect(page.selectedFacet.getText()).toMatch(getExpectedDateRange(dateRangeText));
+    expect(page.getDateRangeInputText()).toEqual(dateRangeText);
+  };
 
   beforeEach(() => {
     page = new SearchPage();
@@ -22,7 +73,7 @@ describe('Search Page', () => {
 
   it('should accept text input in searchbox and retains the value', () => {
     const searchText = 'this is a sample test';
-    page.searchBox().sendKeys(searchText);
+    page.searchBox.sendKeys(searchText);
     expect(page.getSearchBoxInputText()).toEqual(searchText);
   });
 
@@ -38,7 +89,7 @@ describe('Search Page', () => {
     const studentData = require('../mocks/data-api/student-query.json');
     const testStudentId = studentData.content[0].studentNumber;
 
-    page.searchBox().sendKeys(testStudentId);
+    page.searchBox.sendKeys(testStudentId);
     expect(page.autoCompletePanel.isDisplayed());
     expect(page.autoCompletedOption.getText()).toEqual(studentData.content[0].displayName);
 
@@ -72,5 +123,29 @@ describe('Search Page', () => {
         expect(page2.selectedFacet.getText()).toMatch(new RegExp(expectedFacetText));
       });
     });
+  });
+
+  it('should display correct date range in search filter when Today is selected', () => {
+    selectAndVerifyDateRange('Today');
+  });
+
+  it('should display correct date range in search filter when Yesterday is selected', () => {
+    selectAndVerifyDateRange('Yesterday');
+  });
+
+  it('should display correct date range in search filter when Last 7 Days is selected', () => {
+    selectAndVerifyDateRange('Last 7 Days');
+  });
+
+  it('should display correct date range in search filter when Last 30 Days is selected', () => {
+    selectAndVerifyDateRange('Last 30 Days');
+  });
+
+  it('should display correct date range in search filter when This Month is selected', () => {
+    selectAndVerifyDateRange('This Month');
+  });
+
+  it('should display correct date range in search filter when Last Month is selected', () => {
+    selectAndVerifyDateRange('Last Month');
   });
 });
