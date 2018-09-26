@@ -26,6 +26,7 @@ export const environment = {
   profile_api: {
     url: 'http://localhost:12345',
     context: '/profile/v1',
+    app_name: 'content-services-ui',
     authenticationHeader: null
   },
   data_api: {

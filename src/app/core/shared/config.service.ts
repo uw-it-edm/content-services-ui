@@ -15,7 +15,8 @@ export class ConfigService {
   private configs: Map<string, Config> = new Map();
   private tenantsConfig = null;
 
-  private appConfigBaseUrl = environment.profile_api.url + environment.profile_api.context;
+  private appConfigUrl =
+    environment.profile_api.url + environment.profile_api.context + '/app/' + environment.profile_api.app_name;
 
   constructor(private http: HttpClient, private progressService: ProgressService, private userService: UserService) {}
 
@@ -69,7 +70,7 @@ export class ConfigService {
       console.log('getTenantList');
       const requestOptions = this.buildRequestOptions();
       return this.http
-        .get(this.appConfigBaseUrl + '/app/content-services-ui', requestOptions)
+        .get(this.appConfigUrl, requestOptions)
         .map(result => {
           const tenants: TenantConfigInfo[] = [];
 
