@@ -32,6 +32,7 @@ export const environment = {
   profile_api: {
     url: 'http://profile-api.dev',
     context: '/profile/v1',
+    app_name: 'content-services-ui',
     authenticationHeader: 'auth'
   },
   data_api: {
