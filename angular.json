@@ -35,6 +35,14 @@
                 }
               ]
             },
+            "localmock": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.localmock.ts"
+                }
+              ]
+            },
             "travis": {
               "optimization": true,
               "outputHashing": "all",
@@ -79,6 +87,9 @@
           "configurations": {
             "local": {
               "browserTarget": "content-services-ui:build:local"
+            },
+            "localmock": {
+              "browserTarget": "content-services-ui:build:localmock"
             },
             "prod": {
               "browserTarget": "content-services-ui:build:prod"
@@ -168,5 +179,8 @@
     "@schematics/angular:directive": {
       "prefix": "app"
     }
+  },
+  "cli": {
+    "packageManager": "yarn"
   }
 }

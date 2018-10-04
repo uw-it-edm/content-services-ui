@@ -1,4 +1,5 @@
 # Content Services UI
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d024952d66a04338b330808b4b255048)](https://www.codacy.com/app/uw-it-edm/content-services-ui?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=uw-it-edm/content-services-ui&amp;utm_campaign=Badge_Grade)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=uw-it-edm/content-services-ui)](https://dependabot.com)
 
 develop: 
@@ -12,7 +13,12 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Development server
 
-Run `ng serve --configuration=local --disable-host-check` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `yarn start-local` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+
+## Development server with mock apis
+
+Run `yarn mock-services && yarn start  --configuration=localmock --disable-host-check` 
+Stop the containers when you're done with `yarn stop-mock-services`
 
 ## Code scaffolding
 

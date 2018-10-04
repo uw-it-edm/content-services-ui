@@ -20,6 +20,7 @@
     "tab-search": {
       "pageName": "Demonstration Search",
       "theme": "uw-default",
+      "searchStateInURL": true,
       "fieldsToDisplay": [
         {
           "key": "ProfileId",
@@ -49,6 +50,16 @@
         "placeholder": "Search for documents",
         "indexName": "documents-demo"
       },
+      "searchDaterangeConfig": {
+        "active": true,
+        "filterKey": "metadata.LastModifiedDate.raw",
+        "filterLabel": "Last Modified Date",
+        "showCalendar": true,
+        "showRelativeRange": true,
+        "placeholder": "Choose Date Range",
+        "displayRangeLabelInsteadOfDates": true,
+        "showDropdowns": true
+      },
       "facetsConfig": {
         "active": true,
         "facets": {
@@ -58,7 +69,7 @@
             "order": "asc",
             "size": 5
           },
-          "metadata.DocumentYear": {
+          "metadata.PublishStatus": {
             "key": "metadata.PublishStatus.raw",
             "label": "Publish Status",
             "order": "asc",

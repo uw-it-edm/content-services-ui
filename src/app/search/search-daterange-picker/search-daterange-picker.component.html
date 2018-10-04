@@ -1,0 +1,15 @@
+<mat-form-field [formGroup]="formGroup" class="cs-search-daterange-picker" >
+  <input matInput
+         formControlName="internalDateRange"
+         ngxDaterangepickerMd
+         [ranges]="ranges"
+         [showRangeLabelOnInput]="showRangeLabelOnInput"
+         [alwaysShowCalendars]="alwaysShowCalendars"
+         [placeholder]="placeholder"
+         [showDropdowns]="showDropdowns"
+         [attr.aria-label]="placeholder"
+         (datesUpdated)="datesUpdated($event)"
+         (rangeClicked)="datesUpdated($event)"
+         autoApply="false"
+         />
+</mat-form-field>

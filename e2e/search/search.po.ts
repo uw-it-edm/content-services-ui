@@ -7,6 +7,9 @@ export class SearchPage {
   pageUrl = `${browser.baseUrl}/${this.profile}/tab-search`;
   selectedFacet = element.all(by.className('mat-chip'));
   idColumHeaderButton = element(by.buttonText('Id'));
+  dateRangeInput = element(by.css('.cs-search-daterange-picker input'));
+  dateRangePicker = element(by.className('md-drppicker'));
+  searchBox = element(by.id('search-field'));
 
   constructor(private profile: string = 'demo') {}
 
@@ -18,12 +21,8 @@ export class SearchPage {
     return browser.getTitle();
   }
 
-  searchBox() {
-    return element(by.id('search-field'));
-  }
-
   getSearchBoxInputText() {
-    return this.searchBox().getAttribute('value');
+    return this.searchBox.getAttribute('value');
   }
 
   getPaginators() {
@@ -35,7 +34,7 @@ export class SearchPage {
   }
 
   clickUploadButton() {
-    element(by.css('.cs-generic-header .mat-button')).click();
+    element(by.className('cs-upload-new-document-button')).click();
   }
 
   getHeaderToolbarText() {
@@ -91,5 +90,13 @@ export class SearchPage {
     return element.all(by.css('.mat-list-item a')).then(items => {
       return items[facetIndex].getText();
     });
+  }
+
+  getButtonByText(buttonText: string) {
+    return element(by.buttonText(buttonText));
+  }
+
+  getDateRangeInputText() {
+    return this.dateRangeInput.getAttribute('value');
   }
 }

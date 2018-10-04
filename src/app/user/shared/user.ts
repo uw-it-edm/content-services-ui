@@ -1,7 +1,7 @@
 export class User {
   userName: string;
   actAs: string;
-  accounts: Map<string, string>;
+  userGroups: string[];
 
   constructor(actAs: string) {
     this.userName = actAs;

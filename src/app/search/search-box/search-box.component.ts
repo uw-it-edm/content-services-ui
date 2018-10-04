@@ -13,14 +13,18 @@ import { SearchFilterableResult } from '../../shared/shared/model/search-filtera
   templateUrl: './search-box.component.html',
   styleUrls: ['./search-box.component.css']
 })
-export class SearchBoxComponent implements OnInit, OnDestroy {
+export class SearchBoxComponent implements OnDestroy, OnInit {
   private componentDestroyed = new Subject();
   searchModel: SearchModel = new SearchModel();
 
-  @Input() searchAutocomplete: SearchAutocomplete;
-  @Input() searchModel$: Observable<SearchModel>;
-  @Input() pageConfig: SearchPageConfig;
-  @Output() searchEvent = new EventEmitter<SearchModel>();
+  @Input()
+  searchAutocomplete: SearchAutocomplete;
+  @Input()
+  searchModel$: Observable<SearchModel>;
+  @Input()
+  pageConfig: SearchPageConfig;
+  @Output()
+  searchEvent = new EventEmitter<SearchModel>();
 
   filteredOptions: SearchFilterableResult[] = [];
 
@@ -31,6 +35,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
       this.assignAutocompleteListener();
     }
     this.searchModel$.takeUntil(this.componentDestroyed).subscribe(searchModel => {
+      console.log('search-box search model updated : ' + this.searchModel.stringQuery);
       this.searchModel = searchModel;
     });
   }
