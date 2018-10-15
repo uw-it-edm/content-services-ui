@@ -210,9 +210,9 @@
   dependencies:
     tslib "^1.9.0"
 
-"@angular/platform-server@^6.1.9":
-  version "6.1.9"
-  resolved "https://registry.yarnpkg.com/@angular/platform-server/-/platform-server-6.1.9.tgz#431f40278b52779825d5e087283b5d823d72c29d"
+"@angular/platform-server@^6.1.10":
+  version "6.1.10"
+  resolved "https://registry.yarnpkg.com/@angular/platform-server/-/platform-server-6.1.10.tgz#8d8ee2a4899fa840985191c8f223fe0dbf3c9a72"
   dependencies:
     domino "^2.0.1"
     tslib "^1.9.0"
