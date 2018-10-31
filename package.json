@@ -14,8 +14,6 @@
     "e2e": "ng e2e",
     "e2e-local": "yarn mock-services && ng e2e --protractor-config=protractor.conf.local.js --configuration=travis ; testStatus=$? ; yarn stop-mock-services ; exit $testStatus",
     "validate": "npm-run-all --parallel test lint",
-    "prepush": "npm run validate",
-    "precommit": "lint-staged",
     "pretty": "prettier --parser typescript --single-quote --print-width=120 --write",
     "mock-services": "docker container inspect content-services-api-e2e-mock || (docker build -q -t content-services-api-e2e-mock ./e2e/mocks && docker run --name content-services-api-e2e-mock --rm -d -p 12345:80 -v ${PWD}/e2e/mocks:/usr/share/nginx/html/ content-services-api-e2e-mock)",
     "stop-mock-services": "docker stop content-services-api-e2e-mock"
@@ -71,7 +69,7 @@
     "@types/jasminewd2": "~2.0.5",
     "@types/node": "~10.9.4",
     "codelyzer": "^4.5.0",
-    "husky": "^0.14.3",
+    "husky": "^1.1.2",
     "jasmine-core": "~2.99.0",
     "jasmine-reporters": "^2.3.2",
     "jasmine-spec-reporter": "~4.2.1",
@@ -89,5 +87,11 @@
     "ts-node": "^7.0.1",
     "tslint": "~5.11.0",
     "typescript": "~2.9.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run validate"
+    }
   }
 }
