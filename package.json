@@ -52,7 +52,7 @@
     "lodash": "^4.17.11",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",
-    "ng2-pdf-viewer": "5.1.2",
+    "ng2-pdf-viewer": "5.2.0",
     "ngx-daterangepicker-material": "^1.2.4",
     "pdfjs-dist": "^2.0.550",
     "rxjs": "^6.3.3",
