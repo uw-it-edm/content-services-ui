@@ -141,9 +141,9 @@
     symbol-observable "^1.2.0"
     yargs-parser "^10.0.0"
 
-"@angular/common@^6.1.10":
-  version "6.1.10"
-  resolved "https://registry.yarnpkg.com/@angular/common/-/common-6.1.10.tgz#96e01564031b23cf54e4264e4c9defd6e10a0e11"
+"@angular/common@^7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@angular/common/-/common-7.0.1.tgz#55750879f08d5f4b6f247f7dce0b5ea2b3ec2059"
   dependencies:
     tslib "^1.9.0"
 
