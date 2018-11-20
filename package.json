@@ -42,7 +42,7 @@
     "@angular/router": "^6.1.10",
     "@types/lodash": "^4.14.116",
     "@types/pdfjs-dist": "^0.1.2",
-    "angulartics2": "^6.3.0",
+    "angulartics2": "^6.3.1",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.5.7",
     "coveralls": "^3.0.2",
