@@ -124,12 +124,6 @@ describe('SearchPageComponent', () => {
 
   it('should display the display documents button when enabled', () => {
     let displaySearchButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-display-search-button');
-    expect(displaySearchButton.length).toEqual(1);
-
-    component.pageConfig.disableDisplaySearch = true;
-    fixture.detectChanges();
-
-    displaySearchButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-display-search-button');
     expect(displaySearchButton.length).toEqual(0);
 
     component.pageConfig.disableDisplaySearch = false;
@@ -137,5 +131,11 @@ describe('SearchPageComponent', () => {
 
     displaySearchButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-display-search-button');
     expect(displaySearchButton.length).toEqual(1);
+
+    component.pageConfig.disableDisplaySearch = true;
+    fixture.detectChanges();
+
+    displaySearchButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-display-search-button');
+    expect(displaySearchButton.length).toEqual(0);
   });
 });

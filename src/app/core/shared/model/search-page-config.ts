@@ -11,7 +11,7 @@ export class SearchPageConfig implements PageConfig {
   theme = 'uw-default';
   fieldsToDisplay: Array<Field> = [];
   displayDocumentLabelField = false;
-  disableDisplaySearch = false;
+  disableDisplaySearch = true;
 
   searchStateInURL = false;
   disableUploadNewDocument = false;
