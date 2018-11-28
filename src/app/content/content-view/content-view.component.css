@@ -17,10 +17,13 @@
   margin: 2rem;
 }
 
+.content-object-display-fix-sized {
+  height: calc(100vh - 265px);
+}
+
 .content-object-display {
   background-color: white;
   color: black;
-  height: calc(100vh - 265px);
   overflow-x: auto;
   overflow-y: auto;
 }

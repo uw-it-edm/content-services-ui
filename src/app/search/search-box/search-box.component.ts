@@ -18,6 +18,8 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
   searchModel: SearchModel = new SearchModel();
 
   @Input()
+  readonly: false;
+  @Input()
   searchAutocomplete: SearchAutocomplete;
   @Input()
   searchModel$: Observable<SearchModel>;
@@ -41,9 +43,11 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
   }
 
   removeFilter(filter: SearchFilter) {
-    console.log('removing filter for ' + filter.key);
-    this.searchModel.removeFilter(filter);
-    this.updateSearch();
+    if (!this.readonly) {
+      console.log('removing filter for ' + filter.key);
+      this.searchModel.removeFilter(filter);
+      this.updateSearch();
+    }
   }
 
   updateSearch() {

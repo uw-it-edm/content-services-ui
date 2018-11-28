@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Config } from '../../core/shared/model/config';
-import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { Title } from '@angular/platform-browser';
 import { SearchModel } from '../shared/model/search-model';
 import { SearchResults } from '../shared/model/search-result';
@@ -9,45 +8,42 @@ import { SearchService } from '../shared/search.service';
 import { Subject } from 'rxjs/Subject';
 import { DataService } from '../../shared/providers/data.service';
 import { Sort } from '../shared/model/sort';
-
-import { StudentSearchAutocomplete } from '../shared/search-autocomplete/student-search-autocomplete';
-import { StudentService } from '../../shared/providers/student.service';
-import { SearchAutocomplete } from '../shared/search-autocomplete/search-autocomplete';
 import { NotificationService } from '../../shared/providers/notification.service';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { BehaviorSubject } from 'rxjs';
+import { ContentService } from '../../content/shared/content.service';
+import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 
 @Component({
-  selector: 'app-search-page',
-  templateUrl: './search-page.component.html',
-  styleUrls: ['./search-page.component.css']
+  selector: 'app-display-search-page',
+  templateUrl: './display-search-page.component.html',
+  styleUrls: ['./display-search-page.component.css']
 })
-export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
+export class DisplaySearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   private componentDestroyed = new Subject();
   config: Config;
   pageConfig: SearchPageConfig;
   page: string;
 
   searchModel$: BehaviorSubject<SearchModel>;
-  searchResults$ = new Subject<SearchResults>();
-  searchAutocomplete: SearchAutocomplete;
+  searchResults: SearchResults;
 
   initialSearchModel: SearchModel;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
+    private route: ActivatedRoute,
     private titleService: Title,
     private searchService: SearchService,
+    private contentService: ContentService,
     private dataService: DataService,
     private router: Router,
-    private studentService: StudentService,
     private notificationService: NotificationService
   ) {
     this.searchModel$ = new BehaviorSubject<SearchModel>(new SearchModel());
 
-    console.log('init generic page component');
-    if (this.activatedRoute.snapshot.queryParams != null) {
-      const initialSearch = this.activatedRoute.snapshot.queryParams.s;
+    console.log('init Displays search page component');
+    if (this.route.snapshot.queryParams != null) {
+      const initialSearch = this.route.snapshot.queryParams.s;
       if (initialSearch != null) {
         console.log('found initial search : ' + initialSearch);
         this.initialSearchModel = SearchModel.fromJson(initialSearch);
@@ -55,23 +51,23 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     if (this.initialSearchModel == null) {
-      this.initialSearchModel = new SearchModel();
+      // TODO what to do ?
+      this.router.navigate([this.config.tenant]);
     }
   }
 
   ngAfterViewInit(): void {
     const cachedSearch = this.dataService.get('currentSearch');
     if (cachedSearch) {
-      // TODO what is this ?
       console.log('got cached search : ' + JSON.stringify(cachedSearch));
       this.searchModel$.next(Object.assign(new SearchModel(), cachedSearch));
     }
   }
 
   ngOnInit() {
-    this.activatedRoute.paramMap.takeUntil(this.componentDestroyed).subscribe(params => {
+    this.route.paramMap.takeUntil(this.componentDestroyed).subscribe(params => {
       this.page = params.get('page');
-      this.activatedRoute.data.takeUntil(this.componentDestroyed).subscribe((data: { config: Config }) => {
+      this.route.data.takeUntil(this.componentDestroyed).subscribe((data: { config: Config }) => {
         this.config = data.config;
         this.pageConfig = data.config.pages[this.page.toLowerCase()];
         if (
@@ -82,13 +78,7 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
           this.pageConfig.defaultSort = new Sort('id', 'desc');
         }
         this.titleService.setTitle(this.pageConfig.pageName);
-        if (this.pageConfig.autocompleteConfig) {
-          this.searchAutocomplete = new StudentSearchAutocomplete(
-            this.studentService,
-            this.pageConfig.autocompleteConfig.filterKey,
-            this.pageConfig.autocompleteConfig.filterLabel
-          );
-        }
+
         this.searchService.search(this.searchModel$, this.pageConfig).subscribe(
           (searchResults: SearchResults) => {
             /* we are not sending the search results observable
@@ -96,7 +86,7 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
                as doing so makes all the components subscribe
                to the search service and execute multiple searches
                */
-            this.searchResults$.next(searchResults);
+            this.searchResults = searchResults;
           },
           err => {
             this.notificationService.error('error while executing search', err);
@@ -108,25 +98,8 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  navigateToDisplaySearchPage() {
-    console.log('go to display page');
-    const queryParams: Params = Object.assign({}, this.activatedRoute.snapshot.queryParams);
-    queryParams['s'] = JSON.stringify(this.searchModel$.value);
-
-    this.router.navigate(['display-search'], { relativeTo: this.activatedRoute, queryParams: queryParams });
-  }
-
-  onSearch(searchModel: SearchModel) {
-    console.log('search in generic page component');
-    this.searchModel$.next(Object.assign(new SearchModel(), searchModel));
-  }
-
   ngOnDestroy(): void {
     this.componentDestroyed.next();
     this.componentDestroyed.complete();
-  }
-
-  navigateToCreate() {
-    this.router.navigate([this.config.tenant + '/create']);
   }
 }

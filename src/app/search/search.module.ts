@@ -10,16 +10,20 @@ import { UserModule } from '../user/user.module';
 import { SearchPageComponent } from './search-page/search-page.component';
 import { SearchDaterangePickerComponent } from './search-daterange-picker/search-daterange-picker.component';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
+import { DisplaySearchPageComponent } from './display-search-page/display-search-page.component';
+import { DocumentDisplayerComponent } from './document-displayer/document-displayer.component';
 
 @NgModule({
   imports: [SharedModule, FormsModule, ReactiveFormsModule, MaterialConfigModule, NgxDaterangepickerMd, UserModule],
-  exports: [SearchPageComponent],
+  exports: [SearchPageComponent, DisplaySearchPageComponent],
   declarations: [
     SearchDaterangePickerComponent,
     SearchPageComponent,
+    DisplaySearchPageComponent,
     SearchResultsComponent,
     SearchBoxComponent,
-    FacetsBoxComponent
+    FacetsBoxComponent,
+    DocumentDisplayerComponent
   ],
   providers: [SearchService]
 })

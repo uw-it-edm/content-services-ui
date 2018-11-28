@@ -1,0 +1,43 @@
+<div role="main" [ngClass]="pageConfig?.theme">
+  <div class="cs-content-page">
+    <div fxLayout="row" class="cs-generic-header">
+      <div fxFlex="20">
+        <h2>{{pageConfig.pageName}}</h2>
+        <button mat-icon-button routerLink="/{{config.tenant}}" queryParamsHandling="merge"
+                matTooltip="Return to Search">
+          <mat-icon>keyboard_arrow_left</mat-icon>
+          Return to Search
+        </button>
+      </div>
+      <div fxFlex="70">
+        <app-search-box
+          [searchModel$]="searchModel$"
+          [pageConfig]="pageConfig"
+          [readonly]="true"
+        >
+        </app-search-box>
+      </div>
+
+    </div>
+
+    <div fxLayout="row" class="cs-generic-body" *ngFor="let result of searchResults?.results">
+      <div fxFlex="20">
+        <li><a [routerLink] [fragment]="'doc-'+result.id" queryParamsHandling="merge">
+          {{result.id}} </a>
+        </li>
+      </div>
+    </div>
+    <div fxLayout="row" class="cs-generic-body" *ngFor="let result of searchResults?.results">
+      <div fxFlex="20">
+      </div>
+      <div fxFlex="80">
+        <section [id]="'doc-'+result.id">
+          DocumentId : {{result.id}}
+          <app-document-displayer
+            [itemId]="result.id"
+          ></app-document-displayer>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

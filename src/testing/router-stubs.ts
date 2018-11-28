@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { convertToParamMap, Data, ParamMap } from '@angular/router';
+import { convertToParamMap, Data, ParamMap, Params } from '@angular/router';
 
 @Injectable()
 export class ActivatedRouteStub {
@@ -13,19 +13,30 @@ export class ActivatedRouteStub {
 
   // Test parameters
   private _testParamMap: ParamMap;
+  private _testQueryParamMap: Params;
   private _testData: Data;
 
   get testParamMap() {
     return this._testParamMap;
   }
+
   set testParamMap(params: {}) {
     this._testParamMap = convertToParamMap(params);
     this.paramSubject.next(this._testParamMap);
   }
 
+  get testQueryParamMap() {
+    return this._testQueryParamMap;
+  }
+
+  set testQueryParamMap(params: {}) {
+    this._testQueryParamMap = params;
+  }
+
   get testData() {
     return this._testData;
   }
+
   set testData(data: {}) {
     this._testData = data;
     this.dataSubject.next(this._testData);
@@ -33,6 +44,9 @@ export class ActivatedRouteStub {
 
   // ActivatedRoute.snapshot.paramMap
   get snapshot() {
-    return { paramMap: this.testParamMap };
+    return {
+      paramMap: this.testParamMap,
+      queryParams: this.testQueryParamMap
+    };
   }
 }

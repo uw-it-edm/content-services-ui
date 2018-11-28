@@ -49,7 +49,7 @@
             </span>
             <span>of {{pageCount}}</span>
         </span>
-        <span class="button-row">
+        <span *ngIf="allowFullScreen" class="button-row">
             <button mat-icon-button (click)="toggleFullScreen()" role="button">
                 <mat-icon>{{fullScreen ? 'fullscreen_exit' : 'fullscreen'}}</mat-icon>
             </button>

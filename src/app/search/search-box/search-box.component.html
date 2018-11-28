@@ -2,7 +2,15 @@
     <div class="search-form-group">
         <label for="search-field" *ngIf="pageConfig?.searchConfig?.label">{{pageConfig.searchConfig.label}}</label>
         <mat-form-field >
-            <input id="search-field" matInput [(ngModel)]="searchModel.stringQuery" (search)="updateSearch()" (ngModelChange)="updateSearch()" placeholder="{{pageConfig?.searchConfig?.placeholder}}" type="search" [matAutocomplete]="autocomplete">
+            <input id="search-field" matInput
+                   [(ngModel)]="searchModel.stringQuery"
+                   (search)="updateSearch()"
+                   (ngModelChange)="updateSearch()"
+                   placeholder="{{pageConfig?.searchConfig?.placeholder}}"
+                   type="search"
+                   [matAutocomplete]="autocomplete"
+                   [readonly]="readonly"
+            >
 
             <mat-hint id="search-hint" *ngIf="pageConfig?.searchConfig?.directions" align="start">{{pageConfig?.searchConfig?.directions}}</mat-hint>
             <mat-autocomplete #autocomplete="matAutocomplete" (optionSelected)="onSelectFilter($event)">
@@ -16,7 +24,7 @@
         <mat-chip-list aria-label="Search filters">
             <mat-chip *ngFor="let filter of searchModel.filters">
                 {{filter.label}}: {{filter.value}}
-                <button (click)="removeFilter(filter)" mat-icon-button aria-label="Remove filter">
+                <button *ngIf="!readonly" (click)="removeFilter(filter)" mat-icon-button aria-label="Remove filter" >
                     <mat-icon>clear</mat-icon>
                 </button>
             </mat-chip>
