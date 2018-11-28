@@ -132,18 +132,19 @@ export class SearchService {
   private addFacetsToSearchPayload(searchPayload: any, pageConfig: SearchPageConfig) {
     const facets = [];
 
-    Object.keys(pageConfig.facetsConfig.facets)
-      .map(key => {
-        return pageConfig.facetsConfig.facets[key];
-      })
-      .forEach((facetConfig: FacetConfig) => {
-        facets.push({
-          field: facetConfig.key,
-          order: facetConfig.order,
-          size: facetConfig.size
+    if (!isNullOrUndefined(pageConfig.facetsConfig)) {
+      Object.keys(pageConfig.facetsConfig.facets)
+        .map(key => {
+          return pageConfig.facetsConfig.facets[key];
+        })
+        .forEach((facetConfig: FacetConfig) => {
+          facets.push({
+            field: facetConfig.key,
+            order: facetConfig.order,
+            size: facetConfig.size
+          });
         });
-      });
-
+    }
     searchPayload['facets'] = facets;
   }
 
@@ -151,7 +152,7 @@ export class SearchService {
     if (isNullOrUndefined(sort) || isNullOrUndefined(sort.term) || isNullOrUndefined(sort.order)) {
       sort = pageConfig.defaultSort;
     }
-    if (sort && sort.term && sort.order) {
+    if (pageConfig.fieldsToDisplay && sort && sort.term && sort.order) {
       const newSort: Sort = Object.assign(new Sort(), sort);
       const fieldConfig: Field = pageConfig.fieldsToDisplay.find(field => field.key === newSort.term);
 

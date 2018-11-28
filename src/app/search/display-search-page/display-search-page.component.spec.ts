@@ -1,6 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SearchPageComponent } from './search-page.component';
 import { MaterialConfigModule } from '../../routing/material-config.module';
 import { ActivatedRoute } from '@angular/router';
 import { Title } from '@angular/platform-browser';
@@ -20,13 +19,18 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { StudentService } from '../../shared/providers/student.service';
 import { NotificationService } from '../../shared/providers/notification.service';
+import { DisplaySearchPageComponent } from './display-search-page.component';
+import { MatAutocompleteModule, MatDatepickerModule, MatOptionModule } from '@angular/material';
+import { ProgressService } from '../../shared/providers/progress.service';
+import { ContentService } from '../../content/shared/content.service';
+import { ContentItem } from '../../content/shared/model/content-item';
 
 let studentService: StudentService;
 let dataService: DataService;
 let activatedRoute: ActivatedRouteStub;
 let searchServiceSpy: MockSearchService;
-let component: SearchPageComponent;
-let fixture: ComponentFixture<SearchPageComponent>;
+let component: DisplaySearchPageComponent;
+let fixture: ComponentFixture<DisplaySearchPageComponent>;
 
 class MockSearchService {
   search(terms: Observable<SearchModel>, pageConfig: SearchPageConfig): Observable<SearchResults> {
@@ -34,8 +38,33 @@ class MockSearchService {
   }
 }
 
-describe('SearchPageComponent', () => {
+class MockContentService {
+  read(itemId: string): Observable<ContentItem> {
+    const defaultContentItem = new ContentItem();
+    defaultContentItem.id = '1';
+    defaultContentItem.label = 'test label';
+    defaultContentItem.metadata['1'] = 'one';
+    defaultContentItem.metadata['2'] = 'two';
+    defaultContentItem.metadata['3'] = 'three';
+    defaultContentItem.metadata['a'] = 'a';
+    defaultContentItem.metadata['b'] = 'asdf';
+    defaultContentItem.metadata['t'] = 't';
+    return Observable.of(defaultContentItem);
+  }
+
+  getFileUrl(itemId: string, webViewable: boolean): string {
+    return 'testUrl/' + itemId;
+  }
+
+  update(contentItem: ContentItem, file?: File): Observable<ContentItem> {
+    return Observable.of(contentItem);
+  }
+}
+
+describe('DisplaySearchPageComponent', () => {
+  let mockContentService: MockContentService;
   beforeEach(() => {
+    mockContentService = new MockContentService();
     activatedRoute = new ActivatedRouteStub();
     searchServiceSpy = new MockSearchService();
     dataService = new DataService();
@@ -45,13 +74,23 @@ describe('SearchPageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, MaterialConfigModule, HttpClientModule, RouterTestingModule],
-      declarations: [SearchPageComponent, SearchBoxComponent, SearchResultsComponent],
+      imports: [
+        NoopAnimationsModule,
+        RouterTestingModule,
+        HttpClientModule,
+        MaterialConfigModule,
+        MatAutocompleteModule,
+        MatDatepickerModule,
+        MatOptionModule,
+        NoopAnimationsModule
+      ],
+      declarations: [DisplaySearchPageComponent, SearchBoxComponent, SearchResultsComponent],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },
         { provide: SearchService, useValue: searchServiceSpy },
         { provide: DataService, useValue: dataService },
-        { provide: StudentService, useValue: studentService },
+        { provide: ContentService, useValue: mockContentService },
+        ProgressService,
         Title,
         NotificationService
       ],
@@ -61,6 +100,7 @@ describe('SearchPageComponent', () => {
 
   beforeEach(async(() => {
     activatedRoute.testParamMap = { page: 'test-page' };
+    activatedRoute.testQueryParamMap = { s: JSON.stringify(new SearchModel()) };
 
     const pageConfig = new SearchPageConfig();
     pageConfig.pageName = 'test-page';
@@ -74,7 +114,7 @@ describe('SearchPageComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SearchPageComponent);
+    fixture = TestBed.createComponent(DisplaySearchPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
 
@@ -88,54 +128,5 @@ describe('SearchPageComponent', () => {
   it('should get a page config', () => {
     const app = fixture.debugElement.componentInstance;
     expect(app.pageConfig).toBeDefined();
-  });
-
-  it('should get a config', () => {
-    const app = fixture.debugElement.componentInstance;
-    expect(app.config).toBeDefined();
-  });
-
-  it('should have the title set to the page name', () => {
-    const title = fixture.debugElement.injector.get(Title);
-    expect(title.getTitle()).toBe('test-page');
-  });
-
-  it('should add default sort order if none is defined in the pageConfig', () => {
-    expect(component.pageConfig.defaultSort.term).toBe('id');
-    expect(component.pageConfig.defaultSort.order).toBe('desc');
-  });
-
-  it('should display the upload new document button when enabled', () => {
-    let uploadButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-upload-new-document-button');
-    expect(uploadButton.length).toEqual(1);
-
-    component.pageConfig.disableUploadNewDocument = true;
-    fixture.detectChanges();
-
-    uploadButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-upload-new-document-button');
-    expect(uploadButton.length).toEqual(0);
-
-    component.pageConfig.disableUploadNewDocument = false;
-    fixture.detectChanges();
-
-    uploadButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-upload-new-document-button');
-    expect(uploadButton.length).toEqual(1);
-  });
-
-  it('should display the display documents button when enabled', () => {
-    let displaySearchButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-display-search-button');
-    expect(displaySearchButton.length).toEqual(1);
-
-    component.pageConfig.disableDisplaySearch = true;
-    fixture.detectChanges();
-
-    displaySearchButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-display-search-button');
-    expect(displaySearchButton.length).toEqual(0);
-
-    component.pageConfig.disableDisplaySearch = false;
-    fixture.detectChanges();
-
-    displaySearchButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-display-search-button');
-    expect(displaySearchButton.length).toEqual(1);
   });
 });

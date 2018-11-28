@@ -9,10 +9,11 @@
     [(showAll)]="showAll"
     [downloadUrl]="downloadUrl"
     [allowPageByPageMode]="allowPageByPageMode"
+    [allowFullScreen]="allowFullScreen"
     [zoomFactor]="zoomFactor"
     (zoom)="onZoomFactorChanged($event)">
   </app-content-toolbar>
-  <div class="content-object-display">
+  <div class="content-object-display" [class.content-object-display-fix-sized]="!allowFullHeightDisplay">
     <div [ngSwitch]="contentObject.displayType" >
       <div *ngSwitchCase="'blank'">
       </div>

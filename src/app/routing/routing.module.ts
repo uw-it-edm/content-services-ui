@@ -22,6 +22,7 @@ import { SharedModule } from '../shared/shared.module';
 import { UserModule } from '../user/user.module';
 import { CreatePageComponent } from '../content/create-page/create-page.component';
 import { HttpClientModule } from '@angular/common/http';
+import { DisplaySearchPageComponent } from '../search/display-search-page/display-search-page.component';
 
 let enableRouterTracing = false;
 if (environment.enableRouterTracing) {
@@ -62,6 +63,13 @@ const appRoutes: Routes = [
         }
       },
       {
+        path: ':page/display-search',
+        component: DisplaySearchPageComponent,
+        resolve: {
+          config: ConfigResolver
+        }
+      },
+      {
         path: '**',
         redirectTo: 'tab-search'
       }
@@ -77,10 +85,12 @@ const appRoutes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forRoot(
-      appRoutes,
-      { enableTracing: enableRouterTracing } // <-- debugging purposes only
-    ),
+    RouterModule.forRoot(appRoutes, {
+      enableTracing: enableRouterTracing, // <-- debugging purposes only
+      anchorScrolling: 'enabled',
+      scrollPositionRestoration: 'enabled',
+      scrollOffset: [0, 64] // [x, y]
+    }),
     BrowserModule,
     BrowserAnimationsModule,
     MaterialConfigModule,

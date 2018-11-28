@@ -4,7 +4,7 @@ import { HeaderComponent } from './widgets/header/header.component';
 import { MaterialConfigModule } from '../routing/material-config.module';
 import { RouterModule } from '@angular/router';
 import { FileUploadComponent } from './widgets/file-upload/file-upload.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SafeUrlPipe } from './pipes/safe-url.pipe';
 
 import { CustomTextDirective } from './directives/custom-text/custom-text.directive';
@@ -21,9 +21,12 @@ import { FocusDirective } from './directives/focus/focus.directive';
 import { OptionsInputComponent } from './widgets/options-input/options-input.component';
 import { NotificationComponent } from './widgets/notification/notification.component';
 import { NotificationService } from './providers/notification.service';
+import { ContentViewComponent } from '../content/content-view/content-view.component';
+import { ContentToolbarComponent } from '../content/content-toolbar/content-toolbar.component';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 @NgModule({
-  imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule, FormsModule, PdfViewerModule],
   exports: [
     CommonModule,
     CustomTextDirective,
@@ -39,7 +42,9 @@ import { NotificationService } from './providers/notification.service';
     TimestampPickerComponent,
     TruncatePipe,
     DisplayFieldComponent,
-    FocusDirective
+    FocusDirective,
+    ContentViewComponent,
+    ContentToolbarComponent
   ],
   declarations: [
     CustomTextDirective,
@@ -54,7 +59,9 @@ import { NotificationService } from './providers/notification.service';
     TruncatePipe,
     DisplayFieldComponent,
     FocusDirective,
-    NotificationComponent
+    NotificationComponent,
+    ContentViewComponent,
+    ContentToolbarComponent
   ],
   providers: [DataService, ProgressService, StudentService, NotificationService],
   entryComponents: [NotificationComponent]

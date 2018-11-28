@@ -20,8 +20,6 @@ import { ContentObjectListComponent } from './content-object-list/content-object
     EditPageComponent,
     ContentMetadataComponent,
     ContentObjectListComponent,
-    ContentToolbarComponent,
-    ContentViewComponent,
     DynamicComponentDirective,
     ContentPagerComponent,
     CreatePageComponent

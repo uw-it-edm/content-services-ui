@@ -15,8 +15,14 @@ import { PdfViewerComponent } from 'ng2-pdf-viewer';
 export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   private componentDestroyed = new Subject();
 
-  @Input() contentObject: ContentObject;
-  @Input() allowPageByPageMode = false;
+  @Input()
+  contentObject: ContentObject;
+  @Input()
+  allowPageByPageMode = false;
+  @Input()
+  allowFullHeightDisplay = false;
+  @Input()
+  allowFullScreen = true;
 
   autoResize = false;
   fitToPage = true;
@@ -33,10 +39,13 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(private contentService: ContentService, public progressService: ProgressService) {}
 
-  @ViewChild(ContentToolbarComponent) contentToolbarComponent;
-  @ViewChild(PdfViewerComponent) pdfViewer: PdfViewerComponent;
+  @ViewChild(ContentToolbarComponent)
+  contentToolbarComponent;
+  @ViewChild(PdfViewerComponent)
+  pdfViewer: PdfViewerComponent;
 
   ngOnInit() {
+    console.log('init content view component for ' + this.contentObject);
     this.pageCount = 1;
     this.pageNumber = 1;
     if (this.contentObject) {
@@ -72,6 +81,7 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onDisplayComplete(pdf: any) {
+    console.log('display complete for ' + this.contentObject.itemId);
     this.updateDownloadUrl();
     this.progressService.end();
     this.pageCount = pdf.numPages;
@@ -90,7 +100,7 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onDisplayProgress(progressData: any) {
-    console.log('Progress: ' + JSON.stringify(progressData));
+    console.log('Progress for ' + this.contentObject.itemId + ' : ' + JSON.stringify(progressData));
 
     const loaded = progressData.loaded;
     this.progressService.progress(loaded);
