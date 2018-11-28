@@ -123,19 +123,19 @@ describe('SearchPageComponent', () => {
   });
 
   it('should display the display documents button when enabled', () => {
-    let uploadButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-display-search-button');
-    expect(uploadButton.length).toEqual(1);
+    let displaySearchButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-display-search-button');
+    expect(displaySearchButton.length).toEqual(1);
 
     component.pageConfig.disableDisplaySearch = true;
     fixture.detectChanges();
 
-    uploadButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-display-search-button');
-    expect(uploadButton.length).toEqual(0);
+    displaySearchButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-display-search-button');
+    expect(displaySearchButton.length).toEqual(0);
 
     component.pageConfig.disableDisplaySearch = false;
     fixture.detectChanges();
 
-    uploadButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-display-search-button');
-    expect(uploadButton.length).toEqual(1);
+    displaySearchButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-display-search-button');
+    expect(displaySearchButton.length).toEqual(1);
   });
 });
