@@ -21,6 +21,7 @@
       "pageName": "Demonstration Search",
       "theme": "uw-default",
       "searchStateInURL": true,
+      "enableDisplaySearch":true,
       "fieldsToDisplay": [
         {
           "key": "ProfileId",
