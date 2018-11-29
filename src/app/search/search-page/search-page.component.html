@@ -17,9 +17,9 @@
           <span appCustomText="addContentItemButton" defaultValue="Upload"></span>&nbsp;<mat-icon>backup</mat-icon>
       </button>
     </div>
-    <div fxFlex="10" style="text-align: right" *ngIf="!pageConfig.disableDisplaySearch">
+    <div fxFlex="10" style="text-align: right" *ngIf="pageConfig.enableDisplaySearch">
       <button class="cs-display-search-button" mat-button (click)="navigateToDisplaySearchPage()" aria-label="Display all documents">
-          <span appCustomText="addContentItemButton" defaultValue="Display All"></span>&nbsp;<mat-icon>file_copy</mat-icon>
+          <span appCustomText="displaySearchPageButton" defaultValue="Display All"></span>&nbsp;<mat-icon>file_copy</mat-icon>
       </button>
     </div>
   </div>

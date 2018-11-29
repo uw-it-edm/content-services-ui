@@ -47,7 +47,7 @@ describe('ConfigService', () => {
     expect(service.getConfigForTenant('test')).toBeTruthy();
   });
 
-  it('should getTennantList', () => {
+  it('should getTenantList', () => {
     const response$ = Observable.of(profileLinks);
     httpSpy = spyOn(http, 'get').and.returnValue(response$);
 
