@@ -4064,9 +4064,10 @@ karma-jasmine@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/karma-jasmine/-/karma-jasmine-1.1.2.tgz#394f2b25ffb4a644b9ada6f22d443e2fd08886c3"
 
-karma-parallel@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/karma-parallel/-/karma-parallel-0.3.0.tgz#2f5502fb824528647c935be18655567c84c013a9"
+karma-parallel@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/karma-parallel/-/karma-parallel-0.3.1.tgz#781876e5992b2781619e762f3e04dcbf85f47fa1"
+  integrity sha512-64jxNYamYi/9Y67h4+FfViSYhwDgod3rLuq+ZdZ0c3XeZFp/3q3v3HVkd8b5Czp3hCB+LLF8DIv4zlR4xFqbRw==
   dependencies:
     istanbul "^0.4.5"
     lodash "^4.17.11"
