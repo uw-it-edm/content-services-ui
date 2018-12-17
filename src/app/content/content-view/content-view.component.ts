@@ -6,6 +6,7 @@ import { ProgressService } from '../../shared/providers/progress.service';
 import { ContentObject } from '../shared/model/content-object';
 import { ContentToolbarComponent } from '../content-toolbar/content-toolbar.component';
 import { PdfViewerComponent } from 'ng2-pdf-viewer';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-content-view',
@@ -22,6 +23,8 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   @Input()
   allowFullHeightDisplay = false;
   @Input()
+  showPdfInIframe = false;
+  @Input()
   allowFullScreen = true;
 
   autoResize = false;
@@ -37,7 +40,11 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   zoomFactor = 'automatic-zoom';
   downloadUrl: string;
 
-  constructor(private contentService: ContentService, public progressService: ProgressService) {}
+  constructor(
+    private contentService: ContentService,
+    public progressService: ProgressService,
+    private sanitizer: DomSanitizer
+  ) {}
 
   @ViewChild(ContentToolbarComponent)
   contentToolbarComponent;
@@ -57,7 +64,7 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
     this.pageCount = 1;
     this.pageNumber = 1;
 
-    if (changes.contentObject) {
+    if (changes.contentObject && changes.contentObject.currentValue) {
       this.onContentObjectChanged(changes.contentObject.currentValue);
       this.onZoomFactorChanged(this.zoomFactor);
     }
@@ -96,6 +103,7 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onDisplayError() {
+    console.log('display error');
     this.progressService.end();
   }
 
@@ -137,6 +145,10 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
       this.originalSize = false;
       this.zoom = parseFloat(zoomFactor);
     }
+  }
+
+  getIframeUrlForPDF(url: any) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url + '#view=FitH');
   }
 
   buildUrl(id: string, isWebViewable = true, disposition?: string) {
