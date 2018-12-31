@@ -1,5 +1,5 @@
-import { browser, by, element, ExpectedConditions } from 'protractor';
-import { EditPage } from '../edit/edit.po';
+import {browser, by, element, ExpectedConditions} from 'protractor';
+import {EditPage} from '../edit/edit.po';
 
 export class SearchPage {
   autoCompletePanel = element(by.className('mat-autocomplete-panel'));
@@ -10,6 +10,7 @@ export class SearchPage {
   dateRangeInput = element(by.css('.cs-search-daterange-picker input'));
   dateRangePicker = element(by.className('md-drppicker'));
   searchBox = element(by.id('search-field'));
+  displayAllButton = element(by.className('cs-display-search-button'));
 
   constructor(private profile: string = 'demo') {}
 

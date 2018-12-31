@@ -1,7 +1,8 @@
 ///<reference path="../../node_modules/@types/jasminewd2/index.d.ts"/>
-import { SearchPage } from './search.po';
-import { CreatePage } from '../create/create.po';
-import { browser } from 'protractor';
+import {SearchPage} from './search.po';
+import {CreatePage} from '../create/create.po';
+import {DisplaySearchPage} from './display-search.po';
+import {browser} from 'protractor';
 import * as moment from 'moment-timezone';
 
 let page: SearchPage;
@@ -56,6 +57,12 @@ describe('Search Page', () => {
     expect(page.dateRangePicker.isDisplayed()).toBeFalsy();
     expect(page.selectedFacet.getText()).toMatch(getExpectedDateRange(dateRangeText));
     expect(page.getDateRangeInputText()).toEqual(dateRangeText);
+  };
+
+  const getCurrentUrl = function () {
+    return browser.getCurrentUrl().then(url => {
+      return url.toLowerCase();
+    });
   };
 
   beforeEach(() => {
@@ -147,5 +154,12 @@ describe('Search Page', () => {
 
   it('should display correct date range in search filter when Last Month is selected', () => {
     selectAndVerifyDateRange('Last Month');
+  });
+
+  it('should navigate to display-search page when Display All button is clicked', () => {
+    page.displayAllButton.click();
+
+    const displaySearchPage = new DisplaySearchPage();
+    expect(getCurrentUrl()).toMatch(displaySearchPage.pageUrl);
   });
 });
