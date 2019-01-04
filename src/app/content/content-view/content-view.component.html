@@ -13,8 +13,9 @@
     [zoomFactor]="zoomFactor"
     (zoom)="onZoomFactorChanged($event)">
   </app-content-toolbar>
-  <div class="content-object-display" [class.content-object-display-fix-sized]="!allowFullHeightDisplay">
-    <div [ngSwitch]="contentObject.displayType" >
+  <div class="content-object-display"
+       [class.content-object-display-fix-sized]="!allowFullHeightDisplay">
+    <div [ngSwitch]="contentObject.displayType">
       <div *ngSwitchCase="'blank'">
       </div>
       <div *ngSwitchCase="'pdfData'">
@@ -36,7 +37,9 @@
       </div>
 
       <div *ngSwitchCase="'pdfUrl'">
-        <pdf-viewer [src]="contentObject.url"
+
+        <pdf-viewer *ngIf="!showPdfInIframe"
+                    [src]="contentObject.url"
                     [(page)]="pageNumber"
                     [external-link-target]="'blank'"
                     [autoresize]="autoResize"
@@ -51,6 +54,11 @@
                     (error)="onDisplayError($event)"
                     class="cs-preview-max-height"
         ></pdf-viewer>
+
+        <div class="iframe-container" *ngIf="showPdfInIframe" >
+          <iframe [src]="getIframeUrlForPDF(contentObject.url)" height="100%" ></iframe>
+        </div>
+
       </div>
 
       <div *ngSwitchCase="'image'">
