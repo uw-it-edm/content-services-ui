@@ -51,7 +51,7 @@
     "jasmine": "^3.3.1",
     "lint-staged": "^8.1.0",
     "lodash": "^4.17.11",
-    "moment": "^2.22.2",
+    "moment": "^2.23.0",
     "moment-timezone": "^0.5.23",
     "ng2-pdf-viewer": "5.2.3",
     "ngx-daterangepicker-material": "^1.2.7",
