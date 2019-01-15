@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { ContentService } from '../../content/shared/content.service';
 import { ContentObject } from '../../content/shared/model/content-object';
