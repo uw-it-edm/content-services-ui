@@ -59,12 +59,6 @@ describe('Search Page', () => {
     expect(page.getDateRangeInputText()).toEqual(dateRangeText);
   };
 
-  const getCurrentUrl = function () {
-    return browser.getCurrentUrl().then(url => {
-      return url.toLowerCase();
-    });
-  };
-
   beforeEach(() => {
     page = new SearchPage();
     page.navigateTo();
@@ -160,6 +154,6 @@ describe('Search Page', () => {
     page.displayAllButton.click();
 
     const displaySearchPage = new DisplaySearchPage();
-    expect(getCurrentUrl()).toMatch(displaySearchPage.pageUrl);
+    expect(browser.getCurrentUrl()).toEqual(displaySearchPage.getEncodedPageUrl());
   });
 });
