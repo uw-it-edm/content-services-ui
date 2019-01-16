@@ -4,7 +4,7 @@ import {browser} from 'protractor';
 
 let page: DisplaySearchPage;
 
-describe('Display Search All Page', () => {
+describe('Search Display All Page', () => {
   const demoConfig = require('../mocks/profile-api/demo.json');
 
   beforeEach(() => {
