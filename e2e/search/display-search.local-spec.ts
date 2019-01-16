@@ -1,8 +1,10 @@
 import {DisplaySearchPage} from './display-search.po';
+import {SearchPage} from './search.po';
+import {browser} from 'protractor';
 
 let page: DisplaySearchPage;
 
-describe('Search Page', () => {
+describe('Display Search All Page', () => {
   const demoConfig = require('../mocks/profile-api/demo.json');
 
   beforeEach(() => {
@@ -12,5 +14,25 @@ describe('Search Page', () => {
 
   it('should display page title', () => {
     expect(page.getPageTitle()).toEqual(demoConfig.pages['tab-search'].pageName);
+  });
+
+  it('should display correct number of file viewers', () => {
+    const searchJson = require('../mocks/search-api/search.json');
+    const searchResultsCount = Object.keys(searchJson.searchResults).length;
+    expect(page.fileViewers.count()).toBe(searchResultsCount);
+  });
+
+  it('should navigate to Search page when Return to Search button is clicked', () => {
+    page.returnToSearchButton.click();
+
+    const getCurrentUrl = function () {
+      return browser.getCurrentUrl().then(url => {
+        return url.toLowerCase();
+      });
+    };
+
+    const searchPage = new SearchPage();
+
+    expect(getCurrentUrl()).toMatch(searchPage.pageUrl);
   });
 });
