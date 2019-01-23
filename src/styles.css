@@ -78,7 +78,7 @@
 .uw-default .cs-content-view iframe {
     border: 1px solid #aaaaaa;
     height: 600px;
-    margin: 0 4rem;
+    margin: 0;
     width: 100%;
 }
 

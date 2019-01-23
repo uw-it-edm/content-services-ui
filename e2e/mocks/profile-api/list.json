@@ -1,7 +1,7 @@
 {
   "_links": {
     "demo": {
-      "href": "http://localhost:12345/profile/v1/app/my-app/demo"
+      "href": "http://__current_host__:12345/profile/v1/app/my-app/demo"
     }
   }
 }
