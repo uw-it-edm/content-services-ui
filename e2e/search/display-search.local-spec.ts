@@ -13,7 +13,7 @@ describe('Search Display All Page', () => {
   });
 
   it('should display page title', () => {
-    expect(page.getPageTitle()).toEqual(demoConfig.pages['tab-search'].pageName);
+    expect(DisplaySearchPage.getPageTitle()).toEqual(demoConfig.pages['tab-search'].pageName);
   });
 
   it('should display correct number of file viewers', () => {
@@ -34,5 +34,13 @@ describe('Search Display All Page', () => {
     const searchPage = new SearchPage();
 
     expect(getCurrentUrl()).toMatch(searchPage.pageUrl);
+  });
+
+  it('should display scroll bar in all file viewers', () => {
+    DisplaySearchPage.getFileViewersScrollingAttribute().then(attributes => {
+      for (const attr of attributes) {
+        expect(attr).toEqual('yes');
+      }
+    });
   });
 });
