@@ -8,12 +8,16 @@ export class DisplaySearchPage {
   fileViewers = element.all(by.tagName('app-document-displayer'));
   returnToSearchButton = element(by.name('returnToSearch'));
 
-  navigateTo() {
-    return browser.get(this.pageUrl);
+  static getPageTitle() {
+    return browser.getTitle();
   }
 
-  getPageTitle() {
-    return browser.getTitle();
+  static getFileViewersScrollingAttribute() {
+     return element.all(by.name('iframe-content-display')).getAttribute('scrolling');
+  }
+
+  navigateTo() {
+    return browser.get(this.pageUrl);
   }
 
   getEncodedPageUrl() {
@@ -22,6 +26,6 @@ export class DisplaySearchPage {
     .replace(/"/g, '%22')
     .replace(/\[/g, '%5B')
     .replace(/}/g, '%7D')
-    .replace(/\]/g, '%5D');
+    .replace(/]/g, '%5D');
   }
 }
