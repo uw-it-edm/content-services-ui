@@ -55,8 +55,8 @@
                     class="cs-preview-max-height"
         ></pdf-viewer>
 
-        <div class="iframe-container" *ngIf="showPdfInIframe" >
-          <iframe [src]="getIframeUrlForPDF(contentObject.url)" height="100%" ></iframe>
+        <div class="iframe-container" *ngIf="showPdfInIframe"  >
+          <iframe [src]="getIframeUrlForPDF(contentObject.url)" height="100%" name="iframe-content-display" scrolling="yes">Loading...</iframe>
         </div>
 
       </div>
