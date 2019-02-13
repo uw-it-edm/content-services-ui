@@ -46,7 +46,7 @@
     "@types/pdfjs-dist": "^0.1.2",
     "angulartics2": "^6.3.1",
     "classlist.js": "^1.1.20150312",
-    "core-js": "^2.6.3",
+    "core-js": "^2.6.4",
     "coveralls": "^3.0.2",
     "directory-encoder": "0.9.2",
     "jasmine": "^3.3.1",
