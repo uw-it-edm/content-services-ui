@@ -30,7 +30,7 @@ export const environment = {
     authenticationHeader: null
   },
   data_api: {
-    url: 'http://localhost:12345',
+    url: 'http://localhost:12345/data',
     studentContext: '/students/v1',
     valueContext: '/v1/value',
     authenticationHeader: null

@@ -97,7 +97,7 @@
         {
           "key": "DataApiOptionLabel",
           "label": "DataApiOption show label",
-          "required": true,
+          "required": false,
           "displayType": "select",
           "dynamicSelectOptions": {
             "type" : "test-type",
@@ -107,7 +107,7 @@
         {
           "key": "DataApiOptionCode",
           "label": "DataApiOption Show Code",
-          "required": true,
+          "required": false,
           "displayType": "select",
           "dynamicSelectOptions": {
             "type" : "test-type",

@@ -33,7 +33,7 @@ export class DataApiValueService {
     const requestOptionsArgs = {};
     if (environment.data_api.authenticationHeader) {
       const user = this.userService.getUser();
-      requestOptionsArgs['headers'] = new HttpHeaders().append(environment.data_api.authenticationHeader, 'maximed');
+      requestOptionsArgs['headers'] = new HttpHeaders().append(environment.data_api.authenticationHeader, user.actAs);
     }
 
     if (!isNullOrUndefined(httpParams)) {
