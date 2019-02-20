@@ -5,20 +5,20 @@ import { Field } from '../../../core/shared/model/field';
 import { SharedModule } from '../../shared.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectChange } from '@angular/material';
+import { DataApiValueService } from '../../providers/dataapivalue.service';
 
 describe('OptionsInputComponent', () => {
   let component: OptionsInputComponent;
   let fixture: ComponentFixture<OptionsInputComponent>;
 
-  beforeEach(
-    async(() => {
-      TestBed.configureTestingModule({
-        imports: [SharedModule, NoopAnimationsModule],
-        declarations: [],
-        providers: []
-      }).compileComponents();
-    })
-  );
+  beforeEach(async(() => {
+    const dataApiValueServiceSpy = jasmine.createSpyObj('DataApiValueService', ['listByType']);
+    TestBed.configureTestingModule({
+      imports: [SharedModule, NoopAnimationsModule],
+      declarations: [],
+      providers: [{ provide: DataApiValueService, useValue: dataApiValueServiceSpy }]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(OptionsInputComponent);
@@ -48,10 +48,12 @@ describe('OptionsInputComponent', () => {
   });
 
   it('should have a correct list of options', () => {
-    expect(component.options.length).toBe(2);
-    expect(component.options[0].value).toBe('val1');
-    expect(component.options[0].displayValue).toBe('displayVal1');
-    expect(component.options[1].value).toBe('val2');
-    expect(component.options[1].displayValue).toBe('val2');
+    component.options$.subscribe(options => {
+      expect(options.length).toBe(2);
+      expect(options[0].value).toBe('val1');
+      expect(options[0].displayValue).toBe('displayVal1');
+      expect(options[1].value).toBe('val2');
+      expect(options[1].displayValue).toBe('val2');
+    });
   });
 });

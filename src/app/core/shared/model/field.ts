@@ -1,5 +1,6 @@
 import { CheckboxOptions } from './field/checkbox-options';
 import { FieldOption } from './field/field-option';
+import { DynamicSelectOptions } from './field/dynamic-select-options';
 
 export class Field {
   public key: string;
@@ -12,6 +13,9 @@ export class Field {
   public displayType?: string;
 
   public options?: FieldOption[] = [];
+
+  public dynamicSelectOptions: DynamicSelectOptions;
+
   public filteredOptions?: any = [];
 
   public checkboxOptions?: CheckboxOptions;

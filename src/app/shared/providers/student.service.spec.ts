@@ -1,5 +1,3 @@
-import { inject, TestBed } from '@angular/core/testing';
-
 import { StudentService } from './student.service';
 import { UserService } from '../../user/shared/user.service';
 import { HttpClient } from '@angular/common/http';
@@ -69,7 +67,7 @@ const readResponse = {
   studentSystemKey: '4321'
 };
 
-const expectedSearchUrl = environment.data_api.url + environment.data_api.context;
+const expectedSearchUrl = environment.data_api.url + environment.data_api.studentContext;
 describe('StudentService', () => {
   beforeEach(() => {
     http = new HttpClient(null);
@@ -81,7 +79,7 @@ describe('StudentService', () => {
   });
 
   it('should be read a valid studentNumber', () => {
-    const expectedUrl = environment.data_api.url + environment.data_api.context + '/1234';
+    const expectedUrl = environment.data_api.url + environment.data_api.studentContext + '/1234';
 
     httpSpy = spyOn(http, 'get').and.callFake(function(any, any2) {
       return Observable.of(readResponse);

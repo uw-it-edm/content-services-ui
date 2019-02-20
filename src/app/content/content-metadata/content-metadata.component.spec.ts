@@ -25,6 +25,7 @@ import { TimestampPickerComponent } from '../../shared/widgets/timestamp-picker/
 import { FieldOption } from '../../core/shared/model/field/field-option';
 import { OptionsInputComponent } from '../../shared/widgets/options-input/options-input.component';
 import { Field } from '../../core/shared/model/field';
+import { DataApiValueService } from '../../shared/providers/dataapivalue.service';
 
 class UserServiceMock extends UserService {
   constructor() {
@@ -40,41 +41,42 @@ describe('ContentMetadataComponent', () => {
   let component: ContentMetadataComponent;
   let fixture: ComponentFixture<ContentMetadataComponent>;
   let defaultContentItem: ContentItem;
-  beforeEach(
-    async(() => {
-      TestBed.configureTestingModule({
-        imports: [
-          NoopAnimationsModule,
-          MatFormFieldModule,
-          MatInputModule,
-          MatCheckboxModule,
-          MatButtonModule,
-          MatDatepickerModule,
-          MatNativeDateModule,
-          ReactiveFormsModule,
-          MatOptionModule,
-          MatAutocompleteModule,
-          MatSelectModule
-        ],
-        declarations: [
-          ContentMetadataComponent,
-          CheckboxInputComponent,
-          OptionsInputComponent,
-          StudentAutocompleteComponent,
-          TimestampPickerComponent
-        ],
-        providers: [
-          { provide: UserService, useValue: new UserServiceMock() },
-          { provide: HttpClient, useValue: new HttpClient(null) }
-        ]
-      })
-        .compileComponents()
-        .then(() => {
-          fixture = TestBed.createComponent(ContentMetadataComponent);
-          component = fixture.componentInstance;
-        });
+  beforeEach(async(() => {
+    const dataApiValueServiceSpy = jasmine.createSpyObj('DataApiValueService', ['listByType']);
+
+    TestBed.configureTestingModule({
+      imports: [
+        NoopAnimationsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatCheckboxModule,
+        MatButtonModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        ReactiveFormsModule,
+        MatOptionModule,
+        MatAutocompleteModule,
+        MatSelectModule
+      ],
+      declarations: [
+        ContentMetadataComponent,
+        CheckboxInputComponent,
+        OptionsInputComponent,
+        StudentAutocompleteComponent,
+        TimestampPickerComponent
+      ],
+      providers: [
+        { provide: DataApiValueService, useValue: dataApiValueServiceSpy },
+        { provide: UserService, useValue: new UserServiceMock() },
+        { provide: HttpClient, useValue: new HttpClient(null) }
+      ]
     })
-  );
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(ContentMetadataComponent);
+        component = fixture.componentInstance;
+      });
+  }));
 
   beforeEach(() => {
     const editPageConfig = new ContentPageConfig();

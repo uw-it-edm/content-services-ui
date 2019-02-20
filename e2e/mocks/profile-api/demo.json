@@ -95,6 +95,26 @@
       "pageName": "Edit Content Item",
       "fieldsToDisplay": [
         {
+          "key": "DataApiOptionLabel",
+          "label": "DataApiOption show label",
+          "required": true,
+          "displayType": "select",
+          "dynamicSelectOptions": {
+            "type" : "test-type",
+            "labelPath" : "label"
+          }
+        },
+        {
+          "key": "DataApiOptionCode",
+          "label": "DataApiOption Show Code",
+          "required": true,
+          "displayType": "select",
+          "dynamicSelectOptions": {
+            "type" : "test-type",
+            "labelPath" : "metadata.Code"
+          }
+        },
+        {
           "key": "Filer",
           "label": "Filer",
           "required": true
