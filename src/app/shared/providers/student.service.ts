@@ -13,7 +13,7 @@ import { isNullOrUndefined } from '../../core/util/node-utilities';
 
 @Injectable()
 export class StudentService {
-  private studentUrl = environment.data_api.url + environment.data_api.context;
+  private studentUrl = environment.data_api.url + environment.data_api.studentContext;
 
   constructor(private http: HttpClient, private userService: UserService) {}
 

@@ -33,6 +33,11 @@ import { Field } from '../../../core/shared/model/field';
 import { FieldOption } from '../../../core/shared/model/field/field-option';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
+import { DataApiValueService } from '../../providers/dataapivalue.service';
+import { DataApiValueSearchResults } from '../../shared/model/data-api-value-search-results';
+import { DataApiValue } from '../../shared/model/data-api-value';
+import { Observable } from 'rxjs';
+import { ObjectUtilities } from '../../../core/util/object-utilities';
 
 // Boilerplate for applying mixins to OptionsInputComponent.
 /** @docs-private */
@@ -69,7 +74,8 @@ const INTERNAL_FIELD_NAME = 'optionsForm';
   ]
 })
 export class OptionsInputComponent extends _OptionsInputComponentBase
-  implements ControlValueAccessor,
+  implements
+    ControlValueAccessor,
     MatFormFieldControl<string>,
     CanUpdateErrorState,
     AfterContentInit,
@@ -86,7 +92,7 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
   }
 
   @Input() fieldConfig: Field;
-  options: FieldOption[] = [];
+  options$: Observable<FieldOption[]>;
   formGroup: FormGroup;
 
   private initComponent() {
@@ -101,10 +107,27 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
     this.formGroup.controls[INTERNAL_FIELD_NAME] = new FormControl();
   }
 
+  private splitRegex = /[.]/g;
+
   private initOptions() {
-    this.options = this.fieldConfig.options.map(option => {
-      return Object.assign(new FieldOption(), option);
-    });
+    if (this.fieldConfig.dynamicSelectOptions) {
+      this.options$ = this.dataApiValueService
+        .listByType(this.fieldConfig.dynamicSelectOptions.type)
+        .map((results: DataApiValueSearchResults) => results.content)
+        .map((values: DataApiValue[]) => {
+          return values.map((value: DataApiValue) => {
+            const paths = this.fieldConfig.dynamicSelectOptions.labelPath.split(this.splitRegex);
+            const displayValue = ObjectUtilities.getNestedObject(value.data, paths);
+            return new FieldOption(value.valueId, displayValue);
+          });
+        });
+    } else {
+      this.options$ = Observable.of(
+        this.fieldConfig.options.map(option => {
+          return Object.assign(new FieldOption(), option);
+        })
+      );
+    }
   }
 
   private initializeValue(): void {
@@ -253,7 +276,8 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
     _defaultErrorStateMatcher: ErrorStateMatcher,
     @Optional()
     @Self()
-    public ngControl: NgControl
+    public ngControl: NgControl,
+    private dataApiValueService: DataApiValueService
   ) {
     super(_defaultErrorStateMatcher, _parentForm, _parentFormGroup, ngControl);
 
