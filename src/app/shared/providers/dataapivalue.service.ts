@@ -18,8 +18,7 @@ export class DataApiValueService {
 
   @CacheObservableDecorator
   public listByType(type: string): Observable<DataApiValueSearchResults> {
-    const params = new HttpParams();
-    params.set('size', this.DATA_API_VALUE_PAGE_SIZE);
+    const params = new HttpParams().set('size', this.DATA_API_VALUE_PAGE_SIZE);
     const options = this.buildRequestOptions(params);
 
     return this.http.get<DataApiValueSearchResults>(this.valueUrl + '/' + type, options);
