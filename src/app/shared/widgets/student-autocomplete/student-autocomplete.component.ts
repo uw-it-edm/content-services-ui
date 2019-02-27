@@ -261,6 +261,16 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
 
   focused = false;
 
+  @HostListener('focusin')
+  onFocusin() {
+    this.focused = true;
+  }
+
+  @HostListener('focusout')
+  onFocusout() {
+    this.focused = false;
+  }
+
   @HostBinding('class.floating')
   get shouldPlaceholderFloat() {
     return this.focused || !this.empty;
@@ -356,15 +366,7 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
   }
 
   onContainerClick() {
-    this.focus();
     this._markAsTouched();
-  }
-
-  @HostListener('focus')
-  focus() {
-    if ((event.target as Element).tagName.toLowerCase() !== 'input') {
-      this._elementRef.nativeElement.querySelector('input').focus();
-    }
   }
 
   /** Emits change event to set the model value. */
@@ -384,7 +386,6 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
   /** When blurred, mark the field as touched when focus moved outside the Input. */
   @HostListener('blur')
   blur() {
-    console.log('bluuuur');
     if (!this.disabled) {
       this._markAsTouched();
     }
