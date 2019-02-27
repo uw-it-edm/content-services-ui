@@ -11,33 +11,19 @@ import {
   Optional,
   Self
 } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import {
-  ControlValueAccessor,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  FormGroupDirective,
-  NgControl,
-  NgForm
-} from '@angular/forms';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import {
-  CanUpdateErrorState,
-  ErrorStateMatcher,
-  MatFormFieldControl,
-  MatSelectChange,
-  mixinErrorState
-} from '@angular/material';
-import { Field } from '../../../core/shared/model/field';
-import { FieldOption } from '../../../core/shared/model/field/field-option';
-import { FocusMonitor } from '@angular/cdk/a11y';
-import { isNullOrUndefined } from '../../../core/util/node-utilities';
-import { DataApiValueService } from '../../providers/dataapivalue.service';
-import { DataApiValueSearchResults } from '../../shared/model/data-api-value-search-results';
-import { DataApiValue } from '../../shared/model/data-api-value';
-import { Observable } from 'rxjs';
-import { ObjectUtilities } from '../../../core/util/object-utilities';
+import {Subject} from 'rxjs/Subject';
+import {ControlValueAccessor, FormBuilder, FormControl, FormGroup, FormGroupDirective, NgControl, NgForm} from '@angular/forms';
+import {coerceBooleanProperty} from '@angular/cdk/coercion';
+import {CanUpdateErrorState, ErrorStateMatcher, MatFormFieldControl, MatSelectChange, mixinErrorState} from '@angular/material';
+import {Field} from '../../../core/shared/model/field';
+import {FieldOption} from '../../../core/shared/model/field/field-option';
+import {FocusMonitor} from '@angular/cdk/a11y';
+import {isNullOrUndefined} from '../../../core/util/node-utilities';
+import {DataApiValueService} from '../../providers/dataapivalue.service';
+import {DataApiValueSearchResults} from '../../shared/model/data-api-value-search-results';
+import {DataApiValue} from '../../shared/model/data-api-value';
+import {Observable} from 'rxjs';
+import {ObjectUtilities} from '../../../core/util/object-utilities';
 
 // Boilerplate for applying mixins to OptionsInputComponent.
 /** @docs-private */
@@ -47,7 +33,8 @@ export class OptionsInputComponentBase {
     public _parentForm: NgForm,
     public _parentFormGroup: FormGroupDirective,
     public ngControl: NgControl
-  ) {}
+  ) {
+  }
 }
 
 export const _OptionsInputComponentBase = mixinErrorState(OptionsInputComponentBase);
@@ -74,8 +61,7 @@ const INTERNAL_FIELD_NAME = 'optionsForm';
   ]
 })
 export class OptionsInputComponent extends _OptionsInputComponentBase
-  implements
-    ControlValueAccessor,
+  implements ControlValueAccessor,
     MatFormFieldControl<string>,
     CanUpdateErrorState,
     AfterContentInit,
@@ -166,10 +152,12 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
   // MatFormField boilerplate
 
   /** Function when touched */
-  _onTouched = () => {};
+  _onTouched = () => {
+  };
 
   /** Function when changed */
-  _onChange: (value: any) => void = () => {};
+  _onChange: (value: any) => void = () => {
+  };
 
   /** Uid of the chip list */
   protected _uid = `custom-input-${nextUniqueId++}`;
@@ -247,7 +235,18 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
     return !value;
   }
 
+
   focused = false;
+
+  @HostListener('focusin')
+  onFocusin() {
+    this.focused = true;
+  }
+
+  @HostListener('focusout')
+  onFocusout() {
+    this.focused = false;
+  }
 
   get shouldLabelFloat(): boolean {
     return this.focused || !this.empty;
@@ -344,12 +343,8 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
   }
 
   onContainerClick() {
-    this.focus();
     this._markAsTouched();
   }
-
-  @HostListener('focus')
-  focus() {}
 
   /** Emits change event to set the model value. */
   private _propagateChanges(valueToEmit: any): void {
