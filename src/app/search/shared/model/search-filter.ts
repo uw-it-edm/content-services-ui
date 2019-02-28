@@ -18,7 +18,7 @@ export class SearchFilter {
     return this.key === b.key && this.value === b.value;
   }
 
-  getDisplayLabel(): string {
+  getDisplayValue(): string {
     if (this.valueLabel) {
       return this.valueLabel;
     } else {
