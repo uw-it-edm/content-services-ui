@@ -2,13 +2,13 @@ export class SearchFilter {
   key: string;
   value: string;
   label: string;
-  valueLabel?: string;
+  displayValue?: string;
 
-  constructor(key: string, value: string, label: string, valueLabel?: string) {
+  constructor(key: string, value: string, label: string, displayValue?: string) {
     this.key = key;
     this.label = label;
     this.value = value;
-    this.valueLabel = valueLabel;
+    this.displayValue = displayValue;
   }
 
   equals(b: SearchFilter): boolean {
@@ -19,8 +19,8 @@ export class SearchFilter {
   }
 
   getDisplayValue(): string {
-    if (this.valueLabel) {
-      return this.valueLabel;
+    if (this.displayValue) {
+      return this.displayValue;
     } else {
       return this.value;
     }

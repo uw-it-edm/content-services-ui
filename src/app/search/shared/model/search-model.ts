@@ -24,7 +24,7 @@ export class SearchModel {
 
     if (json._filters != null) {
       json._filters.forEach(function(filter) {
-        searchModel.addFilterIfNotThere(new SearchFilter(filter.key, filter.value, filter.label, filter.valueLabel));
+        searchModel.addFilterIfNotThere(new SearchFilter(filter.key, filter.value, filter.label, filter.displayValue));
       });
     }
 
