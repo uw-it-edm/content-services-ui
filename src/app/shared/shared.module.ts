@@ -24,6 +24,7 @@ import { NotificationService } from './providers/notification.service';
 import { ContentViewComponent } from '../content/content-view/content-view.component';
 import { ContentToolbarComponent } from '../content/content-toolbar/content-toolbar.component';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { DataApiValueService } from './providers/dataapivalue.service';
 
 @NgModule({
   imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule, FormsModule, PdfViewerModule],
@@ -63,7 +64,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     ContentViewComponent,
     ContentToolbarComponent
   ],
-  providers: [DataService, ProgressService, StudentService, NotificationService],
+  providers: [DataService, ProgressService, StudentService, DataApiValueService, NotificationService],
   entryComponents: [NotificationComponent]
 })
 export class SharedModule {}

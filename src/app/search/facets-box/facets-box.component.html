@@ -9,7 +9,7 @@
               {{facetResult.key}} ({{facetResult.count}})
             </span>
             <ng-template #showLink>
-              <a (click)="addFacetFilter(facetConfig.key,facetResult.key, facetConfig.label)">
+              <a [routerLink]="" (click)="addFacetFilter(facetConfig.key,facetResult.key, facetConfig.label)">
                 {{facetResult.key}} ({{facetResult.count}})</a>
             </ng-template>
           </mat-list-item>
