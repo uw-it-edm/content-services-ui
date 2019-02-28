@@ -1,4 +1,6 @@
+import { FilterableValue } from './person';
+
 export interface SearchFilterableResult {
-  getFilterableValue(): string;
+  getFilterableValue(): FilterableValue;
   getFilterableDisplay(): string;
 }

@@ -32,14 +32,12 @@ describe('SearchBoxComponent', () => {
   let component: SearchBoxComponent;
   let fixture: ComponentFixture<SearchBoxComponent>;
 
-  beforeEach(
-    async(() => {
-      TestBed.configureTestingModule({
-        imports: [FormsModule, MaterialConfigModule, NoopAnimationsModule],
-        declarations: [SearchBoxComponent]
-      }).compileComponents();
-    })
-  );
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [FormsModule, MaterialConfigModule, NoopAnimationsModule],
+      declarations: [SearchBoxComponent]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SearchBoxComponent);
@@ -74,7 +72,9 @@ describe('SearchBoxComponent', () => {
   it('should add filter', () => {
     const event: MatAutocompleteSelectedEvent = <MatAutocompleteSelectedEvent>{
       option: {
-        value: 'test'
+        value: {
+          value: 'test'
+        }
       }
     };
     component.onSelectFilter(event);

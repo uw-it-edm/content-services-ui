@@ -20,6 +20,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { StudentService } from '../../shared/providers/student.service';
 import { NotificationService } from '../../shared/providers/notification.service';
+import { PersonService } from '../../shared/providers/person.service';
 
 let studentService: StudentService;
 let dataService: DataService;
@@ -52,6 +53,7 @@ describe('SearchPageComponent', () => {
         { provide: SearchService, useValue: searchServiceSpy },
         { provide: DataService, useValue: dataService },
         { provide: StudentService, useValue: studentService },
+        { provide: PersonService, useValue: {} },
         Title,
         NotificationService
       ],
