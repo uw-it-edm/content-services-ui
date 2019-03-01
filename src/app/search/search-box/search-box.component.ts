@@ -57,7 +57,7 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
 
   private assignAutocompleteListener() {
     this.searchEvent.takeUntil(this.componentDestroyed).subscribe((model: SearchModel) => {
-      if (model && model.stringQuery && model.stringQuery.trim().length > 1) {
+      if (model && model.stringQuery && typeof model.stringQuery === 'string' && model.stringQuery.trim().length > 1) {
         this.searchAutocomplete
           .autocomplete(model.stringQuery)
           .takeUntil(this.componentDestroyed)
@@ -71,7 +71,7 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
   }
 
   onSelectFilter(event: MatAutocompleteSelectedEvent) {
-    console.log('select ' + event.option.value);
+    console.log('select ' + event.option.value.value);
 
     const searchFilter = this.searchAutocomplete.createFilter(event.option.value);
     console.log('adding new filter : ' + JSON.stringify(searchFilter));

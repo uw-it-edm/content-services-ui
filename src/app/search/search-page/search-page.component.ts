@@ -16,6 +16,8 @@ import { SearchAutocomplete } from '../shared/search-autocomplete/search-autocom
 import { NotificationService } from '../../shared/providers/notification.service';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { BehaviorSubject } from 'rxjs';
+import { PersonSearchAutocomplete } from '../shared/search-autocomplete/person-search-autocomplete';
+import { PersonService } from '../../shared/providers/person.service';
 
 @Component({
   selector: 'app-search-page',
@@ -39,6 +41,7 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
     private titleService: Title,
     private searchService: SearchService,
     private dataService: DataService,
+    private personService: PersonService,
     private router: Router,
     private studentService: StudentService,
     private notificationService: NotificationService
@@ -83,11 +86,24 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         this.titleService.setTitle(this.pageConfig.pageName);
         if (this.pageConfig.autocompleteConfig) {
-          this.searchAutocomplete = new StudentSearchAutocomplete(
-            this.studentService,
-            this.pageConfig.autocompleteConfig.filterKey,
-            this.pageConfig.autocompleteConfig.filterLabel
-          );
+          switch (this.pageConfig.autocompleteConfig.type) {
+            case 'studentAutocomplete':
+              this.searchAutocomplete = new StudentSearchAutocomplete(
+                this.studentService,
+                this.pageConfig.autocompleteConfig.filterKey,
+                this.pageConfig.autocompleteConfig.filterLabel
+              );
+              break;
+            case 'personAutocomplete':
+              this.searchAutocomplete = new PersonSearchAutocomplete(
+                this.personService,
+                this.pageConfig.autocompleteConfig.filterKey,
+                this.pageConfig.autocompleteConfig.filterLabel
+              );
+              break;
+            default:
+              throw new Error('No autocompleter for ' + this.pageConfig.autocompleteConfig.type);
+          }
         }
         this.searchService.search(this.searchModel$, this.pageConfig).subscribe(
           (searchResults: SearchResults) => {

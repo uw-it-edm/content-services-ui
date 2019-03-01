@@ -4,12 +4,13 @@ import { SearchAutocomplete } from './search-autocomplete';
 import { SearchFilter } from '../model/search-filter';
 import { StudentSearchResults } from '../../../shared/shared/model/student-search-results';
 import { Student } from '../../../shared/shared/model/student';
+import { FilterableValue } from '../../../shared/shared/model/person';
 
 export class StudentSearchAutocomplete implements SearchAutocomplete {
   constructor(private studentService: StudentService, private filterKey: string, private filterLabel: string) {}
 
-  public createFilter(value: string): SearchFilter {
-    return new SearchFilter(this.filterKey, value, this.filterLabel);
+  public createFilter(value: FilterableValue): SearchFilter {
+    return new SearchFilter(this.filterKey, value.value, this.filterLabel);
   }
 
   public autocomplete(query: string): Observable<Student[]> {

@@ -1,5 +1,4 @@
 import { SearchFilter } from './search-filter';
-import { PaginatorConfig } from './paginator-config';
 import { Sort } from './sort';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
 import { SearchPagination } from './search-pagination';
@@ -25,7 +24,7 @@ export class SearchModel {
 
     if (json._filters != null) {
       json._filters.forEach(function(filter) {
-        searchModel.addFilterIfNotThere(new SearchFilter(filter.key, filter.value, filter.label));
+        searchModel.addFilterIfNotThere(new SearchFilter(filter.key, filter.value, filter.label, filter.displayValue));
       });
     }
 
