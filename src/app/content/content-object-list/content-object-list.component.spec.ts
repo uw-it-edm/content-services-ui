@@ -129,7 +129,7 @@ describe('ContentObjectList', () => {
     expect(component).toBeTruthy();
   });
   it('should correctly populate the profileId when preparing to save', () => {
-    const contentItem = component.prepareItem(sourceItem, fields, formModel, config);
+    const contentItem = component.prepareItem(sourceItem, fields, formModel, config, user);
     expect(contentItem.metadata['ProfileId']).toBe('testProfile');
   });
   it('should populate the account when preparing to save', () => {
