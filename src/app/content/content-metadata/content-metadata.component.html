@@ -43,6 +43,16 @@
             <mat-error> {{getErrorMessage(fieldToDisplay.key)}}</mat-error>
           </mat-form-field>
 
+          <mat-form-field *ngSwitchCase="'person-autocomplete'">
+            <app-person-autocomplete
+              [formControlName]="fieldToDisplay.key"
+              [placeholder]="fieldToDisplay.label"
+              [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
+            >
+            </app-person-autocomplete>
+            <mat-error> {{getErrorMessage(fieldToDisplay.key)}}</mat-error>
+          </mat-form-field>
+
           <mat-form-field *ngSwitchDefault>
             <input matInput [formControlName]="fieldToDisplay.key"
                    [name]="fieldToDisplay.key"
