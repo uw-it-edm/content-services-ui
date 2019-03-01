@@ -26,6 +26,7 @@ import { FieldOption } from '../../core/shared/model/field/field-option';
 import { OptionsInputComponent } from '../../shared/widgets/options-input/options-input.component';
 import { Field } from '../../core/shared/model/field';
 import { DataApiValueService } from '../../shared/providers/dataapivalue.service';
+import { PersonAutocompleteComponent } from '../../shared/widgets/person-autocomplete/person-autocomplete.component';
 
 class UserServiceMock extends UserService {
   constructor() {
@@ -63,6 +64,7 @@ describe('ContentMetadataComponent', () => {
         CheckboxInputComponent,
         OptionsInputComponent,
         StudentAutocompleteComponent,
+        PersonAutocompleteComponent,
         TimestampPickerComponent
       ],
       providers: [

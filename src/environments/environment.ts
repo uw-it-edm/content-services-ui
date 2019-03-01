@@ -38,6 +38,7 @@ export const environment = {
   data_api: {
     url: 'http://data-api.dev',
     studentContext: '/students/v1',
+    personContext: '/person/v1',
     valueContext: '/v1/value',
     authenticationHeader: 'auth'
   }

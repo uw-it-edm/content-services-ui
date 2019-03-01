@@ -25,23 +25,19 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
   CanUpdateErrorState,
   ErrorStateMatcher,
+  MatAutocompleteSelectedEvent,
   MatFormFieldControl,
-  MatSelectChange,
   mixinErrorState
 } from '@angular/material';
-import { Field } from '../../../core/shared/model/field';
-import { FieldOption } from '../../../core/shared/model/field/field-option';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
-import { DataApiValueService } from '../../providers/dataapivalue.service';
-import { DataApiValueSearchResults } from '../../shared/model/data-api-value-search-results';
-import { DataApiValue } from '../../shared/model/data-api-value';
-import { Observable } from 'rxjs';
-import { ObjectUtilities } from '../../../core/util/object-utilities';
+import { PersonSearchResults } from '../../shared/model/person-search-results';
+import { Person } from '../../shared/model/person';
+import { PersonService } from '../../providers/person.service';
 
-// Boilerplate for applying mixins to OptionsInputComponent.
+// Boilerplate for applying mixins to PersonAutocompleteComponent.
 /** @docs-private */
-export class OptionsInputComponentBase {
+export class PersonAutocompleteComponentBase {
   constructor(
     public _defaultErrorStateMatcher: ErrorStateMatcher,
     public _parentForm: NgForm,
@@ -50,16 +46,16 @@ export class OptionsInputComponentBase {
   ) {}
 }
 
-export const _OptionsInputComponentBase = mixinErrorState(OptionsInputComponentBase);
+export const _PersonAutocompleteComponentBase = mixinErrorState(PersonAutocompleteComponentBase);
 
 let nextUniqueId = 0;
-const INTERNAL_FIELD_NAME = 'optionsForm';
+const INTERNAL_FIELD_NAME = 'personAutocomplete';
 
 /* tslint:disable:member-ordering use-host-property-decorator*/
 @Component({
-  selector: 'app-options-input',
-  templateUrl: './options-input.component.html',
-  styleUrls: ['./options-input.component.css'],
+  selector: 'app-person-autocomplete',
+  templateUrl: './person-autocomplete.component.html',
+  styleUrls: ['./person-autocomplete.component.css'],
   host: {
     '[attr.aria-required]': 'required.toString()',
     '[attr.aria-disabled]': 'disabled.toString()',
@@ -68,12 +64,12 @@ const INTERNAL_FIELD_NAME = 'optionsForm';
   providers: [
     {
       provide: MatFormFieldControl,
-      useExisting: OptionsInputComponent
+      useExisting: PersonAutocompleteComponent
     },
     ErrorStateMatcher
   ]
 })
-export class OptionsInputComponent extends _OptionsInputComponentBase
+export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBase
   implements
     ControlValueAccessor,
     MatFormFieldControl<string>,
@@ -82,24 +78,42 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
     DoCheck,
     OnDestroy {
   // Component logic
-
-  onSelect(event: MatSelectChange) {
-    this._propagateChanges(event.value);
-  }
+  formGroup: FormGroup;
 
   get internalFieldName(): string {
     return INTERNAL_FIELD_NAME;
   }
 
-  @Input() fieldConfig: Field;
-  options$: Observable<FieldOption[]>;
-  formGroup: FormGroup;
+  filteredOptions: Person[] = [];
+  initialized = false;
 
   private initComponent() {
     this.initInternalForm();
-    this.initOptions();
+    this.initInternalFormUpdateListener();
     this.initializeValue();
     this.setInnerInputDisableState();
+    this.initialized = true;
+  }
+
+  private initInternalFormUpdateListener() {
+    this.formGroup.controls[INTERNAL_FIELD_NAME].valueChanges
+      .startWith(null)
+      .takeUntil(this.componentDestroyed)
+      .subscribe((term: string) => {
+        if (this.initialized) {
+          if (term && term.trim().length > 1) {
+            this.personService
+              .autocomplete(term)
+              .takeUntil(this.componentDestroyed)
+              .subscribe((results: PersonSearchResults) => {
+                this.filteredOptions = results.content;
+              });
+          } else {
+            // if empty, the user probably wants to delete the value
+            this._propagateChanges(term);
+          }
+        }
+      });
   }
 
   private initInternalForm() {
@@ -107,26 +121,13 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
     this.formGroup.controls[INTERNAL_FIELD_NAME] = new FormControl();
   }
 
-  private splitRegex = /[.]/g;
-
-  private initOptions() {
-    if (this.fieldConfig.dynamicSelectOptions) {
-      this.options$ = this.dataApiValueService
-        .listByType(this.fieldConfig.dynamicSelectOptions.type)
-        .map((results: DataApiValueSearchResults) => results.content)
-        .map((values: DataApiValue[]) => {
-          return values.map((value: DataApiValue) => {
-            const paths = this.fieldConfig.dynamicSelectOptions.labelPath.split(this.splitRegex);
-            const displayValue = ObjectUtilities.getNestedObject(value.data, paths);
-            return new FieldOption(value.valueId, displayValue);
-          });
-        });
-    } else {
-      this.options$ = Observable.of(
-        this.fieldConfig.options.map(option => {
-          return Object.assign(new FieldOption(), option);
-        })
-      );
+  private setInnerInputDisableState() {
+    if (this.formGroup && this.formGroup.controls[INTERNAL_FIELD_NAME]) {
+      if (this.disabled) {
+        this.formGroup.controls[INTERNAL_FIELD_NAME].disable();
+      } else {
+        this.formGroup.controls[INTERNAL_FIELD_NAME].enable();
+      }
     }
   }
 
@@ -141,30 +142,43 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
     });
   }
 
-  private setInnerInputDisableState() {
-    if (this.formGroup && this.formGroup.controls[INTERNAL_FIELD_NAME]) {
-      if (this.disabled) {
-        this.formGroup.controls[INTERNAL_FIELD_NAME].disable();
-      } else {
-        this.formGroup.controls[INTERNAL_FIELD_NAME].enable();
-      }
-    }
-  }
-
-  private setInternalValue(value: string) {
-    if (!isNullOrUndefined(value)) {
+  private setInternalValue(regId: string) {
+    if (!isNullOrUndefined(regId)) {
       if (this.formGroup && this.formGroup.controls[INTERNAL_FIELD_NAME]) {
-        this.formGroup.controls[INTERNAL_FIELD_NAME].patchValue(value);
+        this.personService
+          .read(regId)
+          .takeUntil(this.componentDestroyed)
+          .subscribe((result: Person) => {
+            this.filteredOptions = [result];
+            const emptyPerson = new Person();
+            emptyPerson.displayName = 'none';
+            this.filteredOptions.unshift(emptyPerson);
+            this.formGroup.controls[INTERNAL_FIELD_NAME].patchValue(result.regId);
+          });
       }
     } else {
       this.formGroup.controls[INTERNAL_FIELD_NAME].reset();
     }
   }
 
+  onSelect(event: MatAutocompleteSelectedEvent) {
+    console.log('select ' + event.option.value);
+    this._propagateChanges(event.option.value);
+  }
+
+  get displayFn() {
+    return (regId: string) => {
+      if (this.filteredOptions && regId) {
+        const person: Person = this.filteredOptions.find((p: Person) => p.regId === regId);
+        return person ? Person.convertToDisplayName(person) : null;
+      }
+      return null;
+    };
+  }
+
   // End Component logic
 
   // MatFormField boilerplate
-
   /** Function when touched */
   _onTouched = () => {};
 
@@ -187,12 +201,11 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
   protected _placeholder: string;
 
   /** The aria-describedby attribute on the chip list for improved a11y. */
-  @HostBinding('attr.aria-describedby') _ariaDescribedby: string;
+  @HostBinding('attr.aria-describedby') _ariaDescribedby: string = null;
 
   @HostBinding('attr.aria-role')
-  /** https://www.w3.org/TR/wai-aria/roles#listbox */
   get role(): string | null {
-    return this.empty ? null : 'listbox';
+    return this.empty ? null : 'person-autocomplete';
   }
 
   /** An object used to control when error messages are shown. */
@@ -249,34 +262,29 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
 
   focused = false;
 
-  @HostListener('focusin')
-  onFocusin() {
-    this.focused = true;
+  @HostBinding('class.floating')
+  get shouldPlaceholderFloat() {
+    return this.focused || !this.empty;
   }
 
-  @HostListener('focusout')
-  onFocusout() {
-    this.focused = false;
-  }
-
-  get shouldLabelFloat(): boolean {
+  get shouldLabelFloat() {
     return this.focused || !this.empty;
   }
 
   /** Whether this input is disabled. */
-  @Input()
   get disabled() {
     return this.ngControl ? this.ngControl.disabled : this._disabled;
   }
 
+  @Input()
   set disabled(value: any) {
     // this need to be implemented if you want to disable the internal input
-
     this._disabled = coerceBooleanProperty(value);
     this.setInnerInputDisableState();
   }
 
   constructor(
+    private personService: PersonService,
     private fb: FormBuilder,
     private fm: FocusMonitor,
     protected _elementRef: ElementRef,
@@ -286,8 +294,7 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
     _defaultErrorStateMatcher: ErrorStateMatcher,
     @Optional()
     @Self()
-    public ngControl: NgControl,
-    private dataApiValueService: DataApiValueService
+    public ngControl: NgControl
   ) {
     super(_defaultErrorStateMatcher, _parentForm, _parentFormGroup, ngControl);
 
@@ -298,7 +305,6 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
 
   ngAfterContentInit(): void {
     this.initComponent();
-    this.stateChanges.next();
   }
 
   ngDoCheck() {
@@ -317,9 +323,6 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
     this.componentDestroyed.complete();
     this.stateChanges.complete();
     this.fm.stopMonitoring(this._elementRef.nativeElement);
-
-    /*    this._internalChangeSubscription.unsubscribe();
-    this._internalChangeSubscription = null;*/
   }
 
   // Implemented as part of MatFormFieldControl.
@@ -354,7 +357,15 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
   }
 
   onContainerClick() {
+    this.focus();
     this._markAsTouched();
+  }
+
+  @HostListener('focus')
+  focus() {
+    if ((event.target as Element).tagName.toLowerCase() !== 'input') {
+      this._elementRef.nativeElement.querySelector('input').focus();
+    }
   }
 
   /** Emits change event to set the model value. */
@@ -374,6 +385,7 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
   /** When blurred, mark the field as touched when focus moved outside the Input. */
   @HostListener('blur')
   blur() {
+    console.log('bluuuur');
     if (!this.disabled) {
       this._markAsTouched();
     }
