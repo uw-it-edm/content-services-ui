@@ -5,14 +5,14 @@ import { Title } from '@angular/platform-browser';
 import { SearchModel } from '../shared/model/search-model';
 import { SearchResults } from '../shared/model/search-result';
 import { SearchService } from '../shared/search.service';
-import { Subject } from 'rxjs/Subject';
+import { Subject, BehaviorSubject } from 'rxjs';
 import { DataService } from '../../shared/providers/data.service';
 import { Sort } from '../shared/model/sort';
 import { NotificationService } from '../../shared/providers/notification.service';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
-import { BehaviorSubject } from 'rxjs';
 import { ContentService } from '../../content/shared/content.service';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-display-search-page',
@@ -65,9 +65,9 @@ export class DisplaySearchPageComponent implements OnInit, OnDestroy, AfterViewI
   }
 
   ngOnInit() {
-    this.route.paramMap.takeUntil(this.componentDestroyed).subscribe(params => {
+    this.route.paramMap.pipe(takeUntil(this.componentDestroyed)).subscribe(params => {
       this.page = params.get('page');
-      this.route.data.takeUntil(this.componentDestroyed).subscribe((data: { config: Config }) => {
+      this.route.data.pipe(takeUntil(this.componentDestroyed)).subscribe((data: { config: Config }) => {
         this.config = data.config;
         this.pageConfig = data.config.pages[this.page.toLowerCase()];
         if (

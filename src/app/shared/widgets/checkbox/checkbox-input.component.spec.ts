@@ -10,14 +10,12 @@ describe('CheckboxInput', () => {
   let component: CheckboxInputComponent;
   let fixture: ComponentFixture<CheckboxInputComponent>;
 
-  beforeEach(
-    async(() => {
-      TestBed.configureTestingModule({
-        imports: [ReactiveFormsModule, MatCheckboxModule],
-        declarations: [CheckboxInputComponent]
-      }).compileComponents();
-    })
-  );
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [ReactiveFormsModule, MatCheckboxModule],
+      declarations: [CheckboxInputComponent]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CheckboxInputComponent);

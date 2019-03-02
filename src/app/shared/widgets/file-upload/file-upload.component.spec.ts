@@ -28,14 +28,12 @@ describe('FileUploadComponent', () => {
   let fixture: ComponentFixture<FileUploadComponent>;
   let dropZone: DebugElement;
 
-  beforeEach(
-    async(() => {
-      TestBed.configureTestingModule({
-        imports: [MatButtonModule, MatIconModule, MatTooltipModule, ReactiveFormsModule],
-        declarations: [FileUploadComponent, TruncatePipe, FocusDirective]
-      }).compileComponents();
-    })
-  );
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [MatButtonModule, MatIconModule, MatTooltipModule, ReactiveFormsModule],
+      declarations: [FileUploadComponent, TruncatePipe, FocusDirective]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FileUploadComponent);

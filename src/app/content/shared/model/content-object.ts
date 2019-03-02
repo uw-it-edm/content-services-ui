@@ -1,6 +1,6 @@
 import { ContentItem } from './content-item';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ReplaySubject } from 'rxjs';
 
 export class ContentObject {
   public contentLength: number;

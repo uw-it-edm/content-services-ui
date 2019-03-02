@@ -5,7 +5,7 @@ import { User } from '../../user/shared/user';
 import { ProgressService } from '../../shared/providers/progress.service';
 import { Config } from './model/config';
 import { environment } from '../../../environments/environment';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { TenantConfigInfo } from './model/tenant-config-info';
 
 let httpSpy;
@@ -48,7 +48,7 @@ describe('ConfigService', () => {
   });
 
   it('should getTenantList', () => {
-    const response$ = Observable.of(profileLinks);
+    const response$ = of(profileLinks);
     httpSpy = spyOn(http, 'get').and.returnValue(response$);
 
     const expectedUrl = environment.profile_api.url + environment.profile_api.context + '/app/content-services-ui';
@@ -65,8 +65,8 @@ describe('ConfigService', () => {
     const demo = new Config();
     demo.tenant = 'demo';
 
-    const profileLinksResponse$ = Observable.of(profileLinks);
-    const tenantResponse$ = Observable.of(demo);
+    const profileLinksResponse$ = of(profileLinks);
+    const tenantResponse$ = of(demo);
     httpSpy = spyOn(http, 'get').and.returnValues(profileLinksResponse$, tenantResponse$);
 
     const expectedUrl = profileLinks._links['demo'].href;

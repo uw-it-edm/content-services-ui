@@ -27,7 +27,7 @@ import {
   NgControl,
   NgForm
 } from '@angular/forms';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { Field } from '../../../core/shared/model/field';
@@ -69,7 +69,8 @@ const INTERNAL_FIELD_NAME = 'internalCheckbox';
   ]
 })
 export class CheckboxInputComponent extends _CheckboxInputComponentBase
-  implements ControlValueAccessor,
+  implements
+    ControlValueAccessor,
     MatFormFieldControl<String>,
     CanUpdateErrorState,
     AfterContentInit,
@@ -238,7 +239,7 @@ export class CheckboxInputComponent extends _CheckboxInputComponentBase
   }
 
   focused = false;
-
+  @HostBinding('class.floating')
   get shouldLabelFloat(): boolean {
     return true;
   }

@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { A11yModule } from '@angular/cdk/a11y';
 import { Person } from '../../shared/model/person';
 import { PersonSearchResults } from '../../shared/model/person-search-results';
@@ -22,7 +22,7 @@ class MockPersonService extends PersonService {
     testPerson.regId = 'ABCD';
     testPerson.priorRegIds = ['CDEF', 'GHIJ'];
     testPerson.employeeId = '12345';
-    return Observable.of(testPerson);
+    return of(testPerson);
   }
 
   autocomplete(term: string): Observable<PersonSearchResults> {
@@ -38,7 +38,7 @@ class MockPersonService extends PersonService {
     personSearchResults.totalElements = 1;
     personSearchResults.numberOfElements = 1;
     personSearchResults.content = [testPerson];
-    return Observable.of(personSearchResults);
+    return of(personSearchResults);
   }
 }
 

@@ -11,7 +11,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { SearchBoxComponent } from '../search-box/search-box.component';
 import { SearchResultsComponent } from '../search-results/search-results.component';
 import { SearchService } from '../shared/search.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { SearchResults } from '../shared/model/search-result';
 import { SearchModel } from '../shared/model/search-model';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -31,7 +31,7 @@ let fixture: ComponentFixture<SearchPageComponent>;
 
 class MockSearchService {
   search(terms: Observable<SearchModel>, pageConfig: SearchPageConfig): Observable<SearchResults> {
-    return Observable.of(new SearchResults());
+    return of(new SearchResults());
   }
 }
 

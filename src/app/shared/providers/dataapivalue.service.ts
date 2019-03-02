@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { UserService } from '../../user/shared/user.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { CacheObservableDecorator } from '../decorators/cache-observable.decorator';
-import 'rxjs/add/operator/mergeMap';
+
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { DataApiValue } from '../shared/model/data-api-value';
 import { DataApiValueSearchResults } from '../shared/model/data-api-value-search-results';

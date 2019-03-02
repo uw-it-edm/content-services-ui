@@ -1,15 +1,17 @@
+import { Observable, of as observableOf } from 'rxjs';
+
+import { mergeMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { UserService } from '../../user/shared/user.service';
-import { Observable } from 'rxjs/Observable';
 import { StudentSearchResults } from '../shared/model/student-search-results';
 import { StudentSearchModel } from '../shared/model/student-search-model';
 import { CacheObservableDecorator } from '../decorators/cache-observable.decorator';
 import { Student } from '../shared/model/student';
-import 'rxjs/add/operator/mergeMap';
-import { isNumeric } from 'rxjs/util/isNumeric';
+
 import { isNullOrUndefined } from '../../core/util/node-utilities';
+import { isNumeric } from 'rxjs/internal-compatibility';
 
 @Injectable()
 export class StudentService {
@@ -27,21 +29,23 @@ export class StudentService {
     if (term && term.trim().length > 0) {
       let searchModel = this.createAutocompleteSearchModel(term);
 
-      return this.searchStudent(searchModel).flatMap(result => {
-        // if the initial search did not have any results and was only the lastName, try again using the term firstName
-        if (
-          result.totalElements === 0 &&
-          isNullOrUndefined(searchModel.firstName) &&
-          isNullOrUndefined(searchModel.studentNumber)
-        ) {
-          searchModel = this.createAutocompleteSearchModel(term, true);
-          return this.searchStudent(searchModel);
-        } else {
-          return Observable.of(result);
-        }
-      });
+      return this.searchStudent(searchModel).pipe(
+        mergeMap(result => {
+          // if the initial search did not have any results and was only the lastName, try again using the term firstName
+          if (
+            result.totalElements === 0 &&
+            isNullOrUndefined(searchModel.firstName) &&
+            isNullOrUndefined(searchModel.studentNumber)
+          ) {
+            searchModel = this.createAutocompleteSearchModel(term, true);
+            return this.searchStudent(searchModel);
+          } else {
+            return observableOf(result);
+          }
+        })
+      );
     } else {
-      return Observable.of(new StudentSearchResults());
+      return observableOf(new StudentSearchResults());
     }
   }
 

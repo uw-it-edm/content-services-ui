@@ -2,10 +2,10 @@ import { PersonService } from './person.service';
 import { UserService } from '../../user/shared/user.service';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../../user/shared/user';
-import { Observable } from 'rxjs/Observable';
 import { environment } from '../../../environments/environment';
 import { Person } from '../shared/model/person';
 import { PersonSearchResults } from '../shared/model/person-search-results';
+import { of } from 'rxjs';
 
 class UserServiceMock extends UserService {
   constructor() {
@@ -90,7 +90,7 @@ describe('PersonService', () => {
     const expectedUrl = environment.data_api.url + environment.data_api.personContext + '/ABCD';
 
     httpSpy = spyOn(http, 'get').and.callFake(function(any, any2) {
-      return Observable.of(readResponse);
+      return of(readResponse);
     });
 
     personService.read('ABCD').subscribe((result: Person) => {
@@ -102,7 +102,7 @@ describe('PersonService', () => {
 
   it('should autocomplete a valid regId', () => {
     httpSpy = spyOn(http, 'get').and.callFake(function(any, any2) {
-      return Observable.of(singleSearchResponse);
+      return of(singleSearchResponse);
     });
 
     personService.autocomplete('1234').subscribe((result: PersonSearchResults) => {
@@ -116,7 +116,7 @@ describe('PersonService', () => {
 
   it('should autocomplete a valid lastName, firstName', () => {
     httpSpy = spyOn(http, 'get').and.callFake(function(any, any2) {
-      return Observable.of(singleSearchResponse);
+      return of(singleSearchResponse);
     });
 
     personService.autocomplete('user, test').subscribe((result: PersonSearchResults) => {
@@ -129,7 +129,7 @@ describe('PersonService', () => {
   });
   it('should autocomplete a valid firstName lastName', () => {
     httpSpy = spyOn(http, 'get').and.callFake(function(any, any2) {
-      return Observable.of(singleSearchResponse);
+      return of(singleSearchResponse);
     });
 
     personService.autocomplete('test user').subscribe((result: PersonSearchResults) => {
@@ -141,7 +141,7 @@ describe('PersonService', () => {
     });
   });
   it('should autocomplete a valid lastName', () => {
-    httpSpy = spyOn(http, 'get').and.returnValues(Observable.of(singleSearchResponse));
+    httpSpy = spyOn(http, 'get').and.returnValues(of(singleSearchResponse));
 
     personService.autocomplete('user').subscribe((result: PersonSearchResults) => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
@@ -152,10 +152,7 @@ describe('PersonService', () => {
     });
   });
   it('should autocomplete a valid firstName after failing as an invalid lastName', () => {
-    httpSpy = spyOn(http, 'get').and.returnValues(
-      Observable.of(emptySearchResponse),
-      Observable.of(singleSearchResponse)
-    );
+    httpSpy = spyOn(http, 'get').and.returnValues(of(emptySearchResponse), of(singleSearchResponse));
 
     personService.autocomplete('test').subscribe((result: PersonSearchResults) => {
       expect(httpSpy).toHaveBeenCalledTimes(2);
@@ -168,10 +165,7 @@ describe('PersonService', () => {
     });
   });
   it('should not attempt to autocomplete for firstName if lastName, first', () => {
-    httpSpy = spyOn(http, 'get').and.returnValues(
-      Observable.of(emptySearchResponse),
-      Observable.of(singleSearchResponse)
-    );
+    httpSpy = spyOn(http, 'get').and.returnValues(of(emptySearchResponse), of(singleSearchResponse));
 
     personService.autocomplete('user, test').subscribe((result: PersonSearchResults) => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
@@ -182,10 +176,7 @@ describe('PersonService', () => {
     });
   });
   it('should not attempt to autocomplete for firstName if firstName lastName', () => {
-    httpSpy = spyOn(http, 'get').and.returnValues(
-      Observable.of(emptySearchResponse),
-      Observable.of(singleSearchResponse)
-    );
+    httpSpy = spyOn(http, 'get').and.returnValues(of(emptySearchResponse), of(singleSearchResponse));
 
     personService.autocomplete('test user').subscribe((result: PersonSearchResults) => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
@@ -197,10 +188,7 @@ describe('PersonService', () => {
   });
 
   it('should not attempt to autocomplete for firstName if employeeId', () => {
-    httpSpy = spyOn(http, 'get').and.returnValues(
-      Observable.of(emptySearchResponse),
-      Observable.of(singleSearchResponse)
-    );
+    httpSpy = spyOn(http, 'get').and.returnValues(of(emptySearchResponse), of(singleSearchResponse));
 
     personService.autocomplete('1111').subscribe((result: PersonSearchResults) => {
       expect(httpSpy).toHaveBeenCalledTimes(1);

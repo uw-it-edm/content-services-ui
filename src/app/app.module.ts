@@ -7,8 +7,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { Angulartics2Module } from 'angulartics2';
-import { Angulartics2GoogleTagManager } from 'angulartics2/gtm';
 import { RouterModule } from '@angular/router';
+import { Angulartics2GoogleTagManager } from 'angulartics2/gtm';
 
 @NgModule({
   declarations: [],
