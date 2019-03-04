@@ -2,7 +2,7 @@ import { inject, TestBed } from '@angular/core/testing';
 
 import { UserService } from './user.service';
 import { User } from './user';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ProgressService } from '../../shared/providers/progress.service';
 import { NotificationService } from '../../shared/providers/notification.service';
@@ -29,7 +29,7 @@ describe('UserService', () => {
     [UserService, HttpClient],
     (service: UserService, http: HttpClient) => {
       const httpSpy = spyOn(http, 'get').and.callFake(function(_url, _options) {
-        return Observable.of({
+        return of({
           userName: 'myusername',
           userGroups: ['test-group']
         });

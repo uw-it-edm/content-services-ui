@@ -1,4 +1,5 @@
 import { SearchFilterableResult } from './search-filterable-result';
+import { FilterableValue } from './person';
 
 export class Student implements SearchFilterableResult {
   public birthdate?;
@@ -16,8 +17,8 @@ export class Student implements SearchFilterableResult {
     return student.lastName + ', ' + student.firstName + ' (' + student.studentNumber + ')';
   }
 
-  getFilterableValue(): string {
-    return this.studentNumber;
+  getFilterableValue(): FilterableValue {
+    return new FilterableValue(this.studentNumber);
   }
 
   getFilterableDisplay(): string {

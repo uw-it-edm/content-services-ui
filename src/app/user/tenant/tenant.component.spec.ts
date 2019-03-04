@@ -14,27 +14,25 @@ let component: TenantComponent;
 let fixture: ComponentFixture<TenantComponent>;
 
 describe('TenantComponent', () => {
-  beforeEach(
-    async(() => {
-      activatedRoute = new ActivatedRouteStub();
+  beforeEach(async(() => {
+    activatedRoute = new ActivatedRouteStub();
 
-      TestBed.configureTestingModule({
-        imports: [MaterialConfigModule],
-        declarations: [TenantComponent],
-        providers: [{ provide: ActivatedRoute, useValue: activatedRoute }, Title, GlobalEventsManagerService],
-        schemas: [NO_ERRORS_SCHEMA]
-      }).compileComponents();
+    TestBed.configureTestingModule({
+      imports: [MaterialConfigModule],
+      declarations: [TenantComponent],
+      providers: [{ provide: ActivatedRoute, useValue: activatedRoute }, Title, GlobalEventsManagerService],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
 
-      activatedRoute.testParamMap = { tenant: 'test-tenant' };
-      const config = new Config();
-      config.tenant = 'test-tenant';
-      activatedRoute.testData = { config: config };
+    activatedRoute.testParamMap = { tenant: 'test-tenant' };
+    const config = new Config();
+    config.tenant = 'test-tenant';
+    activatedRoute.testData = { config: config };
 
-      fixture = TestBed.createComponent(TenantComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    })
-  );
+    fixture = TestBed.createComponent(TenantComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
   it('should be created', () => {
     expect(component).toBeTruthy();

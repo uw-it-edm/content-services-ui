@@ -21,15 +21,13 @@ describe('ContentPagerComponent', () => {
     dataService.set('adjacentIds', ['123', '1', '456']);
   });
 
-  beforeEach(
-    async(() => {
-      TestBed.configureTestingModule({
-        imports: [MaterialConfigModule, NoopAnimationsModule],
-        providers: [{ provide: Router, useValue: mockRouter }, { provide: DataService, useValue: dataService }],
-        declarations: [ContentPagerComponent]
-      }).compileComponents();
-    })
-  );
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [MaterialConfigModule, NoopAnimationsModule],
+      providers: [{ provide: Router, useValue: mockRouter }, { provide: DataService, useValue: dataService }],
+      declarations: [ContentPagerComponent]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ContentPagerComponent);

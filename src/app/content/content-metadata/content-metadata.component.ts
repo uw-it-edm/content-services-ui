@@ -2,8 +2,8 @@ import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { ContentItem } from '../shared/model/content-item';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/startWith';
+import { Subject } from 'rxjs';
+
 import { Field } from '../../core/shared/model/field';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 

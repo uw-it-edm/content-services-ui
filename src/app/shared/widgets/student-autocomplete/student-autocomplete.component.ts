@@ -1,3 +1,4 @@
+import { startWith, takeUntil } from 'rxjs/operators';
 import {
   AfterContentInit,
   ChangeDetectorRef,
@@ -11,7 +12,7 @@ import {
   Optional,
   Self
 } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -70,7 +71,8 @@ const INTERNAL_FIELD_NAME = 'studentAutocomplete';
   ]
 })
 export class StudentAutocompleteComponent extends _StudentAutocompleteComponentBase
-  implements ControlValueAccessor,
+  implements
+    ControlValueAccessor,
     MatFormFieldControl<string>,
     CanUpdateErrorState,
     AfterContentInit,
@@ -96,14 +98,14 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
 
   private initInternalFormUpdateListener() {
     this.formGroup.controls['studentAutocomplete'].valueChanges
-      .startWith(null)
-      .takeUntil(this.componentDestroyed)
+      .pipe(startWith(null))
+      .pipe(takeUntil(this.componentDestroyed))
       .subscribe((term: string) => {
         if (this.initialized) {
           if (term && term.trim().length > 1) {
             this.studentService
               .autocomplete(term)
-              .takeUntil(this.componentDestroyed)
+              .pipe(takeUntil(this.componentDestroyed))
               .subscribe((results: StudentSearchResults) => {
                 this.filteredOptions = results.content;
               });
@@ -146,7 +148,7 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
       if (this.formGroup && this.formGroup.controls[INTERNAL_FIELD_NAME]) {
         this.studentService
           .read(studentNumber)
-          .takeUntil(this.componentDestroyed)
+          .pipe(takeUntil(this.componentDestroyed))
           .subscribe((result: Student) => {
             this.filteredOptions = [result];
             const emptyStudent = new Student();

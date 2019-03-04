@@ -150,6 +150,11 @@
           "key": "StudentId",
           "label": "Student",
           "displayType": "student-autocomplete"
+        },
+        {
+          "key": "RegId",
+          "label": "Employee",
+          "displayType": "person-autocomplete"
         }
       ],
       "buttons": [
@@ -223,6 +228,11 @@
           "key": "StudentId",
           "label": "Student",
           "displayType": "student-autocomplete"
+        },
+        {
+          "key": "RegId",
+          "label": "Employee",
+          "displayType": "person-autocomplete"
         }
       ],
       "buttons": [

@@ -1,12 +1,12 @@
 import { ContentService } from './content.service';
 import { UserService } from '../../user/shared/user.service';
 import { User } from '../../user/shared/user';
-import { Observable } from 'rxjs/Observable';
 import { ContentItem } from './model/content-item';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { ProgressService } from '../../shared/providers/progress.service';
 import { async } from '@angular/core/testing';
+import { of } from 'rxjs';
 
 let httpSpy;
 let http: HttpClient;
@@ -40,7 +40,7 @@ describe('ContentService', () => {
   });
 
   it('should read from the content api', () => {
-    httpSpy = spyOn(http, 'get').and.returnValue(Observable.of(readResponse));
+    httpSpy = spyOn(http, 'get').and.returnValue(of(readResponse));
 
     const expectedUrl = environment.content_api.url + environment.content_api.contextV3 + '/item/123';
     service.read('123').subscribe(result => {
@@ -67,35 +67,29 @@ describe('ContentService', () => {
     expect(service.getFileUrl('123', true)).toEqual(expectedUrl);
   });
 
-  it(
-    'should update the content api',
-    async(() => {
-      httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(readResponse));
+  it('should update the content api', async(() => {
+    httpSpy = spyOn(http, 'post').and.returnValue(of(readResponse));
 
-      const contentItem = new ContentItem();
-      contentItem.id = '123';
-      const expectedUrl = environment.content_api.url + environment.content_api.contextV3 + '/item/123';
+    const contentItem = new ContentItem();
+    contentItem.id = '123';
+    const expectedUrl = environment.content_api.url + environment.content_api.contextV3 + '/item/123';
 
-      service.update(contentItem, null).subscribe(result => {
-        expect(httpSpy).toHaveBeenCalledTimes(1);
-        expect(httpSpy.calls.first().args[0]).toBe(expectedUrl);
-        expect(result.id).toEqual(contentItem.id);
-      });
-    })
-  );
-  it(
-    'should create content-items',
-    async(() => {
-      httpSpy = spyOn(http, 'post').and.returnValue(Observable.of(readResponse));
-      const expectedUrl = environment.content_api.url + environment.content_api.contextV3 + '/item/';
-      const contentItem = new ContentItem();
-      contentItem.id = '123';
+    service.update(contentItem, null).subscribe(result => {
+      expect(httpSpy).toHaveBeenCalledTimes(1);
+      expect(httpSpy.calls.first().args[0]).toBe(expectedUrl);
+      expect(result.id).toEqual(contentItem.id);
+    });
+  }));
+  it('should create content-items', async(() => {
+    httpSpy = spyOn(http, 'post').and.returnValue(of(readResponse));
+    const expectedUrl = environment.content_api.url + environment.content_api.contextV3 + '/item/';
+    const contentItem = new ContentItem();
+    contentItem.id = '123';
 
-      service.create(contentItem, null).subscribe(result => {
-        expect(httpSpy).toHaveBeenCalledTimes(1);
-        expect(httpSpy.calls.first().args[0]).toBe(expectedUrl);
-        expect(result.id).toEqual(contentItem.id);
-      });
-    })
-  );
+    service.create(contentItem, null).subscribe(result => {
+      expect(httpSpy).toHaveBeenCalledTimes(1);
+      expect(httpSpy.calls.first().args[0]).toBe(expectedUrl);
+      expect(result.id).toEqual(contentItem.id);
+    });
+  }));
 });

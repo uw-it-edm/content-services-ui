@@ -2,11 +2,11 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { StudentDisplayComponent } from './student-display.component';
 import { StudentService } from '../../providers/student.service';
-import { Observable } from 'rxjs/Observable';
 import { Student } from '../../shared/model/student';
 import { By } from '@angular/platform-browser';
 import { NotificationService } from '../../providers/notification.service';
 import { MatSnackBarModule } from '@angular/material';
+import { of } from 'rxjs';
 
 class MockStudentService extends StudentService {
   constructor() {
@@ -19,7 +19,7 @@ class MockStudentService extends StudentService {
     testStudent.firstName = 'Test';
     testStudent.lastName = 'User';
     testStudent.studentNumber = '1234';
-    return Observable.of(testStudent);
+    return of(testStudent);
   }
 }
 
@@ -27,15 +27,13 @@ describe('StudentDisplayComponent', () => {
   let component: StudentDisplayComponent;
   let fixture: ComponentFixture<StudentDisplayComponent>;
 
-  beforeEach(
-    async(() => {
-      TestBed.configureTestingModule({
-        imports: [MatSnackBarModule],
-        declarations: [StudentDisplayComponent],
-        providers: [{ provide: StudentService, useValue: new MockStudentService() }, NotificationService]
-      }).compileComponents();
-    })
-  );
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [MatSnackBarModule],
+      declarations: [StudentDisplayComponent],
+      providers: [{ provide: StudentService, useValue: new MockStudentService() }, NotificationService]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(StudentDisplayComponent);

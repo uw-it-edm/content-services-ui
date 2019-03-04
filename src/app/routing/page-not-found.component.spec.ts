@@ -6,8 +6,7 @@ import { UserService } from '../user/shared/user.service';
 import { TenantConfigInfo } from '../core/shared/model/tenant-config-info';
 import { Injector } from '@angular/core';
 import { User } from '../user/shared/user';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Observable, ReplaySubject } from 'rxjs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRouteStub } from '../../testing/router-stubs';
 import { MaterialConfigModule } from './material-config.module';
@@ -48,30 +47,26 @@ describe('PageNotFoundComponent', () => {
     }
   }
 
-  beforeEach(
-    async(() => {
-      const _mockConfigService = new MockConfigService();
-      const _mockUserService = new MockUserService();
-      activatedRoute = new ActivatedRouteStub();
-      TestBed.configureTestingModule({
-        imports: [MaterialConfigModule, NoopAnimationsModule, RouterTestingModule],
-        providers: [
-          { provide: ConfigService, useValue: _mockConfigService },
-          { provide: UserService, useValue: _mockUserService }
-        ],
-        declarations: [PageNotFoundComponent]
-      });
-    })
-  );
+  beforeEach(async(() => {
+    const _mockConfigService = new MockConfigService();
+    const _mockUserService = new MockUserService();
+    activatedRoute = new ActivatedRouteStub();
+    TestBed.configureTestingModule({
+      imports: [MaterialConfigModule, NoopAnimationsModule, RouterTestingModule],
+      providers: [
+        { provide: ConfigService, useValue: _mockConfigService },
+        { provide: UserService, useValue: _mockUserService }
+      ],
+      declarations: [PageNotFoundComponent]
+    });
+  }));
 
   let mockConfigService: MockConfigService;
   let mockUserService: MockUserService;
-  beforeEach(
-    inject([Injector], injector => {
-      mockConfigService = injector.get(ConfigService);
-      mockUserService = injector.get(UserService);
-    })
-  );
+  beforeEach(inject([Injector], injector => {
+    mockConfigService = injector.get(ConfigService);
+    mockUserService = injector.get(UserService);
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PageNotFoundComponent);

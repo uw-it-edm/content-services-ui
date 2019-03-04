@@ -36,25 +36,23 @@ describe('HeaderComponent', () => {
     configServiceStub = new ConfigServiceStub();
   });
 
-  beforeEach(
-    async(() => {
-      TestBed.configureTestingModule({
-        imports: [MaterialConfigModule, HttpClientModule],
-        declarations: [HeaderComponent],
-        providers: [
-          { provide: ActivatedRoute, useValue: activatedRoute },
-          { provide: Router, useClass: RouterStub },
-          { provide: ConfigService, useValue: configServiceStub },
-          ConfigResolver,
-          GlobalEventsManagerService,
-          ProgressService,
-          UserService,
-          NotificationService
-        ],
-        schemas: [NO_ERRORS_SCHEMA]
-      }).compileComponents();
-    })
-  );
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [MaterialConfigModule, HttpClientModule],
+      declarations: [HeaderComponent],
+      providers: [
+        { provide: ActivatedRoute, useValue: activatedRoute },
+        { provide: Router, useClass: RouterStub },
+        { provide: ConfigService, useValue: configServiceStub },
+        ConfigResolver,
+        GlobalEventsManagerService,
+        ProgressService,
+        UserService,
+        NotificationService
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(HeaderComponent);

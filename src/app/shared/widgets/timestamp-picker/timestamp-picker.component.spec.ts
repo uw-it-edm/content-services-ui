@@ -9,14 +9,12 @@ describe('TimestampPickerComponent', () => {
   let component: TimestampPickerComponent;
   let fixture: ComponentFixture<TimestampPickerComponent>;
 
-  beforeEach(
-    async(() => {
-      TestBed.configureTestingModule({
-        imports: [SharedModule, NoopAnimationsModule],
-        declarations: []
-      }).compileComponents();
-    })
-  );
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [SharedModule, NoopAnimationsModule],
+      declarations: []
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TimestampPickerComponent);

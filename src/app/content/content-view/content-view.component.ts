@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { ContentService } from '../shared/content.service';
-import 'rxjs/add/operator/takeUntil';
+
 import { ProgressService } from '../../shared/providers/progress.service';
 import { ContentObject } from '../shared/model/content-object';
 import { ContentToolbarComponent } from '../content-toolbar/content-toolbar.component';

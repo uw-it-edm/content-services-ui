@@ -1,5 +1,6 @@
+import { startWith, takeUntil } from 'rxjs/operators';
 import { Component, forwardRef, Input, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import * as moment from 'moment-timezone';
@@ -47,8 +48,8 @@ export class TimestampPickerComponent implements ControlValueAccessor, OnInit, O
     });
 
     this.formGroup.controls[INTERNAL_FIELD_NAME].valueChanges
-      .startWith(null)
-      .takeUntil(this.componentDestroyed)
+      .pipe(startWith(null))
+      .pipe(takeUntil(this.componentDestroyed))
       .subscribe((date: Date) => {
         if (date) {
           // offset need to be calculated for the specified date date
