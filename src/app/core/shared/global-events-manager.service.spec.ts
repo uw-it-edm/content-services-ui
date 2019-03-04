@@ -9,10 +9,7 @@ describe('GlobalEventsManagerService', () => {
     });
   });
 
-  it(
-    'should be created',
-    inject([GlobalEventsManagerService], (service: GlobalEventsManagerService) => {
-      expect(service).toBeTruthy();
-    })
-  );
+  it('should be created', inject([GlobalEventsManagerService], (service: GlobalEventsManagerService) => {
+    expect(service).toBeTruthy();
+  }));
 });

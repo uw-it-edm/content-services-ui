@@ -1,3 +1,4 @@
+import { startWith, takeUntil } from 'rxjs/operators';
 import {
   AfterContentInit,
   ChangeDetectorRef,
@@ -11,7 +12,7 @@ import {
   Optional,
   Self
 } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -97,14 +98,16 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
 
   private initInternalFormUpdateListener() {
     this.formGroup.controls[INTERNAL_FIELD_NAME].valueChanges
-      .startWith(null)
-      .takeUntil(this.componentDestroyed)
+      .pipe(
+        startWith(null),
+        takeUntil(this.componentDestroyed)
+      )
       .subscribe((term: string) => {
         if (this.initialized) {
           if (term && term.trim().length > 1) {
             this.personService
               .autocomplete(term)
-              .takeUntil(this.componentDestroyed)
+              .pipe(takeUntil(this.componentDestroyed))
               .subscribe((results: PersonSearchResults) => {
                 this.filteredOptions = results.content;
               });
@@ -147,7 +150,7 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
       if (this.formGroup && this.formGroup.controls[INTERNAL_FIELD_NAME]) {
         this.personService
           .read(regId)
-          .takeUntil(this.componentDestroyed)
+          .pipe(takeUntil(this.componentDestroyed))
           .subscribe((result: Person) => {
             this.filteredOptions = [result];
             const emptyPerson = new Person();

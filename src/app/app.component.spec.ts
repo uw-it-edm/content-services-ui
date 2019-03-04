@@ -6,33 +6,25 @@ import { ProgressService } from './shared/providers/progress.service';
 import { Angulartics2GoogleTagManager } from 'angulartics2/gtm';
 
 describe('AppComponent', () => {
-  beforeEach(
-    async(() => {
-      TestBed.configureTestingModule({
-        declarations: [AppComponent],
-        providers: [ProgressService, { provide: Angulartics2GoogleTagManager, useValue: {} }],
-        schemas: [NO_ERRORS_SCHEMA]
-      }).compileComponents();
-    })
-  );
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [AppComponent],
+      providers: [ProgressService, { provide: Angulartics2GoogleTagManager, useValue: {} }],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
+  }));
 
-  it(
-    'should create the app',
-    async(() => {
-      const fixture = TestBed.createComponent(AppComponent);
-      const app = fixture.debugElement.componentInstance;
-      expect(app).toBeTruthy();
-    })
-  );
+  it('should create the app', async(() => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.debugElement.componentInstance;
+    expect(app).toBeTruthy();
+  }));
 
-  it(
-    `should have as title 'app'`,
-    async(() => {
-      const fixture = TestBed.createComponent(AppComponent);
-      const app = fixture.debugElement.componentInstance;
-      expect(app.title).toEqual('app');
-    })
-  );
+  it(`should have as title 'app'`, async(() => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.debugElement.componentInstance;
+    expect(app.title).toEqual('app');
+  }));
 
   /*  it('should render title in a h1 tag', async(() => {
     const fixture = TestBed.createComponent(AppComponent);

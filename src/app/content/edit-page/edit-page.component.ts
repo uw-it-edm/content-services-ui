@@ -1,3 +1,4 @@
+import { takeUntil } from 'rxjs/operators';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { ActivatedRoute } from '@angular/router';
@@ -5,11 +6,11 @@ import { ActivatedRoute } from '@angular/router';
 import { ContentService } from '../shared/content.service';
 import { Config } from '../../core/shared/model/config';
 import { Title } from '@angular/platform-browser';
-import 'rxjs/add/operator/takeUntil';
-import { Subject } from 'rxjs/Subject';
+
+import { Subject } from 'rxjs';
 import { ContentItem } from '../shared/model/content-item';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import 'rxjs/add/observable/of';
+
 import { MatSnackBar } from '@angular/material';
 import { ContentViewComponent } from '../content-view/content-view.component';
 import { User } from '../../user/shared/user';
@@ -56,11 +57,11 @@ export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit() {
     this.user = this.userService.getUser();
     this.form = this.createForm();
-    this.route.data.takeUntil(this.componentDestroyed).subscribe((data: { config: Config }) => {
+    this.route.data.pipe(takeUntil(this.componentDestroyed)).subscribe((data: { config: Config }) => {
       this.config = data.config;
       this.extractPageConfig();
     });
-    this.route.paramMap.takeUntil(this.componentDestroyed).subscribe(params => {
+    this.route.paramMap.pipe(takeUntil(this.componentDestroyed)).subscribe(params => {
       this.id = params.get('id');
       if (this.contentObjectListComponent) {
         this.contentObjectListComponent.reset();
@@ -73,7 +74,7 @@ export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
       if (this.id) {
         this.contentService
           .read(this.id)
-          .takeUntil(this.componentDestroyed)
+          .pipe(takeUntil(this.componentDestroyed))
           .subscribe(
             contentItem => {
               console.log('Loaded content item: ' + contentItem.id);

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user/shared/user.service';
 import { ConfigService } from '../core/shared/config.service';
 import { User } from '../user/shared/user';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { TenantConfigInfo } from '../core/shared/model/tenant-config-info';
 
 @Component({
@@ -15,16 +15,16 @@ import { TenantConfigInfo } from '../core/shared/model/tenant-config-info';
           <h3>To access this service, please click a link below:</h3>
           <ul>
             <li *ngFor="let availableTenant of tenants">
-              <a routerLink="/{{availableTenant['tenantName']}}/">
-                {{availableTenant['tenantName']}}
+              <a routerLink="/{{ availableTenant['tenantName'] }}/">
+                {{ availableTenant['tenantName'] }}
               </a>
             </li>
           </ul>
         </div>
-        <div *ngIf="! tenants">
+        <div *ngIf="!tenants">
           <h3>
-            You are not authorized to use this service or the service is not available.
-            Please contact {{supportEmail}}
+            You are not authorized to use this service or the service is not available. Please contact
+            {{ supportEmail }}
             if you believe you should be able to access this information.
           </h3>
         </div>

@@ -2,10 +2,10 @@ import { StudentService } from './student.service';
 import { UserService } from '../../user/shared/user.service';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../../user/shared/user';
-import { Observable } from 'rxjs/Observable';
 import { Student } from '../shared/model/student';
 import { environment } from '../../../environments/environment';
 import { StudentSearchResults } from '../shared/model/student-search-results';
+import { of } from 'rxjs';
 
 class UserServiceMock extends UserService {
   constructor() {
@@ -82,7 +82,7 @@ describe('StudentService', () => {
     const expectedUrl = environment.data_api.url + environment.data_api.studentContext + '/1234';
 
     httpSpy = spyOn(http, 'get').and.callFake(function(any, any2) {
-      return Observable.of(readResponse);
+      return of(readResponse);
     });
 
     studentService.read('1234').subscribe((result: Student) => {
@@ -94,7 +94,7 @@ describe('StudentService', () => {
 
   it('should autocomplete a valid studentNumber', () => {
     httpSpy = spyOn(http, 'get').and.callFake(function(any, any2) {
-      return Observable.of(singleSearchResponse);
+      return of(singleSearchResponse);
     });
 
     studentService.autocomplete('1234').subscribe((result: StudentSearchResults) => {
@@ -108,7 +108,7 @@ describe('StudentService', () => {
 
   it('should autocomplete a valid lastName, firstName', () => {
     httpSpy = spyOn(http, 'get').and.callFake(function(any, any2) {
-      return Observable.of(singleSearchResponse);
+      return of(singleSearchResponse);
     });
 
     studentService.autocomplete('user, test').subscribe((result: StudentSearchResults) => {
@@ -121,7 +121,7 @@ describe('StudentService', () => {
   });
   it('should autocomplete a valid firstName lastName', () => {
     httpSpy = spyOn(http, 'get').and.callFake(function(any, any2) {
-      return Observable.of(singleSearchResponse);
+      return of(singleSearchResponse);
     });
 
     studentService.autocomplete('test user').subscribe((result: StudentSearchResults) => {
@@ -133,7 +133,7 @@ describe('StudentService', () => {
     });
   });
   it('should autocomplete a valid lastName', () => {
-    httpSpy = spyOn(http, 'get').and.returnValues(Observable.of(singleSearchResponse));
+    httpSpy = spyOn(http, 'get').and.returnValues(of(singleSearchResponse));
 
     studentService.autocomplete('user').subscribe((result: StudentSearchResults) => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
@@ -144,10 +144,7 @@ describe('StudentService', () => {
     });
   });
   it('should autocomplete a valid firstName after failing as an invalid lastName', () => {
-    httpSpy = spyOn(http, 'get').and.returnValues(
-      Observable.of(emptySearchResponse),
-      Observable.of(singleSearchResponse)
-    );
+    httpSpy = spyOn(http, 'get').and.returnValues(of(emptySearchResponse), of(singleSearchResponse));
 
     studentService.autocomplete('test').subscribe((result: StudentSearchResults) => {
       expect(httpSpy).toHaveBeenCalledTimes(2);
@@ -160,10 +157,7 @@ describe('StudentService', () => {
     });
   });
   it('should not attempt to autocomplete for firstName if lastName, first', () => {
-    httpSpy = spyOn(http, 'get').and.returnValues(
-      Observable.of(emptySearchResponse),
-      Observable.of(singleSearchResponse)
-    );
+    httpSpy = spyOn(http, 'get').and.returnValues(of(emptySearchResponse), of(singleSearchResponse));
 
     studentService.autocomplete('user, test').subscribe((result: StudentSearchResults) => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
@@ -174,10 +168,7 @@ describe('StudentService', () => {
     });
   });
   it('should not attempt to autocomplete for firstName if firstName lastName', () => {
-    httpSpy = spyOn(http, 'get').and.returnValues(
-      Observable.of(emptySearchResponse),
-      Observable.of(singleSearchResponse)
-    );
+    httpSpy = spyOn(http, 'get').and.returnValues(of(emptySearchResponse), of(singleSearchResponse));
 
     studentService.autocomplete('test user').subscribe((result: StudentSearchResults) => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
@@ -189,10 +180,7 @@ describe('StudentService', () => {
   });
 
   it('should not attempt to autocomplete for firstName if studentNumber', () => {
-    httpSpy = spyOn(http, 'get').and.returnValues(
-      Observable.of(emptySearchResponse),
-      Observable.of(singleSearchResponse)
-    );
+    httpSpy = spyOn(http, 'get').and.returnValues(of(emptySearchResponse), of(singleSearchResponse));
 
     studentService.autocomplete('1111').subscribe((result: StudentSearchResults) => {
       expect(httpSpy).toHaveBeenCalledTimes(1);

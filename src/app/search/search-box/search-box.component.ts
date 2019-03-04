@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { SearchModel } from '../shared/model/search-model';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subject } from 'rxjs';
 import { SearchFilter } from '../shared/model/search-filter';
-import { Subject } from 'rxjs/Subject';
 import { MatAutocompleteSelectedEvent } from '@angular/material';
 import { SearchAutocomplete } from '../shared/search-autocomplete/search-autocomplete';
 import { SearchFilterableResult } from '../../shared/shared/model/search-filterable-result';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-search-box',
@@ -36,7 +36,7 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
     if (this.searchAutocomplete) {
       this.assignAutocompleteListener();
     }
-    this.searchModel$.takeUntil(this.componentDestroyed).subscribe(searchModel => {
+    this.searchModel$.pipe(takeUntil(this.componentDestroyed)).subscribe(searchModel => {
       console.log('search-box search model updated : ' + this.searchModel.stringQuery);
       this.searchModel = searchModel;
     });
@@ -56,11 +56,11 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
   }
 
   private assignAutocompleteListener() {
-    this.searchEvent.takeUntil(this.componentDestroyed).subscribe((model: SearchModel) => {
+    this.searchEvent.pipe(takeUntil(this.componentDestroyed)).subscribe((model: SearchModel) => {
       if (model && model.stringQuery && typeof model.stringQuery === 'string' && model.stringQuery.trim().length > 1) {
         this.searchAutocomplete
           .autocomplete(model.stringQuery)
-          .takeUntil(this.componentDestroyed)
+          .pipe(takeUntil(this.componentDestroyed))
           .subscribe((results: SearchFilterableResult[]) => {
             this.filteredOptions = results;
           });

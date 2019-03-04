@@ -8,7 +8,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ContentService } from '../shared/content.service';
 import { ActivatedRouteStub } from '../../../testing/router-stubs';
 import { ContentItem } from '../shared/model/content-item';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 
 import { Title } from '@angular/platform-browser';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
@@ -40,7 +40,7 @@ class MockContentService {
     defaultContentItem.metadata['a'] = 'a';
     defaultContentItem.metadata['b'] = 'asdf';
     defaultContentItem.metadata['t'] = 't';
-    return Observable.of(defaultContentItem);
+    return of(defaultContentItem);
   }
 
   getFileUrl(itemId: string, webViewable: boolean): string {
@@ -48,7 +48,7 @@ class MockContentService {
   }
 
   update(contentItem: ContentItem, file?: File): Observable<ContentItem> {
-    return Observable.of(contentItem);
+    return of(contentItem);
   }
 }
 
@@ -76,42 +76,40 @@ describe('EditPageComponent', () => {
     mockUserService = new MockUserService();
   });
 
-  beforeEach(
-    async(() => {
-      TestBed.configureTestingModule({
-        imports: [
-          HttpClientModule,
-          MaterialConfigModule,
-          MatAutocompleteModule,
-          MatDatepickerModule,
-          MatOptionModule,
-          NoopAnimationsModule
-        ],
-        declarations: [EditPageComponent, ContentMetadataComponent, ContentViewComponent, SafeUrlPipe],
-        providers: [
-          { provide: ActivatedRoute, useValue: activatedRoute },
-          { provide: ContentService, useValue: mockContentService },
-          Title,
-          FormBuilder,
-          MatSnackBar,
-          ProgressService,
-          NotificationService,
-          { provide: UserService, useValue: mockUserService }
-        ],
-        schemas: [NO_ERRORS_SCHEMA]
-      })
-        .overrideModule(BrowserDynamicTestingModule, {
-          set: {
-            entryComponents: [ContentViewComponent]
-          }
-        })
-        .compileComponents()
-        .then(() => {
-          fixture = TestBed.createComponent(EditPageComponent);
-          component = fixture.componentInstance;
-        });
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientModule,
+        MaterialConfigModule,
+        MatAutocompleteModule,
+        MatDatepickerModule,
+        MatOptionModule,
+        NoopAnimationsModule
+      ],
+      declarations: [EditPageComponent, ContentMetadataComponent, ContentViewComponent, SafeUrlPipe],
+      providers: [
+        { provide: ActivatedRoute, useValue: activatedRoute },
+        { provide: ContentService, useValue: mockContentService },
+        Title,
+        FormBuilder,
+        MatSnackBar,
+        ProgressService,
+        NotificationService,
+        { provide: UserService, useValue: mockUserService }
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
-  );
+      .overrideModule(BrowserDynamicTestingModule, {
+        set: {
+          entryComponents: [ContentViewComponent]
+        }
+      })
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(EditPageComponent);
+        component = fixture.componentInstance;
+      });
+  }));
 
   beforeEach(() => {
     activatedRoute.testParamMap = { id: '1', page: 'test-page' };

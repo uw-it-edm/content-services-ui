@@ -3,9 +3,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SearchBoxComponent } from './search-box.component';
 import { FormsModule } from '@angular/forms';
 import { MaterialConfigModule } from '../../routing/material-config.module';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { SearchModel } from '../shared/model/search-model';
-import 'rxjs/add/observable/of';
+
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { Student } from '../../shared/shared/model/student';
@@ -24,7 +24,7 @@ class MockStudentSearchAutocomplete extends StudentSearchAutocomplete {
     testStudent.firstName = 'Test';
     testStudent.lastName = 'User';
     testStudent.studentNumber = '1234';
-    return Observable.of([testStudent]);
+    return of([testStudent]);
   }
 }
 
@@ -44,7 +44,7 @@ describe('SearchBoxComponent', () => {
     component = fixture.componentInstance;
     const searchModel = new SearchModel();
     searchModel.stringQuery = 'iSearch';
-    component.searchModel$ = Observable.of(searchModel);
+    component.searchModel$ = of(searchModel);
     component.pageConfig = new SearchPageConfig();
     component.searchAutocomplete = new MockStudentSearchAutocomplete();
     fixture.detectChanges();

@@ -1,14 +1,13 @@
+import { Observable, of } from 'rxjs';
+
+import { map, publishReplay, refCount, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Config } from './model/config';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ProgressService } from '../../shared/providers/progress.service';
 import { UserService } from '../../user/shared/user.service';
-import { Observable } from 'rxjs/Observable';
 import { TenantConfigInfo } from './model/tenant-config-info';
-
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/publishReplay';
 
 @Injectable()
 export class ConfigService {
@@ -54,9 +53,11 @@ export class ConfigService {
       const requestOptions = this.buildRequestOptions();
       return this.http
         .get<Config>(tenantInfo.downloadUrl, requestOptions)
-        .do(config => this.configs.set(tenantInfo.tenantName, config))
-        .publishReplay(1)
-        .refCount()
+        .pipe(
+          tap(config => this.configs.set(tenantInfo.tenantName, config)),
+          publishReplay(1),
+          refCount()
+        )
         .toPromise();
     }
   }
@@ -65,13 +66,12 @@ export class ConfigService {
     if (this.tenantsConfig !== null) {
       console.log('getTenantList from cache');
       this.progressService.end();
-      return Observable.of(this.tenantsConfig);
+      return of(this.tenantsConfig);
     } else {
       console.log('getTenantList');
       const requestOptions = this.buildRequestOptions();
-      return this.http
-        .get(this.appConfigUrl, requestOptions)
-        .map(result => {
+      return this.http.get(this.appConfigUrl, requestOptions).pipe(
+        map(result => {
           const tenants: TenantConfigInfo[] = [];
 
           const tenantsFromAPI = result['_links'];
@@ -87,12 +87,13 @@ export class ConfigService {
           return tenants.sort((a: TenantConfigInfo, b: TenantConfigInfo) => {
             return a.tenantName.localeCompare(b.tenantName);
           });
-        })
-        .do(tenantsConfig => {
+        }),
+        tap(tenantsConfig => {
           this.tenantsConfig = tenantsConfig;
-        })
-        .publishReplay(1)
-        .refCount();
+        }),
+        publishReplay(1),
+        refCount()
+      );
     }
   }
 

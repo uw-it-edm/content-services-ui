@@ -1,40 +1,38 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {FormsModule} from '@angular/forms';
-import {MaterialConfigModule} from '../../routing/material-config.module';
-import {Observable} from 'rxjs/Observable';
-import {SearchModel} from '../shared/model/search-model';
-import 'rxjs/add/observable/of';
-import {FacetsBoxComponent} from './facets-box.component';
-import {SearchResults} from '../shared/model/search-result';
-import {SearchPageConfig} from '../../core/shared/model/search-page-config';
-import {SearchFilter} from '../shared/model/search-filter';
-import {RouterModule} from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { MaterialConfigModule } from '../../routing/material-config.module';
+import { SearchModel } from '../shared/model/search-model';
+
+import { FacetsBoxComponent } from './facets-box.component';
+import { SearchResults } from '../shared/model/search-result';
+import { SearchPageConfig } from '../../core/shared/model/search-page-config';
+import { SearchFilter } from '../shared/model/search-filter';
+import { RouterModule } from '@angular/router';
+import { of } from 'rxjs';
 
 describe('FacetsBoxComponent', () => {
   let component: FacetsBoxComponent;
   let fixture: ComponentFixture<FacetsBoxComponent>;
 
-  beforeEach(
-    async(() => {
-      TestBed.configureTestingModule({
-        imports: [FormsModule, MaterialConfigModule, RouterModule],
-        declarations: [FacetsBoxComponent]
-      }).compileComponents();
-    })
-  );
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [FormsModule, MaterialConfigModule, RouterModule],
+      declarations: [FacetsBoxComponent]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FacetsBoxComponent);
     component = fixture.componentInstance;
     const searchModel = new SearchModel();
     searchModel.stringQuery = 'iSearch';
-    component.searchModel$ = Observable.of(searchModel);
+    component.searchModel$ = of(searchModel);
     component.pageConfig = new SearchPageConfig();
 
     const searchResults = new SearchResults();
 
-    component.searchResults$ = Observable.of(searchResults);
+    component.searchResults$ = of(searchResults);
 
     fixture.detectChanges();
   });

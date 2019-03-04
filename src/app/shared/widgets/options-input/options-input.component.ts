@@ -11,7 +11,7 @@ import {
   Optional,
   Self
 } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { Observable, of, Subject } from 'rxjs';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -36,8 +36,8 @@ import { isNullOrUndefined } from '../../../core/util/node-utilities';
 import { DataApiValueService } from '../../providers/dataapivalue.service';
 import { DataApiValueSearchResults } from '../../shared/model/data-api-value-search-results';
 import { DataApiValue } from '../../shared/model/data-api-value';
-import { Observable } from 'rxjs';
 import { ObjectUtilities } from '../../../core/util/object-utilities';
+import { map } from 'rxjs/operators';
 
 // Boilerplate for applying mixins to OptionsInputComponent.
 /** @docs-private */
@@ -111,18 +111,18 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
 
   private initOptions() {
     if (this.fieldConfig.dynamicSelectOptions) {
-      this.options$ = this.dataApiValueService
-        .listByType(this.fieldConfig.dynamicSelectOptions.type)
-        .map((results: DataApiValueSearchResults) => results.content)
-        .map((values: DataApiValue[]) => {
+      this.options$ = this.dataApiValueService.listByType(this.fieldConfig.dynamicSelectOptions.type).pipe(
+        map((results: DataApiValueSearchResults) => results.content),
+        map((values: DataApiValue[]) => {
           return values.map((value: DataApiValue) => {
             const paths = this.fieldConfig.dynamicSelectOptions.labelPath.split(this.splitRegex);
             const displayValue = ObjectUtilities.getNestedObject(value.data, paths);
             return new FieldOption(value.valueId, displayValue);
           });
-        });
+        })
+      );
     } else {
-      this.options$ = Observable.of(
+      this.options$ = of(
         this.fieldConfig.options.map(option => {
           return Object.assign(new FieldOption(), option);
         })
@@ -259,6 +259,7 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
     this.focused = false;
   }
 
+  @HostBinding('class.floating')
   get shouldLabelFloat(): boolean {
     return this.focused || !this.empty;
   }

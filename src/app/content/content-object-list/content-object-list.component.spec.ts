@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { ContentService } from '../shared/content.service';
 import { ContentItem } from '../shared/model/content-item';
 import { Config, ContentConfig } from '../../core/shared/model/config';
@@ -30,7 +30,7 @@ class MockContentService extends ContentService {
   }
 
   create(contentItem: ContentItem, file: File): Observable<ContentItem> {
-    return Observable.of(contentItem);
+    return of(contentItem);
   }
 
   getFileUrl(itemId: string, webViewable: boolean): string {
@@ -129,7 +129,7 @@ describe('ContentObjectList', () => {
     expect(component).toBeTruthy();
   });
   it('should correctly populate the profileId when preparing to save', () => {
-    const contentItem = component.prepareItem(sourceItem, fields, formModel, config);
+    const contentItem = component.prepareItem(sourceItem, fields, formModel, config, user);
     expect(contentItem.metadata['ProfileId']).toBe('testProfile');
   });
   it('should populate the account when preparing to save', () => {

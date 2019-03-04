@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { ConfigService } from '../../core/shared/config.service';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { Config, CustomTextItem } from '../../core/shared/model/config';
-import { Subject } from 'rxjs/Subject';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Observable } from 'rxjs/Observable';
+import { Subject, ReplaySubject, Observable } from 'rxjs';
 import { NotificationService } from '../../shared/providers/notification.service';
 
 @Injectable()

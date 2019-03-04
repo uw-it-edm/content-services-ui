@@ -4,7 +4,7 @@ import { Config } from '../../core/shared/model/config';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { ContentItem } from '../shared/model/content-item';
 import { User } from '../../user/shared/user';
 import { UserService } from '../../user/shared/user.service';
@@ -14,6 +14,7 @@ import { ContentObject } from '../shared/model/content-object';
 import { ContentObjectListComponent } from '../content-object-list/content-object-list.component';
 import { NotificationService } from '../../shared/providers/notification.service';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-page',
@@ -49,11 +50,11 @@ export class CreatePageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.user = this.userService.getUser();
     this.form = this.createForm();
-    this.route.data.takeUntil(this.componentDestroyed).subscribe((data: { config: Config }) => {
+    this.route.data.pipe(takeUntil(this.componentDestroyed)).subscribe((data: { config: Config }) => {
       this.config = data.config;
       this.extractPageConfig();
     });
-    this.route.paramMap.takeUntil(this.componentDestroyed).subscribe(params => {
+    this.route.paramMap.pipe(takeUntil(this.componentDestroyed)).subscribe(params => {
       if (this.contentObjectListComponent) {
         this.contentObjectListComponent.reset();
       }
@@ -107,6 +108,7 @@ export class CreatePageComponent implements OnInit, OnDestroy {
   updateSavingStatus(inProgress: boolean) {
     this.submitPending = inProgress;
   }
+
   saveItem() {
     const fields = this.pageConfig.fieldsToDisplay;
     const formModel = this.form.value;

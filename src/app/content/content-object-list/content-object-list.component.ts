@@ -1,3 +1,4 @@
+import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ContentObject } from '../shared/model/content-object';
 import { FormGroup } from '@angular/forms';
@@ -6,8 +7,7 @@ import { ContentService } from '../shared/content.service';
 import { Field } from '../../core/shared/model/field';
 import { Config } from '../../core/shared/model/config';
 import { User } from '../../user/shared/user';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { Observable, Subject } from 'rxjs';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../user/shared/user.service';
@@ -54,8 +54,8 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
   ngOnInit(): void {
     this.user = this.userService.getUser();
 
-    this.route.paramMap.takeUntil(this.componentDestroyed).subscribe(params => {
-      this.route.data.takeUntil(this.componentDestroyed).subscribe((data: { config: Config }) => {
+    this.route.paramMap.pipe(takeUntil(this.componentDestroyed)).subscribe(params => {
+      this.route.data.pipe(takeUntil(this.componentDestroyed)).subscribe((data: { config: Config }) => {
         this.config = data.config;
       });
     });

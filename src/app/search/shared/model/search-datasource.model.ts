@@ -1,12 +1,12 @@
 import { DataSource } from '@angular/cdk/collections';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/merge';
+import { Observable } from 'rxjs';
+
 import { SearchResults } from './search-result';
 import { ResultRow } from './result-row';
 import { MatPaginator, MatSort, SortDirection } from '@angular/material';
 import { SearchModel } from './search-model';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
+import { map } from 'rxjs/operators';
 
 export class SearchDataSource extends DataSource<ResultRow> {
   constructor(
@@ -32,7 +32,7 @@ export class SearchDataSource extends DataSource<ResultRow> {
   }
 
   connect(): Observable<ResultRow[]> {
-    return this.searchResults$.map(response => response.results);
+    return this.searchResults$.pipe(map(response => response.results));
   }
 
   disconnect() {}

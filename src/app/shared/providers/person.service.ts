@@ -1,16 +1,18 @@
+import { Observable, of } from 'rxjs';
+
+import { map, mergeMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { UserService } from '../../user/shared/user.service';
-import { Observable } from 'rxjs/Observable';
 import { CacheObservableDecorator } from '../decorators/cache-observable.decorator';
-import 'rxjs/add/operator/mergeMap';
-import { isNumeric } from 'rxjs/util/isNumeric';
+
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { PersonSearchModel } from '../shared/model/person-search-model';
 import { PersonSearchResults } from '../shared/model/person-search-results';
 import { Person } from '../shared/model/person';
 import { DataApiSearchResults } from '../shared/model/data-api-search-results';
+import { isNumeric } from 'rxjs/internal-compatibility';
 
 @Injectable()
 export class PersonService {
@@ -28,21 +30,23 @@ export class PersonService {
     if (term && term.trim().length > 0) {
       let searchModel = this.createAutocompleteSearchModel(term);
 
-      return this.searchPerson(searchModel).flatMap(result => {
-        // if the initial search did not have any results and was only the lastName, try again using the term firstName
-        if (
-          result.totalElements === 0 &&
-          isNullOrUndefined(searchModel.firstName) &&
-          isNullOrUndefined(searchModel.employeeId)
-        ) {
-          searchModel = this.createAutocompleteSearchModel(term, true);
-          return this.searchPerson(searchModel);
-        } else {
-          return Observable.of(result);
-        }
-      });
+      return this.searchPerson(searchModel).pipe(
+        mergeMap(result => {
+          // if the initial search did not have any results and was only the lastName, try again using the term firstName
+          if (
+            result.totalElements === 0 &&
+            isNullOrUndefined(searchModel.firstName) &&
+            isNullOrUndefined(searchModel.employeeId)
+          ) {
+            searchModel = this.createAutocompleteSearchModel(term, true);
+            return this.searchPerson(searchModel);
+          } else {
+            return of(result);
+          }
+        })
+      );
     } else {
-      return Observable.of(new PersonSearchResults());
+      return of(new PersonSearchResults());
     }
   }
 
@@ -81,7 +85,7 @@ export class PersonService {
     const options = this.buildRequestOptions();
     return this.http
       .get<any>(this.personUrl + '/' + regId, options)
-      .map(pwsPerson => this.newPersonFromPwsPerson(pwsPerson));
+      .pipe(map(pwsPerson => this.newPersonFromPwsPerson(pwsPerson)));
   }
 
   private searchPerson(searchModel: PersonSearchModel): Observable<PersonSearchResults> {
@@ -98,24 +102,26 @@ export class PersonService {
 
     const options = this.buildRequestOptions(params);
 
-    return this.http.get<DataApiSearchResults>(this.personUrl, options).map((results: DataApiSearchResults) => {
-      const personSearchResults = new PersonSearchResults();
+    return this.http.get<DataApiSearchResults>(this.personUrl, options).pipe(
+      map((results: DataApiSearchResults) => {
+        const personSearchResults = new PersonSearchResults();
 
-      personSearchResults.first = results.first;
-      personSearchResults.last = results.last;
-      personSearchResults.number = results.number;
-      personSearchResults.numberOfElements = results.numberOfElements;
-      personSearchResults.size = results.size;
-      personSearchResults.sort = results.sort;
-      personSearchResults.totalElements = results.totalElements;
-      personSearchResults.totalPages = results.totalPages;
+        personSearchResults.first = results.first;
+        personSearchResults.last = results.last;
+        personSearchResults.number = results.number;
+        personSearchResults.numberOfElements = results.numberOfElements;
+        personSearchResults.size = results.size;
+        personSearchResults.sort = results.sort;
+        personSearchResults.totalElements = results.totalElements;
+        personSearchResults.totalPages = results.totalPages;
 
-      personSearchResults.content = results.content.map((pwsPerson: any) => {
-        return this.newPersonFromPwsPerson(pwsPerson);
-      });
+        personSearchResults.content = results.content.map((pwsPerson: any) => {
+          return this.newPersonFromPwsPerson(pwsPerson);
+        });
 
-      return personSearchResults;
-    });
+        return personSearchResults;
+      })
+    );
   }
 
   private newPersonFromPwsPerson(pwsPerson: any): Person {

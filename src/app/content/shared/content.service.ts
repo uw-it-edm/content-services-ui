@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ContentItem } from './model/content-item';
-import { Observable } from 'rxjs/Observable';
+import { Observable, ReplaySubject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { UserService } from '../../user/shared/user.service';
 import { UrlUtilities } from '../../core/util/url-utilities';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ProgressService } from '../../shared/providers/progress.service';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 
 @Injectable()

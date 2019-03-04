@@ -1,12 +1,10 @@
+import { debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { SearchModel } from './model/search-model';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/map';
+
 import { SearchResults } from './model/search-result';
-import 'rxjs/add/observable/from';
+
 import { environment } from '../../../environments/environment';
 import { UserService } from '../../user/shared/user.service';
 import { SearchFilter } from './model/search-filter';
@@ -32,10 +30,10 @@ export class SearchService {
   ) {}
 
   search(searchModel$: Observable<SearchModel>, pageConfig: SearchPageConfig): Observable<SearchResults> {
-    return searchModel$
-      .debounceTime(400)
-      .distinctUntilChanged()
-      .switchMap(searchModel => {
+    return searchModel$.pipe(
+      debounceTime(400),
+      distinctUntilChanged(),
+      switchMap(searchModel => {
         console.log('processing search request');
 
         if (pageConfig.searchStateInURL) {
@@ -49,7 +47,8 @@ export class SearchService {
         this.dataService.set('currentSearch', searchModel);
 
         return this.searchEntries(searchModel, pageConfig);
-      });
+      })
+    );
   }
 
   private searchEntries(searchModel: SearchModel, pageConfig: SearchPageConfig): Observable<SearchResults> {
@@ -58,9 +57,11 @@ export class SearchService {
     const options = this.buildRequestOptions();
 
     console.log('searching "' + indexName + '" with ' + JSON.stringify(searchPayload));
-    return this.http.post(this.baseUrl + indexName, searchPayload, options).map(response => {
-      return this.convertSearchApiResultsToSearchResults(searchModel, response);
-    });
+    return this.http.post(this.baseUrl + indexName, searchPayload, options).pipe(
+      map(response => {
+        return this.convertSearchApiResultsToSearchResults(searchModel, response);
+      })
+    );
   }
 
   private buildRequestOptions() {

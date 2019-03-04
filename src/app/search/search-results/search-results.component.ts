@@ -2,15 +2,15 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } 
 import { SearchModel } from '../shared/model/search-model';
 import { SearchResults } from '../shared/model/search-result';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subject } from 'rxjs';
 import { SearchDataSource } from '../shared/model/search-datasource.model';
 import { MatPaginator, MatSort, PageEvent, Sort, SortDirection } from '@angular/material';
 import { PaginatorConfig } from '../shared/model/paginator-config';
-import { Subject } from 'rxjs/Subject';
 import { DataService } from '../../shared/providers/data.service';
 import { SearchUtility } from '../shared/search-utility';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { SearchPagination } from '../shared/model/search-pagination';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-search-results',
@@ -51,7 +51,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   constructor(private data: DataService) {}
 
   ngOnInit(): void {
-    this.searchModel$.takeUntil(this.componentDestroyed).subscribe(searchModel => {
+    this.searchModel$.pipe(takeUntil(this.componentDestroyed)).subscribe(searchModel => {
       this.searchModel = searchModel;
       if (this.searchModel.pagination != null) {
         if (this.searchModel.pagination.pageIndex != null) {
@@ -69,7 +69,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
       this.topPaginator,
       this.bottomPaginator
     ]);
-    this.searchResults$.takeUntil(this.componentDestroyed).subscribe(results => {
+    this.searchResults$.pipe(takeUntil(this.componentDestroyed)).subscribe(results => {
       this.hasResults = !isNullOrUndefined(results) && results.total > 0;
       if (this.hasResults) {
         this.paginatorConfig.numberOfResults = results.total;

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class ProgressService {
@@ -44,7 +44,7 @@ export class ProgressService {
 
   public progress(current: number): number {
     if (this.total !== 0 && this.total > current) {
-      const value = 100 * Math.round(Number(current)) / this.total;
+      const value = (100 * Math.round(Number(current))) / this.total;
       console.log('Setting progress to ' + value);
       this.value = value;
     } else if (this.total <= current) {

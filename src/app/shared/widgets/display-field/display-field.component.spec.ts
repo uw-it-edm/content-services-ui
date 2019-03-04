@@ -10,14 +10,12 @@ describe('DisplayFieldComponent', () => {
   let component: DisplayFieldComponent;
   let fixture: ComponentFixture<DisplayFieldComponent>;
 
-  beforeEach(
-    async(() => {
-      TestBed.configureTestingModule({
-        declarations: [DisplayFieldComponent],
-        schemas: [NO_ERRORS_SCHEMA]
-      }).compileComponents();
-    })
-  );
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [DisplayFieldComponent],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DisplayFieldComponent);
