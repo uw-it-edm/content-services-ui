@@ -5022,12 +5022,12 @@ ng2-pdf-viewer@5.2.3:
     "@types/pdfjs-dist" "^0.1.2"
     pdfjs-dist "2.0.943"
 
-ngx-daterangepicker-material@^1.2.7:
-  version "1.3.4"
-  resolved "https://registry.yarnpkg.com/ngx-daterangepicker-material/-/ngx-daterangepicker-material-1.3.4.tgz#9d0bf53e6f3ed9523c3ec6752b20722bcd540430"
-  integrity sha512-B1hyESpgmeoz8MBIrf1QUJO5SlgN1E+pyNCM3GjNJRj4JRCAcxwwBirplyghqf5jX2g0TgjYoqLt1ferSDJ+Qg==
+ngx-daterangepicker-material@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/ngx-daterangepicker-material/-/ngx-daterangepicker-material-2.0.2.tgz#8fb1559b5834ca6226806430d4d7026d8a13d766"
+  integrity sha512-MUZBxM/30VAv6uBs+QUSyPz1H23r/VU2NCBXKpxoJLmROvm8V5C9PWZd/lYhW9g24/TL6mwmHcb8WDbe2RFbfw==
   dependencies:
-    tslib "^1.7.1"
+    tslib "^1.9.0"
 
 nice-try@^1.0.4:
   version "1.0.5"
