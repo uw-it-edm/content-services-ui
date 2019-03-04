@@ -1,4 +1,4 @@
-import { Observable, of as observableOf } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { map, mergeMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
@@ -41,12 +41,12 @@ export class PersonService {
             searchModel = this.createAutocompleteSearchModel(term, true);
             return this.searchPerson(searchModel);
           } else {
-            return observableOf(result);
+            return of(result);
           }
         })
       );
     } else {
-      return observableOf(new PersonSearchResults());
+      return of(new PersonSearchResults());
     }
   }
 

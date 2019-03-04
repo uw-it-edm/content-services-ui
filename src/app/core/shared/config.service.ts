@@ -1,4 +1,4 @@
-import { Observable, of as observableOf } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { map, publishReplay, refCount, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
@@ -66,7 +66,7 @@ export class ConfigService {
     if (this.tenantsConfig !== null) {
       console.log('getTenantList from cache');
       this.progressService.end();
-      return observableOf(this.tenantsConfig);
+      return of(this.tenantsConfig);
     } else {
       console.log('getTenantList');
       const requestOptions = this.buildRequestOptions();

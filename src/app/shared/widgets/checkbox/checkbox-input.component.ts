@@ -239,7 +239,7 @@ export class CheckboxInputComponent extends _CheckboxInputComponentBase
   }
 
   focused = false;
-  @HostBinding('class.floating')
+
   get shouldLabelFloat(): boolean {
     return true;
   }
