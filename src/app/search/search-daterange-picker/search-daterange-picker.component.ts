@@ -46,7 +46,17 @@ export class SearchDaterangePickerComponent implements OnInit, OnDestroy {
     this.loadPageConfig();
   }
 
+  rangeClicked(selected) {
+    console.log('range clicked ' + JSON.stringify(selected));
+    this.processUpdate(selected);
+  }
+
   datesUpdated(selected) {
+    console.log('datesUpdated ' + JSON.stringify(selected));
+    this.processUpdate(selected);
+  }
+
+  processUpdate(selected) {
     if (
       selected &&
       ((selected.startDate && selected.endDate) ||

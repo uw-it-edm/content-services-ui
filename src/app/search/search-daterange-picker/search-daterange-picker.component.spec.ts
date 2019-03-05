@@ -17,7 +17,7 @@ describe('SearchDaterangePickerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, NgxDaterangepickerMd, MaterialConfigModule, NoopAnimationsModule],
+      imports: [ReactiveFormsModule, NgxDaterangepickerMd.forRoot(), MaterialConfigModule, NoopAnimationsModule],
       declarations: [SearchDaterangePickerComponent]
     }).compileComponents();
   }));
