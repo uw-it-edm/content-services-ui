@@ -7,8 +7,7 @@
   "PersonAffiliations": {
     "AlumPersonAffiliation": null,
     "EmployeePersonAffiliation": {
-      "EmployeeID": "44444444",
-
+      "EmployeeID": "44444444"
     },
     "StudentPersonAffiliation": null
   },
