@@ -17,8 +17,8 @@ class MockPersonService extends PersonService {
   read(regId: string) {
     const testPerson = new Person();
     testPerson.displayName = 'Test User';
-    testPerson.firstName = 'Test';
-    testPerson.lastName = 'User';
+    testPerson.registeredFirstName = 'Test';
+    testPerson.registeredLastName = 'User';
     testPerson.regId = 'ABCD';
     testPerson.priorRegIds = ['CDEF', 'GHIJ'];
     testPerson.employeeId = '12345';
@@ -28,8 +28,8 @@ class MockPersonService extends PersonService {
   autocomplete(term: string): Observable<PersonSearchResults> {
     const testPerson = new Person();
     testPerson.displayName = 'Test User';
-    testPerson.firstName = 'Test';
-    testPerson.lastName = 'User';
+    testPerson.registeredFirstName = 'Test';
+    testPerson.registeredLastName = 'User';
     testPerson.regId = 'ABCD';
     testPerson.priorRegIds = ['CDEF', 'GHIJ'];
     testPerson.employeeId = '12345';
@@ -67,8 +67,8 @@ describe('PersonAutocompleteComponent', () => {
   it('should display a person name', () => {
     const testPerson = new Person();
     testPerson.displayName = 'Test User';
-    testPerson.firstName = 'Test';
-    testPerson.lastName = 'User';
+    testPerson.registeredFirstName = 'Test';
+    testPerson.registeredLastName = 'User';
     testPerson.regId = 'ABCD';
     testPerson.priorRegIds = ['CDEF', 'GHIJ'];
     testPerson.employeeId = '12345';
@@ -92,8 +92,8 @@ describe('PersonAutocompleteComponent', () => {
     expect(component.filteredOptions.length).toBe(1);
     const testPerson = new Person();
     testPerson.displayName = 'Test User';
-    testPerson.firstName = 'Test';
-    testPerson.lastName = 'User';
+    testPerson.registeredFirstName = 'Test';
+    testPerson.registeredLastName = 'User';
     testPerson.regId = 'ABCD';
     testPerson.priorRegIds = ['CDEF', 'GHIJ'];
     testPerson.employeeId = '12345';

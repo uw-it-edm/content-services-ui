@@ -263,17 +263,6 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
     return !value;
   }
 
-  focused = false;
-
-  @HostBinding('class.floating')
-  get shouldPlaceholderFloat() {
-    return this.focused || !this.empty;
-  }
-
-  get shouldLabelFloat() {
-    return this.focused || !this.empty;
-  }
-
   /** Whether this input is disabled. */
   get disabled() {
     return this.ngControl ? this.ngControl.disabled : this._disabled;
@@ -360,15 +349,28 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
   }
 
   onContainerClick() {
-    this.focus();
     this._markAsTouched();
   }
 
-  @HostListener('focus')
-  focus() {
-    if ((event.target as Element).tagName.toLowerCase() !== 'input') {
-      this._elementRef.nativeElement.querySelector('input').focus();
-    }
+  focused = false;
+
+  @HostListener('focusin')
+  onFocusin() {
+    this.focused = true;
+  }
+
+  @HostListener('focusout')
+  onFocusout() {
+    this.focused = false;
+  }
+
+  @HostBinding('class.floating')
+  get shouldPlaceholderFloat() {
+    return this.focused || !this.empty;
+  }
+
+  get shouldLabelFloat() {
+    return this.focused || !this.empty;
   }
 
   /** Emits change event to set the model value. */
@@ -388,7 +390,6 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
   /** When blurred, mark the field as touched when focus moved outside the Input. */
   @HostListener('blur')
   blur() {
-    console.log('bluuuur');
     if (!this.disabled) {
       this._markAsTouched();
     }
