@@ -14,9 +14,9 @@
             </ng-template>
           </mat-list-item>
           <mat-list-item *ngIf="facetConfig.size < searchResults?.facets.get(facetConfig.key).buckets.length">
-            <button mat-button color="primary" *ngIf="facetConfig.cursize <= facetConfig.size" (click)="facetConfig.cursize=searchResults?.facets.get(facetConfig.key).buckets.length">
+            <button mat-button color="primary" aria-label="show more" *ngIf="facetConfig.cursize <= facetConfig.size" (click)="facetConfig.cursize=searchResults?.facets.get(facetConfig.key).buckets.length">
                <mat-icon>arrow_drop_down</mat-icon>{{facetConfig.buttonMoreLabel||'more ...'}}</button>
-            <button mat-button color="primary" *ngIf="facetConfig.cursize > facetConfig.size" (click)="facetConfig.cursize=facetConfig.size">
+            <button mat-button color="primary" aria-label="show less" *ngIf="facetConfig.cursize > facetConfig.size" (click)="facetConfig.cursize=facetConfig.size">
               <mat-icon>arrow_drop_up</mat-icon>{{facetConfig.buttonLessLabel||'less'}}</button>
           </mat-list-item>
         </mat-list>
