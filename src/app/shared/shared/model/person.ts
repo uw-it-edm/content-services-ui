@@ -24,16 +24,32 @@ export class Person implements SearchFilterableResult {
   public displayName: string;
   public email?: string;
   public registeredFirstName: string;
-  public firstName: string;
+  public preferredFirstName: string;
   public registeredLastName: string;
-  public lastName: string;
+  public preferredLastName: string;
   public netId: string;
   public employeeId?: string;
 
   constructor() {}
 
   static convertToDisplayName(person: Person) {
-    return person.lastName + ', ' + person.firstName + ' (' + person.employeeId + ')';
+    return person.getLastName() + ', ' + person.getFirstName() + ' (' + person.employeeId + ')';
+  }
+
+  getLastName(): string {
+    if (this.preferredLastName) {
+      return this.preferredLastName;
+    } else {
+      return this.registeredLastName;
+    }
+  }
+
+  getFirstName(): string {
+    if (this.preferredFirstName) {
+      return this.preferredFirstName;
+    } else {
+      return this.registeredFirstName;
+    }
   }
 
   getFilterableValue(): FilterableValue {
