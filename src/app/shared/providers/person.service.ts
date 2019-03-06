@@ -134,8 +134,8 @@ export class PersonService {
     person.employeeId = pwsPerson['PersonAffiliations']['EmployeePersonAffiliation']['EmployeeID'];
     person.registeredFirstName = pwsPerson['RegisteredFirstMiddleName'];
     person.registeredLastName = pwsPerson['RegisteredSurname'];
-    person.firstName = pwsPerson['PreferredFirstName'];
-    person.lastName = pwsPerson['PreferredSurname'];
+    person.preferredFirstName = pwsPerson['PreferredFirstName'];
+    person.preferredLastName = pwsPerson['PreferredSurname'];
 
     return person;
   }
