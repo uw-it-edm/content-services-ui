@@ -21,7 +21,7 @@
       "pageName": "Demonstration Search",
       "theme": "uw-default",
       "searchStateInURL": true,
-      "enableDisplaySearch":true,
+      "enableDisplaySearch": true,
       "fieldsToDisplay": [
         {
           "key": "ProfileId",
@@ -100,8 +100,8 @@
           "required": false,
           "displayType": "select",
           "dynamicSelectOptions": {
-            "type" : "test-type",
-            "labelPath" : "label"
+            "type": "test-type",
+            "labelPath": "label"
           }
         },
         {
@@ -110,8 +110,8 @@
           "required": false,
           "displayType": "select",
           "dynamicSelectOptions": {
-            "type" : "test-type",
-            "labelPath" : "metadata.Code"
+            "type": "test-type",
+            "labelPath": "metadata.Code"
           }
         },
         {
@@ -147,15 +147,6 @@
           "displayType": "date"
         },
         {
-          "key": "Reconciled",
-          "label": "Reconciled",
-          "displayType": "checkbox",
-          "checkboxOptions": {
-            "checkedValue": "Yes",
-            "uncheckedValue": "No"
-          }
-        },
-        {
           "key": "StudentId",
           "label": "Student",
           "displayType": "student-autocomplete"
@@ -188,6 +179,26 @@
       "pageName": "Create Content Item",
       "fieldsToDisplay": [
         {
+          "key": "DataApiOptionLabel",
+          "label": "DataApiOption show label",
+          "required": false,
+          "displayType": "select",
+          "dynamicSelectOptions": {
+            "type": "test-type",
+            "labelPath": "label"
+          }
+        },
+        {
+          "key": "DataApiOptionCode",
+          "label": "DataApiOption Show Code",
+          "required": false,
+          "displayType": "select",
+          "dynamicSelectOptions": {
+            "type": "test-type",
+            "labelPath": "metadata.Code"
+          }
+        },
+        {
           "key": "Filer",
           "label": "Filer"
         },
@@ -212,15 +223,6 @@
           "label": "Last Modified Date",
           "dataType": "date",
           "displayType": "date"
-        },
-        {
-          "key": "Reconciled",
-          "label": "Reconciled",
-          "displayType": "checkbox",
-          "checkboxOptions": {
-            "checkedValue": "Yes",
-            "uncheckedValue": "No"
-          }
         },
         {
           "key": "StudentId",

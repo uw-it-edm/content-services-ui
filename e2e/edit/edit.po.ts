@@ -1,4 +1,4 @@
-import { browser, by, element, ExpectedConditions } from 'protractor';
+import {browser, by, element, ExpectedConditions} from 'protractor';
 import * as path from 'path';
 
 export class EditPage {
@@ -12,6 +12,7 @@ export class EditPage {
   public downloadButton = element(by.partialButtonText('Download'));
   public nextItemButton = element(by.id('nextItem'));
   public dateInputField = element.all(by.css('app-timestamp-picker input'));
+  public formFields = element.all(by.tagName('mat-form-field'));
 
   constructor(private profile: string = 'demo', private id: string = '123456') {}
 

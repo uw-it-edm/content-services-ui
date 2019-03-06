@@ -1,4 +1,4 @@
-import { browser, by, element, ExpectedConditions } from 'protractor';
+import {browser, by, element, ExpectedConditions} from 'protractor';
 
 export class CreatePage {
   public pageUrl = `${browser.baseUrl}/${this.profile}/create`;
@@ -11,6 +11,7 @@ export class CreatePage {
   public saveButton = element(by.id('saveItem'));
   public clearButton = element(by.buttonText('clear'));
   public pdfViewer = element(by.tagName('pdf-viewer'));
+  public formFields = element.all(by.tagName('mat-form-field'));
 
   constructor(private profile: string = 'demo') {}
 
