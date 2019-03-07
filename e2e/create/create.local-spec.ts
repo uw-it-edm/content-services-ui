@@ -128,4 +128,19 @@ describe('Create Page', () => {
       browser.actions().sendKeys(protractor.Key.ESCAPE).perform();
     });
   });
+
+  it('should autocomplete Employee Name when Employee ID is entered in Employee input field', () => {
+    const employeeData = require('../mocks/data-api/person-query.json');
+    const employeeFirstName = employeeData.content[0].RegisteredFirstMiddleName;
+    const employeeLastName = employeeData.content[0].RegisteredSurname;
+    const employeeId = employeeData.content[0].PersonAffiliations.EmployeePersonAffiliation.EmployeeID;
+    const employee = `${employeeLastName}, ${employeeFirstName} (${employeeId})`;
+
+    page.personInput.sendKeys(employeeId);
+    expect(searchPage.autoCompletePanel.isDisplayed());
+    expect(searchPage.autoCompletedOption.getText()).toEqual(employee);
+
+    searchPage.autoCompletedOption.click();
+    expect(page.getPersonValue()).toEqual(employee);
+  });
 });

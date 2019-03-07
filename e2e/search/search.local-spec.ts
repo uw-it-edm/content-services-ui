@@ -156,4 +156,20 @@ describe('Search Page', () => {
     const displaySearchPage = new DisplaySearchPage();
     expect(browser.getCurrentUrl()).toEqual(displaySearchPage.getEncodedPageUrl());
   });
+
+  it('should autocomplete Employee Name when Employee ID is entered in search box', () => {
+    page = new SearchPage('demo2');
+    page.navigateTo();
+
+    const employeeData = require('../mocks/data-api/person-query.json');
+    const employeeId = employeeData.content[0].PersonAffiliations.EmployeePersonAffiliation.EmployeeID;
+
+    page.searchBox.sendKeys(employeeId);
+    expect(page.autoCompletePanel.isDisplayed());
+    expect(page.autoCompletedOption.getText()).toEqual(employeeData.content[0].DisplayName);
+
+    page.autoCompletedOption.click();
+    expect(page.selectedFacet.isDisplayed());
+    expect(page.selectedFacet.getText()).toMatch(new RegExp(employeeId));
+  });
 });
