@@ -4,6 +4,7 @@ import * as path from 'path';
 export class EditPage {
   public saveButton = element(by.id('saveItem'));
   public studentInputField = element(by.css('app-student-autocomplete input'));
+  public personInputField = element(by.css('app-person-autocomplete input'));
   public profileUrl = `${browser.baseUrl}/${this.profile}/edit`;
   public pageUrl = `${this.profileUrl}/${this.id}`;
   public pdfFilePath = path.resolve(__dirname, '../mocks/files/sample-file.pdf');
@@ -46,6 +47,10 @@ export class EditPage {
 
   getStudentText() {
     return this.studentInputField.getAttribute('value');
+  }
+
+  getPersonText() {
+    return this.personInputField.getAttribute('value');
   }
 
   getSnackBarText() {

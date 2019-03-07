@@ -96,4 +96,12 @@ describe('Edit Page', () => {
       browser.actions().sendKeys(protractor.Key.ESCAPE).perform();
     });
   });
+
+  it('should display Employee name in correct format', () => {
+    const employeeData = require('../mocks/data-api/person.json');
+    const employeeID = employeeData.PersonAffiliations.EmployeePersonAffiliation.EmployeeID;
+    const employee = `${employeeData.RegisteredSurname}, ${employeeData.RegisteredFirstMiddleName} (${employeeID})`;
+
+    expect(page.getPersonText()).toEqual(employee);
+  });
 });
