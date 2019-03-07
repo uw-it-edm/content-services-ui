@@ -64,6 +64,6 @@ export class Person implements SearchFilterableResult {
   }
 
   getFilterableDisplay(): string {
-    return this.displayName;
+    return this.getNameAndEmployeeId();
   }
 }
