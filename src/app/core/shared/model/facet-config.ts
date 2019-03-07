@@ -6,4 +6,6 @@ export class FacetConfig {
   public order = 'asc';
 
   public size = 5;
+
+  public maxSize = 5; // same default value as size for backward compatiblity
 }

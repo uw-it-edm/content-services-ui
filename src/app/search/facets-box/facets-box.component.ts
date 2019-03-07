@@ -51,7 +51,11 @@ export class FacetsBoxComponent implements OnInit, OnDestroy {
   getFacetsConfig() {
     return Object.keys(this.pageConfig.facetsConfig.facets).map(key => {
       if (!this.pageConfig.facetsConfig.facets[key].size) {
-        this.pageConfig.facetsConfig.facets[key].size = 9999; // for backward compatibility
+        this.pageConfig.facetsConfig.facets[key].size = 5; // default
+      }
+
+      if (!this.pageConfig.facetsConfig.facets[key].maxSize) {
+        this.pageConfig.facetsConfig.facets[key].maxSize = this.pageConfig.facetsConfig.facets[key].size; // for backward compatibility
       }
 
       if (!this.pageConfig.facetsConfig.facets[key].cursize) {
