@@ -36,6 +36,10 @@ export class Person implements SearchFilterableResult {
     return person.getLastName() + ', ' + person.getFirstName() + ' (' + person.employeeId + ')';
   }
 
+  getNameAndEmployeeId(): string {
+    return this.getLastName() + ', ' + this.getFirstName() + ' (' + this.employeeId + ')';
+  }
+
   getLastName(): string {
     if (this.preferredLastName) {
       return this.preferredLastName;
