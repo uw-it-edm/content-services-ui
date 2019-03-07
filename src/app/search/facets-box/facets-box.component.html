@@ -4,7 +4,7 @@
       <legend>{{facetConfig.label}}</legend>
         <mat-list dense>
           <mat-list-item
-            *ngFor="let facetResult of searchResults?.facets.get(facetConfig.key).buckets">
+            *ngFor="let facetResult of searchResults?.facets.get(facetConfig.key).buckets.slice(0, facetConfig.cursize)">
             <span *ngIf="hasSelectedFacet(facetConfig.key); else showLink">
               {{facetResult.key}} ({{facetResult.count}})
             </span>
@@ -12,6 +12,14 @@
               <a [routerLink]="" (click)="addFacetFilter(facetConfig.key,facetResult.key, facetConfig.label)">
                 {{facetResult.key}} ({{facetResult.count}})</a>
             </ng-template>
+          </mat-list-item>
+          <mat-list-item *ngIf="facetConfig.size < facetConfig.maxSize && facetConfig.size < searchResults?.facets.get(facetConfig.key).buckets.length">
+            <button mat-button color="primary" aria-label="show more" *ngIf="facetConfig.cursize <= facetConfig.size" (click)="facetConfig.cursize=facetConfig.maxSize">
+              <mat-icon>keyboard_arrow_down</mat-icon><span appCustomText="showMoreFacetsLabel" defaultValue="more"></span>
+            </button>
+            <button mat-button color="primary" aria-label="show less" *ngIf="facetConfig.cursize > facetConfig.size" (click)="facetConfig.cursize=facetConfig.size">
+              <mat-icon>keyboard_arrow_up</mat-icon><span appCustomText="showLessFacetsLabel" defaultValue="less"></span>
+            </button>
           </mat-list-item>
         </mat-list>
     </fieldset>
