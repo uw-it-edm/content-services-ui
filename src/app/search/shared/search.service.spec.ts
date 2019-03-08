@@ -101,10 +101,10 @@ describe('SearchService', () => {
     facetConfig2.key = 'my-second-facet';
     facetConfig2.order = 'desc';
     const facetConfig3 = new FacetConfig();
-    facetConfig2.size = 15;
-    facetConfig2.maxSize = 50;
-    facetConfig2.key = 'my-third-facet';
-    facetConfig2.order = 'desc';
+    facetConfig3.size = 15;
+    facetConfig3.maxSize = 50;
+    facetConfig3.key = 'my-third-facet';
+    facetConfig3.order = 'desc';
 
     pageConfig.facetsConfig.facets['my-facet'] = facetConfig;
     pageConfig.facetsConfig.facets['my-second-facet'] = facetConfig2;
