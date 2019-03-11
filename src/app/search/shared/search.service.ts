@@ -142,7 +142,7 @@ export class SearchService {
           facets.push({
             field: facetConfig.key,
             order: facetConfig.order,
-            size: facetConfig.size
+            size: facetConfig.maxSize && facetConfig.maxSize > facetConfig.size ? facetConfig.maxSize : facetConfig.size
           });
         });
     }
