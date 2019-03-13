@@ -175,4 +175,23 @@ describe('Search Page', () => {
     expect(page.selectedFacet.isDisplayed());
     expect(page.selectedFacet.getText()).toMatch(new RegExp(employeeId));
   });
+
+  it('should display more DocumentType facet values when "more" is clicked', () => {
+    page.moreButton.click();
+    expect(page.lessButton.isDisplayed()).toBeTruthy();
+
+    const facetSize = demoConfig.pages['tab-search'].facetsConfig.facets['metadata.DocumentType.label.raw'].size;
+    expect(page.getFacetItems(0).count()).toBeGreaterThan(facetSize);
+  });
+
+  it('should display less DocumentType facet values when "less" is clicked', () => {
+    page.moreButton.click();
+    expect(page.lessButton.isDisplayed()).toBeTruthy();
+
+    page.lessButton.click();
+    expect(page.moreButton.isDisplayed()).toBeTruthy();
+
+    const facetSize = demoConfig.pages['tab-search'].facetsConfig.facets['metadata.DocumentType.label.raw'].size;
+    expect(page.getFacetItems(0).count()).toEqual(facetSize);
+  });
 });
