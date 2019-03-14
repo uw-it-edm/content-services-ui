@@ -148,7 +148,8 @@
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
-            "protractorConfig": "./protractor.conf.js"
+            "protractorConfig": "./protractor.conf.js",
+            "port": 4201
           },
           "configurations": {
             "travis": {
