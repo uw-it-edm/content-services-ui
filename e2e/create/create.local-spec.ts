@@ -1,8 +1,9 @@
-import { CreatePage } from './create.po';
-import { SearchPage } from '../search/search.po';
-import { browser } from 'protractor';
+import {CreatePage} from './create.po';
+import {SearchPage} from '../search/search.po';
+import {browser} from 'protractor';
 import * as path from 'path';
-import { until } from 'selenium-webdriver';
+import {until} from 'selenium-webdriver';
+import {protractor} from 'protractor/built/ptor';
 
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
@@ -115,5 +116,31 @@ describe('Create Page', () => {
 
     searchPage.autoCompletedOption.click();
     expect(page.getStudentValue()).toEqual(studentName);
+  });
+
+  it('should indicate focus on all form fields when selected', () => {
+    page.formFields.each(field => {
+      field.click();
+
+      expect(field.getAttribute('className')).toContain('mat-focused');
+
+      // reset for next field
+      browser.actions().sendKeys(protractor.Key.ESCAPE).perform();
+    });
+  });
+
+  it('should autocomplete Employee Name when Employee ID is entered in Employee input field', () => {
+    const employeeData = require('../mocks/data-api/person-query.json');
+    const employeeFirstName = employeeData.content[0].RegisteredFirstMiddleName;
+    const employeeLastName = employeeData.content[0].RegisteredSurname;
+    const employeeId = employeeData.content[0].PersonAffiliations.EmployeePersonAffiliation.EmployeeID;
+    const employee = `${employeeLastName}, ${employeeFirstName} (${employeeId})`;
+
+    page.personInput.sendKeys(employeeId);
+    expect(searchPage.autoCompletePanel.isDisplayed());
+    expect(searchPage.autoCompletedOption.getText()).toEqual(employee);
+
+    searchPage.autoCompletedOption.click();
+    expect(page.getPersonValue()).toEqual(employee);
   });
 });

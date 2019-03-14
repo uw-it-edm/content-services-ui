@@ -25,6 +25,8 @@ import { ContentViewComponent } from '../content/content-view/content-view.compo
 import { ContentToolbarComponent } from '../content/content-toolbar/content-toolbar.component';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { DataApiValueService } from './providers/dataapivalue.service';
+import { PersonService } from './providers/person.service';
+import { PersonAutocompleteComponent } from './widgets/person-autocomplete/person-autocomplete.component';
 
 @NgModule({
   imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule, FormsModule, PdfViewerModule],
@@ -40,6 +42,7 @@ import { DataApiValueService } from './providers/dataapivalue.service';
     OptionsInputComponent,
     StudentAutocompleteComponent,
     StudentDisplayComponent,
+    PersonAutocompleteComponent,
     TimestampPickerComponent,
     TruncatePipe,
     DisplayFieldComponent,
@@ -56,6 +59,7 @@ import { DataApiValueService } from './providers/dataapivalue.service';
     OptionsInputComponent,
     StudentAutocompleteComponent,
     StudentDisplayComponent,
+    PersonAutocompleteComponent,
     TimestampPickerComponent,
     TruncatePipe,
     DisplayFieldComponent,
@@ -64,7 +68,7 @@ import { DataApiValueService } from './providers/dataapivalue.service';
     ContentViewComponent,
     ContentToolbarComponent
   ],
-  providers: [DataService, ProgressService, StudentService, DataApiValueService, NotificationService],
+  providers: [DataService, ProgressService, StudentService, PersonService, DataApiValueService, NotificationService],
   entryComponents: [NotificationComponent]
 })
 export class SharedModule {}

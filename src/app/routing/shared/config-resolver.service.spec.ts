@@ -28,56 +28,43 @@ class MockConfigService {
 }
 
 describe('ConfigResolverService', () => {
-  beforeEach(
-    async(() => {
-      const _mockConfigService = new MockConfigService();
-      TestBed.configureTestingModule({
-        imports: [MatSnackBarModule],
-        providers: [
-          ConfigResolver,
-          { provide: ConfigService, useValue: _mockConfigService },
-          { provide: Router, useClass: RouterStub },
-          NotificationService
-        ]
-      });
-    })
-  );
+  beforeEach(async(() => {
+    const _mockConfigService = new MockConfigService();
+    TestBed.configureTestingModule({
+      imports: [MatSnackBarModule],
+      providers: [
+        ConfigResolver,
+        { provide: ConfigService, useValue: _mockConfigService },
+        { provide: Router, useClass: RouterStub },
+        NotificationService
+      ]
+    });
+  }));
 
   let mockConfigService: MockConfigService;
-  beforeEach(
-    inject([Injector], injector => {
-      mockConfigService = injector.get(ConfigService);
-    })
-  );
+  beforeEach(inject([Injector], injector => {
+    mockConfigService = injector.get(ConfigService);
+  }));
 
-  it(
-    'should be created',
-    inject([ConfigResolver], (configResolverService: ConfigResolver) => {
-      expect(configResolverService).toBeTruthy();
-    })
-  );
+  it('should be created', inject([ConfigResolver], (configResolverService: ConfigResolver) => {
+    expect(configResolverService).toBeTruthy();
+  }));
 
-  it(
-    'should call config service with the correct tenant',
-    inject([ConfigResolver], (service: ConfigResolver) => {
-      const route = new ActivatedRouteSnapshot();
-      const routeParams = { tenant: 'test-tenant' };
-      route.params = routeParams;
-      service.resolve(route, null).then(config => {
-        expect(config.tenant).toBe('test-tenant');
-      });
-    })
-  );
+  it('should call config service with the correct tenant', inject([ConfigResolver], (service: ConfigResolver) => {
+    const route = new ActivatedRouteSnapshot();
+    const routeParams = { tenant: 'test-tenant' };
+    route.params = routeParams;
+    service.resolve(route, null).then(config => {
+      expect(config.tenant).toBe('test-tenant');
+    });
+  }));
 
-  it(
-    'should return null if tenant doesnt exist',
-    inject([ConfigResolver], (service: ConfigResolver) => {
-      const route = new ActivatedRouteSnapshot();
-      const routeParams = { tenant: 'fsdfsd-tenant' };
-      route.params = routeParams;
-      service.resolve(route, null).then(config => {
-        expect(config.tenant).toBeNull();
-      });
-    })
-  );
+  it('should return null if tenant doesnt exist', inject([ConfigResolver], (service: ConfigResolver) => {
+    const route = new ActivatedRouteSnapshot();
+    const routeParams = { tenant: 'fsdfsd-tenant' };
+    route.params = routeParams;
+    service.resolve(route, null).then(config => {
+      expect(config.tenant).toBeNull();
+    });
+  }));
 });

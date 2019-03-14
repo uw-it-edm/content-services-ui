@@ -3,9 +3,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SearchBoxComponent } from './search-box.component';
 import { FormsModule } from '@angular/forms';
 import { MaterialConfigModule } from '../../routing/material-config.module';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { SearchModel } from '../shared/model/search-model';
-import 'rxjs/add/observable/of';
+
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { Student } from '../../shared/shared/model/student';
@@ -24,7 +24,7 @@ class MockStudentSearchAutocomplete extends StudentSearchAutocomplete {
     testStudent.firstName = 'Test';
     testStudent.lastName = 'User';
     testStudent.studentNumber = '1234';
-    return Observable.of([testStudent]);
+    return of([testStudent]);
   }
 }
 
@@ -32,21 +32,19 @@ describe('SearchBoxComponent', () => {
   let component: SearchBoxComponent;
   let fixture: ComponentFixture<SearchBoxComponent>;
 
-  beforeEach(
-    async(() => {
-      TestBed.configureTestingModule({
-        imports: [FormsModule, MaterialConfigModule, NoopAnimationsModule],
-        declarations: [SearchBoxComponent]
-      }).compileComponents();
-    })
-  );
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [FormsModule, MaterialConfigModule, NoopAnimationsModule],
+      declarations: [SearchBoxComponent]
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SearchBoxComponent);
     component = fixture.componentInstance;
     const searchModel = new SearchModel();
     searchModel.stringQuery = 'iSearch';
-    component.searchModel$ = Observable.of(searchModel);
+    component.searchModel$ = of(searchModel);
     component.pageConfig = new SearchPageConfig();
     component.searchAutocomplete = new MockStudentSearchAutocomplete();
     fixture.detectChanges();
@@ -74,7 +72,9 @@ describe('SearchBoxComponent', () => {
   it('should add filter', () => {
     const event: MatAutocompleteSelectedEvent = <MatAutocompleteSelectedEvent>{
       option: {
-        value: 'test'
+        value: {
+          value: 'test'
+        }
       }
     };
     component.onSelectFilter(event);

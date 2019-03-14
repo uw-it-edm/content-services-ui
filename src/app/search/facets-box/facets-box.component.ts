@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { SearchModel } from '../shared/model/search-model';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subject } from 'rxjs';
 import { SearchResults } from '../shared/model/search-result';
 import { SearchFilter } from '../shared/model/search-filter';
-import { Subject } from 'rxjs/Subject';
 import { isUndefined } from '../../core/util/node-utilities';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-facets-box',
@@ -28,10 +28,10 @@ export class FacetsBoxComponent implements OnInit, OnDestroy {
   constructor() {}
 
   ngOnInit() {
-    this.searchModel$.takeUntil(this.componentDestroyed).subscribe(searchModel => {
+    this.searchModel$.pipe(takeUntil(this.componentDestroyed)).subscribe(searchModel => {
       this.searchModel = searchModel;
     });
-    this.searchResults$.takeUntil(this.componentDestroyed).subscribe(searchResults => {
+    this.searchResults$.pipe(takeUntil(this.componentDestroyed)).subscribe(searchResults => {
       this.searchResults = searchResults;
 
       // only update the selected facets after search results are updated
@@ -50,6 +50,17 @@ export class FacetsBoxComponent implements OnInit, OnDestroy {
   }
   getFacetsConfig() {
     return Object.keys(this.pageConfig.facetsConfig.facets).map(key => {
+      if (!this.pageConfig.facetsConfig.facets[key].size) {
+        this.pageConfig.facetsConfig.facets[key].size = 5; // default
+      }
+
+      if (!this.pageConfig.facetsConfig.facets[key].maxSize) {
+        this.pageConfig.facetsConfig.facets[key].maxSize = this.pageConfig.facetsConfig.facets[key].size; // for backward compatibility
+      }
+
+      if (!this.pageConfig.facetsConfig.facets[key].cursize) {
+        this.pageConfig.facetsConfig.facets[key].cursize = this.pageConfig.facetsConfig.facets[key].size;
+      }
       return this.pageConfig.facetsConfig.facets[key];
     });
   }

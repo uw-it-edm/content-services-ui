@@ -2,6 +2,9 @@
   "_links": {
     "demo": {
       "href": "http://__current_host__:12345/profile/v1/app/my-app/demo"
+    },
+    "demo2": {
+      "href": "http://__current_host__:12345/profile/v1/app/my-app/demo2"
     }
   }
 }

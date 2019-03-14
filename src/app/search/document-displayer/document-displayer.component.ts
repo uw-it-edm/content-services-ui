@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, Input, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { ContentService } from '../../content/shared/content.service';
 import { ContentObject } from '../../content/shared/model/content-object';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';

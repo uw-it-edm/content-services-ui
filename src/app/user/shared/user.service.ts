@@ -3,8 +3,7 @@ import { User } from './user';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ProgressService } from '../../shared/providers/progress.service';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Observable } from 'rxjs/Observable';
+import { ReplaySubject, Observable } from 'rxjs';
 import { NotificationService } from '../../shared/providers/notification.service';
 
 @Injectable()

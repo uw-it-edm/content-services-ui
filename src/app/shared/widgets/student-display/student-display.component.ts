@@ -1,9 +1,10 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { StudentService } from '../../providers/student.service';
 import { Student } from '../../shared/model/student';
-import { Subject } from 'rxjs/Subject';
-import { isNumeric } from 'rxjs/util/isNumeric';
+import { Subject } from 'rxjs';
 import { NotificationService } from '../../providers/notification.service';
+import { takeUntil } from 'rxjs/operators';
+import { isNumeric } from 'rxjs/internal-compatibility';
 
 @Component({
   selector: 'app-student-display',
@@ -24,7 +25,7 @@ export class StudentDisplayComponent implements OnInit, OnDestroy {
     if (isNumeric(this.value)) {
       this.studentService
         .read(this.value)
-        .takeUntil(this.componentDestroyed)
+        .pipe(takeUntil(this.componentDestroyed))
         .subscribe(
           (student: Student) => {
             this.displayName = Student.convertToDisplayName(student);

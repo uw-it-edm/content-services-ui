@@ -4,12 +4,12 @@ import { SearchDaterangePickerComponent } from './search-daterange-picker.compon
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialConfigModule } from '../../routing/material-config.module';
 import { SearchModel } from '../shared/model/search-model';
-import { Observable } from 'rxjs';
 import { SearchDaterangeConfig } from '../../core/shared/model/search-daterange-config';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Moment } from 'moment';
 import { SearchFilter } from '../shared/model/search-filter';
 import * as moment from 'moment-timezone';
+import { of } from 'rxjs';
 
 describe('SearchDaterangePickerComponent', () => {
   let component: SearchDaterangePickerComponent;
@@ -32,7 +32,7 @@ describe('SearchDaterangePickerComponent', () => {
     component.searchDaterangeConfig = searchDaterangeConfig;
 
     const searchModel = new SearchModel();
-    component.searchModel$ = Observable.of(searchModel);
+    component.searchModel$ = of(searchModel);
 
     fixture.detectChanges();
   });

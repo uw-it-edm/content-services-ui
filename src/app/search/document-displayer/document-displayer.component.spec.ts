@@ -2,11 +2,11 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FormsModule } from '@angular/forms';
 import { MaterialConfigModule } from '../../routing/material-config.module';
-import 'rxjs/add/observable/of';
+
 import { DocumentDisplayerComponent } from './document-displayer.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
-import { Observable } from 'rxjs';
+import { BrowserModule } from '@angular/platform-browser';
+import { Observable, of } from 'rxjs';
 import { ContentItem } from '../../content/shared/model/content-item';
 import { ContentService } from '../../content/shared/content.service';
 
@@ -21,7 +21,7 @@ class MockContentService {
     defaultContentItem.metadata['a'] = 'a';
     defaultContentItem.metadata['b'] = 'asdf';
     defaultContentItem.metadata['t'] = 't';
-    return Observable.of(defaultContentItem);
+    return of(defaultContentItem);
   }
 
   getFileUrl(itemId: string, webViewable: boolean): string {

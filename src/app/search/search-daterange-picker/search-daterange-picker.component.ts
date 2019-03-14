@@ -7,6 +7,7 @@ import { SearchModel } from '../shared/model/search-model';
 import { SearchFilter } from '../shared/model/search-filter';
 import { SearchDaterangeConfig } from '../../core/shared/model/search-daterange-config';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-search-daterange-picker',
@@ -37,7 +38,7 @@ export class SearchDaterangePickerComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.formGroup = this.fb.group({});
     this.formGroup.controls['internalDateRange'] = new FormControl();
-    this.searchModel$.takeUntil(this.componentDestroyed).subscribe(searchModel => {
+    this.searchModel$.pipe(takeUntil(this.componentDestroyed)).subscribe(searchModel => {
       this.searchModel = searchModel;
       // TODO: if filter is removed, clear daterange-picker textfield
     });

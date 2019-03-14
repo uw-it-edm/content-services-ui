@@ -1,3 +1,4 @@
+import { publishReplay } from 'rxjs/operators';
 /**
  *
  * From: https://stackoverflow.com/a/43879433
@@ -9,7 +10,7 @@
  * @param descriptor
  * @returns {PropertyDescriptor}
  */
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 export function CacheObservableDecorator(target: Object, name: string, descriptor: PropertyDescriptor) {
   const originalFunc = descriptor.value;
@@ -28,7 +29,7 @@ export function CacheObservableDecorator(target: Object, name: string, descripto
     // console.log(`${name} cache-miss ${key} new`, returnValue);
 
     if (returnValue instanceof Observable) {
-      returnValue = returnValue.publishReplay(1);
+      returnValue = returnValue.pipe(publishReplay(1));
       returnValue.connect();
     } else {
       console.warn('CacheObservableDecorator: value not an Observable cannot publishReplay and connect', returnValue);

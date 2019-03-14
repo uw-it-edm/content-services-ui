@@ -48,6 +48,10 @@
         {
           "count": 6,
           "key": "Published"
+        },
+        {
+          "count": 6,
+          "key": "Draft"
         }
       ]
     },
@@ -61,6 +65,26 @@
         {
           "count": 57,
           "key": "Type 2"
+        },
+        {
+          "count": 15,
+          "key": "Type 3"
+        },
+        {
+          "count": 34,
+          "key": "Type 4"
+        },
+        {
+          "count": 2,
+          "key": "Type 5"
+        },
+        {
+          "count": 4,
+          "key": "Type 6"
+        },
+        {
+          "count": 66,
+          "key": "Type 7"
         }
       ]
     }

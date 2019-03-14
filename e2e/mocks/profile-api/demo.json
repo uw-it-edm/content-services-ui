@@ -21,7 +21,7 @@
       "pageName": "Demonstration Search",
       "theme": "uw-default",
       "searchStateInURL": true,
-      "enableDisplaySearch":true,
+      "enableDisplaySearch": true,
       "fieldsToDisplay": [
         {
           "key": "ProfileId",
@@ -46,7 +46,7 @@
         }
       ],
       "searchConfig": {
-        "directions": "Type a budget number, vendor name, amount, or other info",
+        "directions": "Type a student number or other info",
         "label": "",
         "placeholder": "Search for documents",
         "indexName": "documents-demo"
@@ -68,19 +68,22 @@
             "key": "metadata.DocumentType.label.raw",
             "label": "Document Type",
             "order": "asc",
-            "size": 5
+            "size": 3,
+            "maxSize": 50
           },
           "metadata.PublishStatus": {
             "key": "metadata.PublishStatus.raw",
             "label": "Publish Status",
             "order": "asc",
-            "size": 10
+            "size": 3,
+            "maxSize": 50
           },
           "metadata.Filer": {
             "key": "metadata.Filer.raw",
             "label": "Filer",
             "order": "asc",
-            "size": 10
+            "size": 3,
+            "maxSize": 50
           }
         }
       },
@@ -100,8 +103,8 @@
           "required": false,
           "displayType": "select",
           "dynamicSelectOptions": {
-            "type" : "test-type",
-            "labelPath" : "label"
+            "type": "test-type",
+            "labelPath": "label"
           }
         },
         {
@@ -110,8 +113,8 @@
           "required": false,
           "displayType": "select",
           "dynamicSelectOptions": {
-            "type" : "test-type",
-            "labelPath" : "metadata.Code"
+            "type": "test-type",
+            "labelPath": "metadata.Code"
           }
         },
         {
@@ -147,18 +150,14 @@
           "displayType": "date"
         },
         {
-          "key": "Reconciled",
-          "label": "Reconciled",
-          "displayType": "checkbox",
-          "checkboxOptions": {
-            "checkedValue": "Yes",
-            "uncheckedValue": "No"
-          }
-        },
-        {
           "key": "StudentId",
           "label": "Student",
           "displayType": "student-autocomplete"
+        },
+        {
+          "key": "RegId",
+          "label": "Employee",
+          "displayType": "person-autocomplete"
         }
       ],
       "buttons": [
@@ -182,6 +181,26 @@
       "theme": "uw-default",
       "pageName": "Create Content Item",
       "fieldsToDisplay": [
+        {
+          "key": "DataApiOptionLabel",
+          "label": "DataApiOption show label",
+          "required": false,
+          "displayType": "select",
+          "dynamicSelectOptions": {
+            "type": "test-type",
+            "labelPath": "label"
+          }
+        },
+        {
+          "key": "DataApiOptionCode",
+          "label": "DataApiOption Show Code",
+          "required": false,
+          "displayType": "select",
+          "dynamicSelectOptions": {
+            "type": "test-type",
+            "labelPath": "metadata.Code"
+          }
+        },
         {
           "key": "Filer",
           "label": "Filer"
@@ -209,18 +228,14 @@
           "displayType": "date"
         },
         {
-          "key": "Reconciled",
-          "label": "Reconciled",
-          "displayType": "checkbox",
-          "checkboxOptions": {
-            "checkedValue": "Yes",
-            "uncheckedValue": "No"
-          }
-        },
-        {
           "key": "StudentId",
           "label": "Student",
           "displayType": "student-autocomplete"
+        },
+        {
+          "key": "RegId",
+          "label": "Employee",
+          "displayType": "person-autocomplete"
         }
       ],
       "buttons": [
