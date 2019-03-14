@@ -31,7 +31,6 @@ export class PersonDisplayComponent implements OnInit, OnDestroy {
             this.invalidRegId = false;
           },
           err => {
-            console.log('got person service error');
             this.notificationService.warn(err.message, err);
             this.invalidPerson();
           }
