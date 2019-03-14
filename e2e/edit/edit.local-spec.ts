@@ -1,9 +1,9 @@
-import {EditPage} from './edit.po';
-import {browser, ExpectedConditions} from 'protractor';
-import {SearchPage} from '../search/search.po';
-import {ContentServicesUiPage} from '../app/app.po';
-import {until} from 'selenium-webdriver';
-import {protractor} from 'protractor/built/ptor';
+import { EditPage } from './edit.po';
+import { browser, ExpectedConditions } from 'protractor';
+import { SearchPage } from '../search/search.po';
+import { ContentServicesUiPage } from '../app/app.po';
+import { until } from 'selenium-webdriver';
+import { protractor } from 'protractor/built/ptor';
 
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
@@ -93,14 +93,20 @@ describe('Edit Page', () => {
       expect(field.getAttribute('className')).toContain('mat-focused');
 
       // reset for next field
-      browser.actions().sendKeys(protractor.Key.ESCAPE).perform();
+      browser
+        .actions()
+        .sendKeys(protractor.Key.ESCAPE)
+        .perform();
     });
   });
 
   it('should display Employee name in correct format', () => {
     const employeeData = require('../mocks/data-api/person.json');
+    const itemData = require('../mocks/content-api/item.json');
     const employeeID = employeeData.PersonAffiliations.EmployeePersonAffiliation.EmployeeID;
-    const employee = `${employeeData.RegisteredSurname}, ${employeeData.RegisteredFirstMiddleName} (${employeeID})`;
+    let employee = `${employeeData.RegisteredSurname}, ${employeeData.RegisteredFirstMiddleName} (${employeeID})`;
+
+    employee = employee.replace('__RegId__', itemData.metadata.RegId);
 
     expect(page.getPersonText()).toEqual(employee);
   });
