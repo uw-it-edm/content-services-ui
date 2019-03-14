@@ -14,10 +14,10 @@
             </ng-template>
           </mat-list-item>
           <mat-list-item *ngIf="facetConfig.size < facetConfig.maxSize && facetConfig.size < searchResults?.facets.get(facetConfig.key).buckets.length">
-            <button mat-button color="primary" aria-label="show more" *ngIf="facetConfig.cursize <= facetConfig.size" (click)="facetConfig.cursize=facetConfig.maxSize">
+            <button (click)="facetConfig.cursize=facetConfig.maxSize" *ngIf="facetConfig.cursize <= facetConfig.size" aria-label="show more" color="primary" mat-button name="more">
               <mat-icon>keyboard_arrow_down</mat-icon><span appCustomText="showMoreFacetsLabel" defaultValue="more"></span>
             </button>
-            <button mat-button color="primary" aria-label="show less" *ngIf="facetConfig.cursize > facetConfig.size" (click)="facetConfig.cursize=facetConfig.size">
+            <button (click)="facetConfig.cursize=facetConfig.size" *ngIf="facetConfig.cursize > facetConfig.size" aria-label="show less" color="primary" mat-button name="less">
               <mat-icon>keyboard_arrow_up</mat-icon><span appCustomText="showLessFacetsLabel" defaultValue="less"></span>
             </button>
           </mat-list-item>

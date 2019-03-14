@@ -46,7 +46,7 @@
         }
       ],
       "searchConfig": {
-        "directions": "Type a budget number, vendor name, amount, or other info",
+        "directions": "Type a student number or other info",
         "label": "",
         "placeholder": "Search for documents",
         "indexName": "documents-demo"
@@ -68,19 +68,22 @@
             "key": "metadata.DocumentType.label.raw",
             "label": "Document Type",
             "order": "asc",
-            "size": 5
+            "size": 3,
+            "maxSize": 50
           },
           "metadata.PublishStatus": {
             "key": "metadata.PublishStatus.raw",
             "label": "Publish Status",
             "order": "asc",
-            "size": 10
+            "size": 3,
+            "maxSize": 50
           },
           "metadata.Filer": {
             "key": "metadata.Filer.raw",
             "label": "Filer",
             "order": "asc",
-            "size": 10
+            "size": 3,
+            "maxSize": 50
           }
         }
       },

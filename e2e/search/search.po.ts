@@ -11,6 +11,9 @@ export class SearchPage {
   dateRangePicker = element(by.className('md-drppicker'));
   searchBox = element(by.id('search-field'));
   displayAllButton = element(by.className('cs-display-search-button'));
+  moreButton = element(by.name('more'));
+  lessButton = element(by.name('less'));
+  facetItemsLocator = by.css('.mat-list-item a');
 
   constructor(private profile: string = 'demo') {}
 
@@ -88,7 +91,7 @@ export class SearchPage {
   }
 
   getFacetText(facetIndex: number) {
-    return element.all(by.css('.mat-list-item a')).then(items => {
+    return element.all(this.facetItemsLocator).then(items => {
       return items[facetIndex].getText();
     });
   }
@@ -99,5 +102,13 @@ export class SearchPage {
 
   getDateRangeInputText() {
     return this.dateRangeInput.getAttribute('value');
+  }
+
+  getFacet(facetHeaderIndex: number) {
+    return element.all(by.css('.cs-facet-box .mat-list')).get(facetHeaderIndex);
+  }
+
+  getFacetItems(facetHeaderIndex: number) {
+    return this.getFacet(facetHeaderIndex).all(this.facetItemsLocator);
   }
 }
