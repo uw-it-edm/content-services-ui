@@ -199,4 +199,18 @@ describe('Search Page', () => {
     const searchButtonCustomizedText = demoConfig.customText['searchBox.search'].label;
     expect(page.searchButton.getText()).toEqual(searchButtonCustomizedText);
   });
+
+  it('should display Person field in the right format', () => {
+    page = new SearchPage('demo2');
+    page.navigateTo();
+
+    const employeeData = require('../mocks/data-api/person.json');
+    const itemData = require('../mocks/content-api/item.json');
+    const employeeID = employeeData.PersonAffiliations.EmployeePersonAffiliation.EmployeeID;
+    let employee = `${employeeData.RegisteredSurname}, ${employeeData.RegisteredFirstMiddleName} (${employeeID})`;
+
+    employee = employee.replace('__RegId__', itemData.metadata.RegId);
+
+    expect(page.getResultsByColumn('RegId')).toContain(employee);
+  });
 });
