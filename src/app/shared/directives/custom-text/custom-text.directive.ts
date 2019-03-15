@@ -1,20 +1,29 @@
-import { Directive, ElementRef, Input, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
+import { Directive, ElementRef, Input, OnChanges, OnDestroy, OnInit, Renderer2, SimpleChanges } from '@angular/core';
 import { CustomTextItem } from '../../../core/shared/model/config';
 import { ConfigResolver } from '../../../routing/shared/config-resolver.service';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { CustomTextUtilities } from './custom-text-utilities';
 
 @Directive({ selector: '[appCustomText]' })
-export class CustomTextDirective implements OnChanges {
+export class CustomTextDirective implements OnChanges, OnDestroy, OnInit {
+  private componentDestroyed = new Subject();
   @Input() appCustomText: string;
   @Input() defaultValue: string;
 
   customText: Map<string, CustomTextItem>;
 
-  constructor(private configResolver: ConfigResolver, private renderer: Renderer2, private el: ElementRef) {
-    this.configResolver.getCustomTextSubject().subscribe(customText => {
-      this.customText = customText;
-      this.setCustomText(this.customText, this.appCustomText, this.defaultValue);
-    });
+  constructor(private configResolver: ConfigResolver, private renderer: Renderer2, private el: ElementRef) {}
+
+  ngOnInit(): void {
+    this.configResolver
+      .getCustomTextSubject()
+      .pipe(takeUntil(this.componentDestroyed))
+      .subscribe(customText => {
+        this.customText = customText;
+        this.setCustomText(this.customText, this.appCustomText, this.defaultValue);
+      });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -29,6 +38,24 @@ export class CustomTextDirective implements OnChanges {
   }
 
   private setCustomText(customText: Map<string, CustomTextItem>, id: string, defaultValue: string) {
+    if (!isNullOrUndefined(customText)) {
+      const customizedText = CustomTextUtilities.getCustomText(customText, id, defaultValue);
+      if (!isNullOrUndefined(id)) {
+        if (!this.el.nativeElement.classList.contains('custom-text-rendered')) {
+          const text = this.renderer.createText(customizedText.label);
+          this.renderer.addClass(this.el.nativeElement, 'custom-text-rendered');
+          this.renderer.setAttribute(this.el.nativeElement, 'title', customizedText.description);
+          this.renderer.appendChild(this.el.nativeElement, text);
+        }
+      } else if (!isNullOrUndefined(defaultValue)) {
+        const defaultText = this.renderer.createText(customizedText.label);
+        this.renderer.addClass(this.el.nativeElement, 'default-text-rendered');
+        this.renderer.appendChild(this.el.nativeElement, defaultText);
+      }
+    }
+  }
+
+  private setCustomText_old(customText: Map<string, CustomTextItem>, id: string, defaultValue: string) {
     if (!isNullOrUndefined(customText)) {
       if (!isNullOrUndefined(id)) {
         const customTextItem = customText[id];
@@ -52,5 +79,10 @@ export class CustomTextDirective implements OnChanges {
         this.renderer.appendChild(this.el.nativeElement, defaultText);
       }
     }
+  }
+
+  ngOnDestroy(): void {
+    this.componentDestroyed.next();
+    this.componentDestroyed.complete();
   }
 }

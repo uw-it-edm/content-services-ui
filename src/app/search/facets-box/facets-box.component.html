@@ -6,11 +6,11 @@
           <mat-list-item
             *ngFor="let facetResult of searchResults?.facets.get(facetConfig.key).buckets.slice(0, facetConfig.cursize)">
             <span *ngIf="hasSelectedFacet(facetConfig.key); else showLink">
-              {{facetResult.key}} ({{facetResult.count}})
+               <span appCustomText="facet.{{facetConfig.key}}.{{facetResult.key}}" defaultValue="{{facetResult.key}}"></span> ({{facetResult.count}})
             </span>
             <ng-template #showLink>
               <a [routerLink]="" (click)="addFacetFilter(facetConfig.key,facetResult.key, facetConfig.label)">
-                {{facetResult.key}} ({{facetResult.count}})</a>
+                <span appCustomText="facet.{{facetConfig.key}}.{{facetResult.key}}" defaultValue="{{facetResult.key}}"></span> ({{facetResult.count}})</a>
             </ng-template>
           </mat-list-item>
           <mat-list-item *ngIf="facetConfig.size < facetConfig.maxSize && facetConfig.size < searchResults?.facets.get(facetConfig.key).buckets.length">
