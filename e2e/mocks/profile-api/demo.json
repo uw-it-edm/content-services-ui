@@ -14,6 +14,10 @@
     "previousContentItemButton": {
       "label": "Previous",
       "description": "Move up to previous content item"
+    },
+    "searchBox.search": {
+      "label": "Search Now",
+      "description": "Executes search"
     }
   },
   "pages": {

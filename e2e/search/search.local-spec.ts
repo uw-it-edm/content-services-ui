@@ -1,8 +1,8 @@
 ///<reference path="../../node_modules/@types/jasminewd2/index.d.ts"/>
-import {SearchPage} from './search.po';
-import {CreatePage} from '../create/create.po';
-import {DisplaySearchPage} from './display-search.po';
-import {browser} from 'protractor';
+import { SearchPage } from './search.po';
+import { CreatePage } from '../create/create.po';
+import { DisplaySearchPage } from './display-search.po';
+import { browser } from 'protractor';
 import * as moment from 'moment-timezone';
 
 let page: SearchPage;
@@ -193,5 +193,10 @@ describe('Search Page', () => {
 
     const facetSize = demoConfig.pages['tab-search'].facetsConfig.facets['metadata.DocumentType.label.raw'].size;
     expect(page.getFacetItems(0).count()).toEqual(facetSize);
+  });
+
+  it('should display Search button with configurable label', () => {
+    const searchButtonCustomizedText = demoConfig.customText['searchBox.search'].label;
+    expect(page.searchButton.getText()).toEqual(searchButtonCustomizedText);
   });
 });
