@@ -3,6 +3,7 @@ import { browser, ExpectedConditions } from 'protractor';
 import { SearchPage } from '../search/search.po';
 import { ContentServicesUiPage } from '../app/app.po';
 import { until } from 'selenium-webdriver';
+import { protractor } from 'protractor/built/ptor';
 
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
@@ -83,5 +84,30 @@ describe('Edit Page', () => {
   it('should display pdf viewer with download button for pdf file', () => {
     expect(page.getPdfViewer().isDisplayed()).toBeTruthy();
     expect(page.pdfViewerDownloadButton.isEnabled()).toBeTruthy();
+  });
+
+  it('should indicate focus on all form fields when selected', () => {
+    page.formFields.each(field => {
+      field.click();
+
+      expect(field.getAttribute('className')).toContain('mat-focused');
+
+      // reset for next field
+      browser
+        .actions()
+        .sendKeys(protractor.Key.ESCAPE)
+        .perform();
+    });
+  });
+
+  it('should display Employee name in correct format', () => {
+    const employeeData = require('../mocks/data-api/person.json');
+    const itemData = require('../mocks/content-api/item.json');
+    const employeeID = employeeData.PersonAffiliations.EmployeePersonAffiliation.EmployeeID;
+    let employee = `${employeeData.RegisteredSurname}, ${employeeData.RegisteredFirstMiddleName} (${employeeID})`;
+
+    employee = employee.replace('__RegId__', itemData.metadata.RegId);
+
+    expect(page.getPersonText()).toEqual(employee);
   });
 });

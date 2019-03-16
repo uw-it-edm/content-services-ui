@@ -72,12 +72,20 @@ exports.config = {
     browser.driver.findElement(by.id('weblogin_password')).sendKeys(process.env.password);
     browser.driver.findElement(by.css('[value=\'Sign in\']')).click();
 
+    // 2FA
+    browser.sleep(1000);
+    let duoIframe = browser.driver.findElement(by.id('duo_iframe'));
+    browser.driver.switchTo().frame(duoIframe);
+    browser.driver.findElement(by.className('auth-button')).click();
+    let passcodeInput = browser.driver.findElement(by.name('passcode'));
+    passcodeInput.sendKeys(process.env.token);
+    passcodeInput.sendKeys(protractor.Key.ENTER);
+
     // wait until page is redirected
     return browser.driver.wait(function () {
       return browser.driver.getCurrentUrl().then(function (url) {
         return url.startsWith(browser.baseUrl);
       });
     }, 10000);
-
   }
 };

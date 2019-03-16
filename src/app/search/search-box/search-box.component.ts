@@ -28,6 +28,8 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
   @Output()
   searchEvent = new EventEmitter<SearchModel>();
 
+  searchBoxEvent = new EventEmitter<string>();
+
   filteredOptions: SearchFilterableResult[] = [];
 
   constructor() {}
@@ -55,11 +57,16 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
     this.searchEvent.emit(this.searchModel);
   }
 
+  searchBoxChanged() {
+    this.searchBoxEvent.emit(this.searchModel.stringQuery);
+  }
+
   private assignAutocompleteListener() {
-    this.searchEvent.pipe(takeUntil(this.componentDestroyed)).subscribe((model: SearchModel) => {
-      if (model && model.stringQuery && typeof model.stringQuery === 'string' && model.stringQuery.trim().length > 1) {
+    this.searchBoxEvent.pipe(takeUntil(this.componentDestroyed)).subscribe((model: string) => {
+      if (model) {
+        console.log('model update ' + model);
         this.searchAutocomplete
-          .autocomplete(model.stringQuery)
+          .autocomplete(model)
           .pipe(takeUntil(this.componentDestroyed))
           .subscribe((results: SearchFilterableResult[]) => {
             this.filteredOptions = results;

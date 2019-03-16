@@ -1,22 +1,10 @@
 {
   "account": "demo-account",
-  "tenant": "Demo",
-  "appName": "My demo app",
+  "tenant": "Demo2",
+  "appName": "Demo 2",
   "customText": {
-    "facet.metadata.mybooleanfield.0": {
-      "label": "False"
-    },
-    "facet.metadata.mybooleanfield.1": {
-      "label": "True"
-    },
-    "facet.metadata.mysecondbooleanfield.0": {
-      "label": "No"
-    },
-    "facet.metadata.mysecondbooleanfield.1": {
-      "label": "Yes"
-    },
     "addContentItemButton": {
-      "label": "Add Item",
+      "label": "Upload",
       "description": "Upload a new content item"
     },
     "nextContentItemButton": {
@@ -26,17 +14,13 @@
     "previousContentItemButton": {
       "label": "Previous",
       "description": "Move up to previous content item"
-    },
-    "searchBox.search": {
-      "label": "Search Now",
-      "description": "Executes search"
     }
   },
   "pages": {
     "tab-search": {
       "pageName": "Demonstration Search",
       "theme": "uw-default",
-      "searchStateInURL": true,
+      "searchStateInURL": false,
       "enableDisplaySearch": true,
       "fieldsToDisplay": [
         {
@@ -46,6 +30,11 @@
         {
           "key": "Filer",
           "label": "Filer"
+        },
+        {
+          "label": "Person",
+          "key": "RegId",
+          "displayType": "person"
         },
         {
           "key": "PublishStatus",
@@ -62,13 +51,13 @@
         }
       ],
       "searchConfig": {
-        "directions": "Type a student number or other info",
+        "directions": "Type a Employee ID or other info",
         "label": "",
         "placeholder": "Search for documents",
         "indexName": "documents-demo"
       },
       "searchDaterangeConfig": {
-        "active": true,
+        "active": false,
         "filterKey": "metadata.LastModifiedDate.raw",
         "filterLabel": "Last Modified Date",
         "showCalendar": true,
@@ -84,43 +73,26 @@
             "key": "metadata.DocumentType.label.raw",
             "label": "Document Type",
             "order": "asc",
-            "size": 3,
-            "maxSize": 50
+            "size": 5
           },
           "metadata.PublishStatus": {
             "key": "metadata.PublishStatus.raw",
             "label": "Publish Status",
             "order": "asc",
-            "size": 3,
-            "maxSize": 50
+            "size": 10
           },
           "metadata.Filer": {
             "key": "metadata.Filer.raw",
             "label": "Filer",
             "order": "asc",
-            "size": 3,
-            "maxSize": 50
-          },
-          "metadata.mybooleanfield": {
-            "key": "metadata.mybooleanfield",
-            "label": "My boolean",
-            "order": "asc",
-            "size": 3,
-            "maxSize": 50
-          },
-          "metadata.mysecondbooleanfield": {
-            "key": "metadata.mysecondbooleanfield",
-            "label": "My Second boolean",
-            "order": "asc",
-            "size": 3,
-            "maxSize": 50
+            "size": 10
           }
         }
       },
       "autocompleteConfig": {
-        "type": "studentAutocomplete",
-        "filterKey": "metadata.StudentId",
-        "filterLabel": "Student Number"
+        "type": "personAutocomplete",
+        "filterKey": "metadata.RegId",
+        "filterLabel": "Employee"
       }
     },
     "edit": {

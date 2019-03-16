@@ -97,11 +97,18 @@ describe('SearchService', () => {
     facetConfig.order = 'asc';
     const facetConfig2 = new FacetConfig();
     facetConfig2.size = 15;
+    facetConfig2.maxSize = 15;
     facetConfig2.key = 'my-second-facet';
     facetConfig2.order = 'desc';
+    const facetConfig3 = new FacetConfig();
+    facetConfig3.size = 15;
+    facetConfig3.maxSize = 50;
+    facetConfig3.key = 'my-third-facet';
+    facetConfig3.order = 'desc';
 
     pageConfig.facetsConfig.facets['my-facet'] = facetConfig;
     pageConfig.facetsConfig.facets['my-second-facet'] = facetConfig2;
+    pageConfig.facetsConfig.facets['my-third-facet'] = facetConfig3;
 
     httpSpy = spyOn(http, 'post').and.returnValue(of(new Response(new ResponseOptions())));
 
@@ -111,13 +118,16 @@ describe('SearchService', () => {
       const payload = httpSpy.calls.first().args[1];
 
       expect(payload['query']).toBe('iSearch');
-      expect(payload['facets'].length).toBe(2);
+      expect(payload['facets'].length).toBe(3);
       expect(payload['facets'][0].field).toBe('my-facet');
       expect(payload['facets'][0].order).toBe('asc');
       expect(payload['facets'][0].size).toBe(5);
       expect(payload['facets'][1].field).toBe('my-second-facet');
       expect(payload['facets'][1].order).toBe('desc');
       expect(payload['facets'][1].size).toBe(15);
+      expect(payload['facets'][2].field).toBe('my-third-facet');
+      expect(payload['facets'][2].order).toBe('desc');
+      expect(payload['facets'][2].size).toBe(50);
     });
   });
 

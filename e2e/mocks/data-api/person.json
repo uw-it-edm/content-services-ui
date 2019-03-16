@@ -1,5 +1,5 @@
 {
-  "DisplayName": "Jane Doe Smith",
+  "DisplayName": "Jane __RegId__ Smith",
   "EduPersonAffiliations": [
     "employee"
   ],
@@ -7,8 +7,7 @@
   "PersonAffiliations": {
     "AlumPersonAffiliation": null,
     "EmployeePersonAffiliation": {
-      "EmployeeID": "44444444",
-
+      "EmployeeID": "44444444"
     },
     "StudentPersonAffiliation": null
   },
@@ -17,12 +16,12 @@
   "PreferredSurname": null,
   "PriorUWNetIDs": [],
   "PriorUWRegIDs": [],
-  "RegisteredFirstMiddleName": "Jane Doe",
-  "RegisteredName": "Jane Doe Smith",
-  "RegisteredSurname": "Doe",
+  "RegisteredFirstMiddleName": "Jane __RegId__",
+  "RegisteredName": "Jane __RegId__ Smith",
+  "RegisteredSurname": "Smith",
   "RepositoryTimeStamp": "02/08/2020 12:34:54 PM",
   "UIDNumber": "688110",
   "UWNetID": "mynetid",
-  "UWRegID": "ABCDE",
+  "UWRegID": "__RegId__",
   "WhitepagesPublish": false
 }

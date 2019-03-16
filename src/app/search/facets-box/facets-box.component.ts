@@ -6,6 +6,9 @@ import { SearchResults } from '../shared/model/search-result';
 import { SearchFilter } from '../shared/model/search-filter';
 import { isUndefined } from '../../core/util/node-utilities';
 import { takeUntil } from 'rxjs/operators';
+import { ConfigResolver } from '../../routing/shared/config-resolver.service';
+import { CustomTextItem } from '../../core/shared/model/config';
+import { CustomTextUtilities } from '../../shared/directives/custom-text/custom-text-utilities';
 
 @Component({
   selector: 'app-facets-box',
@@ -23,9 +26,11 @@ export class FacetsBoxComponent implements OnInit, OnDestroy {
   @Input() pageConfig: SearchPageConfig;
   @Output() facetFilterAdded = new EventEmitter<SearchModel>();
 
+  customText: Map<string, CustomTextItem>;
+
   searchResults: SearchResults;
 
-  constructor() {}
+  constructor(private configResolver: ConfigResolver) {}
 
   ngOnInit() {
     this.searchModel$.pipe(takeUntil(this.componentDestroyed)).subscribe(searchModel => {
@@ -39,6 +44,12 @@ export class FacetsBoxComponent implements OnInit, OnDestroy {
 
       this.selectedFacets = this.getSelectedFacetKeys();
     });
+    this.configResolver
+      .getCustomTextSubject()
+      .pipe(takeUntil(this.componentDestroyed))
+      .subscribe(customText => {
+        this.customText = customText;
+      });
   }
 
   private getSelectedFacetKeys() {
@@ -48,19 +59,42 @@ export class FacetsBoxComponent implements OnInit, OnDestroy {
   hasSelectedFacet(key: string) {
     return !isUndefined(this.selectedFacets.find(selectedFacet => selectedFacet === key));
   }
+
   getFacetsConfig() {
     return Object.keys(this.pageConfig.facetsConfig.facets).map(key => {
+      if (!this.pageConfig.facetsConfig.facets[key].size) {
+        this.pageConfig.facetsConfig.facets[key].size = 5; // default
+      }
+
+      if (!this.pageConfig.facetsConfig.facets[key].maxSize) {
+        this.pageConfig.facetsConfig.facets[key].maxSize = this.pageConfig.facetsConfig.facets[key].size; // for backward compatibility
+      }
+
+      if (!this.pageConfig.facetsConfig.facets[key].cursize) {
+        this.pageConfig.facetsConfig.facets[key].cursize = this.pageConfig.facetsConfig.facets[key].size;
+      }
       return this.pageConfig.facetsConfig.facets[key];
     });
   }
 
   addFacetFilter(key: string, value: string, label: string) {
-    const searchFilter = new SearchFilter(key, value, label);
+    const customizedText = CustomTextUtilities.getCustomText(this.customText, this.getCustomTextKey(key, value), value);
+    let searchFilter;
+    if (customizedText.isCustom) {
+      searchFilter = new SearchFilter(key, value, label, customizedText.label);
+    } else {
+      searchFilter = new SearchFilter(key, value, label);
+    }
+
     console.log('adding new facet : ' + JSON.stringify(searchFilter));
 
     this.searchModel.addFilterIfNotThere(searchFilter);
 
     this.facetFilterAdded.emit(this.searchModel);
+  }
+
+  private getCustomTextKey(key: string, value: string) {
+    return 'facet.' + key + '.' + value;
   }
 
   select(event) {

@@ -1,4 +1,4 @@
-import { browser, by, element, ExpectedConditions } from 'protractor';
+import {browser, by, element, ExpectedConditions} from 'protractor';
 
 export class CreatePage {
   public pageUrl = `${browser.baseUrl}/${this.profile}/create`;
@@ -8,9 +8,11 @@ export class CreatePage {
   public errorNotification = element(by.className('error'));
   public uploadAnotherCheckbox = element.all(by.name('uploadAnother')).get(1);
   public studentInput = element(by.css('app-student-autocomplete input'));
+  public personInput = element(by.css('app-person-autocomplete input'));
   public saveButton = element(by.id('saveItem'));
   public clearButton = element(by.buttonText('clear'));
   public pdfViewer = element(by.tagName('pdf-viewer'));
+  public formFields = element.all(by.tagName('mat-form-field'));
 
   constructor(private profile: string = 'demo') {}
 
@@ -66,5 +68,9 @@ export class CreatePage {
 
   getStudentValue() {
     return this.studentInput.getAttribute('value');
+  }
+
+  getPersonValue() {
+    return this.personInput.getAttribute('value');
   }
 }

@@ -58,7 +58,7 @@ describe('SearchBoxComponent', () => {
     expect(component.searchModel.stringQuery).toBe('iSearch');
   });
   it('should autocomplete', () => {
-    component.updateSearch();
+    component.searchBoxChanged();
     fixture.detectChanges();
 
     expect(component.filteredOptions.length).toBe(1);

@@ -1,8 +1,8 @@
 ///<reference path="../../node_modules/@types/jasminewd2/index.d.ts"/>
-import {SearchPage} from './search.po';
-import {CreatePage} from '../create/create.po';
-import {DisplaySearchPage} from './display-search.po';
-import {browser} from 'protractor';
+import { SearchPage } from './search.po';
+import { CreatePage } from '../create/create.po';
+import { DisplaySearchPage } from './display-search.po';
+import { browser } from 'protractor';
 import * as moment from 'moment-timezone';
 
 let page: SearchPage;
@@ -155,5 +155,62 @@ describe('Search Page', () => {
 
     const displaySearchPage = new DisplaySearchPage();
     expect(browser.getCurrentUrl()).toEqual(displaySearchPage.getEncodedPageUrl());
+  });
+
+  it('should autocomplete Employee Name when Employee ID is entered in search box', () => {
+    page = new SearchPage('demo2');
+    page.navigateTo();
+
+    const employeeData = require('../mocks/data-api/person-query.json');
+    const employeeId = employeeData.content[0].PersonAffiliations.EmployeePersonAffiliation.EmployeeID;
+    const employeeFirstName = employeeData.content[0].RegisteredFirstMiddleName;
+    const employeeLastName = employeeData.content[0].RegisteredSurname;
+    const employee = `${employeeLastName}, ${employeeFirstName} (${employeeId})`;
+
+    page.searchBox.sendKeys(employeeId);
+    expect(page.autoCompletePanel.isDisplayed());
+    expect(page.autoCompletedOption.getText()).toEqual(employee);
+
+    page.autoCompletedOption.click();
+    expect(page.selectedFacet.isDisplayed());
+    expect(page.selectedFacet.getText()).toMatch(new RegExp(employeeId));
+  });
+
+  it('should display more DocumentType facet values when "more" is clicked', () => {
+    page.moreButton.click();
+    expect(page.lessButton.isDisplayed()).toBeTruthy();
+
+    const facetSize = demoConfig.pages['tab-search'].facetsConfig.facets['metadata.DocumentType.label.raw'].size;
+    expect(page.getFacetItems(0).count()).toBeGreaterThan(facetSize);
+  });
+
+  it('should display less DocumentType facet values when "less" is clicked', () => {
+    page.moreButton.click();
+    expect(page.lessButton.isDisplayed()).toBeTruthy();
+
+    page.lessButton.click();
+    expect(page.moreButton.isDisplayed()).toBeTruthy();
+
+    const facetSize = demoConfig.pages['tab-search'].facetsConfig.facets['metadata.DocumentType.label.raw'].size;
+    expect(page.getFacetItems(0).count()).toEqual(facetSize);
+  });
+
+  it('should display Search button with configurable label', () => {
+    const searchButtonCustomizedText = demoConfig.customText['searchBox.search'].label;
+    expect(page.searchButton.getText()).toEqual(searchButtonCustomizedText);
+  });
+
+  it('should display Person field in the right format', () => {
+    page = new SearchPage('demo2');
+    page.navigateTo();
+
+    const employeeData = require('../mocks/data-api/person.json');
+    const itemData = require('../mocks/content-api/item.json');
+    const employeeID = employeeData.PersonAffiliations.EmployeePersonAffiliation.EmployeeID;
+    let employee = `${employeeData.RegisteredSurname}, ${employeeData.RegisteredFirstMiddleName} (${employeeID})`;
+
+    employee = employee.replace('__RegId__', itemData.metadata.RegId);
+
+    expect(page.getResultsByColumn('RegId')).toContain(employee);
   });
 });

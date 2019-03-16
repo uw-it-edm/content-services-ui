@@ -1,9 +1,10 @@
-import { browser, by, element, ExpectedConditions } from 'protractor';
+import {browser, by, element, ExpectedConditions} from 'protractor';
 import * as path from 'path';
 
 export class EditPage {
   public saveButton = element(by.id('saveItem'));
   public studentInputField = element(by.css('app-student-autocomplete input'));
+  public personInputField = element(by.css('app-person-autocomplete input'));
   public profileUrl = `${browser.baseUrl}/${this.profile}/edit`;
   public pageUrl = `${this.profileUrl}/${this.id}`;
   public pdfFilePath = path.resolve(__dirname, '../mocks/files/sample-file.pdf');
@@ -12,6 +13,7 @@ export class EditPage {
   public downloadButton = element(by.partialButtonText('Download'));
   public nextItemButton = element(by.id('nextItem'));
   public dateInputField = element.all(by.css('app-timestamp-picker input'));
+  public formFields = element.all(by.tagName('mat-form-field'));
 
   constructor(private profile: string = 'demo', private id: string = '123456') {}
 
@@ -45,6 +47,10 @@ export class EditPage {
 
   getStudentText() {
     return this.studentInputField.getAttribute('value');
+  }
+
+  getPersonText() {
+    return this.personInputField.getAttribute('value');
   }
 
   getSnackBarText() {
