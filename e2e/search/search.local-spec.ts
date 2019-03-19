@@ -213,4 +213,18 @@ describe('Search Page', () => {
 
     expect(page.getResultsByColumn('RegId')).toContain(employee);
   });
+
+  it('should display boolean facets value with configurable label', () => {
+    const booleanCustomizedText0 = demoConfig.customText['facet.metadata.mybooleanfield.0'].label;
+    const booleanCustomizedText1 = demoConfig.customText['facet.metadata.mybooleanfield.1'].label;
+
+    page
+      .getFacetItems(3)
+      .getText()
+      .then(actualBooleanLabels => {
+        const booleanLabels = actualBooleanLabels.toString().split(',');
+        expect(booleanLabels[0]).toContain(booleanCustomizedText0);
+        expect(booleanLabels[1]).toContain(booleanCustomizedText1);
+      });
+  });
 });
