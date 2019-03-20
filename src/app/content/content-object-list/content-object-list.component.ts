@@ -8,7 +8,7 @@ import { Field } from '../../core/shared/model/field';
 import { Config } from '../../core/shared/model/config';
 import { User } from '../../user/shared/user';
 import { Observable, Subject } from 'rxjs';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
+import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../user/shared/user.service';
 import { NotificationService } from '../../shared/providers/notification.service';
@@ -35,7 +35,6 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
   updatedItems = new Array<ContentItem>();
   failures = new Array<any>();
 
-  snackBarConfig = new MatSnackBarConfig();
   snackBarTimeout: any;
   selectedIndex = -1;
   user: User;
@@ -47,9 +46,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
     private snackBar: MatSnackBar,
     private userService: UserService,
     private notificationService: NotificationService
-  ) {
-    this.snackBarConfig.duration = 15000;
-  }
+  ) {}
 
   ngOnInit(): void {
     this.user = this.userService.getUser();
@@ -178,16 +175,13 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
       });
     }
   }
-
   notify() {
     if (this.snackBarTimeout) {
       clearTimeout(this.snackBarTimeout);
       this.snackBarTimeout = null;
     }
     this.snackBarTimeout = setTimeout(() => {
-      const message = this.createUpdateSnackBarMessage();
-      const snackBarRef = this.snackBar.open(message, 'Dismiss', this.snackBarConfig);
-
+      const snackBarRef = this.createSnackBar();
       if (this.formGroup && this.formGroup.controls['uploadAnother']) {
         snackBarRef.onAction().subscribe(() => {
           const ctrl = this.formGroup.get('uploadAnother');
@@ -199,6 +193,13 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
         });
       }
     }, 500);
+  }
+
+  private createSnackBar(): MatSnackBarRef<SimpleSnackBar> {
+    const message = this.createUpdateSnackBarMessage();
+    const snackBarConfig = new MatSnackBarConfig();
+    snackBarConfig.duration = 5000;
+    return this.snackBar.open(message, 'Dismiss', snackBarConfig);
   }
 
   private createUpdateSnackBarMessage(): string {
