@@ -1,4 +1,4 @@
-import { browser, by, element, ExpectedConditions } from 'protractor';
+import {browser, by, element, ExpectedConditions} from 'protractor';
 
 export class CreatePage {
   public pageUrl = `${browser.baseUrl}/${this.profile}/create`;
@@ -13,7 +13,8 @@ export class CreatePage {
   public clearButton = element(by.buttonText('clear'));
   public pdfViewer = element(by.tagName('pdf-viewer'));
   public formFields = element.all(by.tagName('mat-form-field'));
-  public requiredInputs = this.formFields.all(by.css("[required='']"));
+  public requiredInputs = this.formFields.all(by.css('[required=\'\']'));
+  public dismissButton = element(by.buttonText('Dismiss'));
 
   constructor(private profile: string = 'demo') {}
 

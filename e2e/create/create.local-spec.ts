@@ -1,9 +1,9 @@
-import { CreatePage } from './create.po';
-import { SearchPage } from '../search/search.po';
-import { browser } from 'protractor';
+import {CreatePage} from './create.po';
+import {SearchPage} from '../search/search.po';
+import {browser} from 'protractor';
 import * as path from 'path';
-import { until } from 'selenium-webdriver';
-import { protractor } from 'protractor/built/ptor';
+import {until} from 'selenium-webdriver';
+import {protractor} from 'protractor/built/ptor';
 
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
@@ -93,11 +93,13 @@ describe('Create Page', () => {
     browser.waitForAngularEnabled(true);
   });
 
-  it('should display error message when no file is attached', () => {
+  it('should display error message with focus on Dismiss button when no file is attached', () => {
     page.inputField.sendKeys('any text');
     page.saveButton.click();
 
-    expect(page.errorNotification.isDisplayed());
+    expect(page.errorNotification.isDisplayed()).toBeTruthy();
+    expect(page.dismissButton.getId()).toEqual(browser.driver.switchTo().activeElement().getId()
+      , 'Dismiss button is not set to focus.');
   });
 
   it('should display Upload Another checkbox that is checked by default', () => {
