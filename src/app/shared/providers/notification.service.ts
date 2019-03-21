@@ -5,7 +5,7 @@ import { isNullOrUndefined } from '../../core/util/node-utilities';
 
 export class NotificationOptions {
   constructor(
-    public duration: number = 4000,
+    public duration?: number,
     public ariaLiveMessage?: string,
     public dismissText: string = 'Dismiss',
     public verticalPosition: MatSnackBarVerticalPosition = 'top'
@@ -27,7 +27,7 @@ export class NotificationService {
     this.openSnackBar(message, NotificationType.ERROR, options);
   }
 
-  info(message: string, detailedMessage?: any, options: NotificationOptions = new NotificationOptions(2000)) {
+  info(message: string, detailedMessage?: any, options: NotificationOptions = new NotificationOptions()) {
     console.log(isNullOrUndefined(detailedMessage) ? message : detailedMessage);
     this.openSnackBar(message, NotificationType.INFO, options);
   }
@@ -41,7 +41,7 @@ export class NotificationService {
     const config = new MatSnackBarConfig();
     config.verticalPosition = options.verticalPosition;
     config.duration = options.duration;
-    config.announcementMessage = isNullOrUndefined(options.ariaLiveMessage) ? message : options.ariaLiveMessage;
+    config.announcementMessage = isNullOrUndefined(options.ariaLiveMessage) ? '' : options.ariaLiveMessage;
     config.data = {
       message: message,
       type: type,

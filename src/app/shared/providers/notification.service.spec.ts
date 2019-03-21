@@ -26,7 +26,7 @@ describe('NotificationService', () => {
     const expectedSnackBarConfig = <MatSnackBarConfig>{
       verticalPosition: defaultNotificationOptions.verticalPosition,
       duration: defaultNotificationOptions.duration,
-      announcementMessage: message,
+      announcementMessage: '',
       data: {
         message: message,
         type: type,

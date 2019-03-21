@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { MAT_SNACK_BAR_DATA, MatSnackBarRef } from '@angular/material';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
 
@@ -7,10 +7,11 @@ import { isNullOrUndefined } from '../../../core/util/node-utilities';
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.css']
 })
-export class NotificationComponent {
+export class NotificationComponent implements AfterViewInit {
   message: string;
   type: string; // error, warning, info
   dismissText: string;
+  @ViewChild('dismissNotificationButton') dismissNotificationButton;
 
   constructor(public snackBarRef: MatSnackBarRef<NotificationComponent>, @Inject(MAT_SNACK_BAR_DATA) public data: any) {
     if (!isNullOrUndefined(data)) {
@@ -18,6 +19,10 @@ export class NotificationComponent {
       this.type = isNullOrUndefined(data.type) ? 'info' : data.type;
       this.dismissText = isNullOrUndefined(data.dismissText) ? 'Dismiss' : data.dismissText;
     }
+  }
+
+  ngAfterViewInit() {
+    this.dismissNotificationButton.focus();
   }
 
   public onDismiss() {

@@ -14,7 +14,8 @@
 
 {{message}}
 
-<button mat-button class="dismiss-button"
-        color="accent"
+<button mat-raised-button
+        class="dismiss-button"
+        #dismissNotificationButton
         (click)="onDismiss()">{{ dismissText }}
 </button>
