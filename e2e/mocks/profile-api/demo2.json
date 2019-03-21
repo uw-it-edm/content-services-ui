@@ -205,7 +205,8 @@
         },
         {
           "key": "Filer",
-          "label": "Filer"
+          "label": "Filer",
+          "required": true
         },
         {
           "key": "PublishStatus",
