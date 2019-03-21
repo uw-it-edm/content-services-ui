@@ -1,9 +1,9 @@
-import {CreatePage} from './create.po';
-import {SearchPage} from '../search/search.po';
-import {browser} from 'protractor';
+import { CreatePage } from './create.po';
+import { SearchPage } from '../search/search.po';
+import { browser } from 'protractor';
 import * as path from 'path';
-import {until} from 'selenium-webdriver';
-import {protractor} from 'protractor/built/ptor';
+import { until } from 'selenium-webdriver';
+import { protractor } from 'protractor/built/ptor';
 
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
@@ -125,7 +125,10 @@ describe('Create Page', () => {
       expect(field.getAttribute('className')).toContain('mat-focused');
 
       // reset for next field
-      browser.actions().sendKeys(protractor.Key.ESCAPE).perform();
+      browser
+        .actions()
+        .sendKeys(protractor.Key.ESCAPE)
+        .perform();
     });
   });
 
@@ -142,5 +145,24 @@ describe('Create Page', () => {
 
     searchPage.autoCompletedOption.click();
     expect(page.getPersonValue()).toEqual(employee);
+  });
+
+  it('should disable Save button when required field is not populated', () => {
+    page = new CreatePage('demo2');
+    page.navigateTo();
+
+    expect(page.saveButton.isEnabled()).toBeFalsy();
+  });
+
+  it('should re-enable Save button when required field is populated', () => {
+    page = new CreatePage('demo2');
+    page.navigateTo();
+
+    page.requiredInputs.each(requiredInput => {
+      requiredInput.sendKeys(protractor.Key.SPACE);
+      requiredInput.sendKeys(protractor.Key.ENTER);
+    });
+
+    expect(page.saveButton.isEnabled()).toBeTruthy();
   });
 });
