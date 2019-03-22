@@ -15,6 +15,7 @@ describe('NotificationComponent', () => {
     component = new NotificationComponent(null, data);
     expect(component).toBeTruthy();
     expect(component.message).toBe(data.message);
+    expect(component.message).toBe(data.message);
     expect(component.type).toBe('info');
     expect(component.dismissText).toBe('Dismiss');
   });
