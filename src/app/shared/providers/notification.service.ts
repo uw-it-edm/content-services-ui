@@ -41,7 +41,7 @@ export class NotificationService {
     const config = new MatSnackBarConfig();
     config.verticalPosition = options.verticalPosition;
     config.duration = options.duration;
-    config.announcementMessage = isNullOrUndefined(options.ariaLiveMessage) ? '' : options.ariaLiveMessage;
+    config.announcementMessage = isNullOrUndefined(options.ariaLiveMessage) ? message : options.ariaLiveMessage;
     config.data = {
       message: message,
       type: type,
