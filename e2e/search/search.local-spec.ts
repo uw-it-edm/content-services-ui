@@ -59,7 +59,23 @@ describe('Search Page', () => {
     expect(page.getDateRangeInputText()).toEqual(dateRangeText);
   };
 
+  const customMatcher = {
+    toHaveNoViolations: function() {
+      return {
+        compare: function(result) {
+          const violations = result.violations.length;
+          return {
+            message: 'Expected no accessibility violations but found ' + violations,
+            pass: violations === 0
+          };
+        }
+      };
+    }
+  };
+
   beforeEach(() => {
+    jasmine.addMatchers(customMatcher);
+
     page = new SearchPage();
     page.navigateTo();
   });
@@ -225,6 +241,21 @@ describe('Search Page', () => {
         const booleanLabels = actualBooleanLabels.toString().split(',');
         expect(booleanLabels[0]).toContain(booleanCustomizedText0);
         expect(booleanLabels[1]).toContain(booleanCustomizedText1);
+      });
+  });
+
+  it('Should have no accessibility violations', function(done) {
+    const AxeBuilder = require('axe-webdriverjs');
+
+    AxeBuilder(browser.driver)
+      .analyze()
+      .then(results => {
+        expect(results).toEqual('no errors');
+        expect(results.violations.length).toEqual(0);
+        done();
+      })
+      .catch(err => {
+        console.log('Error:' + err);
       });
   });
 });
