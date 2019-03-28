@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import {
+  AbstractControl,
   ControlValueAccessor,
   FormBuilder,
   FormControl,
@@ -37,7 +38,8 @@ import { DataApiValueService } from '../../providers/dataapivalue.service';
 import { DataApiValueSearchResults } from '../../shared/model/data-api-value-search-results';
 import { DataApiValue } from '../../shared/model/data-api-value';
 import { ObjectUtilities } from '../../../core/util/object-utilities';
-import { map } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
+import { DynamicSelectConfig } from '../../../core/shared/model/field/dynamic-select-config';
 
 // Boilerplate for applying mixins to OptionsInputComponent.
 /** @docs-private */
@@ -92,6 +94,7 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
   }
 
   @Input() fieldConfig: Field;
+  @Input() parentControl: AbstractControl;
   options$: Observable<FieldOption[]>;
   formGroup: FormGroup;
 
@@ -110,17 +113,32 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
   private splitRegex = /[.]/g;
 
   private initOptions() {
-    if (this.fieldConfig.dynamicSelectOptions) {
-      this.options$ = this.dataApiValueService.listByType(this.fieldConfig.dynamicSelectOptions.type).pipe(
-        map((results: DataApiValueSearchResults) => results.content),
-        map((values: DataApiValue[]) => {
-          return values.map((value: DataApiValue) => {
-            const paths = this.fieldConfig.dynamicSelectOptions.labelPath.split(this.splitRegex);
-            const displayValue = ObjectUtilities.getNestedObject(value.data, paths);
-            return new FieldOption(value.valueId, displayValue);
-          });
-        })
-      );
+    const dynamicSelectConfig = this.fieldConfig.dynamicSelectConfig;
+    if (dynamicSelectConfig) {
+      const parentFieldConfig = this.fieldConfig.dynamicSelectConfig.parentFieldConfig;
+      if (parentFieldConfig) {
+        // Set up options if the parent was already set when this component is initializing
+        const originalParentValue = this.parentControl.value;
+        if (originalParentValue) {
+          this.updateOptionsFromParent(dynamicSelectConfig, parentFieldConfig, originalParentValue);
+        }
+        this.parentControl.valueChanges.pipe(takeUntil(this.componentDestroyed)).subscribe(newParentValue => {
+          if (newParentValue) {
+            this.updateOptionsFromParent(dynamicSelectConfig, parentFieldConfig, newParentValue);
+          } else {
+            this.options$ = of([]);
+          }
+        });
+      } else {
+        this.options$ = this.dataApiValueService.listByType(dynamicSelectConfig.type).pipe(
+          map((results: DataApiValueSearchResults) => results.content),
+          map((values: DataApiValue[]) => {
+            return values.map((value: DataApiValue) => {
+              return this.dataApiValuesToFieldOption(dynamicSelectConfig, value);
+            });
+          })
+        );
+      }
     } else {
       this.options$ = of(
         this.fieldConfig.options.map(option => {
@@ -128,6 +146,25 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
         })
       );
     }
+  }
+
+  private updateOptionsFromParent(dynamicSelectConfig, parentFieldConfig, newParentValue) {
+    this.options$ = this.dataApiValueService
+      .listByTypeAndParent(dynamicSelectConfig.type, parentFieldConfig.parentType, newParentValue)
+      .pipe(
+        map((results: DataApiValueSearchResults) => results.content),
+        map((values: DataApiValue[]) => {
+          return values.map((value: DataApiValue) => {
+            return this.dataApiValuesToFieldOption(dynamicSelectConfig, value);
+          });
+        })
+      );
+  }
+
+  private dataApiValuesToFieldOption(dynamicSelectConfig: DynamicSelectConfig, value: DataApiValue) {
+    const paths = dynamicSelectConfig.labelPath.split(this.splitRegex);
+    const displayValue = ObjectUtilities.getNestedObject(value.data, paths);
+    return new FieldOption(value.valueId, displayValue);
   }
 
   private initializeValue(): void {

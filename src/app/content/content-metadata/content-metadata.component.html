@@ -9,6 +9,7 @@
               [formControlName]="fieldToDisplay.key"
               [placeholder]="fieldToDisplay.label"
               [fieldConfig]="fieldToDisplay"
+              [parentControl]="formGroup.get('metadata').get(fieldToDisplay.dynamicSelectConfig?.parentFieldConfig?.key || '')"
               [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
             >
             </app-options-input>

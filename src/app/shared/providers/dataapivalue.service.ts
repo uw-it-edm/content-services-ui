@@ -25,6 +25,21 @@ export class DataApiValueService {
   }
 
   @CacheObservableDecorator
+  public listByTypeAndParent(
+    type: string,
+    parentType: string,
+    parentId: string
+  ): Observable<DataApiValueSearchResults> {
+    const params = new HttpParams().set('size', this.DATA_API_VALUE_PAGE_SIZE);
+    const options = this.buildRequestOptions(params);
+
+    return this.http.get<DataApiValueSearchResults>(
+      this.valueUrl + '/' + type + '/' + parentType + '/' + parentId,
+      options
+    );
+  }
+
+  @CacheObservableDecorator
   public getByTypeAndValueId(type: string, valueId: string): Observable<DataApiValue> {
     const options = this.buildRequestOptions();
 
