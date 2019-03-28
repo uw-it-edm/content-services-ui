@@ -19,6 +19,8 @@
     "FileSize": "35910",
     "PublishStatus": "Published",
     "StudentId": "3333333",
-    "RegId": "ABCDE"
+    "RegId": "ABCDE",
+    "parentType": "Parent2",
+    "childType": "Child2Parent2"
   }
 }

@@ -104,7 +104,7 @@
           "label": "DataApiOption show label",
           "required": false,
           "displayType": "select",
-          "dynamicSelectOptions": {
+          "dynamicSelectConfig": {
             "type": "test-type",
             "labelPath": "label"
           }
@@ -114,7 +114,7 @@
           "label": "DataApiOption Show Code",
           "required": false,
           "displayType": "select",
-          "dynamicSelectOptions": {
+          "dynamicSelectConfig": {
             "type": "test-type",
             "labelPath": "metadata.Code"
           }
@@ -188,7 +188,7 @@
           "label": "DataApiOption show label",
           "required": false,
           "displayType": "select",
-          "dynamicSelectOptions": {
+          "dynamicSelectConfig": {
             "type": "test-type",
             "labelPath": "label"
           }
@@ -198,7 +198,7 @@
           "label": "DataApiOption Show Code",
           "required": false,
           "displayType": "select",
-          "dynamicSelectOptions": {
+          "dynamicSelectConfig": {
             "type": "test-type",
             "labelPath": "metadata.Code"
           }

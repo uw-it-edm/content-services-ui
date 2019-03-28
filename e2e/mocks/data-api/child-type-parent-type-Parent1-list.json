@@ -1,0 +1,51 @@
+{
+  "content": [
+    {
+      "data": {
+        "label": "Child 1 of parent1"
+      },
+      "parent": {
+        "typeLabel": "parent-type",
+        "valueId": "Parent1"
+      },
+      "type": {
+        "label": "child-type"
+      },
+      "valueId": "Child1Parent1"
+    },
+    {
+      "data": {
+        "label": "Child 2 of parent1"
+      },
+      "parent": {
+        "typeLabel": "parent-type",
+        "valueId": "Parent1"
+      },
+      "type": {
+        "label": "child-type"
+      },
+      "valueId": "Child2Parent1"
+    },
+    {
+      "data": {
+        "label": "Child 3 of parent1"
+      },
+      "parent": {
+        "typeLabel": "parent-type",
+        "valueId": "Parent1"
+      },
+      "type": {
+        "label": "child-type"
+      },
+      "valueId": "Child3Parent1"
+    }
+  ],
+  "first": true,
+  "last": true,
+  "number": 0,
+  "numberOfElements": 3,
+  "size": 50,
+  "sort": null,
+  "totalElements": 3,
+  "totalPages": 1
+}

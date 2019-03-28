@@ -1,16 +1,12 @@
 {
   "content": [
     {
-      "created": 1550651819000,
-      "createdBy": null,
       "data": {
         "label": "val 1 label",
         "metadata": {
           "Code": "code 1"
         }
       },
-      "lastModified": 1550651819000,
-      "lastModifiedBy": null,
       "type": {
         "id": 1,
         "label": "test-type"
@@ -18,16 +14,12 @@
       "valueId": "VAL_1"
     },
     {
-      "created": 1550651819000,
-      "createdBy": null,
       "data": {
         "label": "val 2 label",
         "metadata": {
           "Code": "code 2"
         }
       },
-      "lastModified": 1550651819000,
-      "lastModifiedBy": null,
       "type": {
         "id": 1,
         "label": "test-type"
@@ -35,16 +27,12 @@
       "valueId": "VAL_2"
     },
     {
-      "created": 1550651819000,
-      "createdBy": null,
       "data": {
         "label": "val 3 label",
         "metadata": {
           "Code": "code 3"
         }
       },
-      "lastModified": 1550651819000,
-      "lastModifiedBy": null,
       "type": {
         "id": 1,
         "label": "test-type"
