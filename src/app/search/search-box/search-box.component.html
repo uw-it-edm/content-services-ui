@@ -7,8 +7,8 @@
         <input id="search-field" matInput
                name="search"
                (search)="searchBoxChanged()"
-               (ngModelChange)="searchBoxChanged()"
                [(ngModel)]="searchModel.stringQuery"
+               (ngModelChange)="searchBoxChanged()"
                placeholder="{{pageConfig?.searchConfig?.placeholder}}"
                type="search"
                [matAutocomplete]="autocomplete"
