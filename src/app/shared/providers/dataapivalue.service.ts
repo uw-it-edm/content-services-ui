@@ -34,7 +34,7 @@ export class DataApiValueService {
     const options = this.buildRequestOptions(params);
 
     return this.http.get<DataApiValueSearchResults>(
-      this.valueUrl + '/' + type + '/' + parentType + '/' + parentId,
+      this.valueUrl + '/' + type + '/' + parentType + '/' + encodeURIComponent(parentId),
       options
     );
   }
