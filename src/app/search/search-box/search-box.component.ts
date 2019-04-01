@@ -62,6 +62,9 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
   }
 
   searchBoxUpdated() {
+    /**
+     * ignore when it's a filter selection
+     */
     if (typeof this.internalSearchField === 'string') {
       this.searchBoxEvent.emit(this.internalSearchField);
     }
