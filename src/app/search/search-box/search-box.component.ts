@@ -17,7 +17,7 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
   private componentDestroyed = new Subject();
   searchModel: SearchModel = new SearchModel();
 
-  private internalSearchField: string;
+  internalSearchField: string;
 
   @Input()
   readonly: false;
