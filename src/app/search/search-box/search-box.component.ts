@@ -17,6 +17,8 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
   private componentDestroyed = new Subject();
   searchModel: SearchModel = new SearchModel();
 
+  private internalSearchField: string;
+
   @Input()
   readonly: false;
   @Input()
@@ -41,6 +43,7 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
     this.searchModel$.pipe(takeUntil(this.componentDestroyed)).subscribe(searchModel => {
       console.log('search-box search model updated : ' + this.searchModel.stringQuery);
       this.searchModel = searchModel;
+      this.internalSearchField = this.searchModel.stringQuery;
     });
   }
 
@@ -48,23 +51,26 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
     if (!this.readonly) {
       console.log('removing filter for ' + filter.key);
       this.searchModel.removeFilter(filter);
-      this.updateSearch();
+      this.executeSearch();
     }
   }
 
-  updateSearch() {
-    console.log('search in component with ' + JSON.stringify(this.searchModel));
+  executeSearch() {
+    this.searchModel.stringQuery = this.internalSearchField;
+
     this.searchEvent.emit(this.searchModel);
   }
 
-  searchBoxChanged() {
-    this.searchBoxEvent.emit(this.searchModel.stringQuery);
+  searchBoxUpdated() {
+    if (typeof this.internalSearchField === 'string') {
+      this.searchBoxEvent.emit(this.internalSearchField);
+    }
   }
 
   private assignAutocompleteListener() {
     this.searchBoxEvent.pipe(takeUntil(this.componentDestroyed)).subscribe((model: string) => {
       if (model) {
-        console.log('model update ' + model);
+        console.log('Received new search Box event ' + model);
         this.searchAutocomplete
           .autocomplete(model)
           .pipe(takeUntil(this.componentDestroyed))
@@ -78,14 +84,13 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
   }
 
   onSelectFilter(event: MatAutocompleteSelectedEvent) {
-    console.log('select ' + event.option.value.value);
+    this.internalSearchField = '';
+    this.filteredOptions = [];
 
     const searchFilter = this.searchAutocomplete.createFilter(event.option.value);
     console.log('adding new filter : ' + JSON.stringify(searchFilter));
-
     this.searchModel.addFilterIfNotThere(searchFilter);
-    this.updateSearch();
-    this.searchModel.stringQuery = ''; // clear search field when selecting a filter
+    this.executeSearch();
   }
 
   ngOnDestroy(): void {
