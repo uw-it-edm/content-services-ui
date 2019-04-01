@@ -43,7 +43,7 @@
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row class="uw-highlight-row" *matRowDef="let row; columns: displayedColumns;" routerLink="../edit/{{row.id}}"
+    <mat-row *matRowDef="let row; columns: displayedColumns;" routerLink="../edit/{{row.id}}"
     queryParamsHandling="merge">{{row.id}}"></mat-row>
   </mat-table>
 
