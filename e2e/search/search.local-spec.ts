@@ -1,8 +1,8 @@
 ///<reference path="../../node_modules/@types/jasminewd2/index.d.ts"/>
-import {SearchPage} from './search.po';
-import {CreatePage} from '../create/create.po';
-import {DisplaySearchPage} from './display-search.po';
-import {browser} from 'protractor';
+import { SearchPage } from './search.po';
+import { CreatePage } from '../create/create.po';
+import { DisplaySearchPage } from './display-search.po';
+import { browser } from 'protractor';
 import * as moment from 'moment-timezone';
 
 let page: SearchPage;
@@ -193,5 +193,38 @@ describe('Search Page', () => {
 
     const facetSize = demoConfig.pages['tab-search'].facetsConfig.facets['metadata.DocumentType.label.raw'].size;
     expect(page.getFacetItems(0).count()).toEqual(facetSize);
+  });
+
+  it('should display Search button with configurable label', () => {
+    const searchButtonCustomizedText = demoConfig.customText['searchBox.search'].label;
+    expect(page.searchButton.getText()).toEqual(searchButtonCustomizedText);
+  });
+
+  it('should display Person field in the right format', () => {
+    page = new SearchPage('demo2');
+    page.navigateTo();
+
+    const employeeData = require('../mocks/data-api/person.json');
+    const itemData = require('../mocks/content-api/item.json');
+    const employeeID = employeeData.PersonAffiliations.EmployeePersonAffiliation.EmployeeID;
+    let employee = `${employeeData.RegisteredSurname}, ${employeeData.RegisteredFirstMiddleName} (${employeeID})`;
+
+    employee = employee.replace('__RegId__', itemData.metadata.RegId);
+
+    expect(page.getResultsByColumn('RegId')).toContain(employee);
+  });
+
+  it('should display boolean facets value with configurable label', () => {
+    const booleanCustomizedText0 = demoConfig.customText['facet.metadata.mybooleanfield.0'].label;
+    const booleanCustomizedText1 = demoConfig.customText['facet.metadata.mybooleanfield.1'].label;
+
+    page
+      .getFacetItems(3)
+      .getText()
+      .then(actualBooleanLabels => {
+        const booleanLabels = actualBooleanLabels.toString().split(',');
+        expect(booleanLabels[0]).toContain(booleanCustomizedText0);
+        expect(booleanLabels[1]).toContain(booleanCustomizedText1);
+      });
   });
 });

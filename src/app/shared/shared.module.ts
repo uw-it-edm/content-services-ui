@@ -27,6 +27,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { DataApiValueService } from './providers/dataapivalue.service';
 import { PersonService } from './providers/person.service';
 import { PersonAutocompleteComponent } from './widgets/person-autocomplete/person-autocomplete.component';
+import { PersonDisplayComponent } from './widgets/person-display/person-display.component';
 
 @NgModule({
   imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule, FormsModule, PdfViewerModule],
@@ -43,6 +44,7 @@ import { PersonAutocompleteComponent } from './widgets/person-autocomplete/perso
     StudentAutocompleteComponent,
     StudentDisplayComponent,
     PersonAutocompleteComponent,
+    PersonDisplayComponent,
     TimestampPickerComponent,
     TruncatePipe,
     DisplayFieldComponent,
@@ -60,6 +62,7 @@ import { PersonAutocompleteComponent } from './widgets/person-autocomplete/perso
     StudentAutocompleteComponent,
     StudentDisplayComponent,
     PersonAutocompleteComponent,
+    PersonDisplayComponent,
     TimestampPickerComponent,
     TruncatePipe,
     DisplayFieldComponent,

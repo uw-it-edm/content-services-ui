@@ -32,6 +32,11 @@
           "label": "Filer"
         },
         {
+          "label": "Person",
+          "key": "RegId",
+          "displayType": "person"
+        },
+        {
           "key": "PublishStatus",
           "label": "Publish Status"
         },
@@ -200,7 +205,8 @@
         },
         {
           "key": "Filer",
-          "label": "Filer"
+          "label": "Filer",
+          "required": true
         },
         {
           "key": "PublishStatus",

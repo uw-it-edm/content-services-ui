@@ -3,6 +3,18 @@
   "tenant": "Demo",
   "appName": "My demo app",
   "customText": {
+    "facet.metadata.mybooleanfield.0": {
+      "label": "False"
+    },
+    "facet.metadata.mybooleanfield.1": {
+      "label": "True"
+    },
+    "facet.metadata.mysecondbooleanfield.0": {
+      "label": "No"
+    },
+    "facet.metadata.mysecondbooleanfield.1": {
+      "label": "Yes"
+    },
     "addContentItemButton": {
       "label": "Add Item",
       "description": "Upload a new content item"
@@ -14,6 +26,10 @@
     "previousContentItemButton": {
       "label": "Previous",
       "description": "Move up to previous content item"
+    },
+    "searchBox.search": {
+      "label": "Search Now",
+      "description": "Executes search"
     }
   },
   "pages": {
@@ -81,6 +97,20 @@
           "metadata.Filer": {
             "key": "metadata.Filer.raw",
             "label": "Filer",
+            "order": "asc",
+            "size": 3,
+            "maxSize": 50
+          },
+          "metadata.mybooleanfield": {
+            "key": "metadata.mybooleanfield",
+            "label": "My boolean",
+            "order": "asc",
+            "size": 3,
+            "maxSize": 50
+          },
+          "metadata.mysecondbooleanfield": {
+            "key": "metadata.mysecondbooleanfield",
+            "label": "My Second boolean",
             "order": "asc",
             "size": 3,
             "maxSize": 50

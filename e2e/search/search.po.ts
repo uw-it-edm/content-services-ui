@@ -1,5 +1,5 @@
-import {browser, by, element, ExpectedConditions} from 'protractor';
-import {EditPage} from '../edit/edit.po';
+import { browser, by, element, ExpectedConditions } from 'protractor';
+import { EditPage } from '../edit/edit.po';
 
 export class SearchPage {
   autoCompletePanel = element(by.className('mat-autocomplete-panel'));
@@ -14,6 +14,8 @@ export class SearchPage {
   moreButton = element(by.name('more'));
   lessButton = element(by.name('less'));
   facetItemsLocator = by.css('.mat-list-item a');
+  searchButton = element(by.name('searchButton'));
+  paginatorCounts = element.all(by.className('mat-paginator-range-label'));
 
   constructor(private profile: string = 'demo') {}
 

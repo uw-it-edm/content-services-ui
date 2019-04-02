@@ -1,6 +1,6 @@
 ///<reference path="../../node_modules/@types/jasminewd2/index.d.ts"/>
 import { SearchPage } from './search.po';
-import { browser, ExpectedConditions } from 'protractor';
+import { browser, ExpectedConditions, protractor } from 'protractor';
 import { EditPage } from '../edit/edit.po';
 
 describe('Foster Search Page', () => {
@@ -60,5 +60,40 @@ describe('Foster Search Page', () => {
       expect(page.selectedFacet.getText()).toEqual(selectedFacetTexts);
       expect(page.isSortIndicatorDesc()).toBeFalsy();
     });
+  });
+
+  it('should not change search results when search button is not clicked', () => {
+    page.paginatorCounts
+      .get(0)
+      .getText()
+      .then(paginatorCount => {
+        page.searchBox.sendKeys('search for test documents');
+
+        expect(page.paginatorCounts.get(0).getText()).toEqual(paginatorCount);
+      });
+  });
+
+  it('should change search results when search button is clicked', () => {
+    page.paginatorCounts
+      .get(0)
+      .getText()
+      .then(paginatorCount => {
+        page.searchBox.sendKeys('search for test documents');
+        page.searchButton.click();
+
+        expect(page.paginatorCounts.get(0).getText()).not.toEqual(paginatorCount);
+      });
+  });
+
+  it('should change search results when Enter key is pressed', () => {
+    page.paginatorCounts
+      .get(0)
+      .getText()
+      .then(paginatorCount => {
+        page.searchBox.sendKeys('search for test documents');
+        page.searchBox.sendKeys(protractor.Key.ENTER);
+
+        expect(page.paginatorCounts.get(0).getText()).not.toEqual(paginatorCount);
+      });
   });
 });

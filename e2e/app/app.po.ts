@@ -35,7 +35,8 @@ export class ContentServicesUiPage {
 
   clickAppMenuItem(itemIndex: number) {
     const menuItem = element.all(by.className('tenant-menu-button')).get(itemIndex);
-
+    expect(menuItem).toBeTruthy();
+    browser.sleep(100);
     browser.wait(ExpectedConditions.elementToBeClickable(menuItem), 10000);
     menuItem.click();
   }

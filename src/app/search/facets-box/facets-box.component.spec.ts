@@ -9,7 +9,19 @@ import { SearchResults } from '../shared/model/search-result';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { SearchFilter } from '../shared/model/search-filter';
 import { RouterModule } from '@angular/router';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { ConfigResolver } from '../../routing/shared/config-resolver.service';
+import { CustomTextItem } from '../../core/shared/model/config';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+
+class MockConfigResolver extends ConfigResolver {
+  constructor() {
+    super(null, null, null);
+  }
+  getCustomTextSubject(): Observable<Map<string, CustomTextItem>> {
+    return of(new Map());
+  }
+}
 
 describe('FacetsBoxComponent', () => {
   let component: FacetsBoxComponent;
@@ -18,7 +30,9 @@ describe('FacetsBoxComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [FormsModule, MaterialConfigModule, RouterModule],
-      declarations: [FacetsBoxComponent]
+      declarations: [FacetsBoxComponent],
+      providers: [{ provide: ConfigResolver, useValue: new MockConfigResolver() }],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 

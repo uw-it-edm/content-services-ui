@@ -93,11 +93,13 @@ describe('Create Page', () => {
     browser.waitForAngularEnabled(true);
   });
 
-  it('should display error message when no file is attached', () => {
+  it('should display error message with focus on Dismiss button when no file is attached', () => {
     page.inputField.sendKeys('any text');
     page.saveButton.click();
 
-    expect(page.errorNotification.isDisplayed());
+    expect(page.errorNotification.isDisplayed()).toBeTruthy();
+    expect(page.dismissButton.getId()).toEqual(browser.driver.switchTo().activeElement().getId()
+      , 'Dismiss button is not set to focus.');
   });
 
   it('should display Upload Another checkbox that is checked by default', () => {
@@ -125,7 +127,10 @@ describe('Create Page', () => {
       expect(field.getAttribute('className')).toContain('mat-focused');
 
       // reset for next field
-      browser.actions().sendKeys(protractor.Key.ESCAPE).perform();
+      browser
+        .actions()
+        .sendKeys(protractor.Key.ESCAPE)
+        .perform();
     });
   });
 
@@ -142,5 +147,24 @@ describe('Create Page', () => {
 
     searchPage.autoCompletedOption.click();
     expect(page.getPersonValue()).toEqual(employee);
+  });
+
+  it('should disable Save button when required field is not populated', () => {
+    page = new CreatePage('demo2');
+    page.navigateTo();
+
+    expect(page.saveButton.isEnabled()).toBeFalsy();
+  });
+
+  it('should re-enable Save button when required field is populated', () => {
+    page = new CreatePage('demo2');
+    page.navigateTo();
+
+    page.requiredInputs.each(requiredInput => {
+      requiredInput.sendKeys(protractor.Key.SPACE);
+      requiredInput.sendKeys(protractor.Key.ENTER);
+    });
+
+    expect(page.saveButton.isEnabled()).toBeTruthy();
   });
 });
