@@ -43,7 +43,8 @@
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    <mat-row class="uw-highlight-row" *matRowDef="let row; columns: displayedColumns;" routerLink="../edit/{{row.id}}"
+    queryParamsHandling="merge">{{row.id}}"></mat-row>
   </mat-table>
 
   <mat-paginator #bottomPaginator

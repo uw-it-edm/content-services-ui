@@ -3,7 +3,7 @@
     <fieldset *ngIf="searchResults?.facets.get(facetConfig.key)" >
       <legend>{{facetConfig.label}}</legend>
         <mat-list dense>
-          <mat-list-item
+          <mat-list-item class="uw-highlight-row" (click)="addFacetFilter(facetConfig.key,facetResult.key, facetConfig.label)"
             *ngFor="let facetResult of searchResults?.facets.get(facetConfig.key).buckets.slice(0, facetConfig.cursize)">
             <span *ngIf="hasSelectedFacet(facetConfig.key); else showLink">
                <span appCustomText="facet.{{facetConfig.key}}.{{facetResult.key}}" defaultValue="{{facetResult.key}}"></span> ({{facetResult.count}})
