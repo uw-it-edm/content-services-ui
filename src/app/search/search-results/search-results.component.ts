@@ -11,6 +11,7 @@ import { SearchUtility } from '../shared/search-utility';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { SearchPagination } from '../shared/model/search-pagination';
 import { takeUntil } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-search-results',
@@ -48,7 +49,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort)
   sort: MatSort = new MatSort();
 
-  constructor(private data: DataService) {}
+  constructor(private route: ActivatedRoute, private router: Router, private data: DataService) {}
 
   ngOnInit(): void {
     this.searchModel$.pipe(takeUntil(this.componentDestroyed)).subscribe(searchModel => {
@@ -106,6 +107,10 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.componentDestroyed.next();
     this.componentDestroyed.complete();
+  }
+
+  navigateToEdit(pagePath): void {
+    this.router.navigate(['../edit/' + pagePath], { relativeTo: this.route, queryParamsHandling: 'merge' });
   }
 
   /*

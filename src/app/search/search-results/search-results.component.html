@@ -7,15 +7,16 @@
                  (page)="onPageEvent($event)">
   </mat-paginator>
 
-  <mat-table #table [dataSource]="dataSource" matSort [matSortActive]="sortTerm" [matSortDirection]="sortDirection" aria-label="Search Results">
+  <mat-table #table [dataSource]="dataSource" matSort [matSortActive]="sortTerm"
+             [matSortDirection]="sortDirection" aria-label="Search Results">
 
     <!--- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
 
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Id</mat-header-cell>
-      <mat-cell  *matCellDef="let element"><a routerLink="../edit/{{element.id}}"
-                                             queryParamsHandling="merge">{{element.id}}</a>
+      <mat-cell *matCellDef="let element"><a (click)="navigateToEdit(element.id)" routerLink=""
+      >{{element.id}}</a>
       </mat-cell>
     </ng-container>
 
@@ -43,8 +44,8 @@
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row class="uw-highlight-row" *matRowDef="let row; columns: displayedColumns;" routerLink="../edit/{{row.id}}"
-    queryParamsHandling="merge">{{row.id}}"></mat-row>
+    <mat-row class="uw-highlight-row" *matRowDef="let row; columns: displayedColumns;"
+             (click)="navigateToEdit(row.id)"></mat-row>
   </mat-table>
 
   <mat-paginator #bottomPaginator
@@ -53,6 +54,6 @@
                  [pageSizeOptions]="paginatorConfig.pageSizeOptions"
                  [length]="paginatorConfig.numberOfResults"
                  (page)="onPageEvent($event)"
-                  >
+  >
   </mat-paginator>
 </div>
