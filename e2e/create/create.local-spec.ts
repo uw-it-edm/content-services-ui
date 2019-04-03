@@ -1,9 +1,9 @@
-import {CreatePage} from './create.po';
-import {SearchPage} from '../search/search.po';
-import {browser} from 'protractor';
+import { CreatePage } from './create.po';
+import { SearchPage } from '../search/search.po';
+import { browser } from 'protractor';
 import * as path from 'path';
-import {until} from 'selenium-webdriver';
-import {protractor} from 'protractor/built/ptor';
+import { until } from 'selenium-webdriver';
+import { protractor } from 'protractor/built/ptor';
 
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
@@ -98,8 +98,13 @@ describe('Create Page', () => {
     page.saveButton.click();
 
     expect(page.errorNotification.isDisplayed()).toBeTruthy();
-    expect(page.dismissButton.getId()).toEqual(browser.driver.switchTo().activeElement().getId()
-      , 'Dismiss button is not set to focus.');
+    expect(page.dismissButton.getId()).toEqual(
+      browser.driver
+        .switchTo()
+        .activeElement()
+        .getId(),
+      'Dismiss button is not set to focus.'
+    );
   });
 
   it('should display Upload Another checkbox that is checked by default', () => {
@@ -166,5 +171,22 @@ describe('Create Page', () => {
     });
 
     expect(page.saveButton.isEnabled()).toBeTruthy();
+  });
+
+  it('should display child list dynamically when parent list is selected', () => {
+    page.getFormFieldByLabel('DataApiOption parent').click();
+    expect(page.selectPanels.get(0).isDisplayed()).toBe(true);
+
+    const parentList = require('../mocks/data-api/parent-type-list.json');
+    page.getSelectOptionByText(parentList.content[0].data.label).click();
+
+    const childrenList = require('../mocks/data-api/child-type-parent-type-Parent1-list.json');
+    let childrenLabels = '';
+    for (let i = 0; i < childrenList.content.length; i++) {
+      childrenLabels = childrenLabels.concat(childrenList.content[i].data.label).concat('\n');
+    }
+
+    page.getFormFieldByLabel('DataApiOption child').click();
+    expect(page.selectPanels.get(1).getText()).toEqual(childrenLabels.trim());
   });
 });

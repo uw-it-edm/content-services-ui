@@ -110,4 +110,21 @@ describe('Edit Page', () => {
 
     expect(page.getPersonText()).toEqual(employee);
   });
+
+  it('should display child list dynamically when parent list is selected', () => {
+    page.getFormFieldByLabel('DataApiOption parent').click();
+    expect(page.selectPanels.get(0).isDisplayed()).toBe(true);
+
+    const parentList = require('../mocks/data-api/parent-type-list.json');
+    page.getSelectOptionByText(parentList.content[0].data.label).click();
+
+    const childrenList = require('../mocks/data-api/child-type-parent-type-Parent1-list.json');
+    let childrenLabels = '';
+    for (let i = 0; i < childrenList.content.length; i++) {
+      childrenLabels = childrenLabels.concat(childrenList.content[i].data.label).concat('\n');
+    }
+
+    page.getFormFieldByLabel('DataApiOption child').click();
+    expect(page.selectPanels.get(1).getText()).toEqual(childrenLabels.trim());
+  });
 });
