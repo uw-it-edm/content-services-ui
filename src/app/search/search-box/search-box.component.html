@@ -6,9 +6,9 @@
       <mat-form-field >
         <input id="search-field" matInput
                name="search"
-               (search)="searchBoxChanged()"
-               [(ngModel)]="searchModel.stringQuery"
-               (ngModelChange)="searchBoxChanged()"
+               [(ngModel)]="internalSearchField"
+               (search)="executeSearch()"
+               (ngModelChange)="searchBoxUpdated()"
                placeholder="{{pageConfig?.searchConfig?.placeholder}}"
                type="search"
                [matAutocomplete]="autocomplete"
@@ -28,7 +28,7 @@
                 type="submit"
                 aria-label="Search"
                 name="searchButton"
-                (click)="updateSearch()"
+                (click)="executeSearch()"
                 appCustomText="searchBox.search" defaultValue="Search"
         ></button>
       </div>
