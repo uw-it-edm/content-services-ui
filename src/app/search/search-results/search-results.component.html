@@ -45,7 +45,7 @@
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row class="uw-highlight-row" *matRowDef="let row; columns: displayedColumns;"
-             (click)="navigateToEdit( row.id)"></mat-row>
+             (click)="navigateToEdit(row.id)"></mat-row>
   </mat-table>
 
   <mat-paginator #bottomPaginator
