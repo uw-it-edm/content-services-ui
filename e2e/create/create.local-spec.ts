@@ -19,6 +19,15 @@ describe('Create Page', () => {
   const docFilePath = path.resolve(__dirname, '../mocks/files/sample-file.docx');
   const textFilePath = path.resolve(__dirname, '../mocks/files/sample-file.txt');
 
+  const getExpectedChildrenLabels = function() {
+    const childrenList = require('../mocks/data-api/child-type-parent-type-Parent1-list.json');
+    let childrenLabels = '';
+    for (let i = 0; i < childrenList.content.length; i++) {
+      childrenLabels = childrenLabels.concat(childrenList.content[i].data.label).concat('\n');
+    }
+    return childrenLabels;
+  };
+
   beforeEach(() => {
     page = new CreatePage();
     page.navigateTo();
@@ -180,13 +189,9 @@ describe('Create Page', () => {
     const parentList = require('../mocks/data-api/parent-type-list.json');
     page.getSelectOptionByText(parentList.content[0].data.label).click();
 
-    const childrenList = require('../mocks/data-api/child-type-parent-type-Parent1-list.json');
-    let childrenLabels = '';
-    for (let i = 0; i < childrenList.content.length; i++) {
-      childrenLabels = childrenLabels.concat(childrenList.content[i].data.label).concat('\n');
-    }
-
     page.getFormFieldByLabel('DataApiOption child').click();
-    expect(page.selectPanels.get(1).getText()).toEqual(childrenLabels.trim());
+
+    expect(page.selectPanels.get(1).isDisplayed()).toEqual(true);
+    expect(page.selectPanels.get(1).getText()).toEqual(getExpectedChildrenLabels().trim());
   });
 });
