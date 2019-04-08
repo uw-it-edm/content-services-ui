@@ -418,6 +418,11 @@
   resolved "https://registry.yarnpkg.com/@types/pdfjs-dist/-/pdfjs-dist-0.1.2.tgz#91a28961916deab21745482bb26242005fb5b7c7"
   integrity sha512-BvRLWz6RCI8FMKbgfdTCadVwimUv8920gLsnBEAkECjtqIy95jtt+G1ebNQE2b8PTnLjJICPpmBOGhgkSsiPKA==
 
+"@types/pdfjs-dist@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@types/pdfjs-dist/-/pdfjs-dist-2.0.0.tgz#6d9e836f0f6a5181e932190b94d66a20a160c3d9"
+  integrity sha512-WVPCCHE7a51qBxSdjC3f2q3+h00awOidrsSSnCmHXERMHelO6dpj1tgFiDx2a7qUuQ105u9iKo62aucvmkZ4GA==
+
 "@types/q@^0.0.32":
   version "0.0.32"
   resolved "https://registry.yarnpkg.com/@types/q/-/q-0.0.32.tgz#bd284e57c84f1325da702babfc82a5328190c0c5"
