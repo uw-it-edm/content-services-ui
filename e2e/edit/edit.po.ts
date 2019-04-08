@@ -14,7 +14,7 @@ export class EditPage {
   public nextItemButton = element(by.id('nextItem'));
   public dateInputField = element.all(by.css('app-timestamp-picker input'));
   public formFields = element.all(by.tagName('mat-form-field'));
-  public selectPanels = element.all(by.className('mat-select-panel'));
+  public selectPanel = element(by.className('mat-select-panel'));
 
   constructor(private profile: string = 'demo', private id: string = '123456') {}
 
@@ -74,11 +74,13 @@ export class EditPage {
     });
   }
 
-  getFormFieldByLabel(fieldLabel: string) {
-    return element(by.cssContainingText('.mat-form-field', fieldLabel));
+  clickDropDownOptionValueByText(optionText: string) {
+    element(by.cssContainingText('.mat-option-text', optionText)).click();
+    browser.wait(ExpectedConditions.invisibilityOf(this.selectPanel), 5000);
   }
 
-  getSelectOptionByText(optionText: string) {
-    return element(by.cssContainingText('.mat-option-text', optionText));
+  clickDropDownByLabel(dropDownLabel: string) {
+    element(by.cssContainingText('.mat-form-field', dropDownLabel)).click();
+    browser.wait(ExpectedConditions.visibilityOf(this.selectPanel), 5000);
   }
 }

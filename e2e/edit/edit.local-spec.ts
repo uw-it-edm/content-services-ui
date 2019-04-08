@@ -121,15 +121,13 @@ describe('Edit Page', () => {
   });
 
   it('should display child list dynamically when parent list is selected', () => {
-    page.getFormFieldByLabel('DataApiOption parent').click();
-    expect(page.selectPanels.get(0).isDisplayed()).toBe(true);
+    page.clickDropDownByLabel('DataApiOption parent');
 
     const parentList = require('../mocks/data-api/parent-type-list.json');
-    page.getSelectOptionByText(parentList.content[0].data.label).click();
+    page.clickDropDownOptionValueByText(parentList.content[0].data.label);
 
-    page.getFormFieldByLabel('DataApiOption child').click();
+    page.clickDropDownByLabel('DataApiOption child');
 
-    expect(page.selectPanels.get(1).isDisplayed()).toEqual(true);
-    expect(page.selectPanels.get(1).getText()).toEqual(getExpectedChildrenLabels().trim());
+    expect(page.selectPanel.getText()).toEqual(getExpectedChildrenLabels().trim());
   });
 });
