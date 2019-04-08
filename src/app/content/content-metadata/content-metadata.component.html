@@ -3,7 +3,7 @@
     <div formGroupName="metadata">
       <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
         <div [ngSwitch]="fieldToDisplay.displayType">
-          
+
           <mat-form-field *ngSwitchCase="'select'">
             <app-options-input
               [formControlName]="fieldToDisplay.key"
@@ -21,6 +21,8 @@
           <app-timestamp-picker *ngSwitchCase="'date'"
                                 [formControlName]="fieldToDisplay.key"
                                 [placeholder]="fieldToDisplay.label"
+                                [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
+                                [errorMessage]="getErrorMessage(fieldToDisplay.key)"
           >
           </app-timestamp-picker>
 

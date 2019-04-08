@@ -29,6 +29,9 @@ export class TimestampPickerComponent implements ControlValueAccessor, OnInit, O
 
   private userTimeZone = moment.tz.guess();
 
+  @Input()
+  errorMessage: string;
+
   formGroup: FormGroup;
   onTouched = () => {};
 
