@@ -11,7 +11,7 @@ import { TenantConfigInfo } from '../core/shared/model/tenant-config-info';
   template: `
     <article class="uw-default">
       <div class="cs-main">
-        <div *ngIf="tenants">
+        <div *ngIf="hasAccessToATenant()">
           <h3>To access this service, please click a link below:</h3>
           <ul>
             <li *ngFor="let availableTenant of tenants">
@@ -21,7 +21,7 @@ import { TenantConfigInfo } from '../core/shared/model/tenant-config-info';
             </li>
           </ul>
         </div>
-        <div *ngIf="!tenants">
+        <div *ngIf="!hasAccessToATenant()">
           <h3>
             You are not authorized to use this service or the service is not available. Please contact
             {{ supportEmail }}
@@ -38,6 +38,10 @@ export class PageNotFoundComponent implements OnInit {
   tenants: TenantConfigInfo[];
 
   constructor(private configService: ConfigService, private userService: UserService) {}
+
+  hasAccessToATenant(): boolean {
+    return this.tenants && this.tenants.length > 0;
+  }
 
   ngOnInit() {
     this.supportEmail = this.configService.getSupportEmail();

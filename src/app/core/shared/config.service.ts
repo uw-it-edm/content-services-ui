@@ -29,9 +29,11 @@ export class ConfigService {
           const tenantInfo = tenants.find(tenantInList => {
             return tenantInList.tenantName === requestedTenant;
           });
-
-          const config = this.retrieveConfig(tenantInfo);
-          return config;
+          if (tenantInfo) {
+            return this.retrieveConfig(tenantInfo);
+          } else {
+            return Promise.reject('No such tenant : ' + requestedTenant);
+          }
         },
         err => {
           this.progressService.end();
@@ -75,12 +77,13 @@ export class ConfigService {
           const tenants: TenantConfigInfo[] = [];
 
           const tenantsFromAPI = result['_links'];
+          if (tenantsFromAPI) {
+            for (const tenantName in tenantsFromAPI) {
+              if (tenantsFromAPI.hasOwnProperty(tenantName)) {
+                const tenantConfigInfo = new TenantConfigInfo(tenantName, tenantsFromAPI[tenantName]['href']);
 
-          for (const tenantName in tenantsFromAPI) {
-            if (tenantsFromAPI.hasOwnProperty(tenantName)) {
-              const tenantConfigInfo = new TenantConfigInfo(tenantName, tenantsFromAPI[tenantName]['href']);
-
-              tenants.push(tenantConfigInfo);
+                tenants.push(tenantConfigInfo);
+              }
             }
           }
 
