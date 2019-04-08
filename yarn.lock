@@ -408,15 +408,20 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.123.tgz#39be5d211478c8dd3bdae98ee75bb7efe4abfe4d"
   integrity sha512-pQvPkc4Nltyx7G1Ww45OjVqUsJP4UsZm+GWJpigXgkikZqJgRm4c48g027o6tdgubWHwFRF15iFd+Y4Pmqv6+Q==
 
-"@types/node@*", "@types/node@~11.12.2":
-  version "11.12.2"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.12.2.tgz#d7f302e74b10e9801d52852137f652d9ee235da8"
-  integrity sha512-c82MtnqWB/CqqK7/zit74Ob8H1dBdV7bK+BcErwtXbe0+nUGkgzq5NTDmRW/pAv2lFtmeNmW95b0zK2hxpeklg==
+"@types/node@*", "@types/node@~11.13.2":
+  version "11.13.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.13.2.tgz#dc85dde46aa8740bb4aed54b8104250f8f849503"
+  integrity sha512-HOtU5KqROKT7qX/itKHuTtt5fV0iXbheQvrgbLNXFJQBY/eh+VS5vmmTAVlo3qIGMsypm0G4N1t2AXjy1ZicaQ==
 
 "@types/pdfjs-dist@^0.1.2":
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@types/pdfjs-dist/-/pdfjs-dist-0.1.2.tgz#91a28961916deab21745482bb26242005fb5b7c7"
   integrity sha512-BvRLWz6RCI8FMKbgfdTCadVwimUv8920gLsnBEAkECjtqIy95jtt+G1ebNQE2b8PTnLjJICPpmBOGhgkSsiPKA==
+
+"@types/pdfjs-dist@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@types/pdfjs-dist/-/pdfjs-dist-2.0.0.tgz#6d9e836f0f6a5181e932190b94d66a20a160c3d9"
+  integrity sha512-WVPCCHE7a51qBxSdjC3f2q3+h00awOidrsSSnCmHXERMHelO6dpj1tgFiDx2a7qUuQ105u9iKo62aucvmkZ4GA==
 
 "@types/q@^0.0.32":
   version "0.0.32"
