@@ -73,7 +73,6 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
   private assignAutocompleteListener() {
     this.searchBoxEvent.pipe(takeUntil(this.componentDestroyed)).subscribe((model: string) => {
       if (model) {
-        console.log('Received new search Box event ' + model);
         this.searchAutocomplete
           .autocomplete(model)
           .pipe(takeUntil(this.componentDestroyed))
