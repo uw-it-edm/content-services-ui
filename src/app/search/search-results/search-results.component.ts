@@ -86,7 +86,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
 
       const searchResultsUpdatedMessage = this.getSearchResultsUpdatedMessage(
         this.paginatorConfig.numberOfResults,
-        results.results.length,
+        this.paginatorConfig.pageSize,
         this.paginatorConfig.pageIndex
       );
       console.log(searchResultsUpdatedMessage);
@@ -105,21 +105,18 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     });
   }
 
-  private getSearchResultsUpdatedMessage(totalSize: number, currentPageSize: number, currentPage: number) {
-    return (
-      'Search results updated, found ' +
-      totalSize +
-      ' result' +
-      (totalSize > 1 ? 's.' : '.') +
-      ' Showing ' +
-      currentPageSize +
-      ' item' +
-      (currentPageSize > 1 ? 's' : '') +
-      ' on page ' +
-      (currentPage + 1) +
-      ' of ' +
-      Math.ceil(totalSize / currentPageSize)
-    );
+  private getSearchResultsUpdatedMessage(length: number, pageSize: number, page: number) {
+    // see MatPaginatorIntl.getRangeLabel
+
+    if (length === 0 || pageSize === 0) {
+      return `Search results updated. Showing 0 items of ${length}`;
+    }
+    length = Math.max(length, 0);
+
+    const startIndex = page * pageSize;
+
+    const endIndex = startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize;
+    return `Search results updated. Showing items ${startIndex + 1} to ${endIndex} of ${length}`;
   }
 
   private configureTableColumns() {
