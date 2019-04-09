@@ -2,8 +2,9 @@
 import { SearchPage } from './search.po';
 import { CreatePage } from '../create/create.po';
 import { DisplaySearchPage } from './display-search.po';
-import { browser } from 'protractor';
+import { browser, protractor } from 'protractor';
 import * as moment from 'moment-timezone';
+import { EditPage } from '../edit/edit.po';
 
 let page: SearchPage;
 
@@ -181,7 +182,7 @@ describe('Search Page', () => {
     expect(page.lessButton.isDisplayed()).toBeTruthy();
 
     const facetSize = demoConfig.pages['tab-search'].facetsConfig.facets['metadata.DocumentType.label.raw'].size;
-    expect(page.getFacetItems(0).count()).toBeGreaterThan(facetSize);
+    expect(page.getFacetItemLinks(0).count()).toBeGreaterThan(facetSize);
   });
 
   it('should display less DocumentType facet values when "less" is clicked', () => {
@@ -192,7 +193,7 @@ describe('Search Page', () => {
     expect(page.moreButton.isDisplayed()).toBeTruthy();
 
     const facetSize = demoConfig.pages['tab-search'].facetsConfig.facets['metadata.DocumentType.label.raw'].size;
-    expect(page.getFacetItems(0).count()).toEqual(facetSize);
+    expect(page.getFacetItemLinks(0).count()).toEqual(facetSize);
   });
 
   it('should display Search button with configurable label', () => {
@@ -219,12 +220,42 @@ describe('Search Page', () => {
     const booleanCustomizedText1 = demoConfig.customText['facet.metadata.mybooleanfield.1'].label;
 
     page
-      .getFacetItems(3)
+      .getFacetItemLinks(3)
       .getText()
       .then(actualBooleanLabels => {
         const booleanLabels = actualBooleanLabels.toString().split(',');
         expect(booleanLabels[0]).toContain(booleanCustomizedText0);
         expect(booleanLabels[1]).toContain(booleanCustomizedText1);
       });
+  });
+
+  it('should display a different color on the search results row when moused over', () => {
+    const originalBackgroundColor = page.getBackgroundColor(page.searchResultsRows.get(0));
+
+    page.mouseOver(page.searchResultsRows.first());
+    expect(page.getBackgroundColor(page.searchResultsRows.first())).not.toEqual(originalBackgroundColor);
+  });
+
+  it('should display a different color on the facets row when moused over', () => {
+    const originalBackgroundColor = page.getBackgroundColor(page.getFacetItems(0, 0));
+
+    page.mouseOver(page.getFacetItems(0, 0));
+    expect(page.getBackgroundColor(page.getFacetItems(0, 0))).not.toEqual(originalBackgroundColor);
+  });
+
+  it('should display a different color on the facets row when tabbed on', () => {
+    const originalBackgroundColor = page.getBackgroundColor(page.getFacetItems(0, 0));
+
+    page.dateRangeInput.sendKeys(protractor.Key.TAB);
+    expect(page.getBackgroundColor(page.getFacetItems(0, 0))).not.toEqual(originalBackgroundColor);
+  });
+
+  it('should navigate to Edit page when search results row is clicked on', () => {
+    page.searchResultsRows.first().click();
+
+    const searchData = require('../mocks/search-api/search.json');
+    const itemId = searchData.searchResults[0].id;
+    const editPage = new EditPage('demo', itemId);
+    expect(browser.getCurrentUrl()).toContain(editPage.pageUrl);
   });
 });
