@@ -186,7 +186,7 @@
         {
           "key": "DataApiOptionLabel",
           "label": "DataApiOption show label",
-          "required": false,
+          "required": true,
           "displayType": "select",
           "dynamicSelectConfig": {
             "type": "test-type",
@@ -227,17 +227,19 @@
         {
           "key": "LastModifiedDate",
           "label": "Last Modified Date",
-          "dataType": "date",
-          "displayType": "date"
+          "displayType": "date",
+          "required": true
         },
         {
           "key": "StudentId",
           "label": "Student",
+          "required": true,
           "displayType": "student-autocomplete"
         },
         {
           "key": "RegId",
           "label": "Employee",
+          "required": true,
           "displayType": "person-autocomplete"
         }
       ],
@@ -254,7 +256,7 @@
         }
       ],
       "viewPanel": true,
-      "uploadAnother": true
+      "uploadAnother": false
     }
   }
 }
