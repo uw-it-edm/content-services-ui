@@ -5,19 +5,20 @@ import * as path from 'path';
 import { until } from 'selenium-webdriver';
 import { protractor } from 'protractor/built/ptor';
 
+const searchPage = new SearchPage();
+const demoConfig = require('../mocks/profile-api/demo.json');
+const pdfFilePath = path.resolve(__dirname, '../mocks/files/sample-file.pdf');
+const docFilePath = path.resolve(__dirname, '../mocks/files/sample-file.docx');
+const textFilePath = path.resolve(__dirname, '../mocks/files/sample-file.txt');
+
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
     return url.toLowerCase();
   });
 };
 
-describe('Create Page', () => {
+describe('Create Page for Demo', () => {
   let page: CreatePage;
-  const searchPage = new SearchPage();
-  const demoConfig = require('../mocks/profile-api/demo.json');
-  const pdfFilePath = path.resolve(__dirname, '../mocks/files/sample-file.pdf');
-  const docFilePath = path.resolve(__dirname, '../mocks/files/sample-file.docx');
-  const textFilePath = path.resolve(__dirname, '../mocks/files/sample-file.txt');
 
   const getExpectedChildrenLabels = function() {
     const childrenList = require('../mocks/data-api/child-type-parent-type-Parent1-list.json');
@@ -163,25 +164,6 @@ describe('Create Page', () => {
     expect(page.getPersonValue()).toEqual(employee);
   });
 
-  it('should disable Save button when required field is not populated', () => {
-    page = new CreatePage('demo2');
-    page.navigateTo();
-
-    expect(page.saveButton.isEnabled()).toBeFalsy();
-  });
-
-  it('should re-enable Save button when required field is populated', () => {
-    page = new CreatePage('demo2');
-    page.navigateTo();
-
-    page.requiredInputs.each(requiredInput => {
-      requiredInput.sendKeys(protractor.Key.SPACE);
-      requiredInput.sendKeys(protractor.Key.ENTER);
-    });
-
-    expect(page.saveButton.isEnabled()).toBeTruthy();
-  });
-
   it('should display child list dynamically when parent list is selected', () => {
     page.clickDropDownByLabel('DataApiOption parent');
 
@@ -191,5 +173,44 @@ describe('Create Page', () => {
     page.clickDropDownByLabel('DataApiOption child');
 
     expect(page.selectPanel.getText()).toEqual(getExpectedChildrenLabels().trim());
+  });
+});
+
+describe('Create Page for Demo2', () => {
+  let page: CreatePage;
+
+  beforeEach(() => {
+    page = new CreatePage('demo2');
+    page.navigateTo();
+  });
+
+  it('should disable Save button when required field is not populated', () => {
+    expect(page.saveButton.isEnabled()).toBe(false);
+  });
+
+  it('should re-enable Save button when required field is populated', () => {
+    page.populateRequiredFields(false);
+
+    expect(page.saveButton.isEnabled()).toBe(true);
+  });
+
+  it('should display red error message when required field is not populated', () => {
+    page.populateRequiredFields(true);
+
+    page.metadataErrorMessages.each(errMsg => {
+      expect(errMsg.getText()).toEqual('You must enter a value');
+
+      const red = 'rgba(244, 67, 54, 1)';
+      expect(errMsg.getCssValue('color')).toEqual(red);
+    });
+  });
+
+  it('should have aria-required set to true for all required fields', () => {
+    page.requiredFields.each(requiredField => {
+      expect(requiredField.getAttribute('aria-required')).toEqual(
+        'true',
+        'aria-required not set to true for ' + requiredField.getTagName().then(tagName => tagName)
+      );
+    });
   });
 });
