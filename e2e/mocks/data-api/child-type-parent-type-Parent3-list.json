@@ -1,0 +1,38 @@
+{
+  "content": [
+    {
+      "data": {
+        "label": "Child 1 of parent3"
+      },
+      "parent": {
+        "typeLabel": "parent-type",
+        "valueId": "Parent3"
+      },
+      "type": {
+        "label": "child-type"
+      },
+      "valueId": "Child1Parent3"
+    },
+    {
+      "data": {
+        "label": "Child 2 of parent3"
+      },
+      "parent": {
+        "typeLabel": "parent-type",
+        "valueId": "Parent3"
+      },
+      "type": {
+        "label": "child-type"
+      },
+      "valueId": "Child2Parent3"
+    }
+  ],
+  "first": true,
+  "last": true,
+  "number": 0,
+  "numberOfElements": 2,
+  "size": 50,
+  "sort": null,
+  "totalElements": 2,
+  "totalPages": 1
+}

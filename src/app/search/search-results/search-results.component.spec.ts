@@ -5,16 +5,23 @@ import { MaterialConfigModule } from '../../routing/material-config.module';
 import { SearchModel } from '../shared/model/search-model';
 import { of, Subject } from 'rxjs';
 
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { SearchResults } from '../shared/model/search-result';
 import { DataService } from '../../shared/providers/data.service';
 import { SharedModule } from '../../shared/shared.module';
 import { Sort } from '../shared/model/sort';
+import { ActivatedRouteStub } from '../../../testing/router-stubs';
 
 class MockDataService {
   storage = ['123', '456'];
+}
+
+class RouterStub {
+  navigate(url: string) {
+    return url;
+  }
 }
 
 describe('SearchResultsComponent', () => {
@@ -30,7 +37,14 @@ describe('SearchResultsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MaterialConfigModule, NoopAnimationsModule, RouterModule, SharedModule],
-      providers: [{ provide: DataService, useValue: dataService }],
+      providers: [
+        { provide: DataService, useValue: dataService },
+        { provide: ActivatedRoute, useClass: ActivatedRouteStub },
+        {
+          provide: Router,
+          useClass: RouterStub
+        }
+      ],
       declarations: [SearchResultsComponent]
     }).compileComponents();
   }));

@@ -17,8 +17,12 @@ export class Student implements SearchFilterableResult {
     return student.lastName + ', ' + student.firstName + ' (' + student.studentNumber + ')';
   }
 
+  getNameAndStudentId(): string {
+    return this.lastName + ', ' + this.firstName + ' (' + this.studentNumber + ')';
+  }
+
   getFilterableValue(): FilterableValue {
-    return new FilterableValue(this.studentNumber);
+    return new FilterableValue(this.studentNumber, this.getNameAndStudentId());
   }
 
   getFilterableDisplay(): string {
