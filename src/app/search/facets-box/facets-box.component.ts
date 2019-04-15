@@ -9,6 +9,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ConfigResolver } from '../../routing/shared/config-resolver.service';
 import { CustomTextItem } from '../../core/shared/model/config';
 import { CustomTextUtilities } from '../../shared/directives/custom-text/custom-text-utilities';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 @Component({
   selector: 'app-facets-box',
@@ -30,7 +31,7 @@ export class FacetsBoxComponent implements OnInit, OnDestroy {
 
   searchResults: SearchResults;
 
-  constructor(private configResolver: ConfigResolver) {}
+  constructor(private configResolver: ConfigResolver, private liveAnnouncer: LiveAnnouncer) {}
 
   ngOnInit() {
     this.searchModel$.pipe(takeUntil(this.componentDestroyed)).subscribe(searchModel => {
@@ -90,7 +91,13 @@ export class FacetsBoxComponent implements OnInit, OnDestroy {
 
     this.searchModel.addFilterIfNotThere(searchFilter);
 
+    this.announceFacetSelection(searchFilter);
+
     this.facetFilterAdded.emit(this.searchModel);
+  }
+
+  private announceFacetSelection(searchFilter: SearchFilter) {
+    this.liveAnnouncer.announce('Selected ' + searchFilter.getDisplayValue() + ' filter', 'assertive');
   }
 
   private getCustomTextKey(key: string, value: string) {
