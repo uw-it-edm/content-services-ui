@@ -20,6 +20,11 @@ describe('Edit Page', () => {
     page.navigateTo();
   });
 
+  it('should have no accessibility violations', () => {
+    const app = new ContentServicesUiPage();
+    app.runAccessibilityChecks();
+  });
+
   it('should display page title', () => {
     expect(page.getPageTitle()).toEqual(demoConfig.pages.edit.pageName);
   });

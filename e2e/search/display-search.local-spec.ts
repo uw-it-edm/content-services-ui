@@ -1,6 +1,7 @@
-import {DisplaySearchPage} from './display-search.po';
-import {SearchPage} from './search.po';
-import {browser} from 'protractor';
+import { DisplaySearchPage } from './display-search.po';
+import { SearchPage } from './search.po';
+import { browser } from 'protractor';
+import { ContentServicesUiPage } from '../app/app.po';
 
 let page: DisplaySearchPage;
 
@@ -10,6 +11,11 @@ describe('Search Display All Page', () => {
   beforeEach(() => {
     page = new DisplaySearchPage();
     page.navigateTo();
+  });
+
+  it('should have no accessibility violations', () => {
+    const app = new ContentServicesUiPage();
+    app.runAccessibilityChecks();
   });
 
   it('should display page title', () => {
@@ -25,7 +31,7 @@ describe('Search Display All Page', () => {
   it('should navigate to Search page when Return to Search button is clicked', () => {
     page.returnToSearchButton.click();
 
-    const getCurrentUrl = function () {
+    const getCurrentUrl = function() {
       return browser.getCurrentUrl().then(url => {
         return url.toLowerCase();
       });

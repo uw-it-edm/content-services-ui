@@ -1,9 +1,10 @@
-import {CreatePage} from './create.po';
-import {SearchPage} from '../search/search.po';
-import {browser} from 'protractor';
+import { CreatePage } from './create.po';
+import { SearchPage } from '../search/search.po';
+import { browser } from 'protractor';
 import * as path from 'path';
-import {until} from 'selenium-webdriver';
-import {protractor} from 'protractor/built/ptor';
+import { until } from 'selenium-webdriver';
+import { protractor } from 'protractor/built/ptor';
+import { ContentServicesUiPage } from '../app/app.po';
 
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
@@ -22,6 +23,11 @@ describe('Create Page', () => {
   beforeEach(() => {
     page = new CreatePage();
     page.navigateTo();
+  });
+
+  it('should have no accessibility violations', () => {
+    const app = new ContentServicesUiPage();
+    app.runAccessibilityChecks();
   });
 
   it('should display page title that matches config file', () => {
@@ -98,8 +104,13 @@ describe('Create Page', () => {
     page.saveButton.click();
 
     expect(page.errorNotification.isDisplayed()).toBeTruthy();
-    expect(page.dismissButton.getId()).toEqual(browser.driver.switchTo().activeElement().getId()
-      , 'Dismiss button is not set to focus.');
+    expect(page.dismissButton.getId()).toEqual(
+      browser.driver
+        .switchTo()
+        .activeElement()
+        .getId(),
+      'Dismiss button is not set to focus.'
+    );
   });
 
   it('should display Upload Another checkbox that is checked by default', () => {
