@@ -3,7 +3,7 @@
 
     <mat-toolbar class="secondary-toolbar"  >
       <span class="button-row" role="navigation">
-        <button mat-icon-button routerLink="/{{config.tenant}}" matTooltip="Return to Results">
+        <button mat-icon-button routerLink="/{{config.tenant}}" matTooltip="Return to Results" aria-label="return to results">
           <mat-icon>keyboard_arrow_left</mat-icon>
         </button>
       </span>
@@ -13,7 +13,7 @@
                   [fieldName]="'addFile'"
                   label="Add Files"
                   (fileSelected)="addFile($event)"
-                  [(formGroup)]="form"
+                  [formGroup]="form"
                   [autoFocus]="true"
                   multiple="true">
             </app-file-upload>
@@ -42,7 +42,7 @@
                       [type]="button.type">{{button.label}}
               </button>
               <span *ngIf="pageConfig?.uploadAnother && form.controls['uploadAnother']">
-                <mat-checkbox [(formGroup)]="form"
+                <mat-checkbox [formGroup]="form"
                               formControlName="uploadAnother"
                               name="uploadAnother" >Upload another</mat-checkbox>
               </span>
@@ -55,7 +55,7 @@
                       [fieldName]="'dragFiles'"
                       label="Add Files"
                       (fileSelected)="addFile($event)"
-                      [(formGroup)]="form"
+                      [formGroup]="form"
                       [autoFocus]="true"
                       [dropzone]="true"
                       multiple="true">

@@ -189,7 +189,7 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
   /** The aria-describedby attribute on the chip list for improved a11y. */
   @HostBinding('attr.aria-describedby') _ariaDescribedby: string;
 
-  @HostBinding('attr.aria-role')
+  @HostBinding('attr.role')
   /** https://www.w3.org/TR/wai-aria/roles#listbox */
   get role(): string | null {
     return this.empty ? null : 'listbox';

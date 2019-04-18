@@ -6,7 +6,8 @@
                type="file"
                (change)="onFileChange($event)"
                [formControlName]="fieldName"
-               [multiple]="multiple">
+               [multiple]="multiple"
+               aria-label="add file">
         <label [for]="fieldId" class="mat-icon-button" [appFocus]="autoFocus"
                [matTooltip]="label">
             <span class="mat-button-wrapper">
