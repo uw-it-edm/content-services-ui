@@ -995,7 +995,6 @@ axobject-query@^2.0.2:
 
 babel-code-frame@^6.22.0, babel-code-frame@^6.26.0:
   version "6.26.0"
-  resolved "https://registry.yarnpkg.com/babel-code-frame/-/babel-code-frame-6.26.0.tgz#63fd43f7dc1e3bb7ce35947db8fe8c74b"
   integrity sha1-Y/1D99weO7fONZR9uP42mj9Yx0s=
   dependencies:
     chalk "^1.1.3"
