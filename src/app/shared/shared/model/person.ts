@@ -59,7 +59,7 @@ export class Person implements SearchFilterableResult {
   getFilterableValue(): FilterableValue {
     return new FilterableValue(
       this.regId + (this.priorRegIds.length === 0 ? '' : ';' + this.priorRegIds.join(';')),
-      this.employeeId
+      this.getNameAndEmployeeId()
     );
   }
 

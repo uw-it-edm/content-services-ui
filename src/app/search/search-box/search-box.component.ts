@@ -7,6 +7,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material';
 import { SearchAutocomplete } from '../shared/search-autocomplete/search-autocomplete';
 import { SearchFilterableResult } from '../../shared/shared/model/search-filterable-result';
 import { takeUntil } from 'rxjs/operators';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 @Component({
   selector: 'app-search-box',
@@ -16,6 +17,8 @@ import { takeUntil } from 'rxjs/operators';
 export class SearchBoxComponent implements OnDestroy, OnInit {
   private componentDestroyed = new Subject();
   searchModel: SearchModel = new SearchModel();
+
+  internalSearchField: string;
 
   @Input()
   readonly: false;
@@ -32,7 +35,7 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
 
   filteredOptions: SearchFilterableResult[] = [];
 
-  constructor() {}
+  constructor(private liveAnnouncer: LiveAnnouncer) {}
 
   ngOnInit() {
     if (this.searchAutocomplete) {
@@ -41,6 +44,7 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
     this.searchModel$.pipe(takeUntil(this.componentDestroyed)).subscribe(searchModel => {
       console.log('search-box search model updated : ' + this.searchModel.stringQuery);
       this.searchModel = searchModel;
+      this.internalSearchField = this.searchModel.stringQuery;
     });
   }
 
@@ -48,23 +52,37 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
     if (!this.readonly) {
       console.log('removing filter for ' + filter.key);
       this.searchModel.removeFilter(filter);
-      this.updateSearch();
+      this.announceFilterRemoval(filter);
+      this.executeSearch();
     }
   }
 
-  updateSearch() {
-    console.log('search in component with ' + JSON.stringify(this.searchModel));
+  private announceFilterRemoval(searchFilter: SearchFilter) {
+    this.liveAnnouncer.announce('Removed ' + searchFilter.getDisplayValue() + ' filter', 'assertive');
+  }
+
+  private announceFilterSelection(searchFilter: SearchFilter) {
+    this.liveAnnouncer.announce('Selected ' + searchFilter.getDisplayValue() + ' filter', 'assertive');
+  }
+
+  executeSearch() {
+    this.searchModel.stringQuery = this.internalSearchField;
+
     this.searchEvent.emit(this.searchModel);
   }
 
-  searchBoxChanged() {
-    this.searchBoxEvent.emit(this.searchModel.stringQuery);
+  searchBoxUpdated() {
+    /**
+     * ignore when it's a filter selection
+     */
+    if (typeof this.internalSearchField === 'string') {
+      this.searchBoxEvent.emit(this.internalSearchField);
+    }
   }
 
   private assignAutocompleteListener() {
     this.searchBoxEvent.pipe(takeUntil(this.componentDestroyed)).subscribe((model: string) => {
       if (model) {
-        console.log('model update ' + model);
         this.searchAutocomplete
           .autocomplete(model)
           .pipe(takeUntil(this.componentDestroyed))
@@ -78,14 +96,14 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
   }
 
   onSelectFilter(event: MatAutocompleteSelectedEvent) {
-    console.log('select ' + event.option.value.value);
+    this.internalSearchField = '';
+    this.filteredOptions = [];
 
     const searchFilter = this.searchAutocomplete.createFilter(event.option.value);
     console.log('adding new filter : ' + JSON.stringify(searchFilter));
-
     this.searchModel.addFilterIfNotThere(searchFilter);
-    this.updateSearch();
-    this.searchModel.stringQuery = ''; // clear search field when selecting a filter
+    this.announceFilterSelection(searchFilter);
+    this.executeSearch();
   }
 
   ngOnDestroy(): void {

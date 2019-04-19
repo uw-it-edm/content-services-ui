@@ -1,0 +1,39 @@
+{
+  "content": [
+    {
+      "data": {
+        "label": "Parent 1"
+      },
+      "type": {
+        "label": "parent-type"
+      },
+      "valueId": "Parent1"
+    },
+    {
+      "data": {
+        "label": "Parent 2"
+      },
+      "type": {
+        "label": "parent-type"
+      },
+      "valueId": "Parent2"
+    },
+    {
+      "data": {
+        "label": "Parent 3"
+      },
+      "type": {
+        "label": "parent-type"
+      },
+      "valueId": "Parent3"
+    }
+  ],
+  "first": true,
+  "last": true,
+  "number": 0,
+  "numberOfElements": 3,
+  "size": 50,
+  "sort": null,
+  "totalElements": 3,
+  "totalPages": 1
+}

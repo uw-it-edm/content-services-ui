@@ -104,7 +104,7 @@
           "label": "DataApiOption show label",
           "required": false,
           "displayType": "select",
-          "dynamicSelectOptions": {
+          "dynamicSelectConfig": {
             "type": "test-type",
             "labelPath": "label"
           }
@@ -114,7 +114,7 @@
           "label": "DataApiOption Show Code",
           "required": false,
           "displayType": "select",
-          "dynamicSelectOptions": {
+          "dynamicSelectConfig": {
             "type": "test-type",
             "labelPath": "metadata.Code"
           }
@@ -186,9 +186,9 @@
         {
           "key": "DataApiOptionLabel",
           "label": "DataApiOption show label",
-          "required": false,
+          "required": true,
           "displayType": "select",
-          "dynamicSelectOptions": {
+          "dynamicSelectConfig": {
             "type": "test-type",
             "labelPath": "label"
           }
@@ -198,7 +198,7 @@
           "label": "DataApiOption Show Code",
           "required": false,
           "displayType": "select",
-          "dynamicSelectOptions": {
+          "dynamicSelectConfig": {
             "type": "test-type",
             "labelPath": "metadata.Code"
           }
@@ -227,17 +227,19 @@
         {
           "key": "LastModifiedDate",
           "label": "Last Modified Date",
-          "dataType": "date",
-          "displayType": "date"
+          "displayType": "date",
+          "required": true
         },
         {
           "key": "StudentId",
           "label": "Student",
+          "required": true,
           "displayType": "student-autocomplete"
         },
         {
           "key": "RegId",
           "label": "Employee",
+          "required": true,
           "displayType": "person-autocomplete"
         }
       ],
@@ -254,7 +256,7 @@
         }
       ],
       "viewPanel": true,
-      "uploadAnother": true
+      "uploadAnother": false
     }
   }
 }

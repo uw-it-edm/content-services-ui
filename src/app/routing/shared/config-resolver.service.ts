@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ConfigService } from '../../core/shared/config.service';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { Config, CustomTextItem } from '../../core/shared/model/config';
-import { Subject, ReplaySubject, Observable } from 'rxjs';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { NotificationService } from '../../shared/providers/notification.service';
 
 @Injectable()
@@ -40,17 +40,23 @@ export class ConfigResolver implements Resolve<Config> {
           this.appName$.next(this.getAppName(config));
           return config;
         } else {
+          console.log('no config for ' + tenant);
           // config not found
-          this.customText$.next(null);
-          this.appName$.next('');
-          this.router.navigate(['/']);
+          this.redirectToHome();
           return null;
         }
       })
       .catch(err => {
         this.notificationService.error('Cannot load configuration', err);
+        this.redirectToHome();
         return null;
       });
+  }
+
+  private redirectToHome() {
+    this.customText$.next(null);
+    this.appName$.next('');
+    this.router.navigate(['/']);
   }
 
   private getAppName(config) {
