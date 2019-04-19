@@ -10,8 +10,5 @@
       "jasminewd2",
       "node"
     ]
-  },
-  "include": [
-    "./custom-types.ts"
-  ]
+  }
 }
