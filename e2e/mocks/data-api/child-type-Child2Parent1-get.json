@@ -1,0 +1,13 @@
+{
+  "data": {
+    "label": "Child 2 of parent1"
+  },
+  "parent": {
+    "typeLabel": "parent-type",
+    "valueId": "Parent1"
+  },
+  "type": {
+    "label": "child-type"
+  },
+  "valueId": "Child2Parent1"
+}

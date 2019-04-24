@@ -1,6 +1,6 @@
 import { isNullOrUndefined, isUndefined } from './node-utilities';
 
-describe('isNullOrUndefined', () => {
+describe('isNullOrUndefined function', () => {
   it('return true on null', () => {
     const value = null;
     expect(isNullOrUndefined(value)).toBeTruthy();
@@ -28,7 +28,7 @@ describe('isNullOrUndefined', () => {
   });
 });
 
-describe('isUndefined', () => {
+describe('isUndefined function', () => {
   it('return false on null', () => {
     const value = null;
     expect(isUndefined(value)).toBeFalsy();

@@ -59,6 +59,15 @@
           "key": "LastModifiedDate",
           "label": "Last Modified Date",
           "displayType": "date"
+        },
+        {
+          "key": "childType",
+          "label": "DataApiOption child",
+          "displayType": "select",
+          "dynamicSelectConfig": {
+            "type": "child-type",
+            "labelPath": "label"
+          }
         }
       ],
       "searchConfig": {

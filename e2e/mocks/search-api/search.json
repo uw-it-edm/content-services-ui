@@ -10,7 +10,8 @@
         "PublishStatus": "published",
         "DocumentType": "Type 1",
         "RegId": "ABCDE",
-        "LastModifiedDate": 1.537446824E12
+        "LastModifiedDate": 1.537446824E12,
+        "childType": "Child2Parent2"
       },
       "_score": 0.0,
       "_indexName": "documents-demo"
@@ -25,7 +26,8 @@
         "PublishStatus": "published",
         "DocumentType": "Type 2",
         "RegId": "FGHIJ",
-        "LastModifiedDate": 1.537446824E12
+        "LastModifiedDate": 1.537446824E12,
+        "childType": "Child2Parent1"
       },
       "_score": 0.0,
       "_indexName": "documents-demo"
@@ -40,7 +42,8 @@
         "PublishStatus": "published",
         "DocumentType": "Type 2",
         "RegId": "XYZ",
-        "LastModifiedDate": 1.537246822E12
+        "LastModifiedDate": 1.537246822E12,
+        "childType": "Child2Parent2"
       },
       "_score": 0.0,
       "_indexName": "documents-demo"
