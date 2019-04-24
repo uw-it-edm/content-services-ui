@@ -55,8 +55,7 @@
     },
     {
       "key": "Filer",
-      "label": "Filer",
-      "required": true
+      "label": "Filer"
     },
     {
       "key": "DocumentType",
@@ -69,7 +68,6 @@
     {
       "key": "PublishStatus",
       "label": "Publish Status",
-      "required": true,
       "displayType": "select",
       "options": [
         {
