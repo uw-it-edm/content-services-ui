@@ -1,4 +1,4 @@
-import { browser, by, element, ExpectedConditions } from 'protractor';
+import { browser, by, element, ExpectedConditions, WebElement } from 'protractor';
 import { EditPage } from '../edit/edit.po';
 
 export class SearchPage {
@@ -13,9 +13,10 @@ export class SearchPage {
   displayAllButton = element(by.className('cs-display-search-button'));
   moreButton = element(by.name('more'));
   lessButton = element(by.name('less'));
-  facetItemsLocator = by.css('.mat-list-item a');
+  facetItemsLocator = by.className('mat-list-item');
   searchButton = element(by.name('searchButton'));
   paginatorCounts = element.all(by.className('mat-paginator-range-label'));
+  searchResultsRows = element.all(by.css('app-search-results .mat-row'));
 
   constructor(private profile: string = 'demo') {}
 
@@ -110,7 +111,26 @@ export class SearchPage {
     return element.all(by.css('.cs-facet-box .mat-list')).get(facetHeaderIndex);
   }
 
-  getFacetItems(facetHeaderIndex: number) {
-    return this.getFacet(facetHeaderIndex).all(this.facetItemsLocator);
+  getFacetItems(facetHeaderIndex: number, facetItemIndex: number) {
+    return this.getFacet(facetHeaderIndex)
+      .all(this.facetItemsLocator)
+      .get(facetItemIndex);
+  }
+
+  getFacetItemLinks(facetHeaderIndex: number) {
+    return this.getFacet(facetHeaderIndex)
+      .all(this.facetItemsLocator)
+      .all(by.tagName('a'));
+  }
+
+  getBackgroundColor(webElement: WebElement) {
+    return webElement.getCssValue('background-color');
+  }
+
+  mouseOver(webElement: WebElement) {
+    browser
+      .actions()
+      .mouseMove(webElement)
+      .perform();
   }
 }

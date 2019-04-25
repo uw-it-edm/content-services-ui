@@ -1,9 +1,15 @@
-import {CreatePage} from './create.po';
-import {SearchPage} from '../search/search.po';
-import {browser} from 'protractor';
+import { CreatePage } from './create.po';
+import { SearchPage } from '../search/search.po';
+import { browser } from 'protractor';
 import * as path from 'path';
-import {until} from 'selenium-webdriver';
-import {protractor} from 'protractor/built/ptor';
+import { until } from 'selenium-webdriver';
+import { protractor } from 'protractor/built/ptor';
+
+const searchPage = new SearchPage();
+const demoConfig = require('../mocks/profile-api/demo.json');
+const pdfFilePath = path.resolve(__dirname, '../mocks/files/sample-file.pdf');
+const docFilePath = path.resolve(__dirname, '../mocks/files/sample-file.docx');
+const textFilePath = path.resolve(__dirname, '../mocks/files/sample-file.txt');
 
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
@@ -11,13 +17,17 @@ const getCurrentUrl = function() {
   });
 };
 
-describe('Create Page', () => {
+describe('Create Page for Demo', () => {
   let page: CreatePage;
-  const searchPage = new SearchPage();
-  const demoConfig = require('../mocks/profile-api/demo.json');
-  const pdfFilePath = path.resolve(__dirname, '../mocks/files/sample-file.pdf');
-  const docFilePath = path.resolve(__dirname, '../mocks/files/sample-file.docx');
-  const textFilePath = path.resolve(__dirname, '../mocks/files/sample-file.txt');
+
+  const getExpectedChildrenLabels = function() {
+    const childrenList = require('../mocks/data-api/child-type-parent-type-Parent1-list.json');
+    let childrenLabels = '';
+    for (let i = 0; i < childrenList.content.length; i++) {
+      childrenLabels = childrenLabels.concat(childrenList.content[i].data.label).concat('\n');
+    }
+    return childrenLabels;
+  };
 
   beforeEach(() => {
     page = new CreatePage();
@@ -97,9 +107,14 @@ describe('Create Page', () => {
     page.inputField.sendKeys('any text');
     page.saveButton.click();
 
-    expect(page.errorNotification.isDisplayed()).toBeTruthy();
-    expect(page.dismissButton.getId()).toEqual(browser.driver.switchTo().activeElement().getId()
-      , 'Dismiss button is not set to focus.');
+    expect(page.errorNotification.isDisplayed()).toBe(true);
+    expect(page.dismissButton.getId()).toEqual(
+      browser.driver
+        .switchTo()
+        .activeElement()
+        .getId(),
+      'Dismiss button is not set to focus.'
+    );
   });
 
   it('should display Upload Another checkbox that is checked by default', () => {
@@ -149,22 +164,53 @@ describe('Create Page', () => {
     expect(page.getPersonValue()).toEqual(employee);
   });
 
-  it('should disable Save button when required field is not populated', () => {
+  it('should display child list dynamically when parent list is selected', () => {
+    page.clickDropDownByLabel('DataApiOption parent');
+
+    const parentList = require('../mocks/data-api/parent-type-list.json');
+    page.clickDropDownOptionValueByText(parentList.content[0].data.label);
+
+    page.clickDropDownByLabel('DataApiOption child');
+
+    expect(page.selectPanel.getText()).toEqual(getExpectedChildrenLabels().trim());
+  });
+});
+
+describe('Create Page for Demo2', () => {
+  let page: CreatePage;
+
+  beforeEach(() => {
     page = new CreatePage('demo2');
     page.navigateTo();
+  });
 
-    expect(page.saveButton.isEnabled()).toBeFalsy();
+  it('should disable Save button when required field is not populated', () => {
+    expect(page.saveButton.isEnabled()).toBe(false);
   });
 
   it('should re-enable Save button when required field is populated', () => {
-    page = new CreatePage('demo2');
-    page.navigateTo();
+    page.populateRequiredFields(false);
 
-    page.requiredInputs.each(requiredInput => {
-      requiredInput.sendKeys(protractor.Key.SPACE);
-      requiredInput.sendKeys(protractor.Key.ENTER);
+    expect(page.saveButton.isEnabled()).toBe(true);
+  });
+
+  it('should display red error message when required field is not populated', () => {
+    page.populateRequiredFields(true);
+
+    page.metadataErrorMessages.each(errMsg => {
+      expect(errMsg.getText()).toEqual('You must enter a value');
+
+      const red = 'rgba(244, 67, 54, 1)';
+      expect(errMsg.getCssValue('color')).toEqual(red);
     });
+  });
 
-    expect(page.saveButton.isEnabled()).toBeTruthy();
+  it('should have aria-required set to true for all required fields', () => {
+    page.requiredFields.each(requiredField => {
+      expect(requiredField.getAttribute('aria-required')).toEqual(
+        'true',
+        'aria-required not set to true for ' + requiredField.getTagName().then(tagName => tagName)
+      );
+    });
   });
 });

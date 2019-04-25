@@ -7,6 +7,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material';
 import { SearchAutocomplete } from '../shared/search-autocomplete/search-autocomplete';
 import { SearchFilterableResult } from '../../shared/shared/model/search-filterable-result';
 import { takeUntil } from 'rxjs/operators';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 @Component({
   selector: 'app-search-box',
@@ -34,7 +35,7 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
 
   filteredOptions: SearchFilterableResult[] = [];
 
-  constructor() {}
+  constructor(private liveAnnouncer: LiveAnnouncer) {}
 
   ngOnInit() {
     if (this.searchAutocomplete) {
@@ -51,8 +52,17 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
     if (!this.readonly) {
       console.log('removing filter for ' + filter.key);
       this.searchModel.removeFilter(filter);
+      this.announceFilterRemoval(filter);
       this.executeSearch();
     }
+  }
+
+  private announceFilterRemoval(searchFilter: SearchFilter) {
+    this.liveAnnouncer.announce('Removed ' + searchFilter.getDisplayValue() + ' filter', 'assertive');
+  }
+
+  private announceFilterSelection(searchFilter: SearchFilter) {
+    this.liveAnnouncer.announce('Selected ' + searchFilter.getDisplayValue() + ' filter', 'assertive');
   }
 
   executeSearch() {
@@ -73,7 +83,6 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
   private assignAutocompleteListener() {
     this.searchBoxEvent.pipe(takeUntil(this.componentDestroyed)).subscribe((model: string) => {
       if (model) {
-        console.log('Received new search Box event ' + model);
         this.searchAutocomplete
           .autocomplete(model)
           .pipe(takeUntil(this.componentDestroyed))
@@ -93,6 +102,7 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
     const searchFilter = this.searchAutocomplete.createFilter(event.option.value);
     console.log('adding new filter : ' + JSON.stringify(searchFilter));
     this.searchModel.addFilterIfNotThere(searchFilter);
+    this.announceFilterSelection(searchFilter);
     this.executeSearch();
   }
 

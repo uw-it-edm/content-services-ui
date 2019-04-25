@@ -1,4 +1,4 @@
-import {browser, by, element, ExpectedConditions} from 'protractor';
+import { browser, by, element, ExpectedConditions } from 'protractor';
 import * as path from 'path';
 
 export class EditPage {
@@ -14,6 +14,7 @@ export class EditPage {
   public nextItemButton = element(by.id('nextItem'));
   public dateInputField = element.all(by.css('app-timestamp-picker input'));
   public formFields = element.all(by.tagName('mat-form-field'));
+  public selectPanel = element(by.className('mat-select-panel'));
 
   constructor(private profile: string = 'demo', private id: string = '123456') {}
 
@@ -71,5 +72,15 @@ export class EditPage {
     return element.all(by.css('.mat-list-item-content .mat-list-text p > span')).then(names => {
       return names[fileIndex].getText();
     });
+  }
+
+  clickDropDownOptionValueByText(optionText: string) {
+    element(by.cssContainingText('.mat-option-text', optionText)).click();
+    browser.wait(ExpectedConditions.invisibilityOf(this.selectPanel), 5000);
+  }
+
+  clickDropDownByLabel(dropDownLabel: string) {
+    element(by.cssContainingText('.mat-form-field', dropDownLabel)).click();
+    browser.wait(ExpectedConditions.visibilityOf(this.selectPanel), 5000);
   }
 }
