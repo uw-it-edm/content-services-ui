@@ -10,6 +10,7 @@ export class SearchPageConfig implements PageConfig {
   pageName: string;
   theme = 'uw-default';
   fieldsToDisplay: Array<Field> = [];
+  fieldKeysToDisplay: Array<string> = [];
   displayDocumentLabelField = false;
   enableDisplaySearch = false;
 
