@@ -28,6 +28,7 @@ import { DataApiValueService } from './providers/dataapivalue.service';
 import { PersonService } from './providers/person.service';
 import { PersonAutocompleteComponent } from './widgets/person-autocomplete/person-autocomplete.component';
 import { PersonDisplayComponent } from './widgets/person-display/person-display.component';
+import { DataApiValueDisplayComponent } from './widgets/data-api-display/data-api-value-display.component';
 
 @NgModule({
   imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule, FormsModule, PdfViewerModule],
@@ -45,6 +46,7 @@ import { PersonDisplayComponent } from './widgets/person-display/person-display.
     StudentDisplayComponent,
     PersonAutocompleteComponent,
     PersonDisplayComponent,
+    DataApiValueDisplayComponent,
     TimestampPickerComponent,
     TruncatePipe,
     DisplayFieldComponent,
@@ -61,6 +63,7 @@ import { PersonDisplayComponent } from './widgets/person-display/person-display.
     OptionsInputComponent,
     StudentAutocompleteComponent,
     StudentDisplayComponent,
+    DataApiValueDisplayComponent,
     PersonAutocompleteComponent,
     PersonDisplayComponent,
     TimestampPickerComponent,

@@ -4,4 +4,5 @@ export interface PageConfig {
   pageName: string;
   theme: string;
   fieldsToDisplay: Array<Field>;
+  fieldKeysToDisplay: Array<string>;
 }

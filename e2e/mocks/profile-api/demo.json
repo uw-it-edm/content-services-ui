@@ -32,34 +32,109 @@
       "description": "Executes search"
     }
   },
+  "availableFields": [
+    {
+      "key": "DataApiOptionLabel",
+      "label": "DataApiOption show label",
+      "required": false,
+      "displayType": "select",
+      "dynamicSelectConfig": {
+        "type": "test-type",
+        "labelPath": "label"
+      }
+    },
+    {
+      "key": "DataApiOptionCode",
+      "label": "DataApiOption Show Code",
+      "required": false,
+      "displayType": "select",
+      "dynamicSelectConfig": {
+        "type": "test-type",
+        "labelPath": "metadata.Code"
+      }
+    },
+    {
+      "key": "Filer",
+      "label": "Filer"
+    },
+    {
+      "key": "DocumentType",
+      "label": "Document Type"
+    },
+    {
+      "key": "ProfileId",
+      "label": "Profile Id"
+    },
+    {
+      "key": "PublishStatus",
+      "label": "Publish Status",
+      "displayType": "select",
+      "options": [
+        {
+          "value": ""
+        },
+        {
+          "value": "Draft"
+        },
+        {
+          "value": "Published"
+        }
+      ]
+    },
+    {
+      "key": "LastModifiedDate",
+      "label": "Last Modified Date",
+      "dataType": "date",
+      "displayType": "date"
+    },
+    {
+      "key": "StudentId",
+      "label": "Student",
+      "displayType": "student-autocomplete"
+    },
+    {
+      "key": "RegId",
+      "label": "Employee",
+      "displayType": "person-autocomplete"
+    },
+    {
+      "key": "parentType",
+      "label": "DataApiOption parent",
+      "required": false,
+      "displayType": "select",
+      "dynamicSelectConfig": {
+        "type": "parent-type",
+        "labelPath": "label"
+      }
+    },
+    {
+      "key": "childType",
+      "label": "DataApiOption child",
+      "required": false,
+      "displayType": "select",
+      "dynamicSelectConfig": {
+        "type": "child-type",
+        "labelPath": "label",
+        "parentFieldConfig": {
+          "parentType": "parent-type",
+          "key": "parentType"
+        }
+      }
+    }
+  ],
   "pages": {
     "tab-search": {
       "pageName": "Demonstration Search",
       "theme": "uw-default",
       "searchStateInURL": true,
       "enableDisplaySearch": true,
-      "fieldsToDisplay": [
-        {
-          "key": "ProfileId",
-          "label": "Profile Id"
-        },
-        {
-          "key": "Filer",
-          "label": "Filer"
-        },
-        {
-          "key": "PublishStatus",
-          "label": "Publish Status"
-        },
-        {
-          "key": "DocumentType",
-          "label": "Document Type"
-        },
-        {
-          "key": "LastModifiedDate",
-          "label": "Last Modified Date",
-          "displayType": "date"
-        }
+      "fieldKeysToDisplay": [
+        "ProfileId",
+        "Filer",
+        "PublishStatus",
+        "DocumentType",
+        "LastModifiedDate",
+        "childType"
       ],
       "searchConfig": {
         "directions": "Type a student number or other info",
@@ -126,93 +201,17 @@
     "edit": {
       "theme": "uw-default",
       "pageName": "Edit Content Item",
-      "fieldsToDisplay": [
-        {
-          "key": "DataApiOptionLabel",
-          "label": "DataApiOption show label",
-          "required": false,
-          "displayType": "select",
-          "dynamicSelectConfig": {
-            "type": "test-type",
-            "labelPath": "label"
-          }
-        },
-        {
-          "key": "DataApiOptionCode",
-          "label": "DataApiOption Show Code",
-          "required": false,
-          "displayType": "select",
-          "dynamicSelectConfig": {
-            "type": "test-type",
-            "labelPath": "metadata.Code"
-          }
-        },
-        {
-          "key": "Filer",
-          "label": "Filer",
-          "required": true
-        },
-        {
-          "key": "DocumentType",
-          "label": "Document Type"
-        },
-        {
-          "key": "PublishStatus",
-          "label": "Publish Status",
-          "required": true,
-          "displayType": "select",
-          "options": [
-            {
-              "value": ""
-            },
-            {
-              "value": "Draft"
-            },
-            {
-              "value": "Published"
-            }
-          ]
-        },
-        {
-          "key": "LastModifiedDate",
-          "label": "Last Modified Date",
-          "dataType": "date",
-          "displayType": "date"
-        },
-        {
-          "key": "StudentId",
-          "label": "Student",
-          "displayType": "student-autocomplete"
-        },
-        {
-          "key": "RegId",
-          "label": "Employee",
-          "displayType": "person-autocomplete"
-        },
-        {
-          "key": "parentType",
-          "label": "DataApiOption parent",
-          "required": false,
-          "displayType": "select",
-          "dynamicSelectConfig": {
-            "type": "parent-type",
-            "labelPath": "label"
-          }
-        },
-        {
-          "key": "childType",
-          "label": "DataApiOption child",
-          "required": false,
-          "displayType": "select",
-          "dynamicSelectConfig": {
-            "type": "child-type",
-            "labelPath": "label",
-            "parentFieldConfig": {
-              "parentType": "parent-type",
-              "key": "parentType"
-            }
-          }
-        }
+      "fieldKeysToDisplay": [
+        "DataApiOptionLabel",
+        "DataApiOptionCode",
+        "Filer",
+        "DocumentType",
+        "PublishStatus",
+        "LastModifiedDate",
+        "StudentId",
+        "RegId",
+        "parentType",
+        "childType"
       ],
       "buttons": [
         {
@@ -234,87 +233,16 @@
     "create": {
       "theme": "uw-default",
       "pageName": "Create Content Item",
-      "fieldsToDisplay": [
-        {
-          "key": "DataApiOptionLabel",
-          "label": "DataApiOption show label",
-          "required": false,
-          "displayType": "select",
-          "dynamicSelectConfig": {
-            "type": "test-type",
-            "labelPath": "label"
-          }
-        },
-        {
-          "key": "DataApiOptionCode",
-          "label": "DataApiOption Show Code",
-          "required": false,
-          "displayType": "select",
-          "dynamicSelectConfig": {
-            "type": "test-type",
-            "labelPath": "metadata.Code"
-          }
-        },
-        {
-          "key": "Filer",
-          "label": "Filer"
-        },
-        {
-          "key": "PublishStatus",
-          "label": "Publish Status",
-          "displayType": "select",
-          "options": [
-            {
-              "value": ""
-            },
-            {
-              "value": "Draft"
-            },
-            {
-              "value": "Published"
-            }
-          ]
-        },
-        {
-          "key": "LastModifiedDate",
-          "label": "Last Modified Date",
-          "dataType": "date",
-          "displayType": "date"
-        },
-        {
-          "key": "StudentId",
-          "label": "Student",
-          "displayType": "student-autocomplete"
-        },
-        {
-          "key": "RegId",
-          "label": "Employee",
-          "displayType": "person-autocomplete"
-        },
-        {
-          "key": "parentType",
-          "label": "DataApiOption parent",
-          "required": false,
-          "displayType": "select",
-          "dynamicSelectConfig": {
-            "type": "parent-type",
-            "labelPath": "label"
-          }
-        },
-        {
-          "key": "childType",
-          "label": "DataApiOption child",
-          "required": false,
-          "displayType": "select",
-          "dynamicSelectConfig": {
-            "type": "child-type",
-            "labelPath": "label",
-            "parentFieldConfig": {
-              "parentType": "parent-type",
-              "key": "parentType"
-            }
-          }
-        }
+      "fieldKeysToDisplay": [
+        "DataApiOptionLabel",
+        "DataApiOptionCode",
+        "Filer",
+        "PublishStatus",
+        "LastModifiedDate",
+        "StudentId",
+        "RegId",
+        "parentType",
+        "childType"
       ],
       "buttons": [
         {
