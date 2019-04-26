@@ -1,6 +1,6 @@
 <button mat-icon-button id="previousItem"
         [disabled]="(currentPosition == undefined) || (currentPosition < 1 )"
-        (click)="navigate(currentPosition - 1)" matTooltip="Previous">
+        (click)="navigate(currentPosition - 1)" matTooltip="Previous" aria-label="Previous">
   <mat-icon class="mat-24" aria-label="Previous item">keyboard_arrow_up</mat-icon>
 </button>
 <span *ngIf="(currentPosition != undefined)">
@@ -8,7 +8,7 @@
         </span>
 <button mat-icon-button id="nextItem"
         [disabled]="(currentPosition == undefined) || (currentPosition === (adjacentIds.length - 1)) "
-        (click)="navigate(currentPosition + 1)" matTooltip="Next">
+        (click)="navigate(currentPosition + 1)" matTooltip="Next" aria-label="Next">
   <mat-icon class="mat-24" aria-label="Next item">keyboard_arrow_down</mat-icon>
 </button>
 

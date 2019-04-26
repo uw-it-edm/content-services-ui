@@ -4,6 +4,7 @@ import { browser } from 'protractor';
 import * as path from 'path';
 import { until } from 'selenium-webdriver';
 import { protractor } from 'protractor/built/ptor';
+import { ContentServicesUiPage } from '../app/app.po';
 
 const searchPage = new SearchPage();
 const demoConfig = require('../mocks/profile-api/demo.json');
@@ -32,6 +33,11 @@ describe('Create Page for Demo', () => {
   beforeEach(() => {
     page = new CreatePage();
     page.navigateTo();
+  });
+
+  xit('should have no accessibility violations', () => {
+    const app = new ContentServicesUiPage();
+    app.runAccessibilityChecks();
   });
 
   it('should display page title that matches config file', () => {
@@ -106,6 +112,7 @@ describe('Create Page for Demo', () => {
   it('should display error message with focus on Dismiss button when no file is attached', () => {
     page.inputField.sendKeys('any text');
     page.saveButton.click();
+
 
     expect(page.errorNotification.isDisplayed()).toBe(true);
     expect(page.dismissButton.getId()).toEqual(

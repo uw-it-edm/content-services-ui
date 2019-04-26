@@ -206,9 +206,9 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
   /** The aria-describedby attribute on the chip list for improved a11y. */
   @HostBinding('attr.aria-describedby') _ariaDescribedby: string = null;
 
-  @HostBinding('attr.aria-role')
+  @HostBinding('attr.role')
   get role(): string | null {
-    return this.empty ? null : 'person-autocomplete';
+    return this.empty ? null : 'listbox';
   }
 
   /** An object used to control when error messages are shown. */
