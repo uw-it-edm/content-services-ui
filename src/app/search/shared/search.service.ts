@@ -172,6 +172,9 @@ export class SearchService {
           } else if (fieldConfig.dataType === 'date') {
             // NOOP
           }
+        } else {
+          // Assume default datatype is string
+          newSort.term += '.lowercase';
         }
       }
 
