@@ -92,8 +92,11 @@ export class SearchDaterangePickerComponent implements OnInit, OnDestroy {
     const label = this.searchDaterangeConfig.filterLabel;
 
     if (!isNullOrUndefined(startDate) && !isNullOrUndefined(endDate)) {
-      const value = '[' + startDate.format('YYYY-MM-DD') + ' TO ' + endDate.format('YYYY-MM-DD') + ']';
-      const searchFilter = new SearchFilter(key, value, label);
+      // rounding up the range to the day.
+      // see https://www.elastic.co/guide/en/elasticsearch/reference/2.4/query-dsl-range-query.html#_date_math_and_rounding
+      const value = '[' + startDate.format('YYYY-MM-DD') + '||/d TO ' + endDate.format('YYYY-MM-DD') + '||/d]';
+      const displayValue = '[' + startDate.format('YYYY-MM-DD') + ' TO ' + endDate.format('YYYY-MM-DD') + ']';
+      const searchFilter = new SearchFilter(key, value, label, displayValue);
       console.log('adding new dateRangeFilter : ' + JSON.stringify(searchFilter));
 
       this.searchModel.addOrReplaceFilterForKey(searchFilter);

@@ -49,7 +49,8 @@ describe('SearchDaterangePickerComponent', () => {
     fixture.detectChanges();
 
     expect(component.searchModel.filters.length).toBe(1);
-    expect(component.searchModel.filters[0].value).toBe('[2018-01-01 TO 2018-02-01]');
+    expect(component.searchModel.filters[0].displayValue).toBe('[2018-01-01 TO 2018-02-01]');
+    expect(component.searchModel.filters[0].value).toBe('[2018-01-01||/d TO 2018-02-01||/d]');
     expect(component.searchModel.filters[0].key).toBe('testKey');
     expect(component.searchModel.filters[0].label).toBe('testLabel');
   });
@@ -64,7 +65,8 @@ describe('SearchDaterangePickerComponent', () => {
     fixture.detectChanges();
 
     expect(component.searchModel.filters.length).toBe(1);
-    expect(component.searchModel.filters[0].value).toBe('[2018-01-01 TO 2018-02-01]');
+    expect(component.searchModel.filters[0].displayValue).toBe('[2018-01-01 TO 2018-02-01]');
+    expect(component.searchModel.filters[0].value).toBe('[2018-01-01||/d TO 2018-02-01||/d]');
     expect(component.searchModel.filters[0].key).toBe('testKey');
     expect(component.searchModel.filters[0].label).toBe('testLabel');
   });
@@ -72,7 +74,8 @@ describe('SearchDaterangePickerComponent', () => {
   it('should emit a searchModel', () => {
     component.dateRangeFilterAdded.subscribe((searchModel: SearchModel) => {
       expect(component.searchModel.filters.length).toBe(1);
-      expect(component.searchModel.filters[0].value).toBe('[2018-01-01 TO 2018-02-01]');
+      expect(component.searchModel.filters[0].displayValue).toBe('[2018-01-01 TO 2018-02-01]');
+      expect(component.searchModel.filters[0].value).toBe('[2018-01-01||/d TO 2018-02-01||/d]');
       expect(component.searchModel.filters[0].key).toBe('testKey');
       expect(component.searchModel.filters[0].label).toBe('testLabel');
     });
