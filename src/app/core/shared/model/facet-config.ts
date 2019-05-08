@@ -8,4 +8,8 @@ export class FacetConfig {
   public size = 5;
 
   public maxSize = 5; // same default value as size for backward compatiblity
+
+  public type: string;
+
+  public labelPath: string;
 }
