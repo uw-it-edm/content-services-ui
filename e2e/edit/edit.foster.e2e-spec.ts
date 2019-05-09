@@ -35,29 +35,25 @@ describe('Foster Edit Page', () => {
     expect(page.getFileName(0)).toEqual(path.parse(textFilePath).base);
   });
 
-  it(
-    'should navigate through the items from Search results when the Prev and Next buttons are clicked',
-    () => {
-      // Check only the first 10 to avoid jasmine timing out
-      let total = expectedIds.length;
-      if (total > 10) {
-        total = 10;
+  xit('should navigate through the items from Search results when the Prev and Next buttons are clicked', () => {
+    // Check only the first 10 to avoid jasmine timing out
+    let total = expectedIds.length;
+    if (total > 10) {
+      total = 10;
+    }
+
+    for (let i = 0; i < total; i++) {
+      page = new EditPage(profile, expectedIds[i]);
+      browser.wait(ExpectedConditions.urlIs(page.pageUrl));
+
+      const paginatorCount = i + 1;
+      expect(page.getPaginatorText()).toEqual(paginatorCount + ' of ' + expectedIds.length);
+
+      if (paginatorCount < expectedIds.length) {
+        page.nextItemButton.click();
       }
-
-      for (let i = 0; i < total; i++) {
-        page = new EditPage(profile, expectedIds[i]);
-        browser.wait(ExpectedConditions.urlIs(page.pageUrl));
-
-        const paginatorCount = i + 1;
-        expect(page.getPaginatorText()).toEqual(paginatorCount + ' of ' + expectedIds.length);
-
-        if (paginatorCount < expectedIds.length) {
-          page.nextItemButton.click();
-        }
-      }
-    },
-    30000
-  );
+    }
+  }, 30000);
 
   it('should persist updated metadata', () => {
     page.dateInputField.get(0).clear();
