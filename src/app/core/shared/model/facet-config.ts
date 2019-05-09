@@ -9,7 +9,7 @@ export class FacetConfig {
 
   public maxSize = 5; // same default value as size for backward compatiblity
 
-  public type: string;
+  public dataApiValueType: string;
 
-  public labelPath: string;
+  public dataApiLabelPath: string;
 }
