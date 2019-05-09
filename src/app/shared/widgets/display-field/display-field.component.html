@@ -1,4 +1,4 @@
-<span *ngIf="field" [ngSwitch]="field.displayType">
+<span *ngIf="field" [ngSwitch]="getFieldType()">
  <span *ngSwitchCase="'date'">
   {{value | date: 'shortDate'}}
   </span>
@@ -12,6 +12,13 @@
   <span *ngSwitchCase="'person'">
     <app-person-display
       value="{{value}}"></app-person-display>
+  </span>
+  <span *ngSwitchCase="'dataApiValue'">
+    <app-data-api-display
+      value="{{value}}"
+      type="{{field.dynamicSelectConfig.type}}"
+      labelPath="{{field.dynamicSelectConfig.labelPath}}"
+    ></app-data-api-display>
   </span>
   <span *ngSwitchDefault>
    {{value}}

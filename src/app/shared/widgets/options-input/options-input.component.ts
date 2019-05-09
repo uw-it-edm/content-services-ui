@@ -110,8 +110,6 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
     this.formGroup.controls[INTERNAL_FIELD_NAME] = new FormControl();
   }
 
-  private splitRegex = /[.]/g;
-
   private initOptions() {
     const dynamicSelectConfig = this.fieldConfig.dynamicSelectConfig;
     if (dynamicSelectConfig) {
@@ -162,8 +160,7 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
   }
 
   private dataApiValuesToFieldOption(dynamicSelectConfig: DynamicSelectConfig, value: DataApiValue) {
-    const paths = dynamicSelectConfig.labelPath.split(this.splitRegex);
-    const displayValue = ObjectUtilities.getNestedObject(value.data, paths);
+    const displayValue = ObjectUtilities.getNestedObjectFromStringPath(value.data, dynamicSelectConfig.labelPath);
     return new FieldOption(value.valueId, displayValue);
   }
 
@@ -226,7 +223,7 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
   /** The aria-describedby attribute on the chip list for improved a11y. */
   @HostBinding('attr.aria-describedby') _ariaDescribedby: string;
 
-  @HostBinding('attr.aria-role')
+  @HostBinding('attr.role')
   /** https://www.w3.org/TR/wai-aria/roles#listbox */
   get role(): string | null {
     return this.empty ? null : 'listbox';

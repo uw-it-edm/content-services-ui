@@ -1,4 +1,5 @@
 import { PageConfig } from './page-config';
+import { Field } from './field';
 
 export class Config {
   appName: string;
@@ -6,6 +7,8 @@ export class Config {
   contentConfig: ContentConfig;
   pages: Map<string, PageConfig> = new Map<string, PageConfig>();
   customText: Map<string, CustomTextItem>;
+
+  availableFields: Array<Field>;
 }
 
 export class ContentConfig {

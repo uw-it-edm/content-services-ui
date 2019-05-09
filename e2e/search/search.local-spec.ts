@@ -1,6 +1,7 @@
 ///<reference path="../../node_modules/@types/jasminewd2/index.d.ts"/>
 import { SearchPage } from './search.po';
 import { CreatePage } from '../create/create.po';
+import { ContentServicesUiPage } from '../app/app.po';
 import { DisplaySearchPage } from './display-search.po';
 import { browser, protractor } from 'protractor';
 import * as moment from 'moment-timezone';
@@ -63,6 +64,11 @@ describe('Search Page', () => {
   beforeEach(() => {
     page = new SearchPage();
     page.navigateTo();
+  });
+
+  xit('should have no accessibility violations', () => {
+    const app = new ContentServicesUiPage();
+    app.runAccessibilityChecks();
   });
 
   it('should display page title', () => {

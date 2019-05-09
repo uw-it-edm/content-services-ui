@@ -8,6 +8,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ProgressService } from '../../shared/providers/progress.service';
 import { UserService } from '../../user/shared/user.service';
 import { TenantConfigInfo } from './model/tenant-config-info';
+import { Field } from './model/field';
 
 @Injectable()
 export class ConfigService {
@@ -56,12 +57,37 @@ export class ConfigService {
       return this.http
         .get<Config>(tenantInfo.downloadUrl, requestOptions)
         .pipe(
-          tap(config => this.configs.set(tenantInfo.tenantName, config)),
+          tap(config => this.configs.set(tenantInfo.tenantName, this.buildConfig(config))),
           publishReplay(1),
           refCount()
         )
         .toPromise();
     }
+  }
+
+  private buildConfig(config: Config) {
+    const availableFieldsMap = new Map<string, Field>();
+    if (config.availableFields) {
+      config.availableFields.map(value => availableFieldsMap.set(value.key, value));
+
+      Object.keys(config.pages).forEach(pageKey => {
+        const pageConfig = config.pages[pageKey];
+
+        if (!pageConfig.fieldsToDisplay) {
+          pageConfig.fieldsToDisplay = [];
+        }
+        if (pageConfig.fieldKeysToDisplay) {
+          pageConfig.fieldKeysToDisplay.forEach(field => {
+            if (!availableFieldsMap.has(field)) {
+              throw new Error('No Such field : ' + field);
+            }
+            pageConfig.fieldsToDisplay.push(availableFieldsMap.get(field));
+          });
+        }
+      });
+    }
+
+    return config;
   }
 
   getTenantList(): Observable<TenantConfigInfo[]> {

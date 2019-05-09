@@ -51,4 +51,18 @@ export class ContentServicesUiPage {
       browser.switchTo().window(windowHandle[tabIndex]);
     });
   }
+
+  runAccessibilityChecks() {
+    const AxeBuilder = require('axe-webdriverjs');
+    const util = require('util');
+
+    AxeBuilder(browser.driver)
+      .analyze()
+      .then(results => {
+        expect(results.violations.length).toBe(0, '\n' + util.inspect(results.violations, false, null, true));
+      })
+      .catch(err => {
+        console.log('Error running accessibility report: ' + err);
+      });
+  }
 }
