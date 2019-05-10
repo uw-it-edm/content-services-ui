@@ -11,6 +11,7 @@ let page: SearchPage;
 
 describe('Search Page', () => {
   const demoConfig = require('../mocks/profile-api/demo.json');
+  const searchData = require('../mocks/search-api/search.json');
 
   const selectAndVerifyDateRange = function(dateRangeText = 'Today') {
     const getExpectedDateRange = function(range: string = 'Today'): string {
@@ -259,9 +260,17 @@ describe('Search Page', () => {
   it('should navigate to Edit page when search results row is clicked on', () => {
     page.searchResultsRows.first().click();
 
-    const searchData = require('../mocks/search-api/search.json');
     const itemId = searchData.searchResults[0].id;
     const editPage = new EditPage('demo', itemId);
     expect(browser.getCurrentUrl()).toContain(editPage.pageUrl);
+  });
+
+  it('should display the label for data-api sourced results', () => {
+    const dataApiColumnKey = 'childType';
+    const searchResultsDataApiKey = searchData.searchResults[0].metadata[`${dataApiColumnKey}`];
+    const dataApiFileName = `child-type-${searchResultsDataApiKey}-get.json`;
+    const dataApiData = require('../mocks/data-api/' + dataApiFileName);
+
+    expect(page.getResultsByColumn(dataApiColumnKey)).toContain(dataApiData.data.label);
   });
 });
