@@ -1,6 +1,7 @@
 import { startWith, takeUntil } from 'rxjs/operators';
 import {
   AfterContentInit,
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
   DoCheck,
@@ -74,6 +75,7 @@ const INTERNAL_FIELD_NAME = 'personAutocomplete';
 })
 export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBase
   implements
+    AfterViewInit,
     ControlValueAccessor,
     MatFormFieldControl<string>,
     CanUpdateErrorState,

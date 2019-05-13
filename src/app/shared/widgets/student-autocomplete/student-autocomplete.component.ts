@@ -1,6 +1,7 @@
 import { startWith, takeUntil } from 'rxjs/operators';
 import {
   AfterContentInit,
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
   DoCheck,
@@ -75,6 +76,7 @@ const INTERNAL_FIELD_NAME = 'studentAutocomplete';
 })
 export class StudentAutocompleteComponent extends _StudentAutocompleteComponentBase
   implements
+    AfterViewInit,
     ControlValueAccessor,
     MatFormFieldControl<string>,
     CanUpdateErrorState,
