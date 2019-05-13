@@ -194,10 +194,10 @@
   dependencies:
     tslib "^1.9.0"
 
-"@angular/language-service@^7.2.14":
-  version "7.2.14"
-  resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-7.2.14.tgz#f0c90e030fbb3777293a2946c2cb4b79c152856f"
-  integrity sha512-YTU4ePAKikbIxNae9Qta8qaDArPgek7nhLEW9QfvrUAnpF7BkVboEI+7yLX5+NTfGf9cQ9cUfQ0TEreV+tMs7A==
+"@angular/language-service@^7.2.15":
+  version "7.2.15"
+  resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-7.2.15.tgz#b2ba33e472dc5e530047c408ff7a35deba4427b8"
+  integrity sha512-Ig5Jr7mnDelaZvSbUd9YhI5am3q1ku9xelAuwvtyDKvQJeKQj3BtTagcOgWrnQBfrJ/FsA/M5Zo48ncSsV0tqQ==
 
 "@angular/material@^7.3.3":
   version "7.3.3"
@@ -384,10 +384,10 @@
   dependencies:
     "@types/jasmine" "*"
 
-"@types/lodash@^4.14.123":
-  version "4.14.123"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.123.tgz#39be5d211478c8dd3bdae98ee75bb7efe4abfe4d"
-  integrity sha512-pQvPkc4Nltyx7G1Ww45OjVqUsJP4UsZm+GWJpigXgkikZqJgRm4c48g027o6tdgubWHwFRF15iFd+Y4Pmqv6+Q==
+"@types/lodash@^4.14.126":
+  version "4.14.126"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.126.tgz#47cff3ea014aa083194f8ca3ec351136c3786613"
+  integrity sha512-HxQ+wQnBtnL0LszZrVdMqWIlzZNyKuMLUb6swQ3mo6ysPqpAu7gfnapCQIi0B+Mrf0fNLZh8AWgJs2njejVasg==
 
 "@types/node@*", "@types/node@~12.0.0":
   version "12.0.0"
@@ -6434,10 +6434,10 @@ rxjs@6.3.3:
   dependencies:
     tslib "^1.9.0"
 
-rxjs@^6.1.0, rxjs@^6.3.3, rxjs@^6.5.1:
-  version "6.5.1"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.5.1.tgz#f7a005a9386361921b8524f38f54cbf80e5d08f4"
-  integrity sha512-y0j31WJc83wPu31vS1VlAFW5JGrnGC+j+TtGAa1fRQphy48+fDYiDmX8tjGloToEsMkxnouOg/1IzXGKkJnZMg==
+rxjs@^6.1.0, rxjs@^6.3.3, rxjs@^6.5.2:
+  version "6.5.2"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.5.2.tgz#2e35ce815cd46d84d02a209fb4e5921e051dbec7"
+  integrity sha512-HUb7j3kvb7p7eCUHE3FqjoDsC1xfZQ4AHFWfTKSpZ+sAhhz5X1WX0ZuUqWbzB2QhSLp3DoLUG+hMdEDKqWo2Zg==
   dependencies:
     tslib "^1.9.0"
 
