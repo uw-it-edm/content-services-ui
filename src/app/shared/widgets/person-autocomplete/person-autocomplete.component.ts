@@ -10,7 +10,8 @@ import {
   Input,
   OnDestroy,
   Optional,
-  Self
+  Self,
+  ViewChild
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import {
@@ -27,6 +28,7 @@ import {
   CanUpdateErrorState,
   ErrorStateMatcher,
   MatAutocompleteSelectedEvent,
+  MatAutocompleteTrigger,
   MatFormFieldControl,
   mixinErrorState
 } from '@angular/material';
@@ -87,6 +89,8 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
 
   filteredOptions: Person[] = [];
   initialized = false;
+
+  @ViewChild(MatAutocompleteTrigger) trigger;
 
   private initComponent() {
     this.initInternalForm();
@@ -297,6 +301,30 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
 
   ngAfterContentInit(): void {
     this.initComponent();
+  }
+
+  ngAfterViewInit() {
+    this.trigger.panelClosingActions.subscribe(e => {
+      if (!(e && e.source)) {
+        // user did not select from the list
+        // check if the value is valid
+        const regId =
+          this.formGroup &&
+          this.formGroup.controls[INTERNAL_FIELD_NAME] &&
+          this.formGroup.controls[INTERNAL_FIELD_NAME].value;
+        let person: Person = null;
+        if (this.filteredOptions && !isNullOrUndefined(regId)) {
+          person = this.filteredOptions.find((p: Person) => p.regId === regId);
+        }
+
+        // clear the value if the value is invalid
+        if (!person) {
+          this.setInternalValue(null);
+        }
+
+        this.trigger.closePanel();
+      }
+    });
   }
 
   ngDoCheck() {

@@ -10,8 +10,10 @@ import {
   Input,
   OnDestroy,
   Optional,
-  Self
+  Self,
+  ViewChild
 } from '@angular/core';
+
 import { Subject } from 'rxjs';
 import {
   ControlValueAccessor,
@@ -30,6 +32,7 @@ import {
   CanUpdateErrorState,
   ErrorStateMatcher,
   MatAutocompleteSelectedEvent,
+  MatAutocompleteTrigger,
   MatFormFieldControl,
   mixinErrorState
 } from '@angular/material';
@@ -87,6 +90,8 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
 
   filteredOptions: Student[] = [];
   initialized = false;
+
+  @ViewChild(MatAutocompleteTrigger) trigger;
 
   private initComponent() {
     this.initInternalForm();
@@ -316,6 +321,30 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
 
   ngAfterContentInit(): void {
     this.initComponent();
+  }
+
+  ngAfterViewInit() {
+    this.trigger.panelClosingActions.subscribe(e => {
+      if (!(e && e.source)) {
+        // user did not select from the list
+        // check if the existing value is valid
+        const studentNumber =
+          this.formGroup &&
+          this.formGroup.controls[INTERNAL_FIELD_NAME] &&
+          this.formGroup.controls[INTERNAL_FIELD_NAME].value;
+        let student: Student = null;
+        if (this.filteredOptions && !isNullOrUndefined(studentNumber)) {
+          student = this.filteredOptions.find((s: Student) => s.studentNumber === studentNumber);
+        }
+
+        // clear the value if the value is invalid
+        if (!student) {
+          this.setInternalValue(null);
+        }
+
+        this.trigger.closePanel();
+      }
+    });
   }
 
   ngDoCheck() {
