@@ -3,6 +3,9 @@
   "tenant": "Demo",
   "appName": "My demo app",
   "customText": {
+    "error.content.update.403": {
+      "label": "Unauthorized"
+    },
     "facet.metadata.mybooleanfield.0": {
       "label": "False"
     },
