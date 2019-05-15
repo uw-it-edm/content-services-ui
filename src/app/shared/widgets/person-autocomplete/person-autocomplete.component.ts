@@ -305,25 +305,28 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
     this.initComponent();
   }
 
+  validate() {
+    // check if the value is valid
+    const regId =
+      this.formGroup &&
+      this.formGroup.controls[INTERNAL_FIELD_NAME] &&
+      this.formGroup.controls[INTERNAL_FIELD_NAME].value;
+    let person: Person = null;
+    if (this.filteredOptions && !isNullOrUndefined(regId)) {
+      person = this.filteredOptions.find((p: Person) => p.regId === regId);
+    }
+
+    // clear the value if the value is invalid
+    if (!person && !isNullOrUndefined(regId)) {
+      this.setInternalValue(null);
+    }
+  }
+
   ngAfterViewInit() {
     this.trigger.panelClosingActions.subscribe(e => {
       if (!(e && e.source)) {
         // user did not select from the list
-        // check if the value is valid
-        const regId =
-          this.formGroup &&
-          this.formGroup.controls[INTERNAL_FIELD_NAME] &&
-          this.formGroup.controls[INTERNAL_FIELD_NAME].value;
-        let person: Person = null;
-        if (this.filteredOptions && !isNullOrUndefined(regId)) {
-          person = this.filteredOptions.find((p: Person) => p.regId === regId);
-        }
-
-        // clear the value if the value is invalid
-        if (!person) {
-          this.setInternalValue(null);
-        }
-
+        this.validate();
         this.trigger.closePanel();
       }
     });
