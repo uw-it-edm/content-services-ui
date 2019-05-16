@@ -135,4 +135,28 @@ describe('Edit Page', () => {
 
     expect(page.selectPanel.getText()).toEqual(getExpectedChildrenLabels().trim());
   });
+
+  it('should display customized error message on save if custom message is configured', () => {
+    const editPageForBadItemWithCustomMsg = new EditPage('demo', 'unauthorized-updatedid');
+    editPageForBadItemWithCustomMsg.navigateTo();
+
+    editPageForBadItemWithCustomMsg.inputField.sendKeys('any text');
+    editPageForBadItemWithCustomMsg.saveButton.click();
+
+    const customizedErrMsgLabel = demoConfig.customText['error.content.update.403'].label;
+    const expectedCustomizedMsg = `Failed to save 1 item\n${customizedErrMsgLabel}\nDismiss`;
+    expect(until.alertIsPresent()).toBeTruthy();
+    expect(editPageForBadItemWithCustomMsg.getSnackBarText()).toEqual(expectedCustomizedMsg);
+  });
+
+  it('should display default error message on save if custom message is not configured', () => {
+    const editPageForBadItemWithoutCustomMsg = new EditPage('demo2', 'unauthorized-updatedid');
+    editPageForBadItemWithoutCustomMsg.navigateTo();
+
+    editPageForBadItemWithoutCustomMsg.inputField.sendKeys('any text');
+    editPageForBadItemWithoutCustomMsg.saveButton.click();
+
+    expect(until.alertIsPresent()).toBeTruthy();
+    expect(editPageForBadItemWithoutCustomMsg.getSnackBarText()).toEqual('Failed to save 1 item\nDismiss');
+  });
 });
