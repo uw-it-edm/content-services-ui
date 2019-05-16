@@ -116,9 +116,6 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
               .subscribe((results: StudentSearchResults) => {
                 this.filteredOptions = results.content;
               });
-          } else if (!term || term.trim().length === 0) {
-            // if empty, the user probably wants to delete the value
-            this._propagateChanges(null);
           }
         }
       });
