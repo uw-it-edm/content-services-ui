@@ -230,13 +230,14 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
       }
 
       this.failures.forEach(failure => {
-        message +=
-          '\n' +
-          CustomTextUtilities.getCustomText(
-            this.config.customText,
-            'error.content.update.' + failure.status,
-            failure.message
-          ).label;
+        const customText = CustomTextUtilities.getCustomText(
+          this.config.customText,
+          'error.content.update.' + failure.status,
+          failure.message
+        );
+        if (customText.isCustom) {
+          message += '\n' + customText.label;
+        }
       });
     }
 
