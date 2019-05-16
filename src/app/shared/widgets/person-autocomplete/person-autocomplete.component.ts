@@ -111,15 +111,24 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
       .subscribe((term: string) => {
         if (this.initialized) {
           if (term && term.trim().length > 1) {
-            this.personService
-              .autocomplete(term)
-              .pipe(takeUntil(this.componentDestroyed))
-              .subscribe((results: PersonSearchResults) => {
-                this.filteredOptions = results.content;
-              });
-          } else {
+            let person: Person = null;
+            if (this.filteredOptions) {
+              person = this.filteredOptions.find((p: Person) => p.regId === term);
+            }
+
+            if (person) {
+              this.filteredOptions = [person];
+            } else {
+              this.personService
+                .autocomplete(term)
+                .pipe(takeUntil(this.componentDestroyed))
+                .subscribe((results: PersonSearchResults) => {
+                  this.filteredOptions = results.content;
+                });
+            }
+          } else if (!term || term.trim().length == 0) {
             // if empty, the user probably wants to delete the value
-            this._propagateChanges(term);
+            this._propagateChanges(null);
           }
         }
       });
