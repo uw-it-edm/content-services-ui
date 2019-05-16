@@ -116,9 +116,6 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
               .subscribe((results: StudentSearchResults) => {
                 this.filteredOptions = results.content;
               });
-          } else {
-            // if empty, the user probably wants to delete the value
-            this._propagateChanges(term);
           }
         }
       });
@@ -325,25 +322,28 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
     this.initComponent();
   }
 
+  validate() {
+    // check if the existing value is valid
+    const studentNumber =
+      this.formGroup &&
+      this.formGroup.controls[INTERNAL_FIELD_NAME] &&
+      this.formGroup.controls[INTERNAL_FIELD_NAME].value;
+    let student: Student = null;
+    if (this.filteredOptions && !isNullOrUndefined(studentNumber)) {
+      student = this.filteredOptions.find((s: Student) => s.studentNumber === studentNumber);
+    }
+
+    // clear the value if the value is invalid
+    if (!student && !isNullOrUndefined(studentNumber)) {
+      this.setInternalValue(null);
+    }
+  }
+
   ngAfterViewInit() {
     this.trigger.panelClosingActions.subscribe(e => {
       if (!(e && e.source)) {
         // user did not select from the list
-        // check if the existing value is valid
-        const studentNumber =
-          this.formGroup &&
-          this.formGroup.controls[INTERNAL_FIELD_NAME] &&
-          this.formGroup.controls[INTERNAL_FIELD_NAME].value;
-        let student: Student = null;
-        if (this.filteredOptions && !isNullOrUndefined(studentNumber)) {
-          student = this.filteredOptions.find((s: Student) => s.studentNumber === studentNumber);
-        }
-
-        // clear the value if the value is invalid
-        if (!student) {
-          this.setInternalValue(null);
-        }
-
+        this.validate();
         this.trigger.closePanel();
       }
     });
