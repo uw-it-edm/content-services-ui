@@ -323,8 +323,9 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
     }
 
     // clear the value if the value is invalid
-    if (!person && !isNullOrUndefined(regId)) {
+    if (!person) {
       this.setInternalValue(null);
+      this._propagateChanges(null);
     }
   }
 
