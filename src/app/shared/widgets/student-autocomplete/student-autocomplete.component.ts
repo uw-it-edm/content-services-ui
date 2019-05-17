@@ -334,8 +334,9 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
     }
 
     // clear the value if the value is invalid
-    if (!student && !isNullOrUndefined(studentNumber)) {
+    if (!student) {
       this.setInternalValue(null);
+      this._propagateChanges(null);
     }
   }
 
