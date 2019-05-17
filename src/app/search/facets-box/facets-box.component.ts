@@ -1,9 +1,11 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { SearchModel } from '../shared/model/search-model';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
+import { FacetConfig } from '../../core/shared/model/facet-config';
 import { Observable, Subject } from 'rxjs';
 import { SearchResults } from '../shared/model/search-result';
 import { SearchFilter } from '../shared/model/search-filter';
+import { DataApiValueDisplayComponent } from '../../shared/widgets/data-api-display/data-api-value-display.component';
 import { isUndefined } from '../../core/util/node-utilities';
 import { takeUntil } from 'rxjs/operators';
 import { ConfigResolver } from '../../routing/shared/config-resolver.service';
@@ -30,6 +32,9 @@ export class FacetsBoxComponent implements OnInit, OnDestroy {
   customText: Map<string, CustomTextItem>;
 
   searchResults: SearchResults;
+
+  // capture data api display components here for use later to get facet display value
+  @ViewChildren(DataApiValueDisplayComponent) dataApiDisplayComponents!: QueryList<DataApiValueDisplayComponent>;
 
   constructor(private configResolver: ConfigResolver, private liveAnnouncer: LiveAnnouncer) {}
 
@@ -78,10 +83,21 @@ export class FacetsBoxComponent implements OnInit, OnDestroy {
     });
   }
 
-  addFacetFilter(key: string, value: string, label: string) {
+  addFacetFilter(key: string, value: string, label: string, facetConfig?: FacetConfig) {
+    // check to see if we need to use facet display value for facet filter
+    let dataApiDisplayComponent = null;
+    if (facetConfig && facetConfig.dataApiValueType && facetConfig.dataApiLabelPath && value) {
+      dataApiDisplayComponent = this.dataApiDisplayComponents.find(
+        e =>
+          e.type === facetConfig.dataApiValueType && e.labelPath === facetConfig.dataApiLabelPath && e.value === value
+      );
+    }
+
     const customizedText = CustomTextUtilities.getCustomText(this.customText, this.getCustomTextKey(key, value), value);
     let searchFilter;
-    if (customizedText.isCustom) {
+    if (dataApiDisplayComponent && dataApiDisplayComponent.displayValue) {
+      searchFilter = new SearchFilter(key, value, label, dataApiDisplayComponent.displayValue);
+    } else if (customizedText.isCustom) {
       searchFilter = new SearchFilter(key, value, label, customizedText.label);
     } else {
       searchFilter = new SearchFilter(key, value, label);
