@@ -70,7 +70,7 @@ describe('FacetsBoxComponent', () => {
 
     // create a DataApiDisplayComponen instance
     const dataApiDisplayComponentFixture = TestBed.createComponent(DataApiValueDisplayComponent);
-    let dataApiDisplayComponent = dataApiDisplayComponentFixture.componentInstance;
+    const dataApiDisplayComponent = dataApiDisplayComponentFixture.componentInstance;
     dataApiDisplayComponent.value = 'testValue';
     dataApiDisplayComponent.type = 'my-type';
     dataApiDisplayComponent.labelPath = 'label';
@@ -94,7 +94,7 @@ describe('FacetsBoxComponent', () => {
   });
 
   it('should use display value', () => {
-    let facetConfig = new FacetConfig();
+    const facetConfig = new FacetConfig();
     facetConfig.key = 'testKey';
     facetConfig.label = 'testLabel';
     facetConfig.dataApiValueType = 'my-type';
