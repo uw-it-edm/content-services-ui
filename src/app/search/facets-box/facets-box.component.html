@@ -3,7 +3,7 @@
     <fieldset *ngIf="searchResults?.facets.get(facetConfig.key)" >
       <legend>{{facetConfig.label}}</legend>
         <mat-list dense>
-          <mat-list-item class="uw-highlight-row" (click)="addFacetFilter(facetConfig.key,facetResult.key, facetConfig.label)"
+          <mat-list-item class="uw-highlight-row" (click)="addFacetFilter(facetConfig.key,facetResult.key, facetConfig.label, facetConfig)"
             *ngFor="let facetResult of searchResults?.facets.get(facetConfig.key).buckets.slice(0, facetConfig.cursize)">
             <span *ngIf="hasSelectedFacet(facetConfig.key); else showLink">
               <span *ngIf="facetConfig.dataApiValueType && facetConfig.dataApiLabelPath && facetResult.key; else useCustomText">
@@ -14,7 +14,7 @@
               </ng-template>
             </span>
             <ng-template #showLink>
-              <a *ngIf="facetConfig.dataApiValueType && facetConfig.dataApiLabelPath && facetResult.key; else useCustomText" [routerLink]="" (click)="addFacetFilter(facetConfig.key,facetResult.key, facetConfig.label)">
+              <a *ngIf="facetConfig.dataApiValueType && facetConfig.dataApiLabelPath && facetResult.key; else useCustomText" [routerLink]="" (click)="addFacetFilter(facetConfig.key,facetResult.key, facetConfig.label, facetConfig)">
                 <app-data-api-display [value]="facetResult.key" [type]="facetConfig.dataApiValueType" [labelPath]="facetConfig.dataApiLabelPath"></app-data-api-display> ({{facetResult.count}})
               </a>
               <ng-template #useCustomText>
