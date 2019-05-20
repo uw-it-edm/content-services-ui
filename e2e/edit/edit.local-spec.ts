@@ -1,9 +1,9 @@
-import { EditPage } from './edit.po';
-import { browser, ExpectedConditions } from 'protractor';
-import { SearchPage } from '../search/search.po';
-import { ContentServicesUiPage } from '../app/app.po';
-import { until } from 'selenium-webdriver';
-import { protractor } from 'protractor/built/ptor';
+import {EditPage} from './edit.po';
+import {browser, ExpectedConditions} from 'protractor';
+import {SearchPage} from '../search/search.po';
+import {ContentServicesUiPage} from '../app/app.po';
+import {until} from 'selenium-webdriver';
+import {protractor} from 'protractor/built/ptor';
 
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
@@ -144,6 +144,7 @@ describe('Edit Page', () => {
     editPageForBadItemWithCustomMsg.saveButton.click();
 
     const customizedErrMsgLabel = demoConfig.customText['error.content.update.403'].label;
+    expect(customizedErrMsgLabel.length).not.toEqual(0, 'Custom error message is not configured in demo profile.');
     const expectedCustomizedMsg = `Failed to save 1 item\n${customizedErrMsgLabel}\nDismiss`;
     expect(until.alertIsPresent()).toBeTruthy();
     expect(editPageForBadItemWithCustomMsg.getSnackBarText()).toEqual(expectedCustomizedMsg);
