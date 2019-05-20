@@ -13,6 +13,7 @@ import { Observable, of } from 'rxjs';
 import { ConfigResolver } from '../../routing/shared/config-resolver.service';
 import { CustomTextItem } from '../../core/shared/model/config';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { SearchPagination } from '../shared/model/search-pagination';
 
 class MockConfigResolver extends ConfigResolver {
   constructor() {
@@ -63,5 +64,18 @@ describe('FacetsBoxComponent', () => {
     const searchFilter = new SearchFilter('testKey', 'testString', 'testLabel');
     component.addFacetFilter(searchFilter.key, searchFilter.value, searchFilter.label);
     expect(component.searchModel.filters).toEqual([searchFilter]);
+  });
+
+  it('should reset pagination', () => {
+    const searchPagination = new SearchPagination();
+    searchPagination.pageSize = 123;
+    searchPagination.pageIndex = 2;
+    component.searchModel.pagination = searchPagination;
+
+    const searchFilter = new SearchFilter('testKey', 'testString', 'testLabel');
+    component.addFacetFilter(searchFilter.key, searchFilter.value, searchFilter.label);
+
+    expect(component.searchModel.pagination.pageSize).toEqual(50);
+    expect(component.searchModel.pagination.pageIndex).toEqual(0);
   });
 });

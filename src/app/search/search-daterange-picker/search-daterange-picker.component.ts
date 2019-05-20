@@ -8,6 +8,7 @@ import { SearchFilter } from '../shared/model/search-filter';
 import { SearchDaterangeConfig } from '../../core/shared/model/search-daterange-config';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { takeUntil } from 'rxjs/operators';
+import { SearchPagination } from '../shared/model/search-pagination';
 
 @Component({
   selector: 'app-search-daterange-picker',
@@ -104,6 +105,8 @@ export class SearchDaterangePickerComponent implements OnInit, OnDestroy {
       console.log('removing  dateRangeFilter for key: ' + key);
       this.searchModel.removeFilterForKey(key);
     }
+
+    this.searchModel.pagination = new SearchPagination();
 
     this.dateRangeFilterAdded.emit(this.searchModel);
   }
