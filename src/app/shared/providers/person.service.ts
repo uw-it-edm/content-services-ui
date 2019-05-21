@@ -78,10 +78,10 @@ export class PersonService {
     }
 
     if (searchModel.lastName) {
-      searchModel.lastName = '*' + searchModel.lastName + '*';
+      searchModel.lastName = searchModel.lastName + '*';
     }
     if (searchModel.firstName) {
-      searchModel.firstName = '*' + searchModel.firstName + '*';
+      searchModel.firstName = searchModel.firstName + '*';
     }
 
     return searchModel;
