@@ -8,6 +8,7 @@ import { SearchFilter } from '../shared/model/search-filter';
 import { SearchDaterangeConfig } from '../../core/shared/model/search-daterange-config';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { takeUntil } from 'rxjs/operators';
+import { SearchPagination } from '../shared/model/search-pagination';
 
 @Component({
   selector: 'app-search-daterange-picker',
@@ -40,18 +41,21 @@ export class SearchDaterangePickerComponent implements OnInit, OnDestroy {
     this.formGroup.controls['internalDateRange'] = new FormControl();
     this.searchModel$.pipe(takeUntil(this.componentDestroyed)).subscribe(searchModel => {
       this.searchModel = searchModel;
-      // TODO: if filter is removed, clear daterange-picker textfield
+
+      if (!this.searchModel.hasFilterForKey(this.searchDaterangeConfig.filterKey)) {
+        if (!this.formGroup.controls['internalDateRange'].pristine) {
+          this.formGroup.controls['internalDateRange'].reset(undefined);
+
+          this.formGroup.controls['internalDateRange'].markAsPristine();
+        }
+      }
     });
 
     this.loadPageConfig();
   }
 
   datesUpdated(selected) {
-    if (
-      selected &&
-      ((selected.startDate && selected.endDate) ||
-        (isNullOrUndefined(selected.startDate) && isNullOrUndefined(selected.endDate)))
-    ) {
+    if (selected && !isNullOrUndefined(selected.startDate) && !isNullOrUndefined(selected.endDate)) {
       const startDate: Moment = this.createLosAngelesMoment(selected.startDate);
       const endDate: Moment = this.createLosAngelesMoment(selected.endDate);
       this.addDateRangeFilter(startDate, endDate);
@@ -104,6 +108,8 @@ export class SearchDaterangePickerComponent implements OnInit, OnDestroy {
       console.log('removing  dateRangeFilter for key: ' + key);
       this.searchModel.removeFilterForKey(key);
     }
+
+    this.searchModel.pagination = new SearchPagination();
 
     this.dateRangeFilterAdded.emit(this.searchModel);
   }
