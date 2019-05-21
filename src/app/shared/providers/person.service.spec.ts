@@ -122,7 +122,7 @@ describe('PersonService', () => {
     personService.autocomplete('user, test').subscribe((result: PersonSearchResults) => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       expect(httpSpy.calls.first().args[0]).toBe(expectedSearchUrl);
-      expect(httpSpy.calls.first().args[1].params.toString()).toEqual('firstName=test&lastName=user');
+      expect(httpSpy.calls.first().args[1].params.toString()).toEqual('firstName=test*&lastName=user*');
       expect(result.totalElements).toBe(1);
       expect(result.content[0].regId).toBe('ABCD');
     });
@@ -135,7 +135,7 @@ describe('PersonService', () => {
     personService.autocomplete('test user').subscribe((result: PersonSearchResults) => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       expect(httpSpy.calls.first().args[0]).toBe(expectedSearchUrl);
-      expect(httpSpy.calls.first().args[1].params.toString()).toEqual('firstName=test&lastName=user');
+      expect(httpSpy.calls.first().args[1].params.toString()).toEqual('firstName=test*&lastName=user*');
       expect(result.totalElements).toBe(1);
       expect(result.content[0].regId).toBe('ABCD');
     });
@@ -146,7 +146,7 @@ describe('PersonService', () => {
     personService.autocomplete('user').subscribe((result: PersonSearchResults) => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       expect(httpSpy.calls.first().args[0]).toBe(expectedSearchUrl);
-      expect(httpSpy.calls.first().args[1].params.toString()).toEqual('lastName=user');
+      expect(httpSpy.calls.first().args[1].params.toString()).toEqual('lastName=user*');
       expect(result.totalElements).toBe(1);
       expect(result.content[0].regId).toBe('ABCD');
     });
@@ -157,9 +157,9 @@ describe('PersonService', () => {
     personService.autocomplete('test').subscribe((result: PersonSearchResults) => {
       expect(httpSpy).toHaveBeenCalledTimes(2);
       expect(httpSpy.calls.first().args[0]).toBe(expectedSearchUrl);
-      expect(httpSpy.calls.first().args[1].params.toString()).toEqual('lastName=test');
+      expect(httpSpy.calls.first().args[1].params.toString()).toEqual('lastName=test*');
       expect(httpSpy.calls.mostRecent().args[0]).toBe(expectedSearchUrl);
-      expect(httpSpy.calls.mostRecent().args[1].params.toString()).toEqual('firstName=test');
+      expect(httpSpy.calls.mostRecent().args[1].params.toString()).toEqual('firstName=test*');
       expect(result.totalElements).toBe(1);
       expect(result.content[0].regId).toBe('ABCD');
     });
@@ -170,7 +170,7 @@ describe('PersonService', () => {
     personService.autocomplete('user, test').subscribe((result: PersonSearchResults) => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       expect(httpSpy.calls.first().args[0]).toBe(expectedSearchUrl);
-      expect(httpSpy.calls.first().args[1].params.toString()).toEqual('firstName=test&lastName=user');
+      expect(httpSpy.calls.first().args[1].params.toString()).toEqual('firstName=test*&lastName=user*');
       expect(result.totalElements).toBe(0);
       expect(result.content).toEqual([]);
     });
@@ -181,7 +181,7 @@ describe('PersonService', () => {
     personService.autocomplete('test user').subscribe((result: PersonSearchResults) => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       expect(httpSpy.calls.first().args[0]).toBe(expectedSearchUrl);
-      expect(httpSpy.calls.first().args[1].params.toString()).toEqual('firstName=test&lastName=user');
+      expect(httpSpy.calls.first().args[1].params.toString()).toEqual('firstName=test*&lastName=user*');
       expect(result.totalElements).toBe(0);
       expect(result.content).toEqual([]);
     });

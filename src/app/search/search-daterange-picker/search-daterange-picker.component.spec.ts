@@ -10,6 +10,7 @@ import { Moment } from 'moment';
 import { SearchFilter } from '../shared/model/search-filter';
 import * as moment from 'moment-timezone';
 import { of } from 'rxjs';
+import { SearchPagination } from '../shared/model/search-pagination';
 
 describe('SearchDaterangePickerComponent', () => {
   let component: SearchDaterangePickerComponent;
@@ -17,7 +18,7 @@ describe('SearchDaterangePickerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, NgxDaterangepickerMd, MaterialConfigModule, NoopAnimationsModule],
+      imports: [ReactiveFormsModule, NgxDaterangepickerMd.forRoot(), MaterialConfigModule, NoopAnimationsModule],
       declarations: [SearchDaterangePickerComponent]
     }).compileComponents();
   }));
@@ -45,7 +46,8 @@ describe('SearchDaterangePickerComponent', () => {
     const startDate: Moment = moment('01-01-2018', 'MM-DD-YYYY');
     const endDate: Moment = moment('02-01-2018', 'MM-DD-YYYY');
 
-    component.formGroup.controls['internalDateRange'].patchValue({ startDate: startDate, endDate: endDate });
+    component.datesUpdated({ startDate: startDate, endDate: endDate });
+
     fixture.detectChanges();
 
     expect(component.searchModel.filters.length).toBe(1);
@@ -61,7 +63,7 @@ describe('SearchDaterangePickerComponent', () => {
 
     const startDate: Moment = moment('01-01-2018', 'MM-DD-YYYY');
     const endDate: Moment = moment('02-01-2018', 'MM-DD-YYYY');
-    component.formGroup.controls['internalDateRange'].patchValue({ startDate: startDate, endDate: endDate });
+    component.datesUpdated({ startDate: startDate, endDate: endDate });
     fixture.detectChanges();
 
     expect(component.searchModel.filters.length).toBe(1);
@@ -84,5 +86,20 @@ describe('SearchDaterangePickerComponent', () => {
     const endDate: Moment = moment('02-01-2018', 'MM-DD-YYYY');
 
     component.datesUpdated({ startDate: startDate, endDate: endDate });
+  });
+
+  it('should reset pagination', () => {
+    const searchPagination = new SearchPagination();
+    searchPagination.pageSize = 123;
+    searchPagination.pageIndex = 2;
+    component.searchModel.pagination = searchPagination;
+
+    const startDate: Moment = moment('01-01-2018', 'MM-DD-YYYY');
+    const endDate: Moment = moment('02-01-2018', 'MM-DD-YYYY');
+    component.datesUpdated({ startDate: startDate, endDate: endDate });
+    fixture.detectChanges();
+
+    expect(component.searchModel.pagination.pageSize).toEqual(50);
+    expect(component.searchModel.pagination.pageIndex).toEqual(0);
   });
 });

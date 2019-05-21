@@ -8,6 +8,7 @@ import { SearchAutocomplete } from '../shared/search-autocomplete/search-autocom
 import { SearchFilterableResult } from '../../shared/shared/model/search-filterable-result';
 import { takeUntil } from 'rxjs/operators';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { SearchPagination } from '../shared/model/search-pagination';
 
 @Component({
   selector: 'app-search-box',
@@ -67,6 +68,8 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
 
   executeSearch() {
     this.searchModel.stringQuery = this.internalSearchField;
+
+    this.searchModel.pagination = new SearchPagination();
 
     this.searchEvent.emit(this.searchModel);
   }
