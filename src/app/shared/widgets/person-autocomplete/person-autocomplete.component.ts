@@ -1,7 +1,6 @@
-import { startWith, takeUntil } from 'rxjs/operators';
+import { debounceTime, filter, startWith, switchMap, takeUntil, tap } from 'rxjs/operators';
 import {
   AfterContentInit,
-  AfterViewInit,
   ChangeDetectorRef,
   Component,
   DoCheck,
@@ -16,6 +15,7 @@ import {
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import {
+  AbstractControl,
   ControlValueAccessor,
   FormBuilder,
   FormControl,
@@ -28,12 +28,11 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
   CanUpdateErrorState,
   ErrorStateMatcher,
-  MatAutocompleteSelectedEvent,
   MatAutocompleteTrigger,
   MatFormFieldControl,
   mixinErrorState
 } from '@angular/material';
-import { FocusMonitor } from '@angular/cdk/a11y';
+import { FocusMonitor, LiveAnnouncer } from '@angular/cdk/a11y';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
 import { PersonSearchResults } from '../../shared/model/person-search-results';
 import { Person } from '../../shared/model/person';
@@ -55,6 +54,18 @@ export const _PersonAutocompleteComponentBase = mixinErrorState(PersonAutocomple
 let nextUniqueId = 0;
 const INTERNAL_FIELD_NAME = 'personAutocomplete';
 
+// This Validator checks if the selected value is an object ( not a string as it'd be a value for the typeahead
+export function RequirePersonMatch(control: AbstractControl) {
+  const selection: any = control.value;
+  if (!selection) {
+    return null;
+  }
+  if (typeof selection === 'string') {
+    return { incorrect: true };
+  }
+  return null;
+}
+
 /* tslint:disable:member-ordering use-host-property-decorator*/
 @Component({
   selector: 'app-person-autocomplete',
@@ -75,7 +86,6 @@ const INTERNAL_FIELD_NAME = 'personAutocomplete';
 })
 export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBase
   implements
-    AfterViewInit,
     ControlValueAccessor,
     MatFormFieldControl<string>,
     CanUpdateErrorState,
@@ -84,9 +94,30 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
     OnDestroy {
   // Component logic
   formGroup: FormGroup;
+  private isLoading: boolean;
 
   get internalFieldName(): string {
     return INTERNAL_FIELD_NAME;
+  }
+
+  private isInternalFieldValid() {
+    if (
+      this.formGroup &&
+      this.formGroup.controls &&
+      this.formGroup.controls[INTERNAL_FIELD_NAME] &&
+      this.formGroup.controls[INTERNAL_FIELD_NAME].invalid
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  panelClosed() {
+    if (!this.isInternalFieldValid()) {
+      // Reset parent value with initial value
+      this.setInternalValue(this._value);
+    }
   }
 
   filteredOptions: Person[] = [];
@@ -103,37 +134,72 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
   }
 
   private initInternalFormUpdateListener() {
+    // This will listen to every INTERNAL_FIELD_NAME value changes where the content is a non empty string.
     this.formGroup.controls[INTERNAL_FIELD_NAME].valueChanges
       .pipe(
-        startWith(null),
-        takeUntil(this.componentDestroyed)
+        startWith(''),
+        takeUntil(this.componentDestroyed),
+        filter(term => {
+          return typeof term === 'string' && term.length > 0;
+        }),
+        tap(() => (this.isLoading = true)),
+        debounceTime(300),
+        tap(term => console.log('searching for ' + term)),
+        switchMap(term => this.personService.autocomplete(term))
       )
-      .subscribe((term: string) => {
+      .subscribe((searchResults: PersonSearchResults) => {
         if (this.initialized) {
-          if (term && term.trim().length > 1) {
-            let person: Person = null;
-            if (this.filteredOptions) {
-              person = this.filteredOptions.find((p: Person) => p.regId === term);
-            }
+          this.filteredOptions = searchResults.content;
+          this.announceSearchResults();
+          this.isLoading = false;
+        }
+      });
 
-            if (person) {
-              this.filteredOptions = [person];
-            } else {
-              this.personService
-                .autocomplete(term)
-                .pipe(takeUntil(this.componentDestroyed))
-                .subscribe((results: PersonSearchResults) => {
-                  this.filteredOptions = results.content;
-                });
-            }
+    // This will listen to every INTERNAL_FIELD_NAME value changes where the type is a Person
+    this.formGroup.controls[INTERNAL_FIELD_NAME].valueChanges
+      .pipe(
+        startWith(''),
+        filter(value => {
+          return !value || value instanceof Person;
+        })
+      )
+      .subscribe((person: Person) => {
+        if (this.initialized) {
+          if (person) {
+            this.announcePersonSelection(person);
+            this._propagateChanges(person.regId);
+          } else {
+            this._propagateChanges(null);
           }
         }
       });
   }
 
+  private announcePersonSelection(person: Person) {
+    const announcementMessage = 'selected ' + person.getNameAndEmployeeId();
+    console.log('liveAnnouncer : ' + announcementMessage);
+
+    this.liveAnnouncer.announce(announcementMessage, 'polite');
+  }
+
+  private announceSearchResults() {
+    let announcementMessage;
+    if (!this.filteredOptions || this.filteredOptions.length === 0) {
+      announcementMessage = 'No results';
+    } else if (this.filteredOptions.length === 1) {
+      announcementMessage = 'Found 1 person : ' + this.filteredOptions[0].getNameAndEmployeeId();
+    } else if (this.filteredOptions.length > 1) {
+      announcementMessage = 'Found ' + this.filteredOptions.length + ' persons';
+    }
+
+    console.log('liveAnnouncer : ' + announcementMessage);
+
+    this.liveAnnouncer.announce(announcementMessage, 'polite');
+  }
+
   private initInternalForm() {
     this.formGroup = this.fb.group({});
-    this.formGroup.controls[INTERNAL_FIELD_NAME] = new FormControl();
+    this.formGroup.controls[INTERNAL_FIELD_NAME] = new FormControl('', [RequirePersonMatch]);
   }
 
   private setInnerInputDisableState() {
@@ -165,10 +231,7 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
           .pipe(takeUntil(this.componentDestroyed))
           .subscribe((result: Person) => {
             this.filteredOptions = [result];
-            const emptyPerson = new Person();
-            emptyPerson.displayName = 'none';
-            this.filteredOptions.unshift(emptyPerson);
-            this.formGroup.controls[INTERNAL_FIELD_NAME].patchValue(result.regId);
+            this.formGroup.controls[INTERNAL_FIELD_NAME].patchValue(result);
           });
       }
     } else {
@@ -176,19 +239,8 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
     }
   }
 
-  onSelect(event: MatAutocompleteSelectedEvent) {
-    console.log('select ' + event.option.value);
-    this._propagateChanges(event.option.value);
-  }
-
-  get displayFn() {
-    return (regId: string) => {
-      if (this.filteredOptions && regId) {
-        const person: Person = this.filteredOptions.find((p: Person) => p.regId === regId);
-        return person ? Person.convertToDisplayName(person) : null;
-      }
-      return null;
-    };
+  displayFn(person?: Person) {
+    return person && person instanceof Person ? person.getNameAndEmployeeId() : undefined;
   }
 
   // End Component logic
@@ -288,6 +340,7 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
   }
 
   constructor(
+    private liveAnnouncer: LiveAnnouncer,
     private personService: PersonService,
     private fb: FormBuilder,
     private fm: FocusMonitor,
@@ -309,34 +362,6 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
 
   ngAfterContentInit(): void {
     this.initComponent();
-  }
-
-  validate() {
-    // check if the value is valid
-    const regId =
-      this.formGroup &&
-      this.formGroup.controls[INTERNAL_FIELD_NAME] &&
-      this.formGroup.controls[INTERNAL_FIELD_NAME].value;
-    let person: Person = null;
-    if (this.filteredOptions && !isNullOrUndefined(regId)) {
-      person = this.filteredOptions.find((p: Person) => p.regId === regId);
-    }
-
-    // clear the value if the value is invalid
-    if (!person) {
-      this.setInternalValue(null);
-      this._propagateChanges(null);
-    }
-  }
-
-  ngAfterViewInit() {
-    this.trigger.panelClosingActions.subscribe(e => {
-      if (!(e && e.source)) {
-        // user did not select from the list
-        this.validate();
-        this.trigger.closePanel();
-      }
-    });
   }
 
   ngDoCheck() {

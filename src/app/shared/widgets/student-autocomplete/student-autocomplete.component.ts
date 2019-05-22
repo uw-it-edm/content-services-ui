@@ -1,7 +1,6 @@
-import { startWith, takeUntil } from 'rxjs/operators';
+import { debounceTime, filter, startWith, switchMap, takeUntil, tap } from 'rxjs/operators';
 import {
   AfterContentInit,
-  AfterViewInit,
   ChangeDetectorRef,
   Component,
   DoCheck,
@@ -17,6 +16,7 @@ import {
 
 import { Subject } from 'rxjs';
 import {
+  AbstractControl,
   ControlValueAccessor,
   FormBuilder,
   FormControl,
@@ -32,12 +32,11 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
   CanUpdateErrorState,
   ErrorStateMatcher,
-  MatAutocompleteSelectedEvent,
   MatAutocompleteTrigger,
   MatFormFieldControl,
   mixinErrorState
 } from '@angular/material';
-import { FocusMonitor } from '@angular/cdk/a11y';
+import { FocusMonitor, LiveAnnouncer } from '@angular/cdk/a11y';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
 
 // Boilerplate for applying mixins to StudentAutocompleteComponent.
@@ -55,6 +54,18 @@ export const _StudentAutocompleteComponentBase = mixinErrorState(StudentAutocomp
 
 let nextUniqueId = 0;
 const INTERNAL_FIELD_NAME = 'studentAutocomplete';
+
+// This Validator checks if the selected value is an object ( not a string as it'd be a value for the typeahead
+export function RequireStudentMatch(control: AbstractControl) {
+  const selection: any = control.value;
+  if (!selection) {
+    return null;
+  }
+  if (typeof selection === 'string') {
+    return { incorrect: true };
+  }
+  return null;
+}
 
 /* tslint:disable:member-ordering use-host-property-decorator*/
 @Component({
@@ -76,7 +87,6 @@ const INTERNAL_FIELD_NAME = 'studentAutocomplete';
 })
 export class StudentAutocompleteComponent extends _StudentAutocompleteComponentBase
   implements
-    AfterViewInit,
     ControlValueAccessor,
     MatFormFieldControl<string>,
     CanUpdateErrorState,
@@ -85,9 +95,30 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
     OnDestroy {
   // Component logic
   formGroup: FormGroup;
+  private isLoading: boolean;
 
   get internalFieldName(): string {
     return INTERNAL_FIELD_NAME;
+  }
+
+  private isInternalFieldValid() {
+    if (
+      this.formGroup &&
+      this.formGroup.controls &&
+      this.formGroup.controls[INTERNAL_FIELD_NAME] &&
+      this.formGroup.controls[INTERNAL_FIELD_NAME].invalid
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  panelClosed() {
+    if (!this.isInternalFieldValid()) {
+      // Reset parent value with initial value
+      this.setInternalValue(this._value);
+    }
   }
 
   filteredOptions: Student[] = [];
@@ -104,26 +135,72 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
   }
 
   private initInternalFormUpdateListener() {
-    this.formGroup.controls['studentAutocomplete'].valueChanges
-      .pipe(startWith(null))
-      .pipe(takeUntil(this.componentDestroyed))
-      .subscribe((term: string) => {
+    // This will listen to every INTERNAL_FIELD_NAME value changes where the content is a non empty string.
+    this.formGroup.controls[INTERNAL_FIELD_NAME].valueChanges
+      .pipe(
+        startWith(''),
+        takeUntil(this.componentDestroyed),
+        filter(term => {
+          return typeof term === 'string' && term.length > 0;
+        }),
+        tap(() => (this.isLoading = true)),
+        debounceTime(300),
+        tap(term => console.log('searching for ' + term)),
+        switchMap(term => this.studentService.autocomplete(term))
+      )
+      .subscribe((searchResults: StudentSearchResults) => {
         if (this.initialized) {
-          if (term && term.trim().length > 1) {
-            this.studentService
-              .autocomplete(term)
-              .pipe(takeUntil(this.componentDestroyed))
-              .subscribe((results: StudentSearchResults) => {
-                this.filteredOptions = results.content;
-              });
+          this.filteredOptions = searchResults.content;
+          this.announceSearchResults();
+          this.isLoading = false;
+        }
+      });
+
+    // This will listen to every INTERNAL_FIELD_NAME value changes where the type is a Student
+    this.formGroup.controls[INTERNAL_FIELD_NAME].valueChanges
+      .pipe(
+        startWith(''),
+        filter(value => {
+          return !value || value instanceof Student;
+        })
+      )
+      .subscribe((student: Student) => {
+        if (this.initialized) {
+          if (student) {
+            this.announceStudentSelection(student);
+            this._propagateChanges(student.studentNumber);
+          } else {
+            this._propagateChanges(null);
           }
         }
       });
   }
 
+  private announceStudentSelection(student: Student) {
+    const announcementMessage = 'selected ' + student.getNameAndStudentId();
+    console.log('liveAnnouncer : ' + announcementMessage);
+
+    this.liveAnnouncer.announce(announcementMessage, 'polite');
+  }
+
+  private announceSearchResults() {
+    let announcementMessage;
+    if (!this.filteredOptions || this.filteredOptions.length === 0) {
+      announcementMessage = 'No student for search';
+    } else if (this.filteredOptions.length === 1) {
+      announcementMessage = 'Found 1 student : ' + this.filteredOptions[0].getNameAndStudentId();
+    } else if (this.filteredOptions.length > 1) {
+      announcementMessage = 'Found ' + this.filteredOptions.length + ' students';
+    }
+
+    console.log('liveAnnouncer : ' + announcementMessage);
+
+    this.liveAnnouncer.announce(announcementMessage, 'polite');
+  }
+
   private initInternalForm() {
     this.formGroup = this.fb.group({});
-    this.formGroup.controls[INTERNAL_FIELD_NAME] = new FormControl();
+    this.formGroup.controls[INTERNAL_FIELD_NAME] = new FormControl('', [RequireStudentMatch]);
   }
 
   private setInnerInputDisableState() {
@@ -155,10 +232,7 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
           .pipe(takeUntil(this.componentDestroyed))
           .subscribe((result: Student) => {
             this.filteredOptions = [result];
-            const emptyStudent = new Student();
-            emptyStudent.displayName = 'none';
-            this.filteredOptions.unshift(emptyStudent);
-            this.formGroup.controls[INTERNAL_FIELD_NAME].patchValue(studentNumber);
+            this.formGroup.controls[INTERNAL_FIELD_NAME].patchValue(result);
           });
       }
     } else {
@@ -166,19 +240,8 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
     }
   }
 
-  onSelect(event: MatAutocompleteSelectedEvent) {
-    console.log('select ' + event.option.value);
-    this._propagateChanges(event.option.value);
-  }
-
-  get displayFn() {
-    return (studentNumber: string) => {
-      if (this.filteredOptions && studentNumber) {
-        const student: Student = this.filteredOptions.find((s: Student) => s.studentNumber === studentNumber);
-        return student ? Student.convertToDisplayName(student) : null;
-      }
-      return null;
-    };
+  displayFn(student?: Student) {
+    return student && student instanceof Student ? student.getNameAndStudentId() : undefined;
   }
 
   // End Component logic
@@ -299,6 +362,7 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
   }
 
   constructor(
+    private liveAnnouncer: LiveAnnouncer,
     private studentService: StudentService,
     private fb: FormBuilder,
     private fm: FocusMonitor,
@@ -338,16 +402,6 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
       this.setInternalValue(null);
       this._propagateChanges(null);
     }
-  }
-
-  ngAfterViewInit() {
-    this.trigger.panelClosingActions.subscribe(e => {
-      if (!(e && e.source)) {
-        // user did not select from the list
-        this.validate();
-        this.trigger.closePanel();
-      }
-    });
   }
 
   ngDoCheck() {
