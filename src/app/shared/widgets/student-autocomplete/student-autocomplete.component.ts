@@ -139,14 +139,14 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
     this.formGroup.controls[INTERNAL_FIELD_NAME].valueChanges
       .pipe(
         startWith(''),
-        takeUntil(this.componentDestroyed),
         filter(term => {
           return typeof term === 'string' && term.length > 0;
         }),
         tap(() => (this.isLoading = true)),
         debounceTime(300),
         tap(term => console.log('searching for ' + term)),
-        switchMap(term => this.studentService.autocomplete(term))
+        switchMap(term => this.studentService.autocomplete(term)),
+        takeUntil(this.componentDestroyed)
       )
       .subscribe((searchResults: StudentSearchResults) => {
         if (this.initialized) {
@@ -162,7 +162,8 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
         startWith(''),
         filter(value => {
           return !value || value instanceof Student;
-        })
+        }),
+        takeUntil(this.componentDestroyed)
       )
       .subscribe((student: Student) => {
         if (this.initialized) {

@@ -138,14 +138,14 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
     this.formGroup.controls[INTERNAL_FIELD_NAME].valueChanges
       .pipe(
         startWith(''),
-        takeUntil(this.componentDestroyed),
         filter(term => {
           return typeof term === 'string' && term.length > 0;
         }),
         tap(() => (this.isLoading = true)),
         debounceTime(300),
         tap(term => console.log('searching for ' + term)),
-        switchMap(term => this.personService.autocomplete(term))
+        switchMap(term => this.personService.autocomplete(term)),
+        takeUntil(this.componentDestroyed)
       )
       .subscribe((searchResults: PersonSearchResults) => {
         if (this.initialized) {
@@ -161,7 +161,8 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
         startWith(''),
         filter(value => {
           return !value || value instanceof Person;
-        })
+        }),
+        takeUntil(this.componentDestroyed)
       )
       .subscribe((person: Person) => {
         if (this.initialized) {

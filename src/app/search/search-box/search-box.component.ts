@@ -86,8 +86,8 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
   private assignAutocompleteListener() {
     this.searchBoxEvent
       .pipe(
-        takeUntil(this.componentDestroyed),
-        debounceTime(300)
+        debounceTime(300),
+        takeUntil(this.componentDestroyed)
       )
       .subscribe((model: string) => {
         if (model) {
