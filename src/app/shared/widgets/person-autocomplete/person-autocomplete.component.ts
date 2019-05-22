@@ -94,7 +94,7 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
     OnDestroy {
   // Component logic
   formGroup: FormGroup;
-  private isLoading: boolean;
+  isLoading: boolean;
 
   get internalFieldName(): string {
     return INTERNAL_FIELD_NAME;
