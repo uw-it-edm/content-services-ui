@@ -125,8 +125,8 @@ export class StudentService {
 
   private fromDataApiObject(dataApiStudent: Student) {
     const student = new Student();
-    student.studentNumber = dataApiStudent.studentNumber;
     student.birthdate = dataApiStudent.birthdate;
+    student.displayName = dataApiStudent.displayName;
     student.email = dataApiStudent.email;
     student.firstName = dataApiStudent.firstName;
     student.lastName = dataApiStudent.lastName;
