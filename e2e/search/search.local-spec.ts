@@ -94,7 +94,7 @@ describe('Search Page', () => {
     expect(page.isSortIndicatorDesc);
   });
 
-  fit('should autocomplete Student Name when Student ID is entered in search box', () => {
+  it('should autocomplete Student Name when Student ID is entered in search box', () => {
     const studentData = require('../mocks/data-api/student-query.json');
     const testStudentId = studentData.content[0].studentNumber;
 
