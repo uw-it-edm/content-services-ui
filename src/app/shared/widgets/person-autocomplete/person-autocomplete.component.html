@@ -1,5 +1,5 @@
 <div [formGroup]="formGroup">
-  <input type="text"  matInput [formControlName]="internalFieldName" [matAutocomplete]="auto" [attr.aria-label]="placeholder">
+  <input type="text"  matInput [formControlName]="internalFieldName" [matAutocomplete]="auto" [attr.aria-label]="placeholder" (blur)="validate()">
   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onSelect($event)" >
     <mat-option *ngFor="let person of filteredOptions " [value]="person.regId">
       <span>{{ person.getNameAndEmployeeId() }}</span>

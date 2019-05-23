@@ -1,6 +1,7 @@
 import { startWith, takeUntil } from 'rxjs/operators';
 import {
   AfterContentInit,
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
   DoCheck,
@@ -10,8 +11,10 @@ import {
   Input,
   OnDestroy,
   Optional,
-  Self
+  Self,
+  ViewChild
 } from '@angular/core';
+
 import { Subject } from 'rxjs';
 import {
   ControlValueAccessor,
@@ -30,6 +33,7 @@ import {
   CanUpdateErrorState,
   ErrorStateMatcher,
   MatAutocompleteSelectedEvent,
+  MatAutocompleteTrigger,
   MatFormFieldControl,
   mixinErrorState
 } from '@angular/material';
@@ -72,6 +76,7 @@ const INTERNAL_FIELD_NAME = 'studentAutocomplete';
 })
 export class StudentAutocompleteComponent extends _StudentAutocompleteComponentBase
   implements
+    AfterViewInit,
     ControlValueAccessor,
     MatFormFieldControl<string>,
     CanUpdateErrorState,
@@ -87,6 +92,8 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
 
   filteredOptions: Student[] = [];
   initialized = false;
+
+  @ViewChild(MatAutocompleteTrigger) trigger;
 
   private initComponent() {
     this.initInternalForm();
@@ -109,9 +116,6 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
               .subscribe((results: StudentSearchResults) => {
                 this.filteredOptions = results.content;
               });
-          } else {
-            // if empty, the user probably wants to delete the value
-            this._propagateChanges(term);
           }
         }
       });
@@ -316,6 +320,34 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
 
   ngAfterContentInit(): void {
     this.initComponent();
+  }
+
+  validate() {
+    // check if the existing value is valid
+    const studentNumber =
+      this.formGroup &&
+      this.formGroup.controls[INTERNAL_FIELD_NAME] &&
+      this.formGroup.controls[INTERNAL_FIELD_NAME].value;
+    let student: Student = null;
+    if (this.filteredOptions && !isNullOrUndefined(studentNumber)) {
+      student = this.filteredOptions.find((s: Student) => s.studentNumber === studentNumber);
+    }
+
+    // clear the value if the value is invalid
+    if (!student) {
+      this.setInternalValue(null);
+      this._propagateChanges(null);
+    }
+  }
+
+  ngAfterViewInit() {
+    this.trigger.panelClosingActions.subscribe(e => {
+      if (!(e && e.source)) {
+        // user did not select from the list
+        this.validate();
+        this.trigger.closePanel();
+      }
+    });
   }
 
   ngDoCheck() {

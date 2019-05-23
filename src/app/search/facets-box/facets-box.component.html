@@ -3,14 +3,24 @@
     <fieldset *ngIf="searchResults?.facets.get(facetConfig.key)" >
       <legend>{{facetConfig.label}}</legend>
         <mat-list dense>
-          <mat-list-item class="uw-highlight-row" (click)="addFacetFilter(facetConfig.key,facetResult.key, facetConfig.label)"
+          <mat-list-item class="uw-highlight-row" (click)="addFacetFilter(facetConfig.key,facetResult.key, facetConfig.label, facetConfig)"
             *ngFor="let facetResult of searchResults?.facets.get(facetConfig.key).buckets.slice(0, facetConfig.cursize)">
             <span *ngIf="hasSelectedFacet(facetConfig.key); else showLink">
-               <span appCustomText="facet.{{facetConfig.key}}.{{facetResult.key}}" defaultValue="{{facetResult.key}}"></span> ({{facetResult.count}})
+              <span *ngIf="facetConfig.dataApiValueType && facetConfig.dataApiLabelPath && facetResult.key; else useCustomText">
+                <app-data-api-display [value]="facetResult.key" [type]="facetConfig.dataApiValueType" [labelPath]="facetConfig.dataApiLabelPath"></app-data-api-display> ({{facetResult.count}})
+              </span>
+              <ng-template #useCustomText>
+                <span appCustomText="facet.{{facetConfig.key}}.{{facetResult.key}}" defaultValue="{{facetResult.key}}"></span> ({{facetResult.count}})
+              </ng-template>
             </span>
             <ng-template #showLink>
-              <a [routerLink]="" (click)="addFacetFilter(facetConfig.key,facetResult.key, facetConfig.label)">
-                <span appCustomText="facet.{{facetConfig.key}}.{{facetResult.key}}" defaultValue="{{facetResult.key}}"></span> ({{facetResult.count}})</a>
+              <a *ngIf="facetConfig.dataApiValueType && facetConfig.dataApiLabelPath && facetResult.key; else useCustomText" [routerLink]="" (click)="addFacetFilter(facetConfig.key,facetResult.key, facetConfig.label, facetConfig)">
+                <app-data-api-display [value]="facetResult.key" [type]="facetConfig.dataApiValueType" [labelPath]="facetConfig.dataApiLabelPath"></app-data-api-display> ({{facetResult.count}})
+              </a>
+              <ng-template #useCustomText>
+                <a [routerLink]="" (click)="addFacetFilter(facetConfig.key,facetResult.key, facetConfig.label)">
+                  <span appCustomText="facet.{{facetConfig.key}}.{{facetResult.key}}" defaultValue="{{facetResult.key}}"></span> ({{facetResult.count}})</a>
+              </ng-template>
             </ng-template>
           </mat-list-item>
           <mat-list-item *ngIf="facetConfig.size < facetConfig.maxSize && facetConfig.size < searchResults?.facets.get(facetConfig.key).buckets.length">

@@ -1,6 +1,7 @@
 import { startWith, takeUntil } from 'rxjs/operators';
 import {
   AfterContentInit,
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
   DoCheck,
@@ -10,7 +11,8 @@ import {
   Input,
   OnDestroy,
   Optional,
-  Self
+  Self,
+  ViewChild
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import {
@@ -27,6 +29,7 @@ import {
   CanUpdateErrorState,
   ErrorStateMatcher,
   MatAutocompleteSelectedEvent,
+  MatAutocompleteTrigger,
   MatFormFieldControl,
   mixinErrorState
 } from '@angular/material';
@@ -72,6 +75,7 @@ const INTERNAL_FIELD_NAME = 'personAutocomplete';
 })
 export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBase
   implements
+    AfterViewInit,
     ControlValueAccessor,
     MatFormFieldControl<string>,
     CanUpdateErrorState,
@@ -87,6 +91,8 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
 
   filteredOptions: Person[] = [];
   initialized = false;
+
+  @ViewChild(MatAutocompleteTrigger) trigger;
 
   private initComponent() {
     this.initInternalForm();
@@ -105,15 +111,21 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
       .subscribe((term: string) => {
         if (this.initialized) {
           if (term && term.trim().length > 1) {
-            this.personService
-              .autocomplete(term)
-              .pipe(takeUntil(this.componentDestroyed))
-              .subscribe((results: PersonSearchResults) => {
-                this.filteredOptions = results.content;
-              });
-          } else {
-            // if empty, the user probably wants to delete the value
-            this._propagateChanges(term);
+            let person: Person = null;
+            if (this.filteredOptions) {
+              person = this.filteredOptions.find((p: Person) => p.regId === term);
+            }
+
+            if (person) {
+              this.filteredOptions = [person];
+            } else {
+              this.personService
+                .autocomplete(term)
+                .pipe(takeUntil(this.componentDestroyed))
+                .subscribe((results: PersonSearchResults) => {
+                  this.filteredOptions = results.content;
+                });
+            }
           }
         }
       });
@@ -297,6 +309,34 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
 
   ngAfterContentInit(): void {
     this.initComponent();
+  }
+
+  validate() {
+    // check if the value is valid
+    const regId =
+      this.formGroup &&
+      this.formGroup.controls[INTERNAL_FIELD_NAME] &&
+      this.formGroup.controls[INTERNAL_FIELD_NAME].value;
+    let person: Person = null;
+    if (this.filteredOptions && !isNullOrUndefined(regId)) {
+      person = this.filteredOptions.find((p: Person) => p.regId === regId);
+    }
+
+    // clear the value if the value is invalid
+    if (!person) {
+      this.setInternalValue(null);
+      this._propagateChanges(null);
+    }
+  }
+
+  ngAfterViewInit() {
+    this.trigger.panelClosingActions.subscribe(e => {
+      if (!(e && e.source)) {
+        // user did not select from the list
+        this.validate();
+        this.trigger.closePanel();
+      }
+    });
   }
 
   ngDoCheck() {

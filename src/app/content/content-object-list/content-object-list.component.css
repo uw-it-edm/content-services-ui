@@ -1,3 +1,7 @@
 .cs-selected  {
     background-color: #eeeeee;
 }
+
+::ng-deep .cs-wrap-lines {
+  white-space:pre-wrap
+}

@@ -12,6 +12,7 @@ import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef, SimpleSnackBar } from '
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../user/shared/user.service';
 import { NotificationService } from '../../shared/providers/notification.service';
+import { CustomTextUtilities } from '../../shared/directives/custom-text/custom-text-utilities';
 
 @Component({
   selector: 'app-content-object-list',
@@ -175,6 +176,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
       });
     }
   }
+
   notify() {
     if (this.snackBarTimeout) {
       clearTimeout(this.snackBarTimeout);
@@ -199,6 +201,8 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
     const message = this.createUpdateSnackBarMessage();
     const snackBarConfig = new MatSnackBarConfig();
     snackBarConfig.duration = 5000;
+    snackBarConfig.politeness = 'assertive';
+    snackBarConfig.panelClass = 'cs-wrap-lines';
     return this.snackBar.open(message, 'Dismiss', snackBarConfig);
   }
 
@@ -222,8 +226,19 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
       if (numberOfSavedItems) {
         message = numberOfSavedItems + ' saved and ' + numberOfFailures + ' failed';
       } else {
-        message = 'Failed to save ' + numberOfFailures + ' items';
+        message = 'Failed to save ' + numberOfFailures + ' item' + (numberOfFailures > 1 ? 's' : '');
       }
+
+      this.failures.forEach(failure => {
+        const customText = CustomTextUtilities.getCustomText(
+          this.config.customText,
+          'error.content.update.' + failure.status,
+          failure.message
+        );
+        if (customText.isCustom) {
+          message += '\n' + customText.label;
+        }
+      });
     }
 
     return message;
