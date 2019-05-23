@@ -7,7 +7,7 @@
       <mat-spinner diameter="25"></mat-spinner>
     </mat-option>
     <ng-container *ngIf="!isLoading">
-      <mat-option *ngFor="let student of filteredOptions " [value]="student">
+      <mat-option *ngFor="let student of filteredOptions" [value]="student">
         <span>{{ student.getNameAndStudentId() }}</span>
       </mat-option>
     </ng-container>
