@@ -97,6 +97,7 @@ export class CreatePage {
           case 'input': {
             if (shouldClearFieldValue) {
               requiredField.clear();
+              requiredField.sendKeys(protractor.Key.TAB);
             } else {
               requiredField.sendKeys('12/31/2019');
             }
