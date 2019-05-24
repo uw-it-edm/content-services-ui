@@ -1,4 +1,4 @@
-import { debounceTime, filter, startWith, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, filter, first, switchMap, takeUntil, tap } from 'rxjs/operators';
 import {
   AfterContentInit,
   ChangeDetectorRef,
@@ -113,6 +113,11 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
     }
   }
 
+  optionSelected(newPerson: Person) {
+    this.announcePersonSelection(newPerson);
+    this._propagateChanges(newPerson.regId);
+  }
+
   panelClosed() {
     if (!this.isInternalFieldValid()) {
       // Reset parent value with initial value
@@ -137,13 +142,20 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
     // This will listen to every INTERNAL_FIELD_NAME value changes where the content is a non empty string.
     this.formGroup.controls[INTERNAL_FIELD_NAME].valueChanges
       .pipe(
-        startWith(''),
         filter(term => {
-          return typeof term === 'string' && term.length > 0;
+          return typeof term === 'string';
         }),
         tap(() => (this.isLoading = true)),
         debounceTime(300),
         tap(term => console.log('searching for ' + term)),
+        tap(term => {
+          if (term === '') {
+            // user is probably trying to empty the field
+            if (!this.formGroup.controls[INTERNAL_FIELD_NAME].pristine) {
+              this._propagateChanges(null);
+            }
+          }
+        }),
         switchMap(term => this.personService.autocomplete(term)),
         takeUntil(this.componentDestroyed)
       )
@@ -152,26 +164,6 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
           this.filteredOptions = searchResults.content;
           this.announceSearchResults();
           this.isLoading = false;
-        }
-      });
-
-    // This will listen to every INTERNAL_FIELD_NAME value changes where the type is a Person
-    this.formGroup.controls[INTERNAL_FIELD_NAME].valueChanges
-      .pipe(
-        startWith(''),
-        filter(value => {
-          return !value || value instanceof Person;
-        }),
-        takeUntil(this.componentDestroyed)
-      )
-      .subscribe((person: Person) => {
-        if (this.initialized) {
-          if (person) {
-            this.announcePersonSelection(person);
-            this._propagateChanges(person.regId);
-          } else {
-            this._propagateChanges(null);
-          }
         }
       });
   }
@@ -229,7 +221,7 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
       if (this.formGroup && this.formGroup.controls[INTERNAL_FIELD_NAME]) {
         this.personService
           .read(regId)
-          .pipe(takeUntil(this.componentDestroyed))
+          .pipe(first())
           .subscribe((result: Person) => {
             this.filteredOptions = [result];
             this.formGroup.controls[INTERNAL_FIELD_NAME].patchValue(result);

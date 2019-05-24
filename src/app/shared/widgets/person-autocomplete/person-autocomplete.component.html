@@ -2,7 +2,10 @@
   <input type="text" matInput [formControlName]="internalFieldName"
          [matAutocomplete]="auto" [attr.aria-label]="placeholder"
   >
-  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (closed)="panelClosed()">
+  <mat-autocomplete #auto="matAutocomplete"
+                    [displayWith]="displayFn"
+                    (closed)="panelClosed()"
+                    (optionSelected)="optionSelected($event.option.value)">
     <mat-option *ngIf="isLoading" class="is-loading">
       <mat-spinner diameter="25"></mat-spinner>
     </mat-option>

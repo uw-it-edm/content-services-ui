@@ -1,4 +1,4 @@
-import { debounceTime, filter, startWith, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, filter, first, startWith, switchMap, takeUntil, tap } from 'rxjs/operators';
 import {
   AfterContentInit,
   ChangeDetectorRef,
@@ -38,6 +38,7 @@ import {
 } from '@angular/material';
 import { FocusMonitor, LiveAnnouncer } from '@angular/cdk/a11y';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
+import { Person } from '../../shared/model/person';
 
 // Boilerplate for applying mixins to StudentAutocompleteComponent.
 /** @docs-private */
@@ -114,6 +115,11 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
     }
   }
 
+  optionSelected(newStudent: Student) {
+    this.announceStudentSelection(newStudent);
+    this._propagateChanges(newStudent.studentNumber);
+  }
+
   panelClosed() {
     if (!this.isInternalFieldValid()) {
       // Reset parent value with initial value
@@ -138,13 +144,20 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
     // This will listen to every INTERNAL_FIELD_NAME value changes where the content is a non empty string.
     this.formGroup.controls[INTERNAL_FIELD_NAME].valueChanges
       .pipe(
-        startWith(''),
         filter(term => {
           return typeof term === 'string' && term.length > 0;
         }),
         tap(() => (this.isLoading = true)),
         debounceTime(300),
         tap(term => console.log('searching for ' + term)),
+        tap(term => {
+          if (term === '') {
+            // user is probably trying to empty the field
+            if (!this.formGroup.controls[INTERNAL_FIELD_NAME].pristine) {
+              this._propagateChanges(null);
+            }
+          }
+        }),
         switchMap(term => this.studentService.autocomplete(term)),
         takeUntil(this.componentDestroyed)
       )
@@ -153,26 +166,6 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
           this.filteredOptions = searchResults.content;
           this.announceSearchResults();
           this.isLoading = false;
-        }
-      });
-
-    // This will listen to every INTERNAL_FIELD_NAME value changes where the type is a Student
-    this.formGroup.controls[INTERNAL_FIELD_NAME].valueChanges
-      .pipe(
-        startWith(''),
-        filter(value => {
-          return !value || value instanceof Student;
-        }),
-        takeUntil(this.componentDestroyed)
-      )
-      .subscribe((student: Student) => {
-        if (this.initialized) {
-          if (student) {
-            this.announceStudentSelection(student);
-            this._propagateChanges(student.studentNumber);
-          } else {
-            this._propagateChanges(null);
-          }
         }
       });
   }
@@ -230,7 +223,7 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
       if (this.formGroup && this.formGroup.controls[INTERNAL_FIELD_NAME]) {
         this.studentService
           .read(studentNumber)
-          .pipe(takeUntil(this.componentDestroyed))
+          .pipe(first())
           .subscribe((result: Student) => {
             this.filteredOptions = [result];
             this.formGroup.controls[INTERNAL_FIELD_NAME].patchValue(result);
