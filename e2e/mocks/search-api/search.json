@@ -133,6 +133,19 @@
           "key": "1"
         }
       ]
+    },
+    {
+      "name": "metadata.childType",
+      "buckets": [
+        {
+          "count": 5,
+          "key": "Child2Parent2"
+        },
+        {
+          "count": 3,
+          "key": "Child2Parent1"
+        }
+      ]
     }
   ],
   "totalCount": 471,
