@@ -77,6 +77,13 @@ export class PersonService {
       searchModel.lastName = term;
     }
 
+    if (searchModel.lastName) {
+      searchModel.lastName = searchModel.lastName + '*';
+    }
+    if (searchModel.firstName) {
+      searchModel.firstName = searchModel.firstName + '*';
+    }
+
     return searchModel;
   }
 

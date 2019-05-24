@@ -12,6 +12,7 @@ import { Student } from '../../shared/shared/model/student';
 import { StudentSearchAutocomplete } from '../shared/search-autocomplete/student-search-autocomplete';
 import { MatAutocompleteSelectedEvent } from '@angular/material';
 import { SearchFilter } from '../shared/model/search-filter';
+import { SearchPagination } from '../shared/model/search-pagination';
 
 class MockStudentSearchAutocomplete extends StudentSearchAutocomplete {
   constructor() {
@@ -82,5 +83,16 @@ describe('SearchBoxComponent', () => {
     expect(component.searchModel.stringQuery).toEqual('');
     const expectedFilter = new SearchFilter('testKey', 'test', 'testLabel');
     expect(component.searchModel.filters).toContain(expectedFilter);
+  });
+
+  it('should reset pagination', () => {
+    const searchPagination = new SearchPagination();
+    searchPagination.pageSize = 123;
+    searchPagination.pageIndex = 2;
+    component.searchModel.pagination = searchPagination;
+    component.executeSearch();
+
+    expect(component.searchModel.pagination.pageSize).toEqual(50);
+    expect(component.searchModel.pagination.pageIndex).toEqual(0);
   });
 });

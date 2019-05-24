@@ -12,6 +12,7 @@ import { ConfigResolver } from '../../routing/shared/config-resolver.service';
 import { CustomTextItem } from '../../core/shared/model/config';
 import { CustomTextUtilities } from '../../shared/directives/custom-text/custom-text-utilities';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { SearchPagination } from '../shared/model/search-pagination';
 
 @Component({
   selector: 'app-facets-box',
@@ -106,6 +107,7 @@ export class FacetsBoxComponent implements OnInit, OnDestroy {
     console.log('adding new facet : ' + JSON.stringify(searchFilter));
 
     this.searchModel.addFilterIfNotThere(searchFilter);
+    this.searchModel.pagination = new SearchPagination();
 
     this.announceFacetSelection(searchFilter);
 

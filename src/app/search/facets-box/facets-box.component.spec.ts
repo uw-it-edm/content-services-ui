@@ -17,6 +17,7 @@ import { FacetConfig } from '../../core/shared/model/facet-config';
 import { DataApiValueService } from '../../shared/providers/dataapivalue.service';
 import { NotificationService } from '../../shared/providers/notification.service';
 import { NO_ERRORS_SCHEMA, QueryList } from '@angular/core';
+import { SearchPagination } from '../shared/model/search-pagination';
 
 class MockConfigResolver extends ConfigResolver {
   constructor() {
@@ -104,5 +105,18 @@ describe('FacetsBoxComponent', () => {
     component.addFacetFilter(facetConfig.key, 'testValue', facetConfig.label, facetConfig);
     expect(component.searchModel.filters.length).toEqual(1);
     expect(component.searchModel.filters).toEqual([searchFilter]);
+  });
+
+  it('should reset pagination', () => {
+    const searchPagination = new SearchPagination();
+    searchPagination.pageSize = 123;
+    searchPagination.pageIndex = 2;
+    component.searchModel.pagination = searchPagination;
+
+    const searchFilter = new SearchFilter('testKey', 'testString', 'testLabel');
+    component.addFacetFilter(searchFilter.key, searchFilter.value, searchFilter.label);
+
+    expect(component.searchModel.pagination.pageSize).toEqual(50);
+    expect(component.searchModel.pagination.pageIndex).toEqual(0);
   });
 });

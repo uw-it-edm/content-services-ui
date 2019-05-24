@@ -1,3 +1,7 @@
 .cs-search-daterange-picker .mat-form-field-infix{
+  width: 300px;
+}
+
+.cs-search-daterange-picker .mat-form-field-infix .md-drppicker{
   width: 600px;
 }
