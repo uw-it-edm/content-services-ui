@@ -133,4 +133,8 @@ export class SearchPage {
       .mouseMove(webElement)
       .perform();
   }
+
+  getResultColumnsPaddingSizes() {
+    return element.all(by.className('cs-search-table-cell')).getCssValue('padding-right');
+  }
 }
