@@ -273,4 +273,13 @@ describe('Search Page', () => {
 
     expect(page.getResultsByColumn(dataApiColumnKey)).toContain(dataApiData.data.label);
   });
+
+  it('should display results column with fixed padding', () => {
+    const expectedPaddingSize = '10px';
+    page.getResultColumnsPaddingSizes().then(paddingSizes => {
+      for (const size of paddingSizes) {
+        expect(size).toEqual(expectedPaddingSize);
+      }
+    });
+  });
 });
