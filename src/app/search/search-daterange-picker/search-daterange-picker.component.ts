@@ -109,7 +109,7 @@ export class SearchDaterangePickerComponent implements OnInit, OnDestroy {
       this.searchModel.removeFilterForKey(key);
     }
 
-    this.searchModel.pagination = new SearchPagination();
+    this.searchModel.pagination.reset();
 
     this.dateRangeFilterAdded.emit(this.searchModel);
   }
