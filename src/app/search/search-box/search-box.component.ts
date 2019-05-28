@@ -69,7 +69,7 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
   executeSearch() {
     this.searchModel.stringQuery = this.internalSearchField;
 
-    this.searchModel.pagination = new SearchPagination();
+    this.searchModel.pagination.reset();
 
     this.searchEvent.emit(this.searchModel);
   }
