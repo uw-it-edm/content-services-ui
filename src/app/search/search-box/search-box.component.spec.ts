@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { SearchBoxComponent } from './search-box.component';
 import { FormsModule } from '@angular/forms';
@@ -58,9 +58,10 @@ describe('SearchBoxComponent', () => {
   it('should have an initialized searchModel ', () => {
     expect(component.searchModel.stringQuery).toBe('iSearch');
   });
-  it('should autocomplete', () => {
+  it('should autocomplete', fakeAsync(() => {
     component.searchBoxUpdated();
     fixture.detectChanges();
+    tick(4000);
 
     expect(component.filteredOptions.length).toBe(1);
     const testStudent = new Student();
@@ -69,7 +70,8 @@ describe('SearchBoxComponent', () => {
     testStudent.lastName = 'User';
     testStudent.studentNumber = '1234';
     expect(component.filteredOptions).toEqual([testStudent]);
-  });
+  }));
+
   it('should add filter', () => {
     const event: MatAutocompleteSelectedEvent = <MatAutocompleteSelectedEvent>{
       option: {

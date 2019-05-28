@@ -6,7 +6,7 @@ import { SearchFilter } from '../shared/model/search-filter';
 import { MatAutocompleteSelectedEvent } from '@angular/material';
 import { SearchAutocomplete } from '../shared/search-autocomplete/search-autocomplete';
 import { SearchFilterableResult } from '../../shared/shared/model/search-filterable-result';
-import { takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { SearchPagination } from '../shared/model/search-pagination';
 
@@ -84,18 +84,40 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
   }
 
   private assignAutocompleteListener() {
-    this.searchBoxEvent.pipe(takeUntil(this.componentDestroyed)).subscribe((model: string) => {
-      if (model) {
-        this.searchAutocomplete
-          .autocomplete(model)
-          .pipe(takeUntil(this.componentDestroyed))
-          .subscribe((results: SearchFilterableResult[]) => {
-            this.filteredOptions = results;
-          });
-      } else {
-        this.filteredOptions = [];
-      }
-    });
+    this.searchBoxEvent
+      .pipe(
+        debounceTime(300),
+        takeUntil(this.componentDestroyed)
+      )
+      .subscribe((model: string) => {
+        if (model) {
+          this.searchAutocomplete
+            .autocomplete(model)
+            .pipe(takeUntil(this.componentDestroyed))
+            .subscribe((results: SearchFilterableResult[]) => {
+              this.filteredOptions = results;
+              this.announceAutocompleteSearchResults();
+            });
+        } else {
+          this.filteredOptions = [];
+        }
+      });
+  }
+
+  private announceAutocompleteSearchResults() {
+    let announcementMessage;
+
+    if (!this.filteredOptions || this.filteredOptions.length === 0) {
+      announcementMessage = 'No results for autocomplete';
+    } else if (this.filteredOptions.length === 1) {
+      announcementMessage = 'Found 1 result : ' + this.filteredOptions[0].getFilterableDisplay();
+    } else if (this.filteredOptions.length > 1) {
+      announcementMessage = 'Found ' + this.filteredOptions.length + ' results';
+    }
+
+    console.log('liveAnnouncer : ' + announcementMessage);
+
+    this.liveAnnouncer.announce(announcementMessage, 'polite');
   }
 
   onSelectFilter(event: MatAutocompleteSelectedEvent) {

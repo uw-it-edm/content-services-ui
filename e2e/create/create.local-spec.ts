@@ -1,10 +1,10 @@
-import { CreatePage } from './create.po';
-import { SearchPage } from '../search/search.po';
-import { browser } from 'protractor';
+import {CreatePage} from './create.po';
+import {SearchPage} from '../search/search.po';
+import {browser} from 'protractor';
 import * as path from 'path';
-import { until } from 'selenium-webdriver';
-import { protractor } from 'protractor/built/ptor';
-import { ContentServicesUiPage } from '../app/app.po';
+import {until} from 'selenium-webdriver';
+import {protractor} from 'protractor/built/ptor';
+import {ContentServicesUiPage} from '../app/app.po';
 
 const searchPage = new SearchPage();
 const demoConfig = require('../mocks/profile-api/demo.json');
@@ -205,7 +205,7 @@ describe('Create Page for Demo2', () => {
     page.populateRequiredFields(true);
 
     page.metadataErrorMessages.each(errMsg => {
-      expect(errMsg.getText()).toEqual('You must enter a value');
+      expect(errMsg.getText()).not.toEqual('');
 
       const red = 'rgba(244, 67, 54, 1)';
       expect(errMsg.getCssValue('color')).toEqual(red);
