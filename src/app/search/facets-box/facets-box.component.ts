@@ -107,7 +107,7 @@ export class FacetsBoxComponent implements OnInit, OnDestroy {
     console.log('adding new facet : ' + JSON.stringify(searchFilter));
 
     this.searchModel.addFilterIfNotThere(searchFilter);
-    this.searchModel.pagination = new SearchPagination();
+    this.searchModel.pagination.reset();
 
     this.announceFacetSelection(searchFilter);
 

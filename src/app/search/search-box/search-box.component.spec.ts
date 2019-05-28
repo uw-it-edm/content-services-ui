@@ -87,14 +87,14 @@ describe('SearchBoxComponent', () => {
     expect(component.searchModel.filters).toContain(expectedFilter);
   });
 
-  it('should reset pagination', () => {
+  it('should reset pagination while keeping pageSize', () => {
     const searchPagination = new SearchPagination();
     searchPagination.pageSize = 123;
     searchPagination.pageIndex = 2;
     component.searchModel.pagination = searchPagination;
     component.executeSearch();
 
-    expect(component.searchModel.pagination.pageSize).toEqual(50);
+    expect(component.searchModel.pagination.pageSize).toEqual(123);
     expect(component.searchModel.pagination.pageIndex).toEqual(0);
   });
 });
