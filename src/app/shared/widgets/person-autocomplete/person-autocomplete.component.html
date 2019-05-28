@@ -1,8 +1,18 @@
 <div [formGroup]="formGroup">
-  <input type="text"  matInput [formControlName]="internalFieldName" [matAutocomplete]="auto" [attr.aria-label]="placeholder" (blur)="validate()">
-  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onSelect($event)" >
-    <mat-option *ngFor="let person of filteredOptions " [value]="person.regId">
-      <span>{{ person.getNameAndEmployeeId() }}</span>
+  <input type="text" matInput [formControlName]="internalFieldName"
+         [matAutocomplete]="auto" [attr.aria-label]="placeholder"
+  >
+  <mat-autocomplete #auto="matAutocomplete"
+                    [displayWith]="displayFn"
+                    (closed)="panelClosed()"
+                    (optionSelected)="optionSelected($event.option.value)">
+    <mat-option *ngIf="isLoading" class="is-loading">
+      <mat-spinner diameter="25"></mat-spinner>
     </mat-option>
+    <ng-container *ngIf="!isLoading">
+      <mat-option *ngFor="let person of filteredOptions " [value]="person">
+        <span>{{ person.getNameAndEmployeeId() }}</span>
+      </mat-option>
+    </ng-container>
   </mat-autocomplete>
 </div>

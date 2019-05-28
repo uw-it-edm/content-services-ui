@@ -43,7 +43,7 @@
               [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
             >
             </app-student-autocomplete>
-            <mat-error> {{getErrorMessage(fieldToDisplay.key)}}</mat-error>
+            <mat-error>Please select a valid {{fieldToDisplay.label}}</mat-error>
           </mat-form-field>
 
           <mat-form-field *ngSwitchCase="'person-autocomplete'">
@@ -53,7 +53,7 @@
               [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
             >
             </app-person-autocomplete>
-            <mat-error> {{getErrorMessage(fieldToDisplay.key)}}</mat-error>
+            <mat-error>Please select a valid {{fieldToDisplay.label}}</mat-error>
           </mat-form-field>
 
           <mat-form-field *ngSwitchDefault>
