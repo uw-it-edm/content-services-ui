@@ -280,7 +280,9 @@ describe('Search Page', () => {
     const dataApiFileName = `child-type-${searchResultsDataApiKey}-get.json`;
     const dataApiData = require('../mocks/data-api/' + dataApiFileName);
 
-    expect(page.getFacetItemLinksTexts(5)).toMatch(dataApiData.data.label);
+    const expectedFacetLabel = dataApiData.data.label;
+    expect(expectedFacetLabel.length).not.toEqual(0, 'Facets label is not configured in data-api mock.');
+    expect(page.getFacetItemLinksTexts(5)).toMatch(expectedFacetLabel);
   });
 
   it('should display results column with fixed padding', () => {
