@@ -2,7 +2,11 @@
   "rulesDirectory": [
     "node_modules/codelyzer"
   ],
+  "extends": [
+    "rxjs-tslint-rules"
+  ],
   "rules": {
+    "rxjs-no-unsafe-takeuntil": { "severity": "error" },
     "arrow-return-shorthand": true,
     "callable-types": true,
     "class-name": true,
