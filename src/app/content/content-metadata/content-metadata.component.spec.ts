@@ -12,6 +12,7 @@ import {
   MatInputModule,
   MatNativeDateModule,
   MatOptionModule,
+  MatProgressSpinnerModule,
   MatSelectModule
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -57,7 +58,8 @@ describe('ContentMetadataComponent', () => {
         ReactiveFormsModule,
         MatOptionModule,
         MatAutocompleteModule,
-        MatSelectModule
+        MatSelectModule,
+        MatProgressSpinnerModule
       ],
       declarations: [
         ContentMetadataComponent,

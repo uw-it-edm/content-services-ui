@@ -1,8 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { StudentAutocompleteComponent } from './student-autocomplete.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material';
+import { MatAutocompleteModule, MatProgressSpinnerModule } from '@angular/material';
 import { Observable, of } from 'rxjs';
 import { StudentService } from '../../providers/student.service';
 import { StudentSearchResults } from '../../shared/model/student-search-results';
@@ -44,7 +44,7 @@ describe('StudentAutocompleteComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, MatAutocompleteModule, A11yModule],
+      imports: [ReactiveFormsModule, MatAutocompleteModule, A11yModule, MatProgressSpinnerModule],
       declarations: [StudentAutocompleteComponent],
       providers: [{ provide: StudentService, useValue: new MockStudentService() }]
     }).compileComponents();
@@ -68,7 +68,7 @@ describe('StudentAutocompleteComponent', () => {
     testStudent.studentNumber = '1234';
 
     component.filteredOptions = [testStudent];
-    const displayName = component.displayFn('1234');
+    const displayName = component.displayFn(testStudent);
     expect(displayName).toBe('User, Test (1234)');
   });
 
@@ -76,11 +76,24 @@ describe('StudentAutocompleteComponent', () => {
     component.ngAfterContentInit();
     component.writeValue('1234');
 
-    expect(component.formGroup.controls['studentAutocomplete'].value).toBe('1234');
+    expect(component.formGroup.controls['studentAutocomplete'].value.studentNumber).toBe('1234');
   });
 
-  it('should autocomplete', () => {
+  it('should know when internalField is invalid', () => {
+    component.formGroup.controls['studentAutocomplete'].patchValue(new Student());
+
+    expect(component.formGroup.controls['studentAutocomplete'].valid).toBeTruthy();
+  });
+
+  it('should know when internalField is valid', () => {
     component.formGroup.controls['studentAutocomplete'].patchValue('User');
+    expect(component.formGroup.controls['studentAutocomplete'].invalid).toBeTruthy();
+  });
+
+  it('should autocomplete', fakeAsync(() => {
+    component.formGroup.controls['studentAutocomplete'].patchValue('User');
+
+    tick(400); // Need to tick for longer than the debounceTime
     fixture.detectChanges();
 
     expect(component.filteredOptions.length).toBe(1);
@@ -90,5 +103,5 @@ describe('StudentAutocompleteComponent', () => {
     testStudent.lastName = 'User';
     testStudent.studentNumber = '1234';
     expect(component.filteredOptions).toEqual([testStudent]);
-  });
+  }));
 });

@@ -41,7 +41,7 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
 
   private generateDisplayedMetadataGroup(): FormGroup {
     const group: any = {};
-    this.pageConfig.fieldsToDisplay.map(field => {
+    this.pageConfig.fieldsToDisplay.map((field: Field) => {
       const formState = this.initFormState(field);
       const formControl = new FormControl(formState);
       this.addValidation(field, formControl);
@@ -50,7 +50,7 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
     return new FormGroup(group);
   }
 
-  private addValidation(field, formControl: FormControl) {
+  private addValidation(field: Field, formControl: FormControl) {
     // this is where we should handle different type of validation
     if (field.required) {
       formControl.setValidators(Validators.required);

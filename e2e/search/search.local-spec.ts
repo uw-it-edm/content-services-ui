@@ -1,11 +1,11 @@
 ///<reference path="../../node_modules/@types/jasminewd2/index.d.ts"/>
-import { SearchPage } from './search.po';
-import { CreatePage } from '../create/create.po';
-import { ContentServicesUiPage } from '../app/app.po';
-import { DisplaySearchPage } from './display-search.po';
-import { browser, protractor } from 'protractor';
+import {SearchPage} from './search.po';
+import {CreatePage} from '../create/create.po';
+import {ContentServicesUiPage} from '../app/app.po';
+import {DisplaySearchPage} from './display-search.po';
+import {browser, protractor} from 'protractor';
 import * as moment from 'moment-timezone';
-import { EditPage } from '../edit/edit.po';
+import {EditPage} from '../edit/edit.po';
 
 let page: SearchPage;
 
@@ -99,11 +99,11 @@ describe('Search Page', () => {
     const testStudentId = studentData.content[0].studentNumber;
 
     page.searchBox.sendKeys(testStudentId);
-    expect(page.autoCompletePanel.isDisplayed());
+    expect(page.autoCompletePanel.isDisplayed()).toBeTruthy();
     expect(page.autoCompletedOption.getText()).toEqual(studentData.content[0].displayName);
 
     page.autoCompletedOption.click();
-    expect(page.selectedFacet.isDisplayed());
+    expect(page.selectedFacet.isDisplayed()).toBeTruthy();
     expect(page.selectedFacet.getText()).toMatch(new RegExp(testStudentId));
   });
 
