@@ -296,4 +296,24 @@ describe('Search Page', () => {
       }
     });
   });
+
+  it('should reset paging and retain page size when search button is clicked', () => {
+    page.paginatorSizeDropDowns.get(0).click();
+    const selectedSize = 10;
+    page.clickPaginatorSizeOption(selectedSize.toString());
+    expect(page.paginatorSizeDropDowns.get(0).getText()).toEqual(selectedSize.toString());
+
+    page.paginatorNextButtons.get(0).click();
+    const totalResults = searchData.totalCount;
+    const newStartPage = selectedSize + 1;
+    const newEndPage = selectedSize * 2;
+    let expectedPaginatorText = `${newStartPage} - ${newEndPage} of ${totalResults}`;
+    expect(page.paginatorCounts.get(0).getText()).toEqual(expectedPaginatorText);
+
+    page.searchButton.click();
+
+    expect(page.paginatorSizeDropDowns.get(0).getText()).toEqual(selectedSize.toString());
+    expectedPaginatorText = `1 - ${selectedSize} of ${totalResults}`;
+    expect(page.paginatorCounts.get(0).getText()).toEqual(expectedPaginatorText);
+  });
 });
