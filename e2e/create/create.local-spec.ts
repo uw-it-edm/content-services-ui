@@ -1,10 +1,10 @@
-import {CreatePage} from './create.po';
-import {SearchPage} from '../search/search.po';
-import {browser} from 'protractor';
+import { CreatePage } from './create.po';
+import { SearchPage } from '../search/search.po';
+import { browser } from 'protractor';
 import * as path from 'path';
-import {until} from 'selenium-webdriver';
-import {protractor} from 'protractor/built/ptor';
-import {ContentServicesUiPage} from '../app/app.po';
+import { until } from 'selenium-webdriver';
+import { protractor } from 'protractor/built/ptor';
+import { ContentServicesUiPage } from '../app/app.po';
 
 const searchPage = new SearchPage();
 const demoConfig = require('../mocks/profile-api/demo.json');
@@ -113,7 +113,6 @@ describe('Create Page for Demo', () => {
     page.inputField.sendKeys('any text');
     page.saveButton.click();
 
-
     expect(page.errorNotification.isDisplayed()).toBe(true);
     expect(page.dismissButton.getId()).toEqual(
       browser.driver
@@ -180,6 +179,21 @@ describe('Create Page for Demo', () => {
     page.clickDropDownByLabel('DataApiOption child');
 
     expect(page.selectPanel.getText()).toEqual(getExpectedChildrenLabels().trim());
+  });
+
+  it('should clear Employee value when value is not selected from auto complete and Save button is clicked', () => {
+    page.addFile(pdfFilePath);
+    page.personInput.sendKeys('my employee');
+    page.saveButton.click();
+
+    expect(page.getPersonValue()).toEqual('');
+  });
+
+  it('should clear Student value when value is not selected from auto complete and user tabs out of the field', () => {
+    page.studentInput.sendKeys('my student');
+    page.studentInput.sendKeys(protractor.Key.TAB);
+
+    expect(page.getStudentValue()).toEqual('');
   });
 });
 
