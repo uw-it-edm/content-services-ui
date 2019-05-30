@@ -1,11 +1,11 @@
 ///<reference path="../../node_modules/@types/jasminewd2/index.d.ts"/>
-import {SearchPage} from './search.po';
-import {CreatePage} from '../create/create.po';
-import {ContentServicesUiPage} from '../app/app.po';
-import {DisplaySearchPage} from './display-search.po';
-import {browser, protractor} from 'protractor';
+import { SearchPage } from './search.po';
+import { CreatePage } from '../create/create.po';
+import { ContentServicesUiPage } from '../app/app.po';
+import { DisplaySearchPage } from './display-search.po';
+import { browser, protractor } from 'protractor';
 import * as moment from 'moment-timezone';
-import {EditPage} from '../edit/edit.po';
+import { EditPage } from '../edit/edit.po';
 
 let page: SearchPage;
 
@@ -134,8 +134,11 @@ describe('Search Page', () => {
     });
   });
 
-  it('should display correct date range in search filter when Today is selected', () => {
+  it('should clear date range text when date filter is removed', () => {
     selectAndVerifyDateRange('Today');
+    page.removeSelectedFacet();
+
+    expect(page.getDateRangeInputText()).toEqual('');
   });
 
   it('should display correct date range in search filter when Yesterday is selected', () => {
