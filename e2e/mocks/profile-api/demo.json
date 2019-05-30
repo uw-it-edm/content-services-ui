@@ -192,6 +192,15 @@
             "order": "asc",
             "size": 3,
             "maxSize": 50
+          },
+          "metadata.childType": {
+            "key": "metadata.childType",
+            "label": "DataApiOption Child",
+            "dataApiLabelPath": "label",
+            "dataApiValueType": "child-type",
+            "order": "asc",
+            "size": 3,
+            "maxSize": 50
           }
         }
       },

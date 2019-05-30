@@ -123,6 +123,10 @@ export class SearchPage {
       .all(by.tagName('a'));
   }
 
+  getFacetItemLinksTexts(facetHeaderIndex: number) {
+    return this.getFacetItemLinks(facetHeaderIndex).getText();
+  }
+
   getBackgroundColor(webElement: WebElement) {
     return webElement.getCssValue('background-color');
   }

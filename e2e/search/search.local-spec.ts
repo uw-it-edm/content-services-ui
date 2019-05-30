@@ -274,6 +274,17 @@ describe('Search Page', () => {
     expect(page.getResultsByColumn(dataApiColumnKey)).toContain(dataApiData.data.label);
   });
 
+  it('should display the label for data-api sourced facets', () => {
+    const dataApiColumnKey = 'childType';
+    const searchResultsDataApiKey = searchData.searchResults[0].metadata[`${dataApiColumnKey}`];
+    const dataApiFileName = `child-type-${searchResultsDataApiKey}-get.json`;
+    const dataApiData = require('../mocks/data-api/' + dataApiFileName);
+
+    const expectedFacetLabel = dataApiData.data.label;
+    expect(expectedFacetLabel.length).not.toEqual(0, 'Facets label is not configured in data-api mock.');
+    expect(page.getFacetItemLinksTexts(5)).toMatch(expectedFacetLabel);
+  });
+
   it('should display results column with fixed padding', () => {
     const expectedPaddingSize = '10px';
     page.getResultColumnsPaddingSizes().then(paddingSizes => {
