@@ -5101,10 +5101,10 @@ neo-async@^2.5.0:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.0.tgz#b9d15e4d71c6762908654b5183ed38b753340835"
   integrity sha512-MFh0d/Wa7vkKO3Y3LlacqAEeHK0mckVqzDieUKTT+KGxi+zIpeVsFxymkIiRpbpDziHc290Xr9A1O4Om7otoRA==
 
-ng2-pdf-viewer@5.2.4:
-  version "5.2.4"
-  resolved "https://registry.yarnpkg.com/ng2-pdf-viewer/-/ng2-pdf-viewer-5.2.4.tgz#8af8dbe0373c344bb05f1c972ee840b1f2cd0478"
-  integrity sha512-qZ9wOezSvCv8VMA4L64GmcaPpbT8gHpQ7mbxfirezpi4dMU7ivHCBhihw7L6Nlo10zrmgD9hdWltPBcfTeF85w==
+ng2-pdf-viewer@5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/ng2-pdf-viewer/-/ng2-pdf-viewer-5.3.0.tgz#edddc8bcff411c54adb02c8fcf9b01012cba1dc8"
+  integrity sha512-bRpB3ZBK5rSDYqlCCHyzBzvDeJGQahwS7ixYA7ZodxWBVuRGjNHZ1fjtoUK1O3p98RnIYOiwx/05/Nv1N+tOIg==
   dependencies:
     "@types/pdfjs-dist" "^0.1.2"
     pdfjs-dist "2.0.943"
