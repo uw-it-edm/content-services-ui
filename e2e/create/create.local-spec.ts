@@ -113,7 +113,6 @@ describe('Create Page for Demo', () => {
     page.inputField.sendKeys('any text');
     page.saveButton.click();
 
-
     expect(page.errorNotification.isDisplayed()).toBe(true);
     expect(page.dismissButton.getId()).toEqual(
       browser.driver
@@ -181,6 +180,21 @@ describe('Create Page for Demo', () => {
 
     expect(page.selectPanel.getText()).toEqual(getExpectedChildrenLabels().trim());
   });
+
+  it('should clear Employee value when value is not selected from auto complete and Save button is clicked', () => {
+    page.addFile(pdfFilePath);
+    page.personInput.sendKeys('my employee');
+    page.saveButton.click();
+
+    expect(page.getPersonValue()).toEqual('');
+  });
+
+  it('should clear Student value when value is not selected from auto complete and user tabs out of the field', () => {
+    page.studentInput.sendKeys('my student');
+    page.studentInput.sendKeys(protractor.Key.TAB);
+
+    expect(page.getStudentValue()).toEqual('');
+  });
 });
 
 describe('Create Page for Demo2', () => {
@@ -205,7 +219,7 @@ describe('Create Page for Demo2', () => {
     page.populateRequiredFields(true);
 
     page.metadataErrorMessages.each(errMsg => {
-      expect(errMsg.getText()).toEqual('You must enter a value');
+      expect(errMsg.getText()).not.toEqual('');
 
       const red = 'rgba(244, 67, 54, 1)';
       expect(errMsg.getCssValue('color')).toEqual(red);

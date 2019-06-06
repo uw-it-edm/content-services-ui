@@ -1,7 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material';
+import { MatAutocompleteModule, MatProgressSpinnerModule } from '@angular/material';
 import { Observable, of } from 'rxjs';
 import { A11yModule } from '@angular/cdk/a11y';
 import { Person } from '../../shared/model/person';
@@ -48,7 +48,7 @@ describe('PersonAutocompleteComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, MatAutocompleteModule, A11yModule],
+      imports: [ReactiveFormsModule, MatAutocompleteModule, A11yModule, MatProgressSpinnerModule],
       declarations: [PersonAutocompleteComponent],
       providers: [{ provide: PersonService, useValue: new MockPersonService() }]
     }).compileComponents();
@@ -74,7 +74,7 @@ describe('PersonAutocompleteComponent', () => {
     testPerson.employeeId = '12345';
 
     component.filteredOptions = [testPerson];
-    const displayName = component.displayFn('ABCD');
+    const displayName = component.displayFn(testPerson);
     expect(displayName).toBe('User, Test (12345)');
   });
 
@@ -82,14 +82,26 @@ describe('PersonAutocompleteComponent', () => {
     component.ngAfterContentInit();
     component.writeValue('ABCD');
 
-    expect(component.formGroup.controls['personAutocomplete'].value).toBe('ABCD');
+    expect(component.formGroup.controls['personAutocomplete'].value.regId).toBe('ABCD');
   });
 
-  it('should autocomplete', () => {
+  it('should know when internalField is invalid', () => {
+    component.formGroup.controls['personAutocomplete'].patchValue(new Person());
+
+    expect(component.formGroup.controls['personAutocomplete'].valid).toBeTruthy();
+  });
+
+  it('should know when internalField is valid', () => {
     component.formGroup.controls['personAutocomplete'].patchValue('User');
+    expect(component.formGroup.controls['personAutocomplete'].invalid).toBeTruthy();
+  });
+
+  it('should autocomplete', fakeAsync(() => {
+    component.formGroup.controls['personAutocomplete'].patchValue('User');
+    tick(400); // Need to tick for longer than the debounceTime
     fixture.detectChanges();
 
-    expect(component.filteredOptions.length).toBe(1);
+    expect(component.filteredOptions.length).toBe(1, 'incorrect number of filtered options');
     const testPerson = new Person();
     testPerson.displayName = 'Test User';
     testPerson.registeredFirstName = 'Test';
@@ -98,5 +110,5 @@ describe('PersonAutocompleteComponent', () => {
     testPerson.priorRegIds = ['CDEF', 'GHIJ'];
     testPerson.employeeId = '12345';
     expect(component.filteredOptions).toEqual([testPerson]);
-  });
+  }));
 });

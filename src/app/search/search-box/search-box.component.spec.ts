@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { SearchBoxComponent } from './search-box.component';
 import { FormsModule } from '@angular/forms';
@@ -12,6 +12,7 @@ import { Student } from '../../shared/shared/model/student';
 import { StudentSearchAutocomplete } from '../shared/search-autocomplete/student-search-autocomplete';
 import { MatAutocompleteSelectedEvent } from '@angular/material';
 import { SearchFilter } from '../shared/model/search-filter';
+import { SearchPagination } from '../shared/model/search-pagination';
 
 class MockStudentSearchAutocomplete extends StudentSearchAutocomplete {
   constructor() {
@@ -57,9 +58,10 @@ describe('SearchBoxComponent', () => {
   it('should have an initialized searchModel ', () => {
     expect(component.searchModel.stringQuery).toBe('iSearch');
   });
-  it('should autocomplete', () => {
+  it('should autocomplete', fakeAsync(() => {
     component.searchBoxUpdated();
     fixture.detectChanges();
+    tick(4000);
 
     expect(component.filteredOptions.length).toBe(1);
     const testStudent = new Student();
@@ -68,7 +70,8 @@ describe('SearchBoxComponent', () => {
     testStudent.lastName = 'User';
     testStudent.studentNumber = '1234';
     expect(component.filteredOptions).toEqual([testStudent]);
-  });
+  }));
+
   it('should add filter', () => {
     const event: MatAutocompleteSelectedEvent = <MatAutocompleteSelectedEvent>{
       option: {
@@ -82,5 +85,16 @@ describe('SearchBoxComponent', () => {
     expect(component.searchModel.stringQuery).toEqual('');
     const expectedFilter = new SearchFilter('testKey', 'test', 'testLabel');
     expect(component.searchModel.filters).toContain(expectedFilter);
+  });
+
+  it('should reset pagination while keeping pageSize', () => {
+    const searchPagination = new SearchPagination();
+    searchPagination.pageSize = 123;
+    searchPagination.pageIndex = 2;
+    component.searchModel.pagination = searchPagination;
+    component.executeSearch();
+
+    expect(component.searchModel.pagination.pageSize).toEqual(123);
+    expect(component.searchModel.pagination.pageIndex).toEqual(0);
   });
 });

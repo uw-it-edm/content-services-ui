@@ -17,6 +17,8 @@ export class SearchPage {
   searchButton = element(by.name('searchButton'));
   paginatorCounts = element.all(by.className('mat-paginator-range-label'));
   searchResultsRows = element.all(by.css('app-search-results .mat-row'));
+  paginatorSizeDropDowns = element.all(by.css('.mat-paginator-page-size-select mat-select'));
+  paginatorNextButtons = element.all(by.className('mat-paginator-navigation-next'));
 
   constructor(private profile: string = 'demo') {}
 
@@ -123,6 +125,10 @@ export class SearchPage {
       .all(by.tagName('a'));
   }
 
+  getFacetItemLinksTexts(facetHeaderIndex: number) {
+    return this.getFacetItemLinks(facetHeaderIndex).getText();
+  }
+
   getBackgroundColor(webElement: WebElement) {
     return webElement.getCssValue('background-color');
   }
@@ -132,5 +138,18 @@ export class SearchPage {
       .actions()
       .mouseMove(webElement)
       .perform();
+  }
+
+  getResultColumnsPaddingSizes() {
+    return element.all(by.className('cs-search-table-cell')).getCssValue('padding-right');
+  }
+
+  clickPaginatorSizeOption(size: string) {
+    element
+      .all(by.cssContainingText('.mat-option-text', size))
+      .get(0)
+      .click();
+    const selectPanel = element(by.className('mat-select-panel'));
+    browser.wait(ExpectedConditions.invisibilityOf(selectPanel), 5000);
   }
 }

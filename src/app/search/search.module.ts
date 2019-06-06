@@ -14,7 +14,14 @@ import { DisplaySearchPageComponent } from './display-search-page/display-search
 import { DocumentDisplayerComponent } from './document-displayer/document-displayer.component';
 
 @NgModule({
-  imports: [SharedModule, FormsModule, ReactiveFormsModule, MaterialConfigModule, NgxDaterangepickerMd, UserModule],
+  imports: [
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MaterialConfigModule,
+    NgxDaterangepickerMd.forRoot(),
+    UserModule
+  ],
   exports: [SearchPageComponent, DisplaySearchPageComponent],
   declarations: [
     SearchDaterangePickerComponent,

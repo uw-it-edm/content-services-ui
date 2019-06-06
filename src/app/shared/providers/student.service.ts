@@ -1,6 +1,6 @@
 import { Observable, of } from 'rxjs';
 
-import { mergeMap } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
@@ -82,7 +82,9 @@ export class StudentService {
   @CacheObservableDecorator
   public read(studentNumber: string): Observable<Student> {
     const options = this.buildRequestOptions();
-    return this.http.get<Student>(this.studentUrl + '/' + studentNumber, options);
+    return this.http
+      .get<Student>(this.studentUrl + '/' + studentNumber, options)
+      .pipe(map(dataApiStudent => this.fromDataApiObject(dataApiStudent)));
   }
 
   private searchStudent(searchModel: StudentSearchModel): Observable<StudentSearchResults> {
@@ -99,7 +101,39 @@ export class StudentService {
 
     const options = this.buildRequestOptions(params);
 
-    return this.http.get<StudentSearchResults>(this.studentUrl, options);
+    return this.http.get<StudentSearchResults>(this.studentUrl, options).pipe(
+      map((results: StudentSearchResults) => {
+        const studentSearchResults = new StudentSearchResults();
+
+        studentSearchResults.first = results.first;
+        studentSearchResults.last = results.last;
+        studentSearchResults.number = results.number;
+        studentSearchResults.numberOfElements = results.numberOfElements;
+        studentSearchResults.size = results.size;
+        studentSearchResults.sort = results.sort;
+        studentSearchResults.totalElements = results.totalElements;
+        studentSearchResults.totalPages = results.totalPages;
+
+        studentSearchResults.content = results.content.map((dataApiStudent: Student) => {
+          return this.fromDataApiObject(dataApiStudent);
+        });
+
+        return studentSearchResults;
+      })
+    );
+  }
+
+  private fromDataApiObject(dataApiStudent: Student) {
+    const student = new Student();
+    student.birthdate = dataApiStudent.birthdate;
+    student.displayName = dataApiStudent.displayName;
+    student.email = dataApiStudent.email;
+    student.firstName = dataApiStudent.firstName;
+    student.lastName = dataApiStudent.lastName;
+    student.netId = dataApiStudent.netId;
+    student.studentNumber = dataApiStudent.studentNumber;
+    student.studentSystemKey = dataApiStudent.studentSystemKey;
+    return student;
   }
 
   private buildRequestOptions(httpParams?: HttpParams) {
