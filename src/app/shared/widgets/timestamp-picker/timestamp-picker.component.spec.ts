@@ -34,6 +34,16 @@ describe('TimestampPickerComponent', () => {
     expect(component.propagateChange).toHaveBeenCalledWith(1511292577000);
   });
 
+  it('should have the correct display when input is timestamp with an old date', () => {
+    component.writeValue(-57600000);
+    fixture.detectChanges();
+
+    const input = fixture.debugElement.query(By.css('input'));
+    const el = input.nativeElement;
+
+    expect(el.value).toBe('12/31/1969');
+  });
+
   it('should have the correct display when input is timestamp', () => {
     component.writeValue(1511292577000);
     fixture.detectChanges();

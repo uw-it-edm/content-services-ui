@@ -76,7 +76,7 @@ export class TimestampPickerComponent implements ControlValueAccessor, OnInit, O
   }
 
   writeValue(value: any): void {
-    if (value !== undefined && parseInt(value, 10) > 0) {
+    if (value !== undefined && Number.isInteger(value)) {
       const date = moment(value);
 
       const shift = this.getSeattleOffset(date) - this.getUserOffsetAtDate(date);
