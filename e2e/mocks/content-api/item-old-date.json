@@ -1,0 +1,26 @@
+{
+  "id": "__ItemId__",
+  "label": "sample file",
+  "metadata": {
+    "ProfileId": "Demo",
+    "Account": "demo-account",
+    "LastModifiedDate": -57600000,
+    "LastModifier": "edm-tester",
+    "OriginalFileName": "text-sample1.pdf",
+    "DocumentType": "Document",
+    "ReleaseDate": 1496958226000,
+    "WebExtension": "pdf",
+    "RevisionId": "1",
+    "MimeType": "application/pdf",
+    "LastRevisionDate": 1519172295000,
+    "FileExtension": "pdf",
+    "RecordFilingDate": 1519154994000,
+    "Filer": "edm-tester",
+    "FileSize": "35910",
+    "PublishStatus": "Published",
+    "StudentId": "3333333",
+    "RegId": "ABCDE",
+    "parentType": "Parent2",
+    "childType": "Child2Parent2"
+  }
+}
