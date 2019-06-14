@@ -20,13 +20,14 @@ import { ContentObject } from '../shared/model/content-object';
 import { ContentObjectListComponent } from '../content-object-list/content-object-list.component';
 import { NotificationService } from '../../shared/providers/notification.service';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
+import { ComponentCanDeactivate } from '../../routing/shared/component-can-deactivate';
 
 @Component({
   selector: 'app-edit-page',
   templateUrl: './edit-page.component.html',
   styleUrls: ['./edit-page.component.css']
 })
-export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
+export class EditPageComponent extends ComponentCanDeactivate implements OnInit, OnDestroy, AfterViewInit {
   private componentDestroyed = new Subject();
   private user: User;
 
@@ -39,6 +40,7 @@ export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
   id: string;
   previewing: boolean;
   submitPending: boolean;
+  successfulSave: boolean;
 
   @ViewChild(DynamicComponentDirective) contentViewDirective: DynamicComponentDirective;
   @ViewChild(ContentViewComponent) contentViewComponent: ContentViewComponent;
@@ -52,7 +54,9 @@ export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
     private fb: FormBuilder,
     private userService: UserService,
     private notificationService: NotificationService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit() {
     this.user = this.userService.getUser();
@@ -144,7 +148,9 @@ export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
     const metadataOverrides = this.pageConfig.onSave;
 
     if (this.form.valid) {
-      this.contentObjectListComponent.saveItem(fields, formModel, metadataOverrides);
+      this.contentObjectListComponent.saveItem(fields, formModel, metadataOverrides).then(successfulSave => {
+        this.successfulSave = successfulSave;
+      });
     } else {
       const invalidFields = <FormControl[]>Object.keys(this.form.controls)
         .map(key => this.form.controls[key])
@@ -171,5 +177,9 @@ export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
         this.titleService.setTitle(this.pageConfig.pageName);
       }
     }
+  }
+
+  public canDeactivate(): boolean {
+    return this.successfulSave || !this.form.dirty;
   }
 }

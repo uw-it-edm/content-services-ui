@@ -15,13 +15,14 @@ import { ContentObjectListComponent } from '../content-object-list/content-objec
 import { NotificationService } from '../../shared/providers/notification.service';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { takeUntil } from 'rxjs/operators';
+import { ComponentCanDeactivate } from '../../routing/shared/component-can-deactivate';
 
 @Component({
   selector: 'app-create-page',
   templateUrl: './create-page.component.html',
   styleUrls: ['./create-page.component.css']
 })
-export class CreatePageComponent implements OnInit, OnDestroy {
+export class CreatePageComponent extends ComponentCanDeactivate implements OnInit, OnDestroy {
   private componentDestroyed = new Subject();
   private user: User;
 
@@ -32,6 +33,7 @@ export class CreatePageComponent implements OnInit, OnDestroy {
   form: FormGroup;
   previewing: boolean;
   submitPending: boolean;
+  successfulSave: boolean;
 
   @ViewChild(DynamicComponentDirective) contentViewDirective: DynamicComponentDirective;
   @ViewChild(ContentViewComponent) contentViewComponent: ContentViewComponent;
@@ -45,7 +47,9 @@ export class CreatePageComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private userService: UserService,
     private notificationService: NotificationService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit() {
     this.user = this.userService.getUser();
@@ -126,7 +130,9 @@ export class CreatePageComponent implements OnInit, OnDestroy {
     } else if (!this.contentObjectListComponent.hasContentObjects()) {
       this.notificationService.error('No file attached');
     } else {
-      this.contentObjectListComponent.saveItem(fields, formModel, metadataOverrides);
+      this.contentObjectListComponent.saveItem(fields, formModel, metadataOverrides).then(successfulSave => {
+        this.successfulSave = successfulSave;
+      });
     }
   }
 
@@ -166,5 +172,9 @@ export class CreatePageComponent implements OnInit, OnDestroy {
 
   buttonPress(button) {
     this[button.command]();
+  }
+
+  public canDeactivate(): boolean {
+    return this.successfulSave || !this.form.dirty;
   }
 }

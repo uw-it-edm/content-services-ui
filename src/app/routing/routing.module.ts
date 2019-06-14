@@ -23,6 +23,7 @@ import { UserModule } from '../user/user.module';
 import { CreatePageComponent } from '../content/create-page/create-page.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DisplaySearchPageComponent } from '../search/display-search-page/display-search-page.component';
+import { PendingChangesGuard } from './shared/pending-changes.guard';
 
 let enableRouterTracing = false;
 if (environment.enableRouterTracing) {
@@ -44,6 +45,7 @@ const appRoutes: Routes = [
       {
         path: 'create',
         component: CreatePageComponent,
+        canDeactivate: [PendingChangesGuard],
         resolve: {
           config: ConfigResolver
         }
@@ -51,6 +53,7 @@ const appRoutes: Routes = [
       {
         path: 'edit/:id',
         component: EditPageComponent,
+        canDeactivate: [PendingChangesGuard],
         resolve: {
           config: ConfigResolver
         }
@@ -102,6 +105,6 @@ const appRoutes: Routes = [
   ],
   declarations: [AppComponent, PageNotFoundComponent],
   exports: [RouterModule],
-  providers: [ConfigResolver, AuthGardService, UserService]
+  providers: [ConfigResolver, AuthGardService, UserService, PendingChangesGuard]
 })
 export class RoutingModule {}

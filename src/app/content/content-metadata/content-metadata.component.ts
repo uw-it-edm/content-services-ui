@@ -71,6 +71,8 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
           metaDataForm.get(field.key).patchValue(this.contentItem.metadata[field.key]);
         });
       }
+
+      this.formGroup.markAsPristine(); // form shouldn't be dirty after initial loading of metadata
     }
   }
 
