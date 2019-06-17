@@ -1,5 +1,6 @@
 import { SearchModel } from './search-model';
 import { SearchFilter } from './search-filter';
+import { SearchPagination } from './search-pagination';
 
 describe('SearchModel', () => {
   let searchModel: SearchModel;
@@ -44,5 +45,16 @@ describe('SearchModel', () => {
     expect(searchModel.filters.length).toBe(1);
 
     expect(searchModel.hasFilterForKey('filter2')).toBeFalsy();
+  });
+
+  it('should keep the pageSize when resetting', () => {
+    searchModel.pagination = new SearchPagination(10, 500);
+    expect(searchModel.pagination.pageIndex).toBe(10);
+    expect(searchModel.pagination.pageSize).toBe(500);
+
+    searchModel.pagination.reset();
+
+    expect(searchModel.pagination.pageIndex).toBe(0);
+    expect(searchModel.pagination.pageSize).toBe(500);
   });
 });

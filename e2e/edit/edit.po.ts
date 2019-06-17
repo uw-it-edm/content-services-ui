@@ -1,4 +1,4 @@
-import { browser, by, element, ExpectedConditions } from 'protractor';
+import {browser, by, element, ExpectedConditions} from 'protractor';
 import * as path from 'path';
 
 export class EditPage {
@@ -56,7 +56,7 @@ export class EditPage {
 
   getSnackBarText() {
     const snackBar = element(by.className('mat-simple-snackbar'));
-    browser.wait(ExpectedConditions.visibilityOf(snackBar), 5000);
+    browser.wait(ExpectedConditions.visibilityOf(snackBar), 10000);
     return snackBar.getText();
   }
 

@@ -12,7 +12,11 @@ import { RouterModule } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { ConfigResolver } from '../../routing/shared/config-resolver.service';
 import { CustomTextItem } from '../../core/shared/model/config';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { DataApiValueDisplayComponent } from '../../shared/widgets/data-api-display/data-api-value-display.component';
+import { FacetConfig } from '../../core/shared/model/facet-config';
+import { DataApiValueService } from '../../shared/providers/dataapivalue.service';
+import { NotificationService } from '../../shared/providers/notification.service';
+import { NO_ERRORS_SCHEMA, QueryList } from '@angular/core';
 import { SearchPagination } from '../shared/model/search-pagination';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -26,6 +30,18 @@ class MockConfigResolver extends ConfigResolver {
   }
 }
 
+class MockDataApiValueService extends DataApiValueService {
+  constructor() {
+    super(null, null);
+  }
+}
+
+class MockNotificationService extends NotificationService {
+  constructor() {
+    super(null);
+  }
+}
+
 describe('FacetsBoxComponent', () => {
   let component: FacetsBoxComponent;
   let fixture: ComponentFixture<FacetsBoxComponent>;
@@ -33,8 +49,12 @@ describe('FacetsBoxComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [FormsModule, MaterialConfigModule, RouterModule, NoopAnimationsModule],
-      declarations: [FacetsBoxComponent],
-      providers: [{ provide: ConfigResolver, useValue: new MockConfigResolver() }],
+      declarations: [FacetsBoxComponent, DataApiValueDisplayComponent],
+      providers: [
+        { provide: ConfigResolver, useValue: new MockConfigResolver() },
+        { provide: DataApiValueService, useValue: new MockDataApiValueService() },
+        { provide: NotificationService, useValue: new MockNotificationService() }
+      ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
@@ -48,10 +68,18 @@ describe('FacetsBoxComponent', () => {
     component.pageConfig = new SearchPageConfig();
 
     const searchResults = new SearchResults();
-
     component.searchResults$ = of(searchResults);
-
     fixture.detectChanges();
+
+    // create a DataApiDisplayComponen instance
+    const dataApiDisplayComponentFixture = TestBed.createComponent(DataApiValueDisplayComponent);
+    const dataApiDisplayComponent = dataApiDisplayComponentFixture.componentInstance;
+    dataApiDisplayComponent.value = 'testValue';
+    dataApiDisplayComponent.type = 'my-type';
+    dataApiDisplayComponent.labelPath = 'label';
+    dataApiDisplayComponent.displayValue = 'displayValue';
+    component.dataApiDisplayComponents = new QueryList();
+    component.dataApiDisplayComponents.reset([dataApiDisplayComponent]);
   });
 
   it('should be created', () => {
@@ -68,7 +96,20 @@ describe('FacetsBoxComponent', () => {
     expect(component.searchModel.filters).toEqual([searchFilter]);
   });
 
-  it('should reset pagination', () => {
+  it('should use display value', () => {
+    const facetConfig = new FacetConfig();
+    facetConfig.key = 'testKey';
+    facetConfig.label = 'testLabel';
+    facetConfig.dataApiValueType = 'my-type';
+    facetConfig.dataApiLabelPath = 'label';
+
+    const searchFilter = new SearchFilter('testKey', 'testValue', 'testLabel', 'displayValue');
+    component.addFacetFilter(facetConfig.key, 'testValue', facetConfig.label, facetConfig);
+    expect(component.searchModel.filters.length).toEqual(1);
+    expect(component.searchModel.filters).toEqual([searchFilter]);
+  });
+
+  it('should reset pagination while keeping pageSize', () => {
     const searchPagination = new SearchPagination();
     searchPagination.pageSize = 123;
     searchPagination.pageIndex = 2;
@@ -77,7 +118,7 @@ describe('FacetsBoxComponent', () => {
     const searchFilter = new SearchFilter('testKey', 'testString', 'testLabel');
     component.addFacetFilter(searchFilter.key, searchFilter.value, searchFilter.label);
 
-    expect(component.searchModel.pagination.pageSize).toEqual(50);
+    expect(component.searchModel.pagination.pageSize).toEqual(123);
     expect(component.searchModel.pagination.pageIndex).toEqual(0);
   });
 });

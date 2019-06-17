@@ -99,11 +99,11 @@ describe('Search Page', () => {
     const testStudentId = studentData.content[0].studentNumber;
 
     page.searchBox.sendKeys(testStudentId);
-    expect(page.autoCompletePanel.isDisplayed());
+    expect(page.autoCompletePanel.isDisplayed()).toBeTruthy();
     expect(page.autoCompletedOption.getText()).toEqual(studentData.content[0].displayName);
 
     page.autoCompletedOption.click();
-    expect(page.selectedFacet.isDisplayed());
+    expect(page.selectedFacet.isDisplayed()).toBeTruthy();
     expect(page.selectedFacet.getText()).toMatch(new RegExp(testStudentId));
   });
 
@@ -134,8 +134,11 @@ describe('Search Page', () => {
     });
   });
 
-  it('should display correct date range in search filter when Today is selected', () => {
+  it('should clear date range text when date filter is removed', () => {
     selectAndVerifyDateRange('Today');
+    page.removeSelectedFacet();
+
+    expect(page.getDateRangeInputText()).toEqual('');
   });
 
   it('should display correct date range in search filter when Yesterday is selected', () => {
@@ -272,5 +275,45 @@ describe('Search Page', () => {
     const dataApiData = require('../mocks/data-api/' + dataApiFileName);
 
     expect(page.getResultsByColumn(dataApiColumnKey)).toContain(dataApiData.data.label);
+  });
+
+  it('should display the label for data-api sourced facets', () => {
+    const dataApiColumnKey = 'childType';
+    const searchResultsDataApiKey = searchData.searchResults[0].metadata[`${dataApiColumnKey}`];
+    const dataApiFileName = `child-type-${searchResultsDataApiKey}-get.json`;
+    const dataApiData = require('../mocks/data-api/' + dataApiFileName);
+
+    const expectedFacetLabel = dataApiData.data.label;
+    expect(expectedFacetLabel.length).not.toEqual(0, 'Facets label is not configured in data-api mock.');
+    expect(page.getFacetItemLinksTexts(5)).toMatch(expectedFacetLabel);
+  });
+
+  it('should display results column with fixed padding', () => {
+    const expectedPaddingSize = '10px';
+    page.getResultColumnsPaddingSizes().then(paddingSizes => {
+      for (const size of paddingSizes) {
+        expect(size).toEqual(expectedPaddingSize);
+      }
+    });
+  });
+
+  it('should reset paging and retain page size when search button is clicked', () => {
+    page.paginatorSizeDropDowns.get(0).click();
+    const selectedSize = 10;
+    page.clickPaginatorSizeOption(selectedSize.toString());
+    expect(page.paginatorSizeDropDowns.get(0).getText()).toEqual(selectedSize.toString());
+
+    page.paginatorNextButtons.get(0).click();
+    const totalResults = searchData.totalCount;
+    const newStartPage = selectedSize + 1;
+    const newEndPage = selectedSize * 2;
+    let expectedPaginatorText = `${newStartPage} - ${newEndPage} of ${totalResults}`;
+    expect(page.paginatorCounts.get(0).getText()).toEqual(expectedPaginatorText);
+
+    page.searchButton.click();
+
+    expect(page.paginatorSizeDropDowns.get(0).getText()).toEqual(selectedSize.toString());
+    expectedPaginatorText = `1 - ${selectedSize} of ${totalResults}`;
+    expect(page.paginatorCounts.get(0).getText()).toEqual(expectedPaginatorText);
   });
 });
