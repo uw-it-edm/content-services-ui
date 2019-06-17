@@ -14,11 +14,13 @@ import { ConfigResolver } from '../../routing/shared/config-resolver.service';
 import { CustomTextItem } from '../../core/shared/model/config';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { SearchPagination } from '../shared/model/search-pagination';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 class MockConfigResolver extends ConfigResolver {
   constructor() {
     super(null, null, null);
   }
+
   getCustomTextSubject(): Observable<Map<string, CustomTextItem>> {
     return of(new Map());
   }
@@ -30,7 +32,7 @@ describe('FacetsBoxComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, MaterialConfigModule, RouterModule],
+      imports: [FormsModule, MaterialConfigModule, RouterModule, NoopAnimationsModule],
       declarations: [FacetsBoxComponent],
       providers: [{ provide: ConfigResolver, useValue: new MockConfigResolver() }],
       schemas: [NO_ERRORS_SCHEMA]

@@ -148,9 +148,12 @@ export class EditPageComponent extends ComponentCanDeactivate implements OnInit,
     const metadataOverrides = this.pageConfig.onSave;
 
     if (this.form.valid) {
-      this.contentObjectListComponent.saveItem(fields, formModel, metadataOverrides).then(successfulSave => {
-        this.successfulSave = successfulSave;
-      });
+      const saveResult = this.contentObjectListComponent.saveItem(fields, formModel, metadataOverrides);
+      if (saveResult) {
+        saveResult.then(successfulSave => {
+          this.successfulSave = successfulSave;
+        });
+      }
     } else {
       const invalidFields = <FormControl[]>Object.keys(this.form.controls)
         .map(key => this.form.controls[key])
