@@ -14,6 +14,8 @@
     "previousContentItemButton": {
       "label": "Previous",
       "description": "Move up to previous content item"
+    },"unsavedChangesMessage": {
+      "label": "Click OK to lose your changes."
     }
   },
   "pages": {
