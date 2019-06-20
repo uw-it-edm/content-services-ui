@@ -158,4 +158,11 @@ describe('Edit Page', () => {
 
     expect(editPageForBadItemWithoutCustomMsg.getSnackBarText()).toEqual('Failed to save 1 item\nDismiss');
   });
+
+  it('should display dates that are before 1970', () => {
+    page.navigateTo('item-old-date');
+    browser.wait(ExpectedConditions.titleIs(demoConfig.pages.edit.pageName));
+
+    expect(page.getDateText()).toEqual('12/31/1969');
+  });
 });
