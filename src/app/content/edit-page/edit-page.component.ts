@@ -21,6 +21,8 @@ import { ContentObjectListComponent } from '../content-object-list/content-objec
 import { NotificationService } from '../../shared/providers/notification.service';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { ComponentCanDeactivate } from '../../routing/shared/component-can-deactivate';
+import { ContentMetadataComponent } from '../content-metadata/content-metadata.component';
+import { FileUploadComponent } from '../../shared/widgets/file-upload/file-upload.component';
 
 @Component({
   selector: 'app-edit-page',
@@ -40,12 +42,10 @@ export class EditPageComponent extends ComponentCanDeactivate implements OnInit,
   id: string;
   previewing: boolean;
   submitPending: boolean;
-  successfulSave: boolean;
 
   @ViewChild(DynamicComponentDirective) contentViewDirective: DynamicComponentDirective;
   @ViewChild(ContentViewComponent) contentViewComponent: ContentViewComponent;
   @ViewChild(ContentObjectListComponent) contentObjectListComponent: ContentObjectListComponent;
-
   constructor(
     private contentService: ContentService,
     private route: ActivatedRoute,
@@ -151,7 +151,9 @@ export class EditPageComponent extends ComponentCanDeactivate implements OnInit,
       const saveResult = this.contentObjectListComponent.saveItem(fields, formModel, metadataOverrides);
       if (saveResult) {
         saveResult.then(successfulSave => {
-          this.successfulSave = successfulSave;
+          if (successfulSave) {
+            this.form.markAsPristine(); // the entire form has saved and is no longer dirty
+          }
         });
       }
     } else {
@@ -183,6 +185,6 @@ export class EditPageComponent extends ComponentCanDeactivate implements OnInit,
   }
 
   public canDeactivate(): boolean {
-    return this.successfulSave || !this.form.dirty;
+    return !this.form.dirty;
   }
 }

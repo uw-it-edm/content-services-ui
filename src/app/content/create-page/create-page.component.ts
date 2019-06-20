@@ -16,6 +16,8 @@ import { NotificationService } from '../../shared/providers/notification.service
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { takeUntil } from 'rxjs/operators';
 import { ComponentCanDeactivate } from '../../routing/shared/component-can-deactivate';
+import { ContentMetadataComponent } from '../content-metadata/content-metadata.component';
+import { FileUploadComponent } from '../../shared/widgets/file-upload/file-upload.component';
 
 @Component({
   selector: 'app-create-page',
@@ -33,7 +35,6 @@ export class CreatePageComponent extends ComponentCanDeactivate implements OnIni
   form: FormGroup;
   previewing: boolean;
   submitPending: boolean;
-  successfulSave: boolean;
 
   @ViewChild(DynamicComponentDirective) contentViewDirective: DynamicComponentDirective;
   @ViewChild(ContentViewComponent) contentViewComponent: ContentViewComponent;
@@ -130,9 +131,15 @@ export class CreatePageComponent extends ComponentCanDeactivate implements OnIni
     } else if (!this.contentObjectListComponent.hasContentObjects()) {
       this.notificationService.error('No file attached');
     } else {
-      this.contentObjectListComponent.saveItem(fields, formModel, metadataOverrides).then(successfulSave => {
-        this.successfulSave = successfulSave;
-      });
+      const saveResult = this.contentObjectListComponent.saveItem(fields, formModel, metadataOverrides);
+
+      if (saveResult) {
+        saveResult.then(successfulSave => {
+          if (successfulSave) {
+            this.form.markAsPristine(); // the entire form has saved and is no longer dirty
+          }
+        });
+      }
     }
   }
 
@@ -175,6 +182,6 @@ export class CreatePageComponent extends ComponentCanDeactivate implements OnIni
   }
 
   public canDeactivate(): boolean {
-    return this.successfulSave || !this.form.dirty;
+    return !this.form.dirty;
   }
 }
