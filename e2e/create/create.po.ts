@@ -1,5 +1,5 @@
-import {browser, by, element, ExpectedConditions} from 'protractor';
-import {protractor} from 'protractor/built/ptor';
+import { browser, by, element, ExpectedConditions } from 'protractor';
+import { protractor } from 'protractor/built/ptor';
 
 export class CreatePage {
   public pageUrl = `${browser.baseUrl}/${this.profile}/create`;
@@ -14,7 +14,7 @@ export class CreatePage {
   public clearButton = element(by.buttonText('clear'));
   public pdfViewer = element(by.tagName('pdf-viewer'));
   public formFields = element.all(by.tagName('mat-form-field'));
-  public requiredFields = this.formFields.all(by.css('[required=\'\']'));
+  public requiredFields = this.formFields.all(by.css("[required='']"));
   public dismissButton = element(by.buttonText('Dismiss'));
   public selectPanel = element(by.className('mat-select-panel'));
   public metadataErrorMessages = element.all(by.className('mat-error'));
@@ -23,7 +23,16 @@ export class CreatePage {
   constructor(private profile: string = 'demo') {}
 
   navigateTo() {
-    return browser.get(this.pageUrl);
+    return browser.get(this.pageUrl).catch(() => {
+      browser
+        .switchTo()
+        .alert()
+        .then(alert => {
+          console.log('WARN: Unexpected alert left open from previous test. ');
+          alert.accept();
+        });
+      return browser.get(this.pageUrl);
+    });
   }
 
   getPageTitle() {
@@ -139,5 +148,14 @@ export class CreatePage {
         }
       });
     });
+  }
+
+  acceptAlert() {
+    browser
+      .switchTo()
+      .alert()
+      .then(alert => {
+        alert.accept();
+      });
   }
 }
