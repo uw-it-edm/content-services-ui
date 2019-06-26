@@ -216,6 +216,13 @@ describe('Create Page for Demo', () => {
 
     expect(page.getStudentValue()).toEqual('');
   });
+
+  it('should display alert when metadata is entered and browser is refreshed without saving', () => {
+    page.inputField.sendKeys('any text');
+    browser.driver.navigate().refresh();
+
+    page.clickAcceptAlert();
+  });
 });
 
 describe('Create Page for Demo2', () => {

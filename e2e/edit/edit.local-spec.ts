@@ -175,4 +175,26 @@ describe('Edit Page', () => {
 
     expect(page.getDateText()).toEqual('12/31/1969');
   });
+
+  it('should display alert when metadata is edited and browser back button is hit without saving', () => {
+    page.inputField.sendKeys('any text');
+    browser.navigate().back();
+
+    page.clickAcceptAlert();
+  });
+
+  it('should display alert when metadata is edited and Next button is hit without saving', () => {
+    searchPage.navigateTo();
+    searchPage.searchResultsRows.first().click();
+
+    const searchData = require('../mocks/search-api/search.json');
+    const itemId = searchData.searchResults[0].id;
+    const editPage = new EditPage('demo', itemId);
+    expect(browser.getCurrentUrl()).toContain(editPage.pageUrl);
+
+    editPage.dateInputField.get(0).sendKeys('1/1/2020');
+    editPage.nextItemButton.click();
+
+    editPage.clickAcceptAlert();
+  });
 });
