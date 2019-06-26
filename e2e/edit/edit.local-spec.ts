@@ -65,6 +65,7 @@ describe('Edit Page', () => {
     page.inputField.sendKeys('any text');
 
     expect(page.saveButton.isEnabled()).toBeTruthy();
+    page.saveButton.click();
   });
 
   it('should navigate to Search page when Return to Results link is clicked', () => {
@@ -134,6 +135,9 @@ describe('Edit Page', () => {
     page.clickDropDownByLabel('DataApiOption child');
 
     expect(page.selectPanel.getText()).toEqual(getExpectedChildrenLabels().trim());
+
+    page.clickDropDownOptionValueByText(getExpectedChildrenLabels().split('\n')[0]);
+    page.saveButton.click();
   });
 
   it('should display customized error message on save if custom message is configured', () => {
@@ -147,6 +151,9 @@ describe('Edit Page', () => {
     expect(customizedErrMsgLabel.length).not.toEqual(0, 'Custom error message is not configured in demo profile.');
     const expectedCustomizedMsg = `Failed to save 1 item\n${customizedErrMsgLabel}\nDismiss`;
     expect(editPageForBadItemWithCustomMsg.getSnackBarText()).toEqual(expectedCustomizedMsg);
+
+    page.clickReturnToResultsLink();
+    page.clickAcceptAlert();
   });
 
   it('should display default error message on save if custom message is not configured', () => {
@@ -157,6 +164,9 @@ describe('Edit Page', () => {
     editPageForBadItemWithoutCustomMsg.saveButton.click();
 
     expect(editPageForBadItemWithoutCustomMsg.getSnackBarText()).toEqual('Failed to save 1 item\nDismiss');
+
+    page.clickReturnToResultsLink();
+    page.clickAcceptAlert();
   });
 
   it('should display dates that are before 1970', () => {
@@ -164,5 +174,27 @@ describe('Edit Page', () => {
     browser.wait(ExpectedConditions.titleIs(demoConfig.pages.edit.pageName));
 
     expect(page.getDateText()).toEqual('12/31/1969');
+  });
+
+  it('should display alert when metadata is edited and browser back button is hit without saving', () => {
+    page.inputField.sendKeys('any text');
+    browser.navigate().back();
+
+    page.clickAcceptAlert();
+  });
+
+  it('should display alert when metadata is edited and Next button is hit without saving', () => {
+    searchPage.navigateTo();
+    searchPage.searchResultsRows.first().click();
+
+    const searchData = require('../mocks/search-api/search.json');
+    const itemId = searchData.searchResults[0].id;
+    const editPage = new EditPage('demo', itemId);
+    expect(browser.getCurrentUrl()).toContain(editPage.pageUrl);
+
+    editPage.dateInputField.get(0).sendKeys('1/1/2020');
+    editPage.nextItemButton.click();
+
+    editPage.clickAcceptAlert();
   });
 });

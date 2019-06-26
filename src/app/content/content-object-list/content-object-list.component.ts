@@ -1,4 +1,4 @@
-import { takeUntil } from 'rxjs/operators';
+import { first, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ContentObject } from '../shared/model/content-object';
 import { FormGroup } from '@angular/forms';
@@ -7,7 +7,7 @@ import { ContentService } from '../shared/content.service';
 import { Field } from '../../core/shared/model/field';
 import { Config } from '../../core/shared/model/config';
 import { User } from '../../user/shared/user';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../user/shared/user.service';
@@ -264,8 +264,8 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
     }
   }
 
-  saveItem(fields: Array<Field>, formModel: any, metadataOverrides: Array<any>) {
-    const contentItemObservables = new Array<Observable<ContentItem>>();
+  saveItem(fields: Array<Field>, formModel: any, metadataOverrides: Array<any>): Promise<boolean> {
+    const contentItemPromises = new Array<Promise<ContentItem>>();
 
     if (this.contentObjects) {
       this.createdItems = new Array<ContentItem>();
@@ -290,25 +290,34 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
         }
 
         if (contentItem$) {
-          contentItem$.subscribe(
-            item => {
+          const contentItemSaving = contentItem$.pipe(first()).toPromise();
+          contentItemSaving
+            .then(item => {
               contentObject.onLoad(item);
               contentObject.failed = false;
               this.updateComponentSavedItemLists(item);
               this.saving.emit(false); // item saving completed
               this.notify();
-            },
-            err => {
+            })
+            .catch(err => {
               this.failures.push(err);
               contentObject.failed = true;
               this.saving.emit(false); // item saving failed
               this.notify();
-            }
-          );
-          contentItemObservables.push(contentItem$);
+            });
+          contentItemPromises.push(contentItemSaving);
         }
       }
     }
+
+    // when all documents have saved successfully, or short circuit and return false if there are any failures
+    return Promise.all(contentItemPromises)
+      .then(() => {
+        return true;
+      })
+      .catch(() => {
+        return false;
+      });
   }
 
   hasContentObjects() {

@@ -9,6 +9,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { Observable, of } from 'rxjs';
 import { ContentItem } from '../../content/shared/model/content-item';
 import { ContentService } from '../../content/shared/content.service';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 class MockContentService {
   read(itemId: string): Observable<ContentItem> {
@@ -41,7 +42,7 @@ describe('DocumentDisplayerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, MaterialConfigModule, BrowserModule],
+      imports: [FormsModule, MaterialConfigModule, BrowserModule, NoopAnimationsModule],
       declarations: [DocumentDisplayerComponent],
       providers: [{ provide: ContentService, useValue: mockContentService }],
       schemas: [NO_ERRORS_SCHEMA]

@@ -96,6 +96,9 @@ describe('Create Page for Demo', () => {
     page.clearButton.click();
 
     expect(page.uploadFilePanel.isDisplayed());
+
+    page.clickCancelButton();
+    page.clickAcceptAlert();
   });
 
   it('should replace the correct file when 1 of many files is replaced', () => {
@@ -107,13 +110,15 @@ describe('Create Page for Demo', () => {
     browser.waitForAngularEnabled(false);
     expect(page.getFileName(1)).toEqual(path.parse(textFilePath).base);
     browser.waitForAngularEnabled(true);
+
+    page.clickCancelButton();
+    page.clickAcceptAlert();
   });
 
   it('should display error message with focus on Dismiss button when no file is attached', () => {
     page.inputField.sendKeys('any text');
     page.saveButton.click();
 
-    expect(page.errorNotification.isDisplayed()).toBe(true);
     expect(page.dismissButton.getId()).toEqual(
       browser.driver
         .switchTo()
@@ -121,6 +126,10 @@ describe('Create Page for Demo', () => {
         .getId(),
       'Dismiss button is not set to focus.'
     );
+    page.dismissButton.click();
+
+    page.clickCancelButton();
+    page.clickAcceptAlert();
   });
 
   it('should display Upload Another checkbox that is checked by default', () => {
@@ -139,6 +148,9 @@ describe('Create Page for Demo', () => {
 
     searchPage.autoCompletedOption.click();
     expect(page.getStudentValue()).toEqual(studentName);
+
+    page.clickCancelButton();
+    page.clickAcceptAlert();
   });
 
   it('should indicate focus on all form fields when selected', () => {
@@ -168,6 +180,9 @@ describe('Create Page for Demo', () => {
 
     searchPage.autoCompletedOption.click();
     expect(page.getPersonValue()).toEqual(employee);
+
+    page.clickCancelButton();
+    page.clickAcceptAlert();
   });
 
   it('should display child list dynamically when parent list is selected', () => {
@@ -179,6 +194,12 @@ describe('Create Page for Demo', () => {
     page.clickDropDownByLabel('DataApiOption child');
 
     expect(page.selectPanel.getText()).toEqual(getExpectedChildrenLabels().trim());
+
+    const childList1 = getExpectedChildrenLabels().split('\n')[0];
+    page.clickDropDownOptionValueByText(childList1);
+
+    page.clickReturnToResultsButton();
+    page.clickAcceptAlert();
   });
 
   it('should clear Employee value when value is not selected from auto complete and Save button is clicked', () => {
@@ -194,6 +215,13 @@ describe('Create Page for Demo', () => {
     page.studentInput.sendKeys(protractor.Key.TAB);
 
     expect(page.getStudentValue()).toEqual('');
+  });
+
+  it('should display alert when metadata is entered and browser is refreshed without saving', () => {
+    page.inputField.sendKeys('any text');
+    browser.driver.navigate().refresh();
+
+    page.clickAcceptAlert();
   });
 });
 
@@ -213,6 +241,9 @@ describe('Create Page for Demo2', () => {
     page.populateRequiredFields(false);
 
     expect(page.saveButton.isEnabled()).toBe(true);
+
+    page.clickCancelButton();
+    page.clickAcceptAlert();
   });
 
   it('should display red error message when required field is not populated', () => {

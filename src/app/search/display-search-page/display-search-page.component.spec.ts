@@ -81,8 +81,7 @@ describe('DisplaySearchPageComponent', () => {
         MaterialConfigModule,
         MatAutocompleteModule,
         MatDatepickerModule,
-        MatOptionModule,
-        NoopAnimationsModule
+        MatOptionModule
       ],
       declarations: [DisplaySearchPageComponent, SearchBoxComponent, SearchResultsComponent],
       providers: [

@@ -18,11 +18,13 @@ import { DataApiValueService } from '../../shared/providers/dataapivalue.service
 import { NotificationService } from '../../shared/providers/notification.service';
 import { NO_ERRORS_SCHEMA, QueryList } from '@angular/core';
 import { SearchPagination } from '../shared/model/search-pagination';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 class MockConfigResolver extends ConfigResolver {
   constructor() {
     super(null, null, null);
   }
+
   getCustomTextSubject(): Observable<Map<string, CustomTextItem>> {
     return of(new Map());
   }
@@ -46,7 +48,7 @@ describe('FacetsBoxComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, MaterialConfigModule, RouterModule],
+      imports: [FormsModule, MaterialConfigModule, RouterModule, NoopAnimationsModule],
       declarations: [FacetsBoxComponent, DataApiValueDisplayComponent],
       providers: [
         { provide: ConfigResolver, useValue: new MockConfigResolver() },

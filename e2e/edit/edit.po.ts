@@ -1,4 +1,4 @@
-import {browser, by, element, ExpectedConditions} from 'protractor';
+import { browser, by, element, ExpectedConditions } from 'protractor';
 import * as path from 'path';
 
 export class EditPage {
@@ -19,7 +19,17 @@ export class EditPage {
   constructor(private profile: string = 'demo', private id: string = '123456') {}
 
   navigateTo(itemId: string = this.id) {
-    return browser.get(this.profileUrl + '/' + itemId);
+    const destination = this.profileUrl + '/' + itemId;
+    return browser.get(destination).catch(() => {
+      browser
+        .switchTo()
+        .alert()
+        .then(alert => {
+          console.log('WARN: Unexpected alert left open from previous test. ');
+          alert.accept();
+        });
+      return browser.get(destination);
+    });
   }
 
   getPageTitle() {
@@ -82,5 +92,14 @@ export class EditPage {
   clickDropDownByLabel(dropDownLabel: string) {
     element(by.cssContainingText('.mat-form-field', dropDownLabel)).click();
     browser.wait(ExpectedConditions.visibilityOf(this.selectPanel), 5000);
+  }
+
+  clickAcceptAlert() {
+    browser
+      .switchTo()
+      .alert()
+      .then(alert => {
+        alert.accept();
+      });
   }
 }

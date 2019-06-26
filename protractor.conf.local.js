@@ -9,7 +9,7 @@ exports.config = {
     './e2e/**/*.local-spec.ts'
   ],
   capabilities: {
-    'browserName': 'chrome',
+    browserName: 'chrome',
     chromeOptions: {
       args: ["--headless", "--disable-gpu", "--window-size=1280,1024"]
     }
