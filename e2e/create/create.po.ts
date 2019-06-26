@@ -150,7 +150,7 @@ export class CreatePage {
     });
   }
 
-  acceptAlert() {
+  clickAcceptAlert() {
     browser
       .switchTo()
       .alert()

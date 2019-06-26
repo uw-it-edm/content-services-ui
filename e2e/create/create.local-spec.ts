@@ -98,7 +98,7 @@ describe('Create Page for Demo', () => {
     expect(page.uploadFilePanel.isDisplayed());
 
     page.clickCancelButton();
-    page.acceptAlert();
+    page.clickAcceptAlert();
   });
 
   it('should replace the correct file when 1 of many files is replaced', () => {
@@ -112,7 +112,7 @@ describe('Create Page for Demo', () => {
     browser.waitForAngularEnabled(true);
 
     page.clickCancelButton();
-    page.acceptAlert();
+    page.clickAcceptAlert();
   });
 
   it('should display error message with focus on Dismiss button when no file is attached', () => {
@@ -129,7 +129,7 @@ describe('Create Page for Demo', () => {
     page.dismissButton.click();
 
     page.clickCancelButton();
-    page.acceptAlert();
+    page.clickAcceptAlert();
   });
 
   it('should display Upload Another checkbox that is checked by default', () => {
@@ -150,7 +150,7 @@ describe('Create Page for Demo', () => {
     expect(page.getStudentValue()).toEqual(studentName);
 
     page.clickCancelButton();
-    page.acceptAlert();
+    page.clickAcceptAlert();
   });
 
   it('should indicate focus on all form fields when selected', () => {
@@ -182,7 +182,7 @@ describe('Create Page for Demo', () => {
     expect(page.getPersonValue()).toEqual(employee);
 
     page.clickCancelButton();
-    page.acceptAlert();
+    page.clickAcceptAlert();
   });
 
   it('should display child list dynamically when parent list is selected', () => {
@@ -199,7 +199,7 @@ describe('Create Page for Demo', () => {
     page.clickDropDownOptionValueByText(childList1);
 
     page.clickReturnToResultsButton();
-    page.acceptAlert();
+    page.clickAcceptAlert();
   });
 
   it('should clear Employee value when value is not selected from auto complete and Save button is clicked', () => {
@@ -236,7 +236,7 @@ describe('Create Page for Demo2', () => {
     expect(page.saveButton.isEnabled()).toBe(true);
 
     page.clickCancelButton();
-    page.acceptAlert();
+    page.clickAcceptAlert();
   });
 
   it('should display red error message when required field is not populated', () => {
