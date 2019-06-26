@@ -266,7 +266,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
 
   saveItem(fields: Array<Field>, formModel: any, metadataOverrides: Array<any>): Promise<boolean> {
     const contentItemPromises = new Array<Promise<ContentItem>>();
-    
+
     if (this.contentObjects) {
       this.createdItems = new Array<ContentItem>();
       this.updatedItems = new Array<ContentItem>();
