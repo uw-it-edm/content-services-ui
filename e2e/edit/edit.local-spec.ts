@@ -11,7 +11,7 @@ const getCurrentUrl = function() {
   });
 };
 
-describe('Edit Page', () => {
+describe('Edit Page for Demo', () => {
   const page = new EditPage();
   const demoConfig = require('../mocks/profile-api/demo.json');
   const searchPage = new SearchPage();
@@ -196,5 +196,27 @@ describe('Edit Page', () => {
     editPage.nextItemButton.click();
 
     editPage.clickAcceptAlert();
+  });
+});
+
+describe('Edit Page for Demo2', () => {
+  const page = new EditPage('demo2', '123');
+  const searchPage = new SearchPage('demo2');
+
+  beforeEach(() => {
+    page.navigateTo();
+  });
+
+  it('should not display alert when the page has disabled fields and no changes are made', () => {
+    page.clickReturnToResultsLink();
+
+    expect(getCurrentUrl()).toMatch(searchPage.pageUrl);
+  });
+
+  it('should display alert when the page has disabled fields and metadata is updated without saving', () => {
+    page.inputField.sendKeys('any text');
+    browser.navigate().back();
+
+    page.clickAcceptAlert();
   });
 });
