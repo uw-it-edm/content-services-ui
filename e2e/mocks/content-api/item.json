@@ -21,6 +21,8 @@
     "StudentId": "3333333",
     "RegId": "ABCDE",
     "parentType": "Parent2",
-    "childType": "Child2Parent2"
+    "childType": "Child2Parent2",
+    "DataApiOptionLabel": "VAL_1",
+    "DataApiOptionCode": "VAL_1"
   }
 }

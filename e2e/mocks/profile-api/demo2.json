@@ -162,6 +162,12 @@
           "key": "RegId",
           "label": "Employee",
           "displayType": "person-autocomplete"
+        },
+        {
+          "key": "ReleaseDate",
+          "label": "Intake Date",
+          "displayType": "date",
+          "disabled": true
         }
       ],
       "buttons": [
