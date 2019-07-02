@@ -14,9 +14,11 @@ export class ElasticsearchDateValidatorDirective implements Validator {
   static readonly minDate = new Date(1653, 0, 1);
   static readonly maxDate = new Date(2285, 11, 31);
 
-  static validateTimestamp(control: FormControl): ValidationErrors {
-    const timestamp: number = control.value;
+  static validateControl(control: FormControl): ValidationErrors {
+    return ElasticsearchDateValidatorDirective.validateControl(control.value);
+  }
 
+  static validateTimestamp(timestamp: number): ValidationErrors {
     const isValid =
       isNullOrUndefined(timestamp) ||
       (!isNaN(timestamp) &&
@@ -37,6 +39,6 @@ export class ElasticsearchDateValidatorDirective implements Validator {
   constructor() {}
 
   validate(control: FormControl): ValidationErrors {
-    return ElasticsearchDateValidatorDirective.validateTimestamp(control);
+    return ElasticsearchDateValidatorDirective.validateControl(control);
   }
 }
