@@ -28,6 +28,7 @@ import { OptionsInputComponent } from '../../shared/widgets/options-input/option
 import { Field } from '../../core/shared/model/field';
 import { DataApiValueService } from '../../shared/providers/dataapivalue.service';
 import { PersonAutocompleteComponent } from '../../shared/widgets/person-autocomplete/person-autocomplete.component';
+import { CustomTextDirective } from '../../shared/directives/custom-text/custom-text.directive';
 
 class UserServiceMock extends UserService {
   constructor() {
@@ -67,7 +68,8 @@ describe('ContentMetadataComponent', () => {
         OptionsInputComponent,
         StudentAutocompleteComponent,
         PersonAutocompleteComponent,
-        TimestampPickerComponent
+        TimestampPickerComponent,
+        CustomTextDirective
       ],
       providers: [
         { provide: DataApiValueService, useValue: dataApiValueServiceSpy },
