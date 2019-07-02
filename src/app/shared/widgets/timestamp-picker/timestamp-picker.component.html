@@ -17,13 +17,13 @@
     <span
       *ngIf="
       formGroup.get('internalDate').hasError('required') && !formGroup.get('internalDate').hasError('matDatepickerParse')">
-      <span appCustomText="timePickerRequired" defaultValue="{{errorMessage}}"></span>
+      <span appCustomText="timestamp-picker.error.required" defaultValue="{{errorMessage}}"></span>
     </span>
     <span *ngIf="formGroup.get('internalDate').hasError('matDatepickerParse')">
-      <span appCustomText="timePickerInvalidDate" defaultValue="Please enter a valid date."></span>
+      <span appCustomText="timestamp-picker.error.invalidDate" defaultValue="Please enter a valid date."></span>
     </span>
     <span *ngIf="formGroup.get('internalDate').hasError('years')">
-      <span appCustomText="timePickerElasticsearchDateValidator"
+      <span appCustomText="timestamp-picker.error.outsideElasticsearchDateRange"
             defaultValue="{{formGroup.get('internalDate').getError('years').message}}"></span>
     </span>
   </mat-error>
