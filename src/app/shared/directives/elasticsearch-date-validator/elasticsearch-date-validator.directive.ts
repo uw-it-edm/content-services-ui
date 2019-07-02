@@ -15,7 +15,7 @@ export class ElasticsearchDateValidatorDirective implements Validator {
   static readonly maxDate = new Date(2285, 11, 31);
 
   static validateControl(control: FormControl): ValidationErrors {
-    return ElasticsearchDateValidatorDirective.validateControl(control.value);
+    return ElasticsearchDateValidatorDirective.validateTimestamp(control.value);
   }
 
   static validateTimestamp(timestamp: number): ValidationErrors {
