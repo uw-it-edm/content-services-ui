@@ -2,14 +2,27 @@
   <input matInput
          formControlName="internalDate"
          [matDatepicker]="picker"
+         [min]="minDate"
+         [max]="maxDate"
          [placeholder]="placeholder"
          [required]="required"
          [attr.aria-label]="placeholder"
          [attr.aria-disabled]="disabled"
          [attr.aria-required]="required"
-
+         appElasticSearchDateValidator
   >
   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
   <mat-datepicker #picker></mat-datepicker>
-  <mat-error>{{errorMessage}}</mat-error>
+  <mat-error>
+    <span *ngIf="formGroup.get('internalDate').hasError('required') && !formGroup.get('internalDate').hasError('matDatepickerParse')">
+      <span appCustomText="timePickerRequired" defaultValue="{{errorMessage}}"></span>
+    </span>
+    <span *ngIf="formGroup.get('internalDate').hasError('matDatepickerParse')">
+      <span appCustomText="timePickerInvalidDate" defaultValue="Please enter a valid date."></span>
+    </span>
+    <span *ngIf="formGroup.get('internalDate').hasError('years')">
+      <span appCustomText="timePickerElasticsearchDateValidator" defaultValue="{{formGroup.get('internalDate').getError('years').message}}"></span>
+    </span>
+  </mat-error>
+
 </mat-form-field>
