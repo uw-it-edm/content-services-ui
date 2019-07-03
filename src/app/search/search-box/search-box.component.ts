@@ -66,6 +66,11 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
     this.liveAnnouncer.announce('Selected ' + searchFilter.getDisplayValue() + ' filter', 'assertive');
   }
 
+  clearSearch() {
+    this.internalSearchField = '';
+    this.executeSearch();
+  }
+
   executeSearch() {
     this.searchModel.stringQuery = this.internalSearchField;
 

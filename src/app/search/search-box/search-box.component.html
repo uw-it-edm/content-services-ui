@@ -1,9 +1,9 @@
 <div class="cs-search-box" role="search">
   <div class="search-form-group">
-    <form fxLayout="row"  fxLayoutGap="20px" fxLayoutAlign="start center">
+    <form fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
       <label for="search-field"
              *ngIf="pageConfig?.searchConfig?.label">{{pageConfig.searchConfig.label}}</label>
-      <mat-form-field >
+      <mat-form-field>
         <input id="search-field" matInput
                name="search"
                [(ngModel)]="internalSearchField"
@@ -15,6 +15,7 @@
                [readonly]="readonly"
         >
 
+
         <mat-hint id="search-hint" *ngIf="pageConfig?.searchConfig?.directions"
                   align="start">{{pageConfig?.searchConfig?.directions}}</mat-hint>
         <mat-autocomplete #autocomplete="matAutocomplete" (optionSelected)="onSelectFilter($event)">
@@ -22,8 +23,13 @@
             <span>{{ option.getFilterableDisplay() }}</span>
           </mat-option>
         </mat-autocomplete>
+
+        <button type="button" mat-button *ngIf="internalSearchField" matSuffix mat-icon-button
+                aria-label="Clear" (click)="clearSearch()">
+          <mat-icon>close</mat-icon>
+        </button>
       </mat-form-field>
-      <div >
+      <div>
         <button mat-raised-button
                 type="submit"
                 aria-label="Search"
