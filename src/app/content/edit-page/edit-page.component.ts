@@ -20,13 +20,16 @@ import { ContentObject } from '../shared/model/content-object';
 import { ContentObjectListComponent } from '../content-object-list/content-object-list.component';
 import { NotificationService } from '../../shared/providers/notification.service';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
+import { ComponentCanDeactivate } from '../../routing/shared/component-can-deactivate';
+import { ContentMetadataComponent } from '../content-metadata/content-metadata.component';
+import { FileUploadComponent } from '../../shared/widgets/file-upload/file-upload.component';
 
 @Component({
   selector: 'app-edit-page',
   templateUrl: './edit-page.component.html',
   styleUrls: ['./edit-page.component.css']
 })
-export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
+export class EditPageComponent extends ComponentCanDeactivate implements OnInit, OnDestroy, AfterViewInit {
   private componentDestroyed = new Subject();
   private user: User;
 
@@ -43,7 +46,6 @@ export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(DynamicComponentDirective) contentViewDirective: DynamicComponentDirective;
   @ViewChild(ContentViewComponent) contentViewComponent: ContentViewComponent;
   @ViewChild(ContentObjectListComponent) contentObjectListComponent: ContentObjectListComponent;
-
   constructor(
     private contentService: ContentService,
     private route: ActivatedRoute,
@@ -52,7 +54,9 @@ export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
     private fb: FormBuilder,
     private userService: UserService,
     private notificationService: NotificationService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit() {
     this.user = this.userService.getUser();
@@ -144,7 +148,14 @@ export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
     const metadataOverrides = this.pageConfig.onSave;
 
     if (this.form.valid) {
-      this.contentObjectListComponent.saveItem(fields, formModel, metadataOverrides);
+      const saveResult = this.contentObjectListComponent.saveItem(fields, formModel, metadataOverrides);
+      if (saveResult) {
+        saveResult.then(successfulSave => {
+          if (successfulSave) {
+            this.form.markAsPristine(); // the entire form has saved and is no longer dirty
+          }
+        });
+      }
     } else {
       const invalidFields = <FormControl[]>Object.keys(this.form.controls)
         .map(key => this.form.controls[key])
@@ -171,5 +182,9 @@ export class EditPageComponent implements OnInit, OnDestroy, AfterViewInit {
         this.titleService.setTitle(this.pageConfig.pageName);
       }
     }
+  }
+
+  public canDeactivate(): boolean {
+    return !this.form.dirty;
   }
 }

@@ -12,6 +12,7 @@ import { ActivatedRouteStub } from '../../../../testing/router-stubs';
 import { HttpClientModule } from '@angular/common/http';
 import { ProgressService } from '../../providers/progress.service';
 import { NotificationService } from '../../providers/notification.service';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 class RouterStub {
   navigate(url: string) {
@@ -38,7 +39,7 @@ describe('HeaderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MaterialConfigModule, HttpClientModule],
+      imports: [MaterialConfigModule, HttpClientModule, NoopAnimationsModule],
       declarations: [HeaderComponent],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },

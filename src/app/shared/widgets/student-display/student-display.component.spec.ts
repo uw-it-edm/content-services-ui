@@ -7,6 +7,7 @@ import { By } from '@angular/platform-browser';
 import { NotificationService } from '../../providers/notification.service';
 import { MatSnackBarModule } from '@angular/material';
 import { of } from 'rxjs';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 class MockStudentService extends StudentService {
   constructor() {
@@ -29,7 +30,7 @@ describe('StudentDisplayComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MatSnackBarModule],
+      imports: [MatSnackBarModule, NoopAnimationsModule],
       declarations: [StudentDisplayComponent],
       providers: [{ provide: StudentService, useValue: new MockStudentService() }, NotificationService]
     }).compileComponents();

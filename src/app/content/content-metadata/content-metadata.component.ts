@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { ContentItem } from '../shared/model/content-item';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -12,7 +12,7 @@ import { isNullOrUndefined } from '../../core/util/node-utilities';
   templateUrl: './content-metadata.component.html',
   styleUrls: ['./content-metadata.component.css']
 })
-export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
+export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   private componentDestroyed = new Subject();
 
   @Input() pageConfig: ContentPageConfig;
@@ -25,6 +25,10 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit() {
     this.createForm();
     this.ngOnChanges();
+  }
+
+  ngAfterViewInit(): void {
+    this.formGroup.markAsPristine(); // Form shouldn't be dirtied by initialization updates
   }
 
   private createForm() {
@@ -71,6 +75,8 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy {
           metaDataForm.get(field.key).patchValue(this.contentItem.metadata[field.key]);
         });
       }
+
+      this.formGroup.markAsPristine(); // form shouldn't be dirty after initial loading of metadata
     }
   }
 

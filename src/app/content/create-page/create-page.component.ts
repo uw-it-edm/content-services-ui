@@ -15,13 +15,16 @@ import { ContentObjectListComponent } from '../content-object-list/content-objec
 import { NotificationService } from '../../shared/providers/notification.service';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { takeUntil } from 'rxjs/operators';
+import { ComponentCanDeactivate } from '../../routing/shared/component-can-deactivate';
+import { ContentMetadataComponent } from '../content-metadata/content-metadata.component';
+import { FileUploadComponent } from '../../shared/widgets/file-upload/file-upload.component';
 
 @Component({
   selector: 'app-create-page',
   templateUrl: './create-page.component.html',
   styleUrls: ['./create-page.component.css']
 })
-export class CreatePageComponent implements OnInit, OnDestroy {
+export class CreatePageComponent extends ComponentCanDeactivate implements OnInit, OnDestroy {
   private componentDestroyed = new Subject();
   private user: User;
 
@@ -45,7 +48,9 @@ export class CreatePageComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private userService: UserService,
     private notificationService: NotificationService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit() {
     this.user = this.userService.getUser();
@@ -126,7 +131,15 @@ export class CreatePageComponent implements OnInit, OnDestroy {
     } else if (!this.contentObjectListComponent.hasContentObjects()) {
       this.notificationService.error('No file attached');
     } else {
-      this.contentObjectListComponent.saveItem(fields, formModel, metadataOverrides);
+      const saveResult = this.contentObjectListComponent.saveItem(fields, formModel, metadataOverrides);
+
+      if (saveResult) {
+        saveResult.then(successfulSave => {
+          if (successfulSave) {
+            this.form.markAsPristine(); // the entire form has saved and is no longer dirty
+          }
+        });
+      }
     }
   }
 
@@ -166,5 +179,9 @@ export class CreatePageComponent implements OnInit, OnDestroy {
 
   buttonPress(button) {
     this[button.command]();
+  }
+
+  public canDeactivate(): boolean {
+    return !this.form.dirty;
   }
 }
