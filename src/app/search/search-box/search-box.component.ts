@@ -8,7 +8,6 @@ import { SearchAutocomplete } from '../shared/search-autocomplete/search-autocom
 import { SearchFilterableResult } from '../../shared/shared/model/search-filterable-result';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { SearchPagination } from '../shared/model/search-pagination';
 
 @Component({
   selector: 'app-search-box',
@@ -66,9 +65,18 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
     this.liveAnnouncer.announce('Selected ' + searchFilter.getDisplayValue() + ' filter', 'assertive');
   }
 
-  clearSearch() {
+  clearSearchBox() {
     this.internalSearchField = '';
+
+    this.announceSearchBoxCleared();
+
     this.executeSearch();
+  }
+
+  private announceSearchBoxCleared() {
+    const announcementMessage = 'Cleared search text';
+    console.log('liveAnnouncer : ' + announcementMessage);
+    this.liveAnnouncer.announce(announcementMessage, 'polite');
   }
 
   executeSearch() {
