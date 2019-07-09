@@ -23,6 +23,7 @@
                                 [placeholder]="fieldToDisplay.label"
                                 [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
                                 [errorMessage]="getErrorMessage(fieldToDisplay.key)"
+                                appElasticSearchDateValidator
           >
           </app-timestamp-picker>
 
