@@ -19,6 +19,7 @@ export class SearchPage {
   searchResultsRows = element.all(by.css('app-search-results .mat-row'));
   paginatorSizeDropDowns = element.all(by.css('.mat-paginator-page-size-select mat-select'));
   paginatorNextButtons = element.all(by.className('mat-paginator-navigation-next'));
+  clearSearchBoxButton = element(by.name('clearSearchBoxButton'));
 
   constructor(private profile: string = 'demo') {}
 
