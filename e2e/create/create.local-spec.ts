@@ -30,6 +30,8 @@ describe('Create Page for Demo', () => {
     return childrenLabels;
   };
 
+  const invalidDateErrMsg = 'The year must be a valid date between 1654 and 2285';
+
   beforeEach(() => {
     page = new CreatePage();
     page.navigateTo();
@@ -221,6 +223,58 @@ describe('Create Page for Demo', () => {
     page.inputField.sendKeys('any text');
     browser.driver.navigate().refresh();
 
+    page.clickAcceptAlert();
+  });
+
+  it('should display error message and disable Save button when date text input is less than 1654', () => {
+    page.dateInputField.first().sendKeys('12/31/1653');
+    page.dateInputField.first().sendKeys(protractor.Key.TAB);
+
+    expect(page.metadataErrorMessages.first().getText()).toEqual(invalidDateErrMsg);
+    expect(page.saveButton.isEnabled()).toBeFalsy();
+
+    page.clickCancelButton();
+    page.clickAcceptAlert();
+  });
+
+  it('should display error message and disable Save button when date text input is greater than 2285', () => {
+    page.dateInputField.first().sendKeys('1/1/2286');
+    page.dateInputField.first().sendKeys(protractor.Key.TAB);
+
+    expect(page.metadataErrorMessages.first().getText()).toEqual(invalidDateErrMsg);
+    expect(page.saveButton.isEnabled()).toBeFalsy();
+
+    page.clickCancelButton();
+    page.clickAcceptAlert();
+  });
+
+  it('should disable calendar picker less than 1654', () => {
+    page.dateInputField.first().sendKeys('1/1/1653');
+    page.datePickerCalenderButton.click();
+    page.calendarPeriodButton.click();
+
+    expect(page.calendarDisabledSelections.count()).toBeGreaterThan(0);
+    page.calendarDisabledSelections.each(calendarYear => {
+      expect(calendarYear.getText()).toBeLessThan(1654);
+    });
+
+    page.calendarDisabledSelections.first().sendKeys(protractor.Key.ESCAPE);
+    page.clickCancelButton();
+    page.clickAcceptAlert();
+  });
+
+  it('should disable calendar picker greater than 2285', () => {
+    page.dateInputField.first().sendKeys('1/1/2285');
+    page.datePickerCalenderButton.click();
+    page.calendarPeriodButton.click();
+
+    expect(page.calendarDisabledSelections.count()).toBeGreaterThan(0);
+    page.calendarDisabledSelections.each(calendarYear => {
+      expect(calendarYear.getText()).toBeGreaterThan(2285);
+    });
+
+    page.calendarDisabledSelections.first().sendKeys(protractor.Key.ESCAPE);
+    page.clickCancelButton();
     page.clickAcceptAlert();
   });
 });
