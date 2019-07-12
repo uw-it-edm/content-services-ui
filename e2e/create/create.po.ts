@@ -19,6 +19,10 @@ export class CreatePage {
   public selectPanel = element(by.className('mat-select-panel'));
   public metadataErrorMessages = element.all(by.className('mat-error'));
   public dropDownOptions = element.all(by.className('mat-option'));
+  public dateInputField = element.all(by.css('app-timestamp-picker input'));
+  public datePickerCalenderButton = element.all(by.css('.mat-datepicker-toggle button'));
+  public calendarPeriodButton = element.all(by.className('mat-calendar-period-button'));
+  public calendarDisabledSelections = element.all(by.className('mat-calendar-body-disabled'));
 
   constructor(private profile: string = 'demo') {}
 
