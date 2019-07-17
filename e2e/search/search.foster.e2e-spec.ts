@@ -47,7 +47,7 @@ describe('Foster Search Page', () => {
     page.clickFacetLink(0); // Adviser
     page.clickFacetLink(1); // Form
 
-    page.idColumHeaderButton.click();
+    page.idColumnHeaderButton.click();
     expect(page.isSortIndicatorDesc()).toBeFalsy();
 
     page.selectedFacet.getText().then(selectedFacetTexts => {
