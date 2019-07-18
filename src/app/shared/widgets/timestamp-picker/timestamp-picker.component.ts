@@ -5,6 +5,7 @@ import { ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALUE_ACC
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import * as moment from 'moment-timezone';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
+import { ElasticsearchDateValidatorDirective } from '../../directives/elasticsearch-date-validator/elasticsearch-date-validator.directive';
 
 const INTERNAL_FIELD_NAME = 'internalDate';
 
@@ -31,8 +32,10 @@ export class TimestampPickerComponent implements ControlValueAccessor, OnInit, O
 
   @Input()
   errorMessage: string;
-
+  readonly minDate = ElasticsearchDateValidatorDirective.minDate;
+  readonly maxDate = ElasticsearchDateValidatorDirective.maxDate;
   formGroup: FormGroup;
+
   onTouched = () => {};
 
   constructor(private fb: FormBuilder) {}
