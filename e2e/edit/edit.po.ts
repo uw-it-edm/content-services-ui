@@ -21,13 +21,7 @@ export class EditPage {
   navigateTo(itemId: string = this.id) {
     const destination = this.profileUrl + '/' + itemId;
     return browser.get(destination).catch(() => {
-      browser
-        .switchTo()
-        .alert()
-        .then(alert => {
-          console.log('WARN: Unexpected alert left open from previous test. ');
-          alert.accept();
-        });
+      this.clickAcceptAlert(true);
       return browser.get(destination);
     });
   }
@@ -94,11 +88,14 @@ export class EditPage {
     browser.wait(ExpectedConditions.visibilityOf(this.selectPanel), 5000);
   }
 
-  clickAcceptAlert() {
+  clickAcceptAlert(isAlertUnexpected: boolean = false) {
     browser
       .switchTo()
       .alert()
       .then(alert => {
+        if (isAlertUnexpected) {
+          console.log('WARN: Unexpected alert left open from previous test. ');
+        }
         alert.accept();
       });
   }

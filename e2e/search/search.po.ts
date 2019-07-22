@@ -6,7 +6,7 @@ export class SearchPage {
   autoCompletedOption = this.autoCompletePanel.element(by.css('.mat-option-text'));
   pageUrl = `${browser.baseUrl}/${this.profile}/tab-search`;
   selectedFacet = element.all(by.className('mat-chip'));
-  idColumHeaderButton = element(by.buttonText('Id'));
+  idColumnHeaderButton = element(by.buttonText('Id'));
   dateRangeInput = element(by.css('.cs-search-daterange-picker input'));
   dateRangePicker = element(by.className('md-drppicker'));
   searchBox = element(by.id('search-field'));
@@ -24,7 +24,10 @@ export class SearchPage {
   constructor(private profile: string = 'demo') {}
 
   navigateTo() {
-    return browser.get(this.pageUrl);
+    return browser.get(this.pageUrl).catch(() => {
+      this.clickAcceptAlert(true);
+      return browser.get(this.pageUrl);
+    });
   }
 
   getPageTitle() {
@@ -52,11 +55,11 @@ export class SearchPage {
   }
 
   isSortIndicatorDesc() {
-    return element(by.className('mat-sort-header-indicator'))
-      .getAttribute('style')
-      .then(attr => {
+    return element.all(by.className('mat-sort-header-indicator')).each(sortIndicator => {
+      sortIndicator.getAttribute('style').then(attr => {
         return attr === 'transform: translateY(10px)';
       });
+    });
   }
 
   clickPartialLinkText(facetText: string) {
@@ -152,5 +155,17 @@ export class SearchPage {
       .click();
     const selectPanel = element(by.className('mat-select-panel'));
     browser.wait(ExpectedConditions.invisibilityOf(selectPanel), 5000);
+  }
+
+  clickAcceptAlert(isAlertUnexpected: boolean = false) {
+    browser
+      .switchTo()
+      .alert()
+      .then(alert => {
+        if (isAlertUnexpected) {
+          console.log('WARN: Unexpected alert left open from previous test. ');
+        }
+        alert.accept();
+      });
   }
 }
