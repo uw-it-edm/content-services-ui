@@ -13,7 +13,7 @@ describe('Search Display All Page', () => {
     page.navigateTo();
   });
 
-  xit('should have no accessibility violations', () => {
+  it('should have no accessibility violations', () => {
     const app = new ContentServicesUiPage();
     app.runAccessibilityChecks();
   });
