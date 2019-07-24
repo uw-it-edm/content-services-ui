@@ -1,7 +1,7 @@
 <div [formGroup]="formGroup" class="cs-content-metadata">
   <ul *ngIf="pageConfig?.fieldsToDisplay" class="fields">
     <div formGroupName="metadata">
-      <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay">
+      <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay; index as i">
         <div [ngSwitch]="fieldToDisplay.displayType">
 
           <mat-form-field *ngSwitchCase="'select'">
@@ -11,6 +11,8 @@
               [fieldConfig]="fieldToDisplay"
               [parentControl]="formGroup.get('metadata').get(fieldToDisplay.dynamicSelectConfig?.parentFieldConfig?.key || '')"
               [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
+              [id]="'custom-input-'+ i"
+              [attr.id]="'custom-input-'+ i"
             >
             </app-options-input>
             <mat-error>
@@ -33,6 +35,8 @@
               [formControlName]="fieldToDisplay.key"
               [placeholder]="fieldToDisplay.label"
               [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
+              [id]="'custom-input-'+ i"
+              [attr.id]="'custom-input-'+ i"
             ></app-checkbox-input>
             <mat-error> {{getErrorMessage(fieldToDisplay.key)}}</mat-error>
           </mat-form-field>
@@ -42,6 +46,8 @@
               [formControlName]="fieldToDisplay.key"
               [placeholder]="fieldToDisplay.label"
               [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
+              [id]="'custom-input-'+ i"
+              [attr.id]="'custom-input-'+ i"
             >
             </app-student-autocomplete>
             <mat-error>Please select a valid {{fieldToDisplay.label}}</mat-error>
@@ -52,6 +58,8 @@
               [formControlName]="fieldToDisplay.key"
               [placeholder]="fieldToDisplay.label"
               [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
+              [id]="'custom-input-'+ i"
+              [attr.id]="'custom-input-'+ i"
             >
             </app-person-autocomplete>
             <mat-error>Please select a valid {{fieldToDisplay.label}}</mat-error>
