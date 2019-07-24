@@ -8,7 +8,7 @@
                [formControlName]="fieldName"
                [multiple]="multiple"
                role="button"
-               aria-label="add file">
+               [attr.aria-label]="label ? label : 'add file'">
         <label [for]="fieldId" class="mat-icon-button" [appFocus]="autoFocus"
                [matTooltip]="label">
             <span class="mat-button-wrapper">
@@ -34,7 +34,9 @@
                      type="file"
                      (change)="onFileChange($event)"
                      [formControlName]="fieldName"
-                     multiple="true">
+                     multiple="true"
+                     aria-label="Choose Files"
+                     role="button">
 
               <label for="attach-files" class="mat-raised-button mat-button" [appFocus]="autoFocus">
                 <mat-icon class="cs-icon">cloud_upload</mat-icon>
