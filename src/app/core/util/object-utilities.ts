@@ -11,10 +11,18 @@ export class ObjectUtilities {
    *
    * @param nestedObj
    * @param pathArr
+   * @param defaultValue Optional, let you define a default value if the key doesn't exist
    */
 
-  public static getNestedObjectFromArrayOfPath(nestedObj: any, pathArr: string[]) {
-    return pathArr.reduce((obj, key) => (obj && obj[key] !== 'undefined' ? obj[key] : undefined), nestedObj);
+  public static getNestedObjectFromArrayOfPath(nestedObj: any, pathArr: string[], defaultValue?: string) {
+    return pathArr.reduce(
+      (obj, key) => (obj && obj[key] !== 'undefined' ? obj[key] : this.getDefaultOrUndefined(defaultValue)),
+      nestedObj
+    );
+  }
+
+  private static getDefaultOrUndefined(defaultValue: string) {
+    return defaultValue === undefined ? undefined : defaultValue;
   }
 
   /**
@@ -27,8 +35,9 @@ export class ObjectUtilities {
    *
    * @param nestedObj
    * @param pathArr
+   * @param defaultValue Optional, let you define a default value if the key doesn't exist
    */
-  public static getNestedObjectFromStringPath(nestedObj: any, path: string) {
-    return this.getNestedObjectFromArrayOfPath(nestedObj, path.split(this.splitRegex));
+  public static getNestedObjectFromStringPath(nestedObj: any, path: string, defaultValue?: string) {
+    return this.getNestedObjectFromArrayOfPath(nestedObj, path.split(this.splitRegex), defaultValue);
   }
 }

@@ -11,7 +11,14 @@
         "DocumentType": "Type 1",
         "RegId": "ABCDE",
         "LastModifiedDate": 1.537446824E12,
-        "childType": "Child2Parent2"
+        "childType": "Child2Parent2",
+        "SourceModel": {
+          "childType": {
+            "data": {
+              "label": "Child 2 of parent2"
+            }
+          }
+        }
       },
       "_score": 0.0,
       "_indexName": "documents-demo"
@@ -27,7 +34,14 @@
         "DocumentType": "Type 2",
         "RegId": "FGHIJ",
         "LastModifiedDate": 1.537446824E12,
-        "childType": "Child2Parent1"
+        "childType": "Child2Parent1",
+        "SourceModel": {
+          "childType": {
+            "data": {
+              "label": "Child 2 of parent1"
+            }
+          }
+        }
       },
       "_score": 0.0,
       "_indexName": "documents-demo"
@@ -43,7 +57,29 @@
         "DocumentType": "Type 2",
         "RegId": "XYZ",
         "LastModifiedDate": 1.537246822E12,
-        "childType": "Child2Parent2"
+        "childType": "Child2Parent2",
+        "SourceModel": {
+          "childType": {
+            "data": {
+              "label": "Child 2 of parent2"
+            }
+          }
+        }
+      },
+      "_score": 0.0,
+      "_indexName": "documents-demo"
+    },
+    {
+      "id": "234",
+      "label": "sample-file-2.txt",
+      "metadata": {
+        "ProfileId": "Demo",
+        "Account": "DEMO-ACCOUNT",
+        "Filer": "you",
+        "PublishStatus": "published",
+        "DocumentType": "Type 2",
+        "RegId": "FGHIJ",
+        "LastModifiedDate": 1.537446824E12
       },
       "_score": 0.0,
       "_indexName": "documents-demo"
@@ -62,7 +98,8 @@
           "key": "You"
         }
       ]
-    },    {
+    },
+    {
       "name": "metadata.PublishStatus.raw",
       "buckets": [
         {
