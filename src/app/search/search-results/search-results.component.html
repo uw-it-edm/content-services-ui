@@ -37,7 +37,8 @@
       </span>
 
       <mat-cell *matCellDef="let element" class="cs-search-table-cell">
-        <app-display-field [field]="col" [value]="element.metadata[col.key]"></app-display-field>
+        <app-display-field [field]="col"
+                           [value]="getValueFromMetadata(element.metadata,col.key)"></app-display-field>
       </mat-cell>
 
 
