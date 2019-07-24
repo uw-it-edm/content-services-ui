@@ -123,6 +123,10 @@
           "key": "parentType"
         }
       }
+    },
+    {
+      "key": "SourceModel.childType.data.label",
+      "label": "DataApiOption child - from search"
     }
   ],
   "pages": {
@@ -137,7 +141,8 @@
         "PublishStatus",
         "DocumentType",
         "LastModifiedDate",
-        "childType"
+        "childType",
+        "SourceModel.childType.data.label"
       ],
       "searchConfig": {
         "directions": "Type a student number or other info",
