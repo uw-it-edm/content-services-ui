@@ -24,7 +24,7 @@
         <span class="cs-fill-remaining-space"></span>
         <span *ngIf="contentType === 'pdf'">
             <mat-form-field class="medium-field">
-                <mat-select [ngModel]="zoomFactor" (ngModelChange)="changeZoomFactor($event)" class="cs-zoom-factor-select" name="zoomFactor" ngDefaultControl>
+                <mat-select [ngModel]="zoomFactor" (ngModelChange)="changeZoomFactor($event)" class="cs-zoom-factor-select" name="zoomFactor" aria-label="Zoom" ngDefaultControl>
                     <mat-option value="automatic-zoom">Automatic Zoom</mat-option>
                     <mat-option value="actual-size">Actual Size</mat-option>
                     <mat-option value="page-width">Page Width</mat-option>
