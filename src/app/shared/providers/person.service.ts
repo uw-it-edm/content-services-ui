@@ -1,6 +1,6 @@
 import { Observable, of } from 'rxjs';
 
-import { map, mergeMap } from 'rxjs/operators';
+import { catchError, map, mergeMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
@@ -13,6 +13,7 @@ import { PersonSearchResults } from '../shared/model/person-search-results';
 import { Person } from '../shared/model/person';
 import { DataApiSearchResults } from '../shared/model/data-api-search-results';
 import { isNumeric } from 'rxjs/internal-compatibility';
+import { ObjectUtilities } from '../../core/util/object-utilities';
 
 @Injectable()
 export class PersonService {
@@ -31,6 +32,9 @@ export class PersonService {
       let searchModel = this.createAutocompleteSearchModel(term);
 
       return this.searchPerson(searchModel).pipe(
+        catchError(val => {
+          return of(new PersonSearchResults());
+        }),
         mergeMap(result => {
           // if the initial search did not have any results and was only the lastName, try again using the term firstName
           if (
@@ -90,6 +94,9 @@ export class PersonService {
   @CacheObservableDecorator
   public read(regId: string): Observable<Person> {
     const options = this.buildRequestOptions();
+    if (!regId) {
+      return null;
+    }
     return this.http
       .get<any>(this.personUrl + '/' + regId, options)
       .pipe(map(pwsPerson => this.newPersonFromPwsPerson(pwsPerson)));
@@ -137,8 +144,16 @@ export class PersonService {
     person.regId = pwsPerson['UWRegID'];
     person.priorRegIds = pwsPerson['PriorUWRegIDs'];
     person.netId = pwsPerson['UWNetID'];
-    person.email = pwsPerson['PersonAffiliations']['EmployeePersonAffiliation']['EmailAddresses'];
-    person.employeeId = pwsPerson['PersonAffiliations']['EmployeePersonAffiliation']['EmployeeID'];
+    person.email = ObjectUtilities.getNestedObjectFromArrayOfPath(pwsPerson, [
+      'PersonAffiliations',
+      'EmployeePersonAffiliation',
+      'EmailAddresses'
+    ]);
+    person.employeeId = ObjectUtilities.getNestedObjectFromArrayOfPath(pwsPerson, [
+      'PersonAffiliations',
+      'EmployeePersonAffiliation',
+      'EmployeeID'
+    ]);
     person.registeredFirstName = pwsPerson['RegisteredFirstMiddleName'];
     person.registeredLastName = pwsPerson['RegisteredSurname'];
     person.preferredFirstName = pwsPerson['PreferredFirstName'];
