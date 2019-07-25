@@ -1,9 +1,8 @@
 <div [formGroup]="formGroup" class="cs-content-metadata">
-  <ul *ngIf="pageConfig?.fieldsToDisplay" class="fields">
-    <div formGroupName="metadata">
+  <div formGroupName="metadata">
+    <ul *ngIf="pageConfig?.fieldsToDisplay" class="fields">
       <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay; index as i">
         <div [ngSwitch]="fieldToDisplay.displayType">
-
           <mat-form-field *ngSwitchCase="'select'">
             <app-options-input
               [formControlName]="fieldToDisplay.key"
@@ -17,7 +16,6 @@
             </app-options-input>
             <mat-error>
               {{getErrorMessage(fieldToDisplay.key)}}
-
             </mat-error>
           </mat-form-field>
           <app-timestamp-picker *ngSwitchCase="'date'"
@@ -76,6 +74,6 @@
           </mat-form-field>
         </div>
       </li>
-    </div>
-  </ul>
+    </ul>
+  </div>
 </div>
