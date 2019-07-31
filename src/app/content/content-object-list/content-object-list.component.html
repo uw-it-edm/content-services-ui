@@ -3,9 +3,6 @@
     <mat-list-item *ngFor="let contentObject of contentObjects; let i = index" [ngClass]="selectedIndex > -1 && i == selectedIndex ? 'cs-selected' : ''">
  
         <p matLine (click)="selectObject(i)">
-            <button mat-icon-button>
-                <mat-icon [ngClass]="contentObject.failed ? 'hasError' : ''">{{ contentObject.persisted ? 'cloud_circle' : 'description' }}</mat-icon>
-            </button>
             <span>{{ contentObject.getOriginalFileName() }}</span>
         </p>
 

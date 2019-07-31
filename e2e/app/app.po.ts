@@ -57,6 +57,7 @@ export class ContentServicesUiPage {
     const util = require('util');
 
     AxeBuilder(browser.driver)
+      .withTags(['wcag2a', 'wcag2aa'])
       .analyze()
       .then(results => {
         expect(results.violations.length).toBe(0, '\n' + util.inspect(results.violations, false, null, true));

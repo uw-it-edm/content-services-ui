@@ -30,14 +30,25 @@ describe('Create Page for Demo', () => {
     return childrenLabels;
   };
 
-  const invalidDateErrMsg = 'The year must be a valid date between 1654 and 2285';
+  const enterDateAndVerifyErrorMsg = function(date: string) {
+    page.dateInputField.first().sendKeys(date);
+    page.dateInputField.first().sendKeys(protractor.Key.TAB);
+
+    browser.wait(protractor.ExpectedConditions.visibilityOf(page.metadataErrorMessages.first()), 10000);
+    const invalidDateErrMsg = 'The year must be a valid date between 1654 and 2285';
+    expect(page.metadataErrorMessages.first().getText()).toEqual(invalidDateErrMsg);
+    expect(page.saveButton.isEnabled()).toBeFalsy();
+
+    page.clickCancelButton();
+    page.clickAcceptAlert();
+  };
 
   beforeEach(() => {
     page = new CreatePage();
     page.navigateTo();
   });
 
-  xit('should have no accessibility violations', () => {
+  it('should have no accessibility violations', () => {
     const app = new ContentServicesUiPage();
     app.runAccessibilityChecks();
   });
@@ -227,25 +238,11 @@ describe('Create Page for Demo', () => {
   });
 
   it('should display error message and disable Save button when date text input is less than 1654', () => {
-    page.dateInputField.first().sendKeys('12/31/1653');
-    page.dateInputField.first().sendKeys(protractor.Key.TAB);
-
-    expect(page.metadataErrorMessages.first().getText()).toEqual(invalidDateErrMsg);
-    expect(page.saveButton.isEnabled()).toBeFalsy();
-
-    page.clickCancelButton();
-    page.clickAcceptAlert();
+    enterDateAndVerifyErrorMsg('12/31/1653');
   });
 
   it('should display error message and disable Save button when date text input is greater than 2285', () => {
-    page.dateInputField.first().sendKeys('1/1/2286');
-    page.dateInputField.first().sendKeys(protractor.Key.TAB);
-
-    expect(page.metadataErrorMessages.first().getText()).toEqual(invalidDateErrMsg);
-    expect(page.saveButton.isEnabled()).toBeFalsy();
-
-    page.clickCancelButton();
-    page.clickAcceptAlert();
+    enterDateAndVerifyErrorMsg('1/1/2286');
   });
 
   it('should disable calendar picker less than 1654', () => {
@@ -285,6 +282,11 @@ describe('Create Page for Demo2', () => {
   beforeEach(() => {
     page = new CreatePage('demo2');
     page.navigateTo();
+  });
+
+  it('should have no accessibility violations', () => {
+    const app = new ContentServicesUiPage();
+    app.runAccessibilityChecks();
   });
 
   it('should disable Save button when required field is not populated', () => {

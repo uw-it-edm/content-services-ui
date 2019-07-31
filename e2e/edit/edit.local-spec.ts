@@ -29,7 +29,7 @@ describe('Edit Page for Demo', () => {
     page.navigateTo();
   });
 
-  xit('should have no accessibility violations', () => {
+  it('should have no accessibility violations', () => {
     const app = new ContentServicesUiPage();
     app.runAccessibilityChecks();
   });
@@ -205,6 +205,11 @@ describe('Edit Page for Demo2', () => {
 
   beforeEach(() => {
     page.navigateTo();
+  });
+
+  it('should have no accessibility violations', () => {
+    const app = new ContentServicesUiPage();
+    app.runAccessibilityChecks();
   });
 
   it('should not display alert when the page has disabled fields and no changes are made', () => {
