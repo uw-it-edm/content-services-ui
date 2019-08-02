@@ -24,10 +24,10 @@ jobs:
       env:
         - job=yarn test
         - TZ=Europe/Brussels
-    - stage: test
-      script: yarn e2e-local
-      env:
-        job=yarn e2e-local
+#    - stage: test
+#      script: yarn e2e-local
+#      env:
+#        job=yarn e2e-local
     - stage: test
       script: yarn build --prod --configuration=travis
       env:
