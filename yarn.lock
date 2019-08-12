@@ -5239,10 +5239,10 @@ ng2-pdf-viewer@5.3.0:
     "@types/pdfjs-dist" "^0.1.2"
     pdfjs-dist "2.0.943"
 
-ngx-daterangepicker-material@^2.1.7:
-  version "2.1.7"
-  resolved "https://registry.yarnpkg.com/ngx-daterangepicker-material/-/ngx-daterangepicker-material-2.1.7.tgz#c1fbd0ebd984a5743295dd57debedcdd18fb5752"
-  integrity sha512-hZ/9GTanpPRnPfvXE3Nx6QMhI6WZsA9E/VdpBIFs/w3s78rMVI7vdkIQhklAihqV8gDbPHG675Y1hLFj8Qq89Q==
+ngx-daterangepicker-material@^2.1.8:
+  version "2.1.8"
+  resolved "https://registry.yarnpkg.com/ngx-daterangepicker-material/-/ngx-daterangepicker-material-2.1.8.tgz#6f9844488b164897c3cf4eca179ff52d37eb807e"
+  integrity sha512-nSS/M2CQnUSfzZwy+V5mcnE+tjqwmr+HusIDYmiE1zNARG7gkEzYWBmXIOxsC1Dx9snA3NMpqqXj2NitIhyHig==
   dependencies:
     tslib "^1.9.0"
 
