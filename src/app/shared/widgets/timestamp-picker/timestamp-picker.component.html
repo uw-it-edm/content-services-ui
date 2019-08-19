@@ -12,7 +12,7 @@
          appElasticSearchDateValidator
   >
   <mat-datepicker-toggle *ngIf="!disabled" matSuffix [for]="picker"></mat-datepicker-toggle>
-  <mat-icon *ngIf="disabled" matSuffix class="disabled-icon" matTooltip="Disabled">lock</mat-icon>
+  <mat-icon *ngIf="disabled" matSuffix class="disabled-icon" matTooltip="Read-only">lock</mat-icon>
   <mat-datepicker #picker></mat-datepicker>
   <mat-error>
     <span
