@@ -14,6 +14,7 @@
               [attr.id]="'custom-input-'+ i"
             >
             </app-options-input>
+            <mat-icon *ngIf="fieldToDisplay.disabled" matSuffix class="disabled-icon" matTooltip="Read-only">lock</mat-icon>
             <mat-error>
               {{getErrorMessage(fieldToDisplay.key)}}
             </mat-error>
@@ -36,6 +37,7 @@
               [id]="'custom-input-'+ i"
               [attr.id]="'custom-input-'+ i"
             ></app-checkbox-input>
+            <mat-icon *ngIf="fieldToDisplay.disabled" matSuffix class="disabled-icon" matTooltip="Read-only">lock</mat-icon>
             <mat-error> {{getErrorMessage(fieldToDisplay.key)}}</mat-error>
           </mat-form-field>
 
@@ -48,6 +50,7 @@
               [attr.id]="'custom-input-'+ i"
             >
             </app-student-autocomplete>
+            <mat-icon *ngIf="fieldToDisplay.disabled" matSuffix class="disabled-icon" matTooltip="Read-only">lock</mat-icon>
             <mat-error>Please select a valid {{fieldToDisplay.label}}</mat-error>
           </mat-form-field>
 
@@ -60,6 +63,7 @@
               [attr.id]="'custom-input-'+ i"
             >
             </app-person-autocomplete>
+            <mat-icon *ngIf="fieldToDisplay.disabled" matSuffix class="disabled-icon" matTooltip="Read-only">lock</mat-icon>
             <mat-error>Please select a valid {{fieldToDisplay.label}}</mat-error>
           </mat-form-field>
 
@@ -70,6 +74,7 @@
                    [attr.aria-label]="fieldToDisplay.label"
                    [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
             >
+            <mat-icon *ngIf="fieldToDisplay.disabled" matSuffix class="disabled-icon" matTooltip="Read-only">lock</mat-icon>
             <mat-error> {{getErrorMessage(fieldToDisplay.key)}}</mat-error>
           </mat-form-field>
         </div>
