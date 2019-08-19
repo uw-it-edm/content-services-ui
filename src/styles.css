@@ -90,13 +90,13 @@
 
 /*Increase disable field's text alpha from default to 0.5 */
 .uw-default .cs-content-page .mat-select-disabled .mat-select-value {
-  color: rgba(0,0,0,.5);
+  color: rgba(0,0,0,.55);
 }
 .uw-default .cs-content-page :disabled  {
-  color: rgba(0,0,0,.5);
+  color: rgba(0,0,0,.55);
 }
 .uw-default .disabled-icon  {
-  color: rgba(0,0,0,.5);
+  color: rgba(0,0,0,.55);
   font-size: smaller;
   margin-left: 1rem;
 
