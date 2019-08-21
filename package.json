@@ -74,7 +74,7 @@
     "@types/node": "~12.6.9",
     "axe-webdriverjs": "^2.2.0",
     "codelyzer": "^5.1.0",
-    "husky": "^3.0.3",
+    "husky": "^3.0.4",
     "jasmine-core": "^3.4.0",
     "jasmine-reporters": "^2.3.2",
     "jasmine-spec-reporter": "^4.2.1",
