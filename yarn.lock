@@ -449,10 +449,10 @@
   resolved "https://registry.yarnpkg.com/@types/pdfjs-dist/-/pdfjs-dist-0.1.2.tgz#91a28961916deab21745482bb26242005fb5b7c7"
   integrity sha512-BvRLWz6RCI8FMKbgfdTCadVwimUv8920gLsnBEAkECjtqIy95jtt+G1ebNQE2b8PTnLjJICPpmBOGhgkSsiPKA==
 
-"@types/pdfjs-dist@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@types/pdfjs-dist/-/pdfjs-dist-2.0.1.tgz#f0438a15a17d7bf165fd66b604c93a798801e63e"
-  integrity sha512-BK1GBEEqw2epr95wu6yLxDVjmARZGN9jZQxtWbL1kC21GihkSyzIIr5Hd/2VQHGcWlfcSpQtuK+0MVxrp9SzPQ==
+"@types/pdfjs-dist@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@types/pdfjs-dist/-/pdfjs-dist-2.1.0.tgz#a2801b998520ead71764d5d7abb213602f21a2a7"
+  integrity sha512-o3iR6SfgZPJuemnn9J91iH2nhoSMDuLRqm7rPaUXJs5anEWgOc7HaUkvsZSTCukZQIk74TW2etve2IiDT4AU+Q==
 
 "@types/q@^0.0.32":
   version "0.0.32"
