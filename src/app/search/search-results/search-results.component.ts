@@ -144,8 +144,10 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     this.componentDestroyed.complete();
   }
 
-  navigateToEdit(pagePath): void {
-    this.router.navigate(['../edit/' + pagePath], { relativeTo: this.route, queryParamsHandling: 'merge' });
+  navigateToEdit(event, pagePath): void {
+    if (event.view.getSelection().type !== 'Range') {
+      this.router.navigate(['../edit/' + pagePath], { relativeTo: this.route, queryParamsHandling: 'merge' });
+    }
   }
 
   /*
