@@ -86,6 +86,24 @@
     padding: 0rem 2rem;
 }
 
+
+
+/*Increase disable field's text alpha from default to 0.55 */
+.uw-default .cs-content-page .mat-select-disabled .mat-select-value {
+  color: rgba(0,0,0,.55);
+}
+.uw-default .cs-content-page :disabled  {
+  color: rgba(0,0,0,.55);
+}
+.uw-default .disabled-icon  {
+  color: rgba(0,0,0,.55);
+  font-size: smaller;
+  margin-left: 1rem;
+
+}
+
+
+
 .uw-default .cs-content-page .mat-raised-button {
     margin-right: 1rem;
 }
