@@ -15,6 +15,8 @@ export class EditPage {
   public dateInputField = element.all(by.css('app-timestamp-picker input'));
   public formFields = element.all(by.tagName('mat-form-field'));
   public selectPanel = element(by.className('mat-select-panel'));
+  public lockIcons = element.all(by.className('disabled-icon'));
+  public disabledFields = element.all(by.css(':disabled'));
 
   constructor(private profile: string = 'demo', private id: string = '123456') {}
 
