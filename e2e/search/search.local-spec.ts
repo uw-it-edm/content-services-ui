@@ -332,4 +332,34 @@ describe('Search Page', () => {
     expectedPaginatorText = `1 - ${selectedSize} of ${totalResults}`;
     expect(page.paginatorCounts.get(0).getText()).toEqual(expectedPaginatorText);
   });
+
+  it('should open Edit page in new tab when user right clicks on id column value and selects "Open in new tab"', () => {
+    const resultsId = page.searchResultsRows.first();
+
+    browser
+      .actions()
+      .mouseMove(resultsId)
+      .perform();
+    browser
+      .actions()
+      .click(protractor.Button.RIGHT)
+      .perform();
+    browser
+      .actions()
+      .mouseMove(resultsId)
+      .keyDown(protractor.Key.CONTROL)
+      .click()
+      .perform();
+    browser
+      .actions()
+      .mouseMove(resultsId)
+      .keyDown(protractor.Key.CONTROL)
+      .click()
+      .keyUp(protractor.Key.CONTROL)
+      .perform();
+
+    const itemId = searchData.searchResults[0].id;
+    const editPage = new EditPage('demo', itemId);
+    expect(browser.getCurrentUrl()).toContain(editPage.pageUrl);
+  });
 });
