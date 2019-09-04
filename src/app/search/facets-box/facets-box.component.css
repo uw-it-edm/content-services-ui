@@ -32,3 +32,9 @@
 .uw-default .cs-facet-box .mat-card:not([class*=mat-elevation-z]) {
   box-shadow: none;
 }
+
+
+.fake-a{
+  cursor: pointer;
+
+}
