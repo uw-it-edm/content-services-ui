@@ -14,12 +14,13 @@
               </ng-template>
             </span>
             <ng-template #showLink>
-              <a *ngIf="facetConfig.dataApiValueType && facetConfig.dataApiLabelPath && facetResult.key; else useCustomText" [routerLink]="" (click)="addFacetFilter(facetConfig.key,facetResult.key, facetConfig.label, facetConfig)">
+              <a class="fake-a" href="javascript:void(0)" *ngIf="facetConfig.dataApiValueType && facetConfig.dataApiLabelPath && facetResult.key; else useCustomText" (click)="addFacetFilter(facetConfig.key,facetResult.key, facetConfig.label, facetConfig)">
                 <app-data-api-display [value]="facetResult.key" [type]="facetConfig.dataApiValueType" [labelPath]="facetConfig.dataApiLabelPath"></app-data-api-display> ({{facetResult.count}})
               </a>
               <ng-template #useCustomText>
-                <a [routerLink]="" (click)="addFacetFilter(facetConfig.key,facetResult.key, facetConfig.label)">
-                  <span appCustomText="facet.{{facetConfig.key}}.{{facetResult.key}}" defaultValue="{{facetResult.key}}"></span> ({{facetResult.count}})</a>
+                <a class="fake-a" href="javascript:void(0)" (click)="addFacetFilter(facetConfig.key,facetResult.key, facetConfig.label)">
+                  <span appCustomText="facet.{{facetConfig.key}}.{{facetResult.key}}" defaultValue="{{facetResult.key}}"></span> ({{facetResult.count}})
+                </a>
               </ng-template>
             </ng-template>
           </mat-list-item>
