@@ -5,6 +5,7 @@ cache: yarn
 services:
   - docker
 
+dist: xenial
 addons:
   chrome: stable
 
