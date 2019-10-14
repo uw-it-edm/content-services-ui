@@ -18,7 +18,9 @@ export class DataApiValueService {
 
   @CacheObservableDecorator
   public listByType(type: string): Observable<DataApiValueSearchResults> {
-    const params = new HttpParams().set('size', this.DATA_API_VALUE_PAGE_SIZE);
+    const params = new HttpParams()
+      .set('size', this.DATA_API_VALUE_PAGE_SIZE)
+      .set('sortbys', '[{"field": "order"},{"field": "label"}]');
     const options = this.buildRequestOptions(params);
 
     return this.http.get<DataApiValueSearchResults>(this.valueUrl + '/' + type, options);
@@ -30,7 +32,9 @@ export class DataApiValueService {
     parentType: string,
     parentId: string
   ): Observable<DataApiValueSearchResults> {
-    const params = new HttpParams().set('size', this.DATA_API_VALUE_PAGE_SIZE);
+    const params = new HttpParams()
+      .set('size', this.DATA_API_VALUE_PAGE_SIZE)
+      .set('sortbys', '[{"field": "order"},{"field": "label"}]');
     const options = this.buildRequestOptions(params);
 
     return this.http.get<DataApiValueSearchResults>(
