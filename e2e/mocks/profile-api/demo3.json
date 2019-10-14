@@ -1,0 +1,278 @@
+{
+  "account": "demo-account",
+  "tenant": "Demo3",
+  "appName": "Demo 3: Disabled Edit Page",
+  "customText": {
+    "addContentItemButton": {
+      "label": "Upload",
+      "description": "Upload a new content item"
+    },
+    "nextContentItemButton": {
+      "label": "Next",
+      "description": "Move down to next content item"
+    },
+    "previousContentItemButton": {
+      "label": "Previous",
+      "description": "Move up to previous content item"
+    },"unsavedChangesMessage": {
+      "label": "Click OK to lose your changes."
+    }
+  },
+  "pages": {
+    "tab-search": {
+      "pageName": "Demonstration Search",
+      "theme": "uw-default",
+      "searchStateInURL": false,
+      "enableDisplaySearch": true,
+      "fieldsToDisplay": [
+        {
+          "key": "ProfileId",
+          "label": "Profile Id"
+        },
+        {
+          "key": "Filer",
+          "label": "Filer"
+        },
+        {
+          "label": "Person",
+          "key": "RegId",
+          "displayType": "person"
+        },
+        {
+          "key": "PublishStatus",
+          "label": "Publish Status"
+        },
+        {
+          "key": "DocumentType",
+          "label": "Document Type"
+        },
+        {
+          "key": "LastModifiedDate",
+          "label": "Last Modified Date",
+          "displayType": "date"
+        }
+      ],
+      "searchConfig": {
+        "directions": "Type a Employee ID or other info",
+        "label": "",
+        "placeholder": "Search for documents",
+        "indexName": "documents-demo"
+      },
+      "searchDaterangeConfig": {
+        "active": false,
+        "filterKey": "metadata.LastModifiedDate.raw",
+        "filterLabel": "Last Modified Date",
+        "showCalendar": true,
+        "showRelativeRange": true,
+        "placeholder": "Choose Date Range",
+        "displayRangeLabelInsteadOfDates": true,
+        "showDropdowns": true
+      },
+      "facetsConfig": {
+        "active": true,
+        "facets": {
+          "metadata.DocumentType.label.raw": {
+            "key": "metadata.DocumentType.label.raw",
+            "label": "Document Type",
+            "order": "asc",
+            "size": 5
+          },
+          "metadata.PublishStatus": {
+            "key": "metadata.PublishStatus.raw",
+            "label": "Publish Status",
+            "order": "asc",
+            "size": 10
+          },
+          "metadata.Filer": {
+            "key": "metadata.Filer.raw",
+            "label": "Filer",
+            "order": "asc",
+            "size": 10
+          }
+        }
+      },
+      "autocompleteConfig": {
+        "type": "personAutocomplete",
+        "filterKey": "metadata.RegId",
+        "filterLabel": "Employee"
+      }
+    },
+    "edit": {
+      "theme": "uw-default",
+      "pageName": "Edit Content Item",
+      "fieldsToDisplay": [
+        {
+          "key": "DataApiOptionLabel",
+          "label": "DataApiOption show label",
+          "required": false,
+          "disabled": true,
+          "displayType": "select",
+          "dynamicSelectConfig": {
+            "type": "test-type",
+            "labelPath": "label"
+          }
+        },
+        {
+          "key": "DataApiOptionCode",
+          "label": "DataApiOption Show Code",
+          "required": false,
+          "disabled": true,
+          "displayType": "select",
+          "dynamicSelectConfig": {
+            "type": "test-type",
+            "labelPath": "metadata.Code"
+          }
+        },
+        {
+          "key": "Filer",
+          "label": "Filer",
+          "required": true,
+          "disabled": true
+        },
+        {
+          "key": "DocumentType",
+          "label": "Document Type",
+          "disabled": true
+        },
+        {
+          "key": "PublishStatus",
+          "label": "Publish Status",
+          "required": true,
+          "disabled": true,
+          "displayType": "select",
+          "options": [
+            {
+              "value": ""
+            },
+            {
+              "value": "Draft"
+            },
+            {
+              "value": "Published"
+            }
+          ]
+        },
+        {
+          "key": "LastModifiedDate",
+          "label": "Last Modified Date",
+          "dataType": "date",
+          "displayType": "date",
+          "disabled": true
+        },
+        {
+          "key": "StudentId",
+          "label": "Student",
+          "displayType": "student-autocomplete",
+          "disabled": true
+        },
+        {
+          "key": "RegId",
+          "label": "Employee",
+          "displayType": "person-autocomplete",
+          "disabled": true
+        },
+        {
+          "key": "ReleaseDate",
+          "label": "Intake Date",
+          "displayType": "date",
+          "disabled": true
+        }
+      ],
+      "buttons": [
+        {
+          "label": "Void",
+          "command": "voidItem"
+        },
+        {
+          "label": "Publish",
+          "command": "publishItem"
+        },
+        {
+          "label": "Save",
+          "color": "primary",
+          "command": "saveItem"
+        }
+      ],
+      "viewPanel": true
+    },
+    "create": {
+      "theme": "uw-default",
+      "pageName": "Create Content Item",
+      "fieldsToDisplay": [
+        {
+          "key": "DataApiOptionLabel",
+          "label": "DataApiOption show label",
+          "required": true,
+          "displayType": "select",
+          "dynamicSelectConfig": {
+            "type": "test-type",
+            "labelPath": "label"
+          }
+        },
+        {
+          "key": "DataApiOptionCode",
+          "label": "DataApiOption Show Code",
+          "required": false,
+          "displayType": "select",
+          "dynamicSelectConfig": {
+            "type": "test-type",
+            "labelPath": "metadata.Code"
+          }
+        },
+        {
+          "key": "Filer",
+          "label": "Filer",
+          "required": true
+        },
+        {
+          "key": "PublishStatus",
+          "label": "Publish Status",
+          "displayType": "select",
+          "options": [
+            {
+              "value": ""
+            },
+            {
+              "value": "Draft"
+            },
+            {
+              "value": "Published"
+            }
+          ]
+        },
+        {
+          "key": "LastModifiedDate",
+          "label": "Last Modified Date",
+          "displayType": "date",
+          "required": true
+        },
+        {
+          "key": "StudentId",
+          "label": "Student",
+          "required": true,
+          "displayType": "student-autocomplete"
+        },
+        {
+          "key": "RegId",
+          "label": "Employee",
+          "required": true,
+          "displayType": "person-autocomplete"
+        }
+      ],
+      "buttons": [
+        {
+          "label": "Save",
+          "color": "primary",
+          "command": "saveItem"
+        },
+        {
+          "label": "Cancel",
+          "alwaysActive": true,
+          "command": "cancel"
+        }
+      ],
+      "viewPanel": true,
+      "uploadAnother": false
+    }
+  }
+}

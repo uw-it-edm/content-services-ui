@@ -15,7 +15,10 @@
 
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Id</mat-header-cell>
-      <mat-cell *matCellDef="let element"><a (click)="navigateToEdit(element.id)" routerLink=""
+      <mat-cell *matCellDef="let element">
+        <a (click)="navigateToEdit($event, element.id)"
+           [routerLink]="['../edit/' + element.id]"
+           queryParamsHandling="merge"
       >{{element.id}}</a>
       </mat-cell>
     </ng-container>
@@ -37,7 +40,8 @@
       </span>
 
       <mat-cell *matCellDef="let element" class="cs-search-table-cell">
-        <app-display-field [field]="col" [value]="element.metadata[col.key]"></app-display-field>
+        <app-display-field [field]="col"
+                           [value]="getValueFromMetadata(element.metadata,col.key)"></app-display-field>
       </mat-cell>
 
 
@@ -45,7 +49,7 @@
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row class="uw-highlight-row" *matRowDef="let row; columns: displayedColumns;"
-             (click)="navigateToEdit(row.id)"></mat-row>
+             (click)="navigateToEdit($event, row.id)"></mat-row>
   </mat-table>
 
   <mat-paginator #bottomPaginator

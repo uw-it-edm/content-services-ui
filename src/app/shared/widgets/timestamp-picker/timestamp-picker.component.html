@@ -11,7 +11,8 @@
          [attr.aria-required]="required"
          appElasticSearchDateValidator
   >
-  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker-toggle *ngIf="!disabled" matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-icon *ngIf="disabled" matSuffix class="disabled-icon" matTooltip="Read-only">lock</mat-icon>
   <mat-datepicker #picker></mat-datepicker>
   <mat-error>
     <span

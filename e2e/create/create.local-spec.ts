@@ -30,12 +30,25 @@ describe('Create Page for Demo', () => {
     return childrenLabels;
   };
 
+  const enterDateAndVerifyErrorMsg = function(date: string) {
+    page.dateInputField.first().sendKeys(date);
+    page.dateInputField.first().sendKeys(protractor.Key.TAB);
+
+    browser.wait(protractor.ExpectedConditions.visibilityOf(page.metadataErrorMessages.first()), 10000);
+    const invalidDateErrMsg = 'The year must be a valid date between 1654 and 2285';
+    expect(page.metadataErrorMessages.first().getText()).toEqual(invalidDateErrMsg);
+    expect(page.saveButton.isEnabled()).toBeFalsy();
+
+    page.clickCancelButton();
+    page.clickAcceptAlert();
+  };
+
   beforeEach(() => {
     page = new CreatePage();
     page.navigateTo();
   });
 
-  xit('should have no accessibility violations', () => {
+  it('should have no accessibility violations', () => {
     const app = new ContentServicesUiPage();
     app.runAccessibilityChecks();
   });
@@ -223,6 +236,44 @@ describe('Create Page for Demo', () => {
 
     page.clickAcceptAlert();
   });
+
+  it('should display error message and disable Save button when date text input is less than 1654', () => {
+    enterDateAndVerifyErrorMsg('12/31/1653');
+  });
+
+  it('should display error message and disable Save button when date text input is greater than 2285', () => {
+    enterDateAndVerifyErrorMsg('1/1/2286');
+  });
+
+  it('should disable calendar picker less than 1654', () => {
+    page.dateInputField.first().sendKeys('1/1/1653');
+    page.datePickerCalenderButton.click();
+    page.calendarPeriodButton.click();
+
+    expect(page.calendarDisabledSelections.count()).toBeGreaterThan(0);
+    page.calendarDisabledSelections.each(calendarYear => {
+      expect(calendarYear.getText()).toBeLessThan(1654);
+    });
+
+    page.calendarDisabledSelections.first().sendKeys(protractor.Key.ESCAPE);
+    page.clickCancelButton();
+    page.clickAcceptAlert();
+  });
+
+  it('should disable calendar picker greater than 2285', () => {
+    page.dateInputField.first().sendKeys('1/1/2285');
+    page.datePickerCalenderButton.click();
+    page.calendarPeriodButton.click();
+
+    expect(page.calendarDisabledSelections.count()).toBeGreaterThan(0);
+    page.calendarDisabledSelections.each(calendarYear => {
+      expect(calendarYear.getText()).toBeGreaterThan(2285);
+    });
+
+    page.calendarDisabledSelections.first().sendKeys(protractor.Key.ESCAPE);
+    page.clickCancelButton();
+    page.clickAcceptAlert();
+  });
 });
 
 describe('Create Page for Demo2', () => {
@@ -231,6 +282,11 @@ describe('Create Page for Demo2', () => {
   beforeEach(() => {
     page = new CreatePage('demo2');
     page.navigateTo();
+  });
+
+  it('should have no accessibility violations', () => {
+    const app = new ContentServicesUiPage();
+    app.runAccessibilityChecks();
   });
 
   it('should disable Save button when required field is not populated', () => {

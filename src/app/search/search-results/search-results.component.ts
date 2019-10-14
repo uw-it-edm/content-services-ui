@@ -13,6 +13,7 @@ import { SearchPagination } from '../shared/model/search-pagination';
 import { takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { ObjectUtilities } from '../../core/util/object-utilities';
 
 @Component({
   selector: 'app-search-results',
@@ -128,6 +129,10 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     }
   }
 
+  getValueFromMetadata(metadata, key: string) {
+    return ObjectUtilities.getNestedObjectFromStringPath(metadata, key);
+  }
+
   onPageEvent(pageEvent: PageEvent) {
     const searchPagination = new SearchPagination(pageEvent.pageIndex, pageEvent.pageSize);
     this.searchModel.pagination = searchPagination;
@@ -139,8 +144,10 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     this.componentDestroyed.complete();
   }
 
-  navigateToEdit(pagePath): void {
-    this.router.navigate(['../edit/' + pagePath], { relativeTo: this.route, queryParamsHandling: 'merge' });
+  navigateToEdit(event, pagePath): void {
+    if (event.view.getSelection().type !== 'Range') {
+      this.router.navigate(['../edit/' + pagePath], { relativeTo: this.route, queryParamsHandling: 'merge' });
+    }
   }
 
   /*

@@ -67,7 +67,7 @@ describe('Search Page', () => {
     page.navigateTo();
   });
 
-  xit('should have no accessibility violations', () => {
+  it('should have no accessibility violations', () => {
     const app = new ContentServicesUiPage();
     app.runAccessibilityChecks();
   });
@@ -84,6 +84,22 @@ describe('Search Page', () => {
     const searchText = 'this is a sample test';
     page.searchBox.sendKeys(searchText);
     expect(page.getSearchBoxInputText()).toEqual(searchText);
+  });
+
+  it('should clear search text when Clear Search button is clicked', () => {
+    page.searchBox.sendKeys('my search text');
+    expect(page.clearSearchBoxButton.isDisplayed).toBeTruthy();
+
+    page.clearSearchBoxButton.click();
+    expect(page.getSearchBoxInputText()).toEqual('');
+  });
+
+  it('should not clear filters when Clear Search button is clicked', () => {
+    page.clickFacetLink(0);
+    page.searchBox.sendKeys('my search text');
+    page.clearSearchBoxButton.click();
+
+    expect(page.selectedFacet.isDisplayed).toBeTruthy();
   });
 
   it('should display 2 page paginators', () => {

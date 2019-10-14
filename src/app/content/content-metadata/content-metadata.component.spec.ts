@@ -9,6 +9,7 @@ import {
   MatCheckboxModule,
   MatDatepickerModule,
   MatFormFieldModule,
+  MatIconModule,
   MatInputModule,
   MatNativeDateModule,
   MatOptionModule,
@@ -60,7 +61,8 @@ describe('ContentMetadataComponent', () => {
         MatOptionModule,
         MatAutocompleteModule,
         MatSelectModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        MatIconModule
       ],
       declarations: [
         ContentMetadataComponent,

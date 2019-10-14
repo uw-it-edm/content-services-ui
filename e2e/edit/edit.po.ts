@@ -15,19 +15,15 @@ export class EditPage {
   public dateInputField = element.all(by.css('app-timestamp-picker input'));
   public formFields = element.all(by.tagName('mat-form-field'));
   public selectPanel = element(by.className('mat-select-panel'));
+  public lockIcons = element.all(by.className('disabled-icon'));
+  public disabledFields = element.all(by.css(':disabled'));
 
   constructor(private profile: string = 'demo', private id: string = '123456') {}
 
   navigateTo(itemId: string = this.id) {
     const destination = this.profileUrl + '/' + itemId;
     return browser.get(destination).catch(() => {
-      browser
-        .switchTo()
-        .alert()
-        .then(alert => {
-          console.log('WARN: Unexpected alert left open from previous test. ');
-          alert.accept();
-        });
+      this.clickAcceptAlert(true);
       return browser.get(destination);
     });
   }
@@ -94,11 +90,14 @@ export class EditPage {
     browser.wait(ExpectedConditions.visibilityOf(this.selectPanel), 5000);
   }
 
-  clickAcceptAlert() {
+  clickAcceptAlert(isAlertUnexpected: boolean = false) {
     browser
       .switchTo()
       .alert()
       .then(alert => {
+        if (isAlertUnexpected) {
+          console.log('WARN: Unexpected alert left open from previous test. ');
+        }
         alert.accept();
       });
   }

@@ -29,7 +29,7 @@ describe('Edit Page for Demo', () => {
     page.navigateTo();
   });
 
-  xit('should have no accessibility violations', () => {
+  it('should have no accessibility violations', () => {
     const app = new ContentServicesUiPage();
     app.runAccessibilityChecks();
   });
@@ -207,6 +207,11 @@ describe('Edit Page for Demo2', () => {
     page.navigateTo();
   });
 
+  it('should have no accessibility violations', () => {
+    const app = new ContentServicesUiPage();
+    app.runAccessibilityChecks();
+  });
+
   it('should not display alert when the page has disabled fields and no changes are made', () => {
     page.clickReturnToResultsLink();
 
@@ -218,5 +223,31 @@ describe('Edit Page for Demo2', () => {
     browser.navigate().back();
 
     page.clickAcceptAlert();
+  });
+});
+
+describe('Edit Page for Demo3', () => {
+  const page = new EditPage('demo3', '123');
+
+  beforeEach(() => {
+    page.navigateTo();
+  });
+
+  it('should have no accessibility violations', () => {
+    const app = new ContentServicesUiPage();
+    app.runAccessibilityChecks();
+  });
+
+  it('should display lock icon for all disabled fields', () => {
+    expect(page.lockIcons.count()).toEqual(9);
+    page.lockIcons.each(lockIcon => {
+      expect(lockIcon.getCssValue('color')).toEqual('rgba(0, 0, 0, 0.55)');
+    });
+  });
+
+  it('should display all disabled field values in grey color', () => {
+    page.disabledFields.each(disabledField => {
+      expect(disabledField.getCssValue('color')).toEqual('rgba(0, 0, 0, 0.55)');
+    });
   });
 });
