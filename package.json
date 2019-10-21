@@ -71,7 +71,7 @@
     "@angular/language-service": "^7.2.7",
     "@types/jasmine": "~3.3.11",
     "@types/jasminewd2": "~2.0.8",
-    "@types/node": "~12.7.12",
+    "@types/node": "~12.11.1",
     "axe-webdriverjs": "^2.2.0",
     "husky": "^3.0.9",
     "codelyzer": "^5.1.2",
