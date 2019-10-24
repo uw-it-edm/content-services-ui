@@ -1,4 +1,4 @@
-<div class="cs-facet-box" aria-label="Search facets">
+<div class="cs-facet-box" aria-label="Search facets" role="region">
   <div *ngFor="let facetConfig of getFacetsConfig()">
     <fieldset *ngIf="searchResults?.facets.get(facetConfig.key)" >
       <legend>{{facetConfig.label}}</legend>

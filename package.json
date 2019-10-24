@@ -19,7 +19,7 @@
     "mock-services": "$npm_execpath start-mock-services",
     "start-mock-services": "docker container inspect content-services-api-e2e-mock || (docker build -q -t content-services-api-e2e-mock ./e2e/mocks && docker run --name content-services-api-e2e-mock --rm -d -p 12345:80 -v ${PWD}/e2e/mocks:/usr/share/nginx/html/ content-services-api-e2e-mock)",
     "stop-mock-services": "docker stop content-services-api-e2e-mock",
-    "postinstall": "cd ./node_modules/protractor && npm i webdriver-manager@^12.1.6"
+    "postinstall": "cd ./node_modules/protractor && npm i webdriver-manager@latest"
   },
   "lint-staged": {
     "linters": {
@@ -45,12 +45,12 @@
     "@angular/platform-browser-dynamic": "^7.2.7",
     "@angular/platform-server": "^7.2.7",
     "@angular/router": "^7.2.7",
-    "@types/lodash": "^4.14.137",
-    "@types/pdfjs-dist": "^2.1.0",
+    "@types/lodash": "^4.14.144",
+    "@types/pdfjs-dist": "^2.1.2",
     "angulartics2": "^6.3.1",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.6.5",
-    "coveralls": "^3.0.6",
+    "coveralls": "^3.0.7",
     "directory-encoder": "0.9.2",
     "lint-staged": "^8.2.1",
     "lodash": "^4.17.15",
@@ -59,7 +59,7 @@
     "ng2-pdf-viewer": "5.3.0",
     "ngx-daterangepicker-material": "^2.1.8",
     "pdfjs-dist": "^2.0.943",
-    "rxjs": "^6.5.2",
+    "rxjs": "^6.5.3",
     "tslib": "^1.10.0",
     "web-animations-js": "^2.3.2",
     "zone.js": "^0.8.29"
@@ -70,12 +70,12 @@
     "@angular/compiler-cli": "^7.2.7",
     "@angular/language-service": "^7.2.7",
     "@types/jasmine": "~3.3.11",
-    "@types/jasminewd2": "~2.0.6",
-    "@types/node": "~12.7.2",
+    "@types/jasminewd2": "~2.0.8",
+    "@types/node": "~12.7.12",
     "axe-webdriverjs": "^2.2.0",
-    "codelyzer": "^5.1.0",
-    "husky": "^3.0.5",
-    "jasmine-core": "^3.4.0",
+    "husky": "^3.0.9",
+    "codelyzer": "^5.1.2",
+    "jasmine-core": "^3.5.0",
     "jasmine-reporters": "^2.3.2",
     "jasmine-spec-reporter": "^4.2.1",
     "karma": "~4.3.0",
@@ -89,9 +89,9 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^1.18.2",
     "protractor": "^5.4.2",
-    "rxjs-tslint-rules": "^4.24.3",
+    "rxjs-tslint-rules": "^4.25.0",
     "ts-node": "^8.2.0",
-    "tslint": "~5.19.0",
+    "tslint": "~5.20.0",
     "typescript": "~3.2.4"
   },
   "husky": {
