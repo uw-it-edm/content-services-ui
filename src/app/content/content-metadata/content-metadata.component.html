@@ -67,6 +67,18 @@
             <mat-error>Please select a valid {{fieldToDisplay.label}}</mat-error>
           </mat-form-field>
 
+          <div *ngSwitchCase="'course-input'">
+            <app-course-input
+              [formControlName]="fieldToDisplay.key"
+              [placeholder]="fieldToDisplay.label"
+              [fieldConfig]="fieldToDisplay"
+              [id]="'custom-input-'+ i"
+              [attr.id]="'custom-input-'+ i"
+              [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
+            >
+            </app-course-input>
+          </div>
+
           <mat-form-field *ngSwitchDefault>
             <input matInput [formControlName]="fieldToDisplay.key"
                    [name]="fieldToDisplay.key"
