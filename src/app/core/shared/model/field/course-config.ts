@@ -15,6 +15,6 @@ export class CourseConfig {
     this._curriculumAbbrevation = value;
   }
 
-  private _years: number = 10;
-  private _curriculumAbbrevation: string = 'PHYS';
+  private _years = 10;
+  private _curriculumAbbrevation = 'PHYS';
 }

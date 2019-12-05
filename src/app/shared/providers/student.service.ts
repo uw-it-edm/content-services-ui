@@ -174,7 +174,7 @@ export class StudentService {
   @CacheObservableDecorator
   public getSections(year: string, quarter: string, curriculum: string, courseNumber?: string): Observable<any> {
     const options = this.buildRequestOptions();
-    var url = this.studentUrl + '/section/' + year + '/' + quarter + '/' + curriculum;
+    let url = this.studentUrl + '/section/' + year + '/' + quarter + '/' + curriculum;
     if (courseNumber) {
       url += '/' + courseNumber;
     }

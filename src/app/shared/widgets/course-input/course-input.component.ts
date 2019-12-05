@@ -140,8 +140,8 @@ export class CourseInputComponent extends _CourseInputComponentBase
 
   onSelectCourse(event: MatSelectChange) {
     this.courseNumber = event.value;
-    for (var i = 0; i < this.courseOptions.length; i++) {
-      if (this.courseOptions[i]['CourseNumber'] == this.courseNumber) {
+    for (let i = 0; i < this.courseOptions.length; i++) {
+      if (this.courseOptions[i]['CourseNumber'] === this.courseNumber) {
         this.courseTitle = this.courseOptions[i]['CourseTitle'];
         break;
       }
@@ -158,7 +158,7 @@ export class CourseInputComponent extends _CourseInputComponentBase
     const today = new Date();
     const years = (this.fieldConfig && this.fieldConfig.courseConfig && this.fieldConfig.courseConfig['years']) || 10;
     const currentYear = new Date().getFullYear();
-    for (var i = 0; i < years; i++) {
+    for (let i = 0; i < years; i++) {
       this.yearOptions.push((currentYear - i).toString());
     }
 
@@ -194,11 +194,11 @@ export class CourseInputComponent extends _CourseInputComponentBase
         .getSections(this.year, this.quarter, this.curriculumAbbreviation, this.courseNumber)
         .subscribe((result: any) => {
           this.sectionOptions = (result && result['Sections']) || [];
-          if (!this.sectionOptions || this.sectionOptions.length == 0) {
+          if (!this.sectionOptions || this.sectionOptions.length === 0) {
             // disable section option
             this.setSectionValue('');
             this.sectionControl.disable();
-          } else if (this.sectionOptions.length == 1) {
+          } else if (this.sectionOptions.length === 1) {
             this.setSectionValue(this.sectionOptions[0]['SectionID']);
           } else {
             this.setSectionValue(this.sectionOptions[0]['SectionID']);
@@ -247,13 +247,13 @@ export class CourseInputComponent extends _CourseInputComponentBase
   }
 
   private setInternalValue(value: string) {
-    var values: string[];
+    let values: string[];
     if (!isNullOrUndefined(value)) {
       // parse value into year, quarter, courseNumber, section
       values = value.split('|');
     }
 
-    if (values && values.length == NUMBER_OF_FIELDS) {
+    if (values && values.length === NUMBER_OF_FIELDS) {
       this.year = values[0];
       this.quarter = values[1];
       this.courseNumber = values[3];
