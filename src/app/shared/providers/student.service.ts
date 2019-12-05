@@ -149,4 +149,35 @@ export class StudentService {
 
     return requestOptionsArgs;
   }
+
+  @CacheObservableDecorator
+  public getCourses(
+    year: string,
+    quarter: string,
+    curriculum: string,
+    courseNumber?: string,
+    title?: string
+  ): Observable<any> {
+    let params = new HttpParams();
+    if (courseNumber) {
+      params = params.set('courseNumber', courseNumber);
+    }
+    if (title) {
+      params = params.set('courseTitle', title);
+    }
+    const options = this.buildRequestOptions(params);
+    return this.http
+      .get<any>(this.studentUrl + '/course/' + year + '/' + quarter + '/' + curriculum, options)
+      .pipe(map(dataApiCourses => dataApiCourses));
+  }
+
+  @CacheObservableDecorator
+  public getSections(year: string, quarter: string, curriculum: string, courseNumber?: string): Observable<any> {
+    const options = this.buildRequestOptions();
+    var url = this.studentUrl + '/section/' + year + '/' + quarter + '/' + curriculum;
+    if (courseNumber) {
+      url += '/' + courseNumber;
+    }
+    return this.http.get<any>(url, options).pipe(map(dataApiSections => dataApiSections));
+  }
 }

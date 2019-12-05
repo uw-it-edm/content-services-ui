@@ -30,6 +30,7 @@ import { PersonAutocompleteComponent } from './widgets/person-autocomplete/perso
 import { PersonDisplayComponent } from './widgets/person-display/person-display.component';
 import { DataApiValueDisplayComponent } from './widgets/data-api-display/data-api-value-display.component';
 import { ElasticsearchDateValidatorDirective } from './directives/elasticsearch-date-validator/elasticsearch-date-validator.directive';
+import { CourseInputComponent } from './widgets/course-input/course-input.component';
 
 @NgModule({
   imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule, FormsModule, PdfViewerModule],
@@ -54,6 +55,7 @@ import { ElasticsearchDateValidatorDirective } from './directives/elasticsearch-
     FocusDirective,
     ContentViewComponent,
     ContentToolbarComponent,
+    CourseInputComponent,
     ElasticsearchDateValidatorDirective
   ],
   declarations: [
@@ -75,6 +77,7 @@ import { ElasticsearchDateValidatorDirective } from './directives/elasticsearch-
     NotificationComponent,
     ContentViewComponent,
     ContentToolbarComponent,
+    CourseInputComponent,
     ElasticsearchDateValidatorDirective
   ],
   providers: [DataService, ProgressService, StudentService, PersonService, DataApiValueService, NotificationService],
