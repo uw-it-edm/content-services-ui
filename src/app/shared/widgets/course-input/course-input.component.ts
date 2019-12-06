@@ -1,5 +1,6 @@
 import {
   AfterContentInit,
+  AfterViewChecked,
   ChangeDetectorRef,
   Component,
   DoCheck,
@@ -85,6 +86,7 @@ export class CourseInputComponent extends _CourseInputComponentBase
     MatFormFieldControl<string>,
     CanUpdateErrorState,
     AfterContentInit,
+    AfterViewChecked,
     DoCheck,
     OnDestroy {
   @Input() fieldConfig: Field;
