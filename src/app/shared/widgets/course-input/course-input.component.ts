@@ -116,12 +116,12 @@ export class CourseInputComponent extends _CourseInputComponentBase
 
   courseTitle;
 
-  userPerformedSelection = false;
+  userMadeChange = false;
 
   // Called after every ngAfterContentChecked().
   ngAfterViewChecked() {
     // markAsPristine until user has made a selection
-    if (!this.userPerformedSelection && this.ngControl && this.ngControl.control) {
+    if (!this.userMadeChange && this.ngControl && this.ngControl.control) {
       this.ngControl.control.markAsPristine();
     }
   }
@@ -130,7 +130,7 @@ export class CourseInputComponent extends _CourseInputComponentBase
     if (event.value) {
       this.year = event.value;
       this.updateCourses();
-      this.userPerformedSelection = true;
+      this.userMadeChange = true;
     }
   }
 
@@ -138,7 +138,7 @@ export class CourseInputComponent extends _CourseInputComponentBase
     if (event.value) {
       this.quarter = event.value;
       this.updateCourses();
-      this.userPerformedSelection = true;
+      this.userMadeChange = true;
     }
   }
 
@@ -161,13 +161,13 @@ export class CourseInputComponent extends _CourseInputComponentBase
       }
     }
     this.updateSections();
-    this.userPerformedSelection = true;
+    this.userMadeChange = true;
   }
 
   onSelectSection(event: MatSelectChange) {
     this.section = event.value;
     this._propagateChanges();
-    this.userPerformedSelection = true;
+    this.userMadeChange = true;
   }
 
   private initComponent() {
