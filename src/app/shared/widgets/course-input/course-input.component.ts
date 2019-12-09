@@ -1,6 +1,5 @@
 import {
   AfterContentInit,
-  AfterViewChecked,
   ChangeDetectorRef,
   Component,
   DoCheck,
@@ -86,7 +85,6 @@ export class CourseInputComponent extends _CourseInputComponentBase
     MatFormFieldControl<string>,
     CanUpdateErrorState,
     AfterContentInit,
-    AfterViewChecked,
     DoCheck,
     OnDestroy {
   @Input() fieldConfig: Field;
@@ -116,21 +114,11 @@ export class CourseInputComponent extends _CourseInputComponentBase
 
   courseTitle;
 
-  userMadeChange = false;
-
-  // Called after every ngAfterContentChecked().
-  ngAfterViewChecked() {
-    // markAsPristine until user has made a selection
-    if (!this.userMadeChange && this.ngControl && this.ngControl.control) {
-      this.ngControl.control.markAsPristine();
-    }
-  }
-
   onSelectYear(event: MatSelectChange) {
     if (event.value) {
       this.year = event.value;
       this.updateCourses();
-      this.userMadeChange = true;
+      this._propagateChanges();
     }
   }
 
@@ -138,18 +126,20 @@ export class CourseInputComponent extends _CourseInputComponentBase
     if (event.value) {
       this.quarter = event.value;
       this.updateCourses();
-      this.userMadeChange = true;
+      this._propagateChanges();
     }
   }
 
   private setSectionValue(val: string) {
-    this.section = val;
+    if (this.section !== val) {
+      this.section = val;
 
-    if (!this.section) {
-      this.sectionOptions = [];
+      if (!this.section) {
+        this.sectionOptions = [];
+      }
+      this.sectionControl.setValue(this.section);
+      this._propagateChanges();
     }
-    this.sectionControl.setValue(this.section);
-    this._propagateChanges();
   }
 
   onSelectCourse(event: MatSelectChange) {
@@ -161,13 +151,12 @@ export class CourseInputComponent extends _CourseInputComponentBase
       }
     }
     this.updateSections();
-    this.userMadeChange = true;
+    this._propagateChanges();
   }
 
   onSelectSection(event: MatSelectChange) {
     this.section = event.value;
     this._propagateChanges();
-    this.userMadeChange = true;
   }
 
   private initComponent() {
@@ -196,12 +185,20 @@ export class CourseInputComponent extends _CourseInputComponentBase
     if (this.year && this.quarter && this.curriculumAbbreviation) {
       this.studentService.getCourses(this.year, this.quarter, this.curriculumAbbreviation).subscribe((result: any) => {
         this.courseOptions = (result && result['Courses']) || [];
-        this.courseControl.patchValue(this.courseNumber);
-        this.updateSections();
+        if (
+          this.courseOptions &&
+          this.courseOptions.length > 0 &&
+          !this.courseOptions.find(e => e['CourseNumber'] === this.courseNumber)
+        ) {
+          this.courseNumber = this.courseOptions[0]['CourseNumber'];
+          this.courseControl.patchValue(this.courseNumber);
+        }
       });
     } else {
       this.courseOptions = [];
     }
+
+    this.updateSections(); // need to update sections when year/quarter changed, even if course remained the same
   }
 
   private updateSections() {
@@ -215,9 +212,14 @@ export class CourseInputComponent extends _CourseInputComponentBase
             this.setSectionValue('');
             this.sectionControl.disable();
           } else if (this.sectionOptions.length === 1) {
-            this.setSectionValue(this.sectionOptions[0]['SectionID']);
+            if (this.section !== this.sectionOptions[0]['SectionID']) {
+              this.setSectionValue(this.sectionOptions[0]['SectionID']);
+            }
+            this.sectionControl.disable();
           } else {
-            this.setSectionValue(this.sectionOptions[0]['SectionID']);
+            if (!this.sectionOptions.find(e => e['SectionID'] === this.section)) {
+              this.setSectionValue(this.sectionOptions[0]['SectionID']);
+            }
             this.sectionControl.enable();
           }
 
@@ -238,7 +240,6 @@ export class CourseInputComponent extends _CourseInputComponentBase
         } else {
           this.setInternalValue(this._value);
         }
-        this._propagateChanges();
         this.stateChanges.next();
       }
     });
@@ -271,14 +272,15 @@ export class CourseInputComponent extends _CourseInputComponentBase
       this.courseNumber = values[3];
       this.courseTitle = values[4];
       this.section = values[5];
-      this.yearControl.patchValue(this.year);
-      this.quarterControl.patchValue(this.quarter);
     } else {
       this.courseNumber = '';
       this.setSectionValue('');
-      this.yearControl.patchValue(this.year);
-      this.quarterControl.patchValue(this.quarter);
     }
+
+    this.yearControl.patchValue(this.year);
+    this.quarterControl.patchValue(this.quarter);
+    this.courseControl.patchValue(this.courseNumber);
+    this.sectionControl.setValue(this.section);
 
     this.updateCourses();
   }
