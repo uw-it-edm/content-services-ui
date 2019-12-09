@@ -128,23 +128,6 @@ describe('Create Page for Demo', () => {
     page.clickAcceptAlert();
   });
 
-  it('should display error message with focus on Dismiss button when no file is attached', () => {
-    page.inputField.sendKeys('any text');
-    page.saveButton.click();
-
-    expect(page.dismissButton.getId()).toEqual(
-      browser.driver
-        .switchTo()
-        .activeElement()
-        .getId(),
-      'Dismiss button is not set to focus.'
-    );
-    page.dismissButton.click();
-
-    page.clickCancelButton();
-    page.clickAcceptAlert();
-  });
-
   it('should display Upload Another checkbox that is checked by default', () => {
     expect(page.uploadAnotherCheckbox.isDisplayed());
     expect(page.uploadAnotherCheckbox.isSelected());
@@ -293,10 +276,20 @@ describe('Create Page for Demo2', () => {
     expect(page.saveButton.isEnabled()).toBe(false);
   });
 
-  it('should re-enable Save button when required field is populated', () => {
+  it('should re-enable Save button when required fields are populated and file is uploaded', () => {
     page.populateRequiredFields(false);
+    page.addFile(pdfFilePath);
 
     expect(page.saveButton.isEnabled()).toBe(true);
+
+    page.clickCancelButton();
+    page.clickAcceptAlert();
+  });
+
+  it('should disable Save button when required fields are populated but file is not uploaded', () => {
+    page.populateRequiredFields(false);
+
+    expect(page.saveButton.isEnabled()).toBe(false);
 
     page.clickCancelButton();
     page.clickAcceptAlert();
