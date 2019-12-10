@@ -454,7 +454,7 @@ export class CourseInputComponent extends _CourseInputComponentBase
 
   // Implemented as part of ControlValueAccessor
   writeValue(value: any): void {
-    if (value !== undefined) {
+    if (value) {
       this.setInternalValue(value);
     }
   }
