@@ -193,12 +193,12 @@ export class CourseInputComponent extends _CourseInputComponentBase
           this.courseNumber = this.courseOptions[0]['CourseNumber'];
           this.courseControl.patchValue(this.courseNumber);
         }
+        this.updateSections(); // need to update sections when year/quarter changed, even if course remained the same
       });
     } else {
       this.courseOptions = [];
+      this.updateSections();
     }
-
-    this.updateSections(); // need to update sections when year/quarter changed, even if course remained the same
   }
 
   private updateSections() {
