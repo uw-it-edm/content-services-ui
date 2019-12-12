@@ -197,6 +197,13 @@ describe('Edit Page for Demo', () => {
 
     editPage.clickAcceptAlert();
   });
+
+  it('should enable Save button when Course is updated', () => {
+    page.clickDropDownByLabel('Course');
+    page.clickDropDownOptionValueByText('103-PHY SCI INQUIRY I');
+
+    expect(page.saveButton.isEnabled()).toBeTruthy();
+  });
 });
 
 describe('Edit Page for Demo2', () => {

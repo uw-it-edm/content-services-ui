@@ -99,8 +99,12 @@ export class CreatePage {
   }
 
   clickDropDownByLabel(dropDownLabel: string) {
-    element(by.cssContainingText('.mat-form-field', dropDownLabel)).click();
+    this.getFormFieldByLabel(dropDownLabel).click();
     browser.wait(ExpectedConditions.visibilityOf(this.selectPanel), 5000);
+  }
+
+  getFormFieldByLabel(dropDownLabel: string) {
+    return element(by.cssContainingText('.mat-form-field', dropDownLabel));
   }
 
   populateRequiredFields(shouldClearFieldValue: boolean = false) {
@@ -116,6 +120,8 @@ export class CreatePage {
             }
             break;
           }
+          case 'app-course-input':
+          /* falls through */
           case 'app-options-input': {
             requiredField.click();
             if (shouldClearFieldValue) {
