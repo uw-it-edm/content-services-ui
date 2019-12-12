@@ -59,18 +59,21 @@ describe('Create Page for Demo', () => {
 
   it('should navigate to Search page when Cancel button is clicked', () => {
     page.clickCancelButton();
+    page.clickAcceptAlert();
 
     expect(getCurrentUrl()).toMatch(searchPage.pageUrl);
   });
 
   it('should navigate to Search page when Return to Results button is clicked', () => {
     page.clickReturnToResultsButton();
+    page.clickAcceptAlert();
 
     expect(getCurrentUrl()).toMatch(searchPage.pageUrl);
   });
 
   it('should navigate to Search page when App Name link is clicked', () => {
     page.clickAppName();
+    page.clickAcceptAlert();
 
     expect(getCurrentUrl()).toMatch(searchPage.pageUrl);
   });
@@ -256,6 +259,30 @@ describe('Create Page for Demo', () => {
     page.calendarDisabledSelections.first().sendKeys(protractor.Key.ESCAPE);
     page.clickCancelButton();
     page.clickAcceptAlert();
+  });
+
+  it('should display the default number of entries for Course Year', () => {
+    const getExpectedYears = function() {
+      let year = new Date().getFullYear();
+      let years = year.toString();
+      const defaultYearEntries = 10;
+      for (let i = 0; i < defaultYearEntries - 1; i++) {
+        year = year - 1;
+        years = years.concat('\n').concat(year.toString());
+      }
+      return years;
+    };
+
+    page.clickDropDownByLabel('Year');
+
+    expect(page.selectPanel.getText()).toEqual(getExpectedYears());
+  });
+
+  it('should display Year, Quarter, Course, and Section fields for course-input component', () => {
+    expect(page.getFormFieldByLabel('Year').isDisplayed()).toBeTruthy();
+    expect(page.getFormFieldByLabel('Quarter').isDisplayed()).toBeTruthy();
+    expect(page.getFormFieldByLabel('Course').isDisplayed()).toBeTruthy();
+    expect(page.getFormFieldByLabel('Section').isDisplayed()).toBeTruthy();
   });
 });
 

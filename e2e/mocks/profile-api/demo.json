@@ -127,6 +127,15 @@
     {
       "key": "SourceModel.childType.data.label",
       "label": "DataApiOption child - from search"
+    },
+    {
+      "key": "courses",
+      "label": "Course Input",
+      "displayType": "course-input",
+      "required": true,
+      "courseConfig": {
+        "curriculumAbbreviation": "PHYS"
+      }
     }
   ],
   "pages": {
@@ -221,14 +230,14 @@
       "fieldKeysToDisplay": [
         "DataApiOptionLabel",
         "DataApiOptionCode",
-        "Filer",
         "DocumentType",
         "PublishStatus",
         "LastModifiedDate",
         "StudentId",
         "RegId",
         "parentType",
-        "childType"
+        "childType",
+        "courses"
       ],
       "buttons": [
         {
@@ -259,7 +268,8 @@
         "StudentId",
         "RegId",
         "parentType",
-        "childType"
+        "childType",
+        "courses"
       ],
       "buttons": [
         {
