@@ -4,14 +4,14 @@
  */
 
 // import settings from default config file
-var properties = null;
-var originalConfigFn = require('./karma.conf.js');
+let properties = null;
+let originalConfigFn = require('./karma.conf.js');
 originalConfigFn({ set: function (arg) { properties = arg; } });
 
 // remove the parallel framework, this makes running focused tests simpler and faster.
 let parallelIndex = properties.frameworks.indexOf('parallel');
 if (parallelIndex >= 0) {
-  properties.frameworks.splice(parallelIndex, 1)
+  properties.frameworks.splice(parallelIndex, 1);
 }
 
 // Adds a custom launcher that can open chrome with a specified port for remote debugging.
