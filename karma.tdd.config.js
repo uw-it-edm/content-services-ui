@@ -6,7 +6,7 @@
 // import settings from default config file
 let properties = null;
 let originalConfigFn = require('./karma.conf.js');
-originalConfigFn({ set: function (arg) { properties = arg; } });
+originalConfigFn({ set(arg) { properties = arg; } });
 
 // remove the parallel framework, this makes running focused tests simpler and faster.
 let parallelIndex = properties.frameworks.indexOf('parallel');
