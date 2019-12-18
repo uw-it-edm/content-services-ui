@@ -4,7 +4,7 @@ import { SearchResults } from '../shared/model/search-result';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { Observable, Subject } from 'rxjs';
 import { SearchDataSource } from '../shared/model/search-datasource.model';
-import { MatPaginator, MatSort, PageEvent, Sort, SortDirection } from '@angular/material';
+import { MatPaginator, MatSort, PageEvent, Sort, SortDirection, MatSortHeaderIntl } from '@angular/material';
 import { PaginatorConfig } from '../shared/model/paginator-config';
 import { DataService } from '../../shared/providers/data.service';
 import { SearchUtility } from '../shared/search-utility';
@@ -21,6 +21,7 @@ import { ObjectUtilities } from '../../core/util/object-utilities';
   styleUrls: ['./search-results.component.css']
 })
 export class SearchResultsComponent implements OnInit, OnDestroy {
+  private fieldLabelMap: { [id: string]: string } = {};
   private componentDestroyed = new Subject();
   searchModel: SearchModel = new SearchModel();
   paginatorConfig: PaginatorConfig = new PaginatorConfig();
@@ -55,7 +56,8 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private data: DataService,
-    private liveAnnouncer: LiveAnnouncer
+    private liveAnnouncer: LiveAnnouncer,
+    private matSortService: MatSortHeaderIntl
   ) {}
 
   ngOnInit(): void {
@@ -124,9 +126,17 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     if (this.pageConfig.displayDocumentLabelField) {
       this.displayedColumns.push('label');
     }
+
     for (const field of this.pageConfig.fieldsToDisplay) {
       this.displayedColumns.push(field.key);
+      this.fieldLabelMap[field.key] = field.label;
     }
+
+    this.matSortService.sortButtonLabel = id => {
+      const label = this.fieldLabelMap[id] || id;
+
+      return `Change sorting for ${label}`;
+    };
   }
 
   getValueFromMetadata(metadata, key: string) {
