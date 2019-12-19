@@ -32,12 +32,10 @@ describe('HeaderComponent', () => {
   let activatedRoute: ActivatedRouteStub;
   let configServiceStub: ConfigServiceStub;
 
-  beforeEach(() => {
+  beforeEach(async(() => {
     activatedRoute = new ActivatedRouteStub();
     configServiceStub = new ConfigServiceStub();
-  });
 
-  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MaterialConfigModule, HttpClientModule, NoopAnimationsModule],
       declarations: [HeaderComponent],

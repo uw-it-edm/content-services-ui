@@ -61,13 +61,11 @@ describe('CreatePageComponent', () => {
   let mockContentService: MockContentService;
   let mockUserService: MockUserService;
 
-  beforeEach(() => {
+  beforeEach(async(() => {
     activatedRoute = new ActivatedRouteStub();
     mockContentService = new MockContentService();
     mockUserService = new MockUserService();
-  });
 
-  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientModule,
@@ -118,7 +116,10 @@ describe('CreatePageComponent', () => {
       Object.assign(new Field(), { key: 'a', label: 'a' })
     ];
     createPageConfig.buttons = [saveButton];
-    createPageConfig.onSave = [{ key: 'PublishStatus', value: 'Published' }, { key: 'AnotherOnSave', value: 'Value' }];
+    createPageConfig.onSave = [
+      { key: 'PublishStatus', value: 'Published' },
+      { key: 'AnotherOnSave', value: 'Value' }
+    ];
     createPageConfig.pageName = 'test-create-page';
     createPageConfig.viewPanel = true;
 

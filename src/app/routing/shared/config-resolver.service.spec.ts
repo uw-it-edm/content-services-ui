@@ -38,7 +38,7 @@ describe('ConfigResolverService', () => {
         { provide: Router, useClass: RouterStub },
         NotificationService
       ]
-    });
+    }).compileComponents();
   }));
 
   let mockConfigService: MockConfigService;

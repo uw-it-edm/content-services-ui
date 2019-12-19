@@ -36,15 +36,13 @@ class MockSearchService {
 }
 
 describe('SearchPageComponent', () => {
-  beforeEach(() => {
+  beforeEach(async(() => {
     activatedRoute = new ActivatedRouteStub();
     searchServiceSpy = new MockSearchService();
     dataService = new DataService();
     dataService.set('adjacentIds', ['123', '456']);
     studentService = new StudentService(null, null);
-  });
 
-  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [NoopAnimationsModule, MaterialConfigModule, HttpClientModule, RouterTestingModule],
       declarations: [SearchPageComponent, SearchBoxComponent, SearchResultsComponent],

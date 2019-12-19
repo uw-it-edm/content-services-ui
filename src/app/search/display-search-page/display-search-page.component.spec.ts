@@ -63,16 +63,15 @@ class MockContentService {
 
 describe('DisplaySearchPageComponent', () => {
   let mockContentService: MockContentService;
-  beforeEach(() => {
+
+  beforeEach(async(() => {
     mockContentService = new MockContentService();
     activatedRoute = new ActivatedRouteStub();
     searchServiceSpy = new MockSearchService();
     dataService = new DataService();
     dataService.set('adjacentIds', ['123', '456']);
     studentService = new StudentService(null, null);
-  });
 
-  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
         NoopAnimationsModule,
