@@ -59,18 +59,21 @@ describe('Create Page for Demo', () => {
 
   it('should navigate to Search page when Cancel button is clicked', () => {
     page.clickCancelButton();
+    page.clickAcceptAlert();
 
     expect(getCurrentUrl()).toMatch(searchPage.pageUrl);
   });
 
   it('should navigate to Search page when Return to Results button is clicked', () => {
     page.clickReturnToResultsButton();
+    page.clickAcceptAlert();
 
     expect(getCurrentUrl()).toMatch(searchPage.pageUrl);
   });
 
   it('should navigate to Search page when App Name link is clicked', () => {
     page.clickAppName();
+    page.clickAcceptAlert();
 
     expect(getCurrentUrl()).toMatch(searchPage.pageUrl);
   });
@@ -123,23 +126,6 @@ describe('Create Page for Demo', () => {
     browser.waitForAngularEnabled(false);
     expect(page.getFileName(1)).toEqual(path.parse(textFilePath).base);
     browser.waitForAngularEnabled(true);
-
-    page.clickCancelButton();
-    page.clickAcceptAlert();
-  });
-
-  it('should display error message with focus on Dismiss button when no file is attached', () => {
-    page.inputField.sendKeys('any text');
-    page.saveButton.click();
-
-    expect(page.dismissButton.getId()).toEqual(
-      browser.driver
-        .switchTo()
-        .activeElement()
-        .getId(),
-      'Dismiss button is not set to focus.'
-    );
-    page.dismissButton.click();
 
     page.clickCancelButton();
     page.clickAcceptAlert();
@@ -274,6 +260,30 @@ describe('Create Page for Demo', () => {
     page.clickCancelButton();
     page.clickAcceptAlert();
   });
+
+  it('should display the default number of entries for Course Year', () => {
+    const getExpectedYears = function() {
+      let year = new Date().getFullYear();
+      let years = year.toString();
+      const defaultYearEntries = 10;
+      for (let i = 0; i < defaultYearEntries - 1; i++) {
+        year = year - 1;
+        years = years.concat('\n').concat(year.toString());
+      }
+      return years;
+    };
+
+    page.clickDropDownByLabel('Year');
+
+    expect(page.selectPanel.getText()).toEqual(getExpectedYears());
+  });
+
+  it('should display Year, Quarter, Course, and Section fields for course-input component', () => {
+    expect(page.getFormFieldByLabel('Year').isDisplayed()).toBeTruthy();
+    expect(page.getFormFieldByLabel('Quarter').isDisplayed()).toBeTruthy();
+    expect(page.getFormFieldByLabel('Course').isDisplayed()).toBeTruthy();
+    expect(page.getFormFieldByLabel('Section').isDisplayed()).toBeTruthy();
+  });
 });
 
 describe('Create Page for Demo2', () => {
@@ -293,10 +303,20 @@ describe('Create Page for Demo2', () => {
     expect(page.saveButton.isEnabled()).toBe(false);
   });
 
-  it('should re-enable Save button when required field is populated', () => {
+  it('should re-enable Save button when required fields are populated and file is uploaded', () => {
     page.populateRequiredFields(false);
+    page.addFile(pdfFilePath);
 
     expect(page.saveButton.isEnabled()).toBe(true);
+
+    page.clickCancelButton();
+    page.clickAcceptAlert();
+  });
+
+  it('should disable Save button when required fields are populated but file is not uploaded', () => {
+    page.populateRequiredFields(false);
+
+    expect(page.saveButton.isEnabled()).toBe(false);
 
     page.clickCancelButton();
     page.clickAcceptAlert();

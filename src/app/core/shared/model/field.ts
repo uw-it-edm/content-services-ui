@@ -1,6 +1,7 @@
 import { CheckboxOptions } from './field/checkbox-options';
 import { FieldOption } from './field/field-option';
 import { DynamicSelectConfig } from './field/dynamic-select-config';
+import { CourseConfig } from './field/course-config';
 
 export class Field {
   public key: string;
@@ -21,4 +22,6 @@ export class Field {
   public checkboxOptions?: CheckboxOptions;
 
   public sortable?: boolean;
+
+  public courseConfig?: CourseConfig;
 }

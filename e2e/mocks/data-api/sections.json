@@ -1,0 +1,29 @@
+{
+  "Sections": [
+    {
+      "Year": "2019",
+      "Quarter": "autumn",
+      "CurriculumAbbreviation": "PHYS",
+      "CourseNumber": "114",
+      "SectionID": "A",
+      "Href": "/student/v5/course/2019,autumn,PHYS,114/A.json"
+    },
+    {
+      "Year": "2019",
+      "Quarter": "autumn",
+      "CurriculumAbbreviation": "PHYS",
+      "CourseNumber": "114",
+      "SectionID": "B",
+      "Href": "/student/v5/course/2019,autumn,PHYS,114/B.json"
+    },
+    {
+      "Year": "2019",
+      "Quarter": "autumn",
+      "CurriculumAbbreviation": "PHYS",
+      "CourseNumber": "114",
+      "SectionID": "C",
+      "Href": "/student/v5/course/2019,autumn,PHYS,114/C.json"
+    }
+  ],
+  "TotalCount": 3
+}

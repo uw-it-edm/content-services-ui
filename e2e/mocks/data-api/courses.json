@@ -1,0 +1,65 @@
+{
+  "Courses": [
+    {
+      "Year": "2019",
+      "Quarter": "autumn",
+      "CurriculumAbbreviation": "PHYS",
+      "CourseNumber": "101",
+      "CourseTitle": "PHYS SCI INQUIRY I",
+      "CourseTitleLong": "Physical Science By Inquiry I",
+      "CourseCampus": null,
+      "CourseCollege": null,
+      "RepositoryTimeStamp": null,
+      "Metadata": null
+    },
+    {
+      "Year": "2019",
+      "Quarter": "autumn",
+      "CurriculumAbbreviation": "PHYS",
+      "CourseNumber": "102",
+      "CourseTitle": "PHY SCI INQUIRY I",
+      "CourseTitleLong": "PHYSICAL SCIENCE BY INQUIRY I",
+      "CourseCampus": null,
+      "CourseCollege": null,
+      "RepositoryTimeStamp": null,
+      "Metadata": null
+    },
+    {
+      "Year": "2019",
+      "Quarter": "autumn",
+      "CurriculumAbbreviation": "PHYS",
+      "CourseNumber": "103",
+      "CourseTitle": "PHY SCI INQUIRY I",
+      "CourseTitleLong": "PHYSICAL SCIENCE BY INQUIRY I",
+      "CourseCampus": null,
+      "CourseCollege": null,
+      "RepositoryTimeStamp": null,
+      "Metadata": null
+    },
+    {
+      "Year": "2019",
+      "Quarter": "autumn",
+      "CurriculumAbbreviation": "PHYS",
+      "CourseNumber": "104",
+      "CourseTitle": "GROUP INQUIRY I",
+      "CourseTitleLong": "Facilitated Group Inquiry I",
+      "CourseCampus": null,
+      "CourseCollege": null,
+      "RepositoryTimeStamp": null,
+      "Metadata": null
+    },
+    {
+      "Year": "2019",
+      "Quarter": "autumn",
+      "CurriculumAbbreviation": "PHYS",
+      "CourseNumber": "105",
+      "CourseTitle": "GROUP INQUIRY II",
+      "CourseTitleLong": "Facilitated Group Inquiry II",
+      "CourseCampus": null,
+      "CourseCollege": null,
+      "RepositoryTimeStamp": null,
+      "Metadata": null
+    }
+  ],
+  "TotalCount": 5
+}
