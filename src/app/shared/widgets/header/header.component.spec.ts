@@ -1,4 +1,5 @@
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { Observable, of } from 'rxjs';
 
 import { HeaderComponent } from './header.component';
 import { MaterialConfigModule } from '../../../routing/material-config.module';
@@ -13,6 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ProgressService } from '../../providers/progress.service';
 import { NotificationService } from '../../providers/notification.service';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { User } from '../../../user/shared/user';
 
 class RouterStub {
   navigate(url: string) {
@@ -23,6 +25,16 @@ class RouterStub {
 class ConfigServiceStub {
   getTenantList(): Promise<string[]> {
     return Promise.resolve(Array.from(['demo', 'one', 'two', 'three']));
+  }
+}
+
+class MockUserService extends UserService {
+  constructor() {
+    super(null, null, null);
+  }
+
+  getUserObservable(): Observable<User> {
+    return of(new User('testUser'));
   }
 }
 
@@ -43,10 +55,10 @@ describe('HeaderComponent', () => {
         { provide: ActivatedRoute, useValue: activatedRoute },
         { provide: Router, useClass: RouterStub },
         { provide: ConfigService, useValue: configServiceStub },
+        { provide: UserService, useValue: new MockUserService() },
         ConfigResolver,
         GlobalEventsManagerService,
         ProgressService,
-        UserService,
         NotificationService
       ],
       schemas: [NO_ERRORS_SCHEMA]
