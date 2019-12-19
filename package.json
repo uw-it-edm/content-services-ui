@@ -9,6 +9,7 @@
     "start-localmock": "ng serve --configuration=localmock --disable-host-check",
     "build": "ng build",
     "test": "ng test --watch=false --sourceMap=false",
+    "test-tdd": "ng test --watch=true --sourceMap=true --browsers ChromeDebugging --karmaConfig karma.tdd.config.js",
     "test-cover": "rm -rf ./coverage && ng test --no-watch --code-coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "lint": "ng lint content-services-ui --type-check",
