@@ -70,13 +70,11 @@ describe('EditPageComponent', () => {
   let mockUserService: MockUserService;
   let editPageConfig: ContentPageConfig;
 
-  beforeEach(() => {
+  beforeEach(async(() => {
     activatedRoute = new ActivatedRouteStub();
     mockContentService = new MockContentService();
     mockUserService = new MockUserService();
-  });
 
-  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientModule,
