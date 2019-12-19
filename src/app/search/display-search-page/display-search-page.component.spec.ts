@@ -94,22 +94,22 @@ describe('DisplaySearchPageComponent', () => {
         NotificationService
       ],
       schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents();
-  }));
+    })
+      .compileComponents()
+      .then(() => {
+        activatedRoute.testParamMap = { page: 'test-page' };
+        activatedRoute.testQueryParamMap = { s: JSON.stringify(new SearchModel()) };
 
-  beforeEach(async(() => {
-    activatedRoute.testParamMap = { page: 'test-page' };
-    activatedRoute.testQueryParamMap = { s: JSON.stringify(new SearchModel()) };
+        const pageConfig = new SearchPageConfig();
+        pageConfig.pageName = 'test-page';
 
-    const pageConfig = new SearchPageConfig();
-    pageConfig.pageName = 'test-page';
+        const config = new Config();
+        config.tenant = 'test-tenant';
+        config.pages['test-page'] = pageConfig;
 
-    const config = new Config();
-    config.tenant = 'test-tenant';
-    config.pages['test-page'] = pageConfig;
-
-    console.log(JSON.stringify(config));
-    activatedRoute.testData = { config: config };
+        console.log(JSON.stringify(config));
+        activatedRoute.testData = { config: config };
+      });
   }));
 
   beforeEach(() => {
