@@ -21,7 +21,6 @@ import { ObjectUtilities } from '../../core/util/object-utilities';
   styleUrls: ['./search-results.component.css']
 })
 export class SearchResultsComponent implements OnInit, OnDestroy {
-  private fieldLabelMap: { [id: string]: string } = {};
   private componentDestroyed = new Subject();
   searchModel: SearchModel = new SearchModel();
   paginatorConfig: PaginatorConfig = new PaginatorConfig();
@@ -123,17 +122,19 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   }
 
   private configureTableColumns() {
+    const fieldLabelMap: { [id: string]: string } = {};
+
     if (this.pageConfig.displayDocumentLabelField) {
       this.displayedColumns.push('label');
     }
 
     for (const field of this.pageConfig.fieldsToDisplay) {
       this.displayedColumns.push(field.key);
-      this.fieldLabelMap[field.key] = field.label;
+      fieldLabelMap[field.key] = field.label;
     }
 
     this.matSortService.sortButtonLabel = id => {
-      const label = this.fieldLabelMap[id] || id;
+      const label = fieldLabelMap[id] || id;
 
       return `Change sorting for ${label}`;
     };
