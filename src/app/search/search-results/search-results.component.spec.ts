@@ -1,8 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 import { SearchResultsComponent } from './search-results.component';
 import { MaterialConfigModule } from '../../routing/material-config.module';
 import { SearchModel } from '../shared/model/search-model';
+import { Field } from '../../core/shared/model/field';
 import { of, Subject } from 'rxjs';
 
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -50,13 +52,20 @@ describe('SearchResultsComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SearchResultsComponent);
-    component = fixture.componentInstance;
     const searchModel = new SearchModel();
     searchModel.stringQuery = 'iSearch';
+
+    const field = new Field();
+    field.key = 'MyFieldKey';
+    field.label = 'Friendly Field Name';
+
+    fixture = TestBed.createComponent(SearchResultsComponent);
+    component = fixture.componentInstance;
     component.searchModel$ = of(searchModel);
     component.pageConfig = new SearchPageConfig();
     component.pageConfig.defaultSort = new Sort('myfield', 'asc');
+    component.pageConfig.fieldKeysToDisplay.push(field.key);
+    component.pageConfig.fieldsToDisplay.push(field);
     component.searchResults$ = new Subject<SearchResults>();
     component.searchResults$.next(new SearchResults());
 
@@ -89,5 +98,13 @@ describe('SearchResultsComponent', () => {
     // event on the matSort object is being digested correctly
     expect(component.sort.active).toBe('newfield');
     expect(component.sort.direction).toBe('desc');
+  });
+
+  it('should use the field label for the aria attribute of sorting button', () => {
+    const headerButtons = fixture.debugElement.queryAll(By.css('.mat-sort-header-button'));
+    expect(headerButtons.length).toBe(2);
+
+    const secondHeaderButton: HTMLElement = headerButtons[1].nativeElement;
+    expect(secondHeaderButton.getAttribute('aria-label')).toEqual('Change sorting for Friendly Field Name');
   });
 });
