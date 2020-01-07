@@ -1,0 +1,11 @@
+.header-username {
+    /* Note: These set of styles are based on UW 2014 stylesheet for header buttons. */
+    font-family: "Encode Sans Compressed", sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    padding: 0 16px;
+  }
+  
+  .header-username>* {
+    vertical-align: middle;
+}
