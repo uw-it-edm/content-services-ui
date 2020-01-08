@@ -6630,15 +6630,15 @@ run-queue@^1.0.0, run-queue@^1.0.3:
   dependencies:
     aproba "^1.1.1"
 
-rxjs-tslint-rules@^4.28.0:
-  version "4.28.0"
-  resolved "https://registry.yarnpkg.com/rxjs-tslint-rules/-/rxjs-tslint-rules-4.28.0.tgz#5e98a85008e58cce3e3af8906a87ddd8a98982cd"
-  integrity sha512-Nx0so6Iyc5+tyIgKRAh3wlBDMuKQ7V8PM/i1VauUYCEcvtKDvnQn542A2GNKJDmq/urVzaC8EXONlggONPjcsg==
+rxjs-tslint-rules@4.27.1:
+  version "4.27.1"
+  resolved "https://registry.yarnpkg.com/rxjs-tslint-rules/-/rxjs-tslint-rules-4.27.1.tgz#9f646ba2f768672bfdc4b51fc0e6c1a062412db1"
+  integrity sha512-LMTT0QeGKqBI+oOcWhnKTclovHFL9NrzviNeDc+iPRJpNsvq8ZN/nBaWAhFhnNtqMLX2SgWrhCKJcW6lAyxAYA==
   dependencies:
     "@phenomnomnominal/tsquery" "^4.0.0"
     decamelize "^3.0.0"
     resolve "^1.4.0"
-    semver "^7.0.0"
+    semver "^6.0.0"
     tslib "^1.8.0"
     tsutils "^3.0.0"
     tsutils-etc "^1.1.0"
@@ -6795,11 +6795,6 @@ semver@^6.0.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/semver/-/semver-6.1.0.tgz#e95dc415d45ecf03f2f9f83b264a6b11f49c0cca"
   integrity sha512-kCqEOOHoBcFs/2Ccuk4Xarm/KiWRSLEX9CAZF8xkJ6ZPlIoTZ8V5f7J16vYLJqDbR7KrxTJpR2lqjIEm2Qx9cQ==
-
-semver@^7.0.0:
-  version "7.1.1"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-7.1.1.tgz#29104598a197d6cbe4733eeecbe968f7b43a9667"
-  integrity sha512-WfuG+fl6eh3eZ2qAf6goB7nhiCd7NPXhmyFxigB/TOkQyeLP8w8GsVehvtGNtnNmyboz4TgeK40B1Kbql/8c5A==
 
 semver@~5.3.0:
   version "5.3.0"
