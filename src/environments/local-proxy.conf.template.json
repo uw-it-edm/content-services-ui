@@ -1,0 +1,38 @@
+{
+  "/profile-api/*": {
+    "target": "http://localhost:EDM_PROFILE_API_PORT",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/profile-api": ""
+    }
+  },
+  "/search-api/*": {
+    "target": "http://localhost:EDM_SEARCH_API_PORT",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/search-api": ""
+    }
+  },
+  "/content-api/*": {
+    "target": "http://localhost:EDM_CONTENT_API_PORT",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/content-api": ""
+    }
+  },
+  "/data-api/*": {
+    "target": "http://localhost:EDM_DATA_API_PORT",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/data-api": ""
+    }
+  }
+}

@@ -34,6 +34,24 @@ Stop the containers when you are done with:
 yarn stop-mock-services
 ```
 
+## Development server with backend services hosted in AWS EC2
+
+- Install and configure the [AWS CLI](https://aws.amazon.com/cli/).
+- Install and configure the [AWS helper scripts](https://github.com/uw-it-edm/technical-operations/tree/master/aws-helper-scripts).
+- Setup the environment variables as described in the [EDM Data](https://github.com/uw-it-edm/workstation-setup/tree/master/configuration/edm-team) workstation setup. 
+- Login to AWS with 'developer' role.
+- Run SSH to tunnel requests to the app servers:
+```
+ec2TunnelToEnvAndType -p $EDM_PROFILE_API_PORT,$EDM_CONTENT_API_PORT,$EDM_SEARCH_API_PORT,$EDM_DATA_API_PORT dev apps
+```
+- Run Angular with the proxy setup for the remote servers (this is needed to by-pass CORS):
+```
+yarn start-localproxy
+```
+- Navigate to http://localhost:42000 watch the console to if there are any errors on the proxy url re-writting.
+
+How it works? There is a script (`./src/environments/replace-vars.mjs`) that will inject values from environment variables into the appropiate local files that includes your NetID used to make requests to back end servers and all the port numbers.
+
 ## Debug in VSCode
 - Add the following configuration to your launch.json file:
 ```

@@ -40,4 +40,5 @@ Thumbs.db
 
 # Env files
 /src/environments/environment.*.ts
+/src/environment/*.json
 start.sh
