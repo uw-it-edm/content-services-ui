@@ -34,6 +34,23 @@ Stop the containers when you are done with:
 yarn stop-mock-services
 ```
 
+## Debug in VSCode
+- Add the following configuration to your launch.json file:
+```
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Chrome",
+      "url": "http://localhost:4200",
+      "webRoot": "${workspaceFolder}"
+    }
+```
+- Start the angular server with one of the options above.
+- Lanch chrome using the launch configuration, this will start a new chrome instance in debug mode and attach VSCode to debug it.
+
+## Debug in IntelliJ
+TBD
+
 # Setup for Unit Tests
 Unit tests are written in [jasmine](https://jasmine.github.io) and run via [Karma](https://karma-runner.github.io). 
 
