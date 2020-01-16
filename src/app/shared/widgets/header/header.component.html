@@ -22,17 +22,9 @@
         <span [id]="availableTenant['tenantName']">{{availableTenant['tenantName']}}</span>
       </button>
     </mat-menu>
-    <button mat-button [matMenuTriggerFor]="userMenu">
-      <mat-icon>account_box</mat-icon>&nbsp;<span
-      *ngIf="user$ | async as user">{{user.userName}}</span>
-    </button>
-    <mat-menu #userMenu="matMenu" xPosition="before" yPosition="below">
-      <button mat-menu-item
-              routerLink="/logout"
-              routerLinkActive="active">
-        <span>Logout</span>
-      </button>
-    </mat-menu>
+    <div class="header-username">
+      <mat-icon>account_box</mat-icon>&nbsp;<span *ngIf="user$ | async as user">{{user.userName}}</span>
+    </div>
   </mat-toolbar>
 </header>
 
