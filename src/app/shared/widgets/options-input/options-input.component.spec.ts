@@ -1,4 +1,7 @@
+import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { OptionsInputComponent } from './options-input.component';
 import { FieldOption } from '../../../core/shared/model/field/field-option';
 import { Field } from '../../../core/shared/model/field';
@@ -56,4 +59,58 @@ describe('OptionsInputComponent', () => {
       expect(options[1].displayValue).toBe('val2');
     });
   });
+});
+
+@Component({
+  template: `
+    <div [formGroup]="formGroup">
+      <app-options-input
+        [formControlName]="'testFormControlName'"
+        [fieldConfig]="field"
+        [parentControl]="formGroup"
+        [id]="'test-custom-input'"
+      >
+      </app-options-input>
+    </div>
+  `
+})
+class TestHostComponent {
+  public field: Field;
+  public formGroup: FormGroup;
+
+  constructor() {
+    this.field = new Field();
+    this.field.options = [new FieldOption('optionOneValue', 'optionOneDisplayValue')];
+    this.formGroup = new FormGroup({
+      testFormControlName: new FormControl(this.field.options[0].value)
+    });
+  }
+}
+
+describe('OptionsInputComponent with host', () => {
+  let componentElement: HTMLElement;
+  let fixture: ComponentFixture<TestHostComponent>;
+
+  beforeEach(async(() => {
+    const dataApiValueServiceSpy = jasmine.createSpyObj('DataApiValueService', ['listByType']);
+    TestBed.configureTestingModule({
+      imports: [SharedModule, NoopAnimationsModule, ReactiveFormsModule],
+      declarations: [TestHostComponent],
+      providers: [{ provide: DataApiValueService, useValue: dataApiValueServiceSpy }]
+    }).compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(TestHostComponent);
+    componentElement = fixture.debugElement.queryAll(By.css('mat-select'))[0].nativeElement;
+
+    fixture.detectChanges();
+  });
+
+  it('should render aria-label attribute set to its option value', async(() => {
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      expect(componentElement.getAttribute('aria-label')).toEqual('optionOneValue');
+    });
+  }));
 });
