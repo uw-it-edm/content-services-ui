@@ -65,6 +65,7 @@ describe('OptionsInputComponent', () => {
   template: `
     <div [formGroup]="formGroup">
       <app-options-input
+        [placeholder]="'testPlaceHolder'"
         [formControlName]="'testFormControlName'"
         [fieldConfig]="field"
         [parentControl]="formGroup"
@@ -107,10 +108,10 @@ describe('OptionsInputComponent with host', () => {
     fixture.detectChanges();
   });
 
-  it('should render aria-label attribute set to its option value', async(() => {
+  it('should render aria-label attribute set to its label and option value', async(() => {
     fixture.whenStable().then(() => {
       fixture.detectChanges();
-      expect(componentElement.getAttribute('aria-label')).toEqual('optionOneValue');
+      expect(componentElement.getAttribute('aria-label')).toEqual('testPlaceHolder optionOneValue');
     });
   }));
 });
