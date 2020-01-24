@@ -5,7 +5,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "replace-vars": "ts-node ./src/environments/replace-vars.mjs",
     "start-local": "ng serve --configuration=local --disable-host-check",
+    "start-localproxy": "yarn replace-vars && ng serve --configuration=localproxy --disable-host-check",
     "start-localmock": "ng serve --configuration=localmock --disable-host-check",
     "build": "ng build",
     "test": "ng test --watch=false --sourceMap=false",
