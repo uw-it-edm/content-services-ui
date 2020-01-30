@@ -1,5 +1,6 @@
 <div [formGroup]="formGroup">
-  <mat-select [formControlName]="internalFieldName" (selectionChange)="onSelect($event)">
+  <mat-select [formControlName]="internalFieldName" [aria-label]="placeholder + ' ' + ngControl?.value"
+    (selectionChange)="onSelect($event)">
     <mat-option *ngFor="let option of this.options$| async" [value]="option.value">
       {{ option.displayValue }}
     </mat-option>
