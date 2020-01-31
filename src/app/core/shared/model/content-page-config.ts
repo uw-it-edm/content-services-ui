@@ -9,6 +9,11 @@ export class ContentPageConfig implements PageConfig {
   fieldKeysToDisplay: Array<string> = [];
 
   viewPanel: boolean;
+
+  /**
+   * Whether the 'Upload Another' checkbox should be checked by default on the create page.
+   * The checkbox is only displayed on the create page.
+   */
   uploadAnother: boolean;
   allowPageByPageMode: boolean;
 

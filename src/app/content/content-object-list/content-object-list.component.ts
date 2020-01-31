@@ -1,7 +1,7 @@
 import { first, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ContentObject } from '../shared/model/content-object';
-import { FormGroup } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
 import { ContentItem } from '../shared/model/content-item';
 import { ContentService } from '../shared/content.service';
 import { Field } from '../../core/shared/model/field';
@@ -23,8 +23,8 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
   private componentDestroyed = new Subject();
 
   @Input() contentItem: ContentItem;
-  @Input() formGroup: FormGroup;
   @Input() page: string;
+  @Input() uploadAnotherCtrl: AbstractControl;
 
   @Output() remove = new EventEmitter<number>();
   @Output() select = new EventEmitter<ContentObject>(true);
@@ -113,6 +113,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
     this.createdItems = new Array<ContentItem>();
     this.updatedItems = new Array<ContentItem>();
     this.failures = new Array<any>();
+    this.select.next(null);
   }
 
   public selectObject(index: number) {
@@ -177,24 +178,21 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
     }
   }
 
-  notify() {
+  private notify(): Promise<boolean> {
     if (this.snackBarTimeout) {
       clearTimeout(this.snackBarTimeout);
       this.snackBarTimeout = null;
     }
-    this.snackBarTimeout = setTimeout(() => {
-      const snackBarRef = this.createSnackBar();
-      if (this.formGroup && this.formGroup.controls['uploadAnother']) {
-        snackBarRef.onAction().subscribe(() => {
-          const ctrl = this.formGroup.get('uploadAnother');
-          if (ctrl && ctrl.value) {
-            this.reset();
-          } else if (this.page) {
-            this.router.navigate([this.config.tenant + '/' + this.page]);
-          }
+
+    return new Promise(resolve => {
+      this.snackBarTimeout = setTimeout(() => {
+        const snackBarRef = this.createSnackBar();
+
+        snackBarRef.afterOpened().subscribe(() => {
+          resolve();
         });
-      }
-    }, 500);
+      }, 500);
+    });
   }
 
   private createSnackBar(): MatSnackBarRef<SimpleSnackBar> {
@@ -297,7 +295,14 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
               contentObject.failed = false;
               this.updateComponentSavedItemLists(item);
               this.saving.emit(false); // item saving completed
-              this.notify();
+
+              this.notify().then(() => {
+                if (this.uploadAnotherCtrl && this.uploadAnotherCtrl.value) {
+                  this.reset();
+                } else if (!!this.uploadAnotherCtrl) {
+                  this.router.navigate([this.config.tenant]);
+                }
+              });
             })
             .catch(err => {
               this.failures.push(err);
