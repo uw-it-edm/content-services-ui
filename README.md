@@ -121,6 +121,27 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 1. Install [Docker](https://docs.docker.com/docker-for-mac/install/#download-docker-for-mac) on your machine.   
   1. Run `yarn e2e-local`
 
+## Debug end-to-end tests from local
+
+- Start the docker back end mock server
+```
+yarn start-mock-services
+```
+- Start the local dev server with 'travis' configuration (this is the configuration that is run by CI machine)
+```
+yarn start-travis
+```
+- Launch protractor and attach node debugger. If you [configured VSCode](https://github.com/uw-it-edm/workstation-setup/tree/master/configuration/vscode), you can run the 'Launch Protractor' configuration to automatically attach VSCode as a debugger.
+
+  - Alternatively, you can manually run protractor with node in 'debug' mode, passing the path to the local conf.js and the base url to point to the local web server.
+     ```
+     node --inspect-brk ./node_modules/protractor/bin/protractor ./protractor.conf.local.js --baseUrl=http://localhost:4200
+     ```
+- Stop the docker container
+```
+yarn stop-mock-services
+```
+
 # Build
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
