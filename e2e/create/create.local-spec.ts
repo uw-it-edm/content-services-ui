@@ -2,7 +2,6 @@ import { CreatePage } from './create.po';
 import { SearchPage } from '../search/search.po';
 import { browser, ElementArrayFinder } from 'protractor';
 import * as path from 'path';
-import { until } from 'selenium-webdriver';
 import { protractor } from 'protractor/built/ptor';
 import { ContentServicesUiPage } from '../app/app.po';
 
@@ -130,7 +129,7 @@ describe('Create Page for Demo', () => {
     page.clickAcceptAlert();
   });
 
-  it("should display Upload Another checkbox that is checked by default if setting 'uploadAnoter'=true", () => {
+  it("should display Upload Another checkbox that is checked by default if setting 'uploadAnother'=true", () => {
     expect(page.uploadAnotherCheckbox.isDisplayed());
     expect(page.uploadAnotherCheckbox.isSelected());
   });
@@ -354,7 +353,7 @@ describe('Create Page for Demo2', () => {
     });
   });
 
-  it("should display Upload Another checkbox that is un-checked by default if setting 'uploadAnoter'=false", () => {
+  it("should display Upload Another checkbox that is un-checked by default if setting 'uploadAnother'=false", () => {
     expect(page.uploadAnotherCheckbox.isDisplayed());
     expect(page.uploadAnotherCheckbox.isSelected()).toBeFalsy();
   });
