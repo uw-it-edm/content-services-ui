@@ -68,7 +68,10 @@ class MockStudentService extends StudentService {
   getSections(year: string, quarter: string, curriculum: string, courseNumber?: string): Observable<any> {
     const ret: any = {
       Sections: [
-        { Year: '2019', Quarter: 'autumn', CurriculumAbbreviation: 'PHYS', CourseNumber: '101', SectionID: 'A' }
+        { Year: '2019', Quarter: 'autumn', CurriculumAbbreviation: 'PHYS', CourseNumber: '101', SectionID: 'A' },
+        { Year: '2019', Quarter: 'autumn', CurriculumAbbreviation: 'PHYS', CourseNumber: '102', SectionID: 'A' },
+        { Year: '2019', Quarter: 'autumn', CurriculumAbbreviation: 'PHYS', CourseNumber: '102', SectionID: 'B' },
+        { Year: '2019', Quarter: 'autumn', CurriculumAbbreviation: 'PHYS', CourseNumber: '103', SectionID: 'A' }
       ],
       TotalCount: 1
     };
@@ -117,10 +120,10 @@ describe('CourseInputComponent', () => {
   it('should update the model when a value is selected', () => {
     component.ngAfterContentInit();
     component.writeValue('2019|autumn|PHYS|101|PHYS SCI INQUIRY I|A');
-    component.onSelectYear(new MatSelectChange(null, '2018'));
-    component.onSelectQuarter(new MatSelectChange(null, 'winter'));
+    component.onSelectYear(new MatSelectChange(null, '2019'));
+    component.onSelectQuarter(new MatSelectChange(null, 'autumn'));
     component.onSelectCourse(new MatSelectChange(null, '102'));
     component.onSelectSection(new MatSelectChange(null, 'B'));
-    expect(component.value).toBe('2018|winter|PHYS|102|PHY SCI INQUIRY I|B');
+    expect(component.value).toBe('2019|autumn|PHYS|102|PHY SCI INQUIRY I|B');
   });
 });
