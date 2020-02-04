@@ -15,6 +15,6 @@
 </mat-form-field>
 <mat-form-field>
   <mat-select [formControl]="sectionControl"  [placeholder]="'Section'" (selectionChange)="onSelectSection($event)">
-    <mat-option *ngFor="let option of this.sectionOptions" [value]="option['SectionID']"> {{option['SectionID']}} </mat-option>
+    <mat-option *ngFor="let option of this.sectionOptions" [value]="option"> {{option}} </mat-option>
   </mat-select>
 </mat-form-field>
