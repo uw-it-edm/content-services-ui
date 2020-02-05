@@ -140,7 +140,7 @@ describe('Create Page for Demo', () => {
     expect(page.fileList.count()).toEqual(1);
 
     page.saveButton.click();
-    browser.wait(isEmptyFileList(page.fileList), 2000);
+    browser.wait(isEmptyFileList(page.fileList), 5000);
     expect(page.fileList.count()).toEqual(0);
     expect(page.filerInput.getAttribute('value')).toEqual('test filer');
   });
@@ -365,6 +365,6 @@ describe('Create Page for Demo2', () => {
     expect(page.fileList.count()).toEqual(1);
 
     page.saveButton.click();
-    browser.wait(currentUrlMatches(searchPage.pageUrl), 2000);
+    browser.wait(currentUrlMatches(searchPage.pageUrl), 5000);
   });
 });
