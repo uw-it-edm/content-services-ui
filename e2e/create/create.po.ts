@@ -1,5 +1,5 @@
-import {browser, by, element, ExpectedConditions} from 'protractor';
-import {protractor} from 'protractor/built/ptor';
+import { browser, by, element, ExpectedConditions } from 'protractor';
+import { protractor } from 'protractor/built/ptor';
 
 export class CreatePage {
   public pageUrl = `${browser.baseUrl}/${this.profile}/create`;
@@ -10,11 +10,13 @@ export class CreatePage {
   public uploadAnotherCheckbox = element.all(by.name('uploadAnother')).get(1);
   public studentInput = element(by.css('app-student-autocomplete input'));
   public personInput = element(by.css('app-person-autocomplete input'));
+  public filerInput = element(by.name('Filer'));
   public saveButton = element(by.id('saveItem'));
+  public cancelButton = element(by.id('cancel'));
   public clearButton = element(by.buttonText('clear'));
   public pdfViewer = element(by.tagName('pdf-viewer'));
   public formFields = element.all(by.tagName('mat-form-field'));
-  public requiredFields = this.formFields.all(by.css('[required=\'\']'));
+  public requiredFields = this.formFields.all(by.css("[required='']"));
   public dismissButton = element(by.buttonText('Dismiss'));
   public selectPanel = element(by.className('mat-select-panel'));
   public metadataErrorMessages = element.all(by.className('mat-error'));
@@ -49,10 +51,6 @@ export class CreatePage {
 
   chooseFile(filePath: string) {
     element(by.id('attach-files')).sendKeys(filePath);
-  }
-
-  clickCancelButton() {
-    element(by.id('cancel')).click();
   }
 
   clickReturnToResultsButton() {
