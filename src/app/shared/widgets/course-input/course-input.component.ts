@@ -190,7 +190,7 @@ export class CourseInputComponent extends _CourseInputComponentBase
         this.courseOptions = [];
 
         if (courses && courses['Courses'] && sections && sections['Sections']) {
-          // get group sections by course
+          // get course sections by course
           const secs = {};
           sections['Sections'].forEach(s => {
             const cn = s['CourseNumber'];
@@ -238,9 +238,10 @@ export class CourseInputComponent extends _CourseInputComponentBase
       this.sectionOptions = [];
       // get sections from associated course. no need to call DataAPI.
       if (this.courseOptions && this.courseOptions.length > 0) {
-        this.courseOptions.forEach(c => {
+        this.courseOptions.some(c => {
           if (this.courseNumber === c['CourseNumber']) {
             this.sectionOptions = c.sections || [];
+            return true;
           }
         });
       }
@@ -255,7 +256,7 @@ export class CourseInputComponent extends _CourseInputComponentBase
         }
         this.sectionControl.disable();
       } else {
-        if (!this.sectionOptions.find(e => e === this.section)) {
+        if (!this.sectionOptions.includes(this.section)) {
           this.setSectionValue(this.sectionOptions[0]);
         }
         this.sectionControl.enable();

@@ -125,5 +125,10 @@ describe('CourseInputComponent', () => {
     component.onSelectCourse(new MatSelectChange(null, '102'));
     component.onSelectSection(new MatSelectChange(null, 'B'));
     expect(component.value).toBe('2019|autumn|PHYS|102|PHY SCI INQUIRY I|B');
+    expect(component.courseOptions.length).toBe(3);
+    expect(component.courseOptions[0].sections.length).toBe(1);
+    expect(component.courseOptions[1].sections.length).toBe(2);
+    expect(component.courseOptions[2].sections.length).toBe(1);
+    expect(component.sectionOptions.length).toBe(2);
   });
 });
