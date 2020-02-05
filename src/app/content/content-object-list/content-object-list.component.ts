@@ -1,7 +1,7 @@
 import { first, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ContentObject } from '../shared/model/content-object';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, AbstractControl } from '@angular/forms';
 import { ContentItem } from '../shared/model/content-item';
 import { ContentService } from '../shared/content.service';
 import { Field } from '../../core/shared/model/field';
@@ -21,6 +21,7 @@ import { CustomTextUtilities } from '../../shared/directives/custom-text/custom-
 })
 export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy {
   private componentDestroyed = new Subject();
+  private uploadAnotherCtrl: AbstractControl;
 
   @Input() contentItem: ContentItem;
   @Input() formGroup: FormGroup;
@@ -51,6 +52,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
 
   ngOnInit(): void {
     this.user = this.userService.getUser();
+    this.uploadAnotherCtrl = this.formGroup && this.formGroup.controls['uploadAnother'];
 
     this.route.paramMap.pipe(takeUntil(this.componentDestroyed)).subscribe(params => {
       this.route.data.pipe(takeUntil(this.componentDestroyed)).subscribe((data: { config: Config }) => {
@@ -113,6 +115,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
     this.createdItems = new Array<ContentItem>();
     this.updatedItems = new Array<ContentItem>();
     this.failures = new Array<any>();
+    this.select.next(null);
   }
 
   public selectObject(index: number) {
@@ -177,24 +180,25 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
     }
   }
 
-  notify() {
+  /**
+   * Displays a notification with a message built from the current state of this component,
+   * returns a promise that resolves once the notification has been displayed.
+   */
+  private notify(): Promise<boolean> {
     if (this.snackBarTimeout) {
       clearTimeout(this.snackBarTimeout);
       this.snackBarTimeout = null;
     }
-    this.snackBarTimeout = setTimeout(() => {
-      const snackBarRef = this.createSnackBar();
-      if (this.formGroup && this.formGroup.controls['uploadAnother']) {
-        snackBarRef.onAction().subscribe(() => {
-          const ctrl = this.formGroup.get('uploadAnother');
-          if (ctrl && ctrl.value) {
-            this.reset();
-          } else if (this.page) {
-            this.router.navigate([this.config.tenant + '/' + this.page]);
-          }
+
+    return new Promise(resolve => {
+      this.snackBarTimeout = setTimeout(() => {
+        const snackBarRef = this.createSnackBar();
+
+        snackBarRef.afterOpened().subscribe(() => {
+          resolve();
         });
-      }
-    }, 500);
+      }, 500);
+    });
   }
 
   private createSnackBar(): MatSnackBarRef<SimpleSnackBar> {
@@ -297,7 +301,14 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
               contentObject.failed = false;
               this.updateComponentSavedItemLists(item);
               this.saving.emit(false); // item saving completed
-              this.notify();
+
+              this.notify().then(() => {
+                if (this.uploadAnotherCtrl && this.uploadAnotherCtrl.value) {
+                  this.reset();
+                } else if (!!this.uploadAnotherCtrl) {
+                  this.router.navigate([this.config.tenant]);
+                }
+              });
             })
             .catch(err => {
               this.failures.push(err);

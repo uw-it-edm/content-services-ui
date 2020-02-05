@@ -160,15 +160,13 @@ export class CreatePageComponent extends ComponentCanDeactivate implements OnIni
   }
 
   private setDefaults() {
-    if (this.pageConfig && this.pageConfig.uploadAnother) {
-      // moved creation of form control here from createForm
-      // as pageConfig was not set yet in createForm
-      let ctrl = this.form.get('uploadAnother');
-      if (!ctrl) {
-        ctrl = new FormControl();
-        this.form.addControl('uploadAnother', ctrl);
-      }
-      ctrl.patchValue(this.pageConfig.uploadAnother);
+    // moved creation of form control here from createForm
+    // as pageConfig was not set yet in createForm
+    let ctrl = this.form.get('uploadAnother');
+    if (!ctrl) {
+      ctrl = new FormControl();
+      this.form.addControl('uploadAnother', ctrl);
+      ctrl.patchValue(!!this.pageConfig.uploadAnother);
     }
   }
 
