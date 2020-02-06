@@ -11,7 +11,7 @@ import {
   Optional,
   Self
 } from '@angular/core';
-import { Observable, of, Subject } from 'rxjs';
+import { forkJoin, Observable, of, Subject } from 'rxjs';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -183,17 +183,49 @@ export class CourseInputComponent extends _CourseInputComponentBase
 
   private updateCourses() {
     if (this.year && this.quarter && this.curriculumAbbreviation) {
-      this.studentService.getCourses(this.year, this.quarter, this.curriculumAbbreviation).subscribe((result: any) => {
-        this.courseOptions = (result && result['Courses']) || [];
-        if (
-          this.courseOptions &&
-          this.courseOptions.length > 0 &&
-          !this.courseOptions.find(e => e['CourseNumber'] === this.courseNumber)
-        ) {
-          this.courseNumber = this.courseOptions[0]['CourseNumber'];
-          this.courseControl.patchValue(this.courseNumber);
+      const courses$ = this.studentService.getCourses(this.year, this.quarter, this.curriculumAbbreviation);
+      const sections$ = this.studentService.getSections(this.year, this.quarter, this.curriculumAbbreviation);
+
+      forkJoin(courses$, sections$).subscribe(([courses, sections]) => {
+        this.courseOptions = [];
+
+        if (courses && courses['Courses'] && sections && sections['Sections']) {
+          // get course sections by course
+          const secs = {};
+          sections['Sections'].forEach(s => {
+            const cn = s['CourseNumber'];
+            if (secs[cn]) {
+              secs[cn].push(s['SectionID']);
+            } else {
+              secs[cn] = [s['SectionID']];
+            }
+          });
+
+          // keep courses with sections (i.e. offerings)
+          // and attach sections to corresponding course
+          let hasSelectedCourse = false;
+          courses['Courses'].forEach(c => {
+            const cn = c['CourseNumber'];
+            if (secs[cn]) {
+              c.sections = secs[cn];
+              this.courseOptions.push(c);
+              if (this.courseNumber === cn) {
+                hasSelectedCourse = true;
+              }
+            }
+          });
+
+          // update current course selection
+          if (!hasSelectedCourse && this.courseOptions.length > 0) {
+            this.courseNumber = this.courseOptions[0]['CourseNumber'];
+            this.courseControl.patchValue(this.courseNumber);
+          } else if (this.courseOptions.length === 0) {
+            this.courseNumber = '';
+          }
         }
-        this.updateSections(); // need to update sections when year/quarter changed, even if course remained the same
+
+        // need to update sections when year/quarter changed, even if course remained the same
+        this.updateSections();
       });
     } else {
       this.courseOptions = [];
@@ -203,28 +235,34 @@ export class CourseInputComponent extends _CourseInputComponentBase
 
   private updateSections() {
     if (this.year && this.quarter && this.curriculumAbbreviation && this.courseNumber) {
-      this.studentService
-        .getSections(this.year, this.quarter, this.curriculumAbbreviation, this.courseNumber)
-        .subscribe((result: any) => {
-          this.sectionOptions = (result && result['Sections']) || [];
-          if (!this.sectionOptions || this.sectionOptions.length === 0) {
-            // disable section option
-            this.setSectionValue('');
-            this.sectionControl.disable();
-          } else if (this.sectionOptions.length === 1) {
-            if (this.section !== this.sectionOptions[0]['SectionID']) {
-              this.setSectionValue(this.sectionOptions[0]['SectionID']);
-            }
-            this.sectionControl.disable();
-          } else {
-            if (!this.sectionOptions.find(e => e['SectionID'] === this.section)) {
-              this.setSectionValue(this.sectionOptions[0]['SectionID']);
-            }
-            this.sectionControl.enable();
+      this.sectionOptions = [];
+      // get sections from associated course. no need to call DataAPI.
+      if (this.courseOptions && this.courseOptions.length > 0) {
+        this.courseOptions.some(c => {
+          if (this.courseNumber === c['CourseNumber']) {
+            this.sectionOptions = c.sections || [];
+            return true;
           }
-
-          this.sectionControl.patchValue(this.section);
         });
+      }
+
+      if (!this.sectionOptions || this.sectionOptions.length === 0) {
+        // disable section option
+        this.setSectionValue('');
+        this.sectionControl.disable();
+      } else if (this.sectionOptions.length === 1) {
+        if (this.section !== this.sectionOptions[0]) {
+          this.setSectionValue(this.sectionOptions[0]);
+        }
+        this.sectionControl.disable();
+      } else {
+        if (!this.sectionOptions.includes(this.section)) {
+          this.setSectionValue(this.sectionOptions[0]);
+        }
+        this.sectionControl.enable();
+      }
+
+      this.sectionControl.patchValue(this.section);
     } else {
       this.setSectionValue('');
     }
