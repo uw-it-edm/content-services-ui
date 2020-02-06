@@ -4,25 +4,33 @@
       "Year": "2019",
       "Quarter": "autumn",
       "CurriculumAbbreviation": "PHYS",
-      "CourseNumber": "114",
+      "CourseNumber": "101",
       "SectionID": "A",
-      "Href": "/student/v5/course/2019,autumn,PHYS,114/A.json"
+      "Href": "/student/v5/course/2019,autumn,PHYS,101/A.json"
     },
     {
       "Year": "2019",
       "Quarter": "autumn",
       "CurriculumAbbreviation": "PHYS",
-      "CourseNumber": "114",
+      "CourseNumber": "101",
       "SectionID": "B",
-      "Href": "/student/v5/course/2019,autumn,PHYS,114/B.json"
+      "Href": "/student/v5/course/2019,autumn,PHYS,101/B.json"
     },
     {
       "Year": "2019",
       "Quarter": "autumn",
       "CurriculumAbbreviation": "PHYS",
-      "CourseNumber": "114",
+      "CourseNumber": "101",
       "SectionID": "C",
-      "Href": "/student/v5/course/2019,autumn,PHYS,114/C.json"
+      "Href": "/student/v5/course/2019,autumn,PHYS,101/C.json"
+    },
+    {
+      "Year": "2019",
+      "Quarter": "autumn",
+      "CurriculumAbbreviation": "PHYS",
+      "CourseNumber": "103",
+      "SectionID": "A",
+      "Href": "/student/v5/course/2019,autumn,PHYS,103/A.json"
     }
   ],
   "TotalCount": 3
