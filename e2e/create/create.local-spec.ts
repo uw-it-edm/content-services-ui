@@ -9,6 +9,7 @@ const demoConfig = require('../mocks/profile-api/demo.json');
 const pdfFilePath = path.resolve(__dirname, '../mocks/files/sample-file.pdf');
 const docFilePath = path.resolve(__dirname, '../mocks/files/sample-file.docx');
 const textFilePath = path.resolve(__dirname, '../mocks/files/sample-file.txt');
+const triggerErrorFilePath = path.resolve(__dirname, '../mocks/files/trigger-500-error.pdf');
 
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
@@ -142,6 +143,17 @@ describe('Create Page for Demo', () => {
     page.saveButton.click();
     browser.wait(isEmptyFileList(page.fileList), 5000);
     expect(page.fileList.count()).toEqual(0);
+    expect(page.filerInput.getAttribute('value')).toEqual('test filer');
+  });
+
+  it('should leave form and uploaded files intact if error is returned after saving', () => {
+    page.addFile(triggerErrorFilePath);
+    page.filerInput.sendKeys('test filer');
+    expect(page.fileList.count()).toEqual(1);
+
+    page.saveButton.click();
+    expect(page.getSnackBarText()).toContain('Failed to save 1 item');
+    expect(page.fileList.count()).toEqual(1);
     expect(page.filerInput.getAttribute('value')).toEqual('test filer');
   });
 

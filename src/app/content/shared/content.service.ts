@@ -27,7 +27,7 @@ export class ContentService {
     formData.append('attachment', file);
     item.metadata['RevisionId'] = 1; // initial revisionId
 
-    return this.createOrUpdate(formData, item, url);
+    return this.createOrUpdate(formData, item, url, file && file.name);
   }
 
   public read(itemId: string): Observable<ContentItem> {
@@ -61,7 +61,7 @@ export class ContentService {
     url: string,
     filename?: string
   ): Observable<ContentItem> {
-    const options = this.buildRequestOptions();
+    const options = this.buildRequestOptions(filename);
     const blob: Blob = new Blob([JSON.stringify(contentItem)], { type: 'application/json' });
     formData.append('document', blob);
 
@@ -108,15 +108,19 @@ export class ContentService {
     return url;
   }
 
-  private buildRequestOptions() {
-    const requestOptionsArgs = {};
+  private buildRequestOptions(filename?: string) {
     const CONTENT_API = environment.content_api;
-    const headers = new HttpHeaders();
-    headers.set('Accept', 'application/json');
+    let headers = new HttpHeaders();
+
     if (CONTENT_API.authenticationHeader) {
       const user = this.userService.getUser();
-      requestOptionsArgs['headers'] = new HttpHeaders().append(CONTENT_API.authenticationHeader, user.actAs);
+      headers = headers.append(CONTENT_API.authenticationHeader, user.actAs);
     }
-    return requestOptionsArgs;
+
+    if (!!filename) {
+      headers = headers.append('x-uw-attachment', filename);
+    }
+
+    return { headers };
   }
 }
