@@ -4,11 +4,13 @@ import { browser, ElementArrayFinder } from 'protractor';
 import * as path from 'path';
 import { protractor } from 'protractor/built/ptor';
 import { ContentServicesUiPage } from '../app/app.po';
+import { createWriteStream, existsSync } from 'fs';
 
 const demoConfig = require('../mocks/profile-api/demo.json');
 const pdfFilePath = path.resolve(__dirname, '../mocks/files/sample-file.pdf');
 const docFilePath = path.resolve(__dirname, '../mocks/files/sample-file.docx');
 const textFilePath = path.resolve(__dirname, '../mocks/files/sample-file.txt');
+const invalidFilePath = path.resolve(__dirname, '../mocks/files/invalid-file.txt');
 
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
@@ -27,6 +29,17 @@ const isEmptyFileList = (fileList: ElementArrayFinder) => {
     });
   };
 };
+
+(() => {
+  if (!existsSync(invalidFilePath)) {
+    const fileStream = createWriteStream(invalidFilePath);
+    const buf = Buffer.from('1234567890\n');
+    for (let i = 0; i < 1e5; i++) {
+      fileStream.write(buf);
+    }
+    fileStream.end();
+  }
+})();
 
 describe('Create Page for Demo', () => {
   let page: CreatePage;
@@ -142,6 +155,17 @@ describe('Create Page for Demo', () => {
     page.saveButton.click();
     browser.wait(isEmptyFileList(page.fileList), 5000);
     expect(page.fileList.count()).toEqual(0);
+    expect(page.filerInput.getAttribute('value')).toEqual('test filer');
+  });
+
+  it('should leave form and uploaded files intact if error is returned after saving', () => {
+    page.addFile(invalidFilePath);
+    page.filerInput.sendKeys('test filer');
+    expect(page.fileList.count()).toEqual(1);
+
+    page.saveButton.click();
+    expect(page.getSnackBarText()).toContain('Failed to save 1 item');
+    expect(page.fileList.count()).toEqual(1);
     expect(page.filerInput.getAttribute('value')).toEqual('test filer');
   });
 
