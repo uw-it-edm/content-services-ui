@@ -50,7 +50,7 @@ export const _CheckboxInputComponentBase = mixinErrorState(CheckboxInputComponen
 let nextUniqueId = 0;
 const INTERNAL_FIELD_NAME = 'internalCheckbox';
 
-/* tslint:disable:member-ordering use-host-property-decorator*/
+/* tslint:disable:member-ordering no-host-metadata-property*/
 @Component({
   selector: 'app-checkbox-input',
   templateUrl: './checkbox-input.component.html',

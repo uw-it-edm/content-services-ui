@@ -61,7 +61,7 @@ const COURSE_FIELD_NAME = 'courseInputForm';
 const SECTION_FIELD_NAME = 'sectionInputForm';
 const NUMBER_OF_FIELDS = 6; // year, quarter, curriculum, course, section, course title
 
-/* tslint:disable:member-ordering use-host-property-decorator*/
+/* tslint:disable:member-ordering no-host-metadata-property*/
 @Component({
   selector: 'app-course-input',
   templateUrl: './course-input.component.html',
