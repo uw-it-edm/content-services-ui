@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DisplayFieldComponent } from './display-field.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { DatePipe } from '@angular/common';
 import { Field } from '../../../core/shared/model/field';
 
 describe('DisplayFieldComponent', () => {
@@ -34,10 +35,10 @@ describe('DisplayFieldComponent', () => {
     const span = fixture.debugElement.query(By.css('span span'));
     const el = span.nativeElement;
 
-    expect(el.innerHTML.trim()).toBe('11/21/2017');
+    expect(el.innerHTML.trim()).toBe('11/21/17');
   });
   it('should display a dateTime', () => {
-    const date = new Date('1995-12-17T03:24:00');
+    const date = new Date();
 
     component.value = date.getTime();
     component.field = Object.assign(new Field(), { key: 'displayDate', label: 'displayDate', displayType: 'dateTime' });
@@ -47,7 +48,9 @@ describe('DisplayFieldComponent', () => {
     const span = fixture.debugElement.query(By.css('span span'));
     const el = span.nativeElement;
 
-    expect(el.innerHTML.trim()).toBe('12/17/1995, 3:24 AM');
+    const datePipe = new DatePipe('en');
+    const dateTimeString: string = datePipe.transform(date, 'short');
+    expect(el.innerHTML.trim()).toBe(dateTimeString);
   });
   it('should use the student-display componenent when a student', () => {
     component.value = '1234';
