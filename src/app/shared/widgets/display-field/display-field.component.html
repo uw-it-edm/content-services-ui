@@ -1,9 +1,9 @@
 <span *ngIf="field" [ngSwitch]="getFieldType()">
  <span *ngSwitchCase="'date'">
-  {{value | date: 'M/d/yyyy'}}
+  {{value | date: 'shortDate'}}
   </span>
   <span *ngSwitchCase="'dateTime'">
-     {{value | date: 'M/d/yyyy, h:mm a' }}
+     {{value | date: 'short' }}
    </span>
   <span *ngSwitchCase="'student'">
     <app-student-display
