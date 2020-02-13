@@ -74,10 +74,14 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         this.initializeSort(searchModel.order);
       }
     });
+
     this.dataSource = new SearchDataSource(this.searchModel$, this.searchResults$, this.sort, [
       this.topPaginator,
       this.bottomPaginator
     ]);
+
+    const fieldToLabelMap = this.configureTableColumns();
+
     this.searchResults$.pipe(takeUntil(this.componentDestroyed)).subscribe(results => {
       this.hasResults = !isNullOrUndefined(results) && results.total > 0;
       if (this.hasResults) {
@@ -86,20 +90,24 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         this.paginatorConfig.numberOfResults = 0;
       }
 
+      this.initializeSort(results.sort);
+
       const searchResultsUpdatedMessage = this.getSearchResultsUpdatedMessage(
         this.paginatorConfig.numberOfResults,
         this.paginatorConfig.pageSize,
-        this.paginatorConfig.pageIndex
+        this.paginatorConfig.pageIndex,
+        this.sortTerm,
+        this.sortDirection,
+        fieldToLabelMap
       );
+
       console.log(searchResultsUpdatedMessage);
       this.liveAnnouncer.announce(searchResultsUpdatedMessage, 'assertive');
 
       const adjacentIds = results.results.map(result => result['id']); // store a list of result ids to be passed to edit page
-      this.initializeSort(results.sort);
       this.data.set('adjacentIds', adjacentIds);
     });
 
-    this.configureTableColumns();
     this.sort.sortChange.subscribe((sort: Sort) => {
       this.searchModel.order.order = sort.direction;
       this.searchModel.order.term = sort.active;
@@ -107,21 +115,37 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     });
   }
 
-  private getSearchResultsUpdatedMessage(length: number, pageSize: number, page: number) {
-    // see MatPaginatorIntl.getRangeLabel
+  private getSearchResultsUpdatedMessage(
+    length: number,
+    pageSize: number,
+    page: number,
+    sortTerm: string,
+    sortDirection: SortDirection,
+    fieldToLabelMap: { [id: string]: string }
+  ) {
+    const searchResultsUpdatedMessages = ['Search results updated.'];
 
-    if (length === 0 || pageSize === 0) {
-      return `Search results updated. Showing 0 items of ${length}`;
+    if (sortTerm && sortDirection) {
+      const sortLabel = fieldToLabelMap[sortTerm] || sortTerm;
+      const sortDirectionEnglish = SearchUtility.sortDirectionToEnglish(sortDirection);
+      searchResultsUpdatedMessages.push(`Sort by ${sortLabel}, ${sortDirectionEnglish}.`);
     }
-    length = Math.max(length, 0);
 
-    const startIndex = page * pageSize;
+    // see MatPaginatorIntl.getRangeLabel
+    if (length === 0 || pageSize === 0) {
+      searchResultsUpdatedMessages.push(`Showing 0 items of ${length}.`);
+    } else {
+      length = Math.max(length, 0);
 
-    const endIndex = startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize;
-    return `Search results updated. Showing items ${startIndex + 1} to ${endIndex} of ${length}`;
+      const startIndex = page * pageSize;
+      const endIndex = startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize;
+      searchResultsUpdatedMessages.push(`Showing items ${startIndex + 1} to ${endIndex} of ${length}.`);
+    }
+
+    return searchResultsUpdatedMessages.join(' ');
   }
 
-  private configureTableColumns() {
+  private configureTableColumns(): { [id: string]: string } {
     const fieldLabelMap: { [id: string]: string } = {};
 
     if (this.pageConfig.displayDocumentLabelField) {
@@ -138,6 +162,8 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
 
       return `Change sorting for ${label}`;
     };
+
+    return fieldLabelMap;
   }
 
   getValueFromMetadata(metadata, key: string) {
