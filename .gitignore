@@ -28,6 +28,7 @@ npm-debug.log
 testem.log
 /typings
 yarn-error.log
+*.pdf
 
 # e2e
 /e2e/*.js
@@ -42,3 +43,6 @@ Thumbs.db
 /src/environments/environment.*.ts
 /src/environment/*.json
 start.sh
+
+# e2e files
+/e2e/mocks/files/*.txt

@@ -1,16 +1,16 @@
 import { CreatePage } from './create.po';
 import { SearchPage } from '../search/search.po';
-import { browser } from 'protractor';
+import { browser, ElementArrayFinder } from 'protractor';
 import * as path from 'path';
-import { until } from 'selenium-webdriver';
 import { protractor } from 'protractor/built/ptor';
 import { ContentServicesUiPage } from '../app/app.po';
+import { createWriteStream, existsSync } from 'fs';
 
-const searchPage = new SearchPage();
 const demoConfig = require('../mocks/profile-api/demo.json');
 const pdfFilePath = path.resolve(__dirname, '../mocks/files/sample-file.pdf');
 const docFilePath = path.resolve(__dirname, '../mocks/files/sample-file.docx');
 const textFilePath = path.resolve(__dirname, '../mocks/files/sample-file.txt');
+const invalidFilePath = path.resolve(__dirname, '../mocks/files/invalid-file.txt');
 
 const getCurrentUrl = function() {
   return browser.getCurrentUrl().then(url => {
@@ -18,8 +18,32 @@ const getCurrentUrl = function() {
   });
 };
 
+const currentUrlMatches = (expectedUrl: string) => {
+  return () => browser.getCurrentUrl().then(currentUrl => expectedUrl.toLowerCase() === currentUrl.toLowerCase());
+};
+
+const isEmptyFileList = (fileList: ElementArrayFinder) => {
+  return () => {
+    return fileList.count().then(count => {
+      return count === 0;
+    });
+  };
+};
+
+(() => {
+  if (!existsSync(invalidFilePath)) {
+    const fileStream = createWriteStream(invalidFilePath);
+    const buf = Buffer.from('1234567890\n');
+    for (let i = 0; i < 1e5; i++) {
+      fileStream.write(buf);
+    }
+    fileStream.end();
+  }
+})();
+
 describe('Create Page for Demo', () => {
   let page: CreatePage;
+  let searchPage: SearchPage;
 
   const getExpectedChildrenLabels = function() {
     const childrenList = require('../mocks/data-api/child-type-parent-type-Parent1-list.json');
@@ -39,12 +63,13 @@ describe('Create Page for Demo', () => {
     expect(page.metadataErrorMessages.first().getText()).toEqual(invalidDateErrMsg);
     expect(page.saveButton.isEnabled()).toBeFalsy();
 
-    page.clickCancelButton();
+    page.cancelButton.click();
     page.clickAcceptAlert();
   };
 
   beforeEach(() => {
     page = new CreatePage();
+    searchPage = new SearchPage();
     page.navigateTo();
   });
 
@@ -58,7 +83,7 @@ describe('Create Page for Demo', () => {
   });
 
   it('should navigate to Search page when Cancel button is clicked', () => {
-    page.clickCancelButton();
+    page.cancelButton.click();
     page.clickAcceptAlert();
 
     expect(getCurrentUrl()).toMatch(searchPage.pageUrl);
@@ -113,27 +138,35 @@ describe('Create Page for Demo', () => {
 
     expect(page.uploadFilePanel.isDisplayed());
 
-    page.clickCancelButton();
+    page.cancelButton.click();
     page.clickAcceptAlert();
   });
 
-  it('should replace the correct file when 1 of many files is replaced', () => {
-    page.chooseFile(pdfFilePath + '\n' + docFilePath);
-    page.saveButton.click();
-    expect(until.alertIsPresent()).toBeTruthy();
-
-    page.replaceFile(1, textFilePath);
-    browser.waitForAngularEnabled(false);
-    expect(page.getFileName(1)).toEqual(path.parse(textFilePath).base);
-    browser.waitForAngularEnabled(true);
-
-    page.clickCancelButton();
-    page.clickAcceptAlert();
-  });
-
-  it('should display Upload Another checkbox that is checked by default', () => {
+  it("should display Upload Another checkbox that is checked by default if setting 'uploadAnother'=true", () => {
     expect(page.uploadAnotherCheckbox.isDisplayed());
     expect(page.uploadAnotherCheckbox.isSelected());
+  });
+
+  it('should leave form fields but clear uploaded files list after saving if upload another checkbox is checked', () => {
+    page.addFile(pdfFilePath);
+    page.filerInput.sendKeys('test filer');
+    expect(page.fileList.count()).toEqual(1);
+
+    page.saveButton.click();
+    browser.wait(isEmptyFileList(page.fileList), 5000);
+    expect(page.fileList.count()).toEqual(0);
+    expect(page.filerInput.getAttribute('value')).toEqual('test filer');
+  });
+
+  it('should leave form and uploaded files intact if error is returned after saving', () => {
+    page.addFile(invalidFilePath);
+    page.filerInput.sendKeys('test filer');
+    expect(page.fileList.count()).toEqual(1);
+
+    page.saveButton.click();
+    expect(page.getSnackBarText()).toContain('Failed to save 1 item');
+    expect(page.fileList.count()).toEqual(1);
+    expect(page.filerInput.getAttribute('value')).toEqual('test filer');
   });
 
   it('should autocomplete Student Name when Student ID is entered in Student input field', () => {
@@ -148,7 +181,7 @@ describe('Create Page for Demo', () => {
     searchPage.autoCompletedOption.click();
     expect(page.getStudentValue()).toEqual(studentName);
 
-    page.clickCancelButton();
+    page.cancelButton.click();
     page.clickAcceptAlert();
   });
 
@@ -180,7 +213,7 @@ describe('Create Page for Demo', () => {
     searchPage.autoCompletedOption.click();
     expect(page.getPersonValue()).toEqual(employee);
 
-    page.clickCancelButton();
+    page.cancelButton.click();
     page.clickAcceptAlert();
   });
 
@@ -242,7 +275,7 @@ describe('Create Page for Demo', () => {
     });
 
     page.calendarDisabledSelections.first().sendKeys(protractor.Key.ESCAPE);
-    page.clickCancelButton();
+    page.cancelButton.click();
     page.clickAcceptAlert();
   });
 
@@ -257,7 +290,7 @@ describe('Create Page for Demo', () => {
     });
 
     page.calendarDisabledSelections.first().sendKeys(protractor.Key.ESCAPE);
-    page.clickCancelButton();
+    page.cancelButton.click();
     page.clickAcceptAlert();
   });
 
@@ -288,9 +321,11 @@ describe('Create Page for Demo', () => {
 
 describe('Create Page for Demo2', () => {
   let page: CreatePage;
+  let searchPage: SearchPage;
 
   beforeEach(() => {
     page = new CreatePage('demo2');
+    searchPage = new SearchPage('demo2');
     page.navigateTo();
   });
 
@@ -309,7 +344,7 @@ describe('Create Page for Demo2', () => {
 
     expect(page.saveButton.isEnabled()).toBe(true);
 
-    page.clickCancelButton();
+    page.cancelButton.click();
     page.clickAcceptAlert();
   });
 
@@ -318,7 +353,7 @@ describe('Create Page for Demo2', () => {
 
     expect(page.saveButton.isEnabled()).toBe(false);
 
-    page.clickCancelButton();
+    page.cancelButton.click();
     page.clickAcceptAlert();
   });
 
@@ -340,5 +375,20 @@ describe('Create Page for Demo2', () => {
         'aria-required not set to true for ' + requiredField.getTagName().then(tagName => tagName)
       );
     });
+  });
+
+  it("should display Upload Another checkbox that is un-checked by default if setting 'uploadAnother'=false", () => {
+    expect(page.uploadAnotherCheckbox.isDisplayed());
+    expect(page.uploadAnotherCheckbox.isSelected()).toBeFalsy();
+  });
+
+  it('should redirect to search page after saving if upload another checkbox is un-checked', () => {
+    page.populateRequiredFields(false);
+
+    page.addFile(pdfFilePath);
+    expect(page.fileList.count()).toEqual(1);
+
+    page.saveButton.click();
+    browser.wait(currentUrlMatches(searchPage.pageUrl), 5000);
   });
 });

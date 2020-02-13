@@ -41,10 +41,10 @@
                       [disabled]="!button.alwaysActive &&  (form.pristine || submitPending || (button.command=='saveItem' && (form.invalid || !contentObjectListComponent.hasContentObjects())))" [id]="button.command"
                       [type]="button.type">{{button.label}}
               </button>
-              <span *ngIf="pageConfig?.uploadAnother && form.controls['uploadAnother']">
+              <span>
                 <mat-checkbox [formGroup]="form"
                               formControlName="uploadAnother"
-                              name="uploadAnother" >Upload another</mat-checkbox>
+                              name="uploadAnother">Upload another</mat-checkbox>
               </span>
             </div>
           </div>

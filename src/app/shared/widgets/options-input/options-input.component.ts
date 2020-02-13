@@ -57,7 +57,7 @@ export const _OptionsInputComponentBase = mixinErrorState(OptionsInputComponentB
 let nextUniqueId = 0;
 const INTERNAL_FIELD_NAME = 'optionsForm';
 
-/* tslint:disable:member-ordering use-host-property-decorator*/
+/* tslint:disable:member-ordering no-host-metadata-property*/
 @Component({
   selector: 'app-options-input',
   templateUrl: './options-input.component.html',
