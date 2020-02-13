@@ -41,8 +41,8 @@ export const environment = {
   },
   data_api: {
     url: '/data-api',
-    studentContext: '/students/v1',
-    personContext: '/person/v1',
+    studentContext: '/v1/student',
+    personContext: '/v1/person',
     valueContext: '/v1/value',
     authenticationHeader: 'x-uw-act-as',
     headers: { 'x-uw-act-as': netId }

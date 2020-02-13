@@ -32,7 +32,7 @@
     "logLevel": "debug",
     "changeOrigin": true,
     "pathRewrite": {
-      "^/data-api": ""
+      "^/data-api": "/data"
     }
   }
 }

@@ -36,7 +36,6 @@ yarn stop-mock-services
 
 ## Development server with backend services hosted in AWS EC2
 
-- **Important: Tunneling to the data-api does not work currently.**
 - Make sure you have Node v9.
 - Install and configure the [AWS CLI](https://aws.amazon.com/cli/).
 - Install and configure the [AWS helper scripts](https://github.com/uw-it-edm/technical-operations/tree/master/aws-helper-scripts).
