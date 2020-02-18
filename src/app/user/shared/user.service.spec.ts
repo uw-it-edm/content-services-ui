@@ -27,12 +27,12 @@ describe('UserService', () => {
 
   it('should return a user named myusername', async(
     inject([UserService, HttpClient], (service: UserService, http: HttpClient) => {
-      const httpSpy = spyOn(http, 'get').and.callFake(function(_url, _options) {
-        return of({
+      const httpSpy = spyOn(http, 'get').and.returnValue(
+        of({
           userName: 'myusername',
           userGroups: ['test-group']
-        });
-      });
+        })
+      );
 
       const authenticatedUserObservable: Observable<User> = service.getUserObservable();
 
