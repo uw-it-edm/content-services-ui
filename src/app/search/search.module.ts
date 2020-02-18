@@ -4,6 +4,7 @@ import { SearchBoxComponent } from './search-box/search-box.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { SearchService } from './shared/search.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSortHeaderIntl } from '@angular/material';
 import { MaterialConfigModule } from '../routing/material-config.module';
 import { SharedModule } from '../shared/shared.module';
 import { UserModule } from '../user/user.module';
@@ -32,6 +33,6 @@ import { DocumentDisplayerComponent } from './document-displayer/document-displa
     FacetsBoxComponent,
     DocumentDisplayerComponent
   ],
-  providers: [SearchService]
+  providers: [SearchService, MatSortHeaderIntl]
 })
 export class SearchModule {}

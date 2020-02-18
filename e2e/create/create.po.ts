@@ -10,7 +10,9 @@ export class CreatePage {
   public uploadAnotherCheckbox = element.all(by.name('uploadAnother')).get(1);
   public studentInput = element(by.css('app-student-autocomplete input'));
   public personInput = element(by.css('app-person-autocomplete input'));
+  public filerInput = element(by.name('Filer'));
   public saveButton = element(by.id('saveItem'));
+  public cancelButton = element(by.id('cancel'));
   public clearButton = element(by.buttonText('clear'));
   public pdfViewer = element(by.tagName('pdf-viewer'));
   public formFields = element.all(by.tagName('mat-form-field'));
@@ -49,10 +51,6 @@ export class CreatePage {
 
   chooseFile(filePath: string) {
     element(by.id('attach-files')).sendKeys(filePath);
-  }
-
-  clickCancelButton() {
-    element(by.id('cancel')).click();
   }
 
   clickReturnToResultsButton() {
@@ -99,8 +97,12 @@ export class CreatePage {
   }
 
   clickDropDownByLabel(dropDownLabel: string) {
-    element(by.cssContainingText('.mat-form-field', dropDownLabel)).click();
+    this.getFormFieldByLabel(dropDownLabel).click();
     browser.wait(ExpectedConditions.visibilityOf(this.selectPanel), 5000);
+  }
+
+  getFormFieldByLabel(dropDownLabel: string) {
+    return element(by.cssContainingText('.mat-form-field', dropDownLabel));
   }
 
   populateRequiredFields(shouldClearFieldValue: boolean = false) {
@@ -116,6 +118,8 @@ export class CreatePage {
             }
             break;
           }
+          case 'app-course-input':
+          /* falls through */
           case 'app-options-input': {
             requiredField.click();
             if (shouldClearFieldValue) {

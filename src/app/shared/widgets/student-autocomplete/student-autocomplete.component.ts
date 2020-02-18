@@ -68,7 +68,7 @@ export function RequireStudentMatch(control: AbstractControl) {
   return null;
 }
 
-/* tslint:disable:member-ordering use-host-property-decorator*/
+/* tslint:disable:member-ordering no-host-metadata-property*/
 @Component({
   selector: 'app-student-autocomplete',
   templateUrl: './student-autocomplete.component.html',

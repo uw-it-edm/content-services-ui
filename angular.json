@@ -43,6 +43,14 @@
                 }
               ]
             },
+            "localproxy": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.proxy.ts"
+                }
+              ]
+            },
             "travis": {
               "optimization": true,
               "outputHashing": "all",
@@ -87,6 +95,10 @@
           "configurations": {
             "local": {
               "browserTarget": "content-services-ui:build:local"
+            },
+            "localproxy": {
+              "browserTarget": "content-services-ui:build:localproxy",
+              "proxyConfig": "src/environments/local-proxy.conf.json"
             },
             "localmock": {
               "browserTarget": "content-services-ui:build:localmock"

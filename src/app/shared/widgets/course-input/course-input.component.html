@@ -1,0 +1,20 @@
+<mat-form-field>
+  <mat-select [formControl]="yearControl" [(value)]="year" [placeholder]="'Year'" (selectionChange)="onSelectYear($event)">
+    <mat-option *ngFor="let option of this.yearOptions" [value]="option">{{option}}</mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field>
+  <mat-select [formControl]="quarterControl" [placeholder]="'Quarter'" (selectionChange)="onSelectQuarter($event)">
+    <mat-option *ngFor="let option of this.quarterOptions" [value]="option">{{option}}</mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field>
+  <mat-select [formControl]="courseControl"  [required]="fieldConfig && fieldConfig.required" [placeholder]="'Course'" (selectionChange)="onSelectCourse($event)">
+    <mat-option *ngFor="let option of this.courseOptions" [value]="option['CourseNumber']">{{option['CourseNumber'] + '-' + option['CourseTitle']}}</mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field>
+  <mat-select [formControl]="sectionControl"  [placeholder]="'Section'" (selectionChange)="onSelectSection($event)">
+    <mat-option *ngFor="let option of this.sectionOptions" [value]="option"> {{option}} </mat-option>
+  </mat-select>
+</mat-form-field>

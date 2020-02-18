@@ -1,4 +1,5 @@
 import { browser, by, element, ExpectedConditions, WebElement } from 'protractor';
+import { promise } from 'selenium-webdriver';
 import { EditPage } from '../edit/edit.po';
 
 export class SearchPage {
@@ -20,6 +21,7 @@ export class SearchPage {
   paginatorSizeDropDowns = element.all(by.css('.mat-paginator-page-size-select mat-select'));
   paginatorNextButtons = element.all(by.className('mat-paginator-navigation-next'));
   clearSearchBoxButton = element(by.name('clearSearchBoxButton'));
+  liveAnnouncer = element(by.className('cdk-live-announcer-element'));
 
   constructor(private profile: string = 'demo') {}
 
@@ -146,6 +148,36 @@ export class SearchPage {
 
   getResultColumnsPaddingSizes() {
     return element.all(by.className('cs-search-table-cell')).getCssValue('padding-right');
+  }
+
+  /**
+   * Waits for the accessibility live announcer component to contain the expected text.
+   * It will print friendly error with expected and latest actual after timeout.
+   * @param expectedSubText The expected sub text to wait for.
+   * @param timeoutMilliseconds The timeout in milliseconds to wait for.
+   */
+  waitForLiveAnnouncerText(expectedSubText: string, timeoutMilliseconds: number = 5000): promise.Promise<any> {
+    const startTime = new Date();
+
+    const doesTextContains = () => {
+      return () =>
+        this.liveAnnouncer.getText().then(currentText => {
+          const currentTime = new Date();
+          const timeDiff = <any>currentTime - <any>startTime;
+          return timeDiff >= timeoutMilliseconds || currentText.indexOf(expectedSubText) >= 0;
+        });
+    };
+
+    return browser.wait(doesTextContains()).then(() => expect(this.liveAnnouncer.getText()).toContain(expectedSubText));
+  }
+
+  /**
+   * Sorts results by the column header with the text specified.
+   * @param headerText The text of the column to sort the results by.
+   */
+  sortByHeaderText(headerText: string): promise.Promise<any> {
+    const publishStatusHeader = element(by.buttonText(headerText));
+    return publishStatusHeader.click();
   }
 
   clickPaginatorSizeOption(size: string) {

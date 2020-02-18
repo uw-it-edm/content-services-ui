@@ -332,4 +332,19 @@ describe('Search Page', () => {
     expectedPaginatorText = `1 - ${selectedSize} of ${totalResults}`;
     expect(page.paginatorCounts.get(0).getText()).toEqual(expectedPaginatorText);
   });
+
+  it('should update the accessibility live announcer when columns are sorted', () => {
+    // when the page loads, the default sorting will take place.
+    page.waitForLiveAnnouncerText('Sort by id, descending.');
+
+    page.sortByHeaderText('Publish Status');
+    page.waitForLiveAnnouncerText('Sort by Publish Status, ascending.');
+
+    page.sortByHeaderText('Publish Status');
+    page.waitForLiveAnnouncerText('Sort by Publish Status, descending.');
+
+    // Clicking on the same column for a third time will clear sorting and remove it from announcer.
+    page.sortByHeaderText('Publish Status');
+    page.waitForLiveAnnouncerText('Search results updated. Showing items 1 to 50');
+  });
 });

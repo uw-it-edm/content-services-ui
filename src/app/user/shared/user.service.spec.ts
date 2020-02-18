@@ -1,4 +1,4 @@
-import { inject, TestBed } from '@angular/core/testing';
+import { inject, TestBed, async } from '@angular/core/testing';
 
 import { UserService } from './user.service';
 import { User } from './user';
@@ -25,15 +25,14 @@ describe('UserService', () => {
     expect(service).toBeTruthy();
   }));
 
-  it('should return a user named myusername', inject(
-    [UserService, HttpClient],
-    (service: UserService, http: HttpClient) => {
-      const httpSpy = spyOn(http, 'get').and.callFake(function(_url, _options) {
-        return of({
+  it('should return a user named myusername', async(
+    inject([UserService, HttpClient], (service: UserService, http: HttpClient) => {
+      const httpSpy = spyOn(http, 'get').and.returnValue(
+        of({
           userName: 'myusername',
           userGroups: ['test-group']
-        });
-      });
+        })
+      );
 
       const authenticatedUserObservable: Observable<User> = service.getUserObservable();
 
@@ -42,6 +41,6 @@ describe('UserService', () => {
         expect(authenticatedUser.userName).toBe('myusername');
         expect(authenticatedUser.userGroups).toEqual(['test-group']);
       });
-    }
+    })
   ));
 });

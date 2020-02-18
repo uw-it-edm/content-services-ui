@@ -36,15 +36,13 @@ class MockSearchService {
 }
 
 describe('SearchPageComponent', () => {
-  beforeEach(() => {
+  beforeEach(async(() => {
     activatedRoute = new ActivatedRouteStub();
     searchServiceSpy = new MockSearchService();
     dataService = new DataService();
     dataService.set('adjacentIds', ['123', '456']);
     studentService = new StudentService(null, null);
-  });
 
-  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [NoopAnimationsModule, MaterialConfigModule, HttpClientModule, RouterTestingModule],
       declarations: [SearchPageComponent, SearchBoxComponent, SearchResultsComponent],
@@ -58,21 +56,21 @@ describe('SearchPageComponent', () => {
         NotificationService
       ],
       schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents();
-  }));
+    })
+      .compileComponents()
+      .then(() => {
+        activatedRoute.testParamMap = { page: 'test-page' };
 
-  beforeEach(async(() => {
-    activatedRoute.testParamMap = { page: 'test-page' };
+        const pageConfig = new SearchPageConfig();
+        pageConfig.pageName = 'test-page';
 
-    const pageConfig = new SearchPageConfig();
-    pageConfig.pageName = 'test-page';
+        const config = new Config();
+        config.tenant = 'test-tenant';
+        config.pages['test-page'] = pageConfig;
 
-    const config = new Config();
-    config.tenant = 'test-tenant';
-    config.pages['test-page'] = pageConfig;
-
-    console.log(JSON.stringify(config));
-    activatedRoute.testData = { config: config };
+        console.log(JSON.stringify(config));
+        activatedRoute.testData = { config: config };
+      });
   }));
 
   beforeEach(() => {
