@@ -94,7 +94,7 @@
     "prettier": "^1.19.1",
     "protractor": "^5.4.2",
     "rxjs-tslint-rules": "4.29.0",
-    "ts-node": "^8.2.0",
+    "ts-node": "^8.3.0",
     "tslint": "~5.20.1",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "~3.2.4"
