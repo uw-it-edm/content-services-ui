@@ -50,6 +50,11 @@
           "key": "LastModifiedDate",
           "label": "Last Modified Date",
           "displayType": "date"
+        },
+        {
+          "key": "InvoiceAmount",
+          "label": "Invoice Amount",
+          "displayType": "currency"
         }
       ],
       "searchConfig": {

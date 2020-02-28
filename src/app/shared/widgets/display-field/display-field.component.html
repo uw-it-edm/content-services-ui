@@ -5,6 +5,9 @@
   <span *ngSwitchCase="'dateTime'">
      {{value | date: 'M/d/yyyy, h:mm a' }}
    </span>
+   <span *ngSwitchCase="'currency'">
+    {{value | safeCurrency }}
+  </span>
   <span *ngSwitchCase="'student'">
     <app-student-display
       value="{{value}}"></app-student-display>

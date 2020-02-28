@@ -11,6 +11,7 @@
         "DocumentType": "Type 1",
         "RegId": "ABCDE",
         "LastModifiedDate": 1.537446824E12,
+        "InvoiceAmount": "1220.30",
         "childType": "Child2Parent2",
         "SourceModel": {
           "childType": {
@@ -34,6 +35,7 @@
         "DocumentType": "Type 2",
         "RegId": "FGHIJ",
         "LastModifiedDate": 1.537446824E12,
+        "InvoiceAmount": "200",
         "childType": "Child2Parent1",
         "SourceModel": {
           "childType": {
@@ -57,6 +59,7 @@
         "DocumentType": "Type 2",
         "RegId": "XYZ",
         "LastModifiedDate": 1.537246822E12,
+        "InvoiceAmount": "0.15",
         "childType": "Child2Parent2",
         "SourceModel": {
           "childType": {
@@ -79,7 +82,8 @@
         "PublishStatus": "published",
         "DocumentType": "Type 2",
         "RegId": "FGHIJ",
-        "LastModifiedDate": 1.537446824E12
+        "LastModifiedDate": 1.537446824E12,
+        "InvoiceAmount": "-10"
       },
       "_score": 0.0,
       "_indexName": "documents-demo"

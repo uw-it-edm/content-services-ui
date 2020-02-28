@@ -20,6 +20,8 @@ export class DisplayFieldComponent {
         type = 'date';
       } else if (this.field.displayType === 'dateTime') {
         type = 'dateTime';
+      } else if (this.field.displayType === 'currency') {
+        type = 'currency';
       } else if (this.field.displayType === 'student') {
         type = 'student';
       } else if (this.field.displayType === 'person') {
