@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { FileUploadComponent } from './widgets/file-upload/file-upload.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SafeUrlPipe } from './pipes/safe-url.pipe';
+import { SafeCurrencyPipe } from './pipes/safe-currency.pipe';
 
 import { CustomTextDirective } from './directives/custom-text/custom-text.directive';
 import { DataService } from './providers/data.service';
@@ -42,6 +43,7 @@ import { CourseInputComponent } from './widgets/course-input/course-input.compon
     RouterModule,
     FileUploadComponent,
     SafeUrlPipe,
+    SafeCurrencyPipe,
     CheckboxInputComponent,
     OptionsInputComponent,
     StudentAutocompleteComponent,
@@ -63,6 +65,7 @@ import { CourseInputComponent } from './widgets/course-input/course-input.compon
     HeaderComponent,
     FileUploadComponent,
     SafeUrlPipe,
+    SafeCurrencyPipe,
     CheckboxInputComponent,
     OptionsInputComponent,
     StudentAutocompleteComponent,
