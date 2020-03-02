@@ -4,7 +4,7 @@ import { DynamicSelectConfig } from './field/dynamic-select-config';
 import { CourseConfig } from './field/course-config';
 
 export type FieldDataType = 'string' | 'number' | 'date' ;
-export type FieldDisplayType = 'date' | 'dateTime' | 'currency' | 'student' | 'person' | 'select';
+export type FieldDisplayType = 'date' | 'dateTime' | 'number' | 'currency' | 'student' | 'person' | 'select';
 
 export class Field {
   public key: string;

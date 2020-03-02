@@ -1,3 +1,17 @@
-.cs-search-table-cell {
-  padding-right: 10px;
+.cell-type-date,
+.cell-type-dateTime,
+.cell-type-currency,
+.cell-type-number {
+  /* Right align the content of header and row cells */
+  justify-content: flex-end;
+}
+
+.mat-header-cell.cell-type-date > div,
+.mat-header-cell.cell-type-dateTime > div,
+.mat-header-cell.cell-type-currency > div,
+.mat-header-cell.cell-type-number > div {
+  /* Padding of right aligned header content so that it doesn't collide with the next header.
+     Note: The reason why is 18px is because it matches the width of the up/down sorting arrow so sortable
+           and non-sortable fields will have the same padding. */
+  padding-right: 18px;
 }

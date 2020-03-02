@@ -10,24 +10,14 @@ export class DisplayFieldComponent {
   @Input() field: Field;
   @Input() value;
 
-  constructor() {}
-
-  getFieldType(): string {
+  getFieldDisplayType(): string {
     let type = 'default';
 
-    if (this.field) {
-      if (this.field.displayType === 'date') {
-        type = 'date';
-      } else if (this.field.displayType === 'dateTime') {
-        type = 'dateTime';
-      } else if (this.field.displayType === 'currency') {
-        type = 'currency';
-      } else if (this.field.displayType === 'student') {
-        type = 'student';
-      } else if (this.field.displayType === 'person') {
-        type = 'person';
-      } else if (this.field.displayType === 'select' && this.field.dynamicSelectConfig) {
+    if (this.field && this.field.displayType) {
+      if (this.field.displayType === 'select' && this.field.dynamicSelectConfig) {
         type = 'dataApiValue';
+      } else {
+        type = this.field.displayType;
       }
     }
 

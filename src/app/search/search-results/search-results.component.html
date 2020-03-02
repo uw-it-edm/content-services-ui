@@ -32,14 +32,18 @@
     <ng-container *ngFor="let col of pageConfig.fieldsToDisplay" matColumnDef={{col.key}}>
       <span [ngSwitch]="col.sortable">
          <span *ngSwitchCase="false">
-          <mat-header-cell *matHeaderCellDef>{{ col.label }}</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef [ngClass]="getCellCssClass(col)">
+            <div>{{ col.label }}</div>
+          </mat-header-cell>
         </span>
         <span *ngSwitchDefault>
-         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ col.label }}</mat-header-cell>
+         <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="getCellCssClass(col)">
+           <div>{{ col.label }}</div>
+          </mat-header-cell>
         </span>
       </span>
 
-      <mat-cell *matCellDef="let element" class="cs-search-table-cell">
+      <mat-cell *matCellDef="let element" [ngClass]="getCellCssClass(col)">
         <app-display-field [field]="col"
                            [value]="getValueFromMetadata(element.metadata,col.key)"></app-display-field>
       </mat-cell>

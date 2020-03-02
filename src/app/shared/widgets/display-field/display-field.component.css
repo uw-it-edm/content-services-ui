@@ -1,0 +1,12 @@
+.field-cell {
+  /* Padding of left aligned row cell. */
+  padding-right: 10px;
+}
+
+.field-cell.field-type-date,
+.field-cell.field-type-dateTime,
+.field-cell.field-type-number,
+.field-cell.field-type-currency {
+  /* Padding of right aligned row cell (matches the header cell padding). */
+  padding-right: 18px;
+}
