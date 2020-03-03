@@ -81,9 +81,7 @@ describe('StudentService', () => {
   it('should be read a valid studentNumber', () => {
     const expectedUrl = environment.data_api.url + environment.data_api.studentContext + '/1234';
 
-    httpSpy = spyOn(http, 'get').and.callFake(function(any, any2) {
-      return of(readResponse);
-    });
+    httpSpy = spyOn(http, 'get').and.returnValue(of(readResponse));
 
     studentService.read('1234').subscribe((result: Student) => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
@@ -93,9 +91,7 @@ describe('StudentService', () => {
   });
 
   it('should autocomplete a valid studentNumber', () => {
-    httpSpy = spyOn(http, 'get').and.callFake(function(any, any2) {
-      return of(singleSearchResponse);
-    });
+    httpSpy = spyOn(http, 'get').and.returnValue(of(singleSearchResponse));
 
     studentService.autocomplete('1234').subscribe((result: StudentSearchResults) => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
@@ -107,9 +103,7 @@ describe('StudentService', () => {
   });
 
   it('should autocomplete a valid lastName, firstName', () => {
-    httpSpy = spyOn(http, 'get').and.callFake(function(any, any2) {
-      return of(singleSearchResponse);
-    });
+    httpSpy = spyOn(http, 'get').and.returnValue(of(singleSearchResponse));
 
     studentService.autocomplete('user, test').subscribe((result: StudentSearchResults) => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
@@ -120,9 +114,7 @@ describe('StudentService', () => {
     });
   });
   it('should autocomplete a valid firstName lastName', () => {
-    httpSpy = spyOn(http, 'get').and.callFake(function(any, any2) {
-      return of(singleSearchResponse);
-    });
+    httpSpy = spyOn(http, 'get').and.returnValue(of(singleSearchResponse));
 
     studentService.autocomplete('test user').subscribe((result: StudentSearchResults) => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
