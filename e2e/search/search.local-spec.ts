@@ -375,4 +375,21 @@ describe('Search Page', () => {
     expect(page.selectedFacet.getText()).toEqual([]);
     expect(page.paginatorCounts.get(0).getText()).toContain('1 - ');
   });
+
+  it('should toggle visibility of facets panel when clicking the hide/show button', () => {
+    page.waitForFirstRowValue('ProfileId', 'Demo');
+
+    // Verify the facets are visible on page load.
+    expect(page.getFacet(0).isDisplayed()).toBeTruthy();
+
+    // Verify click button hides the facets panel.
+    page.toggleFacetsPanelButton.click();
+    page.waitForLiveAnnouncerText('Filter panel hidden.');
+    expect(page.getFacet(0).isDisplayed()).toBeFalsy();
+
+    // Verify click button again shows the facets panel.
+    page.toggleFacetsPanelButton.click();
+    page.waitForLiveAnnouncerText('Filter panel shown.');
+    expect(page.getFacet(0).isDisplayed()).toBeTruthy();
+  });
 });
