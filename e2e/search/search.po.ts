@@ -23,6 +23,7 @@ export class SearchPage {
   clearSearchBoxButton = element(by.name('clearSearchBoxButton'));
   liveAnnouncer = element(by.className('cdk-live-announcer-element'));
   tableHeaders = element.all(by.className('mat-header-cell'));
+  toggleFacetsPanelButton = element(by.className('toggle-panel-btn'));
 
   constructor(private profile: string = 'demo') {}
 
