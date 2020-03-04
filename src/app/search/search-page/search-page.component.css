@@ -1,0 +1,12 @@
+.toggle-pane-btn {
+  opacity: 0.5;
+  float: left;
+  position: relative;
+  bottom: -65px;
+  left: -30px;
+}
+
+.toggle-pane-btn:hover {
+  opacity: 0.8;
+}
+

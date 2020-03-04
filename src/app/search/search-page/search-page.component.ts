@@ -1,6 +1,7 @@
 import { takeUntil } from 'rxjs/operators';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Config } from '../../core/shared/model/config';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { Title } from '@angular/platform-browser';
@@ -35,6 +36,7 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   searchAutocomplete: SearchAutocomplete;
 
   initialSearchModel: SearchModel;
+  isLeftPaneShown = true;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -44,7 +46,8 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
     private personService: PersonService,
     private router: Router,
     private studentService: StudentService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private liveAnnouncer: LiveAnnouncer
   ) {
     this.searchModel$ = new BehaviorSubject<SearchModel>(new SearchModel());
 
@@ -135,6 +138,13 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   onSearch(searchModel: SearchModel) {
     console.log('search in generic page component');
     this.searchModel$.next(Object.assign(new SearchModel(), searchModel));
+  }
+
+  toggleLeftPane(): void {
+    this.isLeftPaneShown = !this.isLeftPaneShown;
+
+    const announcerMessage = this.isLeftPaneShown ? 'Filter panel shown.' : 'Filter panel hidden.';
+    this.liveAnnouncer.announce(announcerMessage, 'polite');
   }
 
   ngOnDestroy(): void {

@@ -34,7 +34,7 @@
   </div>
 
   <div fxLayout="row" class="cs-generic-body">
-    <div fxFlex="20">
+    <div fxFlex="20" [hidden]="!isLeftPaneShown">
       <app-facets-box
         *ngIf="pageConfig.facetsConfig && pageConfig.facetsConfig.active"
         [searchModel$]="searchModel$"
@@ -44,8 +44,19 @@
       >
       </app-facets-box>
     </div>
-
+    <div fxFlex="2" [hidden]="isLeftPaneShown">
+      <!-- When the left panel is collapsed, leave a small space to put the button to expand.-->
+    </div>
     <div fxFlex>
+      <button mat-icon-button
+              (click)="toggleLeftPane()"
+              class="toggle-pane-btn"
+              aria-label="Toggle Filter Pane"
+              [matTooltip]="isLeftPaneShown ? 'Hide Filters' : 'Show Filters'"
+              matTooltipPosition="above">
+        <mat-icon *ngIf="isLeftPaneShown">view_headline</mat-icon>
+        <mat-icon *ngIf="!isLeftPaneShown">vertical_split</mat-icon>
+      </button>
       <app-search-results
         [searchModel$]="searchModel$"
         [searchResults$]="searchResults$"
