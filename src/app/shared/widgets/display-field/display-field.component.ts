@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Field } from '../../../core/shared/model/field';
+import { Field, isFieldRightAligned } from '../../../core/shared/model/field';
 
 @Component({
   selector: 'app-display-field',
@@ -22,5 +22,9 @@ export class DisplayFieldComponent {
     }
 
     return type;
+  }
+
+  get isRightAligned(): boolean {
+    return isFieldRightAligned(this.field);
   }
 }

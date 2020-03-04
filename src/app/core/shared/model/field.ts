@@ -6,6 +6,12 @@ import { CourseConfig } from './field/course-config';
 export type FieldDataType = 'string' | 'number' | 'date' ;
 export type FieldDisplayType = 'date' | 'dateTime' | 'number' | 'currency' | 'student' | 'person' | 'select';
 
+export const isFieldRightAligned = (field: Field): boolean => {
+  const displayType = field && field.displayType;
+
+  return displayType && (displayType === 'currency' || displayType === 'number' || displayType === 'date' || displayType === 'dateTime');
+};
+
 export class Field {
   public key: string;
   public label: string;

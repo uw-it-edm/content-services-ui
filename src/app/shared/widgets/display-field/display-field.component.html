@@ -1,4 +1,4 @@
-<div *ngIf="field" [ngSwitch]="getFieldDisplayType()" [ngClass]="['field-cell', 'field-type-' + getFieldDisplayType()]">
+<div *ngIf="field" [ngSwitch]="getFieldDisplayType()" [ngClass]="{ 'field-content': true, 'field-align-right': isRightAligned }">
   <span *ngSwitchCase="'date'">
   {{value | date: 'M/d/yyyy'}}
   </span>
