@@ -33,7 +33,7 @@ describe('DisplayFieldComponent', () => {
 
     fixture.detectChanges();
 
-    const span = fixture.debugElement.query(By.css('span span'));
+    const span = fixture.debugElement.query(By.css('div span'));
     const el = span.nativeElement;
 
     expect(el.innerHTML.trim()).toBe('11/21/2017');
@@ -47,7 +47,7 @@ describe('DisplayFieldComponent', () => {
 
     fixture.detectChanges();
 
-    const span = fixture.debugElement.query(By.css('span span'));
+    const span = fixture.debugElement.query(By.css('div span'));
     const el = span.nativeElement;
 
     expect(el.innerHTML.trim()).toBe('12/17/1995, 3:24 AM');
@@ -74,7 +74,7 @@ describe('DisplayFieldComponent', () => {
 
     fixture.detectChanges();
 
-    const span = fixture.debugElement.query(By.css('span span'));
+    const span = fixture.debugElement.query(By.css('div span'));
     const el = span.nativeElement;
 
     expect(el.innerHTML.trim()).toBe('1511292577000');
@@ -102,7 +102,7 @@ describe('DisplayFieldComponent', () => {
 
       fixture.detectChanges();
 
-      const span = fixture.debugElement.query(By.css('span span'));
+      const span = fixture.debugElement.query(By.css('div span'));
       const el = span.nativeElement;
 
       expect(el.innerHTML.trim()).toBe(expectedString);

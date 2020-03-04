@@ -14,6 +14,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { ObjectUtilities } from '../../core/util/object-utilities';
+import { Field, isFieldRightAligned } from '../../core/shared/model/field';
 
 @Component({
   selector: 'app-search-results',
@@ -168,6 +169,10 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
 
   getValueFromMetadata(metadata, key: string) {
     return ObjectUtilities.getNestedObjectFromStringPath(metadata, key);
+  }
+
+  isFieldRightAligned(field: Field): boolean {
+    return isFieldRightAligned(field);
   }
 
   onPageEvent(pageEvent: PageEvent) {
