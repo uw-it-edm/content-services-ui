@@ -7,7 +7,7 @@ import { Title } from '@angular/platform-browser';
 import { SearchModel } from '../shared/model/search-model';
 import { SearchResults } from '../shared/model/search-result';
 import { SearchService } from '../shared/search.service';
-import { Subject, BehaviorSubject } from 'rxjs';
+import { Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { DataService } from '../../shared/providers/data.service';
 import { Sort } from '../shared/model/sort';
 
@@ -26,11 +26,12 @@ import { PersonService } from '../../shared/providers/person.service';
 })
 export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   private componentDestroyed = new Subject();
+  private searchSubscription: Subscription;
   config: Config;
   pageConfig: SearchPageConfig;
   page: string;
 
-  searchModel$: BehaviorSubject<SearchModel>;
+  searchModel$ = new BehaviorSubject<SearchModel>(new SearchModel());
   searchResults$ = new Subject<SearchResults>();
   searchAutocomplete: SearchAutocomplete;
 
@@ -46,7 +47,6 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
     private studentService: StudentService,
     private notificationService: NotificationService
   ) {
-    this.searchModel$ = new BehaviorSubject<SearchModel>(new SearchModel());
 
     console.log('init generic page component');
     if (this.activatedRoute.snapshot.queryParams != null) {
@@ -75,6 +75,8 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
     this.activatedRoute.paramMap.pipe(takeUntil(this.componentDestroyed)).subscribe(params => {
       this.page = params.get('page');
       this.activatedRoute.data.pipe(takeUntil(this.componentDestroyed)).subscribe((data: { config: Config }) => {
+        const pageConfigChanged = !!this.pageConfig;
+
         this.config = data.config;
         this.pageConfig = data.config.pages[this.page.toLowerCase()];
         if (
@@ -105,7 +107,13 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
               throw new Error('No autocompleter for ' + this.pageConfig.autocompleteConfig.type);
           }
         }
-        this.searchService.search(this.searchModel$, this.pageConfig).subscribe(
+
+        if (this.searchSubscription) {
+          this.searchSubscription.unsubscribe();
+        }
+
+        // Need to re-subcribe each time the page config changes.
+        this.searchSubscription = this.searchService.search(this.searchModel$, this.pageConfig).subscribe(
           (searchResults: SearchResults) => {
             /* we are not sending the search results observable
                directly to the underlying components
@@ -118,6 +126,11 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.notificationService.error('error while executing search', err);
           }
         );
+
+        if (pageConfigChanged) {
+          // If the page config changed after the page loaded, submit an empty search model to the new subscription.
+          this.searchModel$.next(new SearchModel());
+        }
       });
 
       this.searchModel$.next(this.initialSearchModel);

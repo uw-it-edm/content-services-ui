@@ -37,7 +37,7 @@ export class ContentServicesUiPage {
     const menuItem = element.all(by.className('tenant-menu-button')).get(itemIndex);
     expect(menuItem).toBeTruthy();
     browser.sleep(100);
-    browser.wait(ExpectedConditions.elementToBeClickable(menuItem), 10000);
+    browser.wait(ExpectedConditions.elementToBeClickable(menuItem), 10000, `Tenant at index ${itemIndex} is not clickable.`);
     menuItem.click();
   }
 

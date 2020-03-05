@@ -61,11 +61,14 @@ describe('SearchResultsComponent', () => {
 
     fixture = TestBed.createComponent(SearchResultsComponent);
     component = fixture.componentInstance;
+
+    const pageConfig = new SearchPageConfig();
+    pageConfig.defaultSort = new Sort('myfield', 'asc');
+    pageConfig.fieldKeysToDisplay.push(field.key);
+    pageConfig.fieldsToDisplay.push(field);
+    component.pageConfig = pageConfig;
+
     component.searchModel$ = of(searchModel);
-    component.pageConfig = new SearchPageConfig();
-    component.pageConfig.defaultSort = new Sort('myfield', 'asc');
-    component.pageConfig.fieldKeysToDisplay.push(field.key);
-    component.pageConfig.fieldsToDisplay.push(field);
     component.searchResults$ = new Subject<SearchResults>();
     component.searchResults$.next(new SearchResults());
 
