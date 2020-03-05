@@ -23,11 +23,13 @@ import { Field, isFieldRightAligned } from '../../core/shared/model/field';
 })
 export class SearchResultsComponent implements OnInit, OnDestroy {
   private componentDestroyed = new Subject();
+  private _pageConfig: SearchPageConfig;
+  private fieldToLabelMap: { [id: string]: string } = {};
   searchModel: SearchModel = new SearchModel();
   paginatorConfig: PaginatorConfig = new PaginatorConfig();
 
   dataSource: SearchDataSource;
-  displayedColumns = ['id'];
+  displayedColumns = [];
   hasResults = false;
 
   // It seems to be necessary to data-bind these to the mat-table instead of just manipulating
@@ -40,10 +42,18 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   searchModel$: Observable<SearchModel>;
   @Input()
   searchResults$: Subject<SearchResults>;
-  @Input()
-  pageConfig: SearchPageConfig;
   @Output()
   search = new EventEmitter<SearchModel>();
+
+  @Input()
+  set pageConfig(config: SearchPageConfig) {
+    this._pageConfig = config;
+    this.fieldToLabelMap = this.configureTableColumns(config);
+  }
+
+  get pageConfig(): SearchPageConfig {
+    return this._pageConfig;
+  }
 
   @ViewChild(MatPaginator)
   topPaginator: MatPaginator;
@@ -61,52 +71,17 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.searchModel$.pipe(takeUntil(this.componentDestroyed)).subscribe(searchModel => {
-      this.searchModel = searchModel;
-      if (this.searchModel.pagination != null) {
-        if (this.searchModel.pagination.pageIndex != null) {
-          this.paginatorConfig.pageIndex = this.searchModel.pagination.pageIndex;
-        }
-        if (this.searchModel.pagination.pageSize != null) {
-          this.paginatorConfig.pageSize = this.searchModel.pagination.pageSize;
-        }
-      }
-      if (this.searchModel.order != null) {
-        this.initializeSort(searchModel.order);
-      }
-    });
-
     this.dataSource = new SearchDataSource(this.searchModel$, this.searchResults$, this.sort, [
       this.topPaginator,
       this.bottomPaginator
     ]);
 
-    const fieldToLabelMap = this.configureTableColumns();
+    this.searchModel$.pipe(takeUntil(this.componentDestroyed)).subscribe(searchModel => {
+      this.onSearchModelChanged(searchModel);
+    });
 
     this.searchResults$.pipe(takeUntil(this.componentDestroyed)).subscribe(results => {
-      this.hasResults = !isNullOrUndefined(results) && results.total > 0;
-      if (this.hasResults) {
-        this.paginatorConfig.numberOfResults = results.total;
-      } else {
-        this.paginatorConfig.numberOfResults = 0;
-      }
-
-      this.initializeSort(results.sort);
-
-      const searchResultsUpdatedMessage = this.getSearchResultsUpdatedMessage(
-        this.paginatorConfig.numberOfResults,
-        this.paginatorConfig.pageSize,
-        this.paginatorConfig.pageIndex,
-        this.sortTerm,
-        this.sortDirection,
-        fieldToLabelMap
-      );
-
-      console.log(searchResultsUpdatedMessage);
-      this.liveAnnouncer.announce(searchResultsUpdatedMessage, 'assertive');
-
-      const adjacentIds = results.results.map(result => result['id']); // store a list of result ids to be passed to edit page
-      this.data.set('adjacentIds', adjacentIds);
+      this.onSearchResultsChanged(results);
     });
 
     this.sort.sortChange.subscribe((sort: Sort) => {
@@ -114,6 +89,47 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
       this.searchModel.order.term = sort.active;
       this.search.next(this.searchModel);
     });
+  }
+
+  private onSearchResultsChanged(results: SearchResults): void {
+    this.hasResults = !isNullOrUndefined(results) && results.total > 0;
+    if (this.hasResults) {
+      this.paginatorConfig.numberOfResults = results.total;
+    } else {
+      this.paginatorConfig.numberOfResults = 0;
+    }
+
+    this.initializeSort(results.sort);
+
+    const searchResultsUpdatedMessage = this.getSearchResultsUpdatedMessage(
+      this.paginatorConfig.numberOfResults,
+      this.paginatorConfig.pageSize,
+      this.paginatorConfig.pageIndex,
+      this.sortTerm,
+      this.sortDirection,
+      this.fieldToLabelMap
+    );
+
+    console.log(searchResultsUpdatedMessage);
+    this.liveAnnouncer.announce(searchResultsUpdatedMessage, 'assertive');
+
+    const adjacentIds = results.results.map(result => result['id']); // store a list of result ids to be passed to edit page
+    this.data.set('adjacentIds', adjacentIds);
+  }
+
+  private onSearchModelChanged(searchModel: SearchModel): void {
+    this.searchModel = searchModel;
+    if (this.searchModel.pagination != null) {
+      if (this.searchModel.pagination.pageIndex != null) {
+        this.paginatorConfig.pageIndex = this.searchModel.pagination.pageIndex;
+      }
+      if (this.searchModel.pagination.pageSize != null) {
+        this.paginatorConfig.pageSize = this.searchModel.pagination.pageSize;
+      }
+    }
+    if (this.searchModel.order != null) {
+      this.initializeSort(searchModel.order);
+    }
   }
 
   private getSearchResultsUpdatedMessage(
@@ -146,14 +162,16 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     return searchResultsUpdatedMessages.join(' ');
   }
 
-  private configureTableColumns(): { [id: string]: string } {
+  private configureTableColumns(pageConfig: SearchPageConfig): { [id: string]: string } {
     const fieldLabelMap: { [id: string]: string } = {};
 
-    if (this.pageConfig.displayDocumentLabelField) {
+    this.displayedColumns = ['id'];
+
+    if (pageConfig.displayDocumentLabelField) {
       this.displayedColumns.push('label');
     }
 
-    for (const field of this.pageConfig.fieldsToDisplay) {
+    for (const field of pageConfig.fieldsToDisplay) {
       this.displayedColumns.push(field.key);
       fieldLabelMap[field.key] = field.label;
     }

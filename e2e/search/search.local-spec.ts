@@ -11,6 +11,8 @@ let page: SearchPage;
 
 describe('Search Page', () => {
   const demoConfig = require('../mocks/profile-api/demo.json');
+  const demo2Config = require('../mocks/profile-api/demo2.json');
+  const demo3Config = require('../mocks/profile-api/demo3.json');
   const searchData = require('../mocks/search-api/search.json');
 
   const selectAndVerifyDateRange = function(dateRangeText = 'Today') {
@@ -346,5 +348,31 @@ describe('Search Page', () => {
     // Clicking on the same column for a third time will clear sorting and remove it from announcer.
     page.sortByHeaderText('Publish Status');
     page.waitForLiveAnnouncerText('Search results updated. Showing items 1 to 50');
+  });
+
+  it('should re-load table columns and reset search when switching tenants', () => {
+    const app = new ContentServicesUiPage();
+
+    // switch to 'demo3' profile.
+    app.clickAppMenuIcon();
+    app.clickAppMenuItem(2);
+
+    page.waitForFirstRowValue('ProfileId', 'Demo3');
+    expect(page.tableHeaders.getText()).toEqual(['Id'].concat(demo3Config.pages['tab-search'].fieldsToDisplay.map(i => i.label)));
+
+    // Click on facet and paginator.
+    page.clickFacetLink(0);
+    page.paginatorNextButtons.get(0).click();
+
+    // switch to 'demo2' profile and verify table resets columns.
+    app.clickAppMenuIcon();
+    app.clickAppMenuItem(1);
+
+    page.waitForFirstRowValue('ProfileId', 'Demo');
+    expect(page.tableHeaders.getText()).toEqual(['Id'].concat(demo2Config.pages['tab-search'].fieldsToDisplay.map(i => i.label)));
+
+    // verify facets and paginator got cleared.
+    expect(page.selectedFacet.getText()).toEqual([]);
+    expect(page.paginatorCounts.get(0).getText()).toContain('1 - ');
   });
 });

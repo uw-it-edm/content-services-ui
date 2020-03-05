@@ -22,6 +22,7 @@ export class SearchPage {
   paginatorNextButtons = element.all(by.className('mat-paginator-navigation-next'));
   clearSearchBoxButton = element(by.name('clearSearchBoxButton'));
   liveAnnouncer = element(by.className('cdk-live-announcer-element'));
+  tableHeaders = element.all(by.className('mat-header-cell'));
 
   constructor(private profile: string = 'demo') {}
 
@@ -68,12 +69,14 @@ export class SearchPage {
     element(by.partialLinkText(facetText)).click();
   }
 
-  getResultsByColumn(column: string) {
+  getResultsByColumn(column: string): promise.Promise<string[]> {
     const selector = '.mat-cell.mat-column-' + column;
-    return element.all(by.css(selector)).getText();
+
+    // ElementArrayFinder.getText() has incorrect return type. See https://github.com/angular/protractor/issues/3818
+    return <any>element.all(by.css(selector)).getText();
   }
 
-  getDistinctResultsByColumn(column: string) {
+  getDistinctResultsByColumn(column: string): promise.Promise<string[]> {
     return this.getResultsByColumn(column).then(results => {
       return Array.from(new Set(results));
     });
@@ -96,9 +99,7 @@ export class SearchPage {
   }
 
   clickFacetLink(facetIndex: number) {
-    this.getFacetText(facetIndex).then(text => {
-      this.clickPartialLinkText(text);
-    });
+    element.all(this.facetItemsLocator).get(facetIndex).click();
   }
 
   getFacetText(facetIndex: number) {
@@ -157,19 +158,41 @@ export class SearchPage {
    * @param timeoutMilliseconds The timeout in milliseconds to wait for.
    */
   waitForLiveAnnouncerText(expectedSubText: string, timeoutMilliseconds: number = 5000): promise.Promise<any> {
+    return this.waitForFunc(
+      this.liveAnnouncer.getText,
+      val => val.indexOf(expectedSubText) >= 0,
+      timeoutMilliseconds
+    ).then(() => expect(this.liveAnnouncer.getText()).toContain(expectedSubText));
+  }
+
+  /**
+   * Waits for the first row of a given column to have the expected text.
+   * @param columnId The identifier of the column to test.
+   * @param expectedText The expected text of the first row of column.
+   * @param timeoutMilliseconds Timeout in milliseconds to wait for.
+   */
+  waitForFirstRowValue(columnId: string, expectedText: string, timeoutMilliseconds: number = 5000): promise.Promise<any> {
+    return this.waitForFunc(
+      () => this.getResultsByColumn(columnId),
+      rows => rows && rows.length > 0 && rows[0].trim() === expectedText,
+      timeoutMilliseconds
+    ).then(() => expect(this.getDistinctResultsByColumn(columnId).then(rows => rows[0])).toEqual(expectedText));
+  }
+
+  private waitForFunc<T>(testFunc: () => promise.Promise<T>, predicate: (val: T) => boolean, timeoutMilliseconds: number = 5000): promise.Promise<any> {
     const startTime = new Date();
 
-    const doesTextContains = () => {
-      return () =>
-        this.liveAnnouncer.getText().then(currentText => {
+    const checkFunc = () => {
+      return () => testFunc().then(currentVal => {
           const currentTime = new Date();
           const timeDiff = <any>currentTime - <any>startTime;
-          return timeDiff >= timeoutMilliseconds || currentText.indexOf(expectedSubText) >= 0;
+          return timeDiff >= timeoutMilliseconds || predicate(currentVal);
         });
     };
 
-    return browser.wait(doesTextContains()).then(() => expect(this.liveAnnouncer.getText()).toContain(expectedSubText));
+    return browser.wait(checkFunc());
   }
+
 
   /**
    * Sorts results by the column header with the text specified.

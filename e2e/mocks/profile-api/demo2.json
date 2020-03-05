@@ -56,7 +56,7 @@
         "directions": "Type a Employee ID or other info",
         "label": "",
         "placeholder": "Search for documents",
-        "indexName": "documents-demo"
+        "indexName": "documents-demo2"
       },
       "searchDaterangeConfig": {
         "active": false,
