@@ -5271,14 +5271,14 @@ neo-async@^2.5.0, neo-async@^2.6.0:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.1.tgz#ac27ada66167fa8849a6addd837f6b189ad2081c"
   integrity sha512-iyam8fBuCUpWeKPGpaNMetEocMt364qkCsfL9JuhjXX6dRnguRVOfk2GZaDpPjcOKiiXCPINZC1GczQ7iTq3Zw==
 
-ng2-pdf-viewer@6.0.2:
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/ng2-pdf-viewer/-/ng2-pdf-viewer-6.0.2.tgz#e35faf8c8a1d2cc6a10ae78f9bcae0297b680fac"
-  integrity sha512-JlK3Yc/JtwrdULrwnoLrsPTC+Tiq3qU/wbqn4Wkn713M80DRPYBCOs7+DbvnKULOFegpWyBtv0XcjxHaeOpBSg==
+ng2-pdf-viewer@6.1.2:
+  version "6.1.2"
+  resolved "https://registry.yarnpkg.com/ng2-pdf-viewer/-/ng2-pdf-viewer-6.1.2.tgz#4ffbc4c0441da560ae03f04da28818b030b2b5ac"
+  integrity sha512-xd36XJ8yJlV4Ys8bpG4nyLPtb6PtafNwDxZN54vueuXRXtPmwCnxDQEvvoVVxzef/PHt1uSV4ydOf6D3o2m0DQ==
   dependencies:
     "@types/pdfjs-dist" "^2.1.0"
     pdfjs-dist "^2.2.228"
-    tslib "^1.9.0"
+    tslib "^1.10.0"
 
 ngx-daterangepicker-material@^2.1.11:
   version "2.1.11"
