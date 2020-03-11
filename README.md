@@ -9,15 +9,6 @@ master:
 [![Build Status](https://travis-ci.org/uw-it-edm/content-services-ui.svg?branch=master)](https://travis-ci.org/uw-it-edm/content-services-ui)
 
 
-# Overview
-TBD
-
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.2.6.
-
-
-# Related Projects
-TBD
-
 # Setup for Development
 
 ## Development server
@@ -67,9 +58,6 @@ How it works? There is a script (`./src/environments/replace-vars.mjs`) that wil
 - Start the angular server with one of the options above.
 - Lanch chrome using the launch configuration, this will start a new chrome instance in debug mode and attach VSCode to debug it.
 
-## Debug in IntelliJ
-TBD
-
 # Setup for Unit Tests
 Unit tests are written in [jasmine](https://jasmine.github.io) and run via [Karma](https://karma-runner.github.io). 
 
@@ -111,9 +99,6 @@ Note that the karma server is also running in watch mode, so any changes you mak
 
 Note as well, that karma is running in watch mode, any changes to the source code that you make in VSCode will trigger a recompilation. One you reload the browser the new code will take affect.
 
-## TDD - Debug Unit Tests in IntelliJ
-TBD
-
 # Setup for End-To-End Tests
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
@@ -146,12 +131,6 @@ yarn stop-mock-services
 # Build
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
-
-# Git Hooks / Husky
-TBD
-
-# CI/CD
-TBD
 
 
 
