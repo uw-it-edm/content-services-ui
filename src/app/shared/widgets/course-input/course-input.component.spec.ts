@@ -1,6 +1,5 @@
 import { async, ComponentFixture, TestBed, tick } from '@angular/core/testing';
 import { CourseInputComponent } from './course-input.component';
-import { FieldOption } from '../../../core/shared/model/field/field-option';
 import { Field } from '../../../core/shared/model/field';
 import { CourseConfig } from '../../../core/shared/model/field/course-config';
 import { SharedModule } from '../../shared.module';
@@ -8,6 +7,9 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectChange } from '@angular/material';
 import { StudentService } from '../../providers/student.service';
 import { Observable, of } from 'rxjs';
+import { Component } from '@angular/core';
+import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
 
 class MockStudentService extends StudentService {
   constructor() {
@@ -131,4 +133,84 @@ describe('CourseInputComponent', () => {
     expect(component.courseOptions[2].sections.length).toBe(1);
     expect(component.sectionOptions.length).toBe(2);
   });
+});
+
+@Component({
+  template: `
+    <div [formGroup]="formGroup">
+      <app-course-input
+        [formControlName]="'testFormControlName'"
+        [fieldConfig]="field"
+        [id]="'test-custom-input'">
+      </app-course-input>
+    </div>
+  `
+})
+class TestHostComponent {
+  public field: Field;
+  public formGroup: FormGroup;
+
+  constructor() {
+    this.field = new Field();
+    this.field.courseConfig = new CourseConfig();
+    this.formGroup = new FormGroup({
+      testFormControlName: new FormControl()
+    });
+  }
+}
+
+describe('CourseInputComponent with host', () => {
+  let fixture: ComponentFixture<TestHostComponent>;
+  let component: CourseInputComponent;
+  let dropDownElements: HTMLElement[];
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [SharedModule, NoopAnimationsModule, ReactiveFormsModule],
+      declarations: [TestHostComponent],
+      providers: [{ provide: StudentService, useValue: new MockStudentService() }]
+    }).compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(TestHostComponent);
+    dropDownElements = fixture.debugElement.queryAll(By.css('mat-select')).map(e => e.nativeElement);
+
+    const childDebugElement = fixture.debugElement.query(By.directive(CourseInputComponent));
+    component = childDebugElement.componentInstance;
+
+    fixture.detectChanges();
+  });
+
+  it('should render aria-label set to placeholder and value for Year dropdown', async(() => {
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      expect(dropDownElements[0].getAttribute('aria-label')).toEqual('Year 2020');
+    });
+  }));
+
+  it('should render aria-label set to placeholder and value for Quarter dropdown', async(() => {
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      expect(dropDownElements[1].getAttribute('aria-label')).toEqual('Quarter autumn');
+    });
+  }));
+
+  it('should render aria-label set to placeholder and value for Course dropdown', async(() => {
+    fixture.whenStable().then(() => {
+      component.ngAfterContentInit();
+      component.writeValue('2019|autumn|PHYS|101|PHYS SCI INQUIRY I|A');
+
+      fixture.detectChanges();
+
+      expect(dropDownElements[2].getAttribute('aria-label')).toEqual('Course 101-PHYS SCI INQUIRY I');
+    });
+  }));
+
+  it('should render aria-label set to placeholder and value for Section dropdown', async(() => {
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      expect(dropDownElements[3].getAttribute('aria-label')).toEqual('Section A');
+    });
+  }));
 });
