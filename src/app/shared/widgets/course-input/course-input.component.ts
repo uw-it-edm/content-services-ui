@@ -108,11 +108,11 @@ export class CourseInputComponent extends _CourseInputComponentBase
   courseControl = new FormControl();
   courseOptions: any[] = [];
 
-  section;
+  section = '';
   sectionControl = new FormControl();
   sectionOptions: any[] = [];
 
-  courseTitle;
+  courseTitle = '';
 
   onSelectYear(event: MatSelectChange) {
     if (event.value) {
