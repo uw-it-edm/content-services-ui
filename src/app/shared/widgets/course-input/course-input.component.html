@@ -9,7 +9,7 @@
   </mat-select>
 </mat-form-field>
 <mat-form-field>
-  <mat-select [formControl]="courseControl"  [required]="fieldConfig && fieldConfig.required" [placeholder]="'Course'" [aria-label]="'Course ' + courseNumber + '-' + courseTitle" (selectionChange)="onSelectCourse($event)">
+  <mat-select [formControl]="courseControl"  [required]="fieldConfig && fieldConfig.required" [placeholder]="'Course'" [aria-label]="courseAriaLabel" (selectionChange)="onSelectCourse($event)">
     <mat-option *ngFor="let option of this.courseOptions" [value]="option['CourseNumber']">{{option['CourseNumber'] + '-' + option['CourseTitle']}}</mat-option>
   </mat-select>
 </mat-form-field>
