@@ -108,11 +108,11 @@ export class CourseInputComponent extends _CourseInputComponentBase
   courseControl = new FormControl();
   courseOptions: any[] = [];
 
-  section;
+  section = '';
   sectionControl = new FormControl();
   sectionOptions: any[] = [];
 
-  courseTitle;
+  courseTitle = '';
 
   onSelectYear(event: MatSelectChange) {
     if (event.value) {
@@ -128,6 +128,10 @@ export class CourseInputComponent extends _CourseInputComponentBase
       this.updateCourses();
       this._propagateChanges();
     }
+  }
+
+  get courseAriaLabel(): string {
+    return this.courseNumber && this.courseTitle ? `Course ${this.courseNumber}-${this.courseTitle}` : 'Course';
   }
 
   private setSectionValue(val: string) {
@@ -221,6 +225,7 @@ export class CourseInputComponent extends _CourseInputComponentBase
             this.courseControl.patchValue(this.courseNumber);
           } else if (this.courseOptions.length === 0) {
             this.courseNumber = '';
+            this.courseTitle = '';
           }
         }
 
@@ -308,10 +313,11 @@ export class CourseInputComponent extends _CourseInputComponentBase
       this.year = values[0];
       this.quarter = values[1];
       this.courseNumber = values[3];
-      this.courseTitle = values[4];
+      this.courseTitle = this.courseNumber && values[4]; // Only set the course title if there is a course number.
       this.section = values[5];
     } else {
       this.courseNumber = '';
+      this.courseTitle = '';
       this.setSectionValue('');
     }
 
