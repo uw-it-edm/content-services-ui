@@ -19,6 +19,8 @@ import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { PersonSearchAutocomplete } from '../shared/search-autocomplete/person-search-autocomplete';
 import { PersonService } from '../../shared/providers/person.service';
 
+declare var gtag;
+
 @Component({
   selector: 'app-search-page',
   templateUrl: './search-page.component.html',
@@ -75,6 +77,14 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
     this.activatedRoute.paramMap.pipe(takeUntil(this.componentDestroyed)).subscribe(params => {
       this.page = params.get('page');
       this.activatedRoute.data.pipe(takeUntil(this.componentDestroyed)).subscribe((data: { config: Config }) => {
+
+        console.log('Analytics', data.config.tenant);
+
+        gtag('event', 'Load Search Page ', {
+          'event_category': 'Page Load',
+          'event_label': data.config.tenant
+        });
+
         const pageConfigChanged = !!this.pageConfig;
 
         this.config = data.config;
