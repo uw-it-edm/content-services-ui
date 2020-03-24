@@ -111,7 +111,7 @@ describe('OptionsInputComponent with host', () => {
   it('should render aria-label attribute set to its label and option value', async(() => {
     fixture.whenStable().then(() => {
       fixture.detectChanges();
-      expect(componentElement.getAttribute('aria-label')).toEqual('testPlaceHolder optionOneValue');
+      expect(componentElement.getAttribute('aria-label')).toEqual('testPlaceHolder optionOneDisplayValue');
     });
   }));
 });
