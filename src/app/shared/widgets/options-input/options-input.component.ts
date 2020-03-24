@@ -9,7 +9,8 @@ import {
   Input,
   OnDestroy,
   Optional,
-  Self
+  Self,
+  ViewChild
 } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import {
@@ -28,7 +29,9 @@ import {
   ErrorStateMatcher,
   MatFormFieldControl,
   MatSelectChange,
-  mixinErrorState
+  mixinErrorState,
+  MatOption,
+  MatSelect
 } from '@angular/material';
 import { Field } from '../../../core/shared/model/field';
 import { FieldOption } from '../../../core/shared/model/field/field-option';
@@ -93,10 +96,24 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
     return INTERNAL_FIELD_NAME;
   }
 
+  @ViewChild('selectDropDown') matSelect: MatSelect;
   @Input() fieldConfig: Field;
   @Input() parentControl: AbstractControl;
   options$: Observable<FieldOption[]>;
   formGroup: FormGroup;
+
+  get selectedOptionText(): string {
+    let optionText: string;
+
+    try {
+      const matOption = this.matSelect && this.matSelect.selected as MatOption;
+      optionText = matOption && matOption.viewValue;
+    } catch {
+      // MatSelect throws exception instead of returning null or empty array if nothing is selected.
+    }
+
+    return this.placeholder + (optionText ? ` ${optionText}` : '');
+  }
 
   private initComponent() {
     this.initInternalForm();
