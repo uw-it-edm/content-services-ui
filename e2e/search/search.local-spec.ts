@@ -379,7 +379,7 @@ describe('Search Page', () => {
   it('should toggle visibility of facets panel when clicking the hide/show button', () => {
     page.waitForFirstRowValue('ProfileId', 'Demo');
 
-    // Verify the facets are visible on page load.
+    // Verify the facets are visible on page load
     expect(page.getFacet(0).isDisplayed()).toBeTruthy();
 
     // Verify clicking button hides the facets panel.
