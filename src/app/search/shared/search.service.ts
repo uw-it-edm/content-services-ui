@@ -1,6 +1,6 @@
-import { debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { SearchModel } from './model/search-model';
 
 import { SearchResults } from './model/search-result';
@@ -29,26 +29,19 @@ export class SearchService {
     private activatedRoute: ActivatedRoute
   ) {}
 
-  search(searchModel$: Observable<SearchModel>, pageConfig: SearchPageConfig): Observable<SearchResults> {
-    return searchModel$.pipe(
-      debounceTime(400),
-      distinctUntilChanged(),
-      switchMap(searchModel => {
-        console.log('processing search request');
+  search(searchModel: SearchModel, pageConfig: SearchPageConfig): Observable<SearchResults> {
+    console.log('processing search request');
 
-        if (pageConfig.searchStateInURL) {
-          const queryParams: Params = Object.assign({}, this.activatedRoute.snapshot.queryParams);
+    if (pageConfig.searchStateInURL) {
+      const queryParams: Params = Object.assign({}, this.activatedRoute.snapshot.queryParams);
+      queryParams['s'] = JSON.stringify(searchModel);
 
-          queryParams['s'] = JSON.stringify(searchModel);
+      this.router.navigate([], { relativeTo: this.activatedRoute, queryParams: queryParams });
+    }
 
-          this.router.navigate([], { relativeTo: this.activatedRoute, queryParams: queryParams });
-        }
+    this.dataService.set('currentSearch', searchModel);
 
-        this.dataService.set('currentSearch', searchModel);
-
-        return this.searchEntries(searchModel, pageConfig);
-      })
-    );
+    return this.searchEntries(searchModel, pageConfig);
   }
 
   private searchEntries(searchModel: SearchModel, pageConfig: SearchPageConfig): Observable<SearchResults> {

@@ -70,7 +70,7 @@ describe('SearchService', () => {
       });
     });
 
-    searchService.search(of(searchModel), new SearchPageConfig()).subscribe(result => {
+    searchService.search(searchModel, new SearchPageConfig()).subscribe(result => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
 
       // args[1] is the payload
@@ -112,7 +112,7 @@ describe('SearchService', () => {
 
     httpSpy = spyOn(http, 'post').and.returnValue(of(new Response(new ResponseOptions())));
 
-    searchService.search(of(searchModel), pageConfig).subscribe(result => {
+    searchService.search(searchModel, pageConfig).subscribe(result => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       // args[1] is the payload
       const payload = httpSpy.calls.first().args[1];
@@ -139,7 +139,7 @@ describe('SearchService', () => {
 
     httpSpy = spyOn(http, 'post').and.returnValue(of(new Response(new ResponseOptions())));
 
-    searchService.search(of(searchModel), new SearchPageConfig()).subscribe(result => {
+    searchService.search(searchModel, new SearchPageConfig()).subscribe(result => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       // args[1] is the payload
       const payload = httpSpy.calls.first().args[1];
@@ -160,7 +160,7 @@ describe('SearchService', () => {
 
     httpSpy = spyOn(http, 'post').and.returnValue(of(new Response(new ResponseOptions())));
 
-    searchService.search(of(searchModel), new SearchPageConfig()).subscribe(result => {
+    searchService.search(searchModel, new SearchPageConfig()).subscribe(result => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       // args[1] is the payload
       const payload = httpSpy.calls.first().args[1];
@@ -179,7 +179,7 @@ describe('SearchService', () => {
 
     httpSpy = spyOn(http, 'post').and.returnValue(of(new Response(new ResponseOptions())));
 
-    searchService.search(of(searchModel), new SearchPageConfig()).subscribe(result => {
+    searchService.search(searchModel, new SearchPageConfig()).subscribe(result => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       // args[1] is the payload
       const payload = httpSpy.calls.first().args[1];
@@ -197,7 +197,7 @@ describe('SearchService', () => {
 
     httpSpy = spyOn(http, 'post').and.returnValue(of(new Response(new ResponseOptions())));
 
-    searchService.search(of(searchModel), new SearchPageConfig()).subscribe(result => {
+    searchService.search(searchModel, new SearchPageConfig()).subscribe(result => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       // args[1] is the payload
       const payload = httpSpy.calls.first().args[1];
@@ -215,7 +215,7 @@ describe('SearchService', () => {
 
     const searchPageConfig = new SearchPageConfig();
     searchPageConfig.defaultSort = new Sort('mydefaultfield', 'desc');
-    searchService.search(of(searchModel), searchPageConfig).subscribe(result => {
+    searchService.search(searchModel, searchPageConfig).subscribe(result => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       // args[1] is the payload
       const payload = httpSpy.calls.first().args[1];
@@ -235,7 +235,7 @@ describe('SearchService', () => {
 
     const searchPageConfig = new SearchPageConfig();
     searchPageConfig.defaultSort = new Sort('mydefaultfield', 'desc');
-    searchService.search(of(searchModel), searchPageConfig).subscribe(result => {
+    searchService.search(searchModel, searchPageConfig).subscribe(result => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       // args[1] is the payload
       const payload = httpSpy.calls.first().args[1];
@@ -258,7 +258,7 @@ describe('SearchService', () => {
 
     httpSpy = spyOn(http, 'post').and.returnValue(of(new Response(new ResponseOptions())));
 
-    searchService.search(of(searchModel), pageConfig).subscribe(result => {
+    searchService.search(searchModel, pageConfig).subscribe(result => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       // args[1] is the payload
       const payload = httpSpy.calls.first().args[1];
@@ -282,7 +282,7 @@ describe('SearchService', () => {
 
     httpSpy = spyOn(http, 'post').and.returnValue(of(new Response(new ResponseOptions())));
 
-    searchService.search(of(searchModel), pageConfig).subscribe(result => {
+    searchService.search(searchModel, pageConfig).subscribe(result => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       // args[1] is the payload
       const payload = httpSpy.calls.first().args[1];
@@ -306,7 +306,7 @@ describe('SearchService', () => {
 
     httpSpy = spyOn(http, 'post').and.returnValue(of(new Response(new ResponseOptions())));
 
-    searchService.search(of(searchModel), pageConfig).subscribe(result => {
+    searchService.search(searchModel, pageConfig).subscribe(result => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       // args[1] is the payload
       const payload = httpSpy.calls.first().args[1];

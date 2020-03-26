@@ -1,4 +1,4 @@
-import { takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Config } from '../../core/shared/model/config';
@@ -7,7 +7,7 @@ import { Title } from '@angular/platform-browser';
 import { SearchModel } from '../shared/model/search-model';
 import { SearchResults } from '../shared/model/search-result';
 import { SearchService } from '../shared/search.service';
-import { Subject, BehaviorSubject, Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { DataService } from '../../shared/providers/data.service';
 import { Sort } from '../shared/model/sort';
 
@@ -31,7 +31,7 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   pageConfig: SearchPageConfig;
   page: string;
 
-  searchModel$ = new BehaviorSubject<SearchModel>(new SearchModel());
+  searchModel$ = new Subject<SearchModel>();
   searchResults$ = new Subject<SearchResults>();
   searchAutocomplete: SearchAutocomplete;
 
@@ -47,7 +47,6 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
     private studentService: StudentService,
     private notificationService: NotificationService
   ) {
-
     console.log('init generic page component');
     if (this.activatedRoute.snapshot.queryParams != null) {
       const initialSearch = this.activatedRoute.snapshot.queryParams.s;
@@ -108,24 +107,7 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         }
 
-        if (this.searchSubscription) {
-          this.searchSubscription.unsubscribe();
-        }
-
-        // Need to re-subcribe each time the page config changes.
-        this.searchSubscription = this.searchService.search(this.searchModel$, this.pageConfig).subscribe(
-          (searchResults: SearchResults) => {
-            /* we are not sending the search results observable
-               directly to the underlying components
-               as doing so makes all the components subscribe
-               to the search service and execute multiple searches
-               */
-            this.searchResults$.next(searchResults);
-          },
-          err => {
-            this.notificationService.error('error while executing search', err);
-          }
-        );
+        this.addSearchSubscription();
 
         if (pageConfigChanged) {
           // If the page config changed after the page loaded, submit an empty search model to the new subscription.
@@ -137,10 +119,41 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
+  private addSearchSubscription() {
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
+    this.searchSubscription = this.searchModel$
+      .pipe(
+        takeUntil(this.componentDestroyed),
+        debounceTime(400),
+        distinctUntilChanged(),
+        switchMap((searchModel: SearchModel) => {
+          return this.searchService.search(searchModel, this.pageConfig);
+        })
+      )
+      .subscribe(
+        (searchResults: SearchResults) => {
+          /* we are not sending the search results observable
+          directly to the underlying components
+          as doing so makes all the components subscribe
+          to the search service and execute multiple searches
+          */
+          this.searchResults$.next(searchResults);
+        },
+        err => {
+          this.notificationService.error('error while executing search', err);
+          // The subscription will close when there is an error, so we need to attach a new one.
+          this.addSearchSubscription();
+        }
+      );
+  }
+
   navigateToDisplaySearchPage() {
     console.log('go to display page');
     const queryParams: Params = Object.assign({}, this.activatedRoute.snapshot.queryParams);
-    queryParams['s'] = JSON.stringify(this.searchModel$.value);
+    //queryParams['s'] = JSON.stringify(this.searchModel$.value);
+    queryParams['s'] = JSON.stringify(this.searchModel$);
 
     this.router.navigate(['display-search'], { relativeTo: this.activatedRoute, queryParams: queryParams });
   }
