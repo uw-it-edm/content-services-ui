@@ -1,4 +1,4 @@
-<div>
+<div class="search-results-component">
   <mat-paginator #topPaginator
                  [pageIndex]="paginatorConfig.pageIndex"
                  [pageSize]="paginatorConfig.pageSize"
@@ -6,6 +6,13 @@
                  [length]="paginatorConfig.numberOfResults"
                  (page)="onPageEvent($event)">
   </mat-paginator>
+
+  <!-- The template slot below is plugged in by the parent component. It is meant to provide a space
+       for the parent to inject a button that is in the correct tab order between the paginator and the
+       results table.-->
+  <div class="table-action-button">
+    <ng-content select="[search-results-action]"></ng-content>
+  </div>
 
   <mat-table #table [dataSource]="dataSource" matSort [matSortActive]="sortTerm"
              [matSortDirection]="sortDirection" aria-label="Search Results">

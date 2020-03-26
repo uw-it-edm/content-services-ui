@@ -1,15 +1,3 @@
-.toggle-panel-btn {
-  opacity: 0.5;
-  float: left;
-  position: relative;
-  top: 63px;
-  left: -30px;
-}
-
-.toggle-panel-btn:hover {
-  opacity: 0.8;
-}
-
 .toggle-panel-btn .mat-icon {
   font-size: 40px;
 }
