@@ -379,7 +379,7 @@ describe('Search Page', () => {
   it('should toggle visibility of facets panel when clicking the hide/show button', () => {
     page.waitForFirstRowValue('ProfileId', 'Demo');
 
-    // Verify the facets are visible on page load
+    // Verify the facets are visible on page load.
     expect(page.getFacet(0).isDisplayed()).toBeTruthy();
 
     // Verify clicking button hides the facets panel.
@@ -391,5 +391,45 @@ describe('Search Page', () => {
     page.toggleFacetsPanelButton.click();
     page.waitForLiveAnnouncerText('Filter panel shown.');
     expect(page.getFacet(0).isDisplayed()).toBeTruthy();
+  });
+
+  it('should keep facets panel collapsed after changing profiles', () => {
+    const app = new ContentServicesUiPage();
+    page.waitForFirstRowValue('ProfileId', 'Demo');
+
+    // Hide facets panel.
+    page.toggleFacetsPanelButton.click();
+    page.waitForLiveAnnouncerText('Filter panel hidden.');
+    expect(page.getFacet(0).isDisplayed()).toBeFalsy();
+
+    // Switch to 'demo3' profile.
+    app.clickAppMenuIcon();
+    app.clickAppMenuItem(2);
+    page.waitForFirstRowValue('ProfileId', 'Demo3');
+
+    // Verify facets panel is still collapsed.
+    expect(page.getFacet(0).isDisplayed()).toBeFalsy();
+  });
+
+  it('should keep facets panel collapsed after navigating back from upload/edit page', () => {
+    const createPage = new CreatePage();
+    page.waitForFirstRowValue('ProfileId', 'Demo');
+
+    // Hide facets panel.
+    page.toggleFacetsPanelButton.click();
+    page.waitForLiveAnnouncerText('Filter panel hidden.');
+    expect(page.getFacet(0).isDisplayed()).toBeFalsy();
+
+    // Click on 'Upload' button to go upload page.
+    page.clickUploadButton();
+    expect(browser.getCurrentUrl().then(url => url.toLowerCase())).toBe(createPage.pageUrl.toLowerCase());
+
+    // Click on 'Back' button return to search page.
+    createPage.clickReturnToResultsButton();
+    page.clickAcceptAlert();
+    page.waitForFirstRowValue('ProfileId', 'Demo');
+
+     // Verify facets panel is still collapsed.
+     expect(page.getFacet(0).isDisplayed()).toBeFalsy();
   });
 });

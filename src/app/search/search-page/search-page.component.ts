@@ -20,6 +20,8 @@ import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { PersonSearchAutocomplete } from '../shared/search-autocomplete/person-search-autocomplete';
 import { PersonService } from '../../shared/providers/person.service';
 
+const LEFT_PANEL_VISIBLE_STATE_KEY = 'isLeftPanelVisible';
+
 @Component({
   selector: 'app-search-page',
   templateUrl: './search-page.component.html',
@@ -75,6 +77,9 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
+    const leftPanelVisibleState = this.dataService.get(LEFT_PANEL_VISIBLE_STATE_KEY);
+    this.isLeftPanelShown = leftPanelVisibleState !== null ? leftPanelVisibleState : true;
+
     this.activatedRoute.paramMap.pipe(takeUntil(this.componentDestroyed)).subscribe(params => {
       this.page = params.get('page');
       this.activatedRoute.data.pipe(takeUntil(this.componentDestroyed)).subscribe((data: { config: Config }) => {
@@ -155,6 +160,8 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   toggleLeftPanel(): void {
     this.isLeftPanelShown = !this.isLeftPanelShown;
+
+    this.dataService.set(LEFT_PANEL_VISIBLE_STATE_KEY, this.isLeftPanelShown);
 
     const announcerMessage = this.isLeftPanelShown ? 'Filter panel shown.' : 'Filter panel hidden.';
     this.liveAnnouncer.announce(announcerMessage, 'polite');
