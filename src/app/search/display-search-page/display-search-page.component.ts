@@ -40,7 +40,7 @@ export class DisplaySearchPageComponent implements OnInit, OnDestroy, AfterViewI
     private router: Router,
     private notificationService: NotificationService
   ) {
-    this.searchModel$ = new BehaviorSubject<SearchModel>(new SearchModel());
+    this.searchModel$ = new Subject<SearchModel>();
 
     console.log('init Displays search page component');
     if (this.route.snapshot.queryParams != null) {
@@ -92,10 +92,7 @@ export class DisplaySearchPageComponent implements OnInit, OnDestroy, AfterViewI
       this.searchSubscription.unsubscribe();
     }
     this.searchSubscription = this.searchModel$
-      .pipe(
-        takeUntil(this.componentDestroyed),
-        switchMap(searchModel => this.searchService.search(searchModel, this.pageConfig))
-      )
+      .pipe(switchMap(searchModel => this.searchService.search(searchModel, this.pageConfig)))
       .subscribe(
         (searchResults: SearchResults) => {
           /* we are not sending the search results observable
