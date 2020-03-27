@@ -1,26 +1,26 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 
-import { SearchPageComponent } from './search-page.component';
-import { MaterialConfigModule } from '../../routing/material-config.module';
-import { ActivatedRoute } from '@angular/router';
-import { Title } from '@angular/platform-browser';
-import { ActivatedRouteStub } from '../../../testing/router-stubs';
-import { Config } from '../../core/shared/model/config';
-import { SearchPageConfig } from '../../core/shared/model/search-page-config';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { SearchBoxComponent } from '../search-box/search-box.component';
-import { SearchResultsComponent } from '../search-results/search-results.component';
-import { SearchService } from '../shared/search.service';
-import { Observable, of } from 'rxjs';
-import { SearchResults } from '../shared/model/search-result';
-import { SearchModel } from '../shared/model/search-model';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { DataService } from '../../shared/providers/data.service';
-import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientModule } from '@angular/common/http';
-import { StudentService } from '../../shared/providers/student.service';
-import { NotificationService } from '../../shared/providers/notification.service';
-import { PersonService } from '../../shared/providers/person.service';
+import {SearchPageComponent} from './search-page.component';
+import {MaterialConfigModule} from '../../routing/material-config.module';
+import {ActivatedRoute} from '@angular/router';
+import {Title} from '@angular/platform-browser';
+import {ActivatedRouteStub} from '../../../testing/router-stubs';
+import {Config} from '../../core/shared/model/config';
+import {SearchPageConfig} from '../../core/shared/model/search-page-config';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {SearchBoxComponent} from '../search-box/search-box.component';
+import {SearchResultsComponent} from '../search-results/search-results.component';
+import {SearchService} from '../shared/search.service';
+import {Observable, of, throwError} from 'rxjs';
+import {SearchResults} from '../shared/model/search-result';
+import {SearchModel} from '../shared/model/search-model';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {DataService} from '../../shared/providers/data.service';
+import {RouterTestingModule} from '@angular/router/testing';
+import {HttpClientModule} from '@angular/common/http';
+import {StudentService} from '../../shared/providers/student.service';
+import {NotificationService} from '../../shared/providers/notification.service';
+import {PersonService} from '../../shared/providers/person.service';
 
 let studentService: StudentService;
 let dataService: DataService;
@@ -30,12 +30,16 @@ let component: SearchPageComponent;
 let fixture: ComponentFixture<SearchPageComponent>;
 
 class MockSearchService {
-  search(terms: Observable<SearchModel>, pageConfig: SearchPageConfig): Observable<SearchResults> {
+  search(terms: SearchModel, pageConfig: SearchPageConfig): Observable<SearchResults> {
+    if (terms.stringQuery === 'ThrowError') {
+      return throwError('An Error Occurred');
+    }
     return of(new SearchResults());
   }
 }
 
 describe('SearchPageComponent', () => {
+
   beforeEach(async(() => {
     activatedRoute = new ActivatedRouteStub();
     searchServiceSpy = new MockSearchService();
@@ -47,11 +51,12 @@ describe('SearchPageComponent', () => {
       imports: [NoopAnimationsModule, MaterialConfigModule, HttpClientModule, RouterTestingModule],
       declarations: [SearchPageComponent, SearchBoxComponent, SearchResultsComponent],
       providers: [
-        { provide: ActivatedRoute, useValue: activatedRoute },
-        { provide: SearchService, useValue: searchServiceSpy },
-        { provide: DataService, useValue: dataService },
-        { provide: StudentService, useValue: studentService },
-        { provide: PersonService, useValue: {} },
+        {provide: ActivatedRoute, useValue: activatedRoute},
+        {provide: SearchService, useValue: searchServiceSpy},
+        {provide: DataService, useValue: dataService},
+        {provide: StudentService, useValue: studentService},
+        {provide: PersonService, useValue: {}},
+        {provide: PersonService, useValue: {}},
         Title,
         NotificationService
       ],
@@ -59,7 +64,7 @@ describe('SearchPageComponent', () => {
     })
       .compileComponents()
       .then(() => {
-        activatedRoute.testParamMap = { page: 'test-page' };
+        activatedRoute.testParamMap = {page: 'test-page'};
 
         const pageConfig = new SearchPageConfig();
         pageConfig.pageName = 'test-page';
@@ -69,8 +74,10 @@ describe('SearchPageComponent', () => {
         config.pages['test-page'] = pageConfig;
 
         console.log(JSON.stringify(config));
-        activatedRoute.testData = { config: config };
+        activatedRoute.testData = {config: config};
+
       });
+
   }));
 
   beforeEach(() => {
@@ -137,5 +144,67 @@ describe('SearchPageComponent', () => {
 
     displaySearchButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-display-search-button');
     expect(displaySearchButton.length).toEqual(0);
+  });
+
+  describe('should recover from search error', () => {
+    const LongerThanSearchDebounceTime = 200;
+
+    let theSearchService: SearchService;
+    let searchSpy;
+    let searchModel: SearchModel;
+    let theNotificationService;
+    let notificationErrorSpy;
+
+    beforeEach(() => {
+      component.searchDebounceTime = 1;
+      theSearchService = TestBed.get(SearchService);
+      theNotificationService = TestBed.get(NotificationService);
+
+      searchSpy = spyOn(theSearchService, 'search').and.callThrough();
+      notificationErrorSpy = spyOn(theNotificationService, 'error').and.stub();
+
+      searchModel = new SearchModel();
+    });
+
+    it('should inject search & notification services', () => {
+      expect(theSearchService).toBeDefined();
+      expect(theNotificationService).toBeDefined();
+    });
+
+    it('should call searchService onInit', fakeAsync(() => {
+      component.ngOnInit();
+      tick(LongerThanSearchDebounceTime);
+
+      expect(searchSpy).toHaveBeenCalled();
+      expect(searchSpy).toHaveBeenCalledTimes(1);
+
+    }));
+
+    it('should call searchService onSearch', fakeAsync(() => {
+      component.ngOnInit();
+      tick(LongerThanSearchDebounceTime);
+
+      component.onSearch(searchModel);
+      tick(LongerThanSearchDebounceTime);
+      expect(searchSpy).toHaveBeenCalledTimes(2);
+    }));
+
+    it('should call searchService onSearch failure', fakeAsync(() => {
+      component.ngOnInit();
+      tick(LongerThanSearchDebounceTime);
+
+      // Should notify error
+      searchModel.stringQuery = 'ThrowError';
+      component.onSearch(searchModel);
+      tick(LongerThanSearchDebounceTime);
+      expect(searchSpy).toHaveBeenCalledTimes(2);
+      expect(notificationErrorSpy).toHaveBeenCalledTimes(1);
+
+      // Search should continue to function after error
+      searchModel.stringQuery = '';
+      component.onSearch(searchModel);
+      tick(LongerThanSearchDebounceTime);
+      expect(searchSpy).toHaveBeenCalledTimes(3);
+    }));
   });
 });

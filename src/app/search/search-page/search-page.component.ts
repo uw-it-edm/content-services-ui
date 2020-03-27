@@ -27,6 +27,7 @@ import { PersonService } from '../../shared/providers/person.service';
 export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   private componentDestroyed = new Subject();
   private searchSubscription: Subscription;
+  searchDebounceTime = 400;
   config: Config;
   pageConfig: SearchPageConfig;
   page: string;
@@ -119,13 +120,15 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
+
+
   private addSearchSubscription() {
     if (this.searchSubscription) {
       this.searchSubscription.unsubscribe();
     }
     this.searchSubscription = this.searchModel$
       .pipe(
-        debounceTime(400),
+        debounceTime(this.searchDebounceTime),
         distinctUntilChanged(),
         switchMap((searchModel: SearchModel) => {
           return this.searchService.search(searchModel, this.pageConfig);
