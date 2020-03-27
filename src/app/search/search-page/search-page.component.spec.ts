@@ -1,26 +1,27 @@
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
-import {SearchPageComponent} from './search-page.component';
-import {MaterialConfigModule} from '../../routing/material-config.module';
-import {ActivatedRoute} from '@angular/router';
-import {Title} from '@angular/platform-browser';
-import {ActivatedRouteStub} from '../../../testing/router-stubs';
-import {Config} from '../../core/shared/model/config';
-import {SearchPageConfig} from '../../core/shared/model/search-page-config';
-import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {SearchBoxComponent} from '../search-box/search-box.component';
-import {SearchResultsComponent} from '../search-results/search-results.component';
-import {SearchService} from '../shared/search.service';
-import {Observable, of, throwError} from 'rxjs';
-import {SearchResults} from '../shared/model/search-result';
-import {SearchModel} from '../shared/model/search-model';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {DataService} from '../../shared/providers/data.service';
-import {RouterTestingModule} from '@angular/router/testing';
-import {HttpClientModule} from '@angular/common/http';
-import {StudentService} from '../../shared/providers/student.service';
-import {NotificationService} from '../../shared/providers/notification.service';
-import {PersonService} from '../../shared/providers/person.service';
+import { SearchPageComponent } from './search-page.component';
+import { MaterialConfigModule } from '../../routing/material-config.module';
+import { ActivatedRoute } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { ActivatedRouteStub } from '../../../testing/router-stubs';
+import { Config } from '../../core/shared/model/config';
+import { SearchPageConfig } from '../../core/shared/model/search-page-config';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { SearchBoxComponent } from '../search-box/search-box.component';
+import { SearchResultsComponent } from '../search-results/search-results.component';
+import { SearchService } from '../shared/search.service';
+import { Observable, of, throwError } from 'rxjs';
+import { SearchResults } from '../shared/model/search-result';
+import { SearchModel } from '../shared/model/search-model';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { DataService } from '../../shared/providers/data.service';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { StudentService } from '../../shared/providers/student.service';
+import { NotificationService } from '../../shared/providers/notification.service';
+import { PersonService } from '../../shared/providers/person.service';
+import { FacetConfig } from '../../core/shared/model/facet-config';
 
 let studentService: StudentService;
 let dataService: DataService;
@@ -39,6 +40,7 @@ class MockSearchService {
 }
 
 describe('SearchPageComponent', () => {
+  let pageConfig: SearchPageConfig;
 
   beforeEach(async(() => {
     activatedRoute = new ActivatedRouteStub();
@@ -51,12 +53,12 @@ describe('SearchPageComponent', () => {
       imports: [NoopAnimationsModule, MaterialConfigModule, HttpClientModule, RouterTestingModule],
       declarations: [SearchPageComponent, SearchBoxComponent, SearchResultsComponent],
       providers: [
-        {provide: ActivatedRoute, useValue: activatedRoute},
-        {provide: SearchService, useValue: searchServiceSpy},
-        {provide: DataService, useValue: dataService},
-        {provide: StudentService, useValue: studentService},
-        {provide: PersonService, useValue: {}},
-        {provide: PersonService, useValue: {}},
+        { provide: ActivatedRoute, useValue: activatedRoute },
+        { provide: SearchService, useValue: searchServiceSpy },
+        { provide: DataService, useValue: dataService },
+        { provide: StudentService, useValue: studentService },
+        { provide: PersonService, useValue: {} },
+        { provide: PersonService, useValue: {} },
         Title,
         NotificationService
       ],
@@ -64,9 +66,9 @@ describe('SearchPageComponent', () => {
     })
       .compileComponents()
       .then(() => {
-        activatedRoute.testParamMap = {page: 'test-page'};
+        activatedRoute.testParamMap = { page: 'test-page' };
 
-        const pageConfig = new SearchPageConfig();
+        pageConfig = new SearchPageConfig();
         pageConfig.pageName = 'test-page';
 
         const config = new Config();
@@ -74,18 +76,14 @@ describe('SearchPageComponent', () => {
         config.pages['test-page'] = pageConfig;
 
         console.log(JSON.stringify(config));
-        activatedRoute.testData = {config: config};
-
+        activatedRoute.testData = { config: config };
       });
-
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SearchPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-
-    const searchService = fixture.debugElement.injector.get(SearchService);
   });
 
   it('should be created', () => {
@@ -146,6 +144,49 @@ describe('SearchPageComponent', () => {
     expect(displaySearchButton.length).toEqual(0);
   });
 
+  it('should show the facets panel and the toggle button if facets are active and a facet exitst in config', () => {
+    pageConfig.facetsConfig.active = true;
+    pageConfig.facetsConfig.facets = new Map<string, FacetConfig>();
+    pageConfig.facetsConfig.facets.set('myFacet', {
+      key: 'metadata.mybooleanfield',
+      label: 'My boolean',
+      order: 'asc',
+      size: 3,
+      maxSize: 50,
+      dataApiValueType: '',
+      dataApiLabelPath: ''
+    });
+
+    fixture = TestBed.createComponent(SearchPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.isToggleLeftPanelButtonVisible).toBeTrue();
+    expect(component.isLeftPanelVisible).toBeTrue();
+  });
+
+  it('should hide the facets panel and the toggle button if facets are not active in config', () => {
+    pageConfig.facetsConfig.active = false;
+    fixture = TestBed.createComponent(SearchPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.isLeftPanelVisible).toBeFalse();
+    expect(component.isToggleLeftPanelButtonVisible).toBeFalse();
+  });
+
+  it('should hide the facets panel and the toggle button if facets are active but there are no facets in config', () => {
+    pageConfig.facetsConfig.active = true;
+    pageConfig.facetsConfig.facets = new Map<string, FacetConfig>();
+
+    fixture = TestBed.createComponent(SearchPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.isLeftPanelVisible).toBeFalse();
+    expect(component.isToggleLeftPanelButtonVisible).toBeFalse();
+  });
+
   describe('should recover from search error', () => {
     const LongerThanSearchDebounceTime = 200;
 
@@ -177,7 +218,6 @@ describe('SearchPageComponent', () => {
 
       expect(searchSpy).toHaveBeenCalled();
       expect(searchSpy).toHaveBeenCalledTimes(1);
-
     }));
 
     it('should call searchService onSearch', fakeAsync(() => {

@@ -358,7 +358,9 @@ describe('Search Page', () => {
     app.clickAppMenuItem(2);
 
     page.waitForFirstRowValue('ProfileId', 'Demo3');
-    expect(page.tableHeaders.getText()).toEqual(['Id'].concat(demo3Config.pages['tab-search'].fieldsToDisplay.map(i => i.label)));
+    expect(page.tableHeaders.getText()).toEqual(
+      ['Id'].concat(demo3Config.pages['tab-search'].fieldsToDisplay.map(i => i.label))
+    );
 
     // Click on facet and paginator.
     page.clickFacetLink(0);
@@ -369,10 +371,92 @@ describe('Search Page', () => {
     app.clickAppMenuItem(1);
 
     page.waitForFirstRowValue('ProfileId', 'Demo');
-    expect(page.tableHeaders.getText()).toEqual(['Id'].concat(demo2Config.pages['tab-search'].fieldsToDisplay.map(i => i.label)));
+    expect(page.tableHeaders.getText()).toEqual(
+      ['Id'].concat(demo2Config.pages['tab-search'].fieldsToDisplay.map(i => i.label))
+    );
 
     // verify facets and paginator got cleared.
     expect(page.selectedFacet.getText()).toEqual([]);
     expect(page.paginatorCounts.get(0).getText()).toContain('1 - ');
+  });
+
+  it('should toggle visibility of facets panel when clicking the hide/show button', () => {
+    page.waitForFirstRowValue('ProfileId', 'Demo');
+
+    // Verify the facets are visible on page load.
+    expect(page.getFacet(0).isDisplayed()).toBeTruthy();
+
+    // Verify clicking button hides the facets panel.
+    page.toggleFacetsPanelButton.click();
+    page.waitForLiveAnnouncerText('Filter panel hidden.');
+    expect(page.getFacet(0).isDisplayed()).toBeFalsy();
+
+    // Verify clicking button again shows the facets panel.
+    page.toggleFacetsPanelButton.click();
+    page.waitForLiveAnnouncerText('Filter panel shown.');
+    expect(page.getFacet(0).isDisplayed()).toBeTruthy();
+  });
+
+  it('should keep facets panel collapsed after changing profiles', () => {
+    const app = new ContentServicesUiPage();
+    page.waitForFirstRowValue('ProfileId', 'Demo');
+
+    // Hide facets panel.
+    page.toggleFacetsPanelButton.click();
+    page.waitForLiveAnnouncerText('Filter panel hidden.');
+    expect(page.getFacet(0).isDisplayed()).toBeFalsy();
+
+    // Switch to 'demo3' profile.
+    app.clickAppMenuIcon();
+    app.clickAppMenuItem(2);
+    page.waitForFirstRowValue('ProfileId', 'Demo3');
+
+    // Verify facets panel is still collapsed.
+    expect(page.getFacet(0).isDisplayed()).toBeFalsy();
+  });
+
+  it('should keep facets panel collapsed after navigating back from upload/edit page', () => {
+    const createPage = new CreatePage();
+    page.waitForFirstRowValue('ProfileId', 'Demo');
+
+    // Hide facets panel.
+    page.toggleFacetsPanelButton.click();
+    page.waitForLiveAnnouncerText('Filter panel hidden.');
+    expect(page.getFacet(0).isDisplayed()).toBeFalsy();
+
+    // Click on 'Upload' button to go upload page.
+    page.clickUploadButton();
+    expect(browser.getCurrentUrl().then(url => url.toLowerCase())).toBe(createPage.pageUrl.toLowerCase());
+
+    // Click on 'Back' button return to search page.
+    createPage.clickReturnToResultsButton();
+    page.clickAcceptAlert();
+    page.waitForFirstRowValue('ProfileId', 'Demo');
+
+    // Verify facets panel is still collapsed.
+    expect(page.getFacet(0).isDisplayed()).toBeFalsy();
+  });
+
+  it('should auto-collapse facets panel when switching profiles that do not have any configured', () => {
+    const app = new ContentServicesUiPage();
+    page.waitForFirstRowValue('ProfileId', 'Demo');
+
+    // Switch to 'demo4' profile (which has no facets)
+    app.clickAppMenuIcon();
+    app.clickAppMenuItem(3);
+    page.waitForFirstRowValue('ProfileId', 'Demo4');
+
+    // Verify facets panel is collapsed and button is hidden
+    expect(page.facetsElement.isPresent()).toBeFalsy();
+    expect(page.toggleFacetsPanelButton.isDisplayed()).toBeFalsy();
+
+    // Switch to 'demo' profile
+    app.clickAppMenuIcon();
+    app.clickAppMenuItem(0);
+    page.waitForFirstRowValue('ProfileId', 'Demo');
+
+    // Verify facets panel is expanded and button is shown
+    expect(page.facetsElement.isPresent()).toBeTruthy();
+    expect(page.toggleFacetsPanelButton.isDisplayed()).toBeTruthy();
   });
 });

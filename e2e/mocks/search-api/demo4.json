@@ -1,0 +1,194 @@
+{
+  "searchResults": [
+    {
+      "id": "123",
+      "label": "sample-file.txt",
+      "metadata": {
+        "ProfileId": "Demo4",
+        "Account": "DEMO-ACCOUNT",
+        "Filer": "me",
+        "PublishStatus": "published",
+        "DocumentType": "Type 1",
+        "RegId": "ABCDE",
+        "LastModifiedDate": 1.537446824E12,
+        "InvoiceAmount": "1220.30",
+        "childType": "Child2Parent2",
+        "SourceModel": {
+          "childType": {
+            "data": {
+              "label": "Child 2 of parent2"
+            }
+          }
+        }
+      },
+      "_score": 0.0,
+      "_indexName": "documents-demo4"
+    },
+    {
+      "id": "234",
+      "label": "sample-file-2.txt",
+      "metadata": {
+        "ProfileId": "Demo4",
+        "Account": "DEMO-ACCOUNT",
+        "Filer": "you",
+        "PublishStatus": "published",
+        "DocumentType": "Type 2",
+        "RegId": "FGHIJ",
+        "LastModifiedDate": 1.537446824E12,
+        "InvoiceAmount": "200",
+        "childType": "Child2Parent1",
+        "SourceModel": {
+          "childType": {
+            "data": {
+              "label": "Child 2 of parent1"
+            }
+          }
+        }
+      },
+      "_score": 0.0,
+      "_indexName": "documents-demo4"
+    },
+    {
+      "id": "456",
+      "label": "sample-file-2.txt",
+      "metadata": {
+        "ProfileId": "Demo4",
+        "Account": "DEMO-ACCOUNT",
+        "Filer": "him",
+        "PublishStatus": "published",
+        "DocumentType": "Type 2",
+        "RegId": "XYZ",
+        "LastModifiedDate": 1.537246822E12,
+        "InvoiceAmount": "0.15",
+        "childType": "Child2Parent2",
+        "SourceModel": {
+          "childType": {
+            "data": {
+              "label": "Child 2 of parent2"
+            }
+          }
+        }
+      },
+      "_score": 0.0,
+      "_indexName": "documents-demo4"
+    },
+    {
+      "id": "234",
+      "label": "sample-file-2.txt",
+      "metadata": {
+        "ProfileId": "Demo4",
+        "Account": "DEMO-ACCOUNT",
+        "Filer": "you",
+        "PublishStatus": "published",
+        "DocumentType": "Type 2",
+        "RegId": "FGHIJ",
+        "LastModifiedDate": 1.537446824E12,
+        "InvoiceAmount": "-10"
+      },
+      "_score": 0.0,
+      "_indexName": "documents-demo4"
+    }
+  ],
+  "facets": [
+    {
+      "name": "metadata.Filer.raw",
+      "buckets": [
+        {
+          "count": 6,
+          "key": "Me"
+        },
+        {
+          "count": 23,
+          "key": "You"
+        }
+      ]
+    },
+    {
+      "name": "metadata.PublishStatus.raw",
+      "buckets": [
+        {
+          "count": 6,
+          "key": "Published"
+        },
+        {
+          "count": 6,
+          "key": "Draft"
+        }
+      ]
+    },
+    {
+      "name": "metadata.DocumentType.label.raw",
+      "buckets": [
+        {
+          "count": 12,
+          "key": "Type 1"
+        },
+        {
+          "count": 57,
+          "key": "Type 2"
+        },
+        {
+          "count": 15,
+          "key": "Type 3"
+        },
+        {
+          "count": 34,
+          "key": "Type 4"
+        },
+        {
+          "count": 2,
+          "key": "Type 5"
+        },
+        {
+          "count": 4,
+          "key": "Type 6"
+        },
+        {
+          "count": 66,
+          "key": "Type 7"
+        }
+      ]
+    },
+    {
+      "name": "metadata.mybooleanfield",
+      "buckets": [
+        {
+          "count": 8,
+          "key": "0"
+        },
+        {
+          "count": 1,
+          "key": "1"
+        }
+      ]
+    },
+    {
+      "name": "metadata.mysecondbooleanfield",
+      "buckets": [
+        {
+          "count": 5,
+          "key": "0"
+        },
+        {
+          "count": 3,
+          "key": "1"
+        }
+      ]
+    },
+    {
+      "name": "metadata.childType",
+      "buckets": [
+        {
+          "count": 5,
+          "key": "Child2Parent2"
+        },
+        {
+          "count": 3,
+          "key": "Child2Parent1"
+        }
+      ]
+    }
+  ],
+  "totalCount": 471,
+  "timeTaken": "1.0"
+}
