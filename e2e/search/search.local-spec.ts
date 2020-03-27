@@ -432,4 +432,27 @@ describe('Search Page', () => {
      // Verify facets panel is still collapsed.
      expect(page.getFacet(0).isDisplayed()).toBeFalsy();
   });
+
+  it('should auto-collapse facets panel when switching profiles that do not have any configured', () => {
+    const app = new ContentServicesUiPage();
+    page.waitForFirstRowValue('ProfileId', 'Demo');
+
+    // Switch to 'demo4' profile (which has no facets)
+    app.clickAppMenuIcon();
+    app.clickAppMenuItem(3);
+    page.waitForFirstRowValue('ProfileId', 'Demo4');
+
+    // Verify facets panel is collapsed and button is hidden
+    expect(page.facetsElement.isPresent()).toBeFalsy();
+    expect(page.toggleFacetsPanelButton.isDisplayed()).toBeFalsy();
+
+    // Switch to 'demo' profile
+    app.clickAppMenuIcon();
+    app.clickAppMenuItem(0);
+    page.waitForFirstRowValue('ProfileId', 'Demo');
+
+    // Verify facets panel is expanded and button is shown
+    expect(page.facetsElement.isPresent()).toBeTruthy();
+    expect(page.toggleFacetsPanelButton.isDisplayed()).toBeTruthy();
+  });
 });

@@ -11,6 +11,7 @@ import { SearchService } from '../shared/search.service';
 import { Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { DataService } from '../../shared/providers/data.service';
 import { Sort } from '../shared/model/sort';
+import * as _ from 'lodash';
 
 import { StudentSearchAutocomplete } from '../shared/search-autocomplete/student-search-autocomplete';
 import { StudentService } from '../../shared/providers/student.service';
@@ -39,7 +40,8 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   searchAutocomplete: SearchAutocomplete;
 
   initialSearchModel: SearchModel;
-  isLeftPanelShown = true;
+  isLeftPanelVisible = true;
+  isToggleLeftPanelButtonVisible = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -77,9 +79,6 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    const leftPanelVisibleState = this.dataService.get(LEFT_PANEL_VISIBLE_STATE_KEY);
-    this.isLeftPanelShown = leftPanelVisibleState !== null ? leftPanelVisibleState : true;
-
     this.activatedRoute.paramMap.pipe(takeUntil(this.componentDestroyed)).subscribe(params => {
       this.page = params.get('page');
       this.activatedRoute.data.pipe(takeUntil(this.componentDestroyed)).subscribe((data: { config: Config }) => {
@@ -87,6 +86,9 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.config = data.config;
         this.pageConfig = data.config.pages[this.page.toLowerCase()];
+
+        this.initializeToggleLeftPanelButton(this.pageConfig);
+
         if (
           isNullOrUndefined(this.pageConfig.defaultSort) ||
           isNullOrUndefined(this.pageConfig.defaultSort.term) ||
@@ -159,11 +161,11 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   toggleLeftPanel(): void {
-    this.isLeftPanelShown = !this.isLeftPanelShown;
+    this.isLeftPanelVisible = !this.isLeftPanelVisible;
 
-    this.dataService.set(LEFT_PANEL_VISIBLE_STATE_KEY, this.isLeftPanelShown);
+    this.dataService.set(LEFT_PANEL_VISIBLE_STATE_KEY, this.isLeftPanelVisible);
 
-    const announcerMessage = this.isLeftPanelShown ? 'Filter panel shown.' : 'Filter panel hidden.';
+    const announcerMessage = this.isLeftPanelVisible ? 'Filter panel shown.' : 'Filter panel hidden.';
     this.liveAnnouncer.announce(announcerMessage, 'polite');
   }
 
@@ -174,5 +176,17 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   navigateToCreate() {
     this.router.navigate([this.config.tenant + '/create']);
+  }
+
+  private initializeToggleLeftPanelButton(pageConfig: SearchPageConfig): void {
+    const facetsConfig = pageConfig && pageConfig.facetsConfig && pageConfig.facetsConfig.active && pageConfig.facetsConfig.facets;
+    this.isToggleLeftPanelButtonVisible = facetsConfig && !(_.isEmpty(facetsConfig));
+
+    if (this.isToggleLeftPanelButtonVisible) {
+      const leftPanelVisibleInitState = this.dataService.get(LEFT_PANEL_VISIBLE_STATE_KEY);
+      this.isLeftPanelVisible = leftPanelVisibleInitState !== null ? leftPanelVisibleInitState : true;
+    } else {
+      this.isLeftPanelVisible = false;
+    }
   }
 }

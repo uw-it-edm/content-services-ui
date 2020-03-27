@@ -24,6 +24,7 @@ export class SearchPage {
   liveAnnouncer = element(by.className('cdk-live-announcer-element'));
   tableHeaders = element.all(by.className('mat-header-cell'));
   toggleFacetsPanelButton = element(by.className('toggle-panel-btn'));
+  facetsElement = element(by.tagName('app-facets-box'));
 
   constructor(private profile: string = 'demo') {}
 

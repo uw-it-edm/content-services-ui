@@ -34,7 +34,7 @@
   </div>
 
   <div fxLayout="row" class="cs-generic-body">
-    <div fxFlex="20" [hidden]="!isLeftPanelShown">
+    <div fxFlex="20" [hidden]="!isLeftPanelVisible">
       <app-facets-box
         *ngIf="pageConfig.facetsConfig && pageConfig.facetsConfig.active"
         [searchModel$]="searchModel$"
@@ -44,7 +44,7 @@
       >
       </app-facets-box>
     </div>
-    <div fxFlex="2" [hidden]="isLeftPanelShown">
+    <div fxFlex="2" [hidden]="isLeftPanelVisible">
       <!-- When the left panel is collapsed, leave a small space to put the button to expand.-->
     </div>
     <div fxFlex>
@@ -53,15 +53,15 @@
         [searchResults$]="searchResults$"
         [pageConfig]="pageConfig"
         (search)="onSearch($event)">
-          <div search-results-action>
+          <div search-results-action [hidden]="!isToggleLeftPanelButtonVisible">
             <button mat-icon-button
-                    (click)="toggleLeftPanel()"
                     class="toggle-panel-btn"
                     aria-label="Toggle Filter Panel"
-                    [matTooltip]="isLeftPanelShown ? 'Hide Filters' : 'Show Filters'"
-                    matTooltipPosition="above">
-              <mat-icon *ngIf="isLeftPanelShown">arrow_left</mat-icon>
-              <mat-icon *ngIf="!isLeftPanelShown">arrow_right</mat-icon>
+                    [matTooltip]="isLeftPanelVisible ? 'Hide Filters' : 'Show Filters'"
+                    matTooltipPosition="above"
+                    (click)="toggleLeftPanel()">
+              <mat-icon *ngIf="isLeftPanelVisible">arrow_left</mat-icon>
+              <mat-icon *ngIf="!isLeftPanelVisible">arrow_right</mat-icon>
             </button>
           </div>
     </app-search-results>
