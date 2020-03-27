@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { SearchPageComponent } from './search-page.component';
 import { MaterialConfigModule } from '../../routing/material-config.module';
 import { ActivatedRoute } from '@angular/router';
@@ -13,6 +12,7 @@ import { SearchResultsComponent } from '../search-results/search-results.compone
 import { SearchService } from '../shared/search.service';
 import { Observable, of } from 'rxjs';
 import { SearchResults } from '../shared/model/search-result';
+import { FacetConfig } from '../../core/shared/model/facet-config';
 import { SearchModel } from '../shared/model/search-model';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DataService } from '../../shared/providers/data.service';
@@ -36,6 +36,8 @@ class MockSearchService {
 }
 
 describe('SearchPageComponent', () => {
+  let pageConfig: SearchPageConfig;
+
   beforeEach(async(() => {
     activatedRoute = new ActivatedRouteStub();
     searchServiceSpy = new MockSearchService();
@@ -61,7 +63,7 @@ describe('SearchPageComponent', () => {
       .then(() => {
         activatedRoute.testParamMap = { page: 'test-page' };
 
-        const pageConfig = new SearchPageConfig();
+        pageConfig = new SearchPageConfig();
         pageConfig.pageName = 'test-page';
 
         const config = new Config();
@@ -77,8 +79,6 @@ describe('SearchPageComponent', () => {
     fixture = TestBed.createComponent(SearchPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-
-    const searchService = fixture.debugElement.injector.get(SearchService);
   });
 
   it('should be created', () => {
@@ -137,5 +137,48 @@ describe('SearchPageComponent', () => {
 
     displaySearchButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-display-search-button');
     expect(displaySearchButton.length).toEqual(0);
+  });
+
+  it('should show the facets panel and the toggle button if facets are active and a facet exitst in config', () => {
+    pageConfig.facetsConfig.active = true;
+    pageConfig.facetsConfig.facets = new Map<string, FacetConfig>();
+    pageConfig.facetsConfig.facets.set('myFacet', {
+        key: 'metadata.mybooleanfield',
+        label: 'My boolean',
+        order: 'asc',
+        size: 3,
+        maxSize: 50,
+        dataApiValueType: '',
+        dataApiLabelPath: ''
+    });
+
+    fixture = TestBed.createComponent(SearchPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.isToggleLeftPanelButtonVisible).toBeTrue();
+    expect(component.isLeftPanelVisible).toBeTrue();
+  });
+
+  it('should hide the facets panel and the toggle button if facets are not active in config', () => {
+    pageConfig.facetsConfig.active = false;
+    fixture = TestBed.createComponent(SearchPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.isLeftPanelVisible).toBeFalse();
+    expect(component.isToggleLeftPanelButtonVisible).toBeFalse();
+  });
+
+  it('should hide the facets panel and the toggle button if facets are active but there are no facets in config', () => {
+    pageConfig.facetsConfig.active = true;
+    pageConfig.facetsConfig.facets = new Map<string, FacetConfig>();
+
+    fixture = TestBed.createComponent(SearchPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.isLeftPanelVisible).toBeFalse();
+    expect(component.isToggleLeftPanelButtonVisible).toBeFalse();
   });
 });
