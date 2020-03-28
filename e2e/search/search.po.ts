@@ -195,6 +195,7 @@ export class SearchPage {
     return browser.wait(checkFunc());
   }
 
+
   /**
    * Sorts results by the column header with the text specified.
    * @param headerText The text of the column to sort the results by.
