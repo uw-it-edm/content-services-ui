@@ -12,7 +12,7 @@ import { NotificationService } from '../../shared/providers/notification.service
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { ContentService } from '../../content/shared/content.service';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
-import { switchMap, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-display-search-page',
@@ -92,7 +92,11 @@ export class DisplaySearchPageComponent implements OnInit, OnDestroy, AfterViewI
       this.searchSubscription.unsubscribe();
     }
     this.searchSubscription = this.searchModel$
-      .pipe(switchMap(searchModel => this.searchService.search(searchModel, this.pageConfig)))
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        switchMap(searchModel => this.searchService.search(searchModel, this.pageConfig))
+      )
       .subscribe(
         (searchResults: SearchResults) => {
           /* we are not sending the search results observable

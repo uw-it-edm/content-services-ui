@@ -1,6 +1,6 @@
-import { catchError, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { SearchModel } from './model/search-model';
 
 import { SearchResults } from './model/search-result';
