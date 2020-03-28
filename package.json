@@ -17,7 +17,7 @@
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "lint": "ng lint content-services-ui --type-check",
     "e2e": "ng e2e",
-    "e2e-local": "$npm_execpath mock-services && ng e2e --protractor-config=protractor.conf.local.js --configuration=travis ; testStatus=$? ; yarn stop-mock-services ; exit $testStatus",
+    "e2e-local": "$npm_execpath mock-services && node --max_old_space_size=4096 'node_modules/@angular/cli/bin/ng' e2e --protractor-config=protractor.conf.local.js --configuration=travis ; testStatus=$? ; yarn stop-mock-services ; exit $testStatus",
     "validate": "npm-run-all --parallel test lint",
     "pretty": "prettier --parser typescript --single-quote --print-width=120 --write",
     "mock-services": "$npm_execpath start-mock-services",

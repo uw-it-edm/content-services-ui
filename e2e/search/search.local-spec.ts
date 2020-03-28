@@ -140,14 +140,17 @@ describe('Search Page', () => {
   it('should produce sharable search parameters in url when search is performed', () => {
     const expectedFacetText = 'Type 1';
     page.clickFacetLink(0);
-    expect(page.selectedFacet.getText()).toMatch(new RegExp(expectedFacetText));
+    expect(page.selectedFacet.getText()).toMatch(new RegExp(expectedFacetText), 'Initial facet text invalid');
 
     // Open sharable url in another browser
     browser.getCurrentUrl().then(sharableUrl => {
       browser.restart().then(() => {
         browser.get(sharableUrl);
         const page2: SearchPage = new SearchPage();
-        expect(page2.selectedFacet.getText()).toMatch(new RegExp(expectedFacetText));
+        expect(page2.selectedFacet.getText()).toMatch(
+          new RegExp(expectedFacetText),
+          'Facet text from shared url is invalid'
+        );
       });
     });
   });
