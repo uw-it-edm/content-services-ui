@@ -15,9 +15,6 @@ before_install:
 
 jobs:
   include:
-    - stage: dev
-      script: yarn lint-staged
-      env: job=yarn lint-staged
     - stage: test
       script: yarn run test-cover
       env:
