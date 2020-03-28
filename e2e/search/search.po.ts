@@ -101,10 +101,7 @@ export class SearchPage {
   }
 
   clickFacetLink(facetIndex: number) {
-    element
-      .all(this.facetItemsLocator)
-      .get(facetIndex)
-      .click();
+    element.all(this.facetItemsLocator).get(facetIndex).click();
   }
 
   getFacetText(facetIndex: number) {
@@ -176,11 +173,7 @@ export class SearchPage {
    * @param expectedText The expected text of the first row of column.
    * @param timeoutMilliseconds Timeout in milliseconds to wait for.
    */
-  waitForFirstRowValue(
-    columnId: string,
-    expectedText: string,
-    timeoutMilliseconds: number = 5000
-  ): promise.Promise<any> {
+  waitForFirstRowValue(columnId: string, expectedText: string, timeoutMilliseconds: number = 5000): promise.Promise<any> {
     return this.waitForFunc(
       () => this.getResultsByColumn(columnId),
       rows => rows && rows.length > 0 && rows[0].trim() === expectedText,
@@ -188,16 +181,11 @@ export class SearchPage {
     ).then(() => expect(this.getDistinctResultsByColumn(columnId).then(rows => rows[0])).toEqual(expectedText));
   }
 
-  private waitForFunc<T>(
-    testFunc: () => promise.Promise<T>,
-    predicate: (val: T) => boolean,
-    timeoutMilliseconds: number = 5000
-  ): promise.Promise<any> {
+  private waitForFunc<T>(testFunc: () => promise.Promise<T>, predicate: (val: T) => boolean, timeoutMilliseconds: number = 5000): promise.Promise<any> {
     const startTime = new Date();
 
     const checkFunc = () => {
-      return () =>
-        testFunc().then(currentVal => {
+      return () => testFunc().then(currentVal => {
           const currentTime = new Date();
           const timeDiff = <any>currentTime - <any>startTime;
           return timeDiff >= timeoutMilliseconds || predicate(currentVal);
