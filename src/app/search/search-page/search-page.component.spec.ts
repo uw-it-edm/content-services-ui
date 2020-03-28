@@ -22,6 +22,7 @@ import { StudentService } from '../../shared/providers/student.service';
 import { NotificationService } from '../../shared/providers/notification.service';
 import { PersonService } from '../../shared/providers/person.service';
 import { FacetConfig } from '../../core/shared/model/facet-config';
+import Spy = jasmine.Spy;
 
 let studentService: StudentService;
 let dataService: DataService;
@@ -57,7 +58,6 @@ describe('SearchPageComponent', () => {
         { provide: SearchService, useValue: searchServiceSpy },
         { provide: DataService, useValue: dataService },
         { provide: StudentService, useValue: studentService },
-        { provide: PersonService, useValue: {} },
         { provide: PersonService, useValue: {} },
         Title,
         NotificationService
@@ -191,10 +191,9 @@ describe('SearchPageComponent', () => {
     const LongerThanSearchDebounceTime = 200;
 
     let theSearchService: SearchService;
-    let searchSpy;
-    let searchModel: SearchModel;
-    let theNotificationService;
-    let notificationErrorSpy;
+    let searchSpy: Spy;
+    let theNotificationService: NotificationService;
+    let notificationErrorSpy: Spy;
 
     beforeEach(() => {
       component.searchDebounceTime = 1;
@@ -203,8 +202,6 @@ describe('SearchPageComponent', () => {
 
       searchSpy = spyOn(theSearchService, 'search').and.callThrough();
       notificationErrorSpy = spyOn(theNotificationService, 'error').and.stub();
-
-      searchModel = new SearchModel();
     });
 
     it('should inject search & notification services', () => {
@@ -224,7 +221,7 @@ describe('SearchPageComponent', () => {
       component.ngOnInit();
       tick(LongerThanSearchDebounceTime);
 
-      component.onSearch(searchModel);
+      component.onSearch(new SearchModel());
       tick(LongerThanSearchDebounceTime);
       expect(searchSpy).toHaveBeenCalledTimes(2);
     }));
@@ -234,6 +231,7 @@ describe('SearchPageComponent', () => {
       tick(LongerThanSearchDebounceTime);
 
       // Should notify error
+      const searchModel = new SearchModel();
       searchModel.stringQuery = 'ThrowError';
       component.onSearch(searchModel);
       tick(LongerThanSearchDebounceTime);

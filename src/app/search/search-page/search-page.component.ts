@@ -165,7 +165,6 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   navigateToDisplaySearchPage() {
     console.log('go to display page');
     const queryParams: Params = Object.assign({}, this.activatedRoute.snapshot.queryParams);
-    // queryParams['s'] = JSON.stringify(this.searchModel$.value);
     queryParams['s'] = JSON.stringify(this.searchModel$);
 
     this.router.navigate(['display-search'], { relativeTo: this.activatedRoute, queryParams: queryParams });
