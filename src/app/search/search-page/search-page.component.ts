@@ -1,5 +1,5 @@
 import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Config } from '../../core/shared/model/config';
@@ -53,7 +53,8 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router,
     private studentService: StudentService,
     private notificationService: NotificationService,
-    private liveAnnouncer: LiveAnnouncer
+    private liveAnnouncer: LiveAnnouncer,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     console.log('init generic page component');
     if (this.activatedRoute.snapshot.queryParams != null) {
@@ -78,6 +79,7 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       // initialSearchModel should set after all components load, so that they will be subscribed to the searchModel$
       this.searchModel$.next(this.initialSearchModel);
+      this.changeDetectorRef.detectChanges();
     }
   }
 
