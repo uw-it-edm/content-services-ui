@@ -5,7 +5,7 @@ import { Title } from '@angular/platform-browser';
 import { SearchModel } from '../shared/model/search-model';
 import { SearchResults } from '../shared/model/search-result';
 import { SearchService } from '../shared/search.service';
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { DataService } from '../../shared/providers/data.service';
 import { Sort } from '../shared/model/sort';
 import { NotificationService } from '../../shared/providers/notification.service';
