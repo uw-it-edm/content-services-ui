@@ -29,7 +29,7 @@ class MockStudentSearchAutocomplete extends StudentSearchAutocomplete {
   }
 }
 
-fdescribe('SearchBoxComponent', () => {
+describe('SearchBoxComponent', () => {
   let component: SearchBoxComponent;
   let fixture: ComponentFixture<SearchBoxComponent>;
 
@@ -62,6 +62,7 @@ fdescribe('SearchBoxComponent', () => {
   }));
 
   it('should autocomplete', fakeAsync(() => {
+    component.ngOnInit();
     tick(1);
     component.searchBoxUpdated();
     fixture.detectChanges();
