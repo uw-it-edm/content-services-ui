@@ -29,7 +29,7 @@ class MockStudentSearchAutocomplete extends StudentSearchAutocomplete {
   }
 }
 
-describe('SearchBoxComponent', () => {
+fdescribe('SearchBoxComponent', () => {
   let component: SearchBoxComponent;
   let fixture: ComponentFixture<SearchBoxComponent>;
 
@@ -55,10 +55,14 @@ describe('SearchBoxComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have an initialized searchModel ', () => {
+  it('should have an initialized searchModel ', fakeAsync(() => {
+    component.ngOnInit();
+    tick(1);
     expect(component.searchModel.stringQuery).toBe('iSearch');
-  });
+  }));
+
   it('should autocomplete', fakeAsync(() => {
+    tick(1);
     component.searchBoxUpdated();
     fixture.detectChanges();
     tick(4000);
