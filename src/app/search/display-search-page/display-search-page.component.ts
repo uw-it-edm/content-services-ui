@@ -22,6 +22,7 @@ import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/o
 export class DisplaySearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   private searchSubscription: Subscription;
   private componentDestroyed = new Subject();
+  searchDebounceTime = 400;
   config: Config;
   pageConfig: SearchPageConfig;
   page: string;
@@ -97,7 +98,7 @@ export class DisplaySearchPageComponent implements OnInit, OnDestroy, AfterViewI
     }
     this.searchSubscription = this.searchModel$
       .pipe(
-        debounceTime(400),
+        debounceTime(this.searchDebounceTime),
         distinctUntilChanged(),
         switchMap(searchModel => this.searchService.search(searchModel, this.pageConfig))
       )

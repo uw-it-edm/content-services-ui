@@ -215,8 +215,9 @@ describe('SearchPageComponent', () => {
       expect(theNotificationService).toBeDefined();
     });
 
-    it('should call searchService onInit', fakeAsync(() => {
+    it('should call searchService AfterViewInit', fakeAsync(() => {
       component.ngOnInit();
+      component.ngAfterViewInit();
       tick(LongerThanSearchDebounceTime);
 
       expect(searchSpy).toHaveBeenCalled();
@@ -225,6 +226,7 @@ describe('SearchPageComponent', () => {
 
     it('should call searchService when searchModel$ changes', fakeAsync(() => {
       component.ngOnInit();
+      component.ngAfterViewInit();
       tick(LongerThanSearchDebounceTime);
 
       component.searchModel$.next(getTestSearchModel('1'));
@@ -235,10 +237,10 @@ describe('SearchPageComponent', () => {
 
     it('should continue to call searchService after a search failure', fakeAsync(() => {
       component.ngOnInit();
+      component.ngAfterViewInit();
       tick(LongerThanSearchDebounceTime);
 
       // Should notify error
-
       component.searchModel$.next(getTestSearchModel('ThrowError'));
       tick(LongerThanSearchDebounceTime);
       expect(searchSpy).toHaveBeenCalledTimes(2);

@@ -42,6 +42,12 @@ class MockSearchService {
   }
 }
 
+function getTestSearchModel(stringQuery: string): SearchModel {
+  const searchModel = new SearchModel();
+  searchModel.stringQuery = stringQuery;
+  return searchModel;
+}
+
 class MockContentService {
   read(itemId: string): Observable<ContentItem> {
     const defaultContentItem = new ContentItem();
@@ -133,7 +139,7 @@ describe('DisplaySearchPageComponent', () => {
   });
 
   describe('should recover from search error', () => {
-    const LongerThanSearchDebounceTime = 500;
+    const LongerThanSearchDebounceTime = 10;
 
     let theSearchService: SearchService;
     let searchSpy: Spy;
@@ -141,6 +147,7 @@ describe('DisplaySearchPageComponent', () => {
     let notificationErrorSpy: Spy;
 
     beforeEach(() => {
+      component.searchDebounceTime = 1;
       theSearchService = TestBed.get(SearchService);
       theNotificationService = TestBed.get(NotificationService);
 
@@ -153,39 +160,38 @@ describe('DisplaySearchPageComponent', () => {
       expect(theNotificationService).toBeDefined();
     });
 
-    it('should call searchService onInit', fakeAsync(() => {
+    it('should call searchService AfterViewInit', fakeAsync(() => {
       component.ngOnInit();
+      component.ngAfterViewInit();
       tick(LongerThanSearchDebounceTime);
 
       expect(searchSpy).toHaveBeenCalled();
       expect(searchSpy).toHaveBeenCalledTimes(1);
     }));
 
-    it('should call searchService onSearch', fakeAsync(() => {
+    it('should call searchService when searchModel$ changes', fakeAsync(() => {
       component.ngOnInit();
+      component.ngAfterViewInit();
       tick(LongerThanSearchDebounceTime);
-      const searchModel = new SearchModel();
-      searchModel.stringQuery = 'test';
-      component.searchModel$.next(searchModel);
+
+      component.searchModel$.next(getTestSearchModel('test'));
       tick(LongerThanSearchDebounceTime);
       expect(searchSpy).toHaveBeenCalledTimes(2);
     }));
 
-    it('should call searchService onSearch failure', fakeAsync(() => {
+    it('should call searchService when searchModel$ changes after error', fakeAsync(() => {
       component.ngOnInit();
+      component.ngAfterViewInit();
       tick(LongerThanSearchDebounceTime);
 
       // Should notify error
-      const searchModel = new SearchModel();
-      searchModel.stringQuery = 'ThrowError';
-      component.searchModel$.next(searchModel);
+      component.searchModel$.next(getTestSearchModel('ThrowError'));
       tick(LongerThanSearchDebounceTime);
       expect(searchSpy).toHaveBeenCalledTimes(2);
       expect(notificationErrorSpy).toHaveBeenCalledTimes(1);
 
       // Search should continue to function after error
-      searchModel.stringQuery = '';
-      component.searchModel$.next(searchModel);
+      component.searchModel$.next(getTestSearchModel('test'));
       tick(LongerThanSearchDebounceTime);
       expect(searchSpy).toHaveBeenCalledTimes(3);
     }));
