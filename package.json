@@ -26,13 +26,10 @@
     "postinstall": "cd ./node_modules/protractor && npm i webdriver-manager@latest"
   },
   "lint-staged": {
-    "linters": {
       "*.ts": [
-        "npm run pretty",
+        "yarn run pretty",
         "git add"
       ]
-    },
-    "relative": true
   },
   "private": true,
   "dependencies": {
@@ -102,7 +99,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "npm run validate"
+      "pre-push": "yarn run validate"
     }
   }
 }
