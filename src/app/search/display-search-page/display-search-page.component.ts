@@ -64,11 +64,9 @@ export class DisplaySearchPageComponent implements OnInit, OnDestroy, AfterViewI
     if (cachedSearch) {
       console.log('got cached search : ' + JSON.stringify(cachedSearch));
       this.searchModel$.next(Object.assign(new SearchModel(), cachedSearch));
-      this.changeDetectorRef.detectChanges();
     } else {
       // initialSearchModel should set after all components load, so that they will be subscribed to the searchModel$
       this.searchModel$.next(this.initialSearchModel);
-      this.changeDetectorRef.detectChanges();
     }
   }
 
