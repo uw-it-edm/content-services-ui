@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Config } from '../../core/shared/model/config';
 import { Title } from '@angular/platform-browser';
@@ -38,7 +38,8 @@ export class DisplaySearchPageComponent implements OnInit, OnDestroy, AfterViewI
     private contentService: ContentService,
     private dataService: DataService,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     this.searchModel$ = new Subject<SearchModel>();
 
@@ -62,6 +63,11 @@ export class DisplaySearchPageComponent implements OnInit, OnDestroy, AfterViewI
     if (cachedSearch) {
       console.log('got cached search : ' + JSON.stringify(cachedSearch));
       this.searchModel$.next(Object.assign(new SearchModel(), cachedSearch));
+      this.changeDetectorRef.detectChanges();
+    } else {
+      // initialSearchModel should set after all components load, so that they will be subscribed to the searchModel$
+      this.searchModel$.next(this.initialSearchModel);
+      this.changeDetectorRef.detectChanges();
     }
   }
 
@@ -82,8 +88,6 @@ export class DisplaySearchPageComponent implements OnInit, OnDestroy, AfterViewI
 
         this.addSearchSubscription();
       });
-
-      this.searchModel$.next(this.initialSearchModel);
     });
   }
 

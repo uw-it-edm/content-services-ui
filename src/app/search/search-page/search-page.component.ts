@@ -76,6 +76,7 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
       // TODO what is this ?
       console.log('got cached search : ' + JSON.stringify(cachedSearch));
       this.searchModel$.next(Object.assign(new SearchModel(), cachedSearch));
+      this.changeDetectorRef.detectChanges();
     } else {
       // initialSearchModel should set after all components load, so that they will be subscribed to the searchModel$
       this.searchModel$.next(this.initialSearchModel);
@@ -165,7 +166,6 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   navigateToDisplaySearchPage() {
     console.log('go to display page');
     const queryParams: Params = Object.assign({}, this.activatedRoute.snapshot.queryParams);
-    queryParams['s'] = JSON.stringify(this.searchModel$);
 
     this.router.navigate(['display-search'], { relativeTo: this.activatedRoute, queryParams: queryParams });
   }
