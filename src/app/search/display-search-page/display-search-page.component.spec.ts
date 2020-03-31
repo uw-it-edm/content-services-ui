@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { MaterialConfigModule } from '../../routing/material-config.module';
 import { ActivatedRoute } from '@angular/router';
@@ -10,7 +10,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { SearchBoxComponent } from '../search-box/search-box.component';
 import { SearchResultsComponent } from '../search-results/search-results.component';
 import { SearchService } from '../shared/search.service';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { SearchResults } from '../shared/model/search-result';
 import { SearchModel } from '../shared/model/search-model';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -24,6 +24,7 @@ import { MatAutocompleteModule, MatDatepickerModule, MatOptionModule } from '@an
 import { ProgressService } from '../../shared/providers/progress.service';
 import { ContentService } from '../../content/shared/content.service';
 import { ContentItem } from '../../content/shared/model/content-item';
+import Spy = jasmine.Spy;
 
 let studentService: StudentService;
 let dataService: DataService;
@@ -33,9 +34,18 @@ let component: DisplaySearchPageComponent;
 let fixture: ComponentFixture<DisplaySearchPageComponent>;
 
 class MockSearchService {
-  search(terms: Observable<SearchModel>, pageConfig: SearchPageConfig): Observable<SearchResults> {
+  search(terms: SearchModel, pageConfig: SearchPageConfig): Observable<SearchResults> {
+    if (terms.stringQuery === 'ThrowError') {
+      return throwError('An Error Occurred');
+    }
     return of(new SearchResults());
   }
+}
+
+function getTestSearchModel(stringQuery: string): SearchModel {
+  const searchModel = new SearchModel();
+  searchModel.stringQuery = stringQuery;
+  return searchModel;
 }
 
 class MockContentService {
@@ -126,5 +136,64 @@ describe('DisplaySearchPageComponent', () => {
   it('should get a page config', () => {
     const app = fixture.debugElement.componentInstance;
     expect(app.pageConfig).toBeDefined();
+  });
+
+  describe('should recover from search error', () => {
+    const LongerThanSearchDebounceTime = 10;
+
+    let theSearchService: SearchService;
+    let searchSpy: Spy;
+    let theNotificationService: NotificationService;
+    let notificationErrorSpy: Spy;
+
+    beforeEach(() => {
+      component.searchDebounceTime = 1;
+      theSearchService = TestBed.get(SearchService);
+      theNotificationService = TestBed.get(NotificationService);
+
+      searchSpy = spyOn(theSearchService, 'search').and.callThrough();
+      notificationErrorSpy = spyOn(theNotificationService, 'error').and.stub();
+    });
+
+    it('should inject search & notification services', () => {
+      expect(theSearchService).toBeDefined();
+      expect(theNotificationService).toBeDefined();
+    });
+
+    it('should call searchService AfterViewInit', fakeAsync(() => {
+      component.ngOnInit();
+      component.ngAfterViewInit();
+      tick(LongerThanSearchDebounceTime);
+
+      expect(searchSpy).toHaveBeenCalled();
+      expect(searchSpy).toHaveBeenCalledTimes(1);
+    }));
+
+    it('should call searchService when searchModel$ changes', fakeAsync(() => {
+      component.ngOnInit();
+      component.ngAfterViewInit();
+      tick(LongerThanSearchDebounceTime);
+
+      component.searchModel$.next(getTestSearchModel('test'));
+      tick(LongerThanSearchDebounceTime);
+      expect(searchSpy).toHaveBeenCalledTimes(2);
+    }));
+
+    it('should call searchService when searchModel$ changes after error', fakeAsync(() => {
+      component.ngOnInit();
+      component.ngAfterViewInit();
+      tick(LongerThanSearchDebounceTime);
+
+      // Should notify error
+      component.searchModel$.next(getTestSearchModel('ThrowError'));
+      tick(LongerThanSearchDebounceTime);
+      expect(searchSpy).toHaveBeenCalledTimes(2);
+      expect(notificationErrorSpy).toHaveBeenCalledTimes(1);
+
+      // Search should continue to function after error
+      component.searchModel$.next(getTestSearchModel('test'));
+      tick(LongerThanSearchDebounceTime);
+      expect(searchSpy).toHaveBeenCalledTimes(3);
+    }));
   });
 });

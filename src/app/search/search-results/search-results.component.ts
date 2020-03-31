@@ -4,13 +4,13 @@ import { SearchResults } from '../shared/model/search-result';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { Observable, Subject } from 'rxjs';
 import { SearchDataSource } from '../shared/model/search-datasource.model';
-import { MatPaginator, MatSort, PageEvent, Sort, SortDirection, MatSortHeaderIntl } from '@angular/material';
+import { MatPaginator, MatSort, MatSortHeaderIntl, PageEvent, Sort, SortDirection } from '@angular/material';
 import { PaginatorConfig } from '../shared/model/paginator-config';
 import { DataService } from '../../shared/providers/data.service';
 import { SearchUtility } from '../shared/search-utility';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { SearchPagination } from '../shared/model/search-pagination';
-import { takeUntil } from 'rxjs/operators';
+import { delay, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { ObjectUtilities } from '../../core/util/object-utilities';
@@ -76,7 +76,8 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
       this.bottomPaginator
     ]);
 
-    this.searchModel$.pipe(takeUntil(this.componentDestroyed)).subscribe(searchModel => {
+    // delay 0 to prevent "Expression has changed after it was checked" when initial search is performed afterViewInit in parent
+    this.searchModel$.pipe(delay(0), takeUntil(this.componentDestroyed)).subscribe(searchModel => {
       this.onSearchModelChanged(searchModel);
     });
 

@@ -140,14 +140,17 @@ describe('Search Page', () => {
   it('should produce sharable search parameters in url when search is performed', () => {
     const expectedFacetText = 'Type 1';
     page.clickFacetLink(0);
-    expect(page.selectedFacet.getText()).toMatch(new RegExp(expectedFacetText));
+    expect(page.selectedFacet.getText()).toMatch(new RegExp(expectedFacetText), 'Initial facet text invalid');
 
     // Open sharable url in another browser
     browser.getCurrentUrl().then(sharableUrl => {
       browser.restart().then(() => {
         browser.get(sharableUrl);
         const page2: SearchPage = new SearchPage();
-        expect(page2.selectedFacet.getText()).toMatch(new RegExp(expectedFacetText));
+        expect(page2.selectedFacet.getText()).toMatch(
+          new RegExp(expectedFacetText),
+          'Facet text from shared url is invalid'
+        );
       });
     });
   });
@@ -358,7 +361,9 @@ describe('Search Page', () => {
     app.clickAppMenuItem(2);
 
     page.waitForFirstRowValue('ProfileId', 'Demo3');
-    expect(page.tableHeaders.getText()).toEqual(['Id'].concat(demo3Config.pages['tab-search'].fieldsToDisplay.map(i => i.label)));
+    expect(page.tableHeaders.getText()).toEqual(
+      ['Id'].concat(demo3Config.pages['tab-search'].fieldsToDisplay.map(i => i.label))
+    );
 
     // Click on facet and paginator.
     page.clickFacetLink(0);
@@ -369,7 +374,9 @@ describe('Search Page', () => {
     app.clickAppMenuItem(1);
 
     page.waitForFirstRowValue('ProfileId', 'Demo');
-    expect(page.tableHeaders.getText()).toEqual(['Id'].concat(demo2Config.pages['tab-search'].fieldsToDisplay.map(i => i.label)));
+    expect(page.tableHeaders.getText()).toEqual(
+      ['Id'].concat(demo2Config.pages['tab-search'].fieldsToDisplay.map(i => i.label))
+    );
 
     // verify facets and paginator got cleared.
     expect(page.selectedFacet.getText()).toEqual([]);
@@ -429,8 +436,8 @@ describe('Search Page', () => {
     page.clickAcceptAlert();
     page.waitForFirstRowValue('ProfileId', 'Demo');
 
-     // Verify facets panel is still collapsed.
-     expect(page.getFacet(0).isDisplayed()).toBeFalsy();
+    // Verify facets panel is still collapsed.
+    expect(page.getFacet(0).isDisplayed()).toBeFalsy();
   });
 
   it('should auto-collapse facets panel when switching profiles that do not have any configured', () => {

@@ -6,7 +6,7 @@ import { SearchFilter } from '../shared/model/search-filter';
 import { MatAutocompleteSelectedEvent } from '@angular/material';
 import { SearchAutocomplete } from '../shared/search-autocomplete/search-autocomplete';
 import { SearchFilterableResult } from '../../shared/shared/model/search-filterable-result';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { debounceTime, delay, takeUntil } from 'rxjs/operators';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 @Component({
@@ -41,7 +41,8 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
     if (this.searchAutocomplete) {
       this.assignAutocompleteListener();
     }
-    this.searchModel$.pipe(takeUntil(this.componentDestroyed)).subscribe(searchModel => {
+    // delay 0 to prevent "Expression has changed after it was checked" when initial search is performed afterViewInit in parent
+    this.searchModel$.pipe(delay(0), takeUntil(this.componentDestroyed)).subscribe(searchModel => {
       console.log('search-box search model updated : ' + this.searchModel.stringQuery);
       this.searchModel = searchModel;
       this.internalSearchField = this.searchModel.stringQuery;
@@ -97,24 +98,19 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
   }
 
   private assignAutocompleteListener() {
-    this.searchBoxEvent
-      .pipe(
-        debounceTime(300),
-        takeUntil(this.componentDestroyed)
-      )
-      .subscribe((model: string) => {
-        if (model) {
-          this.searchAutocomplete
-            .autocomplete(model)
-            .pipe(takeUntil(this.componentDestroyed))
-            .subscribe((results: SearchFilterableResult[]) => {
-              this.filteredOptions = results;
-              this.announceAutocompleteSearchResults();
-            });
-        } else {
-          this.filteredOptions = [];
-        }
-      });
+    this.searchBoxEvent.pipe(debounceTime(300), takeUntil(this.componentDestroyed)).subscribe((model: string) => {
+      if (model) {
+        this.searchAutocomplete
+          .autocomplete(model)
+          .pipe(takeUntil(this.componentDestroyed))
+          .subscribe((results: SearchFilterableResult[]) => {
+            this.filteredOptions = results;
+            this.announceAutocompleteSearchResults();
+          });
+      } else {
+        this.filteredOptions = [];
+      }
+    });
   }
 
   private announceAutocompleteSearchResults() {
