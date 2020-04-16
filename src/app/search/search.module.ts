@@ -4,7 +4,7 @@ import { SearchBoxComponent } from './search-box/search-box.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { SearchService } from './shared/search.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatSortHeaderIntl } from '@angular/material';
+import { MatSortHeaderIntl } from '@angular/material/sort';
 import { MaterialConfigModule } from '../routing/material-config.module';
 import { SharedModule } from '../shared/shared.module';
 import { UserModule } from '../user/user.module';
@@ -21,7 +21,7 @@ import { DocumentDisplayerComponent } from './document-displayer/document-displa
     ReactiveFormsModule,
     MaterialConfigModule,
     NgxDaterangepickerMd.forRoot(),
-    UserModule
+    UserModule,
   ],
   exports: [SearchPageComponent, DisplaySearchPageComponent],
   declarations: [
@@ -31,8 +31,8 @@ import { DocumentDisplayerComponent } from './document-displayer/document-displa
     SearchResultsComponent,
     SearchBoxComponent,
     FacetsBoxComponent,
-    DocumentDisplayerComponent
+    DocumentDisplayerComponent,
   ],
-  providers: [SearchService, MatSortHeaderIntl]
+  providers: [SearchService, MatSortHeaderIntl],
 })
 export class SearchModule {}

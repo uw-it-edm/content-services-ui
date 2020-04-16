@@ -11,7 +11,7 @@ import { Subject } from 'rxjs';
 import { ContentItem } from '../shared/model/content-item';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ContentViewComponent } from '../content-view/content-view.component';
 import { User } from '../../user/shared/user';
 import { DynamicComponentDirective } from '../shared/directive/dynamic-component.directive';

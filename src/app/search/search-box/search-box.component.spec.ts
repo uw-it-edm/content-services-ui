@@ -10,7 +10,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { Student } from '../../shared/shared/model/student';
 import { StudentSearchAutocomplete } from '../shared/search-autocomplete/student-search-autocomplete';
-import { MatAutocompleteSelectedEvent } from '@angular/material';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { SearchFilter } from '../shared/model/search-filter';
 import { SearchPagination } from '../shared/model/search-pagination';
 
@@ -36,7 +36,7 @@ describe('SearchBoxComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [FormsModule, MaterialConfigModule, NoopAnimationsModule],
-      declarations: [SearchBoxComponent]
+      declarations: [SearchBoxComponent],
     }).compileComponents();
   }));
 
@@ -81,9 +81,9 @@ describe('SearchBoxComponent', () => {
     const event: MatAutocompleteSelectedEvent = <MatAutocompleteSelectedEvent>{
       option: {
         value: {
-          value: 'test'
-        }
-      }
+          value: 'test',
+        },
+      },
     };
     component.onSelectFilter(event);
 

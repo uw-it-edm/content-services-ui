@@ -5,7 +5,7 @@ import { UserService } from '../../../user/shared/user.service';
 import { User } from '../../../user/shared/user';
 import { Observable } from 'rxjs';
 import { ConfigResolver } from '../../../routing/shared/config-resolver.service';
-import { MatMenu } from '@angular/material';
+import { MatMenu } from '@angular/material/menu';
 import { TenantConfigInfo } from '../../../core/shared/model/tenant-config-info';
 
 @Component({

@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NotificationOptions, NotificationService } from '../../providers/notification.service';
-import { MatSnackBarModule } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { of, throwError } from 'rxjs';
 import { PersonService } from '../../providers/person.service';
 import { Person } from '../../shared/model/person';
@@ -51,8 +51,8 @@ describe('PersonDisplayComponent', () => {
       declarations: [PersonDisplayComponent],
       providers: [
         { provide: NotificationService, useValue: new NoopNotificationService() },
-        { provide: PersonService, useValue: new MockPersonService() }
-      ]
+        { provide: PersonService, useValue: new MockPersonService() },
+      ],
     }).compileComponents();
   }));
 

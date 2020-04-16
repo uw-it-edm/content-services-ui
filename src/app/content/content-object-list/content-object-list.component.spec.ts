@@ -6,7 +6,9 @@ import { ContentObjectListComponent } from './content-object-list.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Field } from '../../core/shared/model/field';
 import { User } from '../../user/shared/user';
-import { MatButtonModule, MatSnackBar, MatTooltipModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../../user/shared/user.service';
@@ -60,8 +62,8 @@ describe('ContentObjectList', () => {
   config.contentConfig.profile = 'testProfile';
   const formModel = {
     metadata: {
-      1: 'test'
-    }
+      1: 'test',
+    },
   };
   const field = new Field();
   field.key = '1';
@@ -82,7 +84,7 @@ describe('ContentObjectList', () => {
         MatTooltipModule,
         ReactiveFormsModule,
         RouterTestingModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
       ],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },
@@ -92,9 +94,9 @@ describe('ContentObjectList', () => {
         FormBuilder,
         LiveAnnouncer,
         MatSnackBar,
-        NotificationService
+        NotificationService,
       ],
-      declarations: [FileUploadComponent, ContentObjectListComponent, TruncatePipe, FocusDirective]
+      declarations: [FileUploadComponent, ContentObjectListComponent, TruncatePipe, FocusDirective],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ContentObjectListComponent);
@@ -115,8 +117,8 @@ describe('ContentObjectList', () => {
         key: 't',
         label: 't',
         displayType: 'autocomplete',
-        options: [new FieldOption('o1'), new FieldOption('o2'), new FieldOption('o3')]
-      })
+        options: [new FieldOption('o1'), new FieldOption('o2'), new FieldOption('o3')],
+      }),
     ];
     editPageConfig.viewPanel = false;
     config.pages['edit'] = editPageConfig;
@@ -145,7 +147,7 @@ describe('ContentObjectList', () => {
   it('should add the specified metadata overrides when preparing to save', () => {
     const metadataOverrides = [
       { name: 'PublishStatus', value: 'Published' },
-      { name: 'AnotherOnSave', value: 'Value' }
+      { name: 'AnotherOnSave', value: 'Value' },
     ];
     const contentItem = component.prepareItem(sourceItem, fields, formModel, config, user, metadataOverrides);
     expect(contentItem.metadata['PublishStatus']).toBe('Published');
@@ -161,7 +163,7 @@ describe('ContentObjectList', () => {
   });
   it('should add a file to the transaction and select the object', () => {
     const properties = {
-      type: 'application/pdf'
+      type: 'application/pdf',
     };
     const file = new File(['This is a test file'], 'test.pdf', properties);
     const index = component.addFile(file);
@@ -171,7 +173,7 @@ describe('ContentObjectList', () => {
 
   it('should replace a file on a persisted content item', () => {
     const properties = {
-      type: 'application/pdf'
+      type: 'application/pdf',
     };
     const item = new ContentItem();
     item.id = '123';
@@ -191,15 +193,15 @@ describe('ContentObjectList', () => {
   });
   it('should save item', () => {
     const properties = {
-      type: 'application/pdf'
+      type: 'application/pdf',
     };
     const file = new File(['This is a test file'], 'test.pdf', properties);
     const index = component.addFile(file);
     expect(component.contentObjects.length).toBe(1);
     const formData = {
       metadata: {
-        1: 'asdf'
-      }
+        1: 'asdf',
+      },
     };
     const metadataOverrides = new Array<any>();
     const mockContentServiceCreate = spyOn(mockContentService, 'create');
@@ -211,8 +213,8 @@ describe('ContentObjectList', () => {
   it('should emit saving event on save', () => {
     const formData = {
       metadata: {
-        1: 'asdf'
-      }
+        1: 'asdf',
+      },
     };
     const metadataOverrides = new Array<any>();
 

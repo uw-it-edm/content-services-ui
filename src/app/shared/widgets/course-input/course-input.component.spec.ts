@@ -4,7 +4,7 @@ import { Field } from '../../../core/shared/model/field';
 import { CourseConfig } from '../../../core/shared/model/field/course-config';
 import { SharedModule } from '../../shared.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSelectChange } from '@angular/material';
+import { MatSelectChange } from '@angular/material/select';
 import { StudentService } from '../../providers/student.service';
 import { Observable, of } from 'rxjs';
 import { Component } from '@angular/core';
@@ -30,38 +30,38 @@ class MockStudentService extends StudentService {
           Quarter: 'autumn',
           CurriculumAbbreviation: 'PHYS',
           CourseNumber: '101',
-          CourseTitle: 'PHYS SCI INQUIRY I'
+          CourseTitle: 'PHYS SCI INQUIRY I',
         },
         {
           Year: '2019',
           Quarter: 'autumn',
           CurriculumAbbreviation: 'PHYS',
           CourseNumber: '102',
-          CourseTitle: 'PHY SCI INQUIRY I'
+          CourseTitle: 'PHY SCI INQUIRY I',
         },
         {
           Year: '2019',
           Quarter: 'autumn',
           CurriculumAbbreviation: 'PHYS',
           CourseNumber: '103',
-          CourseTitle: 'PHY SCI INQUIRY I'
+          CourseTitle: 'PHY SCI INQUIRY I',
         },
         {
           Year: '2019',
           Quarter: 'autumn',
           CurriculumAbbreviation: 'PHYS',
           CourseNumber: '104',
-          CourseTitle: 'GROUP INQUIRY I'
+          CourseTitle: 'GROUP INQUIRY I',
         },
         {
           Year: '2019',
           Quarter: 'autumn',
           CurriculumAbbreviation: 'PHYS',
           CourseNumber: '105',
-          CourseTitle: 'GROUP INQUIRY II'
-        }
+          CourseTitle: 'GROUP INQUIRY II',
+        },
       ],
-      TotalCount: 153
+      TotalCount: 153,
     };
 
     return of(ret);
@@ -73,9 +73,9 @@ class MockStudentService extends StudentService {
         { Year: '2019', Quarter: 'autumn', CurriculumAbbreviation: 'PHYS', CourseNumber: '101', SectionID: 'A' },
         { Year: '2019', Quarter: 'autumn', CurriculumAbbreviation: 'PHYS', CourseNumber: '102', SectionID: 'A' },
         { Year: '2019', Quarter: 'autumn', CurriculumAbbreviation: 'PHYS', CourseNumber: '102', SectionID: 'B' },
-        { Year: '2019', Quarter: 'autumn', CurriculumAbbreviation: 'PHYS', CourseNumber: '103', SectionID: 'A' }
+        { Year: '2019', Quarter: 'autumn', CurriculumAbbreviation: 'PHYS', CourseNumber: '103', SectionID: 'A' },
       ],
-      TotalCount: 1
+      TotalCount: 1,
     };
 
     return of(ret);
@@ -90,7 +90,7 @@ describe('CourseInputComponent', () => {
     TestBed.configureTestingModule({
       imports: [SharedModule, NoopAnimationsModule],
       declarations: [],
-      providers: [{ provide: StudentService, useValue: new MockStudentService() }]
+      providers: [{ provide: StudentService, useValue: new MockStudentService() }],
     }).compileComponents();
   }));
 
@@ -138,13 +138,10 @@ describe('CourseInputComponent', () => {
 @Component({
   template: `
     <div [formGroup]="formGroup">
-      <app-course-input
-        [formControlName]="'testFormControlName'"
-        [fieldConfig]="field"
-        [id]="'test-custom-input'">
+      <app-course-input [formControlName]="'testFormControlName'" [fieldConfig]="field" [id]="'test-custom-input'">
       </app-course-input>
     </div>
-  `
+  `,
 })
 class TestHostComponent {
   public field: Field;
@@ -154,7 +151,7 @@ class TestHostComponent {
     this.field = new Field();
     this.field.courseConfig = new CourseConfig();
     this.formGroup = new FormGroup({
-      testFormControlName: new FormControl()
+      testFormControlName: new FormControl(),
     });
   }
 }
@@ -168,13 +165,13 @@ describe('CourseInputComponent with host', () => {
     TestBed.configureTestingModule({
       imports: [SharedModule, NoopAnimationsModule, ReactiveFormsModule],
       declarations: [TestHostComponent],
-      providers: [{ provide: StudentService, useValue: new MockStudentService() }]
+      providers: [{ provide: StudentService, useValue: new MockStudentService() }],
     }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TestHostComponent);
-    dropDownElements = fixture.debugElement.queryAll(By.css('mat-select')).map(e => e.nativeElement);
+    dropDownElements = fixture.debugElement.queryAll(By.css('mat-select')).map((e) => e.nativeElement);
 
     const childDebugElement = fixture.debugElement.query(By.directive(CourseInputComponent));
     component = childDebugElement.componentInstance;

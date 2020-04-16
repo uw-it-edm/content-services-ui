@@ -24,15 +24,9 @@ import {
   NgForm,
 } from '@angular/forms';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import {
-  CanUpdateErrorState,
-  ErrorStateMatcher,
-  MatFormFieldControl,
-  MatSelectChange,
-  mixinErrorState,
-  MatOption,
-  MatSelect,
-} from '@angular/material';
+import { CanUpdateErrorState, ErrorStateMatcher, mixinErrorState, MatOption } from '@angular/material/core';
+import { MatFormFieldControl } from '@angular/material/form-field';
+import { MatSelectChange, MatSelect } from '@angular/material/select';
 import { Field } from '../../../core/shared/model/field';
 import { FieldOption } from '../../../core/shared/model/field/field-option';
 import { FocusMonitor } from '@angular/cdk/a11y';

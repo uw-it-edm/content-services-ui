@@ -29,13 +29,9 @@ import { StudentService } from '../../providers/student.service';
 import { StudentSearchResults } from '../../shared/model/student-search-results';
 import { Student } from '../../shared/model/student';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import {
-  CanUpdateErrorState,
-  ErrorStateMatcher,
-  MatAutocompleteTrigger,
-  MatFormFieldControl,
-  mixinErrorState,
-} from '@angular/material';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { CanUpdateErrorState, ErrorStateMatcher, mixinErrorState } from '@angular/material/core';
+import { MatFormFieldControl } from '@angular/material/form-field';
 import { FocusMonitor, LiveAnnouncer } from '@angular/cdk/a11y';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
 import { Person } from '../../shared/model/person';

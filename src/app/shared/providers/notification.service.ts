@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar, MatSnackBarConfig, MatSnackBarVerticalPosition } from '@angular/material';
+import { MatSnackBar, MatSnackBarConfig, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { NotificationComponent } from '../widgets/notification/notification.component';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 
@@ -45,7 +45,7 @@ export class NotificationService {
     config.data = {
       message: message,
       type: type,
-      dismissText: options.dismissText
+      dismissText: options.dismissText,
     };
 
     this.snackBar.openFromComponent(NotificationComponent, config);

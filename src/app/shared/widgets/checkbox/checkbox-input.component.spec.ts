@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CheckboxInputComponent } from './checkbox-input.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatCheckboxChange, MatCheckboxModule } from '@angular/material';
+import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import { Field } from '../../../core/shared/model/field';
 import { CheckboxOptions } from '../../../core/shared/model/field/checkbox-options';
 
@@ -13,7 +13,7 @@ describe('CheckboxInput', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, MatCheckboxModule],
-      declarations: [CheckboxInputComponent]
+      declarations: [CheckboxInputComponent],
     }).compileComponents();
   }));
 
