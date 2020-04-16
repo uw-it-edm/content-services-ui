@@ -26,10 +26,10 @@
     "postinstall": "cd ./node_modules/protractor && npm i webdriver-manager@latest"
   },
   "lint-staged": {
-      "*.ts": [
-        "yarn run pretty",
-        "git add"
-      ]
+    "*.ts": [
+      "yarn run pretty",
+      "git add"
+    ]
   },
   "private": true,
   "dependencies": {
@@ -40,7 +40,6 @@
     "@angular/core": "^7.2.7",
     "@angular/flex-layout": "^7.0.0-beta.24",
     "@angular/forms": "^7.2.7",
-    "@angular/http": "^7.2.7",
     "@angular/material": "^7.3.3",
     "@angular/platform-browser": "^7.2.7",
     "@angular/platform-browser-dynamic": "^7.2.7",
