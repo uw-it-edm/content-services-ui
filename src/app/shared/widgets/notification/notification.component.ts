@@ -5,13 +5,13 @@ import { isNullOrUndefined } from '../../../core/util/node-utilities';
 @Component({
   selector: 'app-notification',
   templateUrl: './notification.component.html',
-  styleUrls: ['./notification.component.css']
+  styleUrls: ['./notification.component.css'],
 })
 export class NotificationComponent implements AfterViewInit {
   message: string;
   type: string; // error, warning, info
   dismissText: string;
-  @ViewChild('dismissNotificationButton') dismissNotificationButton;
+  @ViewChild('dismissNotificationButton', { static: true }) dismissNotificationButton;
 
   constructor(public snackBarRef: MatSnackBarRef<NotificationComponent>, @Inject(MAT_SNACK_BAR_DATA) public data: any) {
     if (!isNullOrUndefined(data)) {

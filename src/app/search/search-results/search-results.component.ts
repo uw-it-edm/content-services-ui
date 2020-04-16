@@ -19,7 +19,7 @@ import { Field, isFieldRightAligned } from '../../core/shared/model/field';
 @Component({
   selector: 'app-search-results',
   templateUrl: './search-results.component.html',
-  styleUrls: ['./search-results.component.css']
+  styleUrls: ['./search-results.component.css'],
 })
 export class SearchResultsComponent implements OnInit, OnDestroy {
   private componentDestroyed = new Subject();
@@ -55,11 +55,11 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     return this._pageConfig;
   }
 
-  @ViewChild(MatPaginator)
+  @ViewChild(MatPaginator, { static: true })
   topPaginator: MatPaginator;
-  @ViewChild(MatPaginator)
+  @ViewChild(MatPaginator, { static: true })
   bottomPaginator: MatPaginator;
-  @ViewChild(MatSort)
+  @ViewChild(MatSort, { static: true })
   sort: MatSort = new MatSort();
 
   constructor(
@@ -73,15 +73,15 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.dataSource = new SearchDataSource(this.searchModel$, this.searchResults$, this.sort, [
       this.topPaginator,
-      this.bottomPaginator
+      this.bottomPaginator,
     ]);
 
     // delay 0 to prevent "Expression has changed after it was checked" when initial search is performed afterViewInit in parent
-    this.searchModel$.pipe(delay(0), takeUntil(this.componentDestroyed)).subscribe(searchModel => {
+    this.searchModel$.pipe(delay(0), takeUntil(this.componentDestroyed)).subscribe((searchModel) => {
       this.onSearchModelChanged(searchModel);
     });
 
-    this.searchResults$.pipe(takeUntil(this.componentDestroyed)).subscribe(results => {
+    this.searchResults$.pipe(takeUntil(this.componentDestroyed)).subscribe((results) => {
       this.onSearchResultsChanged(results);
     });
 
@@ -114,7 +114,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     console.log(searchResultsUpdatedMessage);
     this.liveAnnouncer.announce(searchResultsUpdatedMessage, 'assertive');
 
-    const adjacentIds = results.results.map(result => result['id']); // store a list of result ids to be passed to edit page
+    const adjacentIds = results.results.map((result) => result['id']); // store a list of result ids to be passed to edit page
     this.data.set('adjacentIds', adjacentIds);
   }
 
@@ -177,7 +177,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
       fieldLabelMap[field.key] = field.label;
     }
 
-    this.matSortService.sortButtonLabel = id => {
+    this.matSortService.sortButtonLabel = (id) => {
       const label = fieldLabelMap[id] || id;
 
       return `Change sorting for ${label}`;

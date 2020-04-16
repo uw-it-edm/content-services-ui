@@ -11,7 +11,7 @@ import {
   OnDestroy,
   Optional,
   Self,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import {
@@ -22,7 +22,7 @@ import {
   FormGroup,
   FormGroupDirective,
   NgControl,
-  NgForm
+  NgForm,
 } from '@angular/forms';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
@@ -30,7 +30,7 @@ import {
   ErrorStateMatcher,
   MatAutocompleteTrigger,
   MatFormFieldControl,
-  mixinErrorState
+  mixinErrorState,
 } from '@angular/material';
 import { FocusMonitor, LiveAnnouncer } from '@angular/cdk/a11y';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
@@ -74,15 +74,15 @@ export function RequirePersonMatch(control: AbstractControl) {
   host: {
     '[attr.aria-required]': 'required.toString()',
     '[attr.aria-disabled]': 'disabled.toString()',
-    '[attr.aria-invalid]': 'errorState'
+    '[attr.aria-invalid]': 'errorState',
   },
   providers: [
     {
       provide: MatFormFieldControl,
-      useExisting: PersonAutocompleteComponent
+      useExisting: PersonAutocompleteComponent,
     },
-    ErrorStateMatcher
-  ]
+    ErrorStateMatcher,
+  ],
 })
 export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBase
   implements
@@ -128,7 +128,7 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
   filteredOptions: Person[] = [];
   initialized = false;
 
-  @ViewChild(MatAutocompleteTrigger) trigger;
+  @ViewChild(MatAutocompleteTrigger, { static: true }) trigger;
 
   private initComponent() {
     this.initInternalForm();
@@ -142,13 +142,13 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
     // This will listen to every INTERNAL_FIELD_NAME value changes where the content is a non empty string.
     this.formGroup.controls[INTERNAL_FIELD_NAME].valueChanges
       .pipe(
-        filter(term => {
+        filter((term) => {
           return typeof term === 'string';
         }),
         tap(() => (this.isLoading = true)),
         debounceTime(300),
-        tap(term => console.log('searching for ' + term)),
-        tap(term => {
+        tap((term) => console.log('searching for ' + term)),
+        tap((term) => {
           if (term === '') {
             // user is probably trying to empty the field
             if (!this.formGroup.controls[INTERNAL_FIELD_NAME].pristine) {
@@ -156,7 +156,7 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
             }
           }
         }),
-        switchMap(term => this.personService.autocomplete(term)),
+        switchMap((term) => this.personService.autocomplete(term)),
         takeUntil(this.componentDestroyed)
       )
       .subscribe((searchResults: PersonSearchResults) => {

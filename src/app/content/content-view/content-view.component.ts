@@ -11,7 +11,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'app-content-view',
   templateUrl: './content-view.component.html',
-  styleUrls: ['./content-view.component.css']
+  styleUrls: ['./content-view.component.css'],
 })
 export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   private componentDestroyed = new Subject();
@@ -46,9 +46,9 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
     private sanitizer: DomSanitizer
   ) {}
 
-  @ViewChild(ContentToolbarComponent)
+  @ViewChild(ContentToolbarComponent, { static: false })
   contentToolbarComponent;
-  @ViewChild(PdfViewerComponent)
+  @ViewChild(PdfViewerComponent, { static: false })
   pdfViewer: PdfViewerComponent;
 
   ngOnInit() {
