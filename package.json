@@ -23,7 +23,7 @@
     "mock-services": "$npm_execpath start-mock-services",
     "start-mock-services": "docker container inspect content-services-api-e2e-mock || (docker build -q -t content-services-api-e2e-mock ./e2e/mocks && docker run --name content-services-api-e2e-mock --rm -d -p 12345:80 -v ${PWD}/e2e/mocks:/usr/share/nginx/html/ content-services-api-e2e-mock)",
     "stop-mock-services": "docker stop content-services-api-e2e-mock",
-    "postinstall": "cd ./node_modules/protractor && npm i webdriver-manager@latest"
+    "postinstall": "cd ./node_modules/protractor && npm i webdriver-manager@latest && webdriver-manager update"
   },
   "lint-staged": {
     "*.ts": [
