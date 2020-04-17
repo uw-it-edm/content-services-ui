@@ -5,7 +5,7 @@ import { EditPage } from '../edit/edit.po';
 export class SearchPage {
   autoCompletePanel = element(by.className('mat-autocomplete-panel'));
   autoCompletedOption = this.autoCompletePanel.element(by.css('.mat-option-text'));
-  pageUrl = `${browser.baseUrl}/${this.profile}/tab-search`;
+  pageUrl = `${browser.baseUrl}${this.profile}/tab-search`;
   selectedFacet = element.all(by.className('mat-chip'));
   idColumnHeaderButton = element(by.buttonText('Id'));
   dateRangeInput = element(by.css('.cs-search-daterange-picker input'));
@@ -60,8 +60,8 @@ export class SearchPage {
   }
 
   isSortIndicatorDesc() {
-    return element.all(by.className('mat-sort-header-indicator')).each(sortIndicator => {
-      sortIndicator.getAttribute('style').then(attr => {
+    return element.all(by.className('mat-sort-header-indicator')).each((sortIndicator) => {
+      sortIndicator.getAttribute('style').then((attr) => {
         return attr === 'transform: translateY(10px)';
       });
     });
@@ -79,20 +79,17 @@ export class SearchPage {
   }
 
   getDistinctResultsByColumn(column: string): promise.Promise<string[]> {
-    return this.getResultsByColumn(column).then(results => {
+    return this.getResultsByColumn(column).then((results) => {
       return Array.from(new Set(results));
     });
   }
 
   removeSelectedFacet(facetIndex: number = 0) {
-    this.selectedFacet
-      .get(facetIndex)
-      .element(by.className('mat-icon-button'))
-      .click();
+    this.selectedFacet.get(facetIndex).element(by.className('mat-icon-button')).click();
   }
 
   goToEditPage(profile: string, editPageTitle: string, idRowIndex: number = 0) {
-    this.getResultsByColumn('id').then(ids => {
+    this.getResultsByColumn('id').then((ids) => {
       this.clickPartialLinkText(ids[idRowIndex]);
       browser.wait(ExpectedConditions.titleIs(editPageTitle));
       const editPage = new EditPage(profile, ids[idRowIndex]);
@@ -105,7 +102,7 @@ export class SearchPage {
   }
 
   getFacetText(facetIndex: number) {
-    return element.all(this.facetItemsLocator).then(items => {
+    return element.all(this.facetItemsLocator).then((items) => {
       return items[facetIndex].getText();
     });
   }
@@ -123,15 +120,11 @@ export class SearchPage {
   }
 
   getFacetItems(facetHeaderIndex: number, facetItemIndex: number) {
-    return this.getFacet(facetHeaderIndex)
-      .all(this.facetItemsLocator)
-      .get(facetItemIndex);
+    return this.getFacet(facetHeaderIndex).all(this.facetItemsLocator).get(facetItemIndex);
   }
 
   getFacetItemLinks(facetHeaderIndex: number) {
-    return this.getFacet(facetHeaderIndex)
-      .all(this.facetItemsLocator)
-      .all(by.tagName('a'));
+    return this.getFacet(facetHeaderIndex).all(this.facetItemsLocator).all(by.tagName('a'));
   }
 
   getFacetItemLinksTexts(facetHeaderIndex: number) {
@@ -143,10 +136,7 @@ export class SearchPage {
   }
 
   mouseOver(webElement: WebElement) {
-    browser
-      .actions()
-      .mouseMove(webElement)
-      .perform();
+    browser.actions().mouseMove(webElement).perform();
   }
 
   getResultColumnsPaddingSizes() {
@@ -162,7 +152,7 @@ export class SearchPage {
   waitForLiveAnnouncerText(expectedSubText: string, timeoutMilliseconds: number = 5000): promise.Promise<any> {
     return this.waitForFunc(
       this.liveAnnouncer.getText,
-      val => val.indexOf(expectedSubText) >= 0,
+      (val) => val.indexOf(expectedSubText) >= 0,
       timeoutMilliseconds
     ).then(() => expect(this.liveAnnouncer.getText()).toContain(expectedSubText));
   }
@@ -173,19 +163,28 @@ export class SearchPage {
    * @param expectedText The expected text of the first row of column.
    * @param timeoutMilliseconds Timeout in milliseconds to wait for.
    */
-  waitForFirstRowValue(columnId: string, expectedText: string, timeoutMilliseconds: number = 5000): promise.Promise<any> {
+  waitForFirstRowValue(
+    columnId: string,
+    expectedText: string,
+    timeoutMilliseconds: number = 5000
+  ): promise.Promise<any> {
     return this.waitForFunc(
       () => this.getResultsByColumn(columnId),
-      rows => rows && rows.length > 0 && rows[0].trim() === expectedText,
+      (rows) => rows && rows.length > 0 && rows[0].trim() === expectedText,
       timeoutMilliseconds
-    ).then(() => expect(this.getDistinctResultsByColumn(columnId).then(rows => rows[0])).toEqual(expectedText));
+    ).then(() => expect(this.getDistinctResultsByColumn(columnId).then((rows) => rows[0])).toEqual(expectedText));
   }
 
-  private waitForFunc<T>(testFunc: () => promise.Promise<T>, predicate: (val: T) => boolean, timeoutMilliseconds: number = 5000): promise.Promise<any> {
+  private waitForFunc<T>(
+    testFunc: () => promise.Promise<T>,
+    predicate: (val: T) => boolean,
+    timeoutMilliseconds: number = 5000
+  ): promise.Promise<any> {
     const startTime = new Date();
 
     const checkFunc = () => {
-      return () => testFunc().then(currentVal => {
+      return () =>
+        testFunc().then((currentVal) => {
           const currentTime = new Date();
           const timeDiff = <any>currentTime - <any>startTime;
           return timeDiff >= timeoutMilliseconds || predicate(currentVal);
@@ -194,7 +193,6 @@ export class SearchPage {
 
     return browser.wait(checkFunc());
   }
-
 
   /**
    * Sorts results by the column header with the text specified.
@@ -206,10 +204,7 @@ export class SearchPage {
   }
 
   clickPaginatorSizeOption(size: string) {
-    element
-      .all(by.cssContainingText('.mat-option-text', size))
-      .get(0)
-      .click();
+    element.all(by.cssContainingText('.mat-option-text', size)).get(0).click();
     const selectPanel = element(by.className('mat-select-panel'));
     browser.wait(ExpectedConditions.invisibilityOf(selectPanel), 5000);
   }
@@ -218,7 +213,7 @@ export class SearchPage {
     browser
       .switchTo()
       .alert()
-      .then(alert => {
+      .then((alert) => {
         if (isAlertUnexpected) {
           console.log('WARN: Unexpected alert left open from previous test. ');
         }
