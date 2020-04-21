@@ -15,8 +15,8 @@ describe('Search Page', () => {
   const demo3Config = require('../mocks/profile-api/demo3.json');
   const searchData = require('../mocks/search-api/search.json');
 
-  const selectAndVerifyDateRange = function(dateRangeText = 'Today') {
-    const getExpectedDateRange = function(range: string = 'Today'): string {
+  const selectAndVerifyDateRange = function (dateRangeText = 'Today') {
+    const getExpectedDateRange = function (range: string = 'Today'): string {
       let startDate;
       let endDate;
 
@@ -42,12 +42,8 @@ describe('Search Page', () => {
           endDate = moment().endOf('month');
           break;
         case 'Last Month':
-          startDate = moment()
-            .subtract(1, 'month')
-            .startOf('month');
-          endDate = moment()
-            .subtract(1, 'month')
-            .endOf('month');
+          startDate = moment().subtract(1, 'month').startOf('month');
+          endDate = moment().subtract(1, 'month').endOf('month');
           break;
       }
 
@@ -128,7 +124,7 @@ describe('Search Page', () => {
   it('should navigate to Upload page when upload button is clicked', () => {
     page.clickUploadButton();
 
-    const actualUrl = browser.getCurrentUrl().then(url => {
+    const actualUrl = browser.getCurrentUrl().then((url) => {
       return url.toLowerCase();
     });
 
@@ -143,7 +139,7 @@ describe('Search Page', () => {
     expect(page.selectedFacet.getText()).toMatch(new RegExp(expectedFacetText), 'Initial facet text invalid');
 
     // Open sharable url in another browser
-    browser.getCurrentUrl().then(sharableUrl => {
+    browser.getCurrentUrl().then((sharableUrl) => {
       browser.restart().then(() => {
         browser.get(sharableUrl);
         const page2: SearchPage = new SearchPage();
@@ -253,7 +249,7 @@ describe('Search Page', () => {
     page
       .getFacetItemLinks(3)
       .getText()
-      .then(actualBooleanLabels => {
+      .then((actualBooleanLabels) => {
         const booleanLabels = actualBooleanLabels.toString().split(',');
         expect(booleanLabels[0]).toContain(booleanCustomizedText0);
         expect(booleanLabels[1]).toContain(booleanCustomizedText1);
@@ -311,7 +307,7 @@ describe('Search Page', () => {
 
   it('should display results column with fixed padding', () => {
     const expectedPaddingSize = '10px';
-    page.getResultColumnsPaddingSizes().then(paddingSizes => {
+    page.getResultColumnsPaddingSizes().then((paddingSizes) => {
       for (const size of paddingSizes) {
         expect(size).toEqual(expectedPaddingSize);
       }
@@ -328,13 +324,13 @@ describe('Search Page', () => {
     const totalResults = searchData.totalCount;
     const newStartPage = selectedSize + 1;
     const newEndPage = selectedSize * 2;
-    let expectedPaginatorText = `${newStartPage} - ${newEndPage} of ${totalResults}`;
+    let expectedPaginatorText = `${newStartPage} – ${newEndPage} of ${totalResults}`;
     expect(page.paginatorCounts.get(0).getText()).toEqual(expectedPaginatorText);
 
     page.searchButton.click();
 
     expect(page.paginatorSizeDropDowns.get(0).getText()).toEqual(selectedSize.toString());
-    expectedPaginatorText = `1 - ${selectedSize} of ${totalResults}`;
+    expectedPaginatorText = `1 – ${selectedSize} of ${totalResults}`;
     expect(page.paginatorCounts.get(0).getText()).toEqual(expectedPaginatorText);
   });
 
@@ -362,7 +358,7 @@ describe('Search Page', () => {
 
     page.waitForFirstRowValue('ProfileId', 'Demo3');
     expect(page.tableHeaders.getText()).toEqual(
-      ['Id'].concat(demo3Config.pages['tab-search'].fieldsToDisplay.map(i => i.label))
+      ['Id'].concat(demo3Config.pages['tab-search'].fieldsToDisplay.map((i) => i.label))
     );
 
     // Click on facet and paginator.
@@ -375,12 +371,12 @@ describe('Search Page', () => {
 
     page.waitForFirstRowValue('ProfileId', 'Demo');
     expect(page.tableHeaders.getText()).toEqual(
-      ['Id'].concat(demo2Config.pages['tab-search'].fieldsToDisplay.map(i => i.label))
+      ['Id'].concat(demo2Config.pages['tab-search'].fieldsToDisplay.map((i) => i.label))
     );
 
     // verify facets and paginator got cleared.
     expect(page.selectedFacet.getText()).toEqual([]);
-    expect(page.paginatorCounts.get(0).getText()).toContain('1 - ');
+    expect(page.paginatorCounts.get(0).getText()).toContain('1 – ');
   });
 
   it('should toggle visibility of facets panel when clicking the hide/show button', () => {
@@ -429,7 +425,7 @@ describe('Search Page', () => {
 
     // Click on 'Upload' button to go upload page.
     page.clickUploadButton();
-    expect(browser.getCurrentUrl().then(url => url.toLowerCase())).toBe(createPage.pageUrl.toLowerCase());
+    expect(browser.getCurrentUrl().then((url) => url.toLowerCase())).toBe(createPage.pageUrl.toLowerCase());
 
     // Click on 'Back' button return to search page.
     createPage.clickReturnToResultsButton();

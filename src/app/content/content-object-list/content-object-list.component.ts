@@ -8,7 +8,7 @@ import { Field } from '../../core/shared/model/field';
 import { Config } from '../../core/shared/model/config';
 import { User } from '../../user/shared/user';
 import { Subject } from 'rxjs';
-import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
+import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../user/shared/user.service';
 import { NotificationService } from '../../shared/providers/notification.service';
@@ -17,7 +17,7 @@ import { CustomTextUtilities } from '../../shared/directives/custom-text/custom-
 @Component({
   selector: 'app-content-object-list',
   templateUrl: './content-object-list.component.html',
-  styleUrls: ['./content-object-list.component.css']
+  styleUrls: ['./content-object-list.component.css'],
 })
 export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy {
   private componentDestroyed = new Subject();
@@ -54,7 +54,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
     this.user = this.userService.getUser();
     this.uploadAnotherCtrl = this.formGroup && this.formGroup.controls['uploadAnother'];
 
-    this.route.paramMap.pipe(takeUntil(this.componentDestroyed)).subscribe(params => {
+    this.route.paramMap.pipe(takeUntil(this.componentDestroyed)).subscribe((params) => {
       this.route.data.pipe(takeUntil(this.componentDestroyed)).subscribe((data: { config: Config }) => {
         this.config = data.config;
       });
@@ -158,12 +158,12 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
     metadataOverrides?: Array<any>
   ) {
     if (metadataDefaults) {
-      metadataDefaults.map(entry => {
+      metadataDefaults.map((entry) => {
         item.metadata[entry.name] = entry.value;
       });
     }
     if (fields) {
-      fields.map(field => {
+      fields.map((field) => {
         if (formModel.metadata) {
           let value = formModel.metadata[field.key];
           if (value !== null && value === '') {
@@ -174,7 +174,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
       });
     }
     if (metadataOverrides) {
-      metadataOverrides.map(entry => {
+      metadataOverrides.map((entry) => {
         item.metadata[entry.name] = entry.value;
       });
     }
@@ -190,7 +190,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
       this.snackBarTimeout = null;
     }
 
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.snackBarTimeout = setTimeout(() => {
         const snackBarRef = this.createSnackBar();
 
@@ -233,7 +233,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
         message = 'Failed to save ' + numberOfFailures + ' item' + (numberOfFailures > 1 ? 's' : '');
       }
 
-      this.failures.forEach(failure => {
+      this.failures.forEach((failure) => {
         const customText = CustomTextUtilities.getCustomText(
           this.config.customText,
           'error.content.update.' + failure.status,
@@ -296,7 +296,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
         if (contentItem$) {
           const contentItemSaving = contentItem$.pipe(first()).toPromise();
           contentItemSaving
-            .then(item => {
+            .then((item) => {
               contentObject.onLoad(item);
               contentObject.failed = false;
               this.updateComponentSavedItemLists(item);
@@ -310,7 +310,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
                 }
               });
             })
-            .catch(err => {
+            .catch((err) => {
               this.failures.push(err);
               contentObject.failed = true;
               this.saving.emit(false); // item saving failed
@@ -352,7 +352,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
 
   private decorateContentObject(contentObject: ContentObject) {
     if (contentObject) {
-      contentObject.displayType$.subscribe(displayType => {
+      contentObject.displayType$.subscribe((displayType) => {
         this.onDisplayType(contentObject, displayType);
       });
     }

@@ -3,7 +3,7 @@ import { SearchModel } from '../shared/model/search-model';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { Observable, Subject } from 'rxjs';
 import { SearchFilter } from '../shared/model/search-filter';
-import { MatAutocompleteSelectedEvent } from '@angular/material';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { SearchAutocomplete } from '../shared/search-autocomplete/search-autocomplete';
 import { SearchFilterableResult } from '../../shared/shared/model/search-filterable-result';
 import { debounceTime, delay, takeUntil } from 'rxjs/operators';
@@ -12,7 +12,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 @Component({
   selector: 'app-search-box',
   templateUrl: './search-box.component.html',
-  styleUrls: ['./search-box.component.css']
+  styleUrls: ['./search-box.component.css'],
 })
 export class SearchBoxComponent implements OnDestroy, OnInit {
   private componentDestroyed = new Subject();
@@ -42,7 +42,7 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
       this.assignAutocompleteListener();
     }
     // delay 0 to prevent "Expression has changed after it was checked" when initial search is performed afterViewInit in parent
-    this.searchModel$.pipe(delay(0), takeUntil(this.componentDestroyed)).subscribe(searchModel => {
+    this.searchModel$.pipe(delay(0), takeUntil(this.componentDestroyed)).subscribe((searchModel) => {
       console.log('search-box search model updated : ' + this.searchModel.stringQuery);
       this.searchModel = searchModel;
       this.internalSearchField = this.searchModel.stringQuery;

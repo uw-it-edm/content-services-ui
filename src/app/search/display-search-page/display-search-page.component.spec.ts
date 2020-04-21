@@ -20,7 +20,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { StudentService } from '../../shared/providers/student.service';
 import { NotificationService } from '../../shared/providers/notification.service';
 import { DisplaySearchPageComponent } from './display-search-page.component';
-import { MatAutocompleteModule, MatDatepickerModule, MatOptionModule } from '@angular/material';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatOptionModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ProgressService } from '../../shared/providers/progress.service';
 import { ContentService } from '../../content/shared/content.service';
 import { ContentItem } from '../../content/shared/model/content-item';
@@ -90,7 +92,7 @@ describe('DisplaySearchPageComponent', () => {
         MaterialConfigModule,
         MatAutocompleteModule,
         MatDatepickerModule,
-        MatOptionModule
+        MatOptionModule,
       ],
       declarations: [DisplaySearchPageComponent, SearchBoxComponent, SearchResultsComponent],
       providers: [
@@ -100,9 +102,9 @@ describe('DisplaySearchPageComponent', () => {
         { provide: ContentService, useValue: mockContentService },
         ProgressService,
         Title,
-        NotificationService
+        NotificationService,
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     })
       .compileComponents()
       .then(() => {

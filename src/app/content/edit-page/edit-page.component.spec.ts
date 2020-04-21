@@ -16,7 +16,10 @@ import { Config } from '../../core/shared/model/config';
 import { FormBuilder } from '@angular/forms';
 import { SafeUrlPipe } from '../../shared/pipes/safe-url.pipe';
 import { ButtonConfig } from '../../core/shared/model/button-config';
-import { MatAutocompleteModule, MatDatepickerModule, MatOptionModule, MatSnackBar } from '@angular/material';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatOptionModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from '../../user/shared/user.service';
 import { User } from '../../user/shared/user';
 import { MaterialConfigModule } from '../../routing/material-config.module';
@@ -82,7 +85,7 @@ describe('EditPageComponent', () => {
         MatAutocompleteModule,
         MatDatepickerModule,
         MatOptionModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
       ],
       declarations: [EditPageComponent, ContentMetadataComponent, ContentViewComponent, SafeUrlPipe],
       providers: [
@@ -93,14 +96,14 @@ describe('EditPageComponent', () => {
         MatSnackBar,
         ProgressService,
         NotificationService,
-        { provide: UserService, useValue: mockUserService }
+        { provide: UserService, useValue: mockUserService },
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     })
       .overrideModule(BrowserDynamicTestingModule, {
         set: {
-          entryComponents: [ContentViewComponent]
-        }
+          entryComponents: [ContentViewComponent],
+        },
       })
       .compileComponents()
       .then(() => {
@@ -132,8 +135,8 @@ describe('EditPageComponent', () => {
         label: 't',
         dataType: 'string',
         displayType: 'typeahead',
-        options: [new FieldOption('o1'), new FieldOption('o2')]
-      })
+        options: [new FieldOption('o1'), new FieldOption('o2')],
+      }),
     ];
     editPageConfig.buttons = [deleteButton, saveButton];
 

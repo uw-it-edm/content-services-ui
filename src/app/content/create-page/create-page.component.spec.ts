@@ -19,7 +19,9 @@ import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { Config } from '../../core/shared/model/config';
 import { User } from '../../user/shared/user';
 import { FileUploadComponent } from '../../shared/widgets/file-upload/file-upload.component';
-import { MatAutocompleteModule, MatOptionModule, MatSnackBar } from '@angular/material';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { MaterialConfigModule } from '../../routing/material-config.module';
@@ -73,7 +75,7 @@ describe('CreatePageComponent', () => {
         RouterTestingModule,
         MatAutocompleteModule,
         MatOptionModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
       ],
       declarations: [CreatePageComponent, ContentMetadataComponent, ContentViewComponent, SafeUrlPipe],
       providers: [
@@ -85,14 +87,14 @@ describe('CreatePageComponent', () => {
         FormBuilder,
         LiveAnnouncer,
         MatSnackBar,
-        NotificationService
+        NotificationService,
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     })
       .overrideModule(BrowserDynamicTestingModule, {
         set: {
-          entryComponents: [ContentViewComponent]
-        }
+          entryComponents: [ContentViewComponent],
+        },
       })
       .compileComponents()
       .then(() => {
@@ -113,12 +115,12 @@ describe('CreatePageComponent', () => {
       Object.assign(new Field(), { key: '1', label: '1' }),
       Object.assign(new Field(), { key: '2', label: '2' }),
       Object.assign(new Field(), { key: '3', label: '3' }),
-      Object.assign(new Field(), { key: 'a', label: 'a' })
+      Object.assign(new Field(), { key: 'a', label: 'a' }),
     ];
     createPageConfig.buttons = [saveButton];
     createPageConfig.onSave = [
       { key: 'PublishStatus', value: 'Published' },
-      { key: 'AnotherOnSave', value: 'Value' }
+      { key: 'AnotherOnSave', value: 'Value' },
     ];
     createPageConfig.pageName = 'test-create-page';
     createPageConfig.viewPanel = true;
@@ -128,7 +130,7 @@ describe('CreatePageComponent', () => {
     config.pages['create'] = createPageConfig;
     config.contentConfig = {
       account: 'testAccount',
-      profile: 'testProfile'
+      profile: 'testProfile',
     };
 
     activatedRoute.testData = { config: config };

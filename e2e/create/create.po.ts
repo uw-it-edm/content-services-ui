@@ -2,7 +2,7 @@ import { browser, by, element, ExpectedConditions } from 'protractor';
 import { protractor } from 'protractor/built/ptor';
 
 export class CreatePage {
-  public pageUrl = `${browser.baseUrl}/${this.profile}/create`;
+  public pageUrl = `${browser.baseUrl}${this.profile}/create`;
   public uploadFilePanel = element(by.id('drop-zone'));
   public fileList = element.all(by.tagName('mat-list-item'));
   public inputField = element(by.id('mat-input-0'));
@@ -25,6 +25,7 @@ export class CreatePage {
   public datePickerCalenderButton = element.all(by.css('.mat-datepicker-toggle button'));
   public calendarPeriodButton = element.all(by.className('mat-calendar-period-button'));
   public calendarDisabledSelections = element.all(by.className('mat-calendar-body-disabled'));
+  public calendarYears = element.all(by.className('mat-calendar-body-cell-content'));
 
   constructor(private profile: string = 'demo') {}
 
@@ -33,7 +34,7 @@ export class CreatePage {
       browser
         .switchTo()
         .alert()
-        .then(alert => {
+        .then((alert) => {
           console.log('WARN: Unexpected alert left open from previous test. ');
           alert.accept();
         });
@@ -66,13 +67,13 @@ export class CreatePage {
   }
 
   getFileName(fileIndex: number) {
-    return element.all(by.css('.mat-list-item-content .mat-list-text p > span')).then(names => {
+    return element.all(by.css('.mat-list-item-content .mat-list-text p > span')).then((names) => {
       return names[fileIndex].getText();
     });
   }
 
   replaceFile(fileIndex: number, filePath: string) {
-    element.all(by.name('replaceFile')).then(replaceButtons => {
+    element.all(by.name('replaceFile')).then((replaceButtons) => {
       replaceButtons[fileIndex].sendKeys(filePath);
     });
   }
@@ -106,8 +107,8 @@ export class CreatePage {
   }
 
   populateRequiredFields(shouldClearFieldValue: boolean = false) {
-    this.requiredFields.each(requiredField => {
-      requiredField.getTagName().then(tagName => {
+    this.requiredFields.each((requiredField) => {
+      requiredField.getTagName().then((tagName) => {
         switch (tagName) {
           case 'input': {
             if (shouldClearFieldValue) {
@@ -162,7 +163,7 @@ export class CreatePage {
     browser
       .switchTo()
       .alert()
-      .then(alert => {
+      .then((alert) => {
         alert.accept();
       });
   }

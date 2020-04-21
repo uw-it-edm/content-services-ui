@@ -12,19 +12,19 @@ const docFilePath = path.resolve(__dirname, '../mocks/files/sample-file.docx');
 const textFilePath = path.resolve(__dirname, '../mocks/files/sample-file.txt');
 const invalidFilePath = path.resolve(__dirname, '../mocks/files/invalid-file.txt');
 
-const getCurrentUrl = function() {
-  return browser.getCurrentUrl().then(url => {
+const getCurrentUrl = function () {
+  return browser.getCurrentUrl().then((url) => {
     return url.toLowerCase();
   });
 };
 
 const currentUrlMatches = (expectedUrl: string) => {
-  return () => browser.getCurrentUrl().then(currentUrl => expectedUrl.toLowerCase() === currentUrl.toLowerCase());
+  return () => browser.getCurrentUrl().then((currentUrl) => expectedUrl.toLowerCase() === currentUrl.toLowerCase());
 };
 
 const isEmptyFileList = (fileList: ElementArrayFinder) => {
   return () => {
-    return fileList.count().then(count => {
+    return fileList.count().then((count) => {
       return count === 0;
     });
   };
@@ -45,7 +45,7 @@ describe('Create Page for Demo', () => {
   let page: CreatePage;
   let searchPage: SearchPage;
 
-  const getExpectedChildrenLabels = function() {
+  const getExpectedChildrenLabels = function () {
     const childrenList = require('../mocks/data-api/child-type-parent-type-Parent1-list.json');
     let childrenLabels = '';
     for (let i = 0; i < childrenList.content.length; i++) {
@@ -54,7 +54,7 @@ describe('Create Page for Demo', () => {
     return childrenLabels;
   };
 
-  const enterDateAndVerifyErrorMsg = function(date: string) {
+  const enterDateAndVerifyErrorMsg = function (date: string) {
     page.dateInputField.first().sendKeys(date);
     page.dateInputField.first().sendKeys(protractor.Key.TAB);
 
@@ -186,16 +186,13 @@ describe('Create Page for Demo', () => {
   });
 
   it('should indicate focus on all form fields when selected', () => {
-    page.formFields.each(field => {
+    page.formFields.each((field) => {
       field.click();
 
       expect(field.getAttribute('className')).toContain('mat-focused');
 
       // reset for next field
-      browser
-        .actions()
-        .sendKeys(protractor.Key.ESCAPE)
-        .perform();
+      browser.actions().sendKeys(protractor.Key.ESCAPE).perform();
     });
   });
 
@@ -270,7 +267,7 @@ describe('Create Page for Demo', () => {
     page.calendarPeriodButton.click();
 
     expect(page.calendarDisabledSelections.count()).toBeGreaterThan(0);
-    page.calendarDisabledSelections.each(calendarYear => {
+    page.calendarDisabledSelections.each((calendarYear) => {
       expect(calendarYear.getText()).toBeLessThan(1654);
     });
 
@@ -279,23 +276,22 @@ describe('Create Page for Demo', () => {
     page.clickAcceptAlert();
   });
 
-  it('should disable calendar picker greater than 2285', () => {
+  it('should not display calendar picker greater than 2285', () => {
     page.dateInputField.first().sendKeys('1/1/2285');
     page.datePickerCalenderButton.click();
     page.calendarPeriodButton.click();
 
-    expect(page.calendarDisabledSelections.count()).toBeGreaterThan(0);
-    page.calendarDisabledSelections.each(calendarYear => {
-      expect(calendarYear.getText()).toBeGreaterThan(2285);
+    page.calendarYears.each((calendarYear) => {
+      expect(calendarYear.getText()).toBeLessThanOrEqual(2285);
     });
 
-    page.calendarDisabledSelections.first().sendKeys(protractor.Key.ESCAPE);
+    page.datePickerCalenderButton.sendKeys(protractor.Key.ESCAPE);
     page.cancelButton.click();
     page.clickAcceptAlert();
   });
 
   it('should display the default number of entries for Course Year', () => {
-    const getExpectedYears = function() {
+    const getExpectedYears = function () {
       let year = new Date().getFullYear();
       let years = year.toString();
       const defaultYearEntries = 10;
@@ -360,7 +356,7 @@ describe('Create Page for Demo2', () => {
   it('should display red error message when required field is not populated', () => {
     page.populateRequiredFields(true);
 
-    page.metadataErrorMessages.each(errMsg => {
+    page.metadataErrorMessages.each((errMsg) => {
       expect(errMsg.getText()).not.toEqual('');
 
       const red = 'rgba(244, 67, 54, 1)';
@@ -369,10 +365,10 @@ describe('Create Page for Demo2', () => {
   });
 
   it('should have aria-required set to true for all required fields', () => {
-    page.requiredFields.each(requiredField => {
+    page.requiredFields.each((requiredField) => {
       expect(requiredField.getAttribute('aria-required')).toEqual(
         'true',
-        'aria-required not set to true for ' + requiredField.getTagName().then(tagName => tagName)
+        'aria-required not set to true for ' + requiredField.getTagName().then((tagName) => tagName)
       );
     });
   });

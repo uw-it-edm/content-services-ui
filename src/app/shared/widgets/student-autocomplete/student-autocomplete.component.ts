@@ -11,7 +11,7 @@ import {
   OnDestroy,
   Optional,
   Self,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
@@ -23,19 +23,15 @@ import {
   FormGroup,
   FormGroupDirective,
   NgControl,
-  NgForm
+  NgForm,
 } from '@angular/forms';
 import { StudentService } from '../../providers/student.service';
 import { StudentSearchResults } from '../../shared/model/student-search-results';
 import { Student } from '../../shared/model/student';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import {
-  CanUpdateErrorState,
-  ErrorStateMatcher,
-  MatAutocompleteTrigger,
-  MatFormFieldControl,
-  mixinErrorState
-} from '@angular/material';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { CanUpdateErrorState, ErrorStateMatcher, mixinErrorState } from '@angular/material/core';
+import { MatFormFieldControl } from '@angular/material/form-field';
 import { FocusMonitor, LiveAnnouncer } from '@angular/cdk/a11y';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
 import { Person } from '../../shared/model/person';
@@ -76,15 +72,15 @@ export function RequireStudentMatch(control: AbstractControl) {
   host: {
     '[attr.aria-required]': 'required.toString()',
     '[attr.aria-disabled]': 'disabled.toString()',
-    '[attr.aria-invalid]': 'errorState'
+    '[attr.aria-invalid]': 'errorState',
   },
   providers: [
     {
       provide: MatFormFieldControl,
-      useExisting: StudentAutocompleteComponent
+      useExisting: StudentAutocompleteComponent,
     },
-    ErrorStateMatcher
-  ]
+    ErrorStateMatcher,
+  ],
 })
 export class StudentAutocompleteComponent extends _StudentAutocompleteComponentBase
   implements
@@ -130,7 +126,7 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
   filteredOptions: Student[] = [];
   initialized = false;
 
-  @ViewChild(MatAutocompleteTrigger) trigger;
+  @ViewChild(MatAutocompleteTrigger, { static: true }) trigger;
 
   private initComponent() {
     this.initInternalForm();
@@ -144,13 +140,13 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
     // This will listen to every INTERNAL_FIELD_NAME value changes where the content is a non empty string.
     this.formGroup.controls[INTERNAL_FIELD_NAME].valueChanges
       .pipe(
-        filter(term => {
+        filter((term) => {
           return typeof term === 'string' && term.length > 0;
         }),
         tap(() => (this.isLoading = true)),
         debounceTime(300),
-        tap(term => console.log('searching for ' + term)),
-        tap(term => {
+        tap((term) => console.log('searching for ' + term)),
+        tap((term) => {
           if (term === '') {
             // user is probably trying to empty the field
             if (!this.formGroup.controls[INTERNAL_FIELD_NAME].pristine) {
@@ -158,7 +154,7 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
             }
           }
         }),
-        switchMap(term => this.studentService.autocomplete(term)),
+        switchMap((term) => this.studentService.autocomplete(term)),
         takeUntil(this.componentDestroyed)
       )
       .subscribe((searchResults: StudentSearchResults) => {

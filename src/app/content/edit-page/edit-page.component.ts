@@ -11,7 +11,7 @@ import { Subject } from 'rxjs';
 import { ContentItem } from '../shared/model/content-item';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ContentViewComponent } from '../content-view/content-view.component';
 import { User } from '../../user/shared/user';
 import { DynamicComponentDirective } from '../shared/directive/dynamic-component.directive';
@@ -27,7 +27,7 @@ import { FileUploadComponent } from '../../shared/widgets/file-upload/file-uploa
 @Component({
   selector: 'app-edit-page',
   templateUrl: './edit-page.component.html',
-  styleUrls: ['./edit-page.component.css']
+  styleUrls: ['./edit-page.component.css'],
 })
 export class EditPageComponent extends ComponentCanDeactivate implements OnInit, OnDestroy, AfterViewInit {
   private componentDestroyed = new Subject();
@@ -43,9 +43,9 @@ export class EditPageComponent extends ComponentCanDeactivate implements OnInit,
   previewing: boolean;
   submitPending: boolean;
 
-  @ViewChild(DynamicComponentDirective) contentViewDirective: DynamicComponentDirective;
-  @ViewChild(ContentViewComponent) contentViewComponent: ContentViewComponent;
-  @ViewChild(ContentObjectListComponent) contentObjectListComponent: ContentObjectListComponent;
+  @ViewChild(DynamicComponentDirective, { static: false }) contentViewDirective: DynamicComponentDirective;
+  @ViewChild(ContentViewComponent, { static: false }) contentViewComponent: ContentViewComponent;
+  @ViewChild(ContentObjectListComponent, { static: false }) contentObjectListComponent: ContentObjectListComponent;
   constructor(
     private contentService: ContentService,
     private route: ActivatedRoute,
@@ -65,7 +65,7 @@ export class EditPageComponent extends ComponentCanDeactivate implements OnInit,
       this.config = data.config;
       this.extractPageConfig();
     });
-    this.route.paramMap.pipe(takeUntil(this.componentDestroyed)).subscribe(params => {
+    this.route.paramMap.pipe(takeUntil(this.componentDestroyed)).subscribe((params) => {
       this.id = params.get('id');
       if (this.contentObjectListComponent) {
         this.contentObjectListComponent.reset();
@@ -80,11 +80,11 @@ export class EditPageComponent extends ComponentCanDeactivate implements OnInit,
           .read(this.id)
           .pipe(takeUntil(this.componentDestroyed))
           .subscribe(
-            contentItem => {
+            (contentItem) => {
               console.log('Loaded content item: ' + contentItem.id);
               this.contentItem = contentItem;
             },
-            err => {
+            (err) => {
               const message = 'There was an error retrieving the content item:' + err.statusText;
               this.snackBar.open(message, 'Dismiss');
             }
@@ -150,7 +150,7 @@ export class EditPageComponent extends ComponentCanDeactivate implements OnInit,
     if (this.form.valid) {
       const saveResult = this.contentObjectListComponent.saveItem(fields, formModel, metadataOverrides);
       if (saveResult) {
-        saveResult.then(successfulSave => {
+        saveResult.then((successfulSave) => {
           if (successfulSave) {
             this.form.markAsPristine(); // the entire form has saved and is no longer dirty
           }
@@ -158,8 +158,8 @@ export class EditPageComponent extends ComponentCanDeactivate implements OnInit,
       }
     } else {
       const invalidFields = <FormControl[]>Object.keys(this.form.controls)
-        .map(key => this.form.controls[key])
-        .filter(ctl => ctl.invalid);
+        .map((key) => this.form.controls[key])
+        .filter((ctl) => ctl.invalid);
       if (invalidFields.length > 0) {
         const invalidElem: any = invalidFields[0];
         invalidElem.nativeElement.focus();

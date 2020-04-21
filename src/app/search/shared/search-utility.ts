@@ -1,4 +1,4 @@
-import { SortDirection } from '@angular/material';
+import { SortDirection } from '@angular/material/sort';
 
 const SORT_DIRECTION_ASCENDING = 'ascending';
 const SORT_DIRECTION_DESCENDING = 'descending';

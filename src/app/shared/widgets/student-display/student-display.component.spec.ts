@@ -5,7 +5,7 @@ import { StudentService } from '../../providers/student.service';
 import { Student } from '../../shared/model/student';
 import { By } from '@angular/platform-browser';
 import { NotificationService } from '../../providers/notification.service';
-import { MatSnackBarModule } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { of } from 'rxjs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -32,7 +32,7 @@ describe('StudentDisplayComponent', () => {
     TestBed.configureTestingModule({
       imports: [MatSnackBarModule, NoopAnimationsModule],
       declarations: [StudentDisplayComponent],
-      providers: [{ provide: StudentService, useValue: new MockStudentService() }, NotificationService]
+      providers: [{ provide: StudentService, useValue: new MockStudentService() }, NotificationService],
     }).compileComponents();
   }));
 

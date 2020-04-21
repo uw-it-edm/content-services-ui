@@ -1,5 +1,5 @@
 import { NotificationOptions, NotificationService } from './notification.service';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import Spy = jasmine.Spy;
 
 let notificationService: NotificationService;
@@ -30,8 +30,8 @@ describe('NotificationService', () => {
       data: {
         message: message,
         type: type,
-        dismissText: defaultNotificationOptions.dismissText
-      }
+        dismissText: defaultNotificationOptions.dismissText,
+      },
     };
 
     notificationService.error(message);

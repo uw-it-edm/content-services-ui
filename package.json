@@ -23,29 +23,28 @@
     "mock-services": "$npm_execpath start-mock-services",
     "start-mock-services": "docker container inspect content-services-api-e2e-mock || (docker build -q -t content-services-api-e2e-mock ./e2e/mocks && docker run --name content-services-api-e2e-mock --rm -d -p 12345:80 -v ${PWD}/e2e/mocks:/usr/share/nginx/html/ content-services-api-e2e-mock)",
     "stop-mock-services": "docker stop content-services-api-e2e-mock",
-    "postinstall": "cd ./node_modules/protractor && npm i webdriver-manager@latest"
+    "postinstall": "cd ./node_modules/protractor && npm i webdriver-manager@latest && webdriver-manager update"
   },
   "lint-staged": {
-      "*.ts": [
-        "yarn run pretty",
-        "git add"
-      ]
+    "*.ts": [
+      "yarn run pretty",
+      "git add"
+    ]
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^7.2.7",
-    "@angular/cdk": "^7.3.3",
-    "@angular/common": "^7.2.7",
-    "@angular/compiler": "^7.2.7",
-    "@angular/core": "^7.2.7",
-    "@angular/flex-layout": "^7.0.0-beta.24",
-    "@angular/forms": "^7.2.7",
-    "@angular/http": "^7.2.7",
-    "@angular/material": "^7.3.3",
-    "@angular/platform-browser": "^7.2.7",
-    "@angular/platform-browser-dynamic": "^7.2.7",
-    "@angular/platform-server": "^7.2.7",
-    "@angular/router": "^7.2.7",
+    "@angular/animations": "^8.2.14",
+    "@angular/cdk": "^8.2.3",
+    "@angular/common": "^8.2.14",
+    "@angular/compiler": "^8.2.14",
+    "@angular/core": "^8.2.14",
+    "@angular/flex-layout": "^8.0.0-beta.27",
+    "@angular/forms": "^8.2.14",
+    "@angular/material": "^8.2.3",
+    "@angular/platform-browser": "^8.2.14",
+    "@angular/platform-browser-dynamic": "^8.2.14",
+    "@angular/platform-server": "^8.2.14",
+    "@angular/router": "^8.2.14",
     "@types/lodash": "^4.14.149",
     "@types/pdfjs-dist": "^2.1.3",
     "angulartics2": "^6.3.1",
@@ -59,21 +58,21 @@
     "ng2-pdf-viewer": "6.0.2",
     "ngx-daterangepicker-material": "^2.1.11",
     "pdfjs-dist": "^2.2.228",
-    "rxjs": "^6.5.4",
+    "rxjs": "^6.5.5",
     "tslib": "^1.11.1",
     "web-animations-js": "^2.3.2",
-    "zone.js": "^0.8.29"
+    "zone.js": "~0.9.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.13.10",
-    "@angular/cli": "^7.3.10",
-    "@angular/compiler-cli": "^7.2.7",
+    "@angular-devkit/build-angular": "~0.803.25",
+    "@angular/cli": "^8.3.26",
+    "@angular/compiler-cli": "^8.2.14",
     "@angular/language-service": "^9.0.5",
     "@types/jasmine": "~3.5.10",
     "@types/jasminewd2": "~2.0.8",
     "@types/node": "~13.9.8",
     "axe-webdriverjs": "^2.2.0",
-    "codelyzer": "^5.2.2",
+    "codelyzer": "^5.0.1",
     "husky": "^4.2.3",
     "jasmine-core": "^3.5.0",
     "jasmine-reporters": "^2.3.2",
@@ -94,7 +93,7 @@
     "ts-node": "^8.3.0",
     "tslint": "~5.20.1",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "~3.2.4"
+    "typescript": "~3.5.3"
   },
   "husky": {
     "hooks": {

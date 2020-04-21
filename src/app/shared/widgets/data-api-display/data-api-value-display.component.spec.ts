@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NotificationOptions, NotificationService } from '../../providers/notification.service';
-import { MatSnackBarModule } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { of, throwError } from 'rxjs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DataApiValueService } from '../../providers/dataapivalue.service';
@@ -47,8 +47,8 @@ describe('PersonDisplayComponent', () => {
       declarations: [DataApiValueDisplayComponent],
       providers: [
         { provide: NotificationService, useValue: new NoopNotificationService() },
-        { provide: DataApiValueService, useValue: new MockDataApiValueService() }
-      ]
+        { provide: DataApiValueService, useValue: new MockDataApiValueService() },
+      ],
     }).compileComponents();
   }));
 
