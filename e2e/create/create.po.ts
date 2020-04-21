@@ -25,6 +25,7 @@ export class CreatePage {
   public datePickerCalenderButton = element.all(by.css('.mat-datepicker-toggle button'));
   public calendarPeriodButton = element.all(by.className('mat-calendar-period-button'));
   public calendarDisabledSelections = element.all(by.className('mat-calendar-body-disabled'));
+  public calendarYears = element.all(by.className('mat-calendar-body-cell-content'));
 
   constructor(private profile: string = 'demo') {}
 

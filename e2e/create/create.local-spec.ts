@@ -276,18 +276,16 @@ describe('Create Page for Demo', () => {
     page.clickAcceptAlert();
   });
 
-  // FIXME: The calendar picker no longer shows any dates greater than the limit of 2285 rather than disabled dates
-  xit('should disable calendar picker greater than 2285', () => {
+  it('should not display calendar picker greater than 2285', () => {
     page.dateInputField.first().sendKeys('1/1/2285');
     page.datePickerCalenderButton.click();
     page.calendarPeriodButton.click();
 
-    expect(page.calendarDisabledSelections.count()).toBeGreaterThan(0);
-    page.calendarDisabledSelections.each((calendarYear) => {
-      expect(calendarYear.getText()).toBeGreaterThan(2285);
+    page.calendarYears.each((calendarYear) => {
+      expect(calendarYear.getText()).toBeLessThanOrEqual(2285);
     });
 
-    page.calendarDisabledSelections.first().sendKeys(protractor.Key.ESCAPE);
+    page.datePickerCalenderButton.sendKeys(protractor.Key.ESCAPE);
     page.cancelButton.click();
     page.clickAcceptAlert();
   });
