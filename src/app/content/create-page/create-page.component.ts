@@ -36,7 +36,7 @@ export class CreatePageComponent extends ComponentCanDeactivate implements OnIni
   previewing: boolean;
   submitPending: boolean;
 
-  @ViewChild(DynamicComponentDirective, { static: false }) contentViewDirective: DynamicComponentDirective;
+  @ViewChild(DynamicComponentDirective) contentViewDirective: DynamicComponentDirective;
   @ViewChild(ContentViewComponent, { static: true }) contentViewComponent: ContentViewComponent;
   @ViewChild(ContentObjectListComponent, { static: true }) contentObjectListComponent: ContentObjectListComponent;
 

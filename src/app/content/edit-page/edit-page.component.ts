@@ -43,9 +43,9 @@ export class EditPageComponent extends ComponentCanDeactivate implements OnInit,
   previewing: boolean;
   submitPending: boolean;
 
-  @ViewChild(DynamicComponentDirective, { static: false }) contentViewDirective: DynamicComponentDirective;
-  @ViewChild(ContentViewComponent, { static: false }) contentViewComponent: ContentViewComponent;
-  @ViewChild(ContentObjectListComponent, { static: false }) contentObjectListComponent: ContentObjectListComponent;
+  @ViewChild(DynamicComponentDirective) contentViewDirective: DynamicComponentDirective;
+  @ViewChild(ContentViewComponent) contentViewComponent: ContentViewComponent;
+  @ViewChild(ContentObjectListComponent) contentObjectListComponent: ContentObjectListComponent;
   constructor(
     private contentService: ContentService,
     private route: ActivatedRoute,
