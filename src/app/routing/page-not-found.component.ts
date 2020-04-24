@@ -6,7 +6,6 @@ import { Observable } from 'rxjs';
 import { TenantConfigInfo } from '../core/shared/model/tenant-config-info';
 
 @Component({
-  moduleId: module.id,
   selector: 'app-404',
   template: `
     <article class="uw-default">
@@ -30,7 +29,7 @@ import { TenantConfigInfo } from '../core/shared/model/tenant-config-info';
         </div>
       </div>
     </article>
-  `
+  `,
 })
 export class PageNotFoundComponent implements OnInit {
   user$: Observable<User>;
@@ -47,9 +46,9 @@ export class PageNotFoundComponent implements OnInit {
     this.supportEmail = this.configService.getSupportEmail();
     this.user$ = this.userService.getUserObservable();
 
-    this.user$.subscribe(user => {
+    this.user$.subscribe((user) => {
       if (user) {
-        this.configService.getTenantList().subscribe(tenants => {
+        this.configService.getTenantList().subscribe((tenants) => {
           this.tenants = tenants;
         });
       }
