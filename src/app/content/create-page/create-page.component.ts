@@ -15,7 +15,7 @@ import { ContentObjectListComponent } from '../content-object-list/content-objec
 import { NotificationService } from '../../shared/providers/notification.service';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { takeUntil } from 'rxjs/operators';
-import { ComponentCanDeactivate } from '../../routing/shared/component-can-deactivate';
+import { ComponentCanDeactivateDirective } from '../../routing/shared/component-can-deactivate.directive';
 import { ContentMetadataComponent } from '../content-metadata/content-metadata.component';
 import { FileUploadComponent } from '../../shared/widgets/file-upload/file-upload.component';
 
@@ -24,7 +24,7 @@ import { FileUploadComponent } from '../../shared/widgets/file-upload/file-uploa
   templateUrl: './create-page.component.html',
   styleUrls: ['./create-page.component.css'],
 })
-export class CreatePageComponent extends ComponentCanDeactivate implements OnInit, OnDestroy {
+export class CreatePageComponent extends ComponentCanDeactivateDirective implements OnInit, OnDestroy {
   private componentDestroyed = new Subject();
   private user: User;
 
