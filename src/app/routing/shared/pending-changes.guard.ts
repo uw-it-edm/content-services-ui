@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 
-import { ComponentCanDeactivate } from './component-can-deactivate';
+import { ComponentCanDeactivateDirective } from './component-can-deactivate.directive';
 import { CanDeactivate } from '@angular/router';
 import { Injectable, OnInit } from '@angular/core';
 import { ConfigResolver } from './config-resolver.service';
@@ -9,7 +9,7 @@ import { CustomTextUtilities } from '../../shared/directives/custom-text/custom-
 import { CustomTextItem } from '../../core/shared/model/config';
 
 @Injectable()
-export class PendingChangesGuard implements CanDeactivate<ComponentCanDeactivate> {
+export class PendingChangesGuard implements CanDeactivate<ComponentCanDeactivateDirective> {
   private unsavedChangesMessage;
   private customText: Map<string, CustomTextItem>;
 
@@ -17,7 +17,7 @@ export class PendingChangesGuard implements CanDeactivate<ComponentCanDeactivate
     this.init();
   }
 
-  canDeactivate(component: ComponentCanDeactivate): boolean | Observable<boolean> {
+  canDeactivate(component: ComponentCanDeactivateDirective): boolean | Observable<boolean> {
     if (component.canDeactivate()) {
       return true;
     } else {
@@ -29,7 +29,7 @@ export class PendingChangesGuard implements CanDeactivate<ComponentCanDeactivate
     this.configResolver
       .getCustomTextSubject()
       .pipe(first())
-      .subscribe(customText => {
+      .subscribe((customText) => {
         this.customText = customText;
       });
     const defaultText =

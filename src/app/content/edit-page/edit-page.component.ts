@@ -20,7 +20,7 @@ import { ContentObject } from '../shared/model/content-object';
 import { ContentObjectListComponent } from '../content-object-list/content-object-list.component';
 import { NotificationService } from '../../shared/providers/notification.service';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
-import { ComponentCanDeactivate } from '../../routing/shared/component-can-deactivate';
+import { ComponentCanDeactivateDirective } from '../../routing/shared/component-can-deactivate.directive';
 import { ContentMetadataComponent } from '../content-metadata/content-metadata.component';
 import { FileUploadComponent } from '../../shared/widgets/file-upload/file-upload.component';
 
@@ -29,7 +29,7 @@ import { FileUploadComponent } from '../../shared/widgets/file-upload/file-uploa
   templateUrl: './edit-page.component.html',
   styleUrls: ['./edit-page.component.css'],
 })
-export class EditPageComponent extends ComponentCanDeactivate implements OnInit, OnDestroy, AfterViewInit {
+export class EditPageComponent extends ComponentCanDeactivateDirective implements OnInit, OnDestroy, AfterViewInit {
   private componentDestroyed = new Subject();
   private user: User;
 
@@ -43,9 +43,9 @@ export class EditPageComponent extends ComponentCanDeactivate implements OnInit,
   previewing: boolean;
   submitPending: boolean;
 
-  @ViewChild(DynamicComponentDirective, { static: false }) contentViewDirective: DynamicComponentDirective;
-  @ViewChild(ContentViewComponent, { static: false }) contentViewComponent: ContentViewComponent;
-  @ViewChild(ContentObjectListComponent, { static: false }) contentObjectListComponent: ContentObjectListComponent;
+  @ViewChild(DynamicComponentDirective) contentViewDirective: DynamicComponentDirective;
+  @ViewChild(ContentViewComponent) contentViewComponent: ContentViewComponent;
+  @ViewChild(ContentObjectListComponent) contentObjectListComponent: ContentObjectListComponent;
   constructor(
     private contentService: ContentService,
     private route: ActivatedRoute,

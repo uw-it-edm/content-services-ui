@@ -46,9 +46,9 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
     private sanitizer: DomSanitizer
   ) {}
 
-  @ViewChild(ContentToolbarComponent, { static: false })
+  @ViewChild(ContentToolbarComponent)
   contentToolbarComponent;
-  @ViewChild(PdfViewerComponent, { static: false })
+  @ViewChild(PdfViewerComponent)
   pdfViewer: PdfViewerComponent;
 
   ngOnInit() {
