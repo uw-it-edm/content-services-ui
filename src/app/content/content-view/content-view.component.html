@@ -1,4 +1,4 @@
-<div *ngIf="contentObject" [ngClass]="fullScreen ? 'full-screen' : ''" class="cs-content-view">
+<div *ngIf="contentObject" [ngClass]="fullScreen ? 'full-screen' : ''" class="cs-content-view" cdkTrapFocus="{{fullScreen}}">
 
   <app-content-toolbar
     [contentType]="contentObject.contentType"

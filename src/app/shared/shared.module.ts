@@ -32,9 +32,18 @@ import { PersonDisplayComponent } from './widgets/person-display/person-display.
 import { DataApiValueDisplayComponent } from './widgets/data-api-display/data-api-value-display.component';
 import { ElasticsearchDateValidatorDirective } from './directives/elasticsearch-date-validator/elasticsearch-date-validator.directive';
 import { CourseInputComponent } from './widgets/course-input/course-input.component';
+import { A11yModule } from '@angular/cdk/a11y';
 
 @NgModule({
-  imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule, FormsModule, PdfViewerModule],
+  imports: [
+    CommonModule,
+    MaterialConfigModule,
+    RouterModule,
+    ReactiveFormsModule,
+    FormsModule,
+    PdfViewerModule,
+    A11yModule
+  ],
   exports: [
     CommonModule,
     CustomTextDirective,
