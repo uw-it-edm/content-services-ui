@@ -93,6 +93,6 @@ import { A11yModule } from '@angular/cdk/a11y';
     ElasticsearchDateValidatorDirective
   ],
   providers: [DataService, ProgressService, StudentService, PersonService, DataApiValueService, NotificationService],
-  entryComponents: [NotificationComponent],
+  entryComponents: [NotificationComponent]
 })
 export class SharedModule {}
