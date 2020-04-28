@@ -42,7 +42,7 @@ import { A11yModule } from '@angular/cdk/a11y';
     ReactiveFormsModule,
     FormsModule,
     PdfViewerModule,
-    A11yModule,
+    A11yModule
   ],
   exports: [
     CommonModule,
@@ -67,7 +67,7 @@ import { A11yModule } from '@angular/cdk/a11y';
     ContentViewComponent,
     ContentToolbarComponent,
     CourseInputComponent,
-    ElasticsearchDateValidatorDirective,
+    ElasticsearchDateValidatorDirective
   ],
   declarations: [
     CustomTextDirective,
@@ -90,7 +90,7 @@ import { A11yModule } from '@angular/cdk/a11y';
     ContentViewComponent,
     ContentToolbarComponent,
     CourseInputComponent,
-    ElasticsearchDateValidatorDirective,
+    ElasticsearchDateValidatorDirective
   ],
   providers: [DataService, ProgressService, StudentService, PersonService, DataApiValueService, NotificationService],
   entryComponents: [NotificationComponent],
