@@ -53,7 +53,7 @@
     "coveralls": "^3.0.11",
     "directory-encoder": "0.9.2",
     "lodash": "^4.17.15",
-    "moment": "^2.24.0",
+    "moment": "^2.25.1",
     "moment-timezone": "^0.5.28",
     "ng2-pdf-viewer": "6.3.0",
     "ngx-daterangepicker-material": "^2.1.11",
