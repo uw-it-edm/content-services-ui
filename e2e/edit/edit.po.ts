@@ -17,6 +17,8 @@ export class EditPage {
   public selectPanel = element(by.className('mat-select-panel'));
   public lockIcons = element.all(by.className('disabled-icon'));
   public disabledFields = element.all(by.css(':disabled'));
+  public toggleFullScreenButton = element(by.name('toggleFullScreen'));
+  public zoomDropDownList = element(by.name('zoomFactor'));
 
   constructor(private profile: string = 'demo', private id: string = '123456') {}
 
