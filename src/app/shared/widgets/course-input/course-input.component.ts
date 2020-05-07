@@ -11,9 +11,8 @@ import {
   Optional,
   Self,
 } from '@angular/core';
-import { forkJoin, Observable, of, Subject } from 'rxjs';
+import { forkJoin, Subject } from 'rxjs';
 import {
-  AbstractControl,
   ControlValueAccessor,
   FormBuilder,
   FormControl,
@@ -27,15 +26,9 @@ import { CanUpdateErrorState, ErrorStateMatcher, mixinErrorState } from '@angula
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { MatSelectChange } from '@angular/material/select';
 import { Field } from '../../../core/shared/model/field';
-import { FieldOption } from '../../../core/shared/model/field/field-option';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
 import { StudentService } from '../../providers/student.service';
-import { DataApiValueSearchResults } from '../../shared/model/data-api-value-search-results';
-import { DataApiValue } from '../../shared/model/data-api-value';
-import { ObjectUtilities } from '../../../core/util/object-utilities';
-import { map, takeUntil } from 'rxjs/operators';
-import { DynamicSelectConfig } from '../../../core/shared/model/field/dynamic-select-config';
 
 // Boilerplate for applying mixins to CourseInputComponent.
 /** @docs-private */
