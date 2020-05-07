@@ -1,7 +1,7 @@
 {
   "account": "demo-account",
-  "tenant": "Demo2",
-  "appName": "Demo 2",
+  "tenant": "Demo4",
+  "appName": "Demo 4 - No Facets",
   "customText": {
     "addContentItemButton": {
       "label": "Upload",
@@ -56,7 +56,7 @@
         "directions": "Type a Employee ID or other info",
         "label": "",
         "placeholder": "Search for documents",
-        "indexName": "documents-demo2"
+        "indexName": "documents-demo4"
       },
       "searchDaterangeConfig": {
         "active": false,
@@ -69,27 +69,8 @@
         "showDropdowns": true
       },
       "facetsConfig": {
-        "active": true,
-        "facets": {
-          "metadata.DocumentType.label.raw": {
-            "key": "metadata.DocumentType.label.raw",
-            "label": "Document Type",
-            "order": "asc",
-            "size": 5
-          },
-          "metadata.PublishStatus": {
-            "key": "metadata.PublishStatus.raw",
-            "label": "Publish Status",
-            "order": "asc",
-            "size": 10
-          },
-          "metadata.Filer": {
-            "key": "metadata.Filer.raw",
-            "label": "Filer",
-            "order": "asc",
-            "size": 10
-          }
-        }
+        "active": false,
+        "facets": {}
       },
       "autocompleteConfig": {
         "type": "personAutocomplete",

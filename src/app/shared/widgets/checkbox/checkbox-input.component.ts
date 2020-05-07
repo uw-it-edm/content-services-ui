@@ -9,15 +9,11 @@ import {
   Input,
   OnDestroy,
   Optional,
-  Self
+  Self,
 } from '@angular/core';
-import {
-  CanUpdateErrorState,
-  ErrorStateMatcher,
-  MatCheckboxChange,
-  MatFormFieldControl,
-  mixinErrorState
-} from '@angular/material';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { CanUpdateErrorState, ErrorStateMatcher, mixinErrorState } from '@angular/material/core';
+import { MatFormFieldControl } from '@angular/material/form-field';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -25,7 +21,7 @@ import {
   FormGroup,
   FormGroupDirective,
   NgControl,
-  NgForm
+  NgForm,
 } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
@@ -58,15 +54,15 @@ const INTERNAL_FIELD_NAME = 'internalCheckbox';
   host: {
     '[attr.aria-required]': 'required.toString()',
     '[attr.aria-disabled]': 'disabled.toString()',
-    '[attr.aria-invalid]': 'errorState'
+    '[attr.aria-invalid]': 'errorState',
   },
   providers: [
     {
       provide: MatFormFieldControl,
-      useExisting: CheckboxInputComponent
+      useExisting: CheckboxInputComponent,
     },
-    ErrorStateMatcher
-  ]
+    ErrorStateMatcher,
+  ],
 })
 export class CheckboxInputComponent extends _CheckboxInputComponentBase
   implements

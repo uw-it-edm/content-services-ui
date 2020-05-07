@@ -4,7 +4,7 @@
       "id": "123",
       "label": "sample-file.txt",
       "metadata": {
-        "ProfileId": "Demo",
+        "ProfileId": "Demo3",
         "Account": "DEMO-ACCOUNT",
         "Filer": "me",
         "PublishStatus": "published",
@@ -22,13 +22,13 @@
         }
       },
       "_score": 0.0,
-      "_indexName": "documents-demo"
+      "_indexName": "documents-demo3"
     },
     {
       "id": "234",
       "label": "sample-file-2.txt",
       "metadata": {
-        "ProfileId": "Demo",
+        "ProfileId": "Demo3",
         "Account": "DEMO-ACCOUNT",
         "Filer": "you",
         "PublishStatus": "published",
@@ -46,13 +46,13 @@
         }
       },
       "_score": 0.0,
-      "_indexName": "documents-demo"
+      "_indexName": "documents-demo3"
     },
     {
       "id": "456",
       "label": "sample-file-2.txt",
       "metadata": {
-        "ProfileId": "Demo",
+        "ProfileId": "Demo3",
         "Account": "DEMO-ACCOUNT",
         "Filer": "him",
         "PublishStatus": "published",
@@ -70,13 +70,13 @@
         }
       },
       "_score": 0.0,
-      "_indexName": "documents-demo"
+      "_indexName": "documents-demo3"
     },
     {
       "id": "234",
       "label": "sample-file-2.txt",
       "metadata": {
-        "ProfileId": "Demo",
+        "ProfileId": "Demo3",
         "Account": "DEMO-ACCOUNT",
         "Filer": "you",
         "PublishStatus": "published",
@@ -86,7 +86,7 @@
         "InvoiceAmount": "-10"
       },
       "_score": 0.0,
-      "_indexName": "documents-demo"
+      "_indexName": "documents-demo3"
     }
   ],
   "facets": [

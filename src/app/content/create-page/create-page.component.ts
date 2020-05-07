@@ -15,16 +15,16 @@ import { ContentObjectListComponent } from '../content-object-list/content-objec
 import { NotificationService } from '../../shared/providers/notification.service';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { takeUntil } from 'rxjs/operators';
-import { ComponentCanDeactivate } from '../../routing/shared/component-can-deactivate';
+import { ComponentCanDeactivateDirective } from '../../routing/shared/component-can-deactivate.directive';
 import { ContentMetadataComponent } from '../content-metadata/content-metadata.component';
 import { FileUploadComponent } from '../../shared/widgets/file-upload/file-upload.component';
 
 @Component({
   selector: 'app-create-page',
   templateUrl: './create-page.component.html',
-  styleUrls: ['./create-page.component.css']
+  styleUrls: ['./create-page.component.css'],
 })
-export class CreatePageComponent extends ComponentCanDeactivate implements OnInit, OnDestroy {
+export class CreatePageComponent extends ComponentCanDeactivateDirective implements OnInit, OnDestroy {
   private componentDestroyed = new Subject();
   private user: User;
 
@@ -37,8 +37,8 @@ export class CreatePageComponent extends ComponentCanDeactivate implements OnIni
   submitPending: boolean;
 
   @ViewChild(DynamicComponentDirective) contentViewDirective: DynamicComponentDirective;
-  @ViewChild(ContentViewComponent) contentViewComponent: ContentViewComponent;
-  @ViewChild(ContentObjectListComponent) contentObjectListComponent: ContentObjectListComponent;
+  @ViewChild(ContentViewComponent, { static: true }) contentViewComponent: ContentViewComponent;
+  @ViewChild(ContentObjectListComponent, { static: true }) contentObjectListComponent: ContentObjectListComponent;
 
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
@@ -59,7 +59,7 @@ export class CreatePageComponent extends ComponentCanDeactivate implements OnIni
       this.config = data.config;
       this.extractPageConfig();
     });
-    this.route.paramMap.pipe(takeUntil(this.componentDestroyed)).subscribe(params => {
+    this.route.paramMap.pipe(takeUntil(this.componentDestroyed)).subscribe((params) => {
       if (this.contentObjectListComponent) {
         this.contentObjectListComponent.reset();
       }
@@ -121,8 +121,8 @@ export class CreatePageComponent extends ComponentCanDeactivate implements OnIni
 
     if (!this.form.valid) {
       const invalidFields = <FormControl[]>Object.keys(this.form.controls)
-        .map(key => this.form.controls[key])
-        .filter(ctl => ctl.invalid);
+        .map((key) => this.form.controls[key])
+        .filter((ctl) => ctl.invalid);
       if (invalidFields.length > 0) {
         const invalidElem: any = invalidFields[0];
         invalidElem.nativeElement.focus();
@@ -134,7 +134,7 @@ export class CreatePageComponent extends ComponentCanDeactivate implements OnIni
       const saveResult = this.contentObjectListComponent.saveItem(fields, formModel, metadataOverrides);
 
       if (saveResult) {
-        saveResult.then(successfulSave => {
+        saveResult.then((successfulSave) => {
           if (successfulSave) {
             this.form.markAsPristine(); // the entire form has saved and is no longer dirty
           }

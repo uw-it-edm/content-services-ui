@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Field } from '../../../core/shared/model/field';
+import { Field, isFieldRightAligned } from '../../../core/shared/model/field';
 
 @Component({
   selector: 'app-display-field',
@@ -10,25 +10,21 @@ export class DisplayFieldComponent {
   @Input() field: Field;
   @Input() value;
 
-  constructor() {}
-
-  getFieldType(): string {
+  getFieldDisplayType(): string {
     let type = 'default';
 
-    if (this.field) {
-      if (this.field.displayType === 'date') {
-        type = 'date';
-      } else if (this.field.displayType === 'dateTime') {
-        type = 'dateTime';
-      } else if (this.field.displayType === 'student') {
-        type = 'student';
-      } else if (this.field.displayType === 'person') {
-        type = 'person';
-      } else if (this.field.displayType === 'select' && this.field.dynamicSelectConfig) {
+    if (this.field && this.field.displayType) {
+      if (this.field.displayType === 'select' && this.field.dynamicSelectConfig) {
         type = 'dataApiValue';
+      } else {
+        type = this.field.displayType;
       }
     }
 
     return type;
+  }
+
+  get isRightAligned(): boolean {
+    return isFieldRightAligned(this.field);
   }
 }

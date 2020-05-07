@@ -9,7 +9,7 @@ import {
   Input,
   OnDestroy,
   Optional,
-  Self
+  Self,
 } from '@angular/core';
 import { forkJoin, Observable, of, Subject } from 'rxjs';
 import {
@@ -20,16 +20,12 @@ import {
   FormGroup,
   FormGroupDirective,
   NgControl,
-  NgForm
+  NgForm,
 } from '@angular/forms';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import {
-  CanUpdateErrorState,
-  ErrorStateMatcher,
-  MatFormFieldControl,
-  MatSelectChange,
-  mixinErrorState
-} from '@angular/material';
+import { CanUpdateErrorState, ErrorStateMatcher, mixinErrorState } from '@angular/material/core';
+import { MatFormFieldControl } from '@angular/material/form-field';
+import { MatSelectChange } from '@angular/material/select';
 import { Field } from '../../../core/shared/model/field';
 import { FieldOption } from '../../../core/shared/model/field/field-option';
 import { FocusMonitor } from '@angular/cdk/a11y';
@@ -69,15 +65,15 @@ const NUMBER_OF_FIELDS = 6; // year, quarter, curriculum, course, section, cours
   host: {
     '[attr.aria-required]': 'required.toString()',
     '[attr.aria-disabled]': 'disabled.toString()',
-    '[attr.aria-invalid]': 'errorState'
+    '[attr.aria-invalid]': 'errorState',
   },
   providers: [
     {
       provide: MatFormFieldControl,
-      useExisting: CourseInputComponent
+      useExisting: CourseInputComponent,
     },
-    ErrorStateMatcher
-  ]
+    ErrorStateMatcher,
+  ],
 })
 export class CourseInputComponent extends _CourseInputComponentBase
   implements
@@ -108,11 +104,11 @@ export class CourseInputComponent extends _CourseInputComponentBase
   courseControl = new FormControl();
   courseOptions: any[] = [];
 
-  section;
+  section = '';
   sectionControl = new FormControl();
   sectionOptions: any[] = [];
 
-  courseTitle;
+  courseTitle = '';
 
   onSelectYear(event: MatSelectChange) {
     if (event.value) {
@@ -128,6 +124,10 @@ export class CourseInputComponent extends _CourseInputComponentBase
       this.updateCourses();
       this._propagateChanges();
     }
+  }
+
+  get courseAriaLabel(): string {
+    return this.courseNumber && this.courseTitle ? `Course ${this.courseNumber}-${this.courseTitle}` : 'Course';
   }
 
   private setSectionValue(val: string) {
@@ -192,7 +192,7 @@ export class CourseInputComponent extends _CourseInputComponentBase
         if (courses && courses['Courses'] && sections && sections['Sections']) {
           // get course sections by course
           const secs = {};
-          sections['Sections'].forEach(s => {
+          sections['Sections'].forEach((s) => {
             const cn = s['CourseNumber'];
             if (secs[cn]) {
               secs[cn].push(s['SectionID']);
@@ -204,7 +204,7 @@ export class CourseInputComponent extends _CourseInputComponentBase
           // keep courses with sections (i.e. offerings)
           // and attach sections to corresponding course
           let hasSelectedCourse = false;
-          courses['Courses'].forEach(c => {
+          courses['Courses'].forEach((c) => {
             const cn = c['CourseNumber'];
             if (secs[cn]) {
               c.sections = secs[cn];
@@ -221,6 +221,7 @@ export class CourseInputComponent extends _CourseInputComponentBase
             this.courseControl.patchValue(this.courseNumber);
           } else if (this.courseOptions.length === 0) {
             this.courseNumber = '';
+            this.courseTitle = '';
           }
         }
 
@@ -238,7 +239,7 @@ export class CourseInputComponent extends _CourseInputComponentBase
       this.sectionOptions = [];
       // get sections from associated course. no need to call DataAPI.
       if (this.courseOptions && this.courseOptions.length > 0) {
-        this.courseOptions.some(c => {
+        this.courseOptions.some((c) => {
           if (this.courseNumber === c['CourseNumber']) {
             this.sectionOptions = c.sections || [];
             return true;
@@ -308,10 +309,11 @@ export class CourseInputComponent extends _CourseInputComponentBase
       this.year = values[0];
       this.quarter = values[1];
       this.courseNumber = values[3];
-      this.courseTitle = values[4];
+      this.courseTitle = this.courseNumber && values[4]; // Only set the course title if there is a course number.
       this.section = values[5];
     } else {
       this.courseNumber = '';
+      this.courseTitle = '';
       this.setSectionValue('');
     }
 

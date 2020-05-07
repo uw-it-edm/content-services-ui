@@ -1,17 +1,18 @@
-<span *ngIf="field" [ngSwitch]="getFieldType()">
- <span *ngSwitchCase="'date'">
-  {{value | date: 'shortDate'}}
+<div *ngIf="field" [ngSwitch]="getFieldDisplayType()" [ngClass]="{ 'field-content': true, 'field-align-right': isRightAligned }">
+  <span *ngSwitchCase="'date'">
+  {{value | date: 'M/d/yyyy'}}
   </span>
   <span *ngSwitchCase="'dateTime'">
-     {{value | date: 'short' }}
-   </span>
+    {{value | date: 'M/d/yyyy, h:mm a' }}
+  </span>
+  <span *ngSwitchCase="'currency'">
+    {{value | safeCurrency }}
+  </span>
   <span *ngSwitchCase="'student'">
-    <app-student-display
-      value="{{value}}"></app-student-display>
+    <app-student-display value="{{value}}"></app-student-display>
   </span>
   <span *ngSwitchCase="'person'">
-    <app-person-display
-      value="{{value}}"></app-person-display>
+    <app-person-display value="{{value}}"></app-person-display>
   </span>
   <span *ngSwitchCase="'dataApiValue'">
     <app-data-api-display
@@ -23,4 +24,4 @@
   <span *ngSwitchDefault>
    {{value}}
   </span>
-</span>
+</div>

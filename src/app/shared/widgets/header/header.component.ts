@@ -5,13 +5,13 @@ import { UserService } from '../../../user/shared/user.service';
 import { User } from '../../../user/shared/user';
 import { Observable } from 'rxjs';
 import { ConfigResolver } from '../../../routing/shared/config-resolver.service';
-import { MatMenu } from '@angular/material';
+import { MatMenu } from '@angular/material/menu';
 import { TenantConfigInfo } from '../../../core/shared/model/tenant-config-info';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
   tenant: string;
@@ -19,8 +19,8 @@ export class HeaderComponent implements OnInit {
   user$: Observable<User>;
   availableTenants$: Observable<TenantConfigInfo[]>;
 
-  @ViewChild(MatMenu) accountMenu: MatMenu;
-  @ViewChild(MatMenu) userMenu: MatMenu;
+  @ViewChild(MatMenu, { static: true }) accountMenu: MatMenu;
+  @ViewChild(MatMenu, { static: true }) userMenu: MatMenu;
 
   constructor(
     private configResolver: ConfigResolver,
@@ -32,16 +32,16 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.user$ = this.userService.getUserObservable();
 
-    this.user$.subscribe(user => {
+    this.user$.subscribe((user) => {
       if (user) {
         this.availableTenants$ = this.configService.getTenantList();
       }
     });
 
-    this.eventsManager.tenantEmitter.subscribe(tenant => {
+    this.eventsManager.tenantEmitter.subscribe((tenant) => {
       this.tenant = tenant;
     });
-    this.configResolver.getAppNameSubject().subscribe(appName => {
+    this.configResolver.getAppNameSubject().subscribe((appName) => {
       this.title = appName;
     });
   }

@@ -1,7 +1,8 @@
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteModule, MatProgressSpinnerModule } from '@angular/material';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Observable, of } from 'rxjs';
 import { A11yModule } from '@angular/cdk/a11y';
 import { Person } from '../../shared/model/person';
@@ -50,7 +51,7 @@ describe('PersonAutocompleteComponent', () => {
     TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, MatAutocompleteModule, A11yModule, MatProgressSpinnerModule],
       declarations: [PersonAutocompleteComponent],
-      providers: [{ provide: PersonService, useValue: new MockPersonService() }]
+      providers: [{ provide: PersonService, useValue: new MockPersonService() }],
     }).compileComponents();
   }));
 

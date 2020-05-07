@@ -6,7 +6,7 @@ import { Config } from '../../core/shared/model/config';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Injector } from '@angular/core';
 import { NotificationService } from '../../shared/providers/notification.service';
-import { MatSnackBarModule } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 class RouterStub {
   navigate(url: string) {
@@ -36,13 +36,13 @@ describe('ConfigResolverService', () => {
         ConfigResolver,
         { provide: ConfigService, useValue: _mockConfigService },
         { provide: Router, useClass: RouterStub },
-        NotificationService
-      ]
+        NotificationService,
+      ],
     }).compileComponents();
   }));
 
   let mockConfigService: MockConfigService;
-  beforeEach(inject([Injector], injector => {
+  beforeEach(inject([Injector], (injector) => {
     mockConfigService = injector.get(ConfigService);
   }));
 
@@ -54,7 +54,7 @@ describe('ConfigResolverService', () => {
     const route = new ActivatedRouteSnapshot();
     const routeParams = { tenant: 'test-tenant' };
     route.params = routeParams;
-    service.resolve(route, null).then(config => {
+    service.resolve(route, null).then((config) => {
       expect(config.tenant).toBe('test-tenant');
     });
   }));
@@ -63,7 +63,7 @@ describe('ConfigResolverService', () => {
     const route = new ActivatedRouteSnapshot();
     const routeParams = { tenant: 'fsdfsd-tenant' };
     route.params = routeParams;
-    service.resolve(route, null).then(config => {
+    service.resolve(route, null).then((config) => {
       expect(config.tenant).toBeNull();
     });
   }));

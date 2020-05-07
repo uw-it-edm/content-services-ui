@@ -2,7 +2,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FileUploadComponent } from './file-upload.component';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule, MatIconModule, MatTooltipModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
@@ -12,14 +14,14 @@ function getFakeEventData(): any {
   return {
     dataTransfer: {
       files: FileList,
-      types: ['Files']
+      types: ['Files'],
     },
     target: {
       files: FileList,
-      types: ['Files']
+      types: ['Files'],
     },
     preventDefault: () => {},
-    stopPropagation: () => {}
+    stopPropagation: () => {},
   };
 }
 
@@ -31,7 +33,7 @@ describe('FileUploadComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MatButtonModule, MatIconModule, MatTooltipModule, ReactiveFormsModule],
-      declarations: [FileUploadComponent, TruncatePipe, FocusDirective]
+      declarations: [FileUploadComponent, TruncatePipe, FocusDirective],
     }).compileComponents();
   }));
 

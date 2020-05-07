@@ -8,6 +8,9 @@
     },
     "demo3": {
       "href": "http://__current_host__:12345/profile/v1/app/my-app/demo3"
+    },
+    "demo4-nofacets": {
+      "href": "http://__current_host__:12345/profile/v1/app/my-app/demo4"
     }
   }
 }

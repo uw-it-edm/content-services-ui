@@ -4,29 +4,33 @@ import { SearchResults } from '../shared/model/search-result';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { Observable, Subject } from 'rxjs';
 import { SearchDataSource } from '../shared/model/search-datasource.model';
-import { MatPaginator, MatSort, PageEvent, Sort, SortDirection, MatSortHeaderIntl } from '@angular/material';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSort, MatSortHeaderIntl, Sort, SortDirection } from '@angular/material/sort';
 import { PaginatorConfig } from '../shared/model/paginator-config';
 import { DataService } from '../../shared/providers/data.service';
 import { SearchUtility } from '../shared/search-utility';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { SearchPagination } from '../shared/model/search-pagination';
-import { takeUntil } from 'rxjs/operators';
+import { delay, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { ObjectUtilities } from '../../core/util/object-utilities';
+import { Field, isFieldRightAligned } from '../../core/shared/model/field';
 
 @Component({
   selector: 'app-search-results',
   templateUrl: './search-results.component.html',
-  styleUrls: ['./search-results.component.css']
+  styleUrls: ['./search-results.component.css'],
 })
 export class SearchResultsComponent implements OnInit, OnDestroy {
   private componentDestroyed = new Subject();
+  private _pageConfig: SearchPageConfig;
+  private fieldToLabelMap: { [id: string]: string } = {};
   searchModel: SearchModel = new SearchModel();
   paginatorConfig: PaginatorConfig = new PaginatorConfig();
 
   dataSource: SearchDataSource;
-  displayedColumns = ['id'];
+  displayedColumns = [];
   hasResults = false;
 
   // It seems to be necessary to data-bind these to the mat-table instead of just manipulating
@@ -39,16 +43,24 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   searchModel$: Observable<SearchModel>;
   @Input()
   searchResults$: Subject<SearchResults>;
-  @Input()
-  pageConfig: SearchPageConfig;
   @Output()
   search = new EventEmitter<SearchModel>();
 
-  @ViewChild(MatPaginator)
+  @Input()
+  set pageConfig(config: SearchPageConfig) {
+    this._pageConfig = config;
+    this.fieldToLabelMap = this.configureTableColumns(config);
+  }
+
+  get pageConfig(): SearchPageConfig {
+    return this._pageConfig;
+  }
+
+  @ViewChild(MatPaginator, { static: true })
   topPaginator: MatPaginator;
-  @ViewChild(MatPaginator)
+  @ViewChild(MatPaginator, { static: true })
   bottomPaginator: MatPaginator;
-  @ViewChild(MatSort)
+  @ViewChild(MatSort, { static: true })
   sort: MatSort = new MatSort();
 
   constructor(
@@ -60,52 +72,18 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.searchModel$.pipe(takeUntil(this.componentDestroyed)).subscribe(searchModel => {
-      this.searchModel = searchModel;
-      if (this.searchModel.pagination != null) {
-        if (this.searchModel.pagination.pageIndex != null) {
-          this.paginatorConfig.pageIndex = this.searchModel.pagination.pageIndex;
-        }
-        if (this.searchModel.pagination.pageSize != null) {
-          this.paginatorConfig.pageSize = this.searchModel.pagination.pageSize;
-        }
-      }
-      if (this.searchModel.order != null) {
-        this.initializeSort(searchModel.order);
-      }
-    });
-
     this.dataSource = new SearchDataSource(this.searchModel$, this.searchResults$, this.sort, [
       this.topPaginator,
-      this.bottomPaginator
+      this.bottomPaginator,
     ]);
 
-    const fieldToLabelMap = this.configureTableColumns();
+    // delay 0 to prevent "Expression has changed after it was checked" when initial search is performed afterViewInit in parent
+    this.searchModel$.pipe(delay(0), takeUntil(this.componentDestroyed)).subscribe((searchModel) => {
+      this.onSearchModelChanged(searchModel);
+    });
 
-    this.searchResults$.pipe(takeUntil(this.componentDestroyed)).subscribe(results => {
-      this.hasResults = !isNullOrUndefined(results) && results.total > 0;
-      if (this.hasResults) {
-        this.paginatorConfig.numberOfResults = results.total;
-      } else {
-        this.paginatorConfig.numberOfResults = 0;
-      }
-
-      this.initializeSort(results.sort);
-
-      const searchResultsUpdatedMessage = this.getSearchResultsUpdatedMessage(
-        this.paginatorConfig.numberOfResults,
-        this.paginatorConfig.pageSize,
-        this.paginatorConfig.pageIndex,
-        this.sortTerm,
-        this.sortDirection,
-        fieldToLabelMap
-      );
-
-      console.log(searchResultsUpdatedMessage);
-      this.liveAnnouncer.announce(searchResultsUpdatedMessage, 'assertive');
-
-      const adjacentIds = results.results.map(result => result['id']); // store a list of result ids to be passed to edit page
-      this.data.set('adjacentIds', adjacentIds);
+    this.searchResults$.pipe(takeUntil(this.componentDestroyed)).subscribe((results) => {
+      this.onSearchResultsChanged(results);
     });
 
     this.sort.sortChange.subscribe((sort: Sort) => {
@@ -113,6 +91,47 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
       this.searchModel.order.term = sort.active;
       this.search.next(this.searchModel);
     });
+  }
+
+  private onSearchResultsChanged(results: SearchResults): void {
+    this.hasResults = !isNullOrUndefined(results) && results.total > 0;
+    if (this.hasResults) {
+      this.paginatorConfig.numberOfResults = results.total;
+    } else {
+      this.paginatorConfig.numberOfResults = 0;
+    }
+
+    this.initializeSort(results.sort);
+
+    const searchResultsUpdatedMessage = this.getSearchResultsUpdatedMessage(
+      this.paginatorConfig.numberOfResults,
+      this.paginatorConfig.pageSize,
+      this.paginatorConfig.pageIndex,
+      this.sortTerm,
+      this.sortDirection,
+      this.fieldToLabelMap
+    );
+
+    console.log(searchResultsUpdatedMessage);
+    this.liveAnnouncer.announce(searchResultsUpdatedMessage, 'assertive');
+
+    const adjacentIds = results.results.map((result) => result['id']); // store a list of result ids to be passed to edit page
+    this.data.set('adjacentIds', adjacentIds);
+  }
+
+  private onSearchModelChanged(searchModel: SearchModel): void {
+    this.searchModel = searchModel;
+    if (this.searchModel.pagination != null) {
+      if (this.searchModel.pagination.pageIndex != null) {
+        this.paginatorConfig.pageIndex = this.searchModel.pagination.pageIndex;
+      }
+      if (this.searchModel.pagination.pageSize != null) {
+        this.paginatorConfig.pageSize = this.searchModel.pagination.pageSize;
+      }
+    }
+    if (this.searchModel.order != null) {
+      this.initializeSort(searchModel.order);
+    }
   }
 
   private getSearchResultsUpdatedMessage(
@@ -145,19 +164,21 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     return searchResultsUpdatedMessages.join(' ');
   }
 
-  private configureTableColumns(): { [id: string]: string } {
+  private configureTableColumns(pageConfig: SearchPageConfig): { [id: string]: string } {
     const fieldLabelMap: { [id: string]: string } = {};
 
-    if (this.pageConfig.displayDocumentLabelField) {
+    this.displayedColumns = ['id'];
+
+    if (pageConfig.displayDocumentLabelField) {
       this.displayedColumns.push('label');
     }
 
-    for (const field of this.pageConfig.fieldsToDisplay) {
+    for (const field of pageConfig.fieldsToDisplay) {
       this.displayedColumns.push(field.key);
       fieldLabelMap[field.key] = field.label;
     }
 
-    this.matSortService.sortButtonLabel = id => {
+    this.matSortService.sortButtonLabel = (id) => {
       const label = fieldLabelMap[id] || id;
 
       return `Change sorting for ${label}`;
@@ -168,6 +189,10 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
 
   getValueFromMetadata(metadata, key: string) {
     return ObjectUtilities.getNestedObjectFromStringPath(metadata, key);
+  }
+
+  isFieldRightAligned(field: Field): boolean {
+    return isFieldRightAligned(field);
   }
 
   onPageEvent(pageEvent: PageEvent) {

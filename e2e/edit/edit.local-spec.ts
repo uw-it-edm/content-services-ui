@@ -5,8 +5,8 @@ import { ContentServicesUiPage } from '../app/app.po';
 import { until } from 'selenium-webdriver';
 import { protractor } from 'protractor/built/ptor';
 
-const getCurrentUrl = function() {
-  return browser.getCurrentUrl().then(url => {
+const getCurrentUrl = function () {
+  return browser.getCurrentUrl().then((url) => {
     return url.toLowerCase();
   });
 };
@@ -16,7 +16,7 @@ describe('Edit Page for Demo', () => {
   const demoConfig = require('../mocks/profile-api/demo.json');
   const searchPage = new SearchPage();
 
-  const getExpectedChildrenLabels = function() {
+  const getExpectedChildrenLabels = function () {
     const childrenList = require('../mocks/data-api/child-type-parent-type-Parent1-list.json');
     let childrenLabels = '';
     for (let i = 0; i < childrenList.content.length; i++) {
@@ -102,16 +102,13 @@ describe('Edit Page for Demo', () => {
   });
 
   it('should indicate focus on all form fields when selected', () => {
-    page.formFields.each(field => {
+    page.formFields.each((field) => {
       field.click();
 
       expect(field.getAttribute('className')).toContain('mat-focused');
 
       // reset for next field
-      browser
-        .actions()
-        .sendKeys(protractor.Key.ESCAPE)
-        .perform();
+      browser.actions().sendKeys(protractor.Key.ESCAPE).perform();
     });
   });
 
@@ -204,6 +201,26 @@ describe('Edit Page for Demo', () => {
 
     expect(page.saveButton.isEnabled()).toBeTruthy();
   });
+
+  it('should trap keyboard focus to only file viewer when full screen mode button in is clicked', () => {
+    page.toggleFullScreenButton.click();
+
+    // focus should be on Download button
+    browser.actions().sendKeys(protractor.Key.TAB).perform();
+    expect(browser.driver.switchTo().activeElement().getText()).toBe(page.pdfViewerDownloadButton.getText());
+
+    // focus should be on Zoom button
+    browser.actions().sendKeys(protractor.Key.TAB).perform();
+    expect(browser.driver.switchTo().activeElement().getText()).toBe(page.zoomDropDownList.getText());
+
+    // focus should be on full screen toggle button
+    browser.actions().sendKeys(protractor.Key.TAB).perform();
+    expect(browser.driver.switchTo().activeElement().getText()).toBe(page.toggleFullScreenButton.getText());
+
+    // focus should be back on Download button
+    browser.actions().sendKeys(protractor.Key.TAB).perform();
+    expect(browser.driver.switchTo().activeElement().getText()).toBe(page.pdfViewerDownloadButton.getText());
+  });
 });
 
 describe('Edit Page for Demo2', () => {
@@ -247,13 +264,13 @@ describe('Edit Page for Demo3', () => {
 
   it('should display lock icon for all disabled fields', () => {
     expect(page.lockIcons.count()).toEqual(9);
-    page.lockIcons.each(lockIcon => {
+    page.lockIcons.each((lockIcon) => {
       expect(lockIcon.getCssValue('color')).toEqual('rgba(0, 0, 0, 0.55)');
     });
   });
 
   it('should display all disabled field values in grey color', () => {
-    page.disabledFields.each(disabledField => {
+    page.disabledFields.each((disabledField) => {
       expect(disabledField.getCssValue('color')).toEqual('rgba(0, 0, 0, 0.55)');
     });
   });

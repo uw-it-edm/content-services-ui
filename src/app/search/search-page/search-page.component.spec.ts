@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { SearchPageComponent } from './search-page.component';
 import { MaterialConfigModule } from '../../routing/material-config.module';
@@ -11,7 +11,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { SearchBoxComponent } from '../search-box/search-box.component';
 import { SearchResultsComponent } from '../search-results/search-results.component';
 import { SearchService } from '../shared/search.service';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { SearchResults } from '../shared/model/search-result';
 import { SearchModel } from '../shared/model/search-model';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -21,6 +21,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { StudentService } from '../../shared/providers/student.service';
 import { NotificationService } from '../../shared/providers/notification.service';
 import { PersonService } from '../../shared/providers/person.service';
+import { FacetConfig } from '../../core/shared/model/facet-config';
+import Spy = jasmine.Spy;
 
 let studentService: StudentService;
 let dataService: DataService;
@@ -30,12 +32,23 @@ let component: SearchPageComponent;
 let fixture: ComponentFixture<SearchPageComponent>;
 
 class MockSearchService {
-  search(terms: Observable<SearchModel>, pageConfig: SearchPageConfig): Observable<SearchResults> {
+  search(terms: SearchModel, pageConfig: SearchPageConfig): Observable<SearchResults> {
+    if (terms.stringQuery === 'ThrowError') {
+      return throwError('An Error Occurred');
+    }
     return of(new SearchResults());
   }
 }
 
+function getTestSearchModel(stringQuery: string): SearchModel {
+  const searchModel = new SearchModel();
+  searchModel.stringQuery = stringQuery;
+  return searchModel;
+}
+
 describe('SearchPageComponent', () => {
+  let pageConfig: SearchPageConfig;
+
   beforeEach(async(() => {
     activatedRoute = new ActivatedRouteStub();
     searchServiceSpy = new MockSearchService();
@@ -61,7 +74,7 @@ describe('SearchPageComponent', () => {
       .then(() => {
         activatedRoute.testParamMap = { page: 'test-page' };
 
-        const pageConfig = new SearchPageConfig();
+        pageConfig = new SearchPageConfig();
         pageConfig.pageName = 'test-page';
 
         const config = new Config();
@@ -77,8 +90,6 @@ describe('SearchPageComponent', () => {
     fixture = TestBed.createComponent(SearchPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-
-    const searchService = fixture.debugElement.injector.get(SearchService);
   });
 
   it('should be created', () => {
@@ -137,5 +148,108 @@ describe('SearchPageComponent', () => {
 
     displaySearchButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-display-search-button');
     expect(displaySearchButton.length).toEqual(0);
+  });
+
+  it('should show the facets panel and the toggle button if facets are active and a facet exitst in config', () => {
+    pageConfig.facetsConfig.active = true;
+    pageConfig.facetsConfig.facets = new Map<string, FacetConfig>();
+    pageConfig.facetsConfig.facets.set('myFacet', {
+      key: 'metadata.mybooleanfield',
+      label: 'My boolean',
+      order: 'asc',
+      size: 3,
+      maxSize: 50,
+      dataApiValueType: '',
+      dataApiLabelPath: ''
+    });
+
+    fixture = TestBed.createComponent(SearchPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.isToggleLeftPanelButtonVisible).toBeTrue();
+    expect(component.isLeftPanelVisible).toBeTrue();
+  });
+
+  it('should hide the facets panel and the toggle button if facets are not active in config', () => {
+    pageConfig.facetsConfig.active = false;
+    fixture = TestBed.createComponent(SearchPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.isLeftPanelVisible).toBeFalse();
+    expect(component.isToggleLeftPanelButtonVisible).toBeFalse();
+  });
+
+  it('should hide the facets panel and the toggle button if facets are active but there are no facets in config', () => {
+    pageConfig.facetsConfig.active = true;
+    pageConfig.facetsConfig.facets = new Map<string, FacetConfig>();
+
+    fixture = TestBed.createComponent(SearchPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.isLeftPanelVisible).toBeFalse();
+    expect(component.isToggleLeftPanelButtonVisible).toBeFalse();
+  });
+
+  describe('should recover from search error', () => {
+    const LongerThanSearchDebounceTime = 200;
+
+    let theSearchService: SearchService;
+    let searchSpy: Spy;
+    let theNotificationService: NotificationService;
+    let notificationErrorSpy: Spy;
+
+    beforeEach(() => {
+      component.searchDebounceTime = 1;
+      theSearchService = TestBed.get(SearchService);
+      theNotificationService = TestBed.get(NotificationService);
+
+      searchSpy = spyOn(theSearchService, 'search').and.callThrough();
+      notificationErrorSpy = spyOn(theNotificationService, 'error').and.stub();
+    });
+
+    it('should inject search & notification services', () => {
+      expect(theSearchService).toBeDefined();
+      expect(theNotificationService).toBeDefined();
+    });
+
+    it('should call searchService AfterViewInit', fakeAsync(() => {
+      component.ngOnInit();
+      component.ngAfterViewInit();
+      tick(LongerThanSearchDebounceTime);
+
+      expect(searchSpy).toHaveBeenCalled();
+      expect(searchSpy).toHaveBeenCalledTimes(1);
+    }));
+
+    it('should call searchService when searchModel$ changes', fakeAsync(() => {
+      component.ngOnInit();
+      component.ngAfterViewInit();
+      tick(LongerThanSearchDebounceTime);
+
+      component.searchModel$.next(getTestSearchModel('1'));
+      tick(LongerThanSearchDebounceTime);
+      expect(searchSpy).toHaveBeenCalledTimes(2);
+      tick(LongerThanSearchDebounceTime);
+    }));
+
+    it('should continue to call searchService after a search failure', fakeAsync(() => {
+      component.ngOnInit();
+      component.ngAfterViewInit();
+      tick(LongerThanSearchDebounceTime);
+
+      // Should notify error
+      component.searchModel$.next(getTestSearchModel('ThrowError'));
+      tick(LongerThanSearchDebounceTime);
+      expect(searchSpy).toHaveBeenCalledTimes(2);
+      expect(notificationErrorSpy).toHaveBeenCalledTimes(1);
+
+      // Search should continue to function after error
+      component.searchModel$.next(getTestSearchModel(''));
+      tick(LongerThanSearchDebounceTime);
+      expect(searchSpy).toHaveBeenCalledTimes(3);
+    }));
   });
 });

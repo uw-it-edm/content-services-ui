@@ -2,7 +2,8 @@ import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core
 
 import { StudentAutocompleteComponent } from './student-autocomplete.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteModule, MatProgressSpinnerModule } from '@angular/material';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Observable, of } from 'rxjs';
 import { StudentService } from '../../providers/student.service';
 import { StudentSearchResults } from '../../shared/model/student-search-results';
@@ -46,7 +47,7 @@ describe('StudentAutocompleteComponent', () => {
     TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, MatAutocompleteModule, A11yModule, MatProgressSpinnerModule],
       declarations: [StudentAutocompleteComponent],
-      providers: [{ provide: StudentService, useValue: new MockStudentService() }]
+      providers: [{ provide: StudentService, useValue: new MockStudentService() }],
     }).compileComponents();
   }));
 

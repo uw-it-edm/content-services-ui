@@ -1,3 +1,34 @@
-.cs-search-table-cell {
-  padding-right: 10px;
+.search-results-component {
+  position: relative;
+}
+
+.cell-align-right {
+  /* Right align the content of header and row cells */
+  justify-content: flex-end;
+}
+
+.mat-header-cell .header-cell-content {
+  /* Align text to the left by default, this is needed because the sortable header is rendered
+     as a button, which by default centers its text. */
+  text-align: left;
+}
+
+.mat-header-cell.cell-align-right .header-cell-content {
+  text-align: right;
+}
+
+.mat-header-cell.cell-align-right > .header-cell-content {
+  /* This rule applies for the non-sortable header.
+     Note: The reason why is 18px is because it matches the width of the up/down sorting arrow so sortable
+           and non-sortable fields will have the same padding. */
+  padding-right: 18px;
+}
+
+/* This rule targets the left space of the table, where an action button can be plugged in
+   by the parent component. */
+.table-action-button {
+  float: left;
+  position: absolute;
+  top: 63px;
+  left: -30px;
 }

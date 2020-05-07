@@ -3,19 +3,16 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ContentMetadataComponent } from './content-metadata.component';
 import { ContentItem } from '../shared/model/content-item';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import {
-  MatAutocompleteModule,
-  MatButtonModule,
-  MatCheckboxModule,
-  MatDatepickerModule,
-  MatFormFieldModule,
-  MatIconModule,
-  MatInputModule,
-  MatNativeDateModule,
-  MatOptionModule,
-  MatProgressSpinnerModule,
-  MatSelectModule
-} from '@angular/material';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { HttpClient } from '@angular/common/http';
@@ -63,7 +60,7 @@ describe('ContentMetadataComponent', () => {
         MatAutocompleteModule,
         MatSelectModule,
         MatProgressSpinnerModule,
-        MatIconModule
+        MatIconModule,
       ],
       declarations: [
         ContentMetadataComponent,
@@ -73,13 +70,13 @@ describe('ContentMetadataComponent', () => {
         StudentAutocompleteComponent,
         PersonAutocompleteComponent,
         TimestampPickerComponent,
-        CustomTextDirective
+        CustomTextDirective,
       ],
       providers: [
         { provide: DataApiValueService, useValue: dataApiValueServiceSpy },
         { provide: UserService, useValue: new UserServiceMock() },
-        { provide: HttpClient, useValue: new HttpClient(null) }
-      ]
+        { provide: HttpClient, useValue: new HttpClient(null) },
+      ],
     })
       .compileComponents()
       .then(() => {
@@ -101,8 +98,8 @@ describe('ContentMetadataComponent', () => {
         key: 't',
         label: 't',
         displayType: 'select',
-        options: [new FieldOption('o1'), new FieldOption('o2'), new FieldOption('o3')]
-      })
+        options: [new FieldOption('o1'), new FieldOption('o2'), new FieldOption('o3')],
+      }),
     ];
     editPageConfig.viewPanel = false;
     component.pageConfig = editPageConfig;
@@ -160,7 +157,7 @@ describe('ContentMetadataComponent', () => {
       '3': 'three',
       a: 'a',
       t: 'o2',
-      d: 1509519600000
+      d: 1509519600000,
     });
   });
 });

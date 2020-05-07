@@ -5,7 +5,7 @@ export class EditPage {
   public saveButton = element(by.id('saveItem'));
   public studentInputField = element(by.css('app-student-autocomplete input'));
   public personInputField = element(by.css('app-person-autocomplete input'));
-  public profileUrl = `${browser.baseUrl}/${this.profile}/edit`;
+  public profileUrl = `${browser.baseUrl}${this.profile}/edit`;
   public pageUrl = `${this.profileUrl}/${this.id}`;
   public pdfFilePath = path.resolve(__dirname, '../mocks/files/sample-file.pdf');
   public inputField = element(by.id('mat-input-0'));
@@ -17,6 +17,8 @@ export class EditPage {
   public selectPanel = element(by.className('mat-select-panel'));
   public lockIcons = element.all(by.className('disabled-icon'));
   public disabledFields = element.all(by.css(':disabled'));
+  public toggleFullScreenButton = element(by.name('toggleFullScreen'));
+  public zoomDropDownList = element(by.name('zoomFactor'));
 
   constructor(private profile: string = 'demo', private id: string = '123456') {}
 
@@ -69,13 +71,13 @@ export class EditPage {
   getPaginatorText() {
     return element(by.css('app-content-pager > span'))
       .getText()
-      .then(text => {
+      .then((text) => {
         return text.trim();
       });
   }
 
   getFileName(fileIndex: number) {
-    return element.all(by.css('.mat-list-item-content .mat-list-text p > span')).then(names => {
+    return element.all(by.css('.mat-list-item-content .mat-list-text p > span')).then((names) => {
       return names[fileIndex].getText();
     });
   }
@@ -94,7 +96,7 @@ export class EditPage {
     browser
       .switchTo()
       .alert()
-      .then(alert => {
+      .then((alert) => {
         if (isAlertUnexpected) {
           console.log('WARN: Unexpected alert left open from previous test. ');
         }

@@ -1,4 +1,4 @@
-<div>
+<div class="search-results-component">
   <mat-paginator #topPaginator
                  [pageIndex]="paginatorConfig.pageIndex"
                  [pageSize]="paginatorConfig.pageSize"
@@ -6,6 +6,13 @@
                  [length]="paginatorConfig.numberOfResults"
                  (page)="onPageEvent($event)">
   </mat-paginator>
+
+  <!-- The template slot below is plugged in by the parent component. It is meant to provide a space
+       for the parent to inject a button that is in the correct tab order between the paginator and the
+       results table.-->
+  <div class="table-action-button">
+    <ng-content select="[search-results-action]"></ng-content>
+  </div>
 
   <mat-table #table [dataSource]="dataSource" matSort [matSortActive]="sortTerm"
              [matSortDirection]="sortDirection" aria-label="Search Results">
@@ -32,14 +39,18 @@
     <ng-container *ngFor="let col of pageConfig.fieldsToDisplay" matColumnDef={{col.key}}>
       <span [ngSwitch]="col.sortable">
          <span *ngSwitchCase="false">
-          <mat-header-cell *matHeaderCellDef>{{ col.label }}</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef [ngClass]="{ 'cell-align-right': isFieldRightAligned(col)}">
+            <div class="header-cell-content">{{ col.label }}</div>
+          </mat-header-cell>
         </span>
         <span *ngSwitchDefault>
-         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ col.label }}</mat-header-cell>
+         <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="{ 'cell-align-right': isFieldRightAligned(col)}">
+           <div class="header-cell-content">{{ col.label }}</div>
+          </mat-header-cell>
         </span>
       </span>
 
-      <mat-cell *matCellDef="let element" class="cs-search-table-cell">
+      <mat-cell *matCellDef="let element" [ngClass]="{ 'cell-align-right': isFieldRightAligned(col)}">
         <app-display-field [field]="col"
                            [value]="getValueFromMetadata(element.metadata,col.key)"></app-display-field>
       </mat-cell>

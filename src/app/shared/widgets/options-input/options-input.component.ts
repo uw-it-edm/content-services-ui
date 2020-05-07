@@ -9,7 +9,8 @@ import {
   Input,
   OnDestroy,
   Optional,
-  Self
+  Self,
+  ViewChild,
 } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import {
@@ -20,16 +21,12 @@ import {
   FormGroup,
   FormGroupDirective,
   NgControl,
-  NgForm
+  NgForm,
 } from '@angular/forms';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import {
-  CanUpdateErrorState,
-  ErrorStateMatcher,
-  MatFormFieldControl,
-  MatSelectChange,
-  mixinErrorState
-} from '@angular/material';
+import { CanUpdateErrorState, ErrorStateMatcher, mixinErrorState, MatOption } from '@angular/material/core';
+import { MatFormFieldControl } from '@angular/material/form-field';
+import { MatSelectChange, MatSelect } from '@angular/material/select';
 import { Field } from '../../../core/shared/model/field';
 import { FieldOption } from '../../../core/shared/model/field/field-option';
 import { FocusMonitor } from '@angular/cdk/a11y';
@@ -65,15 +62,15 @@ const INTERNAL_FIELD_NAME = 'optionsForm';
   host: {
     '[attr.aria-required]': 'required.toString()',
     '[attr.aria-disabled]': 'disabled.toString()',
-    '[attr.aria-invalid]': 'errorState'
+    '[attr.aria-invalid]': 'errorState',
   },
   providers: [
     {
       provide: MatFormFieldControl,
-      useExisting: OptionsInputComponent
+      useExisting: OptionsInputComponent,
     },
-    ErrorStateMatcher
-  ]
+    ErrorStateMatcher,
+  ],
 })
 export class OptionsInputComponent extends _OptionsInputComponentBase
   implements
@@ -93,10 +90,24 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
     return INTERNAL_FIELD_NAME;
   }
 
+  @ViewChild('selectDropDown', { static: true }) matSelect: MatSelect;
   @Input() fieldConfig: Field;
   @Input() parentControl: AbstractControl;
   options$: Observable<FieldOption[]>;
   formGroup: FormGroup;
+
+  get selectedOptionText(): string {
+    let optionText: string;
+
+    try {
+      const matOption = this.matSelect && (this.matSelect.selected as MatOption);
+      optionText = matOption && matOption.viewValue;
+    } catch {
+      // MatSelect throws exception instead of returning null or empty array if nothing is selected.
+    }
+
+    return this.placeholder + (optionText ? ` ${optionText}` : '');
+  }
 
   private initComponent() {
     this.initInternalForm();
@@ -120,7 +131,7 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
         if (originalParentValue) {
           this.updateOptionsFromParent(dynamicSelectConfig, parentFieldConfig, originalParentValue);
         }
-        this.parentControl.valueChanges.pipe(takeUntil(this.componentDestroyed)).subscribe(newParentValue => {
+        this.parentControl.valueChanges.pipe(takeUntil(this.componentDestroyed)).subscribe((newParentValue) => {
           if (newParentValue) {
             this.updateOptionsFromParent(dynamicSelectConfig, parentFieldConfig, newParentValue);
           } else {
@@ -139,7 +150,7 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
       }
     } else {
       this.options$ = of(
-        this.fieldConfig.options.map(option => {
+        this.fieldConfig.options.map((option) => {
           return Object.assign(new FieldOption(), option);
         })
       );

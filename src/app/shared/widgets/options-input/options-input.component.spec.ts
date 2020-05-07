@@ -7,7 +7,7 @@ import { FieldOption } from '../../../core/shared/model/field/field-option';
 import { Field } from '../../../core/shared/model/field';
 import { SharedModule } from '../../shared.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSelectChange } from '@angular/material';
+import { MatSelectChange } from '@angular/material/select';
 import { DataApiValueService } from '../../providers/dataapivalue.service';
 
 describe('OptionsInputComponent', () => {
@@ -19,7 +19,7 @@ describe('OptionsInputComponent', () => {
     TestBed.configureTestingModule({
       imports: [SharedModule, NoopAnimationsModule],
       declarations: [],
-      providers: [{ provide: DataApiValueService, useValue: dataApiValueServiceSpy }]
+      providers: [{ provide: DataApiValueService, useValue: dataApiValueServiceSpy }],
     }).compileComponents();
   }));
 
@@ -51,7 +51,7 @@ describe('OptionsInputComponent', () => {
   });
 
   it('should have a correct list of options', () => {
-    component.options$.subscribe(options => {
+    component.options$.subscribe((options) => {
       expect(options.length).toBe(2);
       expect(options[0].value).toBe('val1');
       expect(options[0].displayValue).toBe('displayVal1');
@@ -73,7 +73,7 @@ describe('OptionsInputComponent', () => {
       >
       </app-options-input>
     </div>
-  `
+  `,
 })
 class TestHostComponent {
   public field: Field;
@@ -83,7 +83,7 @@ class TestHostComponent {
     this.field = new Field();
     this.field.options = [new FieldOption('optionOneValue', 'optionOneDisplayValue')];
     this.formGroup = new FormGroup({
-      testFormControlName: new FormControl(this.field.options[0].value)
+      testFormControlName: new FormControl(this.field.options[0].value),
     });
   }
 }
@@ -97,7 +97,7 @@ describe('OptionsInputComponent with host', () => {
     TestBed.configureTestingModule({
       imports: [SharedModule, NoopAnimationsModule, ReactiveFormsModule],
       declarations: [TestHostComponent],
-      providers: [{ provide: DataApiValueService, useValue: dataApiValueServiceSpy }]
+      providers: [{ provide: DataApiValueService, useValue: dataApiValueServiceSpy }],
     }).compileComponents();
   }));
 
@@ -111,7 +111,7 @@ describe('OptionsInputComponent with host', () => {
   it('should render aria-label attribute set to its label and option value', async(() => {
     fixture.whenStable().then(() => {
       fixture.detectChanges();
-      expect(componentElement.getAttribute('aria-label')).toEqual('testPlaceHolder optionOneValue');
+      expect(componentElement.getAttribute('aria-label')).toEqual('testPlaceHolder optionOneDisplayValue');
     });
   }));
 });

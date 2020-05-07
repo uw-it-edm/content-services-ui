@@ -30,6 +30,14 @@
           "label": "Profile Id"
         },
         {
+          "key": "DocumentType",
+          "label": "Document Type"
+        },
+        {
+          "key": "PublishStatus",
+          "label": "Publish Status"
+        },
+        {
           "key": "Filer",
           "label": "Filer"
         },
@@ -39,24 +47,21 @@
           "displayType": "person"
         },
         {
-          "key": "PublishStatus",
-          "label": "Publish Status"
-        },
-        {
-          "key": "DocumentType",
-          "label": "Document Type"
-        },
-        {
           "key": "LastModifiedDate",
           "label": "Last Modified Date",
           "displayType": "date"
+        },
+        {
+          "key": "InvoiceAmount",
+          "label": "Invoice Amount",
+          "displayType": "currency"
         }
       ],
       "searchConfig": {
         "directions": "Type a Employee ID or other info",
         "label": "",
         "placeholder": "Search for documents",
-        "indexName": "documents-demo"
+        "indexName": "documents-demo3"
       },
       "searchDaterangeConfig": {
         "active": false,

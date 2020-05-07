@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { FileUploadComponent } from './widgets/file-upload/file-upload.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SafeUrlPipe } from './pipes/safe-url.pipe';
+import { SafeCurrencyPipe } from './pipes/safe-currency.pipe';
 
 import { CustomTextDirective } from './directives/custom-text/custom-text.directive';
 import { DataService } from './providers/data.service';
@@ -31,9 +32,18 @@ import { PersonDisplayComponent } from './widgets/person-display/person-display.
 import { DataApiValueDisplayComponent } from './widgets/data-api-display/data-api-value-display.component';
 import { ElasticsearchDateValidatorDirective } from './directives/elasticsearch-date-validator/elasticsearch-date-validator.directive';
 import { CourseInputComponent } from './widgets/course-input/course-input.component';
+import { A11yModule } from '@angular/cdk/a11y';
 
 @NgModule({
-  imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule, FormsModule, PdfViewerModule],
+  imports: [
+    CommonModule,
+    MaterialConfigModule,
+    RouterModule,
+    ReactiveFormsModule,
+    FormsModule,
+    PdfViewerModule,
+    A11yModule
+  ],
   exports: [
     CommonModule,
     CustomTextDirective,
@@ -42,6 +52,7 @@ import { CourseInputComponent } from './widgets/course-input/course-input.compon
     RouterModule,
     FileUploadComponent,
     SafeUrlPipe,
+    SafeCurrencyPipe,
     CheckboxInputComponent,
     OptionsInputComponent,
     StudentAutocompleteComponent,
@@ -63,6 +74,7 @@ import { CourseInputComponent } from './widgets/course-input/course-input.compon
     HeaderComponent,
     FileUploadComponent,
     SafeUrlPipe,
+    SafeCurrencyPipe,
     CheckboxInputComponent,
     OptionsInputComponent,
     StudentAutocompleteComponent,
