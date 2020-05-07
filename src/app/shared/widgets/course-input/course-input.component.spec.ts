@@ -6,7 +6,8 @@ import { SharedModule } from '../../shared.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectChange } from '@angular/material/select';
 import { StudentService } from '../../providers/student.service';
-import { Observable, of } from 'rxjs';
+import { NotificationService } from '../../providers/notification.service';
+import { Observable, of, throwError } from 'rxjs';
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -85,12 +86,20 @@ class MockStudentService extends StudentService {
 describe('CourseInputComponent', () => {
   let component: CourseInputComponent;
   let fixture: ComponentFixture<CourseInputComponent>;
+  let mockStudentService: MockStudentService;
+  let spyNotificationService: NotificationService;
 
   beforeEach(async(() => {
+    mockStudentService = new MockStudentService();
+    spyNotificationService = jasmine.createSpyObj('NotificationService', ['error']);
+
     TestBed.configureTestingModule({
       imports: [SharedModule, NoopAnimationsModule],
       declarations: [],
-      providers: [{ provide: StudentService, useValue: new MockStudentService() }],
+      providers: [
+        { provide: StudentService, useValue: mockStudentService },
+        { provide: NotificationService, useValue: spyNotificationService }
+      ],
     }).compileComponents();
   }));
 
@@ -132,6 +141,24 @@ describe('CourseInputComponent', () => {
     expect(component.courseOptions[1].sections.length).toBe(2);
     expect(component.courseOptions[2].sections.length).toBe(1);
     expect(component.sectionOptions.length).toBe(2);
+  });
+
+  it('should raise a notification error if it fails to get courses', () => {
+    mockStudentService.getCourses = () => throwError('Error from getCourses');
+
+    component.ngAfterContentInit();
+    component.writeValue('2019|autumn|PHYS|101|PHYS SCI INQUIRY I|A');
+
+    expect(spyNotificationService.error).toHaveBeenCalledWith('An error occurred retrieving Course Information, please try again.');
+  });
+
+  it('should raise a notification error if it fails to get sections', () => {
+    mockStudentService.getSections = () => throwError('Error from getSections');
+
+    component.ngAfterContentInit();
+    component.writeValue('2019|autumn|PHYS|101|PHYS SCI INQUIRY I|A');
+
+    expect(spyNotificationService.error).toHaveBeenCalledWith('An error occurred retrieving Course Information, please try again.');
   });
 });
 

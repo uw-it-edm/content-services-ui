@@ -29,6 +29,7 @@ import { Field } from '../../../core/shared/model/field';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
 import { StudentService } from '../../providers/student.service';
+import { NotificationService } from '../../providers/notification.service';
 
 // Boilerplate for applying mixins to CourseInputComponent.
 /** @docs-private */
@@ -49,6 +50,7 @@ const QUARTER_FIELD_NAME = 'quarterInputForm';
 const COURSE_FIELD_NAME = 'courseInputForm';
 const SECTION_FIELD_NAME = 'sectionInputForm';
 const NUMBER_OF_FIELDS = 6; // year, quarter, curriculum, course, section, course title
+const ERROR_LOADING_COURSES = 'An error occurred retrieving Course Information, please try again.';
 
 /* tslint:disable:member-ordering no-host-metadata-property*/
 @Component({
@@ -174,53 +176,57 @@ export class CourseInputComponent extends _CourseInputComponentBase
     this.formGroup.controls[SECTION_FIELD_NAME] = this.sectionControl;
   }
 
+  private loadCoursesAndSections(courses, sections) {
+    this.courseOptions = [];
+
+    if (courses && courses['Courses'] && sections && sections['Sections']) {
+      // get course sections by course
+      const secs = {};
+      sections['Sections'].forEach((s) => {
+        const cn = s['CourseNumber'];
+        if (secs[cn]) {
+          secs[cn].push(s['SectionID']);
+        } else {
+          secs[cn] = [s['SectionID']];
+        }
+      });
+
+      // keep courses with sections (i.e. offerings)
+      // and attach sections to corresponding course
+      let hasSelectedCourse = false;
+      courses['Courses'].forEach((c) => {
+        const cn = c['CourseNumber'];
+        if (secs[cn]) {
+          c.sections = secs[cn];
+          this.courseOptions.push(c);
+          if (this.courseNumber === cn) {
+            hasSelectedCourse = true;
+          }
+        }
+      });
+
+      // update current course selection
+      if (!hasSelectedCourse && this.courseOptions.length > 0) {
+        this.courseNumber = this.courseOptions[0]['CourseNumber'];
+        this.courseControl.patchValue(this.courseNumber);
+      } else if (this.courseOptions.length === 0) {
+        this.courseNumber = '';
+        this.courseTitle = '';
+      }
+    }
+
+    // need to update sections when year/quarter changed, even if course remained the same
+    this.updateSections();
+  }
+
   private updateCourses() {
     if (this.year && this.quarter && this.curriculumAbbreviation) {
       const courses$ = this.studentService.getCourses(this.year, this.quarter, this.curriculumAbbreviation);
       const sections$ = this.studentService.getSections(this.year, this.quarter, this.curriculumAbbreviation);
 
-      forkJoin(courses$, sections$).subscribe(([courses, sections]) => {
-        this.courseOptions = [];
-
-        if (courses && courses['Courses'] && sections && sections['Sections']) {
-          // get course sections by course
-          const secs = {};
-          sections['Sections'].forEach((s) => {
-            const cn = s['CourseNumber'];
-            if (secs[cn]) {
-              secs[cn].push(s['SectionID']);
-            } else {
-              secs[cn] = [s['SectionID']];
-            }
-          });
-
-          // keep courses with sections (i.e. offerings)
-          // and attach sections to corresponding course
-          let hasSelectedCourse = false;
-          courses['Courses'].forEach((c) => {
-            const cn = c['CourseNumber'];
-            if (secs[cn]) {
-              c.sections = secs[cn];
-              this.courseOptions.push(c);
-              if (this.courseNumber === cn) {
-                hasSelectedCourse = true;
-              }
-            }
-          });
-
-          // update current course selection
-          if (!hasSelectedCourse && this.courseOptions.length > 0) {
-            this.courseNumber = this.courseOptions[0]['CourseNumber'];
-            this.courseControl.patchValue(this.courseNumber);
-          } else if (this.courseOptions.length === 0) {
-            this.courseNumber = '';
-            this.courseTitle = '';
-          }
-        }
-
-        // need to update sections when year/quarter changed, even if course remained the same
-        this.updateSections();
-      });
+      forkJoin(courses$, sections$).subscribe(
+        ([courses, sections]) => this.loadCoursesAndSections(courses, sections),
+        _ => this.notificationService.error(ERROR_LOADING_COURSES));
     } else {
       this.courseOptions = [];
       this.updateSections();
@@ -445,7 +451,8 @@ export class CourseInputComponent extends _CourseInputComponentBase
     @Optional()
     @Self()
     public ngControl: NgControl,
-    private studentService: StudentService
+    private studentService: StudentService,
+    private notificationService: NotificationService
   ) {
     super(_defaultErrorStateMatcher, _parentForm, _parentFormGroup, ngControl);
 
