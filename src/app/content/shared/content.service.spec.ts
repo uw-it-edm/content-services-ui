@@ -53,26 +53,41 @@ describe('ContentService', () => {
   });
 
   it('should add web rendition to getFileUrl', () => {
-    expect(service.getFileUrl('123', true, true)).toContain('rendition=Web');
+    expect(service.getFileUrl({ itemId: '123', webViewable: true, useOriginalFilename: true })).toContain(
+      'rendition=Web'
+    );
   });
   it('should not web rendition to getFileUrl', () => {
-    expect(service.getFileUrl('123', false, true)).not.toContain('rendition=Web');
+    expect(service.getFileUrl({ itemId: '123', webViewable: false, useOriginalFilename: true })).not.toContain(
+      'rendition=Web'
+    );
   });
   it('should add useOriginalFilename to getFileUrl', () => {
-    expect(service.getFileUrl('123', true, true)).toContain('useOriginalFilename=true');
+    expect(service.getFileUrl({ itemId: '123', webViewable: true, useOriginalFilename: true })).toContain(
+      'useOriginalFilename=true'
+    );
   });
   it('should not useOriginalFilename to getFileUrl', () => {
-    expect(service.getFileUrl('123', false, false)).not.toContain('useOriginalFilename=true');
+    expect(service.getFileUrl({ itemId: '123', webViewable: false, useOriginalFilename: false })).not.toContain(
+      'useOriginalFilename=true'
+    );
   });
   it('should add disposition to getFileUrl', () => {
-    expect(service.getFileUrl('123', false, true, 'attachment')).toContain('disposition=attachment');
+    expect(
+      service.getFileUrl({
+        itemId: '123',
+        webViewable: false,
+        useOriginalFilename: true,
+        disposition: 'attachment',
+      })
+    ).toContain('disposition=attachment');
   });
   it('should to get the file url', () => {
     const expectedUrl =
       environment.content_api.url +
       environment.content_api.contextV3 +
       '/file/123?rendition=Web&useOriginalFilename=true&auth=test';
-    expect(service.getFileUrl('123', true, true)).toEqual(expectedUrl);
+    expect(service.getFileUrl({ itemId: '123', webViewable: true, useOriginalFilename: true })).toEqual(expectedUrl);
   });
 
   it('should update the content api', async(() => {

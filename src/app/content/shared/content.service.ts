@@ -8,6 +8,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ProgressService } from '../../shared/providers/progress.service';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 
+export interface FileUrlParameters {
+  itemId: string;
+  webViewable?: boolean;
+  useOriginalFilename?: boolean;
+  disposition?: string;
+}
+
 @Injectable()
 export class ContentService {
   /* TODO: changing searchIndexUpdateDelay to 0 from 3000 so that there is no artificial delay
@@ -92,7 +99,7 @@ export class ContentService {
     return contentItem$;
   }
 
-  public getFileUrl(itemId: string, webViewable: boolean, useOriginalFilename: boolean, disposition?: string): string {
+  public getFileUrl({ itemId, webViewable, useOriginalFilename, disposition }: FileUrlParameters): string {
     const urlParameters: string[] = [];
     if (webViewable) {
       urlParameters.push('rendition=Web');

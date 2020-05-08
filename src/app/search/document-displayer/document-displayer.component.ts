@@ -30,7 +30,11 @@ export class DocumentDisplayerComponent implements OnDestroy, AfterViewInit {
       .read(itemId)
       .toPromise()
       .then((item) => {
-        const fileUrl = this.contentService.getFileUrl(itemId, true, true);
+        const fileUrl = this.contentService.getFileUrl({
+          itemId: itemId,
+          webViewable: true,
+          useOriginalFilename: true,
+        });
         const contentObject = new ContentObject(item);
         contentObject.setUrl(fileUrl);
 
