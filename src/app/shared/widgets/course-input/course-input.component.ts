@@ -30,6 +30,7 @@ import { FocusMonitor } from '@angular/cdk/a11y';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
 import { StudentService } from '../../providers/student.service';
 import { NotificationService } from '../../providers/notification.service';
+import {timeout} from 'rxjs/operators';
 
 // Boilerplate for applying mixins to CourseInputComponent.
 /** @docs-private */
@@ -50,7 +51,8 @@ const QUARTER_FIELD_NAME = 'quarterInputForm';
 const COURSE_FIELD_NAME = 'courseInputForm';
 const SECTION_FIELD_NAME = 'sectionInputForm';
 const NUMBER_OF_FIELDS = 6; // year, quarter, curriculum, course, section, course title
-const ERROR_LOADING_COURSES = 'An error occurred retrieving Course Information, please try again.';
+const LOAD_COURSES_ERROR_MSG = 'An error occurred retrieving course information, please try again.';
+const LOAD_COURSES_DEFAULT_TIMEOUT = 10000;
 
 /* tslint:disable:member-ordering no-host-metadata-property*/
 @Component({
@@ -104,6 +106,7 @@ export class CourseInputComponent extends _CourseInputComponentBase
   sectionOptions: any[] = [];
 
   courseTitle = '';
+  loadCoursesTimeout = LOAD_COURSES_DEFAULT_TIMEOUT;
 
   onSelectYear(event: MatSelectChange) {
     if (event.value) {
@@ -224,9 +227,9 @@ export class CourseInputComponent extends _CourseInputComponentBase
       const courses$ = this.studentService.getCourses(this.year, this.quarter, this.curriculumAbbreviation);
       const sections$ = this.studentService.getSections(this.year, this.quarter, this.curriculumAbbreviation);
 
-      forkJoin(courses$, sections$).subscribe(
+      forkJoin(courses$, sections$).pipe(timeout(this.loadCoursesTimeout)).subscribe(
         ([courses, sections]) => this.loadCoursesAndSections(courses, sections),
-        _ => this.notificationService.error(ERROR_LOADING_COURSES));
+        _ => this.notificationService.error(LOAD_COURSES_ERROR_MSG));
     } else {
       this.courseOptions = [];
       this.updateSections();

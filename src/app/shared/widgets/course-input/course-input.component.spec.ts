@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed, tick } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
 import { CourseInputComponent } from './course-input.component';
 import { Field } from '../../../core/shared/model/field';
 import { CourseConfig } from '../../../core/shared/model/field/course-config';
@@ -11,6 +11,45 @@ import { Observable, of, throwError } from 'rxjs';
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { delay } from 'rxjs/operators';
+
+const testCourses = [
+  {
+    Year: '2019',
+    Quarter: 'autumn',
+    CurriculumAbbreviation: 'PHYS',
+    CourseNumber: '101',
+    CourseTitle: 'PHYS SCI INQUIRY I',
+  },
+  {
+    Year: '2019',
+    Quarter: 'autumn',
+    CurriculumAbbreviation: 'PHYS',
+    CourseNumber: '102',
+    CourseTitle: 'PHY SCI INQUIRY I',
+  },
+  {
+    Year: '2019',
+    Quarter: 'autumn',
+    CurriculumAbbreviation: 'PHYS',
+    CourseNumber: '103',
+    CourseTitle: 'PHY SCI INQUIRY I',
+  },
+  {
+    Year: '2019',
+    Quarter: 'autumn',
+    CurriculumAbbreviation: 'PHYS',
+    CourseNumber: '104',
+    CourseTitle: 'GROUP INQUIRY I',
+  },
+  {
+    Year: '2019',
+    Quarter: 'autumn',
+    CurriculumAbbreviation: 'PHYS',
+    CourseNumber: '105',
+    CourseTitle: 'GROUP INQUIRY II',
+  },
+];
 
 class MockStudentService extends StudentService {
   constructor() {
@@ -25,43 +64,7 @@ class MockStudentService extends StudentService {
     title?: string
   ): Observable<any> {
     const ret: any = {
-      Courses: [
-        {
-          Year: '2019',
-          Quarter: 'autumn',
-          CurriculumAbbreviation: 'PHYS',
-          CourseNumber: '101',
-          CourseTitle: 'PHYS SCI INQUIRY I',
-        },
-        {
-          Year: '2019',
-          Quarter: 'autumn',
-          CurriculumAbbreviation: 'PHYS',
-          CourseNumber: '102',
-          CourseTitle: 'PHY SCI INQUIRY I',
-        },
-        {
-          Year: '2019',
-          Quarter: 'autumn',
-          CurriculumAbbreviation: 'PHYS',
-          CourseNumber: '103',
-          CourseTitle: 'PHY SCI INQUIRY I',
-        },
-        {
-          Year: '2019',
-          Quarter: 'autumn',
-          CurriculumAbbreviation: 'PHYS',
-          CourseNumber: '104',
-          CourseTitle: 'GROUP INQUIRY I',
-        },
-        {
-          Year: '2019',
-          Quarter: 'autumn',
-          CurriculumAbbreviation: 'PHYS',
-          CourseNumber: '105',
-          CourseTitle: 'GROUP INQUIRY II',
-        },
-      ],
+      Courses: testCourses,
       TotalCount: 153,
     };
 
@@ -149,7 +152,7 @@ describe('CourseInputComponent', () => {
     component.ngAfterContentInit();
     component.writeValue('2019|autumn|PHYS|101|PHYS SCI INQUIRY I|A');
 
-    expect(spyNotificationService.error).toHaveBeenCalledWith('An error occurred retrieving Course Information, please try again.');
+    expect(spyNotificationService.error).toHaveBeenCalledWith('An error occurred retrieving course information, please try again.');
   });
 
   it('should raise a notification error if it fails to get sections', () => {
@@ -158,8 +161,20 @@ describe('CourseInputComponent', () => {
     component.ngAfterContentInit();
     component.writeValue('2019|autumn|PHYS|101|PHYS SCI INQUIRY I|A');
 
-    expect(spyNotificationService.error).toHaveBeenCalledWith('An error occurred retrieving Course Information, please try again.');
+    expect(spyNotificationService.error).toHaveBeenCalledWith('An error occurred retrieving course information, please try again.');
   });
+
+  it('should raise a notification error if it takes too long to get courses', fakeAsync(() => {
+    mockStudentService.getCourses = () => of({ Courses: testCourses, TotalCount: 153 }).pipe(delay(5000));
+
+    component.loadCoursesTimeout = 500;
+    component.ngAfterContentInit();
+    component.writeValue('2019|autumn|PHYS|101|PHYS SCI INQUIRY I|A');
+
+    tick(1000);
+    expect(spyNotificationService.error).toHaveBeenCalled();
+  }));
+
 });
 
 @Component({
