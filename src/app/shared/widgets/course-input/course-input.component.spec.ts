@@ -167,7 +167,7 @@ describe('CourseInputComponent', () => {
   it('should raise a notification error if it takes too long to get courses', fakeAsync(() => {
     mockStudentService.getCourses = () => of({ Courses: testCourses, TotalCount: 153 }).pipe(delay(5000));
 
-    component.loadCoursesTimeout = 500;
+    component.getCoursesTimeout = 500;
     component.ngAfterContentInit();
     component.writeValue('2019|autumn|PHYS|101|PHYS SCI INQUIRY I|A');
 
