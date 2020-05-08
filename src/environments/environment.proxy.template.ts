@@ -3,7 +3,7 @@
 // `ng build --configuration=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
-const netId = 'agagne';
+const netId = 'EDM_NETID';
 
 export const environment = {
   production: false,
@@ -26,9 +26,9 @@ export const environment = {
     headers: { 'x-uw-act-as': netId },
   },
   content_api: {
-    url: 'http://localhost:11000',
-    contextV3: '/v3',
-    contextV4: '/v4',
+    url: '/content-api',
+    contextV3: '/content/v3',
+    contextV4: '/content/v4',
     authenticationHeader: 'x-uw-act-as',
     headers: { 'x-uw-act-as': netId },
   },
