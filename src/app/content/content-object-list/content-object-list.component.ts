@@ -358,7 +358,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
     }
   }
 
-  private buildUrl(id: string, isWebViewable = true, disposition?: string) {
-    return this.contentService.getFileUrl(id, isWebViewable, disposition);
+  private buildUrl(id: string, isWebViewable = true, useOriginalFilename = true, disposition?: string) {
+    return this.contentService.getFileUrl(id, isWebViewable, useOriginalFilename, disposition);
   }
 }

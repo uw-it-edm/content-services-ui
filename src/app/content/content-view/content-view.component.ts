@@ -96,7 +96,7 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
 
   private updateDownloadUrl(): void {
     if (this.contentObject && this.contentObject.itemId && this.contentObject.url !== '') {
-      this.downloadUrl = this.buildUrl(this.contentObject.itemId, true, 'attachment');
+      this.downloadUrl = this.buildUrl(this.contentObject.itemId, true, true, 'attachment');
     } else {
       this.downloadUrl = undefined;
     }
@@ -151,8 +151,8 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url + '#view=FitH');
   }
 
-  buildUrl(id: string, isWebViewable = true, disposition?: string) {
-    return this.contentService.getFileUrl(id, isWebViewable, disposition);
+  buildUrl(id: string, isWebViewable = true, useOriginalFilename = true, disposition?: string) {
+    return this.contentService.getFileUrl(id, isWebViewable, useOriginalFilename, disposition);
   }
 
   ngOnDestroy(): void {
@@ -161,6 +161,6 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   download(id: string) {
-    window.open(this.buildUrl(id, false, 'attachment'), '_blank');
+    window.open(this.buildUrl(id, false, true, 'attachment'), '_blank');
   }
 }

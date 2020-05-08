@@ -71,7 +71,7 @@ export class ContentService {
     const response = this.http.post<ContentItem>(url, formData, options);
     const contentItem$ = new ReplaySubject<ContentItem>();
     response.subscribe(
-      item => {
+      (item) => {
         setTimeout(() => {
           // Delay notifying the user about a successful update so that the search index is updated
           if (this.progressService != null) {
@@ -80,7 +80,7 @@ export class ContentService {
           contentItem$.next(item);
         }, this.searchIndexUpdateDelay);
       },
-      err => {
+      (err) => {
         err.item = contentItem;
         err.filename = filename;
         if (this.progressService != null) {
@@ -92,10 +92,13 @@ export class ContentService {
     return contentItem$;
   }
 
-  public getFileUrl(itemId: string, webViewable: boolean, disposition?: string): string {
+  public getFileUrl(itemId: string, webViewable: boolean, useOriginalFilename: boolean, disposition?: string): string {
     const urlParameters: string[] = [];
     if (webViewable) {
       urlParameters.push('rendition=Web');
+    }
+    if (useOriginalFilename) {
+      urlParameters.push('useOriginalFilename=true');
     }
     if (!isNullOrUndefined(disposition)) {
       urlParameters.push('disposition=' + disposition);
