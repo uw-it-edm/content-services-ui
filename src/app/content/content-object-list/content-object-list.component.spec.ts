@@ -1,5 +1,5 @@
 import { Observable, of } from 'rxjs';
-import { ContentService } from '../shared/content.service';
+import { ContentService, FileUrlParameters } from '../shared/content.service';
 import { ContentItem } from '../shared/model/content-item';
 import { Config, ContentConfig } from '../../core/shared/model/config';
 import { ContentObjectListComponent } from './content-object-list.component';
@@ -35,7 +35,7 @@ class MockContentService extends ContentService {
     return of(contentItem);
   }
 
-  getFileUrl(itemId: string, webViewable: boolean): string {
+  getFileUrl({ itemId, webViewable, useOriginalFilename, disposition }: FileUrlParameters): string {
     return 'testUrl/' + itemId;
   }
 }

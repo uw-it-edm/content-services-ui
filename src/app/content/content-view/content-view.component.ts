@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
-import { ContentService } from '../shared/content.service';
+import { ContentService, FileUrlParameters } from '../shared/content.service';
 
 import { ProgressService } from '../../shared/providers/progress.service';
 import { ContentObject } from '../shared/model/content-object';
@@ -96,7 +96,12 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
 
   private updateDownloadUrl(): void {
     if (this.contentObject && this.contentObject.itemId && this.contentObject.url !== '') {
-      this.downloadUrl = this.buildUrl(this.contentObject.itemId, true, 'attachment');
+      this.downloadUrl = this.buildUrl({
+        itemId: this.contentObject.itemId,
+        webViewable: true,
+        useOriginalFilename: true,
+        disposition: 'attachment',
+      });
     } else {
       this.downloadUrl = undefined;
     }
@@ -151,8 +156,13 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url + '#view=FitH');
   }
 
-  buildUrl(id: string, isWebViewable = true, disposition?: string) {
-    return this.contentService.getFileUrl(id, isWebViewable, disposition);
+  buildUrl({ itemId, webViewable = true, useOriginalFilename = true, disposition }: FileUrlParameters): string {
+    return this.contentService.getFileUrl({
+      itemId: itemId,
+      webViewable: webViewable,
+      useOriginalFilename: useOriginalFilename,
+      disposition: disposition,
+    });
   }
 
   ngOnDestroy(): void {
@@ -161,6 +171,9 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   download(id: string) {
-    window.open(this.buildUrl(id, false, 'attachment'), '_blank');
+    window.open(
+      this.buildUrl({ itemId: id, webViewable: false, useOriginalFilename: true, disposition: 'attachment' }),
+      '_blank'
+    );
   }
 }

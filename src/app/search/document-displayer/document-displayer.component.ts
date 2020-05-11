@@ -7,7 +7,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 @Component({
   selector: 'app-document-displayer',
   templateUrl: './document-displayer.component.html',
-  styleUrls: ['./document-displayer.component.css']
+  styleUrls: ['./document-displayer.component.css'],
 })
 export class DocumentDisplayerComponent implements OnDestroy, AfterViewInit {
   private componentDestroyed = new Subject();
@@ -29,8 +29,12 @@ export class DocumentDisplayerComponent implements OnDestroy, AfterViewInit {
     this.contentService
       .read(itemId)
       .toPromise()
-      .then(item => {
-        const fileUrl = this.contentService.getFileUrl(itemId, true);
+      .then((item) => {
+        const fileUrl = this.contentService.getFileUrl({
+          itemId: itemId,
+          webViewable: true,
+          useOriginalFilename: true,
+        });
         const contentObject = new ContentObject(item);
         contentObject.setUrl(fileUrl);
 
