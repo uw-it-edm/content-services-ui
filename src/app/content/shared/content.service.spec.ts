@@ -82,7 +82,7 @@ describe('ContentService', () => {
       })
     ).toContain('disposition=attachment');
   });
-  it('should to get the file url', () => {
+  it('should get the file url', () => {
     const expectedUrl =
       environment.content_api.url +
       environment.content_api.contextV3 +
