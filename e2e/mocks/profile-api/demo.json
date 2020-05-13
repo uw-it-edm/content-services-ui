@@ -278,13 +278,16 @@
           "command": "saveItem"
         },
         {
+          "label": "Save and Upload Another",
+          "command": "saveItemAndReset"
+        },
+        {
           "label": "Cancel",
           "alwaysActive": true,
           "command": "cancel"
         }
       ],
-      "viewPanel": true,
-      "uploadAnother": true
+      "viewPanel": true
     }
   }
 }

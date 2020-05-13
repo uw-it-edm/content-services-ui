@@ -16,8 +16,6 @@ import { NotificationService } from '../../shared/providers/notification.service
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { takeUntil } from 'rxjs/operators';
 import { ComponentCanDeactivateDirective } from '../../routing/shared/component-can-deactivate.directive';
-import { ContentMetadataComponent } from '../content-metadata/content-metadata.component';
-import { FileUploadComponent } from '../../shared/widgets/file-upload/file-upload.component';
 
 @Component({
   selector: 'app-create-page',
@@ -114,7 +112,19 @@ export class CreatePageComponent extends ComponentCanDeactivateDirective impleme
     this.submitPending = inProgress;
   }
 
-  saveItem() {
+  private saveItemAndReset(): void {
+    this.saveItemInternal().then(() => {
+      this.contentObjectListComponent && this.contentObjectListComponent.reset();
+    });
+  }
+
+  private saveItem(): void {
+    this.saveItemInternal().then(() => {
+      this.router.navigate([this.config.tenant]);
+    })
+  }
+
+  private saveItemInternal(): Promise<any> {
     const fields = this.pageConfig.fieldsToDisplay;
     const formModel = this.form.value;
     const metadataOverrides = this.pageConfig.onSave;
@@ -134,13 +144,19 @@ export class CreatePageComponent extends ComponentCanDeactivateDirective impleme
       const saveResult = this.contentObjectListComponent.saveItem(fields, formModel, metadataOverrides);
 
       if (saveResult) {
-        saveResult.then((successfulSave) => {
+        return saveResult.then((successfulSave) => {
           if (successfulSave) {
             this.form.markAsPristine(); // the entire form has saved and is no longer dirty
+            return Promise.resolve();
+          }
+          else {
+            return Promise.reject();
           }
         });
       }
     }
+
+    return Promise.reject();
   }
 
   private createForm(): FormGroup {
@@ -156,23 +172,10 @@ export class CreatePageComponent extends ComponentCanDeactivateDirective impleme
         this.titleService.setTitle(this.pageConfig.pageName);
       }
     }
-    this.setDefaults();
-  }
-
-  private setDefaults() {
-    // moved creation of form control here from createForm
-    // as pageConfig was not set yet in createForm
-    let ctrl = this.form.get('uploadAnother');
-    if (!ctrl) {
-      ctrl = new FormControl();
-      this.form.addControl('uploadAnother', ctrl);
-      ctrl.patchValue(!!this.pageConfig.uploadAnother);
-    }
   }
 
   reset() {
     this.form.reset();
-    this.setDefaults();
   }
 
   buttonPress(button) {
