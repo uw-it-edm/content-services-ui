@@ -101,7 +101,7 @@ describe('CourseInputComponent', () => {
       declarations: [],
       providers: [
         { provide: StudentService, useValue: mockStudentService },
-        { provide: NotificationService, useValue: spyNotificationService }
+        { provide: NotificationService, useValue: spyNotificationService },
       ],
     }).compileComponents();
   }));
@@ -152,7 +152,9 @@ describe('CourseInputComponent', () => {
     component.ngAfterContentInit();
     component.writeValue('2019|autumn|PHYS|101|PHYS SCI INQUIRY I|A');
 
-    expect(spyNotificationService.error).toHaveBeenCalledWith('An error occurred retrieving course information, please try again.');
+    expect(spyNotificationService.error).toHaveBeenCalledWith(
+      'An error occurred retrieving course information, please try again.'
+    );
   });
 
   it('should raise a notification error if it fails to get sections', () => {
@@ -161,7 +163,9 @@ describe('CourseInputComponent', () => {
     component.ngAfterContentInit();
     component.writeValue('2019|autumn|PHYS|101|PHYS SCI INQUIRY I|A');
 
-    expect(spyNotificationService.error).toHaveBeenCalledWith('An error occurred retrieving course information, please try again.');
+    expect(spyNotificationService.error).toHaveBeenCalledWith(
+      'An error occurred retrieving course information, please try again.'
+    );
   });
 
   it('should raise a notification error if it takes too long to get courses', fakeAsync(() => {
@@ -174,7 +178,6 @@ describe('CourseInputComponent', () => {
     tick(1000);
     expect(spyNotificationService.error).toHaveBeenCalled();
   }));
-
 });
 
 @Component({
@@ -243,26 +246,6 @@ describe('CourseInputComponent with host', () => {
       fixture.detectChanges();
 
       expect(dropDownElements[2].getAttribute('aria-label')).toEqual('Course 101-PHYS SCI INQUIRY I');
-    });
-  }));
-
-  it('should render aria-label set to placeholder for Course dropdown when course number is empty', async(() => {
-    fixture.whenStable().then(() => {
-      component.ngAfterContentInit();
-      component.writeValue('2020|autumn|||PHYS SCI INQUIRY I|');
-      fixture.detectChanges();
-
-      expect(dropDownElements[2].getAttribute('aria-label')).toEqual('Course');
-    });
-  }));
-
-  it('should render aria-label set to placeholder for Course dropdown when course title is empty', async(() => {
-    fixture.whenStable().then(() => {
-      component.ngAfterContentInit();
-      component.writeValue('2020|autumn||101||');
-      fixture.detectChanges();
-
-      expect(dropDownElements[2].getAttribute('aria-label')).toEqual('Course');
     });
   }));
 

@@ -211,6 +211,7 @@ export class CourseInputComponent extends _CourseInputComponentBase
       // update current course selection
       if (!hasSelectedCourse && this.courseOptions.length > 0) {
         this.courseNumber = this.courseOptions[0]['CourseNumber'];
+        this.courseTitle = this.courseOptions[0]['CourseTitle'];
         this.courseControl.patchValue(this.courseNumber);
       } else if (this.courseOptions.length === 0) {
         this.courseNumber = '';
@@ -227,9 +228,12 @@ export class CourseInputComponent extends _CourseInputComponentBase
       const courses$ = this.studentService.getCourses(this.year, this.quarter, this.curriculumAbbreviation);
       const sections$ = this.studentService.getSections(this.year, this.quarter, this.curriculumAbbreviation);
 
-      forkJoin(courses$, sections$).pipe(timeout(this.getCoursesTimeout)).subscribe(
-        ([courses, sections]) => this.loadCoursesAndSections(courses, sections),
-        _ => this.notificationService.error(GET_COURSES_ERROR_MSG));
+      forkJoin(courses$, sections$)
+        .pipe(timeout(this.getCoursesTimeout))
+        .subscribe(
+          ([courses, sections]) => this.loadCoursesAndSections(courses, sections),
+          (_) => this.notificationService.error(GET_COURSES_ERROR_MSG)
+        );
     } else {
       this.courseOptions = [];
       this.updateSections();
