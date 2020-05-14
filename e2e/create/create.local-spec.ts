@@ -150,6 +150,13 @@ describe('Create Page for Demo', () => {
     browser.wait(isEmptyFileList(page.fileList), 5000);
     expect(page.fileList.count()).toEqual(0);
     expect(page.filerInput.getAttribute('value')).toEqual('test filer');
+
+    // Test that user can upload another document.
+    page.addFile(pdfFilePath);
+    expect(page.fileList.count()).toEqual(1);
+    page.saveAndResetButton.click();
+    browser.wait(isEmptyFileList(page.fileList), 5000);
+    expect(page.fileList.count()).toEqual(0);
   });
 
   it('should leave form and uploaded files intact if error is returned after saving', () => {
