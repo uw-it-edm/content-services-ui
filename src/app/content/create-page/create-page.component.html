@@ -38,14 +38,9 @@
             <div *ngIf="pageConfig?.buttons" class="button-row" style="margin: 2rem 0 1rem;text-align: right">
               <button *ngFor="let button of pageConfig?.buttons" mat-raised-button
                       (click)="buttonPress(button)" [color]="button.color"
-                      [disabled]="!button.alwaysActive &&  (form.pristine || submitPending || (button.command=='saveItem' && (form.invalid || !contentObjectListComponent.hasContentObjects())))" [id]="button.command"
+                      [disabled]="!button.alwaysActive && (form.pristine || submitPending || form.invalid || !contentObjectListComponent.hasContentObjects())" [id]="button.command"
                       [type]="button.type">{{button.label}}
               </button>
-              <span>
-                <mat-checkbox [formGroup]="form"
-                              formControlName="uploadAnother"
-                              name="uploadAnother">Upload another</mat-checkbox>
-              </span>
             </div>
           </div>
           <div fxFlex="auto" class="cs-content-view-wrapper">

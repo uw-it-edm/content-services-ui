@@ -10,10 +10,6 @@ export class ContentPageConfig implements PageConfig {
 
   viewPanel: boolean;
 
-  /**
-   * Whether the 'Upload Another' checkbox should be checked by default on the create page.
-   */
-  uploadAnother: boolean;
   allowPageByPageMode: boolean;
 
   onSave: Array<any> = [];
