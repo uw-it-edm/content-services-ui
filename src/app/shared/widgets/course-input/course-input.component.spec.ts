@@ -246,26 +246,6 @@ describe('CourseInputComponent with host', () => {
     });
   }));
 
-  it('should render aria-label set to placeholder for Course dropdown when course number is empty', async(() => {
-    fixture.whenStable().then(() => {
-      component.ngAfterContentInit();
-      component.writeValue('2020|autumn|||PHYS SCI INQUIRY I|');
-      fixture.detectChanges();
-
-      expect(dropDownElements[2].getAttribute('aria-label')).toEqual('Course');
-    });
-  }));
-
-  it('should render aria-label set to placeholder for Course dropdown when course title is empty', async(() => {
-    fixture.whenStable().then(() => {
-      component.ngAfterContentInit();
-      component.writeValue('2020|autumn||101||');
-      fixture.detectChanges();
-
-      expect(dropDownElements[2].getAttribute('aria-label')).toEqual('Course');
-    });
-  }));
-
   it('should render aria-label set to placeholder and value for Section dropdown', async(() => {
     fixture.whenStable().then(() => {
       fixture.detectChanges();
