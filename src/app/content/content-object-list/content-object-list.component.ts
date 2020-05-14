@@ -21,7 +21,6 @@ import { CustomTextUtilities } from '../../shared/directives/custom-text/custom-
 })
 export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy {
   private componentDestroyed = new Subject();
-  private uploadAnotherCtrl: AbstractControl;
 
   @Input() contentItem: ContentItem;
   @Input() formGroup: FormGroup;
@@ -52,7 +51,6 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
 
   ngOnInit(): void {
     this.user = this.userService.getUser();
-    this.uploadAnotherCtrl = this.formGroup && this.formGroup.controls['uploadAnother'];
 
     this.route.paramMap.pipe(takeUntil(this.componentDestroyed)).subscribe((params) => {
       this.route.data.pipe(takeUntil(this.componentDestroyed)).subscribe((data: { config: Config }) => {
@@ -294,27 +292,22 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
         }
 
         if (contentItem$) {
-          const contentItemSaving = contentItem$.pipe(first()).toPromise();
-          contentItemSaving
+          const contentItemSaving = contentItem$.pipe(first()).toPromise()
             .then((item) => {
               contentObject.onLoad(item);
               contentObject.failed = false;
               this.updateComponentSavedItemLists(item);
               this.saving.emit(false); // item saving completed
 
-              this.notify().then(() => {
-                if (this.uploadAnotherCtrl && this.uploadAnotherCtrl.value) {
-                  this.reset();
-                } else if (!!this.uploadAnotherCtrl) {
-                  this.router.navigate([this.config.tenant]);
-                }
-              });
+              return this.notify();
             })
             .catch((err) => {
               this.failures.push(err);
               contentObject.failed = true;
               this.saving.emit(false); // item saving failed
+
               this.notify();
+              throw err;
             });
           contentItemPromises.push(contentItemSaving);
         }
