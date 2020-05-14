@@ -114,14 +114,16 @@ export class CreatePageComponent extends ComponentCanDeactivateDirective impleme
 
   private saveItemAndReset(): void {
     this.saveItemInternal().then(() => {
-      this.contentObjectListComponent && this.contentObjectListComponent.reset();
+      if (this.contentObjectListComponent) {
+        this.contentObjectListComponent.reset();
+      }
     });
   }
 
   private saveItem(): void {
     this.saveItemInternal().then(() => {
       this.router.navigate([this.config.tenant]);
-    })
+    });
   }
 
   private saveItemInternal(): Promise<any> {
@@ -148,8 +150,7 @@ export class CreatePageComponent extends ComponentCanDeactivateDirective impleme
           if (successfulSave) {
             this.form.markAsPristine(); // the entire form has saved and is no longer dirty
             return Promise.resolve();
-          }
-          else {
+          } else {
             return Promise.reject();
           }
         });
