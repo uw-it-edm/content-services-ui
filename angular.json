@@ -56,6 +56,21 @@
                 }
               ]
             },
+            "localmock-ie11": {
+              "tsConfig": "src/tsconfig-es5.app.json",
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.localmock-ie11.ts"
+                }
+              ]
+            },
             "localproxy": {
               "budgets": [
                 {
@@ -115,15 +130,6 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ]
-            },
-            "localmock-es5": {
-              "tsConfig": "src/tsconfig-es5.app.json",
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.localmock.ts"
-                }
-              ]
             }
           }
         },
@@ -143,6 +149,9 @@
             "localmock": {
               "browserTarget": "content-services-ui:build:localmock"
             },
+            "localmock-ie11": {
+              "browserTarget": "content-services-ui:build:localmock-ie11"
+            },
             "prod": {
               "browserTarget": "content-services-ui:build:prod"
             },
@@ -151,9 +160,6 @@
             },
             "production": {
               "browserTarget": "content-services-ui:build:production"
-            },
-            "localmock-es5": {
-              "browserTarget": "content-services-ui:build:localmock-es5"
             }
           }
         },
