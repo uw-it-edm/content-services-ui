@@ -10,6 +10,7 @@
     "start-travis": "ng serve --configuration=travis --disable-host-check",
     "start-localproxy": "yarn replace-vars && ng serve --configuration=localproxy --disable-host-check",
     "start-localmock": "ng serve --configuration=localmock --disable-host-check",
+    "start-localmock-ie11": "ng serve --configuration=localmock-ie11 --disable-host-check",
     "build": "ng build",
     "test": "ng test --watch=false --sourceMap=false",
     "test-tdd": "ng test --watch=true --sourceMap=true --browsers ChromeDebugging --karmaConfig karma.tdd.config.js",
