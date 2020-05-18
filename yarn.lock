@@ -179,10 +179,10 @@
   resolved "https://registry.yarnpkg.com/@angular/common/-/common-9.1.3.tgz#66eee1b5ec392469d2d5eca023de200233cd5ddb"
   integrity sha512-OGrd/x+WoceskeJWZI3ur+KqVoBHn2kmbg57RyJ8Ng/BkdDVYiXzQ/UvvX1WYGH/YzmiiVdlnVq55xkHkzGaXw==
 
-"@angular/compiler-cli@^9.1.3":
-  version "9.1.3"
-  resolved "https://registry.yarnpkg.com/@angular/compiler-cli/-/compiler-cli-9.1.3.tgz#2554b73e97c31dec66ac1e48b194ec66c6c1f438"
-  integrity sha512-FqDPmEbJQmzzxqF08CJfqT9XKJFPYdyZuFFStKkJEZ5s1JrjrBlgQSqdF0qp5jWNsjTB87USLHC5zAlzJtMKxQ==
+"@angular/compiler-cli@^9.1.7":
+  version "9.1.7"
+  resolved "https://registry.yarnpkg.com/@angular/compiler-cli/-/compiler-cli-9.1.7.tgz#ecd1d47b0368ed21dfcef980b3aaeb37085a3612"
+  integrity sha512-8HT8+UuSohrXlF90eewG2XuhtOEIfJ2UlijnSB10/+ZyroSdTKckoiFSps86nTd/EfrBblqNUMbwjOxIkzac3w==
   dependencies:
     canonical-path "1.0.0"
     chokidar "^3.0.0"
@@ -217,10 +217,10 @@
   resolved "https://registry.yarnpkg.com/@angular/forms/-/forms-9.1.3.tgz#e64c6ae1844ec54a46a1312d44aa66bd3391bb7b"
   integrity sha512-t3BexN5EHgCK6q0R04AuyNb6ZUP6sd9fJ+ER98yWws3HXV6FT+J5IB7dVnhelLoU1GTnql4TJSS+LTVradKZ7g==
 
-"@angular/language-service@^9.1.4":
-  version "9.1.4"
-  resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-9.1.4.tgz#2fa2c444e5a5a6036d5ca43d2887826df17d0553"
-  integrity sha512-eyVxxiegdb4ESdFGfkuDN+YfUbOVHRQLjIl6ACFJQDNHzVXzbmuqpyr5hIJANIVady103/7+dqRxxJo1DdIdTQ==
+"@angular/language-service@^9.1.7":
+  version "9.1.7"
+  resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-9.1.7.tgz#d8d62872b8a7df61e2d0e4f546680f0a5450f6c9"
+  integrity sha512-p4WOZFCn6H5qgII9MbPjSu/AErt0rXpsXlMHC9KJl+JgfPI3YwQuX1dLdt3xTJlxuv8/fY9UbgmPJUqR/txRCg==
 
 "@angular/material@^9.2.1":
   version "9.2.1"
