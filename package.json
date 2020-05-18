@@ -72,7 +72,7 @@
     "@types/jasminewd2": "~2.0.8",
     "@types/node": "^12.11.1",
     "@types/pdfjs-dist": "0.1.2",
-    "axe-webdriverjs": "^2.2.0",
+    "axe-webdriverjs": "^2.3.0",
     "codelyzer": "^5.1.2",
     "husky": "^4.2.5",
     "jasmine-core": "^3.5.0",
