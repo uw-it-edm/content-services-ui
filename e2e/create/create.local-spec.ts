@@ -18,7 +18,8 @@ const getCurrentUrl = function () {
 };
 
 const currentUrlMatches = (expectedUrl: string) => {
-  return () => browser.getCurrentUrl().then((currentUrl) => currentUrl.toLowerCase().startsWith(expectedUrl.toLowerCase()));
+  return () =>
+    browser.getCurrentUrl().then((currentUrl) => currentUrl.toLowerCase().startsWith(expectedUrl.toLowerCase()));
 };
 
 const isEmptyFileList = (fileList: ElementArrayFinder) => {
@@ -323,6 +324,17 @@ describe('Create Page for Demo', () => {
     expect(page.getFormFieldByLabel('Quarter').isDisplayed()).toBeTruthy();
     expect(page.getFormFieldByLabel('Course').isDisplayed()).toBeTruthy();
     expect(page.getFormFieldByLabel('Section').isDisplayed()).toBeTruthy();
+  });
+
+  it('should display error dialog when course input returns error', () => {
+    page.clickDropDownByLabel('Year');
+    page.clickDropDownOptionValueByText('2015'); // 2015 is mocked to fail
+
+    expect(page.errorNotification.isDisplayed()).toBeTruthy();
+    expect(page.dismissButton.getId()).toEqual(
+      browser.driver.switchTo().activeElement().getId(),
+      'Dismiss button is not set to focus.'
+    );
   });
 });
 
