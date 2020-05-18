@@ -6,8 +6,8 @@
     "group:recommended",
     "helpers:disableTypesNodeMajor"
   ],
-  "rangeStrategy": "bump",
   "prConcurrentLimit": 4,
+  "rangeStrategy": "bump",
   "packageRules": [
     {
       "depTypeList": ["devDependencies"],
