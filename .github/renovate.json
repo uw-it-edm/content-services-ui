@@ -1,17 +1,17 @@
 {
   "extends": [
     ":prHourlyLimit4",
-    ":prConcurrentLimit10",
     "schedule:weekly",
     "group:monorepos",
     "group:recommended",
     "helpers:disableTypesNodeMajor"
   ],
   "rangeStrategy": "bump",
+  "prConcurrentLimit": 4,
   "packageRules": [
     {
       "depTypeList": ["devDependencies"],
-      "updateTypes": ["minor, patch"],
+      "updateTypes": ["minor", "patch"],
       "automerge": true
     },
     {
