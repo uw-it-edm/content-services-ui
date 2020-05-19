@@ -19,6 +19,7 @@ export class EditPage {
   public disabledFields = element.all(by.css(':disabled'));
   public toggleFullScreenButton = element(by.name('toggleFullScreen'));
   public zoomDropDownList = element(by.name('zoomFactor'));
+  public replaceFileElement = element(by.name('replaceFile'));
 
   constructor(private profile: string = 'demo', private id: string = '123456') {}
 
@@ -39,7 +40,7 @@ export class EditPage {
   }
 
   replaceFile(filePath: string = this.pdfFilePath) {
-    element(by.name('replaceFile')).sendKeys(filePath);
+    this.replaceFileElement.sendKeys(filePath);
   }
 
   getPdfViewer() {

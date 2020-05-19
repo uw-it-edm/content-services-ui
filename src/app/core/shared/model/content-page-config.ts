@@ -10,6 +10,11 @@ export class ContentPageConfig implements PageConfig {
 
   viewPanel: boolean;
 
+  /**
+   * Whether to disable the ability to replace an uploaded file of the document.
+   */
+  disableFileReplace: boolean;
+
   allowPageByPageMode: boolean;
 
   onSave: Array<any> = [];
