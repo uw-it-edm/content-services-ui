@@ -6,6 +6,7 @@
     "group:recommended",
     "helpers:disableTypesNodeMajor"
   ],
+  "masterIssue": true,
   "prConcurrentLimit": 4,
   "rangeStrategy": "bump",
   "packageRules": [
