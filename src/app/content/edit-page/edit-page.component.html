@@ -29,7 +29,7 @@
             <app-content-object-list
                     [contentItem]="contentItem"
                     [formGroup]="form"
-                    [disableFileReplace]="pageConfig && pageConfig.disableFileReplace"
+                    [disableFileReplace]="disableFileReplace"
                     (remove)="removeFile($event)"
                     (select)="selectObject($event)"
                     (saving)="updateSavingStatus($event)">
