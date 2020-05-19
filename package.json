@@ -70,7 +70,7 @@
     "@angular/language-service": "^9.1.4",
     "@types/jasmine": "~3.5.10",
     "@types/jasminewd2": "~2.0.8",
-    "@types/node": "^12.12.39",
+    "@types/node": "^12.12.40",
     "@types/pdfjs-dist": "0.1.2",
     "axe-webdriverjs": "^2.2.0",
     "codelyzer": "^5.2.2",
