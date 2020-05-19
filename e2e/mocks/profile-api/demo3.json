@@ -198,7 +198,8 @@
           "command": "saveItem"
         }
       ],
-      "viewPanel": true
+      "viewPanel": true,
+      "disableFileReplace": true
     },
     "create": {
       "theme": "uw-default",
