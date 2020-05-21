@@ -9,7 +9,6 @@ import { createWriteStream, existsSync } from 'fs';
 const demoConfig = require('../mocks/profile-api/demo.json');
 const pdfFilePath = path.resolve(__dirname, '../mocks/files/sample-file.pdf');
 const docFilePath = path.resolve(__dirname, '../mocks/files/sample-file.docx');
-const textFilePath = path.resolve(__dirname, '../mocks/files/sample-file.txt');
 const invalidFilePath = path.resolve(__dirname, '../mocks/files/invalid-file.txt');
 
 const getCurrentUrl = function () {
@@ -19,7 +18,8 @@ const getCurrentUrl = function () {
 };
 
 const currentUrlMatches = (expectedUrl: string) => {
-  return () => browser.getCurrentUrl().then((currentUrl) => expectedUrl.toLowerCase() === currentUrl.toLowerCase());
+  return () =>
+    browser.getCurrentUrl().then((currentUrl) => currentUrl.toLowerCase().startsWith(expectedUrl.toLowerCase()));
 };
 
 const isEmptyFileList = (fileList: ElementArrayFinder) => {
@@ -142,20 +142,22 @@ describe('Create Page for Demo', () => {
     page.clickAcceptAlert();
   });
 
-  it("should display Upload Another checkbox that is checked by default if setting 'uploadAnother'=true", () => {
-    expect(page.uploadAnotherCheckbox.isDisplayed());
-    expect(page.uploadAnotherCheckbox.isSelected());
-  });
-
-  it('should leave form fields but clear uploaded files list after saving if upload another checkbox is checked', () => {
+  it('should leave form fields but clear uploaded files list when using Save And Upload Another buttons', () => {
     page.addFile(pdfFilePath);
     page.filerInput.sendKeys('test filer');
     expect(page.fileList.count()).toEqual(1);
 
-    page.saveButton.click();
+    page.saveAndResetButton.click();
     browser.wait(isEmptyFileList(page.fileList), 5000);
     expect(page.fileList.count()).toEqual(0);
     expect(page.filerInput.getAttribute('value')).toEqual('test filer');
+
+    // Test that user can upload another document.
+    page.addFile(pdfFilePath);
+    expect(page.fileList.count()).toEqual(1);
+    page.saveAndResetButton.click();
+    browser.wait(isEmptyFileList(page.fileList), 5000);
+    expect(page.fileList.count()).toEqual(0);
   });
 
   it('should leave form and uploaded files intact if error is returned after saving', () => {
@@ -167,6 +169,16 @@ describe('Create Page for Demo', () => {
     expect(page.getSnackBarText()).toContain('Failed to save 1 item');
     expect(page.fileList.count()).toEqual(1);
     expect(page.filerInput.getAttribute('value')).toEqual('test filer');
+  });
+
+  it('should redirect to search page after saving', () => {
+    page.populateRequiredFields(false);
+
+    page.addFile(pdfFilePath);
+    expect(page.fileList.count()).toEqual(1);
+
+    page.saveButton.click();
+    browser.wait(currentUrlMatches(searchPage.pageUrl), 5000);
   });
 
   it('should autocomplete Student Name when Student ID is entered in Student input field', () => {
@@ -313,6 +325,17 @@ describe('Create Page for Demo', () => {
     expect(page.getFormFieldByLabel('Course').isDisplayed()).toBeTruthy();
     expect(page.getFormFieldByLabel('Section').isDisplayed()).toBeTruthy();
   });
+
+  it('should display error dialog when course input returns error', () => {
+    page.clickDropDownByLabel('Year');
+    page.clickDropDownOptionValueByText('2015'); // 2015 is mocked to fail
+
+    expect(page.errorNotification.isDisplayed()).toBeTruthy();
+    expect(page.dismissButton.getId()).toEqual(
+      browser.driver.switchTo().activeElement().getId(),
+      'Dismiss button is not set to focus.'
+    );
+  });
 });
 
 describe('Create Page for Demo2', () => {
@@ -371,20 +394,5 @@ describe('Create Page for Demo2', () => {
         'aria-required not set to true for ' + requiredField.getTagName().then((tagName) => tagName)
       );
     });
-  });
-
-  it("should display Upload Another checkbox that is un-checked by default if setting 'uploadAnother'=false", () => {
-    expect(page.uploadAnotherCheckbox.isDisplayed());
-    expect(page.uploadAnotherCheckbox.isSelected()).toBeFalsy();
-  });
-
-  it('should redirect to search page after saving if upload another checkbox is un-checked', () => {
-    page.populateRequiredFields(false);
-
-    page.addFile(pdfFilePath);
-    expect(page.fileList.count()).toEqual(1);
-
-    page.saveButton.click();
-    browser.wait(currentUrlMatches(searchPage.pageUrl), 5000);
   });
 });

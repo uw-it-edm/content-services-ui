@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed, tick } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
 import { CourseInputComponent } from './course-input.component';
 import { Field } from '../../../core/shared/model/field';
 import { CourseConfig } from '../../../core/shared/model/field/course-config';
@@ -6,10 +6,50 @@ import { SharedModule } from '../../shared.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectChange } from '@angular/material/select';
 import { StudentService } from '../../providers/student.service';
-import { Observable, of } from 'rxjs';
+import { NotificationService } from '../../providers/notification.service';
+import { Observable, of, throwError } from 'rxjs';
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { delay } from 'rxjs/operators';
+
+const testCourses = [
+  {
+    Year: '2019',
+    Quarter: 'autumn',
+    CurriculumAbbreviation: 'PHYS',
+    CourseNumber: '101',
+    CourseTitle: 'PHYS SCI INQUIRY I',
+  },
+  {
+    Year: '2019',
+    Quarter: 'autumn',
+    CurriculumAbbreviation: 'PHYS',
+    CourseNumber: '102',
+    CourseTitle: 'PHY SCI INQUIRY I',
+  },
+  {
+    Year: '2019',
+    Quarter: 'autumn',
+    CurriculumAbbreviation: 'PHYS',
+    CourseNumber: '103',
+    CourseTitle: 'PHY SCI INQUIRY I',
+  },
+  {
+    Year: '2019',
+    Quarter: 'autumn',
+    CurriculumAbbreviation: 'PHYS',
+    CourseNumber: '104',
+    CourseTitle: 'GROUP INQUIRY I',
+  },
+  {
+    Year: '2019',
+    Quarter: 'autumn',
+    CurriculumAbbreviation: 'PHYS',
+    CourseNumber: '105',
+    CourseTitle: 'GROUP INQUIRY II',
+  },
+];
 
 class MockStudentService extends StudentService {
   constructor() {
@@ -24,43 +64,7 @@ class MockStudentService extends StudentService {
     title?: string
   ): Observable<any> {
     const ret: any = {
-      Courses: [
-        {
-          Year: '2019',
-          Quarter: 'autumn',
-          CurriculumAbbreviation: 'PHYS',
-          CourseNumber: '101',
-          CourseTitle: 'PHYS SCI INQUIRY I',
-        },
-        {
-          Year: '2019',
-          Quarter: 'autumn',
-          CurriculumAbbreviation: 'PHYS',
-          CourseNumber: '102',
-          CourseTitle: 'PHY SCI INQUIRY I',
-        },
-        {
-          Year: '2019',
-          Quarter: 'autumn',
-          CurriculumAbbreviation: 'PHYS',
-          CourseNumber: '103',
-          CourseTitle: 'PHY SCI INQUIRY I',
-        },
-        {
-          Year: '2019',
-          Quarter: 'autumn',
-          CurriculumAbbreviation: 'PHYS',
-          CourseNumber: '104',
-          CourseTitle: 'GROUP INQUIRY I',
-        },
-        {
-          Year: '2019',
-          Quarter: 'autumn',
-          CurriculumAbbreviation: 'PHYS',
-          CourseNumber: '105',
-          CourseTitle: 'GROUP INQUIRY II',
-        },
-      ],
+      Courses: testCourses,
       TotalCount: 153,
     };
 
@@ -85,12 +89,20 @@ class MockStudentService extends StudentService {
 describe('CourseInputComponent', () => {
   let component: CourseInputComponent;
   let fixture: ComponentFixture<CourseInputComponent>;
+  let mockStudentService: MockStudentService;
+  let spyNotificationService: NotificationService;
 
   beforeEach(async(() => {
+    mockStudentService = new MockStudentService();
+    spyNotificationService = jasmine.createSpyObj('NotificationService', ['error']);
+
     TestBed.configureTestingModule({
       imports: [SharedModule, NoopAnimationsModule],
       declarations: [],
-      providers: [{ provide: StudentService, useValue: new MockStudentService() }],
+      providers: [
+        { provide: StudentService, useValue: mockStudentService },
+        { provide: NotificationService, useValue: spyNotificationService }
+      ],
     }).compileComponents();
   }));
 
@@ -133,6 +145,36 @@ describe('CourseInputComponent', () => {
     expect(component.courseOptions[2].sections.length).toBe(1);
     expect(component.sectionOptions.length).toBe(2);
   });
+
+  it('should raise a notification error if it fails to get courses', () => {
+    mockStudentService.getCourses = () => throwError('Error from getCourses');
+
+    component.ngAfterContentInit();
+    component.writeValue('2019|autumn|PHYS|101|PHYS SCI INQUIRY I|A');
+
+    expect(spyNotificationService.error).toHaveBeenCalledWith('An error occurred retrieving course information, please try again.');
+  });
+
+  it('should raise a notification error if it fails to get sections', () => {
+    mockStudentService.getSections = () => throwError('Error from getSections');
+
+    component.ngAfterContentInit();
+    component.writeValue('2019|autumn|PHYS|101|PHYS SCI INQUIRY I|A');
+
+    expect(spyNotificationService.error).toHaveBeenCalledWith('An error occurred retrieving course information, please try again.');
+  });
+
+  it('should raise a notification error if it takes too long to get courses', fakeAsync(() => {
+    mockStudentService.getCourses = () => of({ Courses: testCourses, TotalCount: 153 }).pipe(delay(5000));
+
+    component.getCoursesTimeout = 500;
+    component.ngAfterContentInit();
+    component.writeValue('2019|autumn|PHYS|101|PHYS SCI INQUIRY I|A');
+
+    tick(1000);
+    expect(spyNotificationService.error).toHaveBeenCalled();
+  }));
+
 });
 
 @Component({
@@ -201,26 +243,6 @@ describe('CourseInputComponent with host', () => {
       fixture.detectChanges();
 
       expect(dropDownElements[2].getAttribute('aria-label')).toEqual('Course 101-PHYS SCI INQUIRY I');
-    });
-  }));
-
-  it('should render aria-label set to placeholder for Course dropdown when course number is empty', async(() => {
-    fixture.whenStable().then(() => {
-      component.ngAfterContentInit();
-      component.writeValue('2020|autumn|||PHYS SCI INQUIRY I|');
-      fixture.detectChanges();
-
-      expect(dropDownElements[2].getAttribute('aria-label')).toEqual('Course');
-    });
-  }));
-
-  it('should render aria-label set to placeholder for Course dropdown when course title is empty', async(() => {
-    fixture.whenStable().then(() => {
-      component.ngAfterContentInit();
-      component.writeValue('2020|autumn||101||');
-      fixture.detectChanges();
-
-      expect(dropDownElements[2].getAttribute('aria-label')).toEqual('Course');
     });
   }));
 

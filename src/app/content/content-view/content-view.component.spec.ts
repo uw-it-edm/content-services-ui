@@ -4,7 +4,7 @@ import { ContentViewComponent } from './content-view.component';
 import { SafeUrlPipe } from '../../shared/pipes/safe-url.pipe';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { ContentItem } from '../shared/model/content-item';
-import { ContentService } from '../shared/content.service';
+import { ContentService, FileUrlParameters } from '../shared/content.service';
 import { ContentObject } from '../shared/model/content-object';
 import { ContentToolbarComponent } from '../content-toolbar/content-toolbar.component';
 import { FormsModule } from '@angular/forms';
@@ -13,7 +13,7 @@ import { MaterialConfigModule } from '../../routing/material-config.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 class MockContentService {
-  getFileUrl(itemId: string, webViewable: boolean): string {
+  getFileUrl({ itemId, webViewable, useOriginalFilename, disposition }: FileUrlParameters): string {
     return 'testUrl/' + itemId;
   }
 }
@@ -28,7 +28,7 @@ describe('ContentViewComponent', () => {
     TestBed.configureTestingModule({
       imports: [FormsModule, MaterialConfigModule, PdfViewerModule, NoopAnimationsModule],
       providers: [{ provide: ContentService, useClass: MockContentService }, ProgressService],
-      declarations: [ContentToolbarComponent, ContentViewComponent, SafeUrlPipe]
+      declarations: [ContentToolbarComponent, ContentViewComponent, SafeUrlPipe],
     }).compileComponents();
   });
 
@@ -73,7 +73,7 @@ describe('ContentViewComponent', () => {
   it('should change the page count when display completes', () => {
     expect(component.pageCount).toBe(1);
     const pdf = {
-      numPages: 10
+      numPages: 10,
     };
     component.onDisplayComplete(pdf);
     expect(component.pageCount).toBe(10);
@@ -131,7 +131,7 @@ describe('ContentViewComponent', () => {
   });
 
   it('should build the url by delegating to the content service', () => {
-    const webUrl = component.buildUrl('456');
+    const webUrl = component.buildUrl({ itemId: '456', webViewable: false, useOriginalFilename: false });
     expect(webUrl).toBe('testUrl/456');
   });
 
@@ -150,7 +150,7 @@ describe('ContentViewComponent', () => {
   it('should nudge the progress service when progress is made', () => {
     const progressServiceSpy = spyOn(component.progressService, 'progress');
     const progressData = {
-      loaded: 90232
+      loaded: 90232,
     };
     component.onDisplayProgress(progressData);
     expect(progressServiceSpy).toHaveBeenCalledWith(90232);

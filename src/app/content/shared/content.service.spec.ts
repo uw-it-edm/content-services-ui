@@ -15,8 +15,8 @@ const readResponse = {
   id: '123',
   label: 'test.pdf',
   metadata: {
-    ProfileId: 'Foster'
-  }
+    ProfileId: 'Foster',
+  },
 };
 
 class UserServiceMock extends UserService {
@@ -43,7 +43,7 @@ describe('ContentService', () => {
     httpSpy = spyOn(http, 'get').and.returnValue(of(readResponse));
 
     const expectedUrl = environment.content_api.url + environment.content_api.contextV3 + '/item/123';
-    service.read('123').subscribe(result => {
+    service.read('123').subscribe((result) => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       expect(httpSpy.calls.first().args[0]).toBe(expectedUrl);
       expect(result.id).toBe('123');
@@ -53,18 +53,41 @@ describe('ContentService', () => {
   });
 
   it('should add web rendition to getFileUrl', () => {
-    expect(service.getFileUrl('123', true)).toContain('rendition=Web');
+    expect(service.getFileUrl({ itemId: '123', webViewable: true, useOriginalFilename: true })).toContain(
+      'rendition=Web'
+    );
   });
   it('should not web rendition to getFileUrl', () => {
-    expect(service.getFileUrl('123', false)).not.toContain('rendition=Web');
+    expect(service.getFileUrl({ itemId: '123', webViewable: false, useOriginalFilename: true })).not.toContain(
+      'rendition=Web'
+    );
+  });
+  it('should add useOriginalFilename to getFileUrl', () => {
+    expect(service.getFileUrl({ itemId: '123', webViewable: true, useOriginalFilename: true })).toContain(
+      'useOriginalFilename=true'
+    );
+  });
+  it('should not useOriginalFilename to getFileUrl', () => {
+    expect(service.getFileUrl({ itemId: '123', webViewable: false, useOriginalFilename: false })).not.toContain(
+      'useOriginalFilename=true'
+    );
   });
   it('should add disposition to getFileUrl', () => {
-    expect(service.getFileUrl('123', false, 'attachment')).toContain('disposition=attachment');
+    expect(
+      service.getFileUrl({
+        itemId: '123',
+        webViewable: false,
+        useOriginalFilename: true,
+        disposition: 'attachment',
+      })
+    ).toContain('disposition=attachment');
   });
-  it('should to get the file url', () => {
+  it('should get the file url', () => {
     const expectedUrl =
-      environment.content_api.url + environment.content_api.contextV3 + '/file/123?rendition=Web&auth=test';
-    expect(service.getFileUrl('123', true)).toEqual(expectedUrl);
+      environment.content_api.url +
+      environment.content_api.contextV3 +
+      '/file/123?rendition=Web&useOriginalFilename=true&auth=test';
+    expect(service.getFileUrl({ itemId: '123', webViewable: true, useOriginalFilename: true })).toEqual(expectedUrl);
   });
 
   it('should update the content api', async(() => {
@@ -74,7 +97,7 @@ describe('ContentService', () => {
     contentItem.id = '123';
     const expectedUrl = environment.content_api.url + environment.content_api.contextV3 + '/item/123';
 
-    service.update(contentItem, null).subscribe(result => {
+    service.update(contentItem, null).subscribe((result) => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       expect(httpSpy.calls.first().args[0]).toBe(expectedUrl);
       expect(result.id).toEqual(contentItem.id);
@@ -86,7 +109,7 @@ describe('ContentService', () => {
     const contentItem = new ContentItem();
     contentItem.id = '123';
 
-    service.create(contentItem, null).subscribe(result => {
+    service.create(contentItem, null).subscribe((result) => {
       expect(httpSpy).toHaveBeenCalledTimes(1);
       expect(httpSpy.calls.first().args[0]).toBe(expectedUrl);
       expect(result.id).toEqual(contentItem.id);

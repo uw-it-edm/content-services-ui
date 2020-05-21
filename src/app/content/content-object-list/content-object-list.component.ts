@@ -1,9 +1,9 @@
 import { first, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ContentObject } from '../shared/model/content-object';
-import { FormGroup, AbstractControl } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 import { ContentItem } from '../shared/model/content-item';
-import { ContentService } from '../shared/content.service';
+import { ContentService, FileUrlParameters } from '../shared/content.service';
 import { Field } from '../../core/shared/model/field';
 import { Config } from '../../core/shared/model/config';
 import { User } from '../../user/shared/user';
@@ -21,7 +21,6 @@ import { CustomTextUtilities } from '../../shared/directives/custom-text/custom-
 })
 export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy {
   private componentDestroyed = new Subject();
-  private uploadAnotherCtrl: AbstractControl;
 
   @Input() contentItem: ContentItem;
   @Input() formGroup: FormGroup;
@@ -52,7 +51,6 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
 
   ngOnInit(): void {
     this.user = this.userService.getUser();
-    this.uploadAnotherCtrl = this.formGroup && this.formGroup.controls['uploadAnother'];
 
     this.route.paramMap.pipe(takeUntil(this.componentDestroyed)).subscribe((params) => {
       this.route.data.pipe(takeUntil(this.componentDestroyed)).subscribe((data: { config: Config }) => {
@@ -251,7 +249,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
   onDisplayType(contentObject: ContentObject, displayType: string) {
     console.log('Received display type of ' + displayType);
     if (contentObject.itemId) {
-      contentObject.setUrl(this.buildUrl(contentObject.itemId));
+      contentObject.setUrl(this.buildUrl({ itemId: contentObject.itemId }));
       console.log('Content object url is ' + contentObject.url);
     }
   }
@@ -294,27 +292,22 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
         }
 
         if (contentItem$) {
-          const contentItemSaving = contentItem$.pipe(first()).toPromise();
-          contentItemSaving
+          const contentItemSaving = contentItem$.pipe(first()).toPromise()
             .then((item) => {
               contentObject.onLoad(item);
               contentObject.failed = false;
               this.updateComponentSavedItemLists(item);
               this.saving.emit(false); // item saving completed
 
-              this.notify().then(() => {
-                if (this.uploadAnotherCtrl && this.uploadAnotherCtrl.value) {
-                  this.reset();
-                } else if (!!this.uploadAnotherCtrl) {
-                  this.router.navigate([this.config.tenant]);
-                }
-              });
+              return this.notify();
             })
             .catch((err) => {
               this.failures.push(err);
               contentObject.failed = true;
               this.saving.emit(false); // item saving failed
+
               this.notify();
+              throw err;
             });
           contentItemPromises.push(contentItemSaving);
         }
@@ -358,7 +351,12 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
     }
   }
 
-  private buildUrl(id: string, isWebViewable = true, disposition?: string) {
-    return this.contentService.getFileUrl(id, isWebViewable, disposition);
+  private buildUrl({ itemId, webViewable = true, useOriginalFilename = true, disposition }: FileUrlParameters) {
+    return this.contentService.getFileUrl({
+      itemId: itemId,
+      webViewable: webViewable,
+      useOriginalFilename: useOriginalFilename,
+      disposition: disposition,
+    });
   }
 }

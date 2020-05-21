@@ -244,8 +244,7 @@
           "command": "cancel"
         }
       ],
-      "viewPanel": true,
-      "uploadAnother": false
+      "viewPanel": true
     }
   }
 }

@@ -11,9 +11,8 @@ import {
   Optional,
   Self,
 } from '@angular/core';
-import { forkJoin, Observable, of, Subject } from 'rxjs';
+import { forkJoin, Subject } from 'rxjs';
 import {
-  AbstractControl,
   ControlValueAccessor,
   FormBuilder,
   FormControl,
@@ -27,15 +26,11 @@ import { CanUpdateErrorState, ErrorStateMatcher, mixinErrorState } from '@angula
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { MatSelectChange } from '@angular/material/select';
 import { Field } from '../../../core/shared/model/field';
-import { FieldOption } from '../../../core/shared/model/field/field-option';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
 import { StudentService } from '../../providers/student.service';
-import { DataApiValueSearchResults } from '../../shared/model/data-api-value-search-results';
-import { DataApiValue } from '../../shared/model/data-api-value';
-import { ObjectUtilities } from '../../../core/util/object-utilities';
-import { map, takeUntil } from 'rxjs/operators';
-import { DynamicSelectConfig } from '../../../core/shared/model/field/dynamic-select-config';
+import { NotificationService } from '../../providers/notification.service';
+import { timeout } from 'rxjs/operators';
 
 // Boilerplate for applying mixins to CourseInputComponent.
 /** @docs-private */
@@ -56,6 +51,8 @@ const QUARTER_FIELD_NAME = 'quarterInputForm';
 const COURSE_FIELD_NAME = 'courseInputForm';
 const SECTION_FIELD_NAME = 'sectionInputForm';
 const NUMBER_OF_FIELDS = 6; // year, quarter, curriculum, course, section, course title
+const GET_COURSES_ERROR_MSG = 'An error occurred retrieving course information, please try again.';
+const GET_COURSES_DEFAULT_TIMEOUT = 10000;
 
 /* tslint:disable:member-ordering no-host-metadata-property*/
 @Component({
@@ -109,6 +106,7 @@ export class CourseInputComponent extends _CourseInputComponentBase
   sectionOptions: any[] = [];
 
   courseTitle = '';
+  getCoursesTimeout = GET_COURSES_DEFAULT_TIMEOUT;
 
   onSelectYear(event: MatSelectChange) {
     if (event.value) {
@@ -181,53 +179,58 @@ export class CourseInputComponent extends _CourseInputComponentBase
     this.formGroup.controls[SECTION_FIELD_NAME] = this.sectionControl;
   }
 
+  private loadCoursesAndSections(courses, sections) {
+    this.courseOptions = [];
+
+    if (courses && courses['Courses'] && sections && sections['Sections']) {
+      // get course sections by course
+      const secs = {};
+      sections['Sections'].forEach((s) => {
+        const cn = s['CourseNumber'];
+        if (secs[cn]) {
+          secs[cn].push(s['SectionID']);
+        } else {
+          secs[cn] = [s['SectionID']];
+        }
+      });
+
+      // keep courses with sections (i.e. offerings)
+      // and attach sections to corresponding course
+      let hasSelectedCourse = false;
+      courses['Courses'].forEach((c) => {
+        const cn = c['CourseNumber'];
+        if (secs[cn]) {
+          c.sections = secs[cn];
+          this.courseOptions.push(c);
+          if (this.courseNumber === cn) {
+            hasSelectedCourse = true;
+          }
+        }
+      });
+
+      // update current course selection
+      if (!hasSelectedCourse && this.courseOptions.length > 0) {
+        this.courseNumber = this.courseOptions[0]['CourseNumber'];
+        this.courseTitle = this.courseOptions[0]['CourseTitle'];
+        this.courseControl.patchValue(this.courseNumber);
+      } else if (this.courseOptions.length === 0) {
+        this.courseNumber = '';
+        this.courseTitle = '';
+      }
+    }
+
+    // need to update sections when year/quarter changed, even if course remained the same
+    this.updateSections();
+  }
+
   private updateCourses() {
     if (this.year && this.quarter && this.curriculumAbbreviation) {
       const courses$ = this.studentService.getCourses(this.year, this.quarter, this.curriculumAbbreviation);
       const sections$ = this.studentService.getSections(this.year, this.quarter, this.curriculumAbbreviation);
 
-      forkJoin(courses$, sections$).subscribe(([courses, sections]) => {
-        this.courseOptions = [];
-
-        if (courses && courses['Courses'] && sections && sections['Sections']) {
-          // get course sections by course
-          const secs = {};
-          sections['Sections'].forEach((s) => {
-            const cn = s['CourseNumber'];
-            if (secs[cn]) {
-              secs[cn].push(s['SectionID']);
-            } else {
-              secs[cn] = [s['SectionID']];
-            }
-          });
-
-          // keep courses with sections (i.e. offerings)
-          // and attach sections to corresponding course
-          let hasSelectedCourse = false;
-          courses['Courses'].forEach((c) => {
-            const cn = c['CourseNumber'];
-            if (secs[cn]) {
-              c.sections = secs[cn];
-              this.courseOptions.push(c);
-              if (this.courseNumber === cn) {
-                hasSelectedCourse = true;
-              }
-            }
-          });
-
-          // update current course selection
-          if (!hasSelectedCourse && this.courseOptions.length > 0) {
-            this.courseNumber = this.courseOptions[0]['CourseNumber'];
-            this.courseControl.patchValue(this.courseNumber);
-          } else if (this.courseOptions.length === 0) {
-            this.courseNumber = '';
-            this.courseTitle = '';
-          }
-        }
-
-        // need to update sections when year/quarter changed, even if course remained the same
-        this.updateSections();
-      });
+      forkJoin(courses$, sections$).pipe(timeout(this.getCoursesTimeout)).subscribe(
+        ([courses, sections]) => this.loadCoursesAndSections(courses, sections),
+        _ => this.notificationService.error(GET_COURSES_ERROR_MSG));
     } else {
       this.courseOptions = [];
       this.updateSections();
@@ -452,7 +455,8 @@ export class CourseInputComponent extends _CourseInputComponentBase
     @Optional()
     @Self()
     public ngControl: NgControl,
-    private studentService: StudentService
+    private studentService: StudentService,
+    private notificationService: NotificationService
   ) {
     super(_defaultErrorStateMatcher, _parentForm, _parentFormGroup, ngControl);
 

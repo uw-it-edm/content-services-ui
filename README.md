@@ -17,7 +17,8 @@ Run `yarn start-local` for a dev server. Navigate to `http://localhost:4200/`. T
 
 ## Development server with mock apis
 ```
-yarn mock-services && yarn start  --configuration=localmock --disable-host-check
+yarn start-mock-services
+yarn start-localmock
 ```
 
 Stop the containers when you are done with:
@@ -43,6 +44,15 @@ yarn start-localproxy
 - Navigate to http://localhost:42000 watch the console to if there are any errors on the proxy url re-writting.
 
 How it works? There is a script (`./src/environments/replace-vars.mjs`) that will inject values from environment variables into the appropiate local files that includes your NetID used to make requests to back end servers and all the port numbers.
+
+## Run on IE11 using VirtualBox
+
+- Follow instructions [here](https://wiki.cac.washington.edu/x/LPjFBg) to download a Windows image and load it into VirtualBox.
+- Run dev server configured to produce ES5 scripts and addresses configured for virtual machine
+```
+ yarn start-localmock-ie11
+```
+- On the virtual machine, launch IE11 and navigate to `http://10.0.2.2:4200` to load the application.
 
 ## Debug in VSCode
 - Add the following configuration to your launch.json file:
@@ -131,10 +141,4 @@ yarn stop-mock-services
 # Build
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
-
-
-
-
-
-
 

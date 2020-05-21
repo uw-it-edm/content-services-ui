@@ -7,11 +7,11 @@ export class CreatePage {
   public fileList = element.all(by.tagName('mat-list-item'));
   public inputField = element(by.id('mat-input-0'));
   public errorNotification = element(by.className('error'));
-  public uploadAnotherCheckbox = element.all(by.name('uploadAnother')).get(1);
   public studentInput = element(by.css('app-student-autocomplete input'));
   public personInput = element(by.css('app-person-autocomplete input'));
   public filerInput = element(by.name('Filer'));
   public saveButton = element(by.id('saveItem'));
+  public saveAndResetButton = element(by.id('saveItemAndReset'));
   public cancelButton = element(by.id('cancel'));
   public clearButton = element(by.buttonText('clear'));
   public pdfViewer = element(by.tagName('pdf-viewer'));

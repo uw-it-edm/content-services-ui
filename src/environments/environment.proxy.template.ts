@@ -23,21 +23,21 @@ export const environment = {
     context: '/search/v1/',
     method: 'POST',
     authenticationHeader: 'x-uw-act-as',
-    headers: { 'x-uw-act-as': netId }
+    headers: { 'x-uw-act-as': netId },
   },
   content_api: {
     url: '/content-api',
     contextV3: '/content/v3',
     contextV4: '/content/v4',
     authenticationHeader: 'x-uw-act-as',
-    headers: { 'x-uw-act-as': netId }
+    headers: { 'x-uw-act-as': netId },
   },
   profile_api: {
     url: '/profile-api',
     context: '/profile/v1',
     app_name: 'content-services-ui',
     authenticationHeader: 'x-uw-act-as',
-    headers: { 'x-uw-act-as': netId }
+    headers: { 'x-uw-act-as': netId },
   },
   data_api: {
     url: '/data-api',
@@ -45,6 +45,6 @@ export const environment = {
     personContext: '/v1/person',
     valueContext: '/v1/value',
     authenticationHeader: 'x-uw-act-as',
-    headers: { 'x-uw-act-as': netId }
-  }
+    headers: { 'x-uw-act-as': netId },
+  },
 };
