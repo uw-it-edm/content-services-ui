@@ -12,7 +12,7 @@ import {
   Self,
   ViewChild,
 } from '@angular/core';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, of, Subject, concat } from 'rxjs';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -31,12 +31,8 @@ import { Field } from '../../../core/shared/model/field';
 import { FieldOption } from '../../../core/shared/model/field/field-option';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
-import { DataApiValueService } from '../../providers/dataapivalue.service';
-import { DataApiValueSearchResults } from '../../shared/model/data-api-value-search-results';
-import { DataApiValue } from '../../shared/model/data-api-value';
-import { ObjectUtilities } from '../../../core/util/object-utilities';
-import { map, takeUntil } from 'rxjs/operators';
-import { DynamicSelectConfig } from '../../../core/shared/model/field/dynamic-select-config';
+import { takeUntil, switchMap } from 'rxjs/operators';
+import { FieldOptionService } from '../../providers/fieldoption.service';
 
 // Boilerplate for applying mixins to OptionsInputComponent.
 /** @docs-private */
@@ -123,56 +119,24 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
 
   private initOptions() {
     const dynamicSelectConfig = this.fieldConfig.dynamicSelectConfig;
-    if (dynamicSelectConfig) {
-      const parentFieldConfig = this.fieldConfig.dynamicSelectConfig.parentFieldConfig;
-      if (parentFieldConfig) {
-        // Set up options if the parent was already set when this component is initializing
-        const originalParentValue = this.parentControl.value;
-        if (originalParentValue) {
-          this.updateOptionsFromParent(dynamicSelectConfig, parentFieldConfig, originalParentValue);
-        }
-        this.parentControl.valueChanges.pipe(takeUntil(this.componentDestroyed)).subscribe((newParentValue) => {
+    const parentFieldConfig = dynamicSelectConfig && dynamicSelectConfig.parentFieldConfig;
+
+    let allOptions = this.fieldOptionService.getFieldOptions(this.fieldConfig, this.parentControl && this.parentControl.value);
+
+    if (parentFieldConfig) {
+      allOptions = concat(allOptions, this.parentControl.valueChanges.pipe(
+        switchMap((newParentValue) => {
           if (newParentValue) {
-            this.updateOptionsFromParent(dynamicSelectConfig, parentFieldConfig, newParentValue);
+            return this.fieldOptionService.getOptionsFromParent(dynamicSelectConfig, parentFieldConfig, newParentValue);
           } else {
-            this.options$ = of([]);
+            return of([]);
           }
-        });
-      } else {
-        this.options$ = this.dataApiValueService.listByType(dynamicSelectConfig.type).pipe(
-          map((results: DataApiValueSearchResults) => results.content),
-          map((values: DataApiValue[]) => {
-            return values.map((value: DataApiValue) => {
-              return this.dataApiValuesToFieldOption(dynamicSelectConfig, value);
-            });
-          })
-        );
-      }
-    } else {
-      this.options$ = of(
-        this.fieldConfig.options.map((option) => {
-          return Object.assign(new FieldOption(), option);
-        })
-      );
+        }),
+        takeUntil(this.componentDestroyed)
+      ));
     }
-  }
 
-  private updateOptionsFromParent(dynamicSelectConfig, parentFieldConfig, newParentValue) {
-    this.options$ = this.dataApiValueService
-      .listByTypeAndParent(dynamicSelectConfig.type, parentFieldConfig.parentType, newParentValue)
-      .pipe(
-        map((results: DataApiValueSearchResults) => results.content),
-        map((values: DataApiValue[]) => {
-          return values.map((value: DataApiValue) => {
-            return this.dataApiValuesToFieldOption(dynamicSelectConfig, value);
-          });
-        })
-      );
-  }
-
-  private dataApiValuesToFieldOption(dynamicSelectConfig: DynamicSelectConfig, value: DataApiValue) {
-    const displayValue = ObjectUtilities.getNestedObjectFromStringPath(value.data, dynamicSelectConfig.labelPath);
-    return new FieldOption(value.valueId, displayValue);
+    this.options$ = allOptions;
   }
 
   private initializeValue(): void {
@@ -333,7 +297,7 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
     @Optional()
     @Self()
     public ngControl: NgControl,
-    private dataApiValueService: DataApiValueService
+    private fieldOptionService: FieldOptionService
   ) {
     super(_defaultErrorStateMatcher, _parentForm, _parentFormGroup, ngControl);
 
