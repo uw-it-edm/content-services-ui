@@ -1,0 +1,24 @@
+<mat-form-field [formGroup]="formGroup">
+  <input type="text"
+      matInput
+      [formControlName]="internalFieldName"
+      [matAutocomplete]="auto"
+      [placeholder]="placeholder"
+      [required]="required"
+      [attr.aria-label]="placeholder"
+      [attr.aria-disabled]="disabled"
+      [attr.aria-required]="required" />
+
+  <mat-autocomplete #auto="matAutocomplete"
+                    [displayWith]="getOptionDisplayValue"
+                    (closed)="optionListClosed()"
+                    (optionSelected)="optionSelected($event.option.value)">
+    <mat-option *ngFor="let option of filteredOptions$ | async" [value]="option">
+      {{ option.displayValue }}
+    </mat-option>
+  </mat-autocomplete>
+  <mat-icon *ngIf="disabled" matSuffix class="disabled-icon" matTooltip="Read-only">lock</mat-icon>
+  <mat-error>
+    {{errorMessage}}
+  </mat-error>
+</mat-form-field>
