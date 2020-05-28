@@ -16,7 +16,7 @@
             </app-file-upload>
         </span>
 
-        <span [hidden]="contentObject.item">
+        <span *ngIf="!contentObject.item">
           <button mat-icon-button (click)="removeObject(contentObject, i)" matTooltip="Remove File">
             <mat-icon>clear</mat-icon>
           </button>
