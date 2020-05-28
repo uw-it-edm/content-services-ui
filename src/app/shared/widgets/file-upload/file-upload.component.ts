@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-file-upload',
   templateUrl: './file-upload.component.html',
-  styleUrls: ['./file-upload.component.css']
+  styleUrls: ['./file-upload.component.css'],
 })
 export class FileUploadComponent implements OnInit {
   @Input() fieldName: string;
@@ -14,6 +14,8 @@ export class FileUploadComponent implements OnInit {
   @Input() multiple = false;
   @Input() dropzone;
   @Output() fileSelected: EventEmitter<File> = new EventEmitter();
+
+  @ViewChild('uploadButton') uploadButton: ElementRef;
 
   fieldId: string;
   files: File[] = [];
@@ -73,5 +75,11 @@ export class FileUploadComponent implements OnInit {
   reset() {
     this.files = [];
     this.emitFiles();
+  }
+
+  focus() {
+    if (this.uploadButton) {
+      this.uploadButton.nativeElement.focus();
+    }
   }
 }

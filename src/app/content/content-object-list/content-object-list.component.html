@@ -1,12 +1,12 @@
 <mat-nav-list>
 
     <mat-list-item *ngFor="let contentObject of contentObjects; let i = index" [ngClass]="selectedIndex > -1 && i == selectedIndex ? 'cs-selected' : ''">
- 
+
         <p matLine (click)="selectObject(i)">
             <span>{{ contentObject.getOriginalFileName() }}</span>
         </p>
 
-        <span [hidden]="!contentObject.item">
+        <span [hidden]="disableFileReplace || !contentObject.item">
             <app-file-upload
                     [dropzone]="false"
                     [fieldName]="'replaceFile'"
@@ -17,7 +17,7 @@
         </span>
 
         <span [hidden]="contentObject.item">
-          <button mat-icon-button (click)="removeObject(contentObject, i)" matTooltip="Undo">
+          <button mat-icon-button (click)="removeObject(contentObject, i)" matTooltip="Remove File">
             <mat-icon>clear</mat-icon>
           </button>
         </span>

@@ -274,4 +274,8 @@ describe('Edit Page for Demo3', () => {
       expect(disabledField.getCssValue('color')).toEqual('rgba(0, 0, 0, 0.55)');
     });
   });
+
+  it('should hide the replace file button if config file is set to disableFileReplace=true', () => {
+    expect(page.replaceFileElement.isDisplayed()).toBeFalsy();
+  });
 });

@@ -11,6 +11,10 @@
   "rangeStrategy": "bump",
   "packageRules": [
     {
+      "packagePatterns": ["^@angular", "axe-webdriverjs", "typescript"],
+      "masterIssueApproval": true
+    },
+    {
       "depTypeList": ["devDependencies"],
       "updateTypes": ["minor", "patch"],
       "automerge": true

@@ -44,6 +44,7 @@ export class EditPageComponent extends ComponentCanDeactivateDirective implement
   submitPending: boolean;
   deletePending: boolean; // deletion takes a few seconds
   hasDeletePermission: boolean;
+  disableFileReplace: boolean;
 
   @ViewChild(DynamicComponentDirective) contentViewDirective: DynamicComponentDirective;
   @ViewChild(ContentViewComponent) contentViewComponent: ContentViewComponent;
@@ -222,6 +223,7 @@ export class EditPageComponent extends ComponentCanDeactivateDirective implement
     if (!isNullOrUndefined(config)) {
       this.pageConfig = config.pages['edit'];
       if (!isNullOrUndefined(this.pageConfig)) {
+        this.disableFileReplace = !!this.pageConfig.disableFileReplace;
         this.titleService.setTitle(this.pageConfig.pageName);
       }
     }

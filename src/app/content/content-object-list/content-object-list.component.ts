@@ -1,7 +1,7 @@
 import { first, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ContentObject } from '../shared/model/content-object';
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ContentItem } from '../shared/model/content-item';
 import { ContentService, FileUrlParameters } from '../shared/content.service';
 import { Field } from '../../core/shared/model/field';
@@ -25,6 +25,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
   @Input() contentItem: ContentItem;
   @Input() formGroup: FormGroup;
   @Input() page: string;
+  @Input() disableFileReplace: boolean;
 
   @Output() remove = new EventEmitter<number>();
   @Output() select = new EventEmitter<ContentObject>(true);
@@ -292,7 +293,9 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
         }
 
         if (contentItem$) {
-          const contentItemSaving = contentItem$.pipe(first()).toPromise()
+          const contentItemSaving = contentItem$
+            .pipe(first())
+            .toPromise()
             .then((item) => {
               contentObject.onLoad(item);
               contentObject.failed = false;
