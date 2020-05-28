@@ -147,7 +147,7 @@ export class EditPageComponent extends ComponentCanDeactivateDirective implement
     this.submitPending = inProgress;
   }
 
-  getPermissions() {
+  private getPermissions(): string {
     let permissions;
     if (this.contentItem && this.user && this.user.accounts) {
       const metadata = this.contentItem.metadata;
@@ -160,7 +160,7 @@ export class EditPageComponent extends ComponentCanDeactivateDirective implement
     return permissions;
   }
 
-  getDeletePermission() {
+  private getDeletePermission(): boolean {
     const permissions = this.getPermissions();
     return permissions && permissions.indexOf('d') >= 0;
   }
