@@ -16,8 +16,8 @@ describe('UserService', () => {
         NotificationService,
         ProgressService,
         UserService,
-        { provide: HttpClient, useValue: new HttpClient(null) }
-      ]
+        { provide: HttpClient, useValue: new HttpClient(null) },
+      ],
     });
   });
 
@@ -30,16 +30,18 @@ describe('UserService', () => {
       const httpSpy = spyOn(http, 'get').and.returnValue(
         of({
           userName: 'myusername',
-          userGroups: ['test-group']
+          userGroups: ['test-group'],
+          accounts: { 'Test-Account': 'rwd' },
         })
       );
 
       const authenticatedUserObservable: Observable<User> = service.getUserObservable();
 
-      authenticatedUserObservable.subscribe(authenticatedUser => {
+      authenticatedUserObservable.subscribe((authenticatedUser) => {
         expect(authenticatedUser.actAs).toBe('myusername');
         expect(authenticatedUser.userName).toBe('myusername');
         expect(authenticatedUser.userGroups).toEqual(['test-group']);
+        expect(authenticatedUser.accounts['Test-Account']).toEqual('rwd');
       });
     })
   ));

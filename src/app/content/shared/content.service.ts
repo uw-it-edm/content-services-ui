@@ -37,6 +37,13 @@ export class ContentService {
     return this.createOrUpdate(formData, item, url);
   }
 
+  public delete(itemId: string) {
+    const url: string = this.baseUrl + this.itemPathFragment + itemId;
+    const options = this.buildRequestOptions();
+
+    return this.http.delete(url, options);
+  }
+
   public read(itemId: string): Observable<ContentItem> {
     const url: string = this.baseUrl + this.itemPathFragment + itemId;
     const options = this.buildRequestOptions();

@@ -8,7 +8,8 @@ import { NotificationService } from '../../shared/providers/notification.service
 
 @Injectable()
 export class UserService {
-  private baseUrl: String = environment.profile_api.url + environment.profile_api.context;
+  // get user from Content API, which includes user permissions for WCC accounts
+  private baseUrl: String = environment.content_api.url + environment.content_api.contextV4;
 
   private loggedIn$ = new ReplaySubject<boolean>();
   private user: User;
@@ -34,7 +35,7 @@ export class UserService {
       this.progressService.start('query');
     }
     this.http.get<User>(this.baseUrl + '/user', options).subscribe(
-      user => {
+      (user) => {
         user.actAs = user.userName;
         this.user = user;
         if (this.progressService != null) {

@@ -15,6 +15,7 @@ import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { Config } from '../../core/shared/model/config';
 import { FormBuilder } from '@angular/forms';
 import { SafeUrlPipe } from '../../shared/pipes/safe-url.pipe';
+import { RouterTestingModule } from '@angular/router/testing';
 import { ButtonConfig } from '../../core/shared/model/button-config';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatOptionModule } from '@angular/material/core';
@@ -43,6 +44,7 @@ class MockContentService {
     defaultContentItem.metadata['a'] = 'a';
     defaultContentItem.metadata['b'] = 'asdf';
     defaultContentItem.metadata['t'] = 't';
+    defaultContentItem.metadata['Account'] = 'Test-Account'; // WCC account
     return of(defaultContentItem);
   }
 
@@ -61,7 +63,9 @@ class MockUserService extends UserService {
   }
 
   getUser(): User {
-    return new User('testUser');
+    const user = new User('testUser');
+    user.accounts['Test-Account'] = 'rwd'; // user has 'rwd' permissions on Test-Account
+    return user;
   }
 }
 
@@ -82,6 +86,7 @@ describe('EditPageComponent', () => {
       imports: [
         HttpClientModule,
         MaterialConfigModule,
+        RouterTestingModule,
         MatAutocompleteModule,
         MatDatepickerModule,
         MatOptionModule,
@@ -188,6 +193,18 @@ describe('EditPageComponent', () => {
   it('should not display the content view component when view panel is false', () => {
     const contentArea = fixture.debugElement.nativeElement.querySelectorAll('.cs-content-view-wrapper-insert');
     expect(contentArea.length).toEqual(0);
+  });
+
+  it('should display the remove-button when view panel is true', () => {
+    editPageConfig.viewPanel = true;
+    fixture.detectChanges();
+    const button = fixture.debugElement.nativeElement.querySelectorAll('.remove-button');
+    expect(button.length).toEqual(1);
+  });
+
+  it('should not display the remove button when view panel is false', () => {
+    const button = fixture.debugElement.nativeElement.querySelectorAll('.remove-button');
+    expect(button.length).toEqual(0);
   });
 
   it('should contain buttons to save and delete items in the proper order', () => {
