@@ -248,6 +248,15 @@ describe('Edit Page for Demo2', () => {
 
     page.clickAcceptAlert();
   });
+
+  /**
+   * Regression test for https://jira.cac.washington.edu/browse/CAB-4046.
+   */
+  it('should perform no-op when hitting ENTER on a form field without modifying anything', () => {
+    page.inputField.click();
+    page.inputField.sendKeys(protractor.Key.ENTER);
+    expect(page.getPdfViewer().isDisplayed()).toBeTruthy();
+  });
 });
 
 describe('Edit Page for Demo3', () => {
