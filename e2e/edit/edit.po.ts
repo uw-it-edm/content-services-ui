@@ -20,6 +20,7 @@ export class EditPage {
   public toggleFullScreenButton = element(by.name('toggleFullScreen'));
   public zoomDropDownList = element(by.name('zoomFactor'));
   public replaceFileElement = element(by.name('replaceFile'));
+  public removeDocButton = element(by.id('removeItem'));
 
   constructor(private profile: string = 'demo', private id: string = '123456') {}
 

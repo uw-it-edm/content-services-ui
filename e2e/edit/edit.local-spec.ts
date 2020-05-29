@@ -221,6 +221,10 @@ describe('Edit Page for Demo', () => {
     browser.actions().sendKeys(protractor.Key.TAB).perform();
     expect(browser.driver.switchTo().activeElement().getText()).toBe(page.pdfViewerDownloadButton.getText());
   });
+
+  it('should enable Remove button by default', () => {
+    expect(page.removeDocButton.isEnabled()).toBeTruthy();
+  });
 });
 
 describe('Edit Page for Demo2', () => {
