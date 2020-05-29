@@ -181,6 +181,17 @@
           "label": "Intake Date",
           "displayType": "date",
           "disabled": true
+        },
+        {
+          "key": "DataApiWithFilter",
+          "label": "DataApiOption show label with filter",
+          "required": false,
+          "disabled": true,
+          "displayType": "filter-select",
+          "dynamicSelectConfig": {
+            "type": "test-type",
+            "labelPath": "label"
+          }
         }
       ],
       "buttons": [

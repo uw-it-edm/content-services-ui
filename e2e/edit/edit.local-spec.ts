@@ -272,7 +272,7 @@ describe('Edit Page for Demo3', () => {
   });
 
   it('should display lock icon for all disabled fields', () => {
-    expect(page.lockIcons.count()).toEqual(9);
+    expect(page.lockIcons.count()).toEqual(10);
     page.lockIcons.each((lockIcon) => {
       expect(lockIcon.getCssValue('color')).toEqual('rgba(0, 0, 0, 0.55)');
     });
