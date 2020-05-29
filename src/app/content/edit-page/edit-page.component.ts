@@ -161,6 +161,8 @@ export class EditPageComponent extends ComponentCanDeactivateDirective implement
     return permissions;
   }
 
+  // possible permissions are "r", "rw", "rwd", and "admin"
+  // user has delete right if the permissions include 'd' ("rwd" or "admin")
   private getDeletePermission(): boolean {
     const permissions = this.getPermissions();
     return permissions && permissions.indexOf('d') >= 0;
