@@ -1,4 +1,5 @@
 import { ComponentFixture, async, TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
 import { OptionsAutocompleteComponent } from './options-autocomplete.component';
@@ -7,11 +8,20 @@ import { FieldOptionService } from '../../providers/fieldoption.service';
 import { DataApiValueService } from '../../providers/dataapivalue.service';
 import { Field } from '../../../core/shared/model/field';
 import { FieldOption } from '../../../core/shared/model/field/field-option';
+import { AbstractControl, FormControl } from '@angular/forms';
+import { DynamicSelectConfig } from '../../../core/shared/model/field/dynamic-select-config';
+import { ParentFieldConfig } from '../../../core/shared/model/field/parent-field-config';
 
 const fieldOptions: FieldOption[] = [
   new FieldOption('val1', 'display1 x'),
   new FieldOption('val2', 'display2 xy'),
   new FieldOption('val3', 'display3 xyz'),
+];
+
+const fieldOptions2: FieldOption[] = [
+  new FieldOption('val2.1', 'display2.1 x'),
+  new FieldOption('val2.2', 'display2.2 xy'),
+  new FieldOption('val2.3', 'display2.3 xyz'),
 ];
 
 describe('OptionsAutocompleteComponent', () => {
@@ -87,4 +97,66 @@ describe('OptionsAutocompleteComponent', () => {
       expect(matOptions.length).toBe(2, 'Expect OptionsAutocompleteComponent to have 2 options.');
     });
   }));
+
+  it('should revert to the latest valid option if options list closes while invalid value is on the input', () => {
+    component.registerOnChange(val => {});
+    component.optionSelected(fieldOptions[1]);
+
+    getInputControl().setValue('invalid');
+
+    component.optionListClosed();
+    fixture.detectChanges();
+
+    expect(getInputControl().value).toBe(fieldOptions[1]);
+  });
+});
+
+describe('OptionsAutocompleteComponent with parent control', () => {
+  const getInputControl = () => component.formGroup.controls[component.internalFieldName];
+  let component: OptionsAutocompleteComponent;
+  let fixture: ComponentFixture<OptionsAutocompleteComponent>;
+  let parentControl: AbstractControl;
+
+  beforeEach(async(() => {
+    const fieldOptionServiceSpy = jasmine.createSpyObj('FieldOptionService', ['getFieldOptions', 'getOptionsFromParent']);
+    fieldOptionServiceSpy.getFieldOptions.and.returnValue(of(fieldOptions));
+    fieldOptionServiceSpy.getOptionsFromParent.and.returnValue(of(fieldOptions2));
+
+    TestBed.configureTestingModule({
+      imports: [SharedModule, NoopAnimationsModule],
+      declarations: [],
+      providers: [{ provide: FieldOptionService, useValue: fieldOptionServiceSpy }],
+    }).compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(OptionsAutocompleteComponent);
+    component = fixture.componentInstance;
+    parentControl = new FormControl('parent1');
+
+    const fieldConfig = component.fieldConfig = new Field();
+    const dynamicConfig = fieldConfig.dynamicSelectConfig = new DynamicSelectConfig();
+    const parentConfig = dynamicConfig.parentFieldConfig = new ParentFieldConfig();
+
+    dynamicConfig.type = 'child-type';
+    dynamicConfig.labelPath = 'label';
+
+    parentConfig.parentType = 'parent-type';
+    parentConfig.key = 'parentTypeWithFilter';
+
+    component.fieldConfig = fieldConfig;
+    component.parentControl = parentControl;
+    fixture.detectChanges();
+  });
+
+  it('should clear the filter control when the parent value changes', () => {
+    component.registerOnChange(val => {});
+    getInputControl().setValue(fieldOptions[1].value);
+    fixture.detectChanges();
+
+    parentControl.setValue('new parent');
+    fixture.detectChanges();
+
+    expect(getInputControl().value).toBe(null);
+  });
 });
