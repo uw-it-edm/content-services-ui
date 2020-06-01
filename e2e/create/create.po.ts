@@ -26,6 +26,7 @@ export class CreatePage {
   public calendarPeriodButton = element.all(by.className('mat-calendar-period-button'));
   public calendarDisabledSelections = element.all(by.className('mat-calendar-body-disabled'));
   public calendarYears = element.all(by.className('mat-calendar-body-cell-content'));
+  public addFileButton = element(by.name('addFile'));
 
   constructor(private profile: string = 'demo') {}
 
@@ -47,7 +48,7 @@ export class CreatePage {
   }
 
   addFile(filePath: string) {
-    element(by.name('addFile')).sendKeys(filePath);
+    this.addFileButton.sendKeys(filePath);
   }
 
   chooseFile(filePath: string) {

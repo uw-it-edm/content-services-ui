@@ -113,6 +113,12 @@ describe('Create Page for Demo', () => {
     page.chooseFile(pdfFilePath);
 
     expect(page.pdfViewer.isDisplayed());
+
+    // CAB-3769
+    expect(page.addFileButton.getId()).toEqual(
+      browser.driver.switchTo().activeElement().getId(),
+      'Focus not set to Add Files button after uploading file.'
+    );
   });
 
   it('should display the list of files uploaded when multiple files are uploaded', () => {
