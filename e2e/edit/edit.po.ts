@@ -15,6 +15,7 @@ export class EditPage {
   public dateInputField = element.all(by.css('app-timestamp-picker input'));
   public formFields = element.all(by.css('app-content-metadata mat-form-field'));
   public selectPanel = element(by.className('mat-select-panel'));
+  public autocompleteSelectPanel = element(by.className('mat-autocomplete-panel'));
   public lockIcons = element.all(by.className('disabled-icon'));
   public disabledFields = element.all(by.css(':disabled'));
   public toggleFullScreenButton = element(by.name('toggleFullScreen'));
@@ -91,6 +92,16 @@ export class EditPage {
   clickDropDownByLabel(dropDownLabel: string) {
     element(by.cssContainingText('.mat-form-field', dropDownLabel)).click();
     browser.wait(ExpectedConditions.visibilityOf(this.selectPanel), 5000);
+  }
+
+  clickAutocompleteDropDownByLabel(dropDownLabel: string) {
+    element(by.cssContainingText('.mat-form-field', dropDownLabel)).click();
+    browser.wait(ExpectedConditions.visibilityOf(this.autocompleteSelectPanel), 5000);
+  }
+
+  clickAutocompleteDropDownOptionValueByText(optionText: string) {
+    element(by.cssContainingText('.mat-option-text', optionText)).click();
+    browser.wait(ExpectedConditions.invisibilityOf(this.autocompleteSelectPanel), 5000);
   }
 
   clickAcceptAlert(isAlertUnexpected: boolean = false) {

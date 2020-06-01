@@ -123,7 +123,7 @@ describe('Edit Page for Demo', () => {
     expect(page.getPersonText()).toEqual(employee);
   });
 
-  it('should display child list dynamically when parent list is selected', () => {
+  it('should display child select list dynamically when parent list is selected', () => {
     page.clickDropDownByLabel('DataApiOption parent');
 
     const parentList = require('../mocks/data-api/parent-type-list.json');
@@ -134,6 +134,21 @@ describe('Edit Page for Demo', () => {
     expect(page.selectPanel.getText()).toEqual(getExpectedChildrenLabels().trim());
 
     page.clickDropDownOptionValueByText(getExpectedChildrenLabels().split('\n')[0]);
+    page.saveButton.click();
+  });
+
+  it('should display child filter-select list dynamically when parent list is selected', () => {
+    // select an option from parent
+    page.clickAutocompleteDropDownByLabel('DataApiOption parent with filter');
+    const parentList = require('../mocks/data-api/parent-type-list.json');
+    page.clickAutocompleteDropDownOptionValueByText(parentList.content[0].data.label);
+
+    // verify the option list of child
+    page.clickAutocompleteDropDownByLabel('DataApiOption child with filter');
+    expect(page.autocompleteSelectPanel.getText()).toEqual(getExpectedChildrenLabels().trim());
+
+    // select an option from child and save
+    page.clickAutocompleteDropDownOptionValueByText(getExpectedChildrenLabels().split('\n')[0]);
     page.saveButton.click();
   });
 
