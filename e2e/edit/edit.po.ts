@@ -8,7 +8,7 @@ export class EditPage {
   public profileUrl = `${browser.baseUrl}${this.profile}/edit`;
   public pageUrl = `${this.profileUrl}/${this.id}`;
   public pdfFilePath = path.resolve(__dirname, '../mocks/files/sample-file.pdf');
-  public inputField = element(by.className('mat-input-element'));
+  public inputFields = element.all(by.className('mat-input-element'));
   public pdfViewerDownloadButton = element(by.buttonText('file_download'));
   public downloadButton = element(by.partialButtonText('Download'));
   public nextItemButton = element(by.id('nextItem'));

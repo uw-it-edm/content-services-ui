@@ -62,7 +62,7 @@ describe('Edit Page for Demo', () => {
   });
 
   it('should enable Save button when metadata is edited', () => {
-    page.inputField.sendKeys('any text');
+    page.inputFields.get(0).sendKeys('any text');
 
     expect(page.saveButton.isEnabled()).toBeTruthy();
     page.saveButton.click();
@@ -156,7 +156,7 @@ describe('Edit Page for Demo', () => {
     const editPageForBadItemWithCustomMsg = new EditPage('demo', 'unauthorized-updatedid');
     editPageForBadItemWithCustomMsg.navigateTo();
 
-    editPageForBadItemWithCustomMsg.inputField.sendKeys('any text');
+    editPageForBadItemWithCustomMsg.inputFields.get(0).sendKeys('any text');
     editPageForBadItemWithCustomMsg.saveButton.click();
 
     const customizedErrMsgLabel = demoConfig.customText['error.content.update.403'].label;
@@ -172,7 +172,7 @@ describe('Edit Page for Demo', () => {
     const editPageForBadItemWithoutCustomMsg = new EditPage('demo2', 'unauthorized-updatedid');
     editPageForBadItemWithoutCustomMsg.navigateTo();
 
-    editPageForBadItemWithoutCustomMsg.inputField.sendKeys('any text');
+    editPageForBadItemWithoutCustomMsg.inputFields.get(0).sendKeys('any text');
     editPageForBadItemWithoutCustomMsg.saveButton.click();
 
     expect(editPageForBadItemWithoutCustomMsg.getSnackBarText()).toEqual('Failed to save 1 item\nDismiss');
@@ -189,7 +189,7 @@ describe('Edit Page for Demo', () => {
   });
 
   it('should display alert when metadata is edited and browser back button is hit without saving', () => {
-    page.inputField.sendKeys('any text');
+    page.inputFields.get(0).sendKeys('any text');
     browser.navigate().back();
 
     page.clickAcceptAlert();
@@ -258,7 +258,7 @@ describe('Edit Page for Demo2', () => {
   });
 
   it('should display alert when the page has disabled fields and metadata is updated without saving', () => {
-    page.inputField.sendKeys('any text');
+    page.inputFields.get(0).sendKeys('any text');
     browser.navigate().back();
 
     page.clickAcceptAlert();
@@ -268,8 +268,8 @@ describe('Edit Page for Demo2', () => {
    * Regression test for https://jira.cac.washington.edu/browse/CAB-4046.
    */
   it('should perform no-op when hitting ENTER on a form field without modifying anything', () => {
-    page.inputField.click();
-    page.inputField.sendKeys(protractor.Key.ENTER);
+    page.inputFields.get(0).click();
+    page.inputFields.get(0).sendKeys(protractor.Key.ENTER);
     expect(page.getPdfViewer().isDisplayed()).toBeTruthy();
   });
 });
