@@ -299,15 +299,12 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
               contentObject.failed = false;
               this.updateComponentSavedItemLists(item);
               this.saving.emit(false); // item saving completed
-
-              return this.notify();
             })
             .catch((err) => {
               this.failures.push(err);
               contentObject.failed = true;
               this.saving.emit(false); // item saving failed
 
-              this.notify();
               throw err;
             });
           contentItemPromises.push(contentItemSaving);
@@ -318,10 +315,10 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
     // when all documents have saved successfully, or short circuit and return false if there are any failures
     return Promise.all(contentItemPromises)
       .then(() => {
-        return true;
+        return this.notify().then(() => true);
       })
       .catch(() => {
-        return false;
+        return this.notify().then(() => false);
       });
   }
 
