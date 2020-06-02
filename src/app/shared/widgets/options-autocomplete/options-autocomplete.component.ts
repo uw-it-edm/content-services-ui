@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Subject, Observable, of, combineLatest, concat } from 'rxjs';
-import { takeUntil, map, switchMap, startWith, first } from 'rxjs/operators';
+import { takeUntil, map, switchMap, startWith, first, distinctUntilChanged } from 'rxjs/operators';
 import { FieldOption } from '../../../core/shared/model/field/field-option';
 import { Field } from '../../../core/shared/model/field';
 import { FieldOptionService } from '../../providers/fieldoption.service';
@@ -158,7 +158,10 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
 
     if (parentFieldConfig) {
       allOptions = concat(allOptions, this.parentControl.valueChanges.pipe(
+        distinctUntilChanged(),
         switchMap((newParentValue) => {
+          this.latestValidOption = null;
+          this.formGroup.controls[INTERNAL_FIELD_NAME].reset();
           if (newParentValue) {
             return this.fieldOptionService.getOptionsFromParent(dynamicSelectConfig, parentFieldConfig, newParentValue);
           } else {

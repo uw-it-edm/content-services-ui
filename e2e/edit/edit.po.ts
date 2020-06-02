@@ -8,13 +8,14 @@ export class EditPage {
   public profileUrl = `${browser.baseUrl}${this.profile}/edit`;
   public pageUrl = `${this.profileUrl}/${this.id}`;
   public pdfFilePath = path.resolve(__dirname, '../mocks/files/sample-file.pdf');
-  public inputField = element(by.id('mat-input-0'));
+  public inputFields = element.all(by.className('mat-input-element'));
   public pdfViewerDownloadButton = element(by.buttonText('file_download'));
   public downloadButton = element(by.partialButtonText('Download'));
   public nextItemButton = element(by.id('nextItem'));
   public dateInputField = element.all(by.css('app-timestamp-picker input'));
-  public formFields = element.all(by.tagName('mat-form-field'));
+  public formFields = element.all(by.css('app-content-metadata mat-form-field'));
   public selectPanel = element(by.className('mat-select-panel'));
+  public autocompleteSelectPanel = element(by.className('mat-autocomplete-panel'));
   public lockIcons = element.all(by.className('disabled-icon'));
   public disabledFields = element.all(by.css(':disabled'));
   public toggleFullScreenButton = element(by.name('toggleFullScreen'));
@@ -91,6 +92,16 @@ export class EditPage {
   clickDropDownByLabel(dropDownLabel: string) {
     element(by.cssContainingText('.mat-form-field', dropDownLabel)).click();
     browser.wait(ExpectedConditions.visibilityOf(this.selectPanel), 5000);
+  }
+
+  clickAutocompleteDropDownByLabel(dropDownLabel: string) {
+    element(by.cssContainingText('.mat-form-field', dropDownLabel)).click();
+    browser.wait(ExpectedConditions.visibilityOf(this.autocompleteSelectPanel), 5000);
+  }
+
+  clickAutocompleteDropDownOptionValueByText(optionText: string) {
+    element(by.cssContainingText('.mat-option-text', optionText)).click();
+    browser.wait(ExpectedConditions.invisibilityOf(this.autocompleteSelectPanel), 5000);
   }
 
   clickAcceptAlert(isAlertUnexpected: boolean = false) {
