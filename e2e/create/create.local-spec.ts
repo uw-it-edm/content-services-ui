@@ -142,7 +142,7 @@ describe('Create Page for Demo', () => {
     page.clickAcceptAlert();
   });
 
-  it('should leave form fields but clear uploaded files list when using Save And Upload Another buttons', () => {
+  it('should leave form fields but clear uploaded files list when using Save And Upload Another button', () => {
     page.addFile(pdfFilePath);
     page.filerInput.sendKeys('test filer');
     expect(page.fileList.count()).toEqual(1);
@@ -158,6 +158,17 @@ describe('Create Page for Demo', () => {
     page.saveAndResetButton.click();
     browser.wait(isEmptyFileList(page.fileList), 5000);
     expect(page.fileList.count()).toEqual(0);
+  });
+
+  it('should clear uploaded files list when using Save and Upload Another button', () => {
+    page.chooseFile(pdfFilePath + '\n' + docFilePath);
+    page.filerInput.sendKeys('test filer');
+    expect(page.fileList.count()).toEqual(2);
+
+    page.saveAndResetButton.click();
+    browser.wait(isEmptyFileList(page.fileList), 5000);
+    expect(page.fileList.count()).toEqual(0);
+    expect(page.filerInput.getAttribute('value')).toEqual('test filer');
   });
 
   it('should leave form and uploaded files intact if error is returned after saving', () => {
