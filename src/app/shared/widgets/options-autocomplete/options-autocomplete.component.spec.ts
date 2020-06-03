@@ -102,6 +102,8 @@ describe('OptionsAutocompleteComponent', () => {
     fixture.whenStable().then(() => {
       fixture.detectChanges();
 
+      // I "believe" that this second wait is needed because of the delay to update the UI with the
+      //   announcer. Test fails intermittently without it.
       fixture.whenStable().then(() => {
         const matOptions = document.querySelectorAll('mat-option');
         expect(matOptions.length).toBe(2, 'Expect OptionsAutocompleteComponent to have 2 options.');
