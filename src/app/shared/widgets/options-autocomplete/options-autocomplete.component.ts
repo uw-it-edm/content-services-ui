@@ -186,10 +186,12 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
   private announceOptionsList(options: FieldOption[]) {
     let message: string;
 
-    if (options && options.length > 0) {
-      message = `Filtered list has ${options.length} options.`;
+    if (!options || options.length === 0) {
+      message = 'Found no results.';
+    } else if (options.length === 1) {
+      message = `Found one result: ${options[0].displayValue}.`;
     } else {
-      message = 'Filtered list is empty.';
+      message = `Found ${options.length} results.`;
     }
 
     this.liveAnnouncer.announce(message, 'polite');

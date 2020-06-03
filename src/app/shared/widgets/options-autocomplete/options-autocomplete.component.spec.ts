@@ -101,8 +101,11 @@ describe('OptionsAutocompleteComponent', () => {
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       fixture.detectChanges();
-      const matOptions = document.querySelectorAll('mat-option');
-      expect(matOptions.length).toBe(2, 'Expect OptionsAutocompleteComponent to have 2 options.');
+
+      fixture.whenStable().then(() => {
+        const matOptions = document.querySelectorAll('mat-option');
+        expect(matOptions.length).toBe(2, 'Expect OptionsAutocompleteComponent to have 2 options.');
+      });
     });
   }));
 
@@ -118,7 +121,7 @@ describe('OptionsAutocompleteComponent', () => {
     expect(getInputControl().value).toBe(fieldOptions[1]);
   });
 
-  it('should announce to screen reader the list size after user types in textbox', fakeAsync(() => {
+  it('should announce results to screen reader after user types in textbox with more than one match', fakeAsync(() => {
     const inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
     inputElement.dispatchEvent(new Event('focusin'));
     inputElement.value = 'xy';
@@ -128,7 +131,33 @@ describe('OptionsAutocompleteComponent', () => {
 
     tick(500);
 
-    expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Filtered list has 2 options.', 'polite');
+    expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Found 2 results.', 'polite');
+  }));
+
+  it('should announce results to screen reader after user types in textbox with only 1 match', fakeAsync(() => {
+    const inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
+    inputElement.dispatchEvent(new Event('focusin'));
+    inputElement.value = 'xyz';
+    inputElement.dispatchEvent(new Event('input'));
+
+    fixture.detectChanges();
+
+    tick(500);
+
+    expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Found one result: display3 xyz.', 'polite');
+  }));
+
+  it('should announce results to screen reader after user types in textbox with no matches', fakeAsync(() => {
+    const inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
+    inputElement.dispatchEvent(new Event('focusin'));
+    inputElement.value = 'no matches';
+    inputElement.dispatchEvent(new Event('input'));
+
+    fixture.detectChanges();
+
+    tick(500);
+
+    expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Found no results.', 'polite');
   }));
 });
 
