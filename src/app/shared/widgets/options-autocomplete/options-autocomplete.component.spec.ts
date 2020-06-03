@@ -1,4 +1,5 @@
-import { ComponentFixture, async, TestBed } from '@angular/core/testing';
+import { ComponentFixture, async, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { of } from 'rxjs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
@@ -28,13 +29,20 @@ describe('OptionsAutocompleteComponent', () => {
   const getInputControl = () => component.formGroup.controls[component.internalFieldName];
   let component: OptionsAutocompleteComponent;
   let fixture: ComponentFixture<OptionsAutocompleteComponent>;
+  let liveAnnouncerSpy: any;
 
   beforeEach(async(() => {
     const dataApiValueServiceSpy = jasmine.createSpyObj('DataApiValueService', ['listByType']);
+    liveAnnouncerSpy = jasmine.createSpyObj('LiveAnnouncer', ['announce']);
+
     TestBed.configureTestingModule({
       imports: [SharedModule, NoopAnimationsModule],
       declarations: [],
-      providers: [FieldOptionService, { provide: DataApiValueService, useValue: dataApiValueServiceSpy }],
+      providers: [
+        FieldOptionService,
+        { provide: DataApiValueService, useValue: dataApiValueServiceSpy },
+        { provide: LiveAnnouncer, useValue: liveAnnouncerSpy },
+      ],
     }).compileComponents();
   }));
 
@@ -109,6 +117,19 @@ describe('OptionsAutocompleteComponent', () => {
 
     expect(getInputControl().value).toBe(fieldOptions[1]);
   });
+
+  it('should announce to screen reader the list size after user types in textbox', fakeAsync(() => {
+    const inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
+    inputElement.dispatchEvent(new Event('focusin'));
+    inputElement.value = 'xy';
+    inputElement.dispatchEvent(new Event('input'));
+
+    fixture.detectChanges();
+
+    tick(500);
+
+    expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Filtered list has 2 options.', 'polite');
+  }));
 });
 
 describe('OptionsAutocompleteComponent with parent control', () => {
