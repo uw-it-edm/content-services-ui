@@ -81,7 +81,7 @@ export class CreatePage {
 
   getSnackBarText() {
     const snackBar = element(by.className('mat-simple-snackbar'));
-    browser.wait(ExpectedConditions.visibilityOf(snackBar), 5000);
+    browser.wait(ExpectedConditions.visibilityOf(snackBar), 5000, 'Expected snackbar to be visible.');
     return snackBar.getText();
   }
 
