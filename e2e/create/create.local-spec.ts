@@ -254,11 +254,12 @@ describe('Create Page for Demo', () => {
     page.clickAcceptAlert();
   });
 
-  it('should clear Employee value when value is not selected from auto complete and Save button is clicked', () => {
+  it('should clear Employee value when value is not selected from auto complete and Save and Upload Another button is clicked', () => {
     page.addFile(pdfFilePath);
     page.personInput.sendKeys('my employee');
-    page.saveButton.click();
+    page.saveAndResetButton.click();
 
+    browser.wait(isEmptyFileList(page.fileList), 5000);
     expect(page.getPersonValue()).toEqual('');
   });
 
