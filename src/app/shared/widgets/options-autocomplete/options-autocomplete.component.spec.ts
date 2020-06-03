@@ -29,7 +29,7 @@ describe('OptionsAutocompleteComponent', () => {
   const getInputControl = () => component.formGroup.controls[component.internalFieldName];
   let component: OptionsAutocompleteComponent;
   let fixture: ComponentFixture<OptionsAutocompleteComponent>;
-  let liveAnnouncerSpy: any;
+  let liveAnnouncerSpy: LiveAnnouncer;
 
   beforeEach(async(() => {
     const dataApiValueServiceSpy = jasmine.createSpyObj('DataApiValueService', ['listByType']);
