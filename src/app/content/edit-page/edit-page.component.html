@@ -35,7 +35,7 @@
                     (saving)="updateSavingStatus($event)">
             </app-content-object-list>
 
-            <div *ngIf="pageConfig?.buttons" class="button-row" style="margin: 2rem 25px 2rem 2rem;text-align: right">
+            <div *ngIf="pageConfig?.buttons" class="button-row">
               <button *ngFor="let button of pageConfig?.buttons" mat-raised-button
                       (click)="buttonPress(button)" [color]="button.color"
                       [disabled]="!button.alwaysActive && ( form.pristine || form.invalid || submitPending || deletePending)" [id]="button.command"
@@ -48,10 +48,11 @@
             <div class="cs-content-view-wrapper-insert">
               <app-content-view [contentObject]="contentObject" [allowPageByPageMode]="pageConfig?.allowPageByPageMode"></app-content-view>
             </div>
-            <div *ngIf="hasDeletePermission" class="button-row remove-button">
+            <div *ngIf="hasDeletePermission" class="button-row">
               <mat-spinner *ngIf="deletePending" style="margin:0 auto;" aria-label="deletion in progress"></mat-spinner>
               <button *ngIf="!deletePending" mat-raised-button matTooltip="Delete Document" aria-label="delete document"
-                (click)="removeItem()" [color]="'primary'"
+                      class="remove-button"
+                (click)="removeItem()" [color]="'warn'"
                 [id]="'removeItem'"
                 [disabled]="deletePending || submitPending"
                 >Delete

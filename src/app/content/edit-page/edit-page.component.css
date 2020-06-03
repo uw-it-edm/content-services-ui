@@ -60,7 +60,13 @@
     padding: 0;
 }
 
+.button-row {
+  margin: 2rem 25px 2rem 2rem;
+  text-align: right
+}
+
 .remove-button {
   margin: 2rem 25px 2rem 2rem;
   text-align: right;
+  font-size: x-large;
 }
