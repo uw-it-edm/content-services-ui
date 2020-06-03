@@ -318,7 +318,8 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
         return this.notify().then(() => true);
       })
       .catch(() => {
-        return this.notify().then(() => false);
+        this.notify();
+        return false;
       });
   }
 
