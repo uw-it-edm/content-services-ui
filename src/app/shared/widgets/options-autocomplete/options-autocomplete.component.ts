@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Subject, Observable, of, combineLatest, concat } from 'rxjs';
-import { takeUntil, map, switchMap, startWith, first, distinctUntilChanged } from 'rxjs/operators';
+import { takeUntil, map, switchMap, startWith, first, distinctUntilChanged, debounceTime, skip } from 'rxjs/operators';
 import { FieldOption } from '../../../core/shared/model/field/field-option';
 import { Field } from '../../../core/shared/model/field';
 import { FieldOptionService } from '../../providers/fieldoption.service';
@@ -92,8 +92,16 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
           }
           return true;
         })
-      )
+      ),
+      takeUntil(this.componentDestroyed)
     );
+
+    // Setup separate observable chain to update the live announcer.
+    this.filteredOptions$.pipe(
+      skip(1), // Skip the initial set of options.
+      debounceTime(500),
+      takeUntil(this.componentDestroyed)
+    ).subscribe(options => this.announceOptionsList(options));
   }
 
   ngOnDestroy(): void {
@@ -173,6 +181,20 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
     }
 
     return allOptions;
+  }
+
+  private announceOptionsList(options: FieldOption[]) {
+    let message: string;
+
+    if (!options || options.length === 0) {
+      message = 'Found no results.';
+    } else if (options.length === 1) {
+      message = `Found one result: ${options[0].displayValue}.`;
+    } else {
+      message = `Found ${options.length} results.`;
+    }
+
+    this.liveAnnouncer.announce(message, 'polite');
   }
 
   private isInternalFieldValid() {
