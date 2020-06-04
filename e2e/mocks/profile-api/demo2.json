@@ -168,6 +168,16 @@
           "label": "Intake Date",
           "displayType": "date",
           "disabled": true
+        },
+        {
+          "key": "DataApiWithFilter",
+          "label": "DataApiOption show label with filter",
+          "required": false,
+          "displayType": "filter-select",
+          "dynamicSelectConfig": {
+            "type": "test-type",
+            "labelPath": "label"
+          }
         }
       ],
       "buttons": [
@@ -237,6 +247,16 @@
           "label": "Last Modified Date",
           "displayType": "date",
           "required": true
+        },
+        {
+          "key": "DataApiWithFilter",
+          "label": "DataApiOption show label with filter",
+          "required": true,
+          "displayType": "filter-select",
+          "dynamicSelectConfig": {
+            "type": "test-type",
+            "labelPath": "label"
+          }
         },
         {
           "key": "StudentId",

@@ -23,9 +23,11 @@ import { CheckboxInputComponent } from '../../shared/widgets/checkbox/checkbox-i
 import { TimestampPickerComponent } from '../../shared/widgets/timestamp-picker/timestamp-picker.component';
 import { FieldOption } from '../../core/shared/model/field/field-option';
 import { OptionsInputComponent } from '../../shared/widgets/options-input/options-input.component';
+import { OptionsAutocompleteComponent } from '../../shared/widgets/options-autocomplete/options-autocomplete.component';
 import { CourseInputComponent } from '../../shared/widgets/course-input/course-input.component';
 import { Field } from '../../core/shared/model/field';
 import { DataApiValueService } from '../../shared/providers/dataapivalue.service';
+import { FieldOptionService } from '../../shared/providers/fieldoption.service';
 import { PersonAutocompleteComponent } from '../../shared/widgets/person-autocomplete/person-autocomplete.component';
 import { CustomTextDirective } from '../../shared/directives/custom-text/custom-text.directive';
 
@@ -66,6 +68,7 @@ describe('ContentMetadataComponent', () => {
         ContentMetadataComponent,
         CheckboxInputComponent,
         OptionsInputComponent,
+        OptionsAutocompleteComponent,
         CourseInputComponent,
         StudentAutocompleteComponent,
         PersonAutocompleteComponent,
@@ -73,6 +76,7 @@ describe('ContentMetadataComponent', () => {
         CustomTextDirective,
       ],
       providers: [
+        FieldOptionService,
         { provide: DataApiValueService, useValue: dataApiValueServiceSpy },
         { provide: UserService, useValue: new UserServiceMock() },
         { provide: HttpClient, useValue: new HttpClient(null) },

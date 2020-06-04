@@ -82,6 +82,11 @@ export class CreatePageComponent extends ComponentCanDeactivateDirective impleme
     if (index === 0) {
       this.contentObjectListComponent.selectObject(index);
     }
+
+    if (this.fileUploads && this.fileUploads.length > 0) {
+      this.fileUploads.first.focus();
+    }
+
     return index;
   }
 

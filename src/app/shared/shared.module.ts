@@ -10,6 +10,7 @@ import { SafeCurrencyPipe } from './pipes/safe-currency.pipe';
 
 import { CustomTextDirective } from './directives/custom-text/custom-text.directive';
 import { DataService } from './providers/data.service';
+import { FieldOptionService } from './providers/fieldoption.service';
 import { StudentAutocompleteComponent } from './widgets/student-autocomplete/student-autocomplete.component';
 import { StudentService } from './providers/student.service';
 import { CheckboxInputComponent } from './widgets/checkbox/checkbox-input.component';
@@ -20,6 +21,7 @@ import { DisplayFieldComponent } from './widgets/display-field/display-field.com
 import { ProgressService } from './providers/progress.service';
 import { FocusDirective } from './directives/focus/focus.directive';
 import { OptionsInputComponent } from './widgets/options-input/options-input.component';
+import { OptionsAutocompleteComponent } from './widgets/options-autocomplete/options-autocomplete.component';
 import { NotificationComponent } from './widgets/notification/notification.component';
 import { NotificationService } from './providers/notification.service';
 import { ContentViewComponent } from '../content/content-view/content-view.component';
@@ -42,7 +44,7 @@ import { A11yModule } from '@angular/cdk/a11y';
     ReactiveFormsModule,
     FormsModule,
     PdfViewerModule,
-    A11yModule
+    A11yModule,
   ],
   exports: [
     CommonModule,
@@ -55,6 +57,7 @@ import { A11yModule } from '@angular/cdk/a11y';
     SafeCurrencyPipe,
     CheckboxInputComponent,
     OptionsInputComponent,
+    OptionsAutocompleteComponent,
     StudentAutocompleteComponent,
     StudentDisplayComponent,
     PersonAutocompleteComponent,
@@ -67,7 +70,7 @@ import { A11yModule } from '@angular/cdk/a11y';
     ContentViewComponent,
     ContentToolbarComponent,
     CourseInputComponent,
-    ElasticsearchDateValidatorDirective
+    ElasticsearchDateValidatorDirective,
   ],
   declarations: [
     CustomTextDirective,
@@ -77,6 +80,7 @@ import { A11yModule } from '@angular/cdk/a11y';
     SafeCurrencyPipe,
     CheckboxInputComponent,
     OptionsInputComponent,
+    OptionsAutocompleteComponent,
     StudentAutocompleteComponent,
     StudentDisplayComponent,
     DataApiValueDisplayComponent,
@@ -90,9 +94,9 @@ import { A11yModule } from '@angular/cdk/a11y';
     ContentViewComponent,
     ContentToolbarComponent,
     CourseInputComponent,
-    ElasticsearchDateValidatorDirective
+    ElasticsearchDateValidatorDirective,
   ],
-  providers: [DataService, ProgressService, StudentService, PersonService, DataApiValueService, NotificationService],
-  entryComponents: [NotificationComponent]
+  providers: [DataService, FieldOptionService, ProgressService, StudentService, PersonService, DataApiValueService, NotificationService],
+  entryComponents: [NotificationComponent],
 })
 export class SharedModule {}

@@ -6,9 +6,14 @@
     "group:recommended",
     "helpers:disableTypesNodeMajor"
   ],
+  "masterIssue": true,
   "prConcurrentLimit": 4,
   "rangeStrategy": "bump",
   "packageRules": [
+    {
+      "packagePatterns": ["^@angular", "^angular", "axe-webdriverjs", "typescript"],
+      "enabled": false
+    },
     {
       "depTypeList": ["devDependencies"],
       "updateTypes": ["minor", "patch"],

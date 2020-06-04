@@ -42,6 +42,7 @@ export class EditPageComponent extends ComponentCanDeactivateDirective implement
   id: string;
   previewing: boolean;
   submitPending: boolean;
+  disableFileReplace: boolean;
 
   @ViewChild(DynamicComponentDirective) contentViewDirective: DynamicComponentDirective;
   @ViewChild(ContentViewComponent) contentViewComponent: ContentViewComponent;
@@ -179,6 +180,7 @@ export class EditPageComponent extends ComponentCanDeactivateDirective implement
     if (!isNullOrUndefined(config)) {
       this.pageConfig = config.pages['edit'];
       if (!isNullOrUndefined(this.pageConfig)) {
+        this.disableFileReplace = !!this.pageConfig.disableFileReplace;
         this.titleService.setTitle(this.pageConfig.pageName);
       }
     }

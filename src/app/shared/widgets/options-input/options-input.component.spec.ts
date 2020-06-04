@@ -9,6 +9,7 @@ import { SharedModule } from '../../shared.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectChange } from '@angular/material/select';
 import { DataApiValueService } from '../../providers/dataapivalue.service';
+import { FieldOptionService } from '../../providers/fieldoption.service';
 
 describe('OptionsInputComponent', () => {
   let component: OptionsInputComponent;
@@ -19,7 +20,7 @@ describe('OptionsInputComponent', () => {
     TestBed.configureTestingModule({
       imports: [SharedModule, NoopAnimationsModule],
       declarations: [],
-      providers: [{ provide: DataApiValueService, useValue: dataApiValueServiceSpy }],
+      providers: [FieldOptionService, { provide: DataApiValueService, useValue: dataApiValueServiceSpy }],
     }).compileComponents();
   }));
 
@@ -97,7 +98,7 @@ describe('OptionsInputComponent with host', () => {
     TestBed.configureTestingModule({
       imports: [SharedModule, NoopAnimationsModule, ReactiveFormsModule],
       declarations: [TestHostComponent],
-      providers: [{ provide: DataApiValueService, useValue: dataApiValueServiceSpy }],
+      providers: [FieldOptionService, { provide: DataApiValueService, useValue: dataApiValueServiceSpy }],
     }).compileComponents();
   }));
 
