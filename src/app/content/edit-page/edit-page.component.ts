@@ -177,6 +177,8 @@ export class EditPageComponent extends ComponentCanDeactivateDirective implement
         .subscribe(
           (e) => {
             this.deletePending = false;
+            const message = 'Deleted item ' + this.id;
+            alert(message); // snackBar did not work well just before navigating to another page
             this.router.navigate([this.config.tenant]);
           },
           (err) => {
