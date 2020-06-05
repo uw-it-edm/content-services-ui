@@ -57,6 +57,16 @@
       }
     },
     {
+      "key": "DataApiWithFilter",
+      "label": "DataApiOption show label with filter",
+      "required": false,
+      "displayType": "filter-select",
+      "dynamicSelectConfig": {
+        "type": "test-type",
+        "labelPath": "label"
+      }
+    },
+    {
       "key": "Filer",
       "label": "Filer"
     },
@@ -121,6 +131,30 @@
         "parentFieldConfig": {
           "parentType": "parent-type",
           "key": "parentType"
+        }
+      }
+    },
+    {
+      "key": "parentTypeWithFilter",
+      "label": "DataApiOption parent with filter",
+      "required": false,
+      "displayType": "filter-select",
+      "dynamicSelectConfig": {
+        "type": "parent-type",
+        "labelPath": "label"
+      }
+    },
+    {
+      "key": "childTypeWithFilter",
+      "label": "DataApiOption child with filter",
+      "required": false,
+      "displayType": "filter-select",
+      "dynamicSelectConfig": {
+        "type": "child-type",
+        "labelPath": "label",
+        "parentFieldConfig": {
+          "parentType": "parent-type",
+          "key": "parentTypeWithFilter"
         }
       }
     },
@@ -237,7 +271,10 @@
         "RegId",
         "parentType",
         "childType",
-        "courses"
+        "courses",
+        "DataApiWithFilter",
+        "parentTypeWithFilter",
+        "childTypeWithFilter"
       ],
       "buttons": [
         {

@@ -1,4 +1,5 @@
 import { browser, by, element, ExpectedConditions } from 'protractor';
+import { promise } from 'selenium-webdriver';
 import { protractor } from 'protractor/built/ptor';
 
 export class CreatePage {
@@ -80,7 +81,7 @@ export class CreatePage {
 
   getSnackBarText() {
     const snackBar = element(by.className('mat-simple-snackbar'));
-    browser.wait(ExpectedConditions.visibilityOf(snackBar), 5000);
+    browser.wait(ExpectedConditions.visibilityOf(snackBar), 5000, 'Expected snackbar to be visible.');
     return snackBar.getText();
   }
 
@@ -108,10 +109,18 @@ export class CreatePage {
 
   populateRequiredFields(shouldClearFieldValue: boolean = false) {
     this.requiredFields.each((requiredField) => {
-      requiredField.getTagName().then((tagName) => {
+
+      const tagPromise = requiredField.getTagName();
+      const classesPromise: any = requiredField.getAttribute('class').then(classes => classes.split(' '));
+
+      protractor.promise.all([tagPromise, classesPromise]).then(([tagName, classes]) => {
         switch (tagName) {
           case 'input': {
-            if (shouldClearFieldValue) {
+            if (classes.indexOf('mat-autocomplete-trigger') >= 0) {
+                requiredField.click();
+                browser.wait(ExpectedConditions.elementToBeClickable(this.dropDownOptions.get(0)));
+                this.dropDownOptions.get(0).click();
+            } else if (shouldClearFieldValue) {
               requiredField.clear();
               requiredField.sendKeys(protractor.Key.TAB);
             } else {
@@ -120,7 +129,6 @@ export class CreatePage {
             break;
           }
           case 'app-course-input':
-          /* falls through */
           case 'app-options-input': {
             requiredField.click();
             if (shouldClearFieldValue) {
@@ -136,6 +144,7 @@ export class CreatePage {
               this.studentInput.sendKeys(protractor.Key.TAB);
             } else {
               this.studentInput.sendKeys('test student');
+              browser.wait(ExpectedConditions.elementToBeClickable(this.dropDownOptions.get(0)));
               this.dropDownOptions.get(0).click();
             }
             break;
@@ -146,6 +155,7 @@ export class CreatePage {
               this.personInput.sendKeys(protractor.Key.TAB);
             } else {
               this.personInput.sendKeys('test person');
+              browser.wait(ExpectedConditions.elementToBeClickable(this.dropDownOptions.get(0)));
               this.dropDownOptions.get(0).click();
             }
             break;

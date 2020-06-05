@@ -62,7 +62,7 @@ describe('Edit Page for Demo', () => {
   });
 
   it('should enable Save button when metadata is edited', () => {
-    page.inputField.sendKeys('any text');
+    page.inputFields.get(0).sendKeys('any text');
 
     expect(page.saveButton.isEnabled()).toBeTruthy();
     page.saveButton.click();
@@ -123,7 +123,7 @@ describe('Edit Page for Demo', () => {
     expect(page.getPersonText()).toEqual(employee);
   });
 
-  it('should display child list dynamically when parent list is selected', () => {
+  it('should display child select list dynamically when parent list is selected', () => {
     page.clickDropDownByLabel('DataApiOption parent');
 
     const parentList = require('../mocks/data-api/parent-type-list.json');
@@ -137,11 +137,26 @@ describe('Edit Page for Demo', () => {
     page.saveButton.click();
   });
 
+  it('should display child filter-select list dynamically when parent list is selected', () => {
+    // select an option from parent
+    page.clickAutocompleteDropDownByLabel('DataApiOption parent with filter');
+    const parentList = require('../mocks/data-api/parent-type-list.json');
+    page.clickAutocompleteDropDownOptionValueByText(parentList.content[0].data.label);
+
+    // verify the option list of child
+    page.clickAutocompleteDropDownByLabel('DataApiOption child with filter');
+    expect(page.autocompleteSelectPanel.getText()).toEqual(getExpectedChildrenLabels().trim());
+
+    // select an option from child and save
+    page.clickAutocompleteDropDownOptionValueByText(getExpectedChildrenLabels().split('\n')[0]);
+    page.saveButton.click();
+  });
+
   it('should display customized error message on save if custom message is configured', () => {
     const editPageForBadItemWithCustomMsg = new EditPage('demo', 'unauthorized-updatedid');
     editPageForBadItemWithCustomMsg.navigateTo();
 
-    editPageForBadItemWithCustomMsg.inputField.sendKeys('any text');
+    editPageForBadItemWithCustomMsg.inputFields.get(0).sendKeys('any text');
     editPageForBadItemWithCustomMsg.saveButton.click();
 
     const customizedErrMsgLabel = demoConfig.customText['error.content.update.403'].label;
@@ -157,7 +172,7 @@ describe('Edit Page for Demo', () => {
     const editPageForBadItemWithoutCustomMsg = new EditPage('demo2', 'unauthorized-updatedid');
     editPageForBadItemWithoutCustomMsg.navigateTo();
 
-    editPageForBadItemWithoutCustomMsg.inputField.sendKeys('any text');
+    editPageForBadItemWithoutCustomMsg.inputFields.get(0).sendKeys('any text');
     editPageForBadItemWithoutCustomMsg.saveButton.click();
 
     expect(editPageForBadItemWithoutCustomMsg.getSnackBarText()).toEqual('Failed to save 1 item\nDismiss');
@@ -174,7 +189,7 @@ describe('Edit Page for Demo', () => {
   });
 
   it('should display alert when metadata is edited and browser back button is hit without saving', () => {
-    page.inputField.sendKeys('any text');
+    page.inputFields.get(0).sendKeys('any text');
     browser.navigate().back();
 
     page.clickAcceptAlert();
@@ -255,10 +270,19 @@ describe('Edit Page for Demo2', () => {
   });
 
   it('should display alert when the page has disabled fields and metadata is updated without saving', () => {
-    page.inputField.sendKeys('any text');
+    page.inputFields.get(0).sendKeys('any text');
     browser.navigate().back();
 
     page.clickAcceptAlert();
+  });
+
+  /**
+   * Regression test for https://jira.cac.washington.edu/browse/CAB-4046.
+   */
+  it('should perform no-op when hitting ENTER on a form field without modifying anything', () => {
+    page.inputFields.get(0).click();
+    page.inputFields.get(0).sendKeys(protractor.Key.ENTER);
+    expect(page.getPdfViewer().isDisplayed()).toBeTruthy();
   });
 });
 
@@ -275,7 +299,7 @@ describe('Edit Page for Demo3', () => {
   });
 
   it('should display lock icon for all disabled fields', () => {
-    expect(page.lockIcons.count()).toEqual(9);
+    expect(page.lockIcons.count()).toEqual(10);
     page.lockIcons.each((lockIcon) => {
       expect(lockIcon.getCssValue('color')).toEqual('rgba(0, 0, 0, 0.55)');
     });

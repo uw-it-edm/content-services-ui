@@ -11,8 +11,18 @@
   "rangeStrategy": "bump",
   "packageRules": [
     {
-      "packagePatterns": ["^@angular", "axe-webdriverjs", "typescript"],
-      "masterIssueApproval": true
+      "depTypeList": ["dependencies"],
+      "enabled": false
+    },
+    {
+      "enabled": false,
+      "depTypeList": ["devDependencies"],
+      "packagePatterns": [
+        "^@angular",
+        "^angular",
+        "axe-webdriverjs",
+        "typescript"
+      ]
     },
     {
       "depTypeList": ["devDependencies"],
@@ -22,11 +32,17 @@
     {
       "depTypeList": ["devDependencies"],
       "updateTypes": ["major"],
-      "enabled": false
-    },
-    {
-      "depTypeList": ["dependencies"],
-      "enabled": false
+      "automerge": true,
+      "packagePatterns": [
+        "^@types",
+        "coveralls",
+        "lint-staged",
+        "npm-run-all",
+        "prettier",
+        "rxjs-tslint-rules",
+        "tslint",
+        "tslint-config-prettier"
+      ]
     }
   ]
 }
