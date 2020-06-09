@@ -27,7 +27,6 @@ const fieldOptions2: FieldOption[] = [
 ];
 
 describe('OptionsAutocompleteComponent', () => {
-  const getInputControl = () => component.formGroup.controls[component.internalFieldName];
   let component: OptionsAutocompleteComponent;
   let fixture: ComponentFixture<OptionsAutocompleteComponent>;
   let liveAnnouncerSpy: LiveAnnouncer;
@@ -60,7 +59,8 @@ describe('OptionsAutocompleteComponent', () => {
 
   it('should populate the initial value in the formGroup control', () => {
     component.writeValue('val1');
-    const option: FieldOption = getInputControl().value;
+
+    const option: FieldOption = component.filterInputControl.value;
 
     expect(option.value).toBe('val1');
   });
@@ -78,11 +78,11 @@ describe('OptionsAutocompleteComponent', () => {
   });
 
   it('should disable the formGroup control when component is disabled', () => {
-    expect(getInputControl().disabled).toBeFalse();
+    expect(component.filterInputControl.disabled).toBeFalse();
 
     component.setDisabledState(true);
 
-    expect(getInputControl().disabled).toBeTrue();
+    expect(component.filterInputControl.disabled).toBeTrue();
   });
 
   it('should update the component value when option is selected', () => {
@@ -91,6 +91,8 @@ describe('OptionsAutocompleteComponent', () => {
     component.optionSelected(fieldOptions[1]);
 
     expect(currentValue).toBe('val2');
+
+    expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Selected display2 xy', 'polite');
   });
 
   it('should filter the options after user types in textbox', (done: DoneFn) => {
@@ -111,12 +113,12 @@ describe('OptionsAutocompleteComponent', () => {
     component.registerOnChange(val => {});
     component.optionSelected(fieldOptions[1]);
 
-    getInputControl().setValue('invalid');
+    component.filterInputControl.setValue('invalid');
 
     component.optionListClosed();
     fixture.detectChanges();
 
-    expect(getInputControl().value).toBe(fieldOptions[1]);
+    expect(component.filterInputControl.value).toBe(fieldOptions[1]);
   });
 
   it('should announce results to screen reader after user types in textbox with more than one match', fakeAsync(() => {
@@ -160,7 +162,6 @@ describe('OptionsAutocompleteComponent', () => {
 });
 
 describe('OptionsAutocompleteComponent with parent control', () => {
-  const getInputControl = () => component.formGroup.controls[component.internalFieldName];
   let component: OptionsAutocompleteComponent;
   let fixture: ComponentFixture<OptionsAutocompleteComponent>;
   let parentControl: AbstractControl;
@@ -199,12 +200,12 @@ describe('OptionsAutocompleteComponent with parent control', () => {
 
   it('should clear the filter control when the parent value changes', () => {
     component.registerOnChange(val => {});
-    getInputControl().setValue(fieldOptions[1].value);
+    component.filterInputControl.setValue(fieldOptions[1].value);
     fixture.detectChanges();
 
     parentControl.setValue('new parent');
     fixture.detectChanges();
 
-    expect(getInputControl().value).toBe(null);
+    expect(component.filterInputControl.value).toBe(null);
   });
 });
