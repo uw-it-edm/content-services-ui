@@ -41,6 +41,7 @@ export function RequiresFieldOptionObject(control: AbstractControl) {
 })
 export class OptionsAutocompleteComponent implements ControlValueAccessor, OnInit, OnDestroy {
   private _disabled = false;
+  private _filterInputControl: FormControl;
   private componentDestroyed = new Subject();
   private latestValidOption: FieldOption;
   private onChange: (value: string) => void;
@@ -64,8 +65,8 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
     this.setInnerInputDisableState();
   }
 
-  get internalFieldName(): string {
-    return INTERNAL_FIELD_NAME;
+  get filterInputControl(): FormControl {
+    return this._filterInputControl;
   }
 
   constructor(
@@ -75,14 +76,14 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
   ) {}
 
   ngOnInit(): void {
+    this._filterInputControl = new FormControl('', [RequiresFieldOptionObject]);
+    this.formGroup = this.fb.group({});
+    this.formGroup.controls[INTERNAL_FIELD_NAME] = this.filterInputControl;
+
     const allOptions$ = this.getAllOptions();
-    const autocompleteControl = new FormControl('', [RequiresFieldOptionObject]);
-    const filter$: Observable<string | FieldOption> = autocompleteControl.valueChanges.pipe(
+    const filter$: Observable<string | FieldOption> = this.filterInputControl.valueChanges.pipe(
       startWith(''),
       takeUntil(this.componentDestroyed));
-
-    this.formGroup = this.fb.group({});
-    this.formGroup.controls[INTERNAL_FIELD_NAME] = autocompleteControl;
 
     this.filteredOptions$ = combineLatest(allOptions$, filter$).pipe(
       map(([options, filter]) =>
@@ -101,7 +102,7 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
       skip(1), // Skip the initial set of options.
       debounceTime(500),
       takeUntil(this.componentDestroyed)
-    ).subscribe(options => this.announceOptionsList(options));
+    ).subscribe(options => this.announceFilteredOptions(options));
   }
 
   ngOnDestroy(): void {
@@ -114,10 +115,10 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
   }
 
   optionListClosed() {
-    if (!this.isInternalFieldValid() && this.latestValidOption) {
+    if (this.filterInputControl.invalid && this.latestValidOption) {
       // If the options list is closed and the value left in the input is invalid, reset it
       //   to the last known valid value.
-      this.formGroup.controls[INTERNAL_FIELD_NAME].patchValue(this.latestValidOption);
+      this.filterInputControl.patchValue(this.latestValidOption);
     }
   }
 
@@ -137,12 +138,12 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
         const selectedOpt = options.find((opt) => opt.value === value);
         if (selectedOpt) {
           this.latestValidOption = selectedOpt;
-          this.formGroup.controls[INTERNAL_FIELD_NAME].patchValue(selectedOpt);
+          this.filterInputControl.patchValue(selectedOpt);
         }
       });
     } else {
       this.latestValidOption = null;
-      this.formGroup.controls[INTERNAL_FIELD_NAME].reset();
+      this.filterInputControl.reset();
     }
   }
 
@@ -169,7 +170,7 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
         distinctUntilChanged(),
         switchMap((newParentValue) => {
           this.latestValidOption = null;
-          this.formGroup.controls[INTERNAL_FIELD_NAME].reset();
+          this.filterInputControl.reset();
           if (newParentValue) {
             return this.fieldOptionService.getOptionsFromParent(dynamicSelectConfig, parentFieldConfig, newParentValue);
           } else {
@@ -183,7 +184,7 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
     return allOptions;
   }
 
-  private announceOptionsList(options: FieldOption[]) {
+  private announceFilteredOptions(options: FieldOption[]) {
     let message: string;
 
     if (!options || options.length === 0) {
@@ -197,26 +198,11 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
     this.liveAnnouncer.announce(message, 'polite');
   }
 
-  private isInternalFieldValid() {
-    if (
-      this.formGroup &&
-      this.formGroup.controls &&
-      this.formGroup.controls[INTERNAL_FIELD_NAME] &&
-      this.formGroup.controls[INTERNAL_FIELD_NAME].invalid
-    ) {
-      return false;
-    }
-
-    return true;
-  }
-
   private setInnerInputDisableState() {
-    if (this.formGroup && this.formGroup.controls[INTERNAL_FIELD_NAME]) {
-      if (this.disabled) {
-        this.formGroup.controls[INTERNAL_FIELD_NAME].disable();
-      } else {
-        this.formGroup.controls[INTERNAL_FIELD_NAME].enable();
-      }
+    if (this.disabled) {
+      this.filterInputControl.disable();
+    } else {
+      this.filterInputControl.enable();
     }
   }
 }
