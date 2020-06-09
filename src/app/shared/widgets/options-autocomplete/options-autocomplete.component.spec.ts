@@ -128,7 +128,7 @@ describe('OptionsAutocompleteComponent', () => {
 
     tick(1000);
 
-    expect(liveAnnouncerSpy.announce).not.toHaveBeenCalledWith('Found 3 results.', 'polite');
+    expect(liveAnnouncerSpy.announce).not.toHaveBeenCalled();
   }));
 
 
