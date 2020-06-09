@@ -187,6 +187,11 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
   private announceFilteredOptions(options: FieldOption[]) {
     let message: string;
 
+    if (typeof this.filterInputControl.value !== 'string') {
+      // Do not announce if input control is not being used as a filter.
+      return;
+    }
+
     if (!options || options.length === 0) {
       message = 'Found no results.';
     } else if (options.length === 1) {

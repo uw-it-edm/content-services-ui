@@ -121,6 +121,17 @@ describe('OptionsAutocompleteComponent', () => {
     expect(component.filterInputControl.value).toBe(fieldOptions[1]);
   });
 
+  it('should not announce option list if input control is not typed in', fakeAsync(() => {
+    component.registerOnChange(val => {});
+    component.filterInputControl.setValue(fieldOptions[1]);
+    fixture.detectChanges();
+
+    tick(1000);
+
+    expect(liveAnnouncerSpy.announce).not.toHaveBeenCalledWith('Found 3 results.', 'polite');
+  }));
+
+
   it('should announce results to screen reader after user types in textbox with more than one match', fakeAsync(() => {
     const inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
     inputElement.dispatchEvent(new Event('focusin'));
