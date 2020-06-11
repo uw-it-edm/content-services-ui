@@ -3,7 +3,6 @@ import { Observable } from 'rxjs';
 
 import { SearchResults } from './search-result';
 import { ResultRow } from './result-row';
-import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, SortDirection } from '@angular/material/sort';
 import { SearchModel } from './search-model';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
@@ -11,10 +10,9 @@ import { map } from 'rxjs/operators';
 
 export class SearchDataSource extends DataSource<ResultRow> {
   constructor(
-    private searchModel$: Observable<SearchModel>,
-    private searchResults$: Observable<SearchResults>,
-    private sort: MatSort,
-    private paginators: Array<MatPaginator>
+    searchModel$: Observable<SearchModel>,
+    private searchResults$: Observable<ResultRow[]>,
+    private sort: MatSort
   ) {
     super();
     searchModel$.subscribe((searchModel) => {
@@ -33,7 +31,7 @@ export class SearchDataSource extends DataSource<ResultRow> {
   }
 
   connect(): Observable<ResultRow[]> {
-    return this.searchResults$.pipe(map((response) => response.results));
+    return this.searchResults$;
   }
 
   disconnect() {}

@@ -4,6 +4,7 @@ import { SearchResults } from '../shared/model/search-result';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { Observable, Subject } from 'rxjs';
 import { SearchDataSource } from '../shared/model/search-datasource.model';
+import { ResultRow } from '../shared/model/result-row';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort, MatSortHeaderIntl, Sort, SortDirection } from '@angular/material/sort';
 import { PaginatorConfig } from '../shared/model/paginator-config';
@@ -11,11 +12,12 @@ import { DataService } from '../../shared/providers/data.service';
 import { SearchUtility } from '../shared/search-utility';
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { SearchPagination } from '../shared/model/search-pagination';
-import { delay, takeUntil } from 'rxjs/operators';
+import { delay, takeUntil, map, tap } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { ObjectUtilities } from '../../core/util/object-utilities';
 import { Field, isFieldRightAligned } from '../../core/shared/model/field';
+import {SelectionModel} from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-search-results',
@@ -26,8 +28,10 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   private componentDestroyed = new Subject();
   private _pageConfig: SearchPageConfig;
   private fieldToLabelMap: { [id: string]: string } = {};
+  private _resultRows: ResultRow[] = [];
   searchModel: SearchModel = new SearchModel();
   paginatorConfig: PaginatorConfig = new PaginatorConfig();
+  selection = new SelectionModel<ResultRow>(true, []);
 
   dataSource: SearchDataSource;
   displayedColumns = [];
@@ -40,11 +44,15 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   sortDirection: SortDirection;
 
   @Input()
-  searchModel$: Observable<SearchModel>;
+  searchModel$: Observable<SearchModel> = new Observable<SearchModel>();
   @Input()
   searchResults$: Subject<SearchResults>;
+  @Input()
+  readOnly: false;
   @Output()
   search = new EventEmitter<SearchModel>();
+  @Output()
+  selectRows = new EventEmitter<ResultRow[]>();
 
   @Input()
   set pageConfig(config: SearchPageConfig) {
@@ -54,6 +62,18 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
 
   get pageConfig(): SearchPageConfig {
     return this._pageConfig;
+  }
+
+  @Input()
+  set checkedColumnEnabled(enableCheckedColumn: boolean) {
+    const isEnabled = this.displayedColumns && this.displayedColumns.length > 0 && this.displayedColumns[0] === 'checked';
+
+    if (enableCheckedColumn && !isEnabled) {
+      this.selection.clear();
+      this.displayedColumns.splice(0, 0, 'checked');
+    } else if (!enableCheckedColumn && isEnabled) {
+      this.displayedColumns.splice(0, 1);
+    }
   }
 
   @ViewChild(MatPaginator, { static: true })
@@ -72,10 +92,16 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.dataSource = new SearchDataSource(this.searchModel$, this.searchResults$, this.sort, [
-      this.topPaginator,
-      this.bottomPaginator,
-    ]);
+    const searchResultRows$ = this.searchResults$.pipe(
+      map(results => results.results),
+      tap(rows => this._resultRows = rows)
+    );
+
+    this.selection.changed.subscribe(() => {
+      this.selectRows.emit(this.selection.selected);
+    });
+
+    this.dataSource = new SearchDataSource(this.searchModel$, searchResultRows$, this.sort);
 
     // delay 0 to prevent "Expression has changed after it was checked" when initial search is performed afterViewInit in parent
     this.searchModel$.pipe(delay(0), takeUntil(this.componentDestroyed)).subscribe((searchModel) => {
@@ -178,6 +204,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
       fieldLabelMap[field.key] = field.label;
     }
 
+
     this.matSortService.sortButtonLabel = (id) => {
       const label = fieldLabelMap[id] || id;
 
@@ -207,9 +234,21 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   }
 
   navigateToEdit(event, pagePath): void {
-    if (event.view.getSelection().type !== 'Range') {
+    if (!this.readOnly && event.view.getSelection().type !== 'Range') {
       this.router.navigate(['../edit/' + pagePath], { relativeTo: this.route, queryParamsHandling: 'merge' });
     }
+  }
+
+  areAllRowsSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this._resultRows.length;
+    return numSelected == numRows;
+  }
+
+  toggleSelectAll() {
+    this.areAllRowsSelected() ?
+        this.selection.clear() :
+        this._resultRows.forEach(row => this.selection.select(row));
   }
 
   /*

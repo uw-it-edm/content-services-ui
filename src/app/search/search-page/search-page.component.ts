@@ -8,6 +8,7 @@ import { Title } from '@angular/platform-browser';
 import { SearchModel } from '../shared/model/search-model';
 import { SearchResults } from '../shared/model/search-result';
 import { SearchService } from '../shared/search.service';
+import { ResultRow } from '../shared/model/result-row';
 import { Subject, Subscription } from 'rxjs';
 import { DataService } from '../../shared/providers/data.service';
 import { Sort } from '../shared/model/sort';
@@ -31,6 +32,10 @@ const LEFT_PANEL_VISIBLE_STATE_KEY = 'isLeftPanelVisible';
 export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   private componentDestroyed = new Subject();
   private searchSubscription: Subscription;
+  private _isLeftPanelVisible = true;
+  private _isToggleLeftPanelButtonVisible = false;
+  private _selectedRows: ResultRow[] = [];
+
   searchDebounceTime = 400;
   config: Config;
   pageConfig: SearchPageConfig;
@@ -41,8 +46,23 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   searchAutocomplete: SearchAutocomplete;
 
   initialSearchModel: SearchModel;
-  isLeftPanelVisible = true;
-  isToggleLeftPanelButtonVisible = false;
+  isBulkEditMode = false;
+
+  get isLeftPanelVisible(): boolean {
+    return this._isLeftPanelVisible && !this.isBulkEditMode;
+  }
+
+  get isToggleLeftPanelButtonVisible(): boolean {
+    return this._isToggleLeftPanelButtonVisible && !this.isBulkEditMode;
+  }
+
+  get isSearchBoxVisible(): boolean {
+    return !this.isBulkEditMode;
+  }
+
+  get selectedRows(): ResultRow[] {
+    return this._selectedRows;
+  }
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -90,7 +110,7 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.config = data.config;
         this.pageConfig = data.config.pages[this.page.toLowerCase()];
-
+        this.isBulkEditMode = false;
         this.initializeToggleLeftPanelButton(this.pageConfig);
 
         if (
@@ -168,17 +188,32 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
     this.router.navigate(['display-search'], { relativeTo: this.activatedRoute, queryParams: queryParams });
   }
 
+  toggleBulkEditMode(): void {
+    this.isBulkEditMode = !this.isBulkEditMode;
+  }
+
+  navigateToBulkEdit(): void {
+    if (this._selectedRows.length > 0) {
+      console.log('selected :>> ', this._selectedRows);
+      this.router.navigate([this.config.tenant + '/bulk-edit'], { state: { selectedRows: this._selectedRows }});
+    }
+  }
+
+  onSelectRows(rows: ResultRow[]): void {
+    this._selectedRows = rows;
+  }
+
   onSearch(searchModel: SearchModel) {
     console.log('search in generic page component');
     this.searchModel$.next(Object.assign(new SearchModel(), searchModel));
   }
 
   toggleLeftPanel(): void {
-    this.isLeftPanelVisible = !this.isLeftPanelVisible;
+    this._isLeftPanelVisible = !this._isLeftPanelVisible;
 
-    this.dataService.set(LEFT_PANEL_VISIBLE_STATE_KEY, this.isLeftPanelVisible);
+    this.dataService.set(LEFT_PANEL_VISIBLE_STATE_KEY, this._isLeftPanelVisible);
 
-    const announcerMessage = this.isLeftPanelVisible ? 'Filter panel shown.' : 'Filter panel hidden.';
+    const announcerMessage = this._isLeftPanelVisible ? 'Filter panel shown.' : 'Filter panel hidden.';
     this.liveAnnouncer.announce(announcerMessage, 'polite');
   }
 
@@ -194,13 +229,13 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   private initializeToggleLeftPanelButton(pageConfig: SearchPageConfig): void {
     const facetsConfig =
       pageConfig && pageConfig.facetsConfig && pageConfig.facetsConfig.active && pageConfig.facetsConfig.facets;
-    this.isToggleLeftPanelButtonVisible = facetsConfig && !_.isEmpty(facetsConfig);
+    this._isToggleLeftPanelButtonVisible = facetsConfig && !_.isEmpty(facetsConfig);
 
-    if (this.isToggleLeftPanelButtonVisible) {
+    if (this._isToggleLeftPanelButtonVisible) {
       const leftPanelVisibleInitState = this.dataService.get(LEFT_PANEL_VISIBLE_STATE_KEY);
-      this.isLeftPanelVisible = leftPanelVisibleInitState !== null ? leftPanelVisibleInitState : true;
+      this._isLeftPanelVisible = leftPanelVisibleInitState !== null ? leftPanelVisibleInitState : true;
     } else {
-      this.isLeftPanelVisible = false;
+      this._isLeftPanelVisible = false;
     }
   }
 }

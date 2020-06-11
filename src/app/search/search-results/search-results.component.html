@@ -1,5 +1,7 @@
 <div class="search-results-component">
+
   <mat-paginator #topPaginator
+                 *ngIf="!readOnly"
                  [pageIndex]="paginatorConfig.pageIndex"
                  [pageSize]="paginatorConfig.pageSize"
                  [pageSizeOptions]="paginatorConfig.pageSizeOptions"
@@ -20,18 +22,36 @@
     <!--- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
 
+    <ng-container matColumnDef="checked">
+      <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? toggleSelectAll() : null"
+                      [checked]="selection.hasValue() && areAllRowsSelected()"
+                      [indeterminate]="selection.hasValue() && !areAllRowsSelected()">
+        </mat-checkbox>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)">
+      </mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Id</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="readOnly"> Id</mat-header-cell>
       <mat-cell *matCellDef="let element">
         <a (click)="navigateToEdit($event, element.id)"
+           *ngIf="!readOnly"
            [routerLink]="['../edit/' + element.id]"
-           queryParamsHandling="merge"
-      >{{element.id}}</a>
+           queryParamsHandling="merge">
+           {{element.id}}
+        </a>
+        <span *ngIf="readOnly">{{element.id}}</span>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="label">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Name</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="readOnly"> Name</mat-header-cell>
       <mat-cell *matCellDef="let element">{{element.label}}</mat-cell>
 
     </ng-container>
@@ -44,7 +64,7 @@
           </mat-header-cell>
         </span>
         <span *ngSwitchDefault>
-         <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="{ 'cell-align-right': isFieldRightAligned(col)}">
+         <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="{ 'cell-align-right': isFieldRightAligned(col)}" [disabled]="readOnly">
            <div class="header-cell-content">{{ col.label }}</div>
           </mat-header-cell>
         </span>
@@ -64,6 +84,7 @@
   </mat-table>
 
   <mat-paginator #bottomPaginator
+                 *ngIf="!readOnly"
                  [pageIndex]="paginatorConfig.pageIndex"
                  [pageSize]="paginatorConfig.pageSize"
                  [pageSizeOptions]="paginatorConfig.pageSizeOptions"

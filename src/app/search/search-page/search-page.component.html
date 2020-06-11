@@ -1,38 +1,53 @@
 <div role="main" [ngClass]="pageConfig?.theme">
   <div fxLayout="row" class="cs-generic-header">
     <div fxFlex="20">
-      <h2>{{pageConfig.pageName}}</h2>
+      <h2>{{pageConfig.pageName}}<span *ngIf="isBulkEditMode"> - Bulk Update</span></h2>
+      <h3 *ngIf="isBulkEditMode">Select the documents to update</h3>
     </div>
-    <div fxFlex="70">
+    <div fxFlex="70" [hidden]="!isSearchBoxVisible">
       <app-search-box
         [searchModel$]="searchModel$"
         [pageConfig]="pageConfig"
         (searchEvent)="onSearch($event)"
-        [searchAutocomplete]="searchAutocomplete"
-      >
+        [searchAutocomplete]="searchAutocomplete">
       </app-search-box>
     </div>
-    <div fxFlex="10" style="text-align: right" *ngIf="!pageConfig.disableUploadNewDocument">
-      <button class="cs-upload-new-document-button" mat-button (click)="navigateToCreate()" aria-label="Upload new document">
-          <span appCustomText="addContentItemButton" defaultValue="Upload"></span>&nbsp;<mat-icon>backup</mat-icon>
+
+    <ng-container *ngIf="!isBulkEditMode">
+      <div fxFlex="10" style="text-align: right" *ngIf="!pageConfig.disableUploadNewDocument">
+        <button class="cs-upload-new-document-button" mat-button (click)="navigateToCreate()" aria-label="Upload new document">
+            <span appCustomText="addContentItemButton" defaultValue="Upload"></span>&nbsp;<mat-icon>backup</mat-icon>
+        </button>
+      </div>
+      <div fxFlex="10" style="text-align: right" *ngIf="pageConfig.enableDisplaySearch">
+        <button class="cs-display-search-button" mat-button (click)="navigateToDisplaySearchPage()" aria-label="Display all documents">
+            <span appCustomText="displaySearchPageButton" defaultValue="Display All"></span>&nbsp;<mat-icon>file_copy</mat-icon>
+        </button>
+      </div>
+      <div fxFlex="10" style="text-align: right">
+        <button mat-button (click)="toggleBulkEditMode()" aria-label="Bulk Update">
+            Bulk Update&nbsp;
+            <span class="material-icons">edit</span>
+        </button>
+      </div>
+    </ng-container>
+    <div fxFlex="90" style="text-align: right" *ngIf="isBulkEditMode">
+      <button mat-button (click)="toggleBulkEditMode()" aria-label="Cancel Bulk Update">
+        Cancel Bulk Update&nbsp;
+        <span class="material-icons">cancel</span>
       </button>
     </div>
-    <div fxFlex="10" style="text-align: right" *ngIf="pageConfig.enableDisplaySearch">
-      <button class="cs-display-search-button" mat-button (click)="navigateToDisplaySearchPage()" aria-label="Display all documents">
-          <span appCustomText="displaySearchPageButton" defaultValue="Display All"></span>&nbsp;<mat-icon>file_copy</mat-icon>
-      </button>
-    </div>
+
   </div>
   <div fxLayout="row" class="cs-generic-header"  *ngIf="pageConfig.searchDaterangeConfig && pageConfig.searchDaterangeConfig.active">
     <div fxFlex="20"></div>
-    <div fxFlex>
+    <div fxFlex [hidden]="!isSearchBoxVisible">
       <app-search-daterange-picker
         [searchModel$]="searchModel$"
         [searchDaterangeConfig]="pageConfig.searchDaterangeConfig"
         (dateRangeFilterAdded)="onSearch($event)"></app-search-daterange-picker>
     </div>
   </div>
-
   <div fxLayout="row" class="cs-generic-body">
     <div fxFlex="20" [hidden]="!isLeftPanelVisible">
       <app-facets-box
@@ -52,6 +67,9 @@
         [searchModel$]="searchModel$"
         [searchResults$]="searchResults$"
         [pageConfig]="pageConfig"
+        [readOnly]="isBulkEditMode"
+        [checkedColumnEnabled]="isBulkEditMode"
+        (selectRows)="onSelectRows($event)"
         (search)="onSearch($event)">
           <div search-results-action [hidden]="!isToggleLeftPanelButtonVisible">
             <button mat-icon-button
@@ -64,7 +82,22 @@
               <mat-icon *ngIf="!isLeftPanelVisible">arrow_right</mat-icon>
             </button>
           </div>
-    </app-search-results>
+      </app-search-results>
+    </div>
+    <div *ngIf="isBulkEditMode" class="footer">
+      <div class="space">
+        &nbsp;
+      </div>
+      <div class="sticky">
+        <button mat-button (click)="navigateToBulkEdit()" aria-label="Update Fields" [disabled]="selectedRows.length === 0">
+          Edit {{selectedRows.length}} Documents&nbsp;
+          <span class="material-icons">edit</span>
+        </button>
+        <button mat-button (click)="toggleBulkEditMode()" aria-label="Cancel Bulk Upate">
+          Cancel Bulk Update&nbsp;
+          <span class="material-icons">cancel</span>
+        </button>
+      </div>
     </div>
   </div>
 </div>
