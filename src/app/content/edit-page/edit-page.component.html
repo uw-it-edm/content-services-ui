@@ -48,7 +48,7 @@
             <div class="cs-content-view-wrapper-insert">
               <app-content-view [contentObject]="contentObject" [allowPageByPageMode]="pageConfig?.allowPageByPageMode"></app-content-view>
             </div>
-            <div *ngIf="hasDeletePermission" class="button-row">
+            <div *ngIf="pageConfig?.enableDelete && hasDeletePermission" class="button-row">
               <mat-spinner *ngIf="deletePending" style="margin:0 auto;" aria-label="deletion in progress"></mat-spinner>
               <button *ngIf="!deletePending" mat-raised-button matTooltip="Delete Document" aria-label="delete document"
                       class="remove-button"

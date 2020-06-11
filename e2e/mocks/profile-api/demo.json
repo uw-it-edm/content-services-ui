@@ -291,7 +291,8 @@
           "command": "saveItem"
         }
       ],
-      "viewPanel": true
+      "viewPanel": true,
+      "enableDelete": true
     },
     "create": {
       "theme": "uw-default",

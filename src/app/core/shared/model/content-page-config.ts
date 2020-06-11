@@ -17,6 +17,8 @@ export class ContentPageConfig implements PageConfig {
 
   allowPageByPageMode: boolean;
 
+  enableDelete: boolean; // show delete button for users with delete permission
+
   onSave: Array<any> = [];
   buttons: Array<ButtonConfig> = [];
 }

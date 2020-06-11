@@ -147,6 +147,7 @@ describe('EditPageComponent', () => {
 
     editPageConfig.pageName = 'test-edit-page';
     editPageConfig.viewPanel = false;
+    editPageConfig.enableDelete = true;
 
     const config = new Config();
     config.tenant = 'test-tenant';
@@ -203,6 +204,14 @@ describe('EditPageComponent', () => {
   });
 
   it('should not display the remove button when view panel is false', () => {
+    const button = fixture.debugElement.nativeElement.querySelectorAll('.remove-button');
+    expect(button.length).toEqual(0);
+  });
+
+  it('should not display the remove button when enableDelete is false', () => {
+    editPageConfig.viewPanel = true;
+    editPageConfig.enableDelete = false;
+    fixture.detectChanges();
     const button = fixture.debugElement.nativeElement.querySelectorAll('.remove-button');
     expect(button.length).toEqual(0);
   });
