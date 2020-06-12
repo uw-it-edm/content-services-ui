@@ -1,4 +1,9 @@
+// TODO: transform this to an interface, the default values to not work as expected becase the class is not
+//      instantiated when the response is received from server.
 export class CourseConfig {
+  public defaultYear?: string;
+  public defaultQuarter?: string;
+
   get years(): number {
     return this._years;
   }

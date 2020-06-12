@@ -90,4 +90,13 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy, A
     // return this.formGroup.controls['metadata'].controls[formControlName].hasError('required') ? 'You must enter a value' : '';
     return 'You must enter a value';
   }
+
+  isFieldControlRequired(field: Field): boolean {
+    const metadataErrors = this.formGroup.get('metadata').get(field.key).errors;
+    const hasControlError = metadataErrors && metadataErrors.required;
+    const formErrors = this.formGroup.errors && this.formGroup.errors[field.key];
+    const hasFormError = formErrors && formErrors.required;
+
+    return hasControlError || hasFormError;
+  }
 }

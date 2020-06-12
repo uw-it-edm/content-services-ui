@@ -31,7 +31,7 @@ import { Field } from '../../../core/shared/model/field';
 import { FieldOption } from '../../../core/shared/model/field/field-option';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
-import { takeUntil, switchMap } from 'rxjs/operators';
+import { takeUntil, switchMap, distinctUntilChanged } from 'rxjs/operators';
 import { FieldOptionService } from '../../providers/fieldoption.service';
 
 // Boilerplate for applying mixins to OptionsInputComponent.
@@ -125,7 +125,9 @@ export class OptionsInputComponent extends _OptionsInputComponentBase
 
     if (parentFieldConfig) {
       allOptions = concat(allOptions, this.parentControl.valueChanges.pipe(
+        distinctUntilChanged(),
         switchMap((newParentValue) => {
+          this._propagateChanges(null);
           if (newParentValue) {
             return this.fieldOptionService.getOptionsFromParent(dynamicSelectConfig, parentFieldConfig, newParentValue);
           } else {

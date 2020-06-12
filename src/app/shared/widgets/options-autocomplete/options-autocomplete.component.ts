@@ -171,6 +171,7 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
         switchMap((newParentValue) => {
           this.latestValidOption = null;
           this.filterInputControl.reset();
+          this.onChange(null);
           if (newParentValue) {
             return this.fieldOptionService.getOptionsFromParent(dynamicSelectConfig, parentFieldConfig, newParentValue);
           } else {

@@ -215,8 +215,9 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
   }
 
   private setInternalValue(studentNumber: string) {
-    if (!isNullOrUndefined(studentNumber)) {
-      if (this.formGroup && this.formGroup.controls[INTERNAL_FIELD_NAME]) {
+    // fix for CAB-4070
+    if (this.formGroup && this.formGroup.controls[INTERNAL_FIELD_NAME]) {
+      if (!!studentNumber) {
         this.studentService
           .read(studentNumber)
           .pipe(first())
@@ -224,9 +225,9 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
             this.filteredOptions = [result];
             this.formGroup.controls[INTERNAL_FIELD_NAME].patchValue(result);
           });
+      } else {
+        this.formGroup.controls[INTERNAL_FIELD_NAME].reset();
       }
-    } else {
-      this.formGroup.controls[INTERNAL_FIELD_NAME].reset();
     }
   }
 

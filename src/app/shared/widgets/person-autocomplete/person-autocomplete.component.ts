@@ -213,8 +213,9 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
   }
 
   private setInternalValue(regId: string) {
-    if (!isNullOrUndefined(regId)) {
-      if (this.formGroup && this.formGroup.controls[INTERNAL_FIELD_NAME]) {
+    // fix for CAB-4070
+    if (this.formGroup && this.formGroup.controls[INTERNAL_FIELD_NAME]) {
+      if (!!regId) {
         this.personService
           .read(regId)
           .pipe(first())
@@ -222,9 +223,9 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
             this.filteredOptions = [result];
             this.formGroup.controls[INTERNAL_FIELD_NAME].patchValue(result);
           });
+      } else {
+        this.formGroup.controls[INTERNAL_FIELD_NAME].reset();
       }
-    } else {
-      this.formGroup.controls[INTERNAL_FIELD_NAME].reset();
     }
   }
 

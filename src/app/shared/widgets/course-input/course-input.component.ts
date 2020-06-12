@@ -82,14 +82,17 @@ export class CourseInputComponent extends _CourseInputComponentBase
     OnDestroy {
   @Input() fieldConfig: Field;
 
+  private _defaultYear = '';
+  private _defaultQuarter = '';
+
   // properties
   formGroup: FormGroup;
 
-  year = new Date().getFullYear().toString(); // default value
+  year = '';
   yearControl = new FormControl();
   yearOptions: string[] = [];
 
-  quarter = 'autumn';
+  quarter = '';
   quarterControl = new FormControl();
   quarterOptions: string[] = ['autumn', 'winter', 'spring', 'summer'];
 
@@ -159,10 +162,16 @@ export class CourseInputComponent extends _CourseInputComponentBase
 
   private initComponent() {
     const today = new Date();
-    const years = (this.fieldConfig && this.fieldConfig.courseConfig && this.fieldConfig.courseConfig['years']) || 10;
+    const courseConfig = this.fieldConfig && this.fieldConfig.courseConfig;
+    const years = (courseConfig && courseConfig['years']) || 10;
     const currentYear = new Date().getFullYear();
     for (let i = 0; i < years; i++) {
       this.yearOptions.push((currentYear - i).toString());
+    }
+
+    if (courseConfig) {
+      this.year = this._defaultYear = typeof courseConfig.defaultYear === 'string' ? courseConfig.defaultYear : new Date().getFullYear().toString();
+      this.quarter = this._defaultQuarter = typeof courseConfig.defaultQuarter === 'string' ? courseConfig.defaultQuarter : 'autumn';
     }
 
     this.initInternalForm();
@@ -315,6 +324,9 @@ export class CourseInputComponent extends _CourseInputComponentBase
       this.courseTitle = this.courseNumber && values[4]; // Only set the course title if there is a course number.
       this.section = values[5];
     } else {
+      // Adds support for resetting the fields.
+      this.year = this._defaultYear;
+      this.quarter = this._defaultQuarter;
       this.courseNumber = '';
       this.courseTitle = '';
       this.setSectionValue('');
@@ -498,9 +510,7 @@ export class CourseInputComponent extends _CourseInputComponentBase
 
   // Implemented as part of ControlValueAccessor
   writeValue(value: any): void {
-    if (value) {
-      this.setInternalValue(value);
-    }
+    this.setInternalValue(value);
   }
 
   // Implemented as part of ControlValueAccessor

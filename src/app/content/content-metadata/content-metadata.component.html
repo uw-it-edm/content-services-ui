@@ -9,7 +9,7 @@
               [fieldConfig]="fieldToDisplay"
               [parentControl]="formGroup.get('metadata').get(fieldToDisplay.dynamicSelectConfig?.parentFieldConfig?.key || '')"
               [errorMessage]="getErrorMessage(fieldToDisplay.key)"
-              [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
+              [required]="isFieldControlRequired(fieldToDisplay)"
               [id]="'custom-input-'+ i"
               [attr.id]="'custom-input-'+ i">
             </app-options-autocomplete>
@@ -19,7 +19,7 @@
               [placeholder]="fieldToDisplay.label"
               [fieldConfig]="fieldToDisplay"
               [parentControl]="formGroup.get('metadata').get(fieldToDisplay.dynamicSelectConfig?.parentFieldConfig?.key || '')"
-              [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
+              [required]="isFieldControlRequired(fieldToDisplay)"
               [id]="'custom-input-'+ i"
               [attr.id]="'custom-input-'+ i"
             >
