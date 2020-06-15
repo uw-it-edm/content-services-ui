@@ -69,7 +69,7 @@
     "@types/jasmine": "~3.5.10",
     "@types/jasminewd2": "~2.0.8",
     "@types/lodash": "^4.14.155",
-    "@types/node": "^12.12.44",
+    "@types/node": "^12.12.47",
     "@types/pdfjs-dist": "2.1.4",
     "axe-webdriverjs": "^2.2.0",
     "codelyzer": "^5.2.2",
