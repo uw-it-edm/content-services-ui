@@ -236,6 +236,18 @@ describe('Edit Page for Demo', () => {
     browser.actions().sendKeys(protractor.Key.TAB).perform();
     expect(browser.driver.switchTo().activeElement().getText()).toBe(page.pdfViewerDownloadButton.getText());
   });
+
+  it('should enable Remove button by default', () => {
+    expect(page.removeDocButton.isEnabled()).toBeTruthy();
+  });
+
+  it('should display error message when Delete fails', () => {
+    page.navigateTo('unauthorized-updatedid');
+    page.removeDocButton.click();
+    page.clickAcceptAlert();
+
+    expect(page.getSnackBarText()).toEqual('There was an error deleting content item:Forbidden\nDismiss');
+  });
 });
 
 describe('Edit Page for Demo2', () => {

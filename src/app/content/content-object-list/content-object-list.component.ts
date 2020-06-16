@@ -293,7 +293,9 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
         }
 
         if (contentItem$) {
-          const contentItemSaving = contentItem$.pipe(first()).toPromise()
+          const contentItemSaving = contentItem$
+            .pipe(first())
+            .toPromise()
             .then((item) => {
               contentObject.onLoad(item);
               contentObject.failed = false;
