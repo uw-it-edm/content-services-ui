@@ -1,3 +1,21 @@
 .toggle-panel-btn .mat-icon {
   font-size: 40px;
 }
+
+.button-container {
+  text-align: right;
+}
+
+.footer .space {
+  min-height: 40px;
+}
+
+.footer .sticky{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white;
+  height: 50px;
+  padding-top: 10px;
+}

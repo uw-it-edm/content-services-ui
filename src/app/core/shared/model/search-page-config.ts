@@ -13,6 +13,7 @@ export class SearchPageConfig implements PageConfig {
   fieldKeysToDisplay: Array<string> = [];
   displayDocumentLabelField = false;
   enableDisplaySearch = false;
+  enableBulkUpdate = false;
 
   searchStateInURL = false;
   disableUploadNewDocument = false;

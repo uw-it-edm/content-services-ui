@@ -3,7 +3,7 @@ import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core
 import { SearchPageComponent } from './search-page.component';
 import { MaterialConfigModule } from '../../routing/material-config.module';
 import { ActivatedRoute } from '@angular/router';
-import { Title } from '@angular/platform-browser';
+import { Title, By } from '@angular/platform-browser';
 import { ActivatedRouteStub } from '../../../testing/router-stubs';
 import { Config } from '../../core/shared/model/config';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
@@ -22,14 +22,9 @@ import { StudentService } from '../../shared/providers/student.service';
 import { NotificationService } from '../../shared/providers/notification.service';
 import { PersonService } from '../../shared/providers/person.service';
 import { FacetConfig } from '../../core/shared/model/facet-config';
+import { FacetsConfig } from '../../core/shared/model/facets-config';
+import { ResultRow } from '../shared/model/result-row';
 import Spy = jasmine.Spy;
-
-let studentService: StudentService;
-let dataService: DataService;
-let activatedRoute: ActivatedRouteStub;
-let searchServiceSpy: MockSearchService;
-let component: SearchPageComponent;
-let fixture: ComponentFixture<SearchPageComponent>;
 
 class MockSearchService {
   search(terms: SearchModel, pageConfig: SearchPageConfig): Observable<SearchResults> {
@@ -46,8 +41,29 @@ function getTestSearchModel(stringQuery: string): SearchModel {
   return searchModel;
 }
 
+function getFacetsConfig(): FacetsConfig {
+  const facetsConfig: FacetsConfig = new FacetsConfig();
+  facetsConfig.active = true;
+  facetsConfig.facets.set('myFacet', {
+    key: 'metadata.mybooleanfield',
+    label: 'My boolean',
+    order: 'asc',
+    size: 3,
+    maxSize: 50,
+    dataApiValueType: '',
+    dataApiLabelPath: ''
+  });
+  return facetsConfig;
+}
+
 describe('SearchPageComponent', () => {
   let pageConfig: SearchPageConfig;
+  let studentService: StudentService;
+  let dataService: DataService;
+  let activatedRoute: ActivatedRouteStub;
+  let searchServiceSpy: MockSearchService;
+  let component: SearchPageComponent;
+  let fixture: ComponentFixture<SearchPageComponent>;
 
   beforeEach(async(() => {
     activatedRoute = new ActivatedRouteStub();
@@ -151,17 +167,7 @@ describe('SearchPageComponent', () => {
   });
 
   it('should show the facets panel and the toggle button if facets are active and a facet exitst in config', () => {
-    pageConfig.facetsConfig.active = true;
-    pageConfig.facetsConfig.facets = new Map<string, FacetConfig>();
-    pageConfig.facetsConfig.facets.set('myFacet', {
-      key: 'metadata.mybooleanfield',
-      label: 'My boolean',
-      order: 'asc',
-      size: 3,
-      maxSize: 50,
-      dataApiValueType: '',
-      dataApiLabelPath: ''
-    });
+    pageConfig.facetsConfig = getFacetsConfig();
 
     fixture = TestBed.createComponent(SearchPageComponent);
     component = fixture.componentInstance;
@@ -250,6 +256,104 @@ describe('SearchPageComponent', () => {
       component.searchModel$.next(getTestSearchModel(''));
       tick(LongerThanSearchDebounceTime);
       expect(searchSpy).toHaveBeenCalledTimes(3);
+    }));
+  });
+
+  describe('Bulk Edit Mode', () => {
+    const getSearchResult = (): SearchResults => {
+      const result = new SearchResults();
+      const row = new ResultRow();
+      row.id = '123';
+      result.results.push(row);
+
+      result.total = 1;
+      return result;
+    };
+
+    it('should display the bulk update button when enabled', () => {
+      let bulkUpdateButton = fixture.debugElement.queryAll(By.css('.cs-toggle-bulk-update-button'));
+      expect(bulkUpdateButton.length).toEqual(0);
+
+      component.pageConfig.enableBulkUpdate = true;
+      fixture.detectChanges();
+
+      bulkUpdateButton = fixture.debugElement.queryAll(By.css('.cs-toggle-bulk-update-button'));
+      expect(bulkUpdateButton.length).toEqual(1);
+    });
+
+    it('should be able to enter and exit bulk update mode by using buttons', () => {
+      component.pageConfig.enableBulkUpdate = true;
+      fixture.detectChanges();
+
+      // enter bulk edit mode
+      let bulkUpdateButton = fixture.debugElement.query(By.css('.cs-toggle-bulk-update-button'));
+      bulkUpdateButton.nativeElement.click();
+      fixture.detectChanges();
+
+      let title = fixture.debugElement.query(By.css('h2'));
+      expect(title.nativeElement.textContent).toBe('Bulk Update Mode');
+
+      // exit bulk edit mode
+      bulkUpdateButton = fixture.debugElement.query(By.css('.cs-toggle-bulk-update-button'));
+      bulkUpdateButton.nativeElement.click();
+      fixture.detectChanges();
+
+      title = fixture.debugElement.query(By.css('h2'));
+      expect(title.nativeElement.textContent).toBe('test-page');
+    });
+
+    it('should hide facets, search bar and other buttons when entering bulk update mode', () => {
+      pageConfig.facetsConfig = getFacetsConfig();
+      pageConfig.enableBulkUpdate = true;
+
+      fixture = TestBed.createComponent(SearchPageComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+
+      expect(component.isLeftPanelVisible).toBeTrue();
+      expect(component.isToggleLeftPanelButtonVisible).toBeTrue();
+      expect(component.isSearchBoxVisible).toBeTrue();
+
+      // enter bulk edit mode
+      component.toggleBulkEditMode();
+      fixture.detectChanges();
+
+      expect(component.isLeftPanelVisible).toBeFalse();
+      expect(component.isToggleLeftPanelButtonVisible).toBeFalse();
+      expect(component.isSearchBoxVisible).toBeFalse();
+    });
+
+    it('should freeze results and enable selection of search results when entering bulk update mode', () => {
+      component.pageConfig.enableBulkUpdate = true;
+      component.toggleBulkEditMode();
+      fixture.detectChanges();
+
+      const resultsTable: SearchResultsComponent = fixture.debugElement.query(By.directive(SearchResultsComponent)).componentInstance;
+      expect(resultsTable.freezeResults).toBeTrue();
+      expect(resultsTable.selectionEnabled).toBeTrue();
+    });
+
+    it('should enable the next button and update its text depending of rows are selected', fakeAsync(() => {
+      const resultsTable: SearchResultsComponent = fixture.debugElement.query(By.directive(SearchResultsComponent)).componentInstance;
+      const searchResult = getSearchResult();
+      resultsTable.searchResults$.next(searchResult);
+
+      component.pageConfig.enableBulkUpdate = true;
+      component.toggleBulkEditMode();
+      fixture.detectChanges();
+
+      let bulkUpdateNextButton = fixture.debugElement.query(By.css('.cs-bulk-update-next-button'));
+      expect(bulkUpdateNextButton.attributes['disabled']).toBeTruthy();
+      expect(bulkUpdateNextButton.nativeElement.textContent).toContain('Edit 0 Documents');
+
+      // Select an item from the table
+      resultsTable.selection.select(searchResult.results[0]);
+      tick(100);
+      fixture.detectChanges();
+
+      bulkUpdateNextButton = fixture.debugElement.query(By.css('.cs-bulk-update-next-button'));
+      expect(bulkUpdateNextButton.attributes['disabled']).toBeFalsy();
+      expect(bulkUpdateNextButton.nativeElement.textContent).toContain('Edit 1 Documents');
     }));
   });
 });
