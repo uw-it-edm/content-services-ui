@@ -21,6 +21,27 @@
     <!--- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
 
+    <ng-container matColumnDef="checked">
+      <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox color="primary"
+                      [aria-label]="getHeaderSelectionLabel()"
+                      [matTooltip]="getHeaderSelectionAction()"
+                      (change)="$event ? toggleSelectAll() : null"
+                      [checked]="areAllRowsSelected()"
+                      [indeterminate]="areSomeRowsSelected()">
+        </mat-checkbox>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox color="primary"
+                      [aria-label]="getSelectionLabelForRow(row)"
+                      [matTooltip]="getSelectionActionRow(row)"
+                      (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)">
+      </mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="freezeResults"> Id</mat-header-cell>
       <mat-cell *matCellDef="let element">
