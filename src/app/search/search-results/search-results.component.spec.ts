@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { SearchResultsComponent } from './search-results.component';
@@ -14,6 +14,20 @@ import { SearchResults } from '../shared/model/search-result';
 import { SharedModule } from '../../shared/shared.module';
 import { Sort } from '../shared/model/sort';
 import { ResultRow } from '../shared/model/result-row';
+
+const buildSearchResult = (count: number = 1): SearchResults => {
+  const result = new SearchResults();
+  result.total = count;
+
+  for (let i = 0; i < count; i++) {
+    const row = new ResultRow();
+    row.id = `Id_${i}`;
+    row.metadata['MyFieldKey'] = `Test Value ${i}`;
+    result.results.push(row);
+  }
+
+  return result;
+};
 
 describe('SearchResultsComponent', () => {
   let component: SearchResultsComponent;
@@ -109,14 +123,9 @@ describe('SearchResultsComponent', () => {
   });
 
   it('should disable navigation links when freezeResults=true', () => {
-    const results = new SearchResults();
-    const row = new ResultRow();
-    row.id = '12345';
-    row.metadata['MyFieldKey'] = 'my test value';
-    results.results = [ row ];
-    results.total = 1;
-    component.searchResults$.next(results);
+    const results = buildSearchResult();
 
+    component.searchResults$.next(results);
     fixture.detectChanges();
 
     // verify the table has one link (the id of the row)
@@ -130,4 +139,73 @@ describe('SearchResultsComponent', () => {
     links = fixture.debugElement.queryAll(By.css('a'));
     expect(links.length).toBe(0);
   });
+
+  it('should add the selection column when selectionEnabled=true', () => {
+    let headers = fixture.debugElement.queryAll(By.css('mat-header-cell'));
+    expect(headers.length).toBe(2);
+
+    component.selectionEnabled = true;
+    fixture.detectChanges();
+
+    headers = fixture.debugElement.queryAll(By.css('mat-header-cell'));
+    expect(headers.length).toBe(3);
+  });
+
+  it('should emit selected rows when user selects them', (done: DoneFn) => {
+    const results = buildSearchResult();
+
+    component.searchResults$.next(results);
+    component.selectionEnabled = true;
+    fixture.detectChanges();
+
+    component.selectRows.subscribe((rows: ResultRow[]) => {
+      expect(rows.length).toBe(1);
+      expect(rows[0].id).toBe('Id_0');
+      done();
+    });
+
+    const firstRowCheckbox = fixture.debugElement.query(By.css('mat-cell .mat-checkbox-input'));
+    firstRowCheckbox.nativeElement.click();
+    fixture.detectChanges();
+  });
+
+  it('should set the select all checkbox to indeterminate state when only some rows are selected', () => {
+    const results = buildSearchResult(2);
+
+    component.searchResults$.next(results);
+    component.selectionEnabled = true;
+    fixture.detectChanges();
+
+    const firstRowCheckbox = fixture.debugElement.query(By.css('mat-cell .mat-checkbox-input'));
+    firstRowCheckbox.nativeElement.click();
+    fixture.detectChanges();
+
+    const headerCheckbox = fixture.debugElement.query(By.css('mat-header-cell mat-checkbox'));
+    expect(headerCheckbox.classes['mat-checkbox-indeterminate']).toBeTrue();
+  });
+
+  it('should select and de-select all rows when clicking header checkbox', fakeAsync(() => {
+    const results = buildSearchResult(2);
+    let selectedRows = [];
+
+    component.selectRows.subscribe(rows => selectedRows = rows);
+
+    component.searchResults$.next(results);
+    component.selectionEnabled = true;
+    fixture.detectChanges();
+
+    const headerCheckbox = fixture.debugElement.query(By.css('mat-header-cell .mat-checkbox-input')).nativeElement;
+
+    // select all
+    headerCheckbox.click();
+    fixture.detectChanges();
+    tick(100);
+    expect(selectedRows.length).toBe(2);
+
+    // de-select all
+    headerCheckbox.click();
+    fixture.detectChanges();
+    tick(100);
+    expect(selectedRows.length).toBe(0);
+  }));
 });
