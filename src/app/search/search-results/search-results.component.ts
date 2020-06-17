@@ -43,6 +43,8 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   searchModel$: Observable<SearchModel>;
   @Input()
   searchResults$: Subject<SearchResults>;
+  @Input()
+  readOnly = false;
   @Output()
   search = new EventEmitter<SearchModel>();
 
@@ -72,10 +74,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.dataSource = new SearchDataSource(this.searchModel$, this.searchResults$, this.sort, [
-      this.topPaginator,
-      this.bottomPaginator,
-    ]);
+    this.dataSource = new SearchDataSource(this.searchModel$, this.searchResults$, this.sort);
 
     // delay 0 to prevent "Expression has changed after it was checked" when initial search is performed afterViewInit in parent
     this.searchModel$.pipe(delay(0), takeUntil(this.componentDestroyed)).subscribe((searchModel) => {

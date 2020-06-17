@@ -7,46 +7,21 @@ import { SearchModel } from '../shared/model/search-model';
 import { Field } from '../../core/shared/model/field';
 import { of, Subject } from 'rxjs';
 
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { SearchResults } from '../shared/model/search-result';
-import { DataService } from '../../shared/providers/data.service';
 import { SharedModule } from '../../shared/shared.module';
 import { Sort } from '../shared/model/sort';
-import { ActivatedRouteStub } from '../../../testing/router-stubs';
-
-class MockDataService {
-  storage = ['123', '456'];
-}
-
-class RouterStub {
-  navigate(url: string) {
-    return url;
-  }
-}
+import { ResultRow } from '../shared/model/result-row';
 
 describe('SearchResultsComponent', () => {
   let component: SearchResultsComponent;
-  let dataService: DataService;
   let fixture: ComponentFixture<SearchResultsComponent>;
-
-  beforeEach(() => {
-    dataService = new DataService();
-    dataService.set('adjacentIds', ['123', '456']);
-  });
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MaterialConfigModule, NoopAnimationsModule, RouterModule, SharedModule],
-      providers: [
-        { provide: DataService, useValue: dataService },
-        { provide: ActivatedRoute, useClass: ActivatedRouteStub },
-        {
-          provide: Router,
-          useClass: RouterStub
-        }
-      ],
+      imports: [MaterialConfigModule, NoopAnimationsModule, RouterTestingModule, SharedModule],
       declarations: [SearchResultsComponent]
     }).compileComponents();
   }));
@@ -109,5 +84,50 @@ describe('SearchResultsComponent', () => {
 
     const secondHeaderButton: HTMLElement = headerButtons[1].nativeElement;
     expect(secondHeaderButton.getAttribute('aria-label')).toEqual('Change sorting for Friendly Field Name');
+  });
+
+  it('should hide the paginators when readonly=true', () => {
+    let paginators = fixture.debugElement.queryAll(By.css('mat-paginator'));
+    expect(paginators.length).toBe(2);
+
+    component.readOnly = true;
+    fixture.detectChanges();
+
+    paginators = fixture.debugElement.queryAll(By.css('mat-paginator'));
+    expect(paginators.length).toBe(0);
+  });
+
+  it('should disable all sorting headers when readonly=true', () => {
+    let sortHeaders = fixture.debugElement.queryAll(By.css('.mat-sort-header-button[disabled=true]'));
+    expect(sortHeaders.length).toBe(0);
+
+    component.readOnly = true;
+    fixture.detectChanges();
+
+    sortHeaders = fixture.debugElement.queryAll(By.css('.mat-sort-header-button[disabled=true]'));
+    expect(sortHeaders.length).toBe(2);
+  });
+
+  it('should disable navigation links when readonly=true', () => {
+    const results = new SearchResults();
+    const row = new ResultRow();
+    row.id = '12345';
+    row.metadata['MyFieldKey'] = 'my test value';
+    results.results = [ row ];
+    results.total = 1;
+    component.searchResults$.next(results);
+
+    fixture.detectChanges();
+
+    // verify the table has one link (the id of the row)
+    let links = fixture.debugElement.queryAll(By.css('a'));
+    expect(links.length).toBe(1);
+
+    component.readOnly = true;
+    fixture.detectChanges();
+
+    // verify the table has no links.
+    links = fixture.debugElement.queryAll(By.css('a'));
+    expect(links.length).toBe(0);
   });
 });
