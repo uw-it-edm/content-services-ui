@@ -262,7 +262,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   }
 
   areAllRowsSelected() {
-    return this.selection.selected.length === this._resultRows.length;
+    return this.selection.hasValue() && this.selection.selected.length === this._resultRows.length;
   }
 
   areSomeRowsSelected() {

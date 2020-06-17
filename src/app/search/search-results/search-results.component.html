@@ -27,7 +27,7 @@
                       [aria-label]="getHeaderSelectionLabel()"
                       [matTooltip]="getHeaderSelectionAction()"
                       (change)="$event ? toggleSelectAll() : null"
-                      [checked]="selection.hasValue() && areAllRowsSelected()"
+                      [checked]="areAllRowsSelected()"
                       [indeterminate]="areSomeRowsSelected()">
         </mat-checkbox>
       </mat-header-cell>
