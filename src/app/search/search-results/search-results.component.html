@@ -28,7 +28,7 @@
                       [matTooltip]="getHeaderSelectionAction()"
                       (change)="$event ? toggleSelectAll() : null"
                       [checked]="selection.hasValue() && areAllRowsSelected()"
-                      [indeterminate]="selection.hasValue() && !areAllRowsSelected()">
+                      [indeterminate]="areSomeRowsSelected()">
         </mat-checkbox>
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
