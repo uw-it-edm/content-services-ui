@@ -206,7 +206,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   }
 
   navigateToEdit(event, pagePath): void {
-    if (event.view.getSelection().type !== 'Range') {
+    if (!this.readOnly && event && event.view && event.view.getSelection().type !== 'Range') {
       this.router.navigate(['../edit/' + pagePath], { relativeTo: this.route, queryParamsHandling: 'merge' });
     }
   }
