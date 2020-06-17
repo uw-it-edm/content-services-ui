@@ -43,8 +43,13 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   searchModel$: Observable<SearchModel>;
   @Input()
   searchResults$: Subject<SearchResults>;
+
+  /**
+   * Whether to prevent the loaded results from being modified. Disables sorting, paging and navigation.
+   */
   @Input()
-  readOnly = false;
+  freezeResults = false;
+
   @Output()
   search = new EventEmitter<SearchModel>();
 
@@ -206,7 +211,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   }
 
   navigateToEdit(event, pagePath): void {
-    if (!this.readOnly && event && event.view && event.view.getSelection().type !== 'Range') {
+    if (!this.freezeResults && event && event.view && event.view.getSelection().type !== 'Range') {
       this.router.navigate(['../edit/' + pagePath], { relativeTo: this.route, queryParamsHandling: 'merge' });
     }
   }

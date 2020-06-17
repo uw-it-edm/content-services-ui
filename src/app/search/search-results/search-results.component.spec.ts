@@ -86,29 +86,29 @@ describe('SearchResultsComponent', () => {
     expect(secondHeaderButton.getAttribute('aria-label')).toEqual('Change sorting for Friendly Field Name');
   });
 
-  it('should hide the paginators when readonly=true', () => {
+  it('should hide the paginators when freezeResults=true', () => {
     let paginators = fixture.debugElement.queryAll(By.css('mat-paginator'));
     expect(paginators.length).toBe(2);
 
-    component.readOnly = true;
+    component.freezeResults = true;
     fixture.detectChanges();
 
     paginators = fixture.debugElement.queryAll(By.css('mat-paginator'));
     expect(paginators.length).toBe(0);
   });
 
-  it('should disable all sorting headers when readonly=true', () => {
+  it('should disable all sorting headers when freezeResults=true', () => {
     let sortHeaders = fixture.debugElement.queryAll(By.css('.mat-sort-header-button[disabled=true]'));
     expect(sortHeaders.length).toBe(0);
 
-    component.readOnly = true;
+    component.freezeResults = true;
     fixture.detectChanges();
 
     sortHeaders = fixture.debugElement.queryAll(By.css('.mat-sort-header-button[disabled=true]'));
     expect(sortHeaders.length).toBe(2);
   });
 
-  it('should disable navigation links when readonly=true', () => {
+  it('should disable navigation links when freezeResults=true', () => {
     const results = new SearchResults();
     const row = new ResultRow();
     row.id = '12345';
@@ -123,7 +123,7 @@ describe('SearchResultsComponent', () => {
     let links = fixture.debugElement.queryAll(By.css('a'));
     expect(links.length).toBe(1);
 
-    component.readOnly = true;
+    component.freezeResults = true;
     fixture.detectChanges();
 
     // verify the table has no links.
