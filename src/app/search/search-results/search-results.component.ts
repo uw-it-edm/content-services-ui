@@ -253,16 +253,42 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     }
   }
 
-  areAllRowsSelected() {
-    return this.selection.selected.length === this._resultRows.length;
-  }
-
   toggleSelectAll() {
     if (this.areAllRowsSelected()) {
       this.selection.clear();
     } else {
       this._resultRows.forEach(row => this.selection.select(row));
     }
+  }
+
+  areAllRowsSelected() {
+    return this.selection.selected.length === this._resultRows.length;
+  }
+
+  areSomeRowsSelected() {
+    return this.selection.hasValue() && !this.areAllRowsSelected();
+  }
+
+  getHeaderSelectionLabel(): string {
+    if (this.areAllRowsSelected()) {
+      return `All ${this._resultRows.length} rows selected`;
+    } else if (this.areSomeRowsSelected()) {
+      return `${this.selection.selected.length} rows selected`;
+    } else {
+      return 'No rows selected';
+    }
+  }
+
+  getHeaderSelectionAction(): string {
+    return this.areAllRowsSelected() ? 'Unselect all rows' : 'Select all rows';
+  }
+
+  getSelectionLabelForRow(row: ResultRow): string {
+    return this.selection.isSelected(row) ? `Row selected ${row.id}` : `Row unselected ${row.id}`;
+  }
+
+  getSelectionActionRow(row: ResultRow): string {
+    return this.selection.isSelected(row) ? `Unselect row ${row.id}` : `Select row ${row.id}`;
   }
 
   /*

@@ -151,6 +151,44 @@ describe('SearchResultsComponent', () => {
     expect(headers.length).toBe(3);
   });
 
+  it('should add aria-label to the row checkbox depending on selection state', () => {
+    const results = buildSearchResult();
+
+    component.searchResults$.next(results);
+    component.selectionEnabled = true;
+    fixture.detectChanges();
+
+    const firstRowCheckbox = fixture.debugElement.query(By.css('mat-cell .mat-checkbox-input'));
+    expect(firstRowCheckbox.attributes['aria-label']).toBe('Row unselected Id_0');
+
+    firstRowCheckbox.nativeElement.click();
+    fixture.detectChanges();
+
+    expect(firstRowCheckbox.attributes['aria-label']).toBe('Row selected Id_0');
+  });
+
+  it('should add aria-label to the header checkbox depending on selection state', () => {
+    const results = buildSearchResult(2);
+
+    component.searchResults$.next(results);
+    component.selectionEnabled = true;
+    fixture.detectChanges();
+
+    const headerRowCheckbox = fixture.debugElement.query(By.css('mat-header-cell .mat-checkbox-input'));
+    const firstRowCheckbox = fixture.debugElement.query(By.css('mat-cell .mat-checkbox-input'));
+    expect(headerRowCheckbox.attributes['aria-label']).toBe('No rows selected');
+
+    // select one row
+    firstRowCheckbox.nativeElement.click();
+    fixture.detectChanges();
+    expect(headerRowCheckbox.attributes['aria-label']).toBe('1 rows selected');
+
+    // select all rows
+    headerRowCheckbox.nativeElement.click();
+    fixture.detectChanges();
+    expect(headerRowCheckbox.attributes['aria-label']).toBe('All 2 rows selected');
+  });
+
   it('should emit selected rows when user selects them', (done: DoneFn) => {
     const results = buildSearchResult();
 

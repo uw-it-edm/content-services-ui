@@ -24,7 +24,8 @@
     <ng-container matColumnDef="checked">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox color="primary"
-                      matTooltip="Toggle All Selections"
+                      [aria-label]="getHeaderSelectionLabel()"
+                      [matTooltip]="getHeaderSelectionAction()"
                       (change)="$event ? toggleSelectAll() : null"
                       [checked]="selection.hasValue() && areAllRowsSelected()"
                       [indeterminate]="selection.hasValue() && !areAllRowsSelected()">
@@ -32,7 +33,8 @@
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
         <mat-checkbox color="primary"
-                      [matTooltip]="selection.isSelected(row) ? 'Unselect result ' + row.id : 'Select result ' + row.id"
+                      [aria-label]="getSelectionLabelForRow(row)"
+                      [matTooltip]="getSelectionActionRow(row)"
                       (click)="$event.stopPropagation()"
                       (change)="$event ? selection.toggle(row) : null"
                       [checked]="selection.isSelected(row)">
