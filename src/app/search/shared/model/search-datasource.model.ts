@@ -13,9 +13,7 @@ export class SearchDataSource extends DataSource<ResultRow> {
   constructor(
     private searchModel$: Observable<SearchModel>,
     private searchResults$: Observable<SearchResults>,
-    private sort: MatSort,
-    private paginators: Array<MatPaginator>
-  ) {
+    private sort: MatSort) {
     super();
     searchModel$.subscribe((searchModel) => {
       if (!isNullOrUndefined(searchModel)) {

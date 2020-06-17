@@ -43,6 +43,13 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   searchModel$: Observable<SearchModel>;
   @Input()
   searchResults$: Subject<SearchResults>;
+
+  /**
+   * Whether to prevent the loaded results from being modified. Disables sorting, paging and navigation.
+   */
+  @Input()
+  freezeResults = false;
+
   @Output()
   search = new EventEmitter<SearchModel>();
 
@@ -72,10 +79,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.dataSource = new SearchDataSource(this.searchModel$, this.searchResults$, this.sort, [
-      this.topPaginator,
-      this.bottomPaginator,
-    ]);
+    this.dataSource = new SearchDataSource(this.searchModel$, this.searchResults$, this.sort);
 
     // delay 0 to prevent "Expression has changed after it was checked" when initial search is performed afterViewInit in parent
     this.searchModel$.pipe(delay(0), takeUntil(this.componentDestroyed)).subscribe((searchModel) => {
@@ -207,7 +211,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   }
 
   navigateToEdit(event, pagePath): void {
-    if (event.view.getSelection().type !== 'Range') {
+    if (!this.freezeResults && event && event.view && event.view.getSelection().type !== 'Range') {
       this.router.navigate(['../edit/' + pagePath], { relativeTo: this.route, queryParamsHandling: 'merge' });
     }
   }
