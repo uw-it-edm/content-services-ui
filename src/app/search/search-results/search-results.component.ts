@@ -48,7 +48,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   sortDirection: SortDirection;
 
   @Input()
-  searchModel$: Observable<SearchModel>;
+  searchModel$: Observable<SearchModel> = new Observable<SearchModel>();
   @Input()
   searchResults$: Subject<SearchResults>;
 

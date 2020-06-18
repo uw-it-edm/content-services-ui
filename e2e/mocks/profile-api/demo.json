@@ -178,6 +178,7 @@
       "theme": "uw-default",
       "searchStateInURL": true,
       "enableDisplaySearch": true,
+      "enableBulkUpdate": true,
       "fieldKeysToDisplay": [
         "ProfileId",
         "Filer",
