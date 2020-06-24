@@ -24,7 +24,7 @@ export class SearchResultsPageObject {
   }
 
   /**
-   * Gets the vales of each row cell of a given column.
+   * Gets the values of each row cell of a given column.
    * @param column Text of the column to get all its row values for.
    */
   getResultsByColumn(column: string): promise.Promise<string[]> {
@@ -49,28 +49,28 @@ export class SearchResultsPageObject {
    * @param headerText The text of the column to sort the results by.
    */
   sortByHeaderText(headerText: string): promise.Promise<any> {
-    const publishStatusHeader = this.root.element(by.buttonText(headerText));
-    return publishStatusHeader.click();
+    const header = this.root.element(by.buttonText(headerText));
+    return header.click();
   }
 
   /**
    * Selects rows specified by index.
-   * @param indeces Array of row indeces to select.
+   * @param indices Array of row indices to select.
    */
-  selectRows(...indeces: number[]): promise.Promise<any> {
+  selectRows(...indices: number[]): promise.Promise<any> {
     const checkboxes = this.root.all(by.css('.mat-row .mat-checkbox-inner-container'));
 
-    indeces.sort((a,b) => b - a);
+    indices.sort((a,b) => b - a);
 
     return checkboxes.count().then(count => {
-      if (indeces[0] > count - 1) {
-        throw new Error(`Not enough rows to select all indeces. Row count: ${count}, indeces: ${indeces}`);
+      if (indices[0] > count - 1) {
+        throw new Error(`Not enough rows to select all indices. Row count: ${count}, indices: ${indices}`);
       }
 
       const promises: promise.Promise<any>[] = [];
 
       checkboxes.each((checkbox, index) => {
-        if (indeces.includes(index)) {
+        if (indices.includes(index)) {
           promises.push(checkbox.click());
         }
       });
