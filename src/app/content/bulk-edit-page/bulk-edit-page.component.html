@@ -1,0 +1,47 @@
+<div [ngClass]="pageConfig?.theme">
+  <div class="cs-content-page">
+    <mat-toolbar class="secondary-toolbar" role="navigation">
+      <span class="button-row">
+        <button mat-icon-button routerLink="/{{config.tenant}}" [disabled]="isUpdatePending">
+          <mat-icon>keyboard_arrow_left</mat-icon>&nbsp;{{areRowsAvailable ? 'Cancel Bulk Update': 'Close Bulk Update'}}
+        </button>
+      </span>
+    </mat-toolbar>
+    <h2>{{pageConfig?.pageName}}</h2>
+
+    <div fxLayout="row" class="cs-generic-body">
+      <div fxFlex="40">
+        <form [formGroup]="form" role="main">
+          <app-content-metadata
+                  [contentItem]="contentItem"
+                  [formGroup]="form"
+                  [pageConfig]="pageConfig">
+          </app-content-metadata>
+
+          <div class="button-row">
+            <button mat-raised-button
+                    class="update-button"
+                    (click)="update()"
+                    [disabled]="form.invalid || isUpdatePending || !areRowsAvailable"
+                    color="primary">
+              {{isUpdatePending ? 'Updating' : 'Update'}} {{rowCount}} Documents&nbsp;
+            <mat-icon *ngIf="isUpdatePending">
+              <mat-spinner diameter="20"></mat-spinner>
+            </mat-icon>
+            </button>
+            <button mat-raised-button class="reset-button" (click)="resetFields()" [disabled]="isUpdatePending || !areRowsAvailable">
+              Reset Fields
+            </button>
+            <button mat-raised-button class="cancel-button" (click)="cancel()" [disabled]="isUpdatePending">
+              {{areRowsAvailable ? 'Cancel Bulk Update': 'Close Bulk Update'}}
+            </button>
+          </div>
+        </form>
+      </div>
+      <div fxFlex>
+        <app-search-results [searchResults$]="staticResults$" [pageConfig]="searchPageConfig" freezeResults="true">
+        </app-search-results>
+      </div>
+    </div>
+  </div>
+</div>

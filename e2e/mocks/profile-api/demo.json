@@ -327,6 +327,25 @@
         }
       ],
       "viewPanel": true
+    },
+    "bulk-edit": {
+      "theme": "uw-default",
+      "pageName": "Bulk Edit",
+      "fieldKeysToDisplay": [
+        "DataApiOptionLabel",
+        "DocumentType",
+        "PublishStatus",
+        "LastModifiedDate",
+        "StudentId",
+        "RegId",
+        "DataApiWithFilter"
+      ],
+      "resultsTableFieldKeysToDisplay": [
+        "ProfileId",
+        "Filer",
+        "PublishStatus",
+        "DocumentType"
+      ]
     }
   }
 }

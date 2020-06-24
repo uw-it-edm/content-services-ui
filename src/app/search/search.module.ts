@@ -23,7 +23,7 @@ import { DocumentDisplayerComponent } from './document-displayer/document-displa
     NgxDaterangepickerMd.forRoot(),
     UserModule,
   ],
-  exports: [SearchPageComponent, DisplaySearchPageComponent],
+  exports: [SearchPageComponent, DisplaySearchPageComponent, SearchResultsComponent],
   declarations: [
     SearchDaterangePickerComponent,
     SearchPageComponent,

@@ -193,7 +193,9 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   navigateToBulkEdit(): void {
-    console.log('selected rows', this._selectedRows);
+    if (this._selectedRows.length > 0) {
+      this.router.navigate([this.config.tenant + '/bulk-edit'], { state: { selectedRows: this._selectedRows }});
+    }
   }
 
   onSelectRows(rows: ResultRow[]): void {
