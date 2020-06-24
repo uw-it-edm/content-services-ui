@@ -197,7 +197,7 @@ describe('Edit Page for Demo', () => {
 
   it('should display alert when metadata is edited and Next button is hit without saving', () => {
     searchPage.navigateTo();
-    searchPage.searchResultsRows.first().click();
+    searchPage.searchResults.rows.first().click();
 
     const searchData = require('../mocks/search-api/search.json');
     const itemId = searchData.searchResults[0].id;

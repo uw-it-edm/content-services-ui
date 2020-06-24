@@ -14,7 +14,7 @@ describe('Foster Edit Page', () => {
     searchPage.navigateTo();
     browser.wait(ExpectedConditions.titleIs('Find Documents'));
 
-    searchPage.getResultsByColumn('id').then(ids => {
+    searchPage.searchResults.getResultsByColumn('id').then(ids => {
       expectedIds = ids;
     });
 
