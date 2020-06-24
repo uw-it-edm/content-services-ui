@@ -308,7 +308,7 @@ describe('BulkEditPageComponent', () => {
       tick(95000);
       fixture.detectChanges();
 
-      expect(snackBarSpy.open).toHaveBeenCalledWith('Bulk update operation failed to complete, please try again. TimeoutError: Timeout has occurred', 'Dismiss');
+      expect(snackBarSpy.open).toHaveBeenCalledWith('Bulk update operation failed to complete, please try again. Error: Timeout has occurred', 'Dismiss');
     }));
   });
 });
