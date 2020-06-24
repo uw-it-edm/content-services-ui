@@ -15,7 +15,7 @@ import { ContentService } from '../shared/content.service';
 import { DataService } from '../../shared/providers/data.service';
 
 const ROWS_LOCAL_STORAGE_KEY = 'bulk-edit-rows';
-const UPDATE_OPERATION_TIMEOUT = (3 * 60 * 1000); // 3 minutes
+const UPDATE_OPERATION_TIMEOUT = (90 * 1000);
 
 /**
  * Custom valitor that triggers if no field has values.
@@ -177,16 +177,14 @@ export class BulkEditPageComponent implements OnInit, OnDestroy {
     editConfig.fieldsToDisplay = editConfig.fieldsToDisplay.filter(field => !field.disabled);
     editConfig.fieldsToDisplay = editConfig.fieldsToDisplay.map(field => Object.assign({}, field, {required: false}));
 
-    const searchFieldKeys = editConfig.resultsFieldKeysToDisplay;
-    let searchFields = editConfig.resultsFieldsToDisplay;
-    if (searchFieldKeys && searchFieldKeys.length > 0) {
-      searchFields = config.availableFields.filter(field => searchFieldKeys.includes(field.key));
-    }
+    const searchConfig: SearchPageConfig = Object.assign({}, config.pages['tab-search'], { defaultSort: null });
+    const searchFieldKeys = editConfig.resultsTableFieldKeysToDisplay;
 
-    const searchConfig: SearchPageConfig = Object.assign({}, config.pages['tab-search'], {
-      fieldsToDisplay: searchFields,
-      defaultSort: null
-    });
+    if (searchFieldKeys && searchFieldKeys.length > 0) {
+      searchConfig.fieldsToDisplay = config.availableFields.filter(field => searchFieldKeys.includes(field.key));
+    } else if (editConfig.resultsTableFieldsToDisplay) {
+      searchConfig.fieldsToDisplay = editConfig.resultsTableFieldsToDisplay;
+    }
 
     return { editConfig, searchConfig };
   }

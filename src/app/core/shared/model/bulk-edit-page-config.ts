@@ -10,11 +10,11 @@ export class BulkEditPageConfig implements PageConfig {
   /**
    * Fields to display on the results table of the bulk edit page.
    */
-  resultsFieldsToDisplay: Array<Field> = [];
+  resultsTableFieldsToDisplay: Array<Field> = [];
 
   /**
    * List of keys used to reference fields from the 'availableFields' collection to display
-   *   on the results table. If defined, will take precedence over 'resultsFieldsToDisplay'.
+   *   on the results table. If defined, will take precedence over 'resultsTableFieldsToDisplay'.
    */
-  resultsFieldKeysToDisplay: Array<string> = [];
+  resultsTableFieldKeysToDisplay: Array<string> = [];
 }

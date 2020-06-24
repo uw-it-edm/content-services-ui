@@ -340,7 +340,7 @@
         "RegId",
         "DataApiWithFilter"
       ],
-      "resultsFieldKeysToDisplay": [
+      "resultsTableFieldKeysToDisplay": [
         "ProfileId",
         "Filer",
         "PublishStatus",

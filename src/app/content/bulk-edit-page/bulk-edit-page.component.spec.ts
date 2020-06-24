@@ -38,7 +38,7 @@ function getConfigs(): { config: Config, pageConfig: BulkEditPageConfig } {
     Object.assign(new Field(), { key: 'field2', label: 'label 2' }),
     Object.assign(new Field(), { key: 'field3', label: 'label 3' }),
   ];
-  pageConfig.resultsFieldsToDisplay = pageConfig.fieldsToDisplay.slice(0);
+  pageConfig.resultsTableFieldsToDisplay = pageConfig.fieldsToDisplay.slice(0);
 
   const config = new Config();
   config.tenant = 'test-tenant';
@@ -46,7 +46,7 @@ function getConfigs(): { config: Config, pageConfig: BulkEditPageConfig } {
   return { config, pageConfig };
 }
 
-describe('BulkEditPageComponent', () => {
+fdescribe('BulkEditPageComponent', () => {
   let component: BulkEditPageComponent;
   let fixture: ComponentFixture<BulkEditPageComponent>;
   let activatedRoute: ActivatedRouteStub;
@@ -140,10 +140,25 @@ describe('BulkEditPageComponent', () => {
       expect(component.pageConfig.fieldsToDisplay.length).toBe(2);
     });
 
-    it('should resolve the resultsFieldsToDisplay from resultsFieldKeysToDisplay', () => {
+    it('should fall back to use the fields to display from tab-search page if none are defined', () => {
       const { config, pageConfig } = getConfigs();
-      pageConfig.resultsFieldsToDisplay = [];
-      pageConfig.resultsFieldKeysToDisplay = ['field1'];
+      pageConfig.resultsTableFieldsToDisplay = null;
+      pageConfig.resultsTableFieldKeysToDisplay = null;
+      config.pages['tab-search'] = { fieldsToDisplay: pageConfig.fieldsToDisplay };
+
+      activatedRoute.testData = { config: config };
+
+      fixture = TestBed.createComponent(BulkEditPageComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+
+      expect(component.searchPageConfig.fieldsToDisplay.length).toBe(pageConfig.fieldsToDisplay.length);
+    });
+
+    it('should resolve the fields to display in search table from resultsTableFieldKeysToDisplay', () => {
+      const { config, pageConfig } = getConfigs();
+      pageConfig.resultsTableFieldsToDisplay = [];
+      pageConfig.resultsTableFieldKeysToDisplay = ['field1'];
       config.availableFields = pageConfig.fieldsToDisplay;
 
       activatedRoute.testData = { config: config };
@@ -290,7 +305,7 @@ describe('BulkEditPageComponent', () => {
       (<any>contentServiceSpy.bulkUpdate).and.returnValue(new Subject<BulkUpdateResponse>());
 
       component.update();
-      tick(190000);
+      tick(95000);
       fixture.detectChanges();
 
       expect(snackBarSpy.open).toHaveBeenCalledWith('Bulk update operation failed to complete, please try again. TimeoutError: Timeout has occurred', 'Dismiss');
