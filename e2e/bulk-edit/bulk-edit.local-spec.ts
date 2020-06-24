@@ -38,5 +38,9 @@ describe('Bulk Update Flow', () => {
     // Wait for all rows to be gone and verify success message
     editPage.searchResults.waitForRowCount(0);
     utils.waitForSnackBarText('Updated 3 documents');
+
+    // Close the bulk update mode and verify return to search page.
+    editPage.cancelButton.click();
+    utils.waitForElementText('h2', 'Demonstration Search');
   });
 });

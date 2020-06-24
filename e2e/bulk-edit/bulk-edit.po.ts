@@ -42,4 +42,11 @@ export class BulkEditPage {
   get updateButton(): ElementFinder {
     return element(by.css('.update-button'));
   }
+
+  /**
+   * Gets the cancel/close button of the page.
+   */
+  get cancelButton(): ElementFinder {
+    return element(by.css('.cancel-button'));
+  }
 }
