@@ -46,7 +46,7 @@ function getConfigs(): { config: Config, pageConfig: BulkEditPageConfig } {
   return { config, pageConfig };
 }
 
-fdescribe('BulkEditPageComponent', () => {
+describe('BulkEditPageComponent', () => {
   let component: BulkEditPageComponent;
   let fixture: ComponentFixture<BulkEditPageComponent>;
   let activatedRoute: ActivatedRouteStub;
