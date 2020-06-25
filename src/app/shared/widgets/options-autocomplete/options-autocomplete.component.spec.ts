@@ -210,13 +210,17 @@ describe('OptionsAutocompleteComponent with parent control', () => {
   });
 
   it('should clear the filter control when the parent value changes', () => {
-    component.registerOnChange(val => {});
+    let lastValue: string;
+    component.registerOnChange(val => lastValue = val);
     component.filterInputControl.setValue(fieldOptions[1].value);
     fixture.detectChanges();
 
     parentControl.setValue('new parent');
     fixture.detectChanges();
 
-    expect(component.filterInputControl.value).toBe(null);
+    expect(component.filterInputControl.value).toBeNull();
+
+    // verify onChange is called so that the containing form updates itself and any validators evaluate.
+    expect(lastValue).toBeNull();
   });
 });
