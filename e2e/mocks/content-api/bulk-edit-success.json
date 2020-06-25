@@ -1,0 +1,17 @@
+{
+  "successes": [
+    {
+      "id": "123",
+      "label": "not-used"
+    },
+    {
+      "id": "234",
+      "label": "not-used"
+    },
+    {
+      "id": "456",
+      "label": "not-used"
+    }
+  ],
+  "failures": []
+}

@@ -330,7 +330,7 @@
     },
     "bulk-edit": {
       "theme": "uw-default",
-      "pageName": "Bulk Edit",
+      "pageName": "Demo | Bulk Update",
       "fieldKeysToDisplay": [
         "DataApiOptionLabel",
         "DocumentType",

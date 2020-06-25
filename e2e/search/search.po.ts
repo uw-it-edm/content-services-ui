@@ -1,8 +1,12 @@
-import { browser, by, element, ExpectedConditions, WebElement } from 'protractor';
+import { browser, by, element, ExpectedConditions, WebElement, protractor } from 'protractor';
 import { promise } from 'selenium-webdriver';
 import { EditPage } from '../edit/edit.po';
+import { BrowserUtils } from '../browserUtils';
+import { SearchResultsPageObject } from './search-results.po';
 
 export class SearchPage {
+  private utils = new BrowserUtils;
+
   autoCompletePanel = element(by.className('mat-autocomplete-panel'));
   autoCompletedOption = this.autoCompletePanel.element(by.css('.mat-option-text'));
   pageUrl = `${browser.baseUrl}${this.profile}/tab-search`;
@@ -17,22 +21,27 @@ export class SearchPage {
   facetItemsLocator = by.className('mat-list-item');
   searchButton = element(by.name('searchButton'));
   paginatorCounts = element.all(by.className('mat-paginator-range-label'));
-  searchResultsRows = element.all(by.css('app-search-results .mat-row'));
   paginatorSizeDropDowns = element.all(by.css('.mat-paginator-page-size-select mat-select'));
   paginatorNextButtons = element.all(by.className('mat-paginator-navigation-next'));
   clearSearchBoxButton = element(by.name('clearSearchBoxButton'));
   liveAnnouncer = element(by.className('cdk-live-announcer-element'));
   tableHeaders = element.all(by.className('mat-header-cell'));
   toggleFacetsPanelButton = element(by.className('toggle-panel-btn'));
+  toggleBulkUpdateModeButton = element(by.className('cs-toggle-bulk-update-button'));
+  bulkUpdateNextButton = element(by.className('cs-bulk-update-next-button'));
   facetsElement = element(by.tagName('app-facets-box'));
 
   constructor(private profile: string = 'demo') {}
 
   navigateTo() {
     return browser.get(this.pageUrl).catch(() => {
-      this.clickAcceptAlert(true);
+      this.utils.clickAcceptAlert(true);
       return browser.get(this.pageUrl);
     });
+  }
+
+  get searchResults(): SearchResultsPageObject {
+    return new SearchResultsPageObject(element(by.css('app-search-results')));
   }
 
   getPageTitle() {
@@ -71,25 +80,12 @@ export class SearchPage {
     element(by.partialLinkText(facetText)).click();
   }
 
-  getResultsByColumn(column: string): promise.Promise<string[]> {
-    const selector = '.mat-cell.mat-column-' + column;
-
-    // ElementArrayFinder.getText() has incorrect return type. See https://github.com/angular/protractor/issues/3818
-    return <any>element.all(by.css(selector)).getText();
-  }
-
-  getDistinctResultsByColumn(column: string): promise.Promise<string[]> {
-    return this.getResultsByColumn(column).then((results) => {
-      return Array.from(new Set(results));
-    });
-  }
-
   removeSelectedFacet(facetIndex: number = 0) {
     this.selectedFacet.get(facetIndex).element(by.className('mat-icon-button')).click();
   }
 
   goToEditPage(profile: string, editPageTitle: string, idRowIndex: number = 0) {
-    this.getResultsByColumn('id').then((ids) => {
+    this.searchResults.getResultsByColumn('id').then((ids) => {
       this.clickPartialLinkText(ids[idRowIndex]);
       browser.wait(ExpectedConditions.titleIs(editPageTitle));
       const editPage = new EditPage(profile, ids[idRowIndex]);
@@ -150,74 +146,16 @@ export class SearchPage {
    * @param timeoutMilliseconds The timeout in milliseconds to wait for.
    */
   waitForLiveAnnouncerText(expectedSubText: string, timeoutMilliseconds: number = 5000): promise.Promise<any> {
-    return this.waitForFunc(
+    return this.utils.waitForFunc(
       this.liveAnnouncer.getText,
       (val) => val.indexOf(expectedSubText) >= 0,
       timeoutMilliseconds
     ).then(() => expect(this.liveAnnouncer.getText()).toContain(expectedSubText));
   }
 
-  /**
-   * Waits for the first row of a given column to have the expected text.
-   * @param columnId The identifier of the column to test.
-   * @param expectedText The expected text of the first row of column.
-   * @param timeoutMilliseconds Timeout in milliseconds to wait for.
-   */
-  waitForFirstRowValue(
-    columnId: string,
-    expectedText: string,
-    timeoutMilliseconds: number = 5000
-  ): promise.Promise<any> {
-    return this.waitForFunc(
-      () => this.getResultsByColumn(columnId),
-      (rows) => rows && rows.length > 0 && rows[0].trim() === expectedText,
-      timeoutMilliseconds
-    ).then(() => expect(this.getDistinctResultsByColumn(columnId).then((rows) => rows[0])).toEqual(expectedText));
-  }
-
-  private waitForFunc<T>(
-    testFunc: () => promise.Promise<T>,
-    predicate: (val: T) => boolean,
-    timeoutMilliseconds: number = 5000
-  ): promise.Promise<any> {
-    const startTime = new Date();
-
-    const checkFunc = () => {
-      return () =>
-        testFunc().then((currentVal) => {
-          const currentTime = new Date();
-          const timeDiff = <any>currentTime - <any>startTime;
-          return timeDiff >= timeoutMilliseconds || predicate(currentVal);
-        });
-    };
-
-    return browser.wait(checkFunc());
-  }
-
-  /**
-   * Sorts results by the column header with the text specified.
-   * @param headerText The text of the column to sort the results by.
-   */
-  sortByHeaderText(headerText: string): promise.Promise<any> {
-    const publishStatusHeader = element(by.buttonText(headerText));
-    return publishStatusHeader.click();
-  }
-
   clickPaginatorSizeOption(size: string) {
     element.all(by.cssContainingText('.mat-option-text', size)).get(0).click();
     const selectPanel = element(by.className('mat-select-panel'));
     browser.wait(ExpectedConditions.invisibilityOf(selectPanel), 5000);
-  }
-
-  clickAcceptAlert(isAlertUnexpected: boolean = false) {
-    browser
-      .switchTo()
-      .alert()
-      .then((alert) => {
-        if (isAlertUnexpected) {
-          console.log('WARN: Unexpected alert left open from previous test. ');
-        }
-        alert.accept();
-      });
   }
 }
