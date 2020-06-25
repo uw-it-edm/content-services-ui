@@ -3,9 +3,9 @@
     <div fxFlex="20" *ngIf="!isBulkEditMode">
       <h2>{{pageConfig.pageName}}</h2>
     </div>
-    <div fxFlex="20" *ngIf="isBulkEditMode">
+    <div fxFlex="30" *ngIf="isBulkEditMode">
       <h2>Bulk Update Mode</h2>
-      <h3>Select the documents to update</h3>
+      <h3>Select a <b>maximum of {{bulkEditMaxCount}}</b> documents to update</h3>
     </div>
     <div fxFlex="70" [hidden]="!isSearchBoxVisible">
       <app-search-box
@@ -85,7 +85,9 @@
         &nbsp;
       </div>
       <div class="sticky">
-        <button class="cs-bulk-update-next-button" mat-button (click)="navigateToBulkEdit()" [disabled]="selectedRows.length === 0">
+        <button class="cs-bulk-update-next-button" mat-button
+                (click)="navigateToBulkEdit()"
+                [disabled]="selectedRows.length === 0 || selectedRows.length > bulkEditMaxCount">
           Edit {{selectedRows.length}} Documents&nbsp;
           <span class="material-icons">edit</span>
         </button>
