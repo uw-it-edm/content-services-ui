@@ -23,6 +23,7 @@ import { PersonSearchAutocomplete } from '../shared/search-autocomplete/person-s
 import { PersonService } from '../../shared/providers/person.service';
 
 const LEFT_PANEL_VISIBLE_STATE_KEY = 'isLeftPanelVisible';
+const DEFAULT_BULK_EDIT_MAX_COUNT = 50;
 
 @Component({
   selector: 'app-search-page',
@@ -47,6 +48,7 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   initialSearchModel: SearchModel;
   isBulkEditMode = false;
+  bulkEditMaxCount = DEFAULT_BULK_EDIT_MAX_COUNT;
 
   get isLeftPanelVisible(): boolean {
     return this._isLeftPanelVisible && !this.isBulkEditMode;
