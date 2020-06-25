@@ -121,7 +121,7 @@ export class BulkEditPageComponent implements OnInit, OnDestroy {
         this.removeRowsById(successes.map(row => row.id));
         this.showPostUpdateMessage(successes, failures);
       },
-      err => this._snackBar.open(`Bulk update operation failed to complete, please try again. ${err}`, 'Dismiss')
+      err => this._snackBar.open(`Bulk update operation failed to complete, please try again. Error: ${err.message || err}`, 'Dismiss')
     );
   }
 
