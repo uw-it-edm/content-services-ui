@@ -260,13 +260,16 @@ describe('SearchPageComponent', () => {
   });
 
   describe('Bulk Edit Mode', () => {
-    const getSearchResult = (): SearchResults => {
+    const getSearchResults = (count: number = 1): SearchResults => {
       const result = new SearchResults();
-      const row = new ResultRow();
-      row.id = '123';
-      result.results.push(row);
+      result.total = count;
 
-      result.total = 1;
+      for (let i = 0; i < count; i++) {
+        const row = new ResultRow();
+        row.id = `id-${i}`;
+        result.results.push(row);
+      }
+
       return result;
     };
 
@@ -335,7 +338,7 @@ describe('SearchPageComponent', () => {
 
     it('should enable the next button and update its text depending of rows are selected', fakeAsync(() => {
       const resultsTable: SearchResultsComponent = fixture.debugElement.query(By.directive(SearchResultsComponent)).componentInstance;
-      const searchResult = getSearchResult();
+      const searchResult = getSearchResults();
       resultsTable.searchResults$.next(searchResult);
 
       component.pageConfig.enableBulkUpdate = true;
@@ -351,6 +354,38 @@ describe('SearchPageComponent', () => {
       tick(100);
       fixture.detectChanges();
 
+      bulkUpdateNextButton = fixture.debugElement.query(By.css('.cs-bulk-update-next-button'));
+      expect(bulkUpdateNextButton.attributes['disabled']).toBeFalsy();
+      expect(bulkUpdateNextButton.nativeElement.textContent).toContain('Edit 1 Documents');
+    }));
+
+    it('should disable the next button if user selects more than the maximum number allowed', fakeAsync(() => {
+      const resultsTable: SearchResultsComponent = fixture.debugElement.query(By.directive(SearchResultsComponent)).componentInstance;
+      const searchResult = getSearchResults(2);
+      resultsTable.searchResults$.next(searchResult);
+
+      component.pageConfig.enableBulkUpdate = true;
+      component.bulkEditMaxCount = 1;
+      component.toggleBulkEditMode();
+      fixture.detectChanges();
+
+      // Select two items from the table
+      resultsTable.selection.select(searchResult.results[0]);
+      resultsTable.selection.select(searchResult.results[1]);
+      tick(100);
+      fixture.detectChanges();
+
+      // verify button is disabled
+      let bulkUpdateNextButton = fixture.debugElement.query(By.css('.cs-bulk-update-next-button'));
+      expect(bulkUpdateNextButton.attributes['disabled']).toBeTruthy();
+      expect(bulkUpdateNextButton.nativeElement.textContent).toContain('Edit 2 Documents');
+
+      // De-select one item from the table
+      resultsTable.selection.deselect(searchResult.results[0]);
+      tick(100);
+      fixture.detectChanges();
+
+      // verify button becomes enabled
       bulkUpdateNextButton = fixture.debugElement.query(By.css('.cs-bulk-update-next-button'));
       expect(bulkUpdateNextButton.attributes['disabled']).toBeFalsy();
       expect(bulkUpdateNextButton.nativeElement.textContent).toContain('Edit 1 Documents');
