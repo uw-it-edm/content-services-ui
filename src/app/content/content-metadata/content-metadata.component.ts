@@ -104,6 +104,21 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy, A
     return hasControlError || hasFormError;
   }
 
+  /**
+   * Resets all the form's controls and clears all validation erros.
+   */
+  reset(): void {
+    const metadataFormGroup = this.formGroup.get('metadata') as FormGroup;
+
+    this.formGroup.reset();
+
+    if (metadataFormGroup) {
+      Object.keys(metadataFormGroup.controls).forEach(key => {
+       metadataFormGroup.controls[key].setErrors(null);
+      });
+    }
+  }
+
   private getFormValidators(): ValidatorFn[] {
     let validators: ValidatorFn[] = [];
 

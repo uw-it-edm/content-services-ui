@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, Navigation, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
@@ -13,6 +13,7 @@ import { SearchResults } from '../../search/shared/model/search-result';
 import { ContentItem, IContentItem } from '../shared/model/content-item';
 import { ContentService } from '../shared/content.service';
 import { DataService } from '../../shared/providers/data.service';
+import { ContentMetadataComponent } from '../content-metadata/content-metadata.component';
 
 const ROWS_LOCAL_STORAGE_KEY = 'bulk-edit-rows';
 const UPDATE_OPERATION_TIMEOUT = (90 * 1000);
@@ -33,6 +34,8 @@ export class BulkEditPageComponent implements OnInit, OnDestroy {
   staticResults$: BehaviorSubject<SearchResults>;
   form: FormGroup;
   contentItem: ContentItem;
+
+  @ViewChild(ContentMetadataComponent) contentMetadataComponent: ContentMetadataComponent;
 
   constructor(
     private _router: Router,
@@ -77,8 +80,7 @@ export class BulkEditPageComponent implements OnInit, OnDestroy {
   }
 
   resetFields() {
-    this.form.reset();
-    this.form.markAsPristine();
+    this.contentMetadataComponent.reset();
   }
 
   cancel() {

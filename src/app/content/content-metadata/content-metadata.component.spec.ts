@@ -246,5 +246,23 @@ describe('ContentMetadataComponent', () => {
       expect(component.formGroup.valid).toBeFalse();
       expect(component.formGroup.get('metadata').get('childKey').value).toBeNull();
     }));
+
+    it('should clear validation errors when component is reset', fakeAsync(() => {
+      component.enableCascadingFieldsValidator = true;
+      fixture.detectChanges();
+
+      // verify form should be valid on load
+      expect(component.formGroup.valid).toBeTrue();
+
+      // select parent value, verify form should be invalid
+      component.formGroup.get('metadata').get('parentKey').setValue('parent1');
+      fixture.detectChanges();
+      expect(component.formGroup.valid).toBeFalse();
+
+      // reset component, verify that form is valid.
+      component.reset();
+      fixture.detectChanges();
+      expect(component.formGroup.valid).toBeTrue();
+    }));
   });
 });
