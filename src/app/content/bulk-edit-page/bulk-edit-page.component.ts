@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, Navigation, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, ValidatorFn, ValidationErrors } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, BehaviorSubject } from 'rxjs';
@@ -13,21 +13,10 @@ import { SearchResults } from '../../search/shared/model/search-result';
 import { ContentItem, IContentItem } from '../shared/model/content-item';
 import { ContentService } from '../shared/content.service';
 import { DataService } from '../../shared/providers/data.service';
+import { ContentMetadataComponent } from '../content-metadata/content-metadata.component';
 
 const ROWS_LOCAL_STORAGE_KEY = 'bulk-edit-rows';
 const UPDATE_OPERATION_TIMEOUT = (90 * 1000);
-
-/**
- * Custom valitor that triggers if no field has values.
- */
-export const nonEmptyFormValidator: ValidatorFn = (theForm: FormGroup): ValidationErrors | null => {
-  const metadata = theForm && theForm.value && theForm.value.metadata;
-  if (metadata && Object.keys(metadata).every(key => !metadata[key])) {
-    return { incorrect: true };
-  }
-
-  return null;
-};
 
 @Component({
   selector: 'app-bulk-edit-page',
@@ -46,6 +35,8 @@ export class BulkEditPageComponent implements OnInit, OnDestroy {
   form: FormGroup;
   contentItem: ContentItem;
 
+  @ViewChild(ContentMetadataComponent) contentMetadataComponent: ContentMetadataComponent;
+
   constructor(
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
@@ -60,7 +51,7 @@ export class BulkEditPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.form = this._formBuilder.group({}, { validators: [nonEmptyFormValidator]});
+    this.form = this._formBuilder.group({});
 
     if (this._rows) {
       this._dataService.setToLocalStorage(ROWS_LOCAL_STORAGE_KEY, this._rows);
@@ -89,8 +80,7 @@ export class BulkEditPageComponent implements OnInit, OnDestroy {
   }
 
   resetFields() {
-    this.form.reset();
-    this.form.markAsPristine();
+    this.contentMetadataComponent.reset();
   }
 
   cancel() {

@@ -338,7 +338,11 @@
         "LastModifiedDate",
         "StudentId",
         "RegId",
-        "DataApiWithFilter"
+        "parentType",
+        "childType",
+        "DataApiWithFilter",
+        "parentTypeWithFilter",
+        "childTypeWithFilter"
       ],
       "resultsTableFieldKeysToDisplay": [
         "ProfileId",
