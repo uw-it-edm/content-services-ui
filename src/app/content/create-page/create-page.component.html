@@ -37,6 +37,7 @@
             </app-content-object-list>
             <div *ngIf="pageConfig?.buttons" class="button-row" style="margin: 2rem 0 1rem;text-align: right">
               <button *ngFor="let button of pageConfig?.buttons" mat-raised-button
+                      type="button"
                       (click)="buttonPress(button)" [color]="button.color"
                       [disabled]="!button.alwaysActive && (form.pristine || submitPending || form.invalid || !contentObjectListComponent.hasContentObjects())" [id]="button.command"
                       [type]="button.type">{{button.label}}
