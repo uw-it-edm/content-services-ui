@@ -37,6 +37,7 @@
 
             <div *ngIf="pageConfig?.buttons" class="button-row">
               <button *ngFor="let button of pageConfig?.buttons" mat-raised-button
+                      type="button"
                       (click)="buttonPress(button)" [color]="button.color"
                       [disabled]="!button.alwaysActive && ( form.pristine || form.invalid || submitPending || deletePending)" [id]="button.command"
                       [type]="button.type">{{button.label}}
@@ -52,6 +53,7 @@
               <mat-spinner *ngIf="deletePending" style="margin:0 auto;" aria-label="deletion in progress"></mat-spinner>
               <button *ngIf="!deletePending" mat-raised-button matTooltip="Delete Document" aria-label="delete document"
                       class="remove-button"
+                      type="button"
                 (click)="removeItem()" [color]="'warn'"
                 [id]="'removeItem'"
                 [disabled]="deletePending || submitPending"

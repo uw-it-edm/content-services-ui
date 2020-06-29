@@ -22,6 +22,7 @@
 
           <div class="button-row">
             <button mat-raised-button
+                    type="button"
                     class="update-button"
                     (click)="update()"
                     [disabled]="form.invalid || isUpdatePending || !areRowsAvailable"
@@ -31,10 +32,18 @@
               <mat-spinner diameter="20"></mat-spinner>
             </mat-icon>
             </button>
-            <button mat-raised-button class="reset-button" (click)="resetFields()" [disabled]="isUpdatePending || !areRowsAvailable">
+            <button mat-raised-button
+                    type="button"
+                    class="reset-button"
+                    (click)="resetFields()"
+                    [disabled]="isUpdatePending || !areRowsAvailable">
               Reset Fields
             </button>
-            <button mat-raised-button class="cancel-button" (click)="cancel()" [disabled]="isUpdatePending">
+            <button mat-raised-button
+                    type="button"
+                    class="cancel-button"
+                    (click)="cancel()"
+                    [disabled]="isUpdatePending">
               {{areRowsAvailable ? 'Cancel Bulk Update': 'Close Bulk Update'}}
             </button>
           </div>
