@@ -3,13 +3,13 @@ import { SearchPage } from '../search/search.po';
 import { ContentServicesUiPage } from '../app/app.po';
 import { BrowserUtils } from '../browserUtils';
 
-const editPage = new BulkEditPage();
+const bulkEditPage = new BulkEditPage();
 const searchPage = new SearchPage();
 const utils = new BrowserUtils();
 
 describe('Bulk Update Page', () => {
   it('should have no accessibility violations', () => {
-    editPage.navigateTo();
+    bulkEditPage.navigateTo();
 
     const app = new ContentServicesUiPage();
     app.runAccessibilityChecks();
@@ -33,24 +33,24 @@ describe('Bulk Update Flow', () => {
 
   it('should allow user to update multiple documents at once', () => {
     // verify the 3 rows are displayed on the edit page
-    expect(editPage.searchResults.getResultsByColumn('id')).toEqual(['123', '234', '456']);
+    expect(bulkEditPage.searchResults.getResultsByColumn('id')).toEqual(['123', '234', '456']);
 
     // set a field value and update
-    editPage.fields.inputElements.get(0).sendKeys('test value');
-    editPage.updateButton.click();
+    bulkEditPage.fields.inputElements.get(0).sendKeys('test value');
+    bulkEditPage.updateButton.click();
 
     // Wait for all rows to be gone and verify success message
-    editPage.searchResults.waitForRowCount(0);
+    bulkEditPage.searchResults.waitForRowCount(0);
     utils.waitForSnackBarText('Updated 3 documents');
 
     // Close the bulk update mode and verify return to search page.
-    editPage.cancelButton.click();
+    bulkEditPage.cancelButton.click();
     utils.waitForElementText('h2', 'Demonstration Search');
   });
 
   it('should add required validator if parent cascading select has value and child does not', () => {
-    const parentField = editPage.fields.getSelectFormField('DataApiOption parent');
-    const childField = editPage.fields.getSelectFormField('DataApiOption child');
+    const parentField = bulkEditPage.fields.getSelectFormField('DataApiOption parent');
+    const childField = bulkEditPage.fields.getSelectFormField('DataApiOption child');
 
     // verify child is not required on load.
     expect(childField.optionsInputElement.getAttribute('required')).toBeFalsy();
@@ -65,8 +65,8 @@ describe('Bulk Update Flow', () => {
   });
 
   it('should remove child required validator when fields are reset', () => {
-    const parentField = editPage.fields.getSelectFormField('DataApiOption parent');
-    const childField = editPage.fields.getSelectFormField('DataApiOption child');
+    const parentField = bulkEditPage.fields.getSelectFormField('DataApiOption parent');
+    const childField = bulkEditPage.fields.getSelectFormField('DataApiOption child');
 
     // verify child is not required on load.
     expect(childField.optionsInputElement.getAttribute('required')).toBeFalsy();
@@ -76,7 +76,7 @@ describe('Bulk Update Flow', () => {
     expect(childField.optionsInputElement.getAttribute('required')).toBeTruthy();
 
     // reset fields, verify child validator is removed.
-    editPage.resetButton.click();
+    bulkEditPage.resetButton.click();
     expect(childField.optionsInputElement.getAttribute('required')).toBeFalsy();
   });
 });
