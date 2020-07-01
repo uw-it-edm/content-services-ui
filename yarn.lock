@@ -1207,15 +1207,10 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
-"@types/pdfjs-dist@2.1.4":
+"@types/pdfjs-dist@2.1.4", "@types/pdfjs-dist@^2.1.4":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@types/pdfjs-dist/-/pdfjs-dist-2.1.4.tgz#4ed2ad0506852d630956ff60b21096f6d7078881"
   integrity sha512-KnEc8W2IcntVL/SKfRWy2lcJax07xEaO7ghcT0/hc2Lp5UOcmaXAi887RKOLhP8BLKsVGJ7uYH0mYo1uSvbu2A==
-
-"@types/pdfjs-dist@^2.1.0":
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/@types/pdfjs-dist/-/pdfjs-dist-2.1.3.tgz#68b6bbbe5ef0cdab7f8301f5a85a5a33b9c2080b"
-  integrity sha512-aGyFfB4Q8QjaSR3cBTiJfnFXBU6SXQaBVM7ADfBaZzq4L7EGbjuSoqXfHJofZmLFBfKzZ9b+9nXO2FfUIsw77w==
 
 "@types/q@^0.0.32":
   version "0.0.32"
@@ -6284,13 +6279,13 @@ neo-async@^2.5.0, neo-async@^2.6.0, neo-async@^2.6.1:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.1.tgz#ac27ada66167fa8849a6addd837f6b189ad2081c"
   integrity sha512-iyam8fBuCUpWeKPGpaNMetEocMt364qkCsfL9JuhjXX6dRnguRVOfk2GZaDpPjcOKiiXCPINZC1GczQ7iTq3Zw==
 
-ng2-pdf-viewer@6.2.0:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/ng2-pdf-viewer/-/ng2-pdf-viewer-6.2.0.tgz#dbac10de749b55a81477039eb3950fc396ba0428"
-  integrity sha512-zfAl0aGx2aGM/tNF93FUimAEwuWICIpsTm8KUmRnghYiCB5EdR9/0orqQFyeYwKARhcGCY98KofFWFWy8TNuSg==
+ng2-pdf-viewer@6.3.1:
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/ng2-pdf-viewer/-/ng2-pdf-viewer-6.3.1.tgz#2758888ef2611a17e87a395396405532a88e0148"
+  integrity sha512-lMEosNMNKq5u9J5I7fMkkOP6CtmTz5o6nLLrirYsdOQvoM/Dk2sY9cIu8nNwGX7mywHG3aVuzjbiPnc9i2Y7TA==
   dependencies:
-    "@types/pdfjs-dist" "^2.1.0"
-    pdfjs-dist "^2.2.228"
+    "@types/pdfjs-dist" "^2.1.4"
+    pdfjs-dist "^2.4.456"
     tslib "^1.10.0"
 
 ngx-daterangepicker-material@^2.1.11:
@@ -7046,13 +7041,18 @@ pbkdf2@^3.0.3:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-pdfjs-dist@2.3.200, pdfjs-dist@^2.2.228:
+pdfjs-dist@2.3.200:
   version "2.3.200"
   resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-2.3.200.tgz#2920dc28ae7f2b8313cd6d6223c97ae85ac07eac"
   integrity sha512-+8wBjU5h8LPZOIvR9X2uCrp/8xWQG1DRDKMLg5lzGN1qyIAZlYUxA0KQyy12Nw5jN7ozulC6v97PMaDcLgAcFg==
   dependencies:
     node-ensure "^0.0.0"
     worker-loader "^2.0.0"
+
+pdfjs-dist@^2.4.456:
+  version "2.4.456"
+  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-2.4.456.tgz#0eaad2906cda866bbb393e79a0e5b4e68bd75520"
+  integrity sha512-yckJEHq3F48hcp6wStEpbN9McOj328Ib09UrBlGAKxvN2k+qYPN5iq6TH6jD1C0pso7zTep+g/CKsYgdrQd5QA==
 
 performance-now@^2.1.0:
   version "2.1.0"
