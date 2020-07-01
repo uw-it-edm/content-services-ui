@@ -54,7 +54,7 @@
     "moment-timezone": "^0.5.28",
     "ng2-pdf-viewer": "6.2.0",
     "ngx-daterangepicker-material": "^2.1.11",
-    "pdfjs-dist": "2.3.200",
+    "pdfjs-dist": "2.4.456",
     "rxjs": "^6.5.5",
     "tslib": "^1.10.0",
     "web-animations-js": "^2.3.2",
