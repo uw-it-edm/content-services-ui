@@ -37,10 +37,9 @@
 
             <div *ngIf="pageConfig?.buttons" class="button-row">
               <button *ngFor="let button of pageConfig?.buttons" mat-raised-button
-                      type="button"
                       (click)="buttonPress(button)" [color]="button.color"
                       [disabled]="!button.alwaysActive && ( form.pristine || form.invalid || submitPending || deletePending)" [id]="button.command"
-                      [type]="button.type">{{button.label}}
+                      [type]="button.type || 'button'">{{button.label}}
               </button>
             </div>
 

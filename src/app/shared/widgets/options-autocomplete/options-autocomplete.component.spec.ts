@@ -53,6 +53,7 @@ describe('OptionsAutocompleteComponent', () => {
     const field = new Field();
     field.options = fieldOptions;
     component.fieldConfig = field;
+    component.registerOnChange(val => {});
 
     fixture.detectChanges();
   });
@@ -95,6 +96,20 @@ describe('OptionsAutocompleteComponent', () => {
     expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Selected display2 xy', 'polite');
   });
 
+
+  // See CAB-4067. For accessibility, the list should filter down to the selected value so that it is announced on focus.
+  it('should filter the options list when option is selected', (done: DoneFn) => {
+    component.filteredOptions$.pipe(skip(1), first()).subscribe(options => {
+      // The observable chain starts with all options available, the second value will be the filtered results.
+      expect(options.length).toBe(1, 'Expect OptionsAutocompleteComponent to have 1 options.');
+      expect(options[0].displayValue).toBe('display2 xy');
+      done();
+    });
+
+    component.filterInputControl.setValue(fieldOptions[1]);
+    fixture.detectChanges();
+  });
+
   it('should filter the options after user types in textbox', (done: DoneFn) => {
     const inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
 
@@ -110,7 +125,6 @@ describe('OptionsAutocompleteComponent', () => {
   });
 
   it('should revert to the latest valid option if options list closes while invalid value is on the input', () => {
-    component.registerOnChange(val => {});
     component.optionSelected(fieldOptions[1]);
 
     component.filterInputControl.setValue('invalid');
@@ -122,7 +136,6 @@ describe('OptionsAutocompleteComponent', () => {
   });
 
   it('should not announce option list if input control is not typed in', fakeAsync(() => {
-    component.registerOnChange(val => {});
     component.filterInputControl.setValue(fieldOptions[1]);
     fixture.detectChanges();
 
@@ -133,11 +146,7 @@ describe('OptionsAutocompleteComponent', () => {
 
 
   it('should announce results to screen reader after user types in textbox with more than one match', fakeAsync(() => {
-    const inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
-    inputElement.dispatchEvent(new Event('focusin'));
-    inputElement.value = 'xy';
-    inputElement.dispatchEvent(new Event('input'));
-
+    component.filterInputControl.setValue('xy');
     fixture.detectChanges();
 
     tick(500);
@@ -146,11 +155,7 @@ describe('OptionsAutocompleteComponent', () => {
   }));
 
   it('should announce results to screen reader after user types in textbox with only 1 match', fakeAsync(() => {
-    const inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
-    inputElement.dispatchEvent(new Event('focusin'));
-    inputElement.value = 'xyz';
-    inputElement.dispatchEvent(new Event('input'));
-
+    component.filterInputControl.setValue('xyz');
     fixture.detectChanges();
 
     tick(500);
@@ -159,11 +164,7 @@ describe('OptionsAutocompleteComponent', () => {
   }));
 
   it('should announce results to screen reader after user types in textbox with no matches', fakeAsync(() => {
-    const inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
-    inputElement.dispatchEvent(new Event('focusin'));
-    inputElement.value = 'no matches';
-    inputElement.dispatchEvent(new Event('input'));
-
+    component.filterInputControl.setValue('no matches');
     fixture.detectChanges();
 
     tick(500);
