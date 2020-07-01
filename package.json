@@ -56,7 +56,7 @@
     "ngx-daterangepicker-material": "^2.1.11",
     "pdfjs-dist": "2.3.200",
     "rxjs": "^6.5.5",
-    "tslib": "^1.10.0",
+    "tslib": "^1.13.0",
     "web-animations-js": "^2.3.2",
     "zone.js": "~0.10.2"
   },
