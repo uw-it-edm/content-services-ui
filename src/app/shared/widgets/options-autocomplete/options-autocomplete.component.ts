@@ -83,14 +83,20 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
     const allOptions$ = this.getAllOptions();
     const filter$: Observable<string | FieldOption> = this.filterInputControl.valueChanges.pipe(
       startWith(''),
+      distinctUntilChanged(),
       takeUntil(this.componentDestroyed));
 
     this.filteredOptions$ = combineLatest(allOptions$, filter$).pipe(
       map(([options, filter]) =>
         options.filter((option) => {
+          const fieldOption = filter as FieldOption;
+
           if (typeof filter === 'string' && filter.length > 0) {
-            return !filter || option.displayValue.toLowerCase().indexOf(filter.toLowerCase()) >= 0;
+            return option.displayValue.toLowerCase().indexOf(filter.toLowerCase()) >= 0;
+          } else if (fieldOption !== null && fieldOption.displayValue) {
+            return option.displayValue.toLowerCase().indexOf(fieldOption.displayValue.toLowerCase()) >= 0;
           }
+
           return true;
         })
       ),
