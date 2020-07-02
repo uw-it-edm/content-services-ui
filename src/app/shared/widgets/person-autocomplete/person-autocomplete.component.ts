@@ -213,8 +213,10 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
   }
 
   private setInternalValue(regId: string) {
-    if (!isNullOrUndefined(regId)) {
-      if (this.formGroup && this.formGroup.controls[INTERNAL_FIELD_NAME]) {
+    if (this.formGroup && this.formGroup.controls[INTERNAL_FIELD_NAME]) {
+      if (!regId) {
+        this.formGroup.controls[INTERNAL_FIELD_NAME].reset();
+      } else {
         this.personService
           .read(regId)
           .pipe(first())
@@ -223,8 +225,6 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
             this.formGroup.controls[INTERNAL_FIELD_NAME].patchValue(result);
           });
       }
-    } else {
-      this.formGroup.controls[INTERNAL_FIELD_NAME].reset();
     }
   }
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ContentItem } from './model/content-item';
+import { ContentItem, IContentItem } from './model/content-item';
 import { Observable, ReplaySubject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { UserService } from '../../user/shared/user.service';
@@ -15,12 +15,23 @@ export interface FileUrlParameters {
   disposition?: string;
 }
 
+export interface BulkUpdateItemError extends IContentItem {
+  error: string;
+  exception: string;
+}
+
+export interface BulkUpdateResponse {
+  successes: IContentItem[];
+  failures: BulkUpdateItemError[];
+}
+
 @Injectable()
 export class ContentService {
   /* TODO: changing searchIndexUpdateDelay to 0 from 3000 so that there is no artificial delay
            if we decide to not make this configurable we should remove the timeout in createOrUpdate */
   searchIndexUpdateDelay = 0; // ms delay for updates to be available in the search-api index
   itemPathFragment = '/item/';
+  bulkItemPathFramgment = '/bulk/item/';
   filePathFragment = '/file/';
   baseUrl = environment.content_api.url + environment.content_api.contextV3;
 
@@ -35,6 +46,13 @@ export class ContentService {
     item.metadata['RevisionId'] = 1; // initial revisionId
 
     return this.createOrUpdate(formData, item, url);
+  }
+
+  public delete(itemId: string) {
+    const url: string = this.baseUrl + this.itemPathFragment + itemId;
+    const options = this.buildRequestOptions();
+
+    return this.http.delete(url, options);
   }
 
   public read(itemId: string): Observable<ContentItem> {
@@ -60,6 +78,13 @@ export class ContentService {
     }
 
     return this.createOrUpdate(formData, item, url);
+  }
+
+  public bulkUpdate(items: IContentItem[]): Observable<BulkUpdateResponse> {
+    const url: string = this.baseUrl + this.bulkItemPathFramgment;
+    const options = this.buildRequestOptions();
+
+    return this.http.post<BulkUpdateResponse>(url, items, options);
   }
 
   private createOrUpdate(

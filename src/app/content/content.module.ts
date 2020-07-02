@@ -2,8 +2,10 @@ import { ContentService } from './shared/content.service';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { SearchModule } from '../search/search.module';
 import { UserModule } from '../user/user.module';
 import { EditPageComponent } from './edit-page/edit-page.component';
+import { BulkEditPageComponent } from './bulk-edit-page/bulk-edit-page.component';
 import { ContentMetadataComponent } from './content-metadata/content-metadata.component';
 import { ContentViewComponent } from './content-view/content-view.component';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
@@ -14,10 +16,11 @@ import { ContentToolbarComponent } from './content-toolbar/content-toolbar.compo
 import { ContentObjectListComponent } from './content-object-list/content-object-list.component';
 
 @NgModule({
-  imports: [FormsModule, SharedModule, ReactiveFormsModule, UserModule, PdfViewerModule],
+  imports: [FormsModule, SharedModule, ReactiveFormsModule, UserModule, PdfViewerModule, SearchModule],
   exports: [],
   declarations: [
     EditPageComponent,
+    BulkEditPageComponent,
     ContentMetadataComponent,
     ContentObjectListComponent,
     DynamicComponentDirective,

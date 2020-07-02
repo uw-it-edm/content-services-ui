@@ -197,7 +197,7 @@ describe('Edit Page for Demo', () => {
 
   it('should display alert when metadata is edited and Next button is hit without saving', () => {
     searchPage.navigateTo();
-    searchPage.searchResultsRows.first().click();
+    searchPage.searchResults.rows.first().click();
 
     const searchData = require('../mocks/search-api/search.json');
     const itemId = searchData.searchResults[0].id;
@@ -235,6 +235,18 @@ describe('Edit Page for Demo', () => {
     // focus should be back on Download button
     browser.actions().sendKeys(protractor.Key.TAB).perform();
     expect(browser.driver.switchTo().activeElement().getText()).toBe(page.pdfViewerDownloadButton.getText());
+  });
+
+  it('should enable Remove button by default', () => {
+    expect(page.removeDocButton.isEnabled()).toBeTruthy();
+  });
+
+  it('should display error message when Delete fails', () => {
+    page.navigateTo('unauthorized-updatedid');
+    page.removeDocButton.click();
+    page.clickAcceptAlert();
+
+    expect(page.getSnackBarText()).toEqual('There was an error deleting content item:Forbidden\nDismiss');
   });
 });
 

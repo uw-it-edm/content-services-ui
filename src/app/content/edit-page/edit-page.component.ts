@@ -1,7 +1,7 @@
 import { takeUntil } from 'rxjs/operators';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ContentService } from '../shared/content.service';
 import { Config } from '../../core/shared/model/config';
@@ -42,6 +42,8 @@ export class EditPageComponent extends ComponentCanDeactivateDirective implement
   id: string;
   previewing: boolean;
   submitPending: boolean;
+  deletePending: boolean; // deletion takes a few seconds
+  hasDeletePermission: boolean;
   disableFileReplace: boolean;
 
   @ViewChild(DynamicComponentDirective) contentViewDirective: DynamicComponentDirective;
@@ -49,6 +51,7 @@ export class EditPageComponent extends ComponentCanDeactivateDirective implement
   @ViewChild(ContentObjectListComponent) contentObjectListComponent: ContentObjectListComponent;
   constructor(
     private contentService: ContentService,
+    private router: Router,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
     private titleService: Title,
@@ -76,6 +79,7 @@ export class EditPageComponent extends ComponentCanDeactivateDirective implement
       }
       this.contentObject = undefined;
       this.extractPageConfig();
+      this.hasDeletePermission = false;
       if (this.id) {
         this.contentService
           .read(this.id)
@@ -84,6 +88,7 @@ export class EditPageComponent extends ComponentCanDeactivateDirective implement
             (contentItem) => {
               console.log('Loaded content item: ' + contentItem.id);
               this.contentItem = contentItem;
+              this.hasDeletePermission = this.getDeletePermission();
             },
             (err) => {
               const message = 'There was an error retrieving the content item:' + err.statusText;
@@ -141,6 +146,49 @@ export class EditPageComponent extends ComponentCanDeactivateDirective implement
 
   updateSavingStatus(inProgress: boolean) {
     this.submitPending = inProgress;
+  }
+
+  private getPermissions(): string {
+    let permissions;
+    if (this.contentItem && this.user && this.user.accounts) {
+      const metadata = this.contentItem.metadata;
+      const account = metadata && metadata['Account'];
+      if (account) {
+        permissions = this.user.accounts[account];
+      }
+    }
+
+    return permissions;
+  }
+
+  // possible permissions are "r", "rw", "rwd", and "admin"
+  // user has delete right if the permissions include 'd' ("rwd" or "admin")
+  private getDeletePermission(): boolean {
+    const permissions = this.getPermissions();
+    return permissions && permissions.indexOf('d') >= 0;
+  }
+
+  removeItem() {
+    if (this.id && confirm('Do you want to delete the document with ID ' + this.id + '?')) {
+      this.deletePending = true;
+      this.contentService
+        .delete(this.id)
+        .pipe(takeUntil(this.componentDestroyed))
+        .subscribe(
+          (e) => {
+            this.deletePending = false;
+            this.form.markAsPristine(); // mark form as pristine after successful deletion
+            const message = 'Deleted item ' + this.id;
+            alert(message); // snackBar did not work well just before navigating to another page
+            this.router.navigate([this.config.tenant]);
+          },
+          (err) => {
+            const message = 'There was an error deleting content item:' + err.statusText;
+            this.snackBar.open(message, 'Dismiss');
+            this.deletePending = false;
+          }
+        );
+    }
   }
 
   saveItem() {

@@ -16,6 +16,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { environment } from '../../environments/environment';
 import { AppComponent } from '../app.component';
 import { EditPageComponent } from '../content/edit-page/edit-page.component';
+import { BulkEditPageComponent } from '../content/bulk-edit-page/bulk-edit-page.component';
 import { SearchModule } from '../search/search.module';
 import { ContentModule } from '../content/content.module';
 import { SharedModule } from '../shared/shared.module';
@@ -54,6 +55,13 @@ const appRoutes: Routes = [
         path: 'edit/:id',
         component: EditPageComponent,
         canDeactivate: [PendingChangesGuard],
+        resolve: {
+          config: ConfigResolver
+        }
+      },
+      {
+        path: 'bulk-edit',
+        component: BulkEditPageComponent,
         resolve: {
           config: ConfigResolver
         }

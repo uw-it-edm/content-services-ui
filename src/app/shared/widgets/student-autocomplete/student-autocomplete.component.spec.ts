@@ -1,57 +1,46 @@
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { StudentAutocompleteComponent } from './student-autocomplete.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { StudentService } from '../../providers/student.service';
 import { StudentSearchResults } from '../../shared/model/student-search-results';
 import { A11yModule } from '@angular/cdk/a11y';
 import { Student } from '../../shared/model/student';
 
-class MockStudentService extends StudentService {
-  constructor() {
-    super(null, null);
-  }
+const testStudent = new Student();
+testStudent.displayName = 'Test User';
+testStudent.firstName = 'Test';
+testStudent.lastName = 'User';
+testStudent.studentNumber = '1234';
 
-  read(studentNumber: string) {
-    const testStudent = new Student();
-    testStudent.displayName = 'Test User';
-    testStudent.firstName = 'Test';
-    testStudent.lastName = 'User';
-    testStudent.studentNumber = '1234';
-    return of(testStudent);
-  }
-
-  autocomplete(term: string): Observable<StudentSearchResults> {
-    const testStudent = new Student();
-    testStudent.displayName = 'Test User';
-    testStudent.firstName = 'Test';
-    testStudent.lastName = 'User';
-    testStudent.studentNumber = '1234';
-
-    const studentSearchResults = new StudentSearchResults();
-    studentSearchResults.totalElements = 1;
-    studentSearchResults.numberOfElements = 1;
-    studentSearchResults.content = [testStudent];
-    return of(studentSearchResults);
-  }
-}
+const studentSearchResults = new StudentSearchResults();
+studentSearchResults.totalElements = 1;
+studentSearchResults.numberOfElements = 1;
+studentSearchResults.content = [testStudent];
 
 describe('StudentAutocompleteComponent', () => {
   let component: StudentAutocompleteComponent;
   let fixture: ComponentFixture<StudentAutocompleteComponent>;
+  let studentServiceSpy: StudentService;
 
   beforeEach(async(() => {
+    studentServiceSpy = jasmine.createSpyObj('StudentService', ['read', 'autocomplete']);
     TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, MatAutocompleteModule, A11yModule, MatProgressSpinnerModule],
       declarations: [StudentAutocompleteComponent],
-      providers: [{ provide: StudentService, useValue: new MockStudentService() }],
+      providers: [
+        { provide: StudentService, useValue: studentServiceSpy }
+      ],
     }).compileComponents();
   }));
 
   beforeEach(() => {
+    (<any>studentServiceSpy.read).and.returnValue(of(testStudent));
+    (<any>studentServiceSpy.autocomplete).and.returnValue(of(studentSearchResults));
+
     fixture = TestBed.createComponent(StudentAutocompleteComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -61,13 +50,18 @@ describe('StudentAutocompleteComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display a student name', () => {
-    const testStudent = new Student();
-    testStudent.displayName = 'Test User';
-    testStudent.firstName = 'Test';
-    testStudent.lastName = 'User';
-    testStudent.studentNumber = '1234';
+  // See: https://jira.cac.washington.edu/browse/CAB-4070
+  it('should not call student service if control is initialized with empty string', fakeAsync(() => {
+    fixture = TestBed.createComponent(StudentAutocompleteComponent);
+    fixture.componentInstance.ngControl = <any> new FormControl('');
+    fixture.detectChanges();
 
+    tick(1000);
+
+    expect(studentServiceSpy.read).not.toHaveBeenCalled();
+  }));
+
+  it('should display a student name', () => {
     component.filteredOptions = [testStudent];
     const displayName = component.displayFn(testStudent);
     expect(displayName).toBe('User, Test (1234)');
@@ -98,11 +92,6 @@ describe('StudentAutocompleteComponent', () => {
     fixture.detectChanges();
 
     expect(component.filteredOptions.length).toBe(1);
-    const testStudent = new Student();
-    testStudent.displayName = 'Test User';
-    testStudent.firstName = 'Test';
-    testStudent.lastName = 'User';
-    testStudent.studentNumber = '1234';
     expect(component.filteredOptions).toEqual([testStudent]);
   }));
 });

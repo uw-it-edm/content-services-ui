@@ -1,4 +1,12 @@
-import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import {
+  Component,
+  ComponentFactoryResolver,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewChildren,
+  QueryList,
+} from '@angular/core';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { Config } from '../../core/shared/model/config';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -121,9 +129,8 @@ export class CreatePageComponent extends ComponentCanDeactivateDirective impleme
 
   private saveItemAndReset(): void {
     this.saveItemInternal().then(() => {
-
       if (this.fileUploads) {
-        this.fileUploads.forEach(fileUpload => fileUpload.reset());
+        this.fileUploads.forEach((fileUpload) => fileUpload.reset());
       }
 
       if (this.contentObjectListComponent) {

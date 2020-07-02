@@ -6,7 +6,9 @@ import { DisplaySearchPage } from './display-search.po';
 import { browser, protractor } from 'protractor';
 import * as moment from 'moment-timezone';
 import { EditPage } from '../edit/edit.po';
+import { BrowserUtils } from '../browserUtils';
 
+const utils = new BrowserUtils();
 let page: SearchPage;
 
 describe('Search Page', () => {
@@ -239,7 +241,7 @@ describe('Search Page', () => {
 
     employee = employee.replace('__RegId__', itemData.metadata.RegId);
 
-    expect(page.getResultsByColumn('RegId')).toContain(employee);
+    expect(page.searchResults.getResultsByColumn('RegId')).toContain(employee);
   });
 
   it('should display boolean facets value with configurable label', () => {
@@ -257,10 +259,10 @@ describe('Search Page', () => {
   });
 
   it('should display a different color on the search results row when moused over', () => {
-    const originalBackgroundColor = page.getBackgroundColor(page.searchResultsRows.get(0));
+    const originalBackgroundColor = page.getBackgroundColor(page.searchResults.rows.get(0));
 
-    page.mouseOver(page.searchResultsRows.first());
-    expect(page.getBackgroundColor(page.searchResultsRows.first())).not.toEqual(originalBackgroundColor);
+    page.mouseOver(page.searchResults.rows.first());
+    expect(page.getBackgroundColor(page.searchResults.rows.first())).not.toEqual(originalBackgroundColor);
   });
 
   it('should display a different color on the facets row when moused over', () => {
@@ -278,7 +280,7 @@ describe('Search Page', () => {
   });
 
   it('should navigate to Edit page when search results row is clicked on', () => {
-    page.searchResultsRows.first().click();
+    page.searchResults.rows.first().click();
 
     const itemId = searchData.searchResults[0].id;
     const editPage = new EditPage('demo', itemId);
@@ -291,7 +293,7 @@ describe('Search Page', () => {
     const dataApiFileName = `child-type-${searchResultsDataApiKey}-get.json`;
     const dataApiData = require('../mocks/data-api/' + dataApiFileName);
 
-    expect(page.getResultsByColumn(dataApiColumnKey)).toContain(dataApiData.data.label);
+    expect(page.searchResults.getResultsByColumn(dataApiColumnKey)).toContain(dataApiData.data.label);
   });
 
   it('should display the label for data-api sourced facets', () => {
@@ -338,14 +340,14 @@ describe('Search Page', () => {
     // when the page loads, the default sorting will take place.
     page.waitForLiveAnnouncerText('Sort by id, descending.');
 
-    page.sortByHeaderText('Publish Status');
+    page.searchResults.sortByHeaderText('Publish Status');
     page.waitForLiveAnnouncerText('Sort by Publish Status, ascending.');
 
-    page.sortByHeaderText('Publish Status');
+    page.searchResults.sortByHeaderText('Publish Status');
     page.waitForLiveAnnouncerText('Sort by Publish Status, descending.');
 
     // Clicking on the same column for a third time will clear sorting and remove it from announcer.
-    page.sortByHeaderText('Publish Status');
+    page.searchResults.sortByHeaderText('Publish Status');
     page.waitForLiveAnnouncerText('Search results updated. Showing items 1 to 50');
   });
 
@@ -356,7 +358,7 @@ describe('Search Page', () => {
     app.clickAppMenuIcon();
     app.clickAppMenuItem(2);
 
-    page.waitForFirstRowValue('ProfileId', 'Demo3');
+    page.searchResults.waitForFirstRowValue('ProfileId', 'Demo3');
     expect(page.tableHeaders.getText()).toEqual(
       ['Id'].concat(demo3Config.pages['tab-search'].fieldsToDisplay.map((i) => i.label))
     );
@@ -369,7 +371,7 @@ describe('Search Page', () => {
     app.clickAppMenuIcon();
     app.clickAppMenuItem(1);
 
-    page.waitForFirstRowValue('ProfileId', 'Demo');
+    page.searchResults.waitForFirstRowValue('ProfileId', 'Demo');
     expect(page.tableHeaders.getText()).toEqual(
       ['Id'].concat(demo2Config.pages['tab-search'].fieldsToDisplay.map((i) => i.label))
     );
@@ -380,7 +382,7 @@ describe('Search Page', () => {
   });
 
   it('should toggle visibility of facets panel when clicking the hide/show button', () => {
-    page.waitForFirstRowValue('ProfileId', 'Demo');
+    page.searchResults.waitForFirstRowValue('ProfileId', 'Demo');
 
     // Verify the facets are visible on page load.
     expect(page.getFacet(0).isDisplayed()).toBeTruthy();
@@ -398,7 +400,7 @@ describe('Search Page', () => {
 
   it('should keep facets panel collapsed after changing profiles', () => {
     const app = new ContentServicesUiPage();
-    page.waitForFirstRowValue('ProfileId', 'Demo');
+    page.searchResults.waitForFirstRowValue('ProfileId', 'Demo');
 
     // Hide facets panel.
     page.toggleFacetsPanelButton.click();
@@ -408,7 +410,7 @@ describe('Search Page', () => {
     // Switch to 'demo3' profile.
     app.clickAppMenuIcon();
     app.clickAppMenuItem(2);
-    page.waitForFirstRowValue('ProfileId', 'Demo3');
+    page.searchResults.waitForFirstRowValue('ProfileId', 'Demo3');
 
     // Verify facets panel is still collapsed.
     expect(page.getFacet(0).isDisplayed()).toBeFalsy();
@@ -416,7 +418,7 @@ describe('Search Page', () => {
 
   it('should keep facets panel collapsed after navigating back from upload/edit page', () => {
     const createPage = new CreatePage();
-    page.waitForFirstRowValue('ProfileId', 'Demo');
+    page.searchResults.waitForFirstRowValue('ProfileId', 'Demo');
 
     // Hide facets panel.
     page.toggleFacetsPanelButton.click();
@@ -429,8 +431,8 @@ describe('Search Page', () => {
 
     // Click on 'Back' button return to search page.
     createPage.clickReturnToResultsButton();
-    page.clickAcceptAlert();
-    page.waitForFirstRowValue('ProfileId', 'Demo');
+    utils.clickAcceptAlert();
+    page.searchResults.waitForFirstRowValue('ProfileId', 'Demo');
 
     // Verify facets panel is still collapsed.
     expect(page.getFacet(0).isDisplayed()).toBeFalsy();
@@ -438,12 +440,12 @@ describe('Search Page', () => {
 
   it('should auto-collapse facets panel when switching profiles that do not have any configured', () => {
     const app = new ContentServicesUiPage();
-    page.waitForFirstRowValue('ProfileId', 'Demo');
+    page.searchResults.waitForFirstRowValue('ProfileId', 'Demo');
 
     // Switch to 'demo4' profile (which has no facets)
     app.clickAppMenuIcon();
     app.clickAppMenuItem(3);
-    page.waitForFirstRowValue('ProfileId', 'Demo4');
+    page.searchResults.waitForFirstRowValue('ProfileId', 'Demo4');
 
     // Verify facets panel is collapsed and button is hidden
     expect(page.facetsElement.isPresent()).toBeFalsy();
@@ -452,7 +454,7 @@ describe('Search Page', () => {
     // Switch to 'demo' profile
     app.clickAppMenuIcon();
     app.clickAppMenuItem(0);
-    page.waitForFirstRowValue('ProfileId', 'Demo');
+    page.searchResults.waitForFirstRowValue('ProfileId', 'Demo');
 
     // Verify facets panel is expanded and button is shown
     expect(page.facetsElement.isPresent()).toBeTruthy();

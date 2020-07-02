@@ -178,6 +178,7 @@
       "theme": "uw-default",
       "searchStateInURL": true,
       "enableDisplaySearch": true,
+      "enableBulkUpdate": true,
       "fieldKeysToDisplay": [
         "ProfileId",
         "Filer",
@@ -291,7 +292,8 @@
           "command": "saveItem"
         }
       ],
-      "viewPanel": true
+      "viewPanel": true,
+      "enableDelete": true
     },
     "create": {
       "theme": "uw-default",
@@ -325,6 +327,25 @@
         }
       ],
       "viewPanel": true
+    },
+    "bulk-edit": {
+      "theme": "uw-default",
+      "pageName": "Demo | Bulk Update",
+      "fieldKeysToDisplay": [
+        "DataApiOptionLabel",
+        "DocumentType",
+        "PublishStatus",
+        "LastModifiedDate",
+        "StudentId",
+        "RegId",
+        "DataApiWithFilter"
+      ],
+      "resultsTableFieldKeysToDisplay": [
+        "ProfileId",
+        "Filer",
+        "PublishStatus",
+        "DocumentType"
+      ]
     }
   }
 }
