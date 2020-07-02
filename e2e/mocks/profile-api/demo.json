@@ -67,6 +67,16 @@
       }
     },
     {
+      "key": "DataApiOptionMultiSelect",
+      "label": "DataApiOption with multi select",
+      "required": false,
+      "displayType": "multi-select",
+      "dynamicSelectConfig": {
+        "type": "test-type",
+        "labelPath": "label"
+      }
+    },
+    {
       "key": "Filer",
       "label": "Filer"
     },

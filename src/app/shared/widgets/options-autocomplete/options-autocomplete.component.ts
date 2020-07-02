@@ -1,12 +1,5 @@
-import { Component, forwardRef, Input, OnInit, OnDestroy } from '@angular/core';
-import {
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR,
-  FormGroup,
-  FormBuilder,
-  FormControl,
-  AbstractControl,
-} from '@angular/forms';
+import { Component, forwardRef, Input, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormGroup, FormBuilder, FormControl, AbstractControl } from '@angular/forms';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Subject, Observable, of, combineLatest, concat } from 'rxjs';
 import { takeUntil, map, switchMap, startWith, first, distinctUntilChanged, debounceTime, skip } from 'rxjs/operators';
@@ -14,7 +7,7 @@ import { FieldOption } from '../../../core/shared/model/field/field-option';
 import { Field } from '../../../core/shared/model/field';
 import { FieldOptionService } from '../../providers/fieldoption.service';
 
-const INTERNAL_FIELD_NAME = 'internalAutocomplete';
+const INTERNAL_FILTER_CONTROL_NAME = 'internalFilterControl';
 
 /**
  * Validator that checks if the selected value is an object (instead of a string which is the value used when filtering the list).
@@ -42,18 +35,25 @@ export function RequiresFieldOptionObject(control: AbstractControl) {
 export class OptionsAutocompleteComponent implements ControlValueAccessor, OnInit, OnDestroy {
   private _disabled = false;
   private _filterInputControl: FormControl;
+  private selectedOptionsChanged = new Subject();
+  private allOptions$: Observable<FieldOption[]>;
   private componentDestroyed = new Subject();
   private latestValidOption: FieldOption;
-  private onChange: (value: string) => void;
+  private onChange: (value: string | string[]) => void;
   private onTouch: () => void; // not used.
 
+  @Input() multiSelect = false;
   @Input() required = false;
   @Input() placeholder: string;
   @Input() fieldConfig: Field;
   @Input() parentControl: AbstractControl;
   @Input() errorMessage: string;
+
+  @ViewChild('filterInputElement') filterInputElement: ElementRef<HTMLInputElement>;
+
   formGroup: FormGroup;
   filteredOptions$: Observable<FieldOption[]>;
+  selectedOptions: FieldOption[] = [];
 
   @Input()
   get disabled() {
@@ -69,46 +69,54 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
     return this._filterInputControl;
   }
 
-  constructor(
-    private fb: FormBuilder,
-    private fieldOptionService: FieldOptionService,
-    private liveAnnouncer: LiveAnnouncer
-  ) {}
+  constructor(private fb: FormBuilder, private fieldOptionService: FieldOptionService, private liveAnnouncer: LiveAnnouncer) {}
 
   ngOnInit(): void {
-    this._filterInputControl = new FormControl('', [RequiresFieldOptionObject]);
+    this._filterInputControl = new FormControl(null, this.multiSelect ? [] : [RequiresFieldOptionObject]);
+
     this.formGroup = this.fb.group({});
-    this.formGroup.controls[INTERNAL_FIELD_NAME] = this.filterInputControl;
+    this.formGroup.controls[INTERNAL_FILTER_CONTROL_NAME] = this.filterInputControl;
 
-    const allOptions$ = this.getAllOptions();
+    this.allOptions$ = this.getAllOptions();
+    const forceFilter$ = this.selectedOptionsChanged.asObservable().pipe(startWith(null));
     const filter$: Observable<string | FieldOption> = this.filterInputControl.valueChanges.pipe(
-      startWith(''),
+      startWith(null),
       distinctUntilChanged(),
-      takeUntil(this.componentDestroyed));
+      takeUntil(this.componentDestroyed)
+    );
 
-    this.filteredOptions$ = combineLatest(allOptions$, filter$).pipe(
+    this.filteredOptions$ = combineLatest(this.allOptions$, filter$, forceFilter$).pipe(
       map(([options, filter]) =>
         options.filter((option) => {
           const fieldOption = filter as FieldOption;
+          let keepOption = this.selectedOptions.findIndex((opt) => opt.value === option.value) < 0;
 
           if (typeof filter === 'string' && filter.length > 0) {
-            return option.displayValue.toLowerCase().indexOf(filter.toLowerCase()) >= 0;
-          } else if (fieldOption !== null && fieldOption.displayValue) {
-            return option.displayValue.toLowerCase().indexOf(fieldOption.displayValue.toLowerCase()) >= 0;
+            keepOption = keepOption && option.displayValue.toLowerCase().indexOf(filter.toLowerCase()) >= 0;
+          } else if (!this.multiSelect && fieldOption !== null && fieldOption.displayValue) {
+            keepOption = option.displayValue.toLowerCase().indexOf(fieldOption.displayValue.toLowerCase()) >= 0;
           }
 
-          return true;
+          return keepOption;
         })
       ),
       takeUntil(this.componentDestroyed)
     );
 
     // Setup separate observable chain to update the live announcer.
-    this.filteredOptions$.pipe(
-      skip(1), // Skip the initial set of options.
-      debounceTime(500),
-      takeUntil(this.componentDestroyed)
-    ).subscribe(options => this.announceFilteredOptions(options));
+    this.filteredOptions$
+      .pipe(
+        skip(1), // Skip the initial set of options.
+        debounceTime(500),
+        takeUntil(this.componentDestroyed)
+      )
+      .subscribe((options) => this.announceFilteredOptions(options));
+
+    this.allOptions$.pipe(first()).subscribe(() => {
+      // For chip list with autocomplete, the disabled state of the filter control must
+      //  be set after the initial options have loaded. See: https://github.com/angular/components/issues/14036
+      this.setInnerInputDisableState();
+    });
   }
 
   ngOnDestroy(): void {
@@ -124,32 +132,41 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
     if (this.filterInputControl.invalid && this.latestValidOption) {
       // If the options list is closed and the value left in the input is invalid, reset it
       //   to the last known valid value.
-      this.filterInputControl.patchValue(this.latestValidOption);
+      this.filterInputControl.setValue(this.latestValidOption);
     }
   }
 
   optionSelected(newOption: FieldOption) {
     if (newOption) {
       this.liveAnnouncer.announce(`Selected ${newOption.displayValue}`, 'polite');
-      this.latestValidOption = newOption;
-      this.onChange(newOption.value);
-    } else {
-      this.onChange(null);
+
+      if (this.multiSelect) {
+        this.addOptionToMultiSelect(newOption);
+      } else {
+        this.latestValidOption = newOption;
+        this.onChange(newOption.value);
+      }
+    }
+  }
+
+  removeOptionFromMultiSelect(option: FieldOption): void {
+    const index = this.selectedOptions.findIndex((opt) => opt.value === option.value);
+
+    if (index >= 0) {
+      this.liveAnnouncer.announce(`Removed ${option.displayValue}`, 'polite');
+      this.selectedOptions.splice(index, 1);
+      this.selectedOptionsChanged.next();
+      this.onChange(this.selectedOptions.map((opt) => opt.value));
     }
   }
 
   writeValue(value: any): void {
     if (value) {
-      this.filteredOptions$.pipe(first()).subscribe((options) => {
-        const selectedOpt = options.find((opt) => opt.value === value);
-        if (selectedOpt) {
-          this.latestValidOption = selectedOpt;
-          this.filterInputControl.patchValue(selectedOpt);
-        }
+      this.allOptions$.pipe(first()).subscribe((options) => {
+        this.multiSelect ? this.loadMultiValues(value, options) : this.loadSingleValue(value, options);
       });
     } else {
-      this.latestValidOption = null;
-      this.filterInputControl.reset();
+      this.reset();
     }
   }
 
@@ -165,27 +182,78 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
     this.disabled = isDisabled;
   }
 
+  private reset(): void {
+    this.latestValidOption = null;
+    this.filterInputControl.reset();
+    this.selectedOptions = [];
+    this.selectedOptionsChanged.next();
+  }
+
+  private addOptionToMultiSelect(option: FieldOption): void {
+    this.selectedOptions.push(option);
+    this.selectedOptionsChanged.next();
+    this.onChange(this.selectedOptions.map((opt) => opt.value));
+
+    this.filterInputControl.reset();
+    if (this.filterInputElement) {
+      this.filterInputElement.nativeElement.value = '';
+    }
+  }
+
+  private loadSingleValue(selectedValue: string, allOptions: FieldOption[]): void {
+    if (typeof selectedValue !== 'string') {
+      throw new Error(
+        `OptionsAutocompleteComponent with multiSelect=false expected value from model to be a string. Actual value: ${JSON.stringify(
+          selectedValue
+        )}`
+      );
+    }
+
+    const selectedOpt = allOptions.find((opt) => opt.value === selectedValue);
+    if (selectedOpt) {
+      this.latestValidOption = selectedOpt;
+      this.filterInputControl.setValue(selectedOpt);
+    }
+  }
+
+  private loadMultiValues(selectedValues: string[], allOptions: FieldOption[]): void {
+    if (!Array.isArray(selectedValues)) {
+      throw new Error(
+        `OptionsAutocompleteComponent with multiSelect=true expected value from model to be an array. Actual value: ${JSON.stringify(
+          selectedValues
+        )}`
+      );
+    }
+
+    this.selectedOptions = allOptions.filter((opt) => selectedValues.includes(opt.value));
+    this.selectedOptionsChanged.next();
+  }
+
   private getAllOptions(): Observable<FieldOption[]> {
     const dynamicSelectConfig = this.fieldConfig.dynamicSelectConfig;
     const parentFieldConfig = dynamicSelectConfig && dynamicSelectConfig.parentFieldConfig;
+    const parentControlValue = this.parentControl && this.parentControl.value;
 
-    let allOptions = this.fieldOptionService.getFieldOptions(this.fieldConfig, this.parentControl && this.parentControl.value);
+    let allOptions = this.fieldOptionService.getFieldOptions(this.fieldConfig, parentControlValue);
 
     if (parentFieldConfig) {
-      allOptions = concat(allOptions, this.parentControl.valueChanges.pipe(
-        distinctUntilChanged(),
-        switchMap((newParentValue) => {
-          this.latestValidOption = null;
-          this.filterInputControl.reset();
-          this.onChange(null);
-          if (newParentValue) {
-            return this.fieldOptionService.getOptionsFromParent(dynamicSelectConfig, parentFieldConfig, newParentValue);
-          } else {
-            return of([]);
-          }
-        }),
-        takeUntil(this.componentDestroyed)
-      ));
+      allOptions = concat(
+        allOptions,
+        this.parentControl.valueChanges.pipe(
+          distinctUntilChanged(),
+          switchMap((newParentValue) => {
+            this.reset();
+            this.onChange(null);
+
+            if (newParentValue) {
+              return this.fieldOptionService.getOptionsFromParent(dynamicSelectConfig, parentFieldConfig, newParentValue);
+            } else {
+              return of([]);
+            }
+          }),
+          takeUntil(this.componentDestroyed)
+        )
+      );
     }
 
     return allOptions;

@@ -3,7 +3,18 @@
     <ul *ngIf="pageConfig?.fieldsToDisplay" class="fields">
       <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay; index as i">
         <div [ngSwitch]="fieldToDisplay.displayType">
-            <app-options-autocomplete *ngSwitchCase="'filter-select'"
+          <app-options-autocomplete *ngSwitchCase="'filter-select'"
+            [formControlName]="fieldToDisplay.key"
+            [placeholder]="fieldToDisplay.label"
+            [fieldConfig]="fieldToDisplay"
+            [parentControl]="formGroup.get('metadata').get(fieldToDisplay.dynamicSelectConfig?.parentFieldConfig?.key || '')"
+            [errorMessage]="getErrorMessage(fieldToDisplay.key)"
+            [required]="fieldHasRequiredError(fieldToDisplay)"
+            [id]="'custom-input-'+ i"
+            [attr.id]="'custom-input-'+ i">
+          </app-options-autocomplete>
+          <app-options-autocomplete *ngSwitchCase="'multi-select'"
+              [multiSelect]="true"
               [formControlName]="fieldToDisplay.key"
               [placeholder]="fieldToDisplay.label"
               [fieldConfig]="fieldToDisplay"

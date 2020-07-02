@@ -1,13 +1,36 @@
 <mat-form-field [formGroup]="formGroup">
-  <input type="text"
+  <input type="text" *ngIf="!multiSelect"
       matInput
-      formControlName="internalAutocomplete"
+      formControlName="internalFilterControl"
       [matAutocomplete]="auto"
       [placeholder]="placeholder"
       [required]="required"
       [attr.aria-label]="placeholder"
       [attr.aria-disabled]="disabled"
       [attr.aria-required]="required" />
+
+  <mat-chip-list #chipList *ngIf="multiSelect"
+      aria-label="Options selection"
+      [required]="required"
+      [attr.aria-disabled]="disabled"
+      [attr.aria-required]="required">
+    <mat-chip
+      *ngFor="let option of selectedOptions"
+      [selectable]="!disabled"
+      [removable]="!disabled"
+      (removed)="removeOptionFromMultiSelect(option)">
+      {{option.displayValue}}
+      <mat-icon matChipRemove *ngIf="!disabled">cancel</mat-icon>
+    </mat-chip>
+    <input
+      #filterInputElement
+      formControlName="internalFilterControl"
+      [placeholder]="placeholder"
+      [attr.aria-label]="placeholder"
+      [attr.aria-disabled]="disabled"
+      [matAutocomplete]="auto"
+      [matChipInputFor]="chipList" />
+  </mat-chip-list>
 
   <mat-autocomplete #auto="matAutocomplete"
                     [displayWith]="getOptionDisplayValue"
