@@ -6,15 +6,12 @@ import { BrowserUtils } from '../browserUtils';
  */
 export class SearchResultsPageObject {
   private utils = new BrowserUtils;
-  private root: ElementFinder;
 
   /**
    * Creates a new instance of page object.
    * @param root Root element of component to anchors all internal searches.
    */
-  constructor(root: ElementFinder) {
-    this.root = root;
-  }
+  constructor(public root: ElementFinder) { }
 
   /**
    * Gets the rows of the results table.
