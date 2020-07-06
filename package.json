@@ -71,7 +71,7 @@
     "@types/node": "^12.12.47",
     "@types/pdfjs-dist": "2.1.4",
     "axe-webdriverjs": "^2.2.0",
-    "codelyzer": "^5.2.2",
+    "codelyzer": "^6.0.0",
     "coveralls": "^3.1.0",
     "husky": "^4.2.5",
     "jasmine-core": "^3.5.0",
