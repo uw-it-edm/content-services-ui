@@ -111,12 +111,6 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
         takeUntil(this.componentDestroyed)
       )
       .subscribe((options) => this.announceFilteredOptions(options));
-
-    this.allOptions$.pipe(first()).subscribe(() => {
-      // For chip list with autocomplete, the disabled state of the filter control must
-      //  be set after the initial options have loaded. See: https://github.com/angular/components/issues/14036
-      this.setInnerInputDisableState();
-    });
   }
 
   ngOnDestroy(): void {
@@ -156,7 +150,12 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
       this.liveAnnouncer.announce(`Removed ${option.displayValue}`, 'polite');
       this.selectedOptions.splice(index, 1);
       this.selectedOptionsChanged.next();
-      this.onChange(this.selectedOptions.map((opt) => opt.value));
+
+      if (this.selectedOptions.length === 0) {
+        this.onChange(null);
+      } else {
+        this.onChange(this.selectedOptions.map((opt) => opt.value));
+      }
     }
   }
 

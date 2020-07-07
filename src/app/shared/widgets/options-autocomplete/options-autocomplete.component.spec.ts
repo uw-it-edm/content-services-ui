@@ -190,23 +190,20 @@ describe('OptionsAutocompleteComponent', () => {
       expect(component.selectedOptions.length).toBe(0);
     });
 
-    it('should disable the filter control and chip list control when component is disabled', () => {
+    it('should disable the chip list when component is disabled', () => {
       component.writeValue(['val1']);
       fixture.detectChanges();
 
       const chipList: MatChipList = fixture.debugElement.query(By.directive(MatChipList)).componentInstance;
-      const firstChip = chipList.chips.first;
 
       expect(component.filterInputControl.disabled).toBeFalse();
-      expect(firstChip.selectable).toBeTrue();
-      expect(firstChip.removable).toBeTrue();
+      expect(chipList.disabled).toBeFalse();
 
       component.setDisabledState(true);
       fixture.detectChanges();
 
       expect(component.filterInputControl.disabled).toBeTrue();
-      expect(firstChip.selectable).toBeFalse();
-      expect(firstChip.removable).toBeFalse();
+      expect(chipList.disabled).toBeTrue();
     });
 
     it('should update the form model and add a chip when option is selected', () => {
@@ -221,6 +218,22 @@ describe('OptionsAutocompleteComponent', () => {
       expect(currentValues).toEqual(['val2']);
       expect(chipList.chips.length).toEqual(1);
       expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Selected display2 xy', 'polite');
+    });
+
+    /**
+     * This is important for Bulk Update, where it only includes field values that have been set.
+     */
+    it('should clear the form model when the last option is removed', () => {
+      component.writeValue([fieldOptions[1].value]);
+      expect(component.selectedOptions[0].value).toBe(fieldOptions[1].value);
+
+      let lastValue: any;
+      component.registerOnChange((val) => (lastValue = val));
+      component.removeOptionFromMultiSelect(fieldOptions[1]);
+      fixture.detectChanges();
+
+      expect(component.selectedOptions.length).toBe(0);
+      expect(lastValue).toBeNull();
     });
 
     it('should filter the options list when option is selected', (done: DoneFn) => {
