@@ -2,9 +2,10 @@ import { CheckboxOptions } from './field/checkbox-options';
 import { FieldOption } from './field/field-option';
 import { DynamicSelectConfig } from './field/dynamic-select-config';
 import { CourseConfig } from './field/course-config';
+import { FilterSelectConfig } from './filter-select-config';
 
-export type FieldDataType = 'string' | 'number' | 'date' ;
-export type FieldDisplayType = 'date' | 'dateTime' | 'number' | 'currency' | 'student' | 'person' | 'select';
+export type FieldDataType = 'string' | 'number' | 'date';
+export type FieldDisplayType = 'date' | 'dateTime' | 'number' | 'currency' | 'student' | 'person' | 'select' | 'filter-select';
 
 export const isFieldRightAligned = (field: Field): boolean => {
   const displayType = field && field.displayType;
@@ -40,4 +41,9 @@ export class Field {
   public sortable?: boolean;
 
   public courseConfig?: CourseConfig;
+
+  /**
+   * Configuration settings for field of type 'filter-select'.
+   */
+  public filterSelectConfig?: FilterSelectConfig;
 }
