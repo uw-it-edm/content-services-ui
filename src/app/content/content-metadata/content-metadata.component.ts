@@ -9,11 +9,13 @@ import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { PageConfig } from '../../core/shared/model/page-config';
 
 /**
- * Custom valitor that triggers if no field has values.
+ * Custom valitor that triggers if all fields have either no value set or are set 'empty' values.
  */
 const nonEmptyFormValidator: ValidatorFn = (theForm: FormGroup): ValidationErrors | null => {
   const metadata = theForm && theForm.value && theForm.value.metadata;
-  if (metadata && Object.keys(metadata).every(key => !metadata[key])) {
+  const isEmptyValue = (val) => (Array.isArray(val) ? val.length === 0 : !val);
+
+  if (metadata && Object.keys(metadata).every((key) => isEmptyValue(metadata[key]))) {
     return { incorrect: true };
   }
 
@@ -23,7 +25,7 @@ const nonEmptyFormValidator: ValidatorFn = (theForm: FormGroup): ValidationError
 @Component({
   selector: 'app-content-metadata',
   templateUrl: './content-metadata.component.html',
-  styleUrls: ['./content-metadata.component.css']
+  styleUrls: ['./content-metadata.component.css'],
 })
 export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   private componentDestroyed = new Subject();
@@ -73,7 +75,7 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy, A
       this.formGroup.patchValue({ label: this.contentItem.label });
       const metaDataForm: FormGroup = <FormGroup>this.formGroup.controls['metadata'];
       if (!isNullOrUndefined(metaDataForm)) {
-        this.pageConfig.fieldsToDisplay.map(field => {
+        this.pageConfig.fieldsToDisplay.map((field) => {
           metaDataForm.get(field.key).patchValue(this.contentItem.metadata[field.key]);
         });
       }
@@ -113,8 +115,8 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy, A
     this.formGroup.reset();
 
     if (metadataFormGroup) {
-      Object.keys(metadataFormGroup.controls).forEach(key => {
-       metadataFormGroup.controls[key].setErrors(null);
+      Object.keys(metadataFormGroup.controls).forEach((key) => {
+        metadataFormGroup.controls[key].setErrors(null);
       });
     }
   }
@@ -135,8 +137,8 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy, A
 
   private buildCascadingFieldValidators(config: PageConfig): ValidatorFn[] {
     return (config.fieldsToDisplay || [])
-      .filter(field => field.dynamicSelectConfig && field.dynamicSelectConfig.parentFieldConfig)
-      .map(field => this.buildCascadingFieldValidator(field.dynamicSelectConfig.parentFieldConfig.key, field.key));
+      .filter((field) => field.dynamicSelectConfig && field.dynamicSelectConfig.parentFieldConfig)
+      .map((field) => this.buildCascadingFieldValidator(field.dynamicSelectConfig.parentFieldConfig.key, field.key));
   }
 
   private buildCascadingFieldValidator(parentControlKey: string, childControlKey: string): ValidatorFn {

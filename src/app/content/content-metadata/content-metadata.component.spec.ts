@@ -60,8 +60,8 @@ function getPageConfig({ addCascadingSelects }: { addCascadingSelects?: boolean 
       key: 'parentKey',
       label: 'Parent Label',
       displayType: 'select',
-      options: [new FieldOption('parent1'), new FieldOption('parent2')]
-    })
+      options: [new FieldOption('parent1'), new FieldOption('parent2')],
+    }),
   ];
 
   if (addCascadingSelects) {
@@ -74,9 +74,9 @@ function getPageConfig({ addCascadingSelects }: { addCascadingSelects?: boolean 
         labelPath: 'label',
         parentFieldConfig: {
           parentType: 'parent-type',
-          key: 'parentKey'
-        }
-      }
+          key: 'parentKey',
+        },
+      },
     });
 
     editPageConfig.fieldsToDisplay.push(childField);
@@ -93,7 +93,7 @@ describe('ContentMetadataComponent', () => {
   beforeEach(async(() => {
     dataApiValueServiceSpy = jasmine.createSpyObj('DataApiValueService', ['listByType', 'listByTypeAndParent']);
     const userServiceSpy: UserService = jasmine.createSpyObj('UserService', {
-      'getUser': new User('test')
+      getUser: new User('test'),
     });
 
     TestBed.configureTestingModule({
@@ -135,15 +135,23 @@ describe('ContentMetadataComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ContentMetadataComponent);
 
-    (<any>dataApiValueServiceSpy.listByTypeAndParent).withArgs('child-type', 'parent-type', 'parent1').and.returnValue(of({ content: [
-      { value: 'parent1-child1', displayValue: 'Parent 1 - Child 1' },
-      { value: 'parent1-child2', displayValue: 'Parent 1 - Child 2' },
-    ]}));
+    (<any>dataApiValueServiceSpy.listByTypeAndParent).withArgs('child-type', 'parent-type', 'parent1').and.returnValue(
+      of({
+        content: [
+          { value: 'parent1-child1', displayValue: 'Parent 1 - Child 1' },
+          { value: 'parent1-child2', displayValue: 'Parent 1 - Child 2' },
+        ],
+      })
+    );
 
-    (<any>dataApiValueServiceSpy.listByTypeAndParent).withArgs('child-type', 'parent-type', 'parent2').and.returnValue(of({ content: [
-      { value: 'parent2-child1', displayValue: 'Parent 2 - Child 1' },
-      { value: 'parent2-child2', displayValue: 'Parent 2 - Child 2' },
-    ]}));
+    (<any>dataApiValueServiceSpy.listByTypeAndParent).withArgs('child-type', 'parent-type', 'parent2').and.returnValue(
+      of({
+        content: [
+          { value: 'parent2-child1', displayValue: 'Parent 2 - Child 1' },
+          { value: 'parent2-child2', displayValue: 'Parent 2 - Child 2' },
+        ],
+      })
+    );
 
     component = fixture.componentInstance;
     component.pageConfig = getPageConfig();
@@ -220,6 +228,24 @@ describe('ContentMetadataComponent', () => {
       component.formGroup.get('metadata').get('1').reset();
       fixture.detectChanges();
       expect(component.formGroup.valid).toBeFalse();
+    });
+
+    it('should mark form as invalid when field is set to empty array if form validator is enabled', () => {
+      component.enableEmptyFormValidator = true;
+      fixture.detectChanges();
+
+      // verify form should be invalid on load
+      expect(component.formGroup.valid).toBeFalse();
+
+      // verify form is still invalid after setting a field to empty array.
+      component.formGroup.get('metadata').get('1').setValue([]);
+      fixture.detectChanges();
+      expect(component.formGroup.valid).toBeFalse();
+
+      // verify form becomes valid when setting field to array with value.
+      component.formGroup.get('metadata').get('1').setValue(['one']);
+      fixture.detectChanges();
+      expect(component.formGroup.valid).toBeTrue();
     });
 
     it('should mark form as invalid if parent select has value and child select does not when validator is enabled', fakeAsync(() => {

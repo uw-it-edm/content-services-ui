@@ -150,12 +150,7 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
       this.liveAnnouncer.announce(`Removed ${option.displayValue}`, 'polite');
       this.selectedOptions.splice(index, 1);
       this.selectedOptionsChanged.next();
-
-      if (this.selectedOptions.length === 0) {
-        this.onChange(null);
-      } else {
-        this.onChange(this.selectedOptions.map((opt) => opt.value));
-      }
+      this.onChange(this.selectedOptions.map((opt) => opt.value));
     }
   }
 

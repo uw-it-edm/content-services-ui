@@ -220,10 +220,7 @@ describe('OptionsAutocompleteComponent', () => {
       expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Selected display2 xy', 'polite');
     });
 
-    /**
-     * This is important for Bulk Update, where it only includes field values that have been set.
-     */
-    it('should clear the form model when the last option is removed', () => {
+    it('should set form model to empty array when the last option is removed', () => {
       component.writeValue([fieldOptions[1].value]);
       expect(component.selectedOptions[0].value).toBe(fieldOptions[1].value);
 
@@ -233,7 +230,7 @@ describe('OptionsAutocompleteComponent', () => {
       fixture.detectChanges();
 
       expect(component.selectedOptions.length).toBe(0);
-      expect(lastValue).toBeNull();
+      expect(lastValue).toEqual([]);
     });
 
     it('should filter the options list when option is selected', (done: DoneFn) => {
