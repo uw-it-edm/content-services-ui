@@ -287,7 +287,6 @@
         "childType",
         "courses",
         "DataApiWithFilter",
-        "DataApiOptionMultiSelect",
         "parentTypeWithFilter",
         "childTypeWithFilter"
       ],
@@ -315,7 +314,6 @@
       "fieldKeysToDisplay": [
         "DataApiOptionLabel",
         "DataApiOptionCode",
-        "DataApiOptionMultiSelect",
         "Filer",
         "PublishStatus",
         "LastModifiedDate",
