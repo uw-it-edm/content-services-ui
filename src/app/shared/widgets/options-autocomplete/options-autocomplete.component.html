@@ -15,11 +15,10 @@
       [disabled]="disabled"
       [attr.aria-disabled]="disabled"
       [attr.aria-required]="required">
-    <mat-chip
-      *ngFor="let option of selectedOptions"
-      (removed)="removeOptionFromMultiSelect(option)">
+    <mat-chip *ngFor="let option of selectedOptions"
+              (removed)="removeOptionFromMultiSelect(option)">
       {{option.displayValue}}
-      <mat-icon matChipRemove>cancel</mat-icon>
+      <mat-icon matChipRemove class="remove-option">cancel</mat-icon>
     </mat-chip>
     <input
       #filterInputElement

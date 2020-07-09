@@ -287,6 +287,7 @@
         "childType",
         "courses",
         "DataApiWithFilter",
+        "DataApiOptionMultiSelect",
         "parentTypeWithFilter",
         "childTypeWithFilter"
       ],
