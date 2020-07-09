@@ -1,5 +1,6 @@
 import { by, ElementArrayFinder, browser, ExpectedConditions, ElementFinder } from 'protractor';
 import { SelectFieldPageObject } from './select-field.po';
+import { FilterSelectFieldPageObject } from './filter-select-field.po';
 
 /**
  * Page object to interact with the ContentMetadataComponent.
@@ -8,7 +9,7 @@ export class ContentMetadataPageObject {
   /**
    * Creates a new instance of page object.
    */
-  constructor(public rootFinder: ElementFinder) { }
+  constructor(public rootFinder: ElementFinder) {}
 
   /**
    * Gets all the input elements.
@@ -47,5 +48,13 @@ export class ContentMetadataPageObject {
    */
   getSelectFormField(label: string): SelectFieldPageObject {
     return this.getFormFieldOf<SelectFieldPageObject>(label, SelectFieldPageObject);
+  }
+
+  /**
+   * Gets a page object to interact with a filter select field with the given label.
+   * @param label Label of the form field to locate.
+   */
+  getFilterSelectFormField(label: string): FilterSelectFieldPageObject {
+    return this.getFormFieldOf<FilterSelectFieldPageObject>(label, FilterSelectFieldPageObject);
   }
 }

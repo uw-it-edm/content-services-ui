@@ -1,5 +1,6 @@
 import { browser, by, element, ExpectedConditions } from 'protractor';
 import * as path from 'path';
+import { ContentMetadataPageObject } from '../page-objects/content-metadata.po';
 
 export class EditPage {
   public saveButton = element(by.id('saveItem'));
@@ -115,5 +116,12 @@ export class EditPage {
         }
         alert.accept();
       });
+  }
+
+  /**
+   * Gets a page object to interact with the content metadata component.
+   */
+  get fields(): ContentMetadataPageObject {
+    return new ContentMetadataPageObject(element(by.tagName('app-content-metadata')));
   }
 }
