@@ -5,5 +5,5 @@ export interface FilterSelectConfig {
   /**
    * Whether to enable multiple selection of options.
    */
-  multipleSelection?: boolean;
+  enableMultipleSelection?: boolean;
 }

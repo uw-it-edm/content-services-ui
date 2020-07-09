@@ -4,7 +4,7 @@
       <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay; index as i">
         <div [ngSwitch]="fieldToDisplay.displayType">
           <app-options-autocomplete *ngSwitchCase="'filter-select'"
-            [multiSelect]="fieldToDisplay.filterSelectConfig && fieldToDisplay.filterSelectConfig.multipleSelection"
+            [multiSelect]="fieldToDisplay.filterSelectConfig && fieldToDisplay.filterSelectConfig.enableMultipleSelection"
             [formControlName]="fieldToDisplay.key"
             [placeholder]="fieldToDisplay.label"
             [fieldConfig]="fieldToDisplay"

@@ -72,7 +72,7 @@
       "required": false,
       "displayType": "filter-select",
       "filterSelectConfig": {
-        "multipleSelection": true
+        "enableMultipleSelection": true
       },
       "dynamicSelectConfig": {
         "type": "test-type",
