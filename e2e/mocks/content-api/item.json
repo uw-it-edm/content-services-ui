@@ -24,6 +24,8 @@
     "childType": "Child2Parent2",
     "DataApiOptionLabel": "VAL_1",
     "DataApiOptionCode": "VAL_1",
+    "DataApiWithFilter": "VAL_1",
+    "DataApiOptionMultiSelect": ["VAL_1", "VAL_3"],
     "courses": "2019|autumn|PHYS|101|GROUP SCI INQUIRY I|B"
   }
 }
