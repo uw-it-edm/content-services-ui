@@ -249,7 +249,7 @@ describe('Edit Page for Demo', () => {
     expect(page.getSnackBarText()).toEqual('There was an error deleting content item:Forbidden\nDismiss');
   });
 
-  it('should be able to add and remove options from filter select', () => {
+  it('should be able to add and remove options from filter select with multi select', () => {
     // verify filter-select component loads chips from server and save button is disabled
     const filterSelect = page.fields.getFilterSelectFormField('DataApiOption with filter multi select');
     filterSelect.waitForSelectionCount(2);
