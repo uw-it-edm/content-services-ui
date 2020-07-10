@@ -1,6 +1,6 @@
 import { Observable, of } from 'rxjs';
 
-import { map, mergeMap } from 'rxjs/operators';
+import { catchError, map, mergeMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
@@ -26,11 +26,15 @@ export class StudentService {
       - firstName
       - studentNumber */
   public autocomplete(term: string): Observable<StudentSearchResults> {
-    if (term && term.trim().length > 0) {
+    if (term && term.trim().length > 1) {
+      // a minimum of 2 characters are required by backend
       let searchModel = this.createAutocompleteSearchModel(term);
 
       return this.searchStudent(searchModel).pipe(
-        mergeMap(result => {
+        catchError((val) => {
+          return of(new StudentSearchResults());
+        }),
+        mergeMap((result) => {
           // if the initial search did not have any results and was only the lastName, try again using the term firstName
           if (
             result.totalElements === 0 &&
@@ -53,7 +57,7 @@ export class StudentService {
     const searchModel = new StudentSearchModel();
 
     if (term.indexOf(',') !== -1) {
-      const names: string[] = term.split(',', 2).map(s => s.trim());
+      const names: string[] = term.split(',', 2).map((s) => s.trim());
       if (names.length > 0) {
         searchModel.lastName = names[0];
       }
@@ -61,7 +65,7 @@ export class StudentService {
         searchModel.firstName = names[1];
       }
     } else if (term.indexOf(' ') !== -1) {
-      const names: string[] = term.split(' ', 2).map(s => s.trim());
+      const names: string[] = term.split(' ', 2).map((s) => s.trim());
       if (names.length > 1) {
         searchModel.lastName = names[1];
       }
@@ -84,7 +88,7 @@ export class StudentService {
     const options = this.buildRequestOptions();
     return this.http
       .get<Student>(this.studentUrl + '/' + studentNumber, options)
-      .pipe(map(dataApiStudent => this.fromDataApiObject(dataApiStudent)));
+      .pipe(map((dataApiStudent) => this.fromDataApiObject(dataApiStudent)));
   }
 
   private searchStudent(searchModel: StudentSearchModel): Observable<StudentSearchResults> {
@@ -168,7 +172,7 @@ export class StudentService {
     const options = this.buildRequestOptions(params);
     return this.http
       .get<any>(this.studentUrl + '/course/' + year + '/' + quarter + '/' + curriculum, options)
-      .pipe(map(dataApiCourses => dataApiCourses));
+      .pipe(map((dataApiCourses) => dataApiCourses));
   }
 
   @CacheObservableDecorator
@@ -178,6 +182,6 @@ export class StudentService {
     if (courseNumber) {
       url += '/' + courseNumber;
     }
-    return this.http.get<any>(url, options).pipe(map(dataApiSections => dataApiSections));
+    return this.http.get<any>(url, options).pipe(map((dataApiSections) => dataApiSections));
   }
 }
