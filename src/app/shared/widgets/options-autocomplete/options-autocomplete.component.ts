@@ -61,6 +61,7 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
   formGroup: FormGroup;
   filteredOptions$: Observable<FieldOption[]>;
   selectedOptions: FieldOption[] = [];
+  maxSelectionCount = Number.MAX_VALUE;
 
   @Input()
   get disabled() {
@@ -76,6 +77,18 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
     return this._filterInputControl;
   }
 
+  get areMoreSelectionsAllowed(): boolean {
+    return this.selectedOptions.length < this.maxSelectionCount;
+  }
+
+  get multiSelectLabelText(): string {
+    if (!this.multiSelect || this.maxSelectionCount === Number.MAX_VALUE) {
+      return this.placeholder;
+    } else {
+      return `${this.placeholder} (${this.selectedOptions.length} of ${this.maxSelectionCount})`;
+    }
+  }
+
   constructor(
     private fb: FormBuilder,
     private fieldOptionService: FieldOptionService,
@@ -83,8 +96,11 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
   ) {}
 
   ngOnInit(): void {
-    this._filterInputControl = new FormControl(null, this.multiSelect ? [] : [RequiresFieldOptionObject]);
+    const maxCountSetting =
+      this.fieldConfig.filterSelectConfig && this.fieldConfig.filterSelectConfig.maximumSelectionCount;
+    this.maxSelectionCount = typeof maxCountSetting === 'number' ? maxCountSetting : Number.MAX_VALUE;
 
+    this._filterInputControl = new FormControl(null, this.multiSelect ? [] : [RequiresFieldOptionObject]);
     this.formGroup = this.fb.group({});
     this.formGroup.controls[INTERNAL_FILTER_CONTROL_NAME] = this.filterInputControl;
 
@@ -204,13 +220,15 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
   }
 
   private addOptionToMultiSelect(option: FieldOption): void {
-    this.selectedOptions.push(option);
-    this.selectedOptionsChanged.next();
-    this.onChange(this.selectedOptions.map((opt) => opt.value));
+    if (this.areMoreSelectionsAllowed) {
+      this.selectedOptions.push(option);
+      this.selectedOptionsChanged.next();
+      this.onChange(this.selectedOptions.map((opt) => opt.value));
 
-    this.filterInputControl.reset();
-    if (this.filterInputElement) {
-      this.filterInputElement.nativeElement.value = '';
+      this.filterInputControl.reset();
+      if (this.filterInputElement) {
+        this.filterInputElement.nativeElement.value = '';
+      }
     }
   }
 

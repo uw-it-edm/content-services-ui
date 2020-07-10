@@ -38,14 +38,40 @@
         "label": "test-type"
       },
       "valueId": "VAL_3"
+    },
+    {
+      "data": {
+        "label": "val 4 label",
+        "metadata": {
+          "Code": "code 4"
+        }
+      },
+      "type": {
+        "id": 1,
+        "label": "test-type"
+      },
+      "valueId": "VAL_4"
+    },
+    {
+      "data": {
+        "label": "val 5 label",
+        "metadata": {
+          "Code": "code 5"
+        }
+      },
+      "type": {
+        "id": 1,
+        "label": "test-type"
+      },
+      "valueId": "VAL_5"
     }
   ],
   "first": true,
   "last": true,
   "number": 0,
-  "numberOfElements": 3,
+  "numberOfElements": 5,
   "size": 50,
   "sort": null,
-  "totalElements": 3,
+  "totalElements": 5,
   "totalPages": 1
 }
