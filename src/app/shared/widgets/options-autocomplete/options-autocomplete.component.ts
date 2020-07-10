@@ -6,7 +6,6 @@ import { takeUntil, map, switchMap, startWith, first, distinctUntilChanged, debo
 import { FieldOption } from '../../../core/shared/model/field/field-option';
 import { Field } from '../../../core/shared/model/field';
 import { FieldOptionService } from '../../providers/fieldoption.service';
-import { NullTemplateVisitor } from '@angular/compiler';
 
 const INTERNAL_FILTER_CONTROL_NAME = 'internalFilterControl';
 
