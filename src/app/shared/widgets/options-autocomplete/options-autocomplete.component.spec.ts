@@ -147,7 +147,7 @@ describe('OptionsAutocompleteComponent', () => {
 
       expect(currentValue).toBe('val2');
 
-      expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Selected display2 xy', 'polite');
+      expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Selected display2 xy.', 'polite');
     });
 
     // See CAB-4067. For accessibility, the list should filter down to the selected value so that it is announced on focus.
@@ -218,7 +218,7 @@ describe('OptionsAutocompleteComponent', () => {
       expect(component.selectedOptions[0].value).toEqual('val2');
       expect(currentValues).toEqual(['val2']);
       expect(chipList.chips.length).toEqual(1);
-      expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Selected display2 xy', 'polite');
+      expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Selected display2 xy.', 'polite');
     });
 
     it('should set form model to empty array when the last option is removed', () => {
@@ -272,18 +272,14 @@ describe('OptionsAutocompleteComponent', () => {
       expect(component.maxSelectionCount).toEqual(Number.MAX_VALUE);
     });
 
-    it('should update the placeholder of control dependending of selection count if maxSelectionCount is set', () => {
+    it('should update the placeholder of control if maxSelectionCount is set', () => {
       component.placeholder = 'test placeholder';
       fixture.detectChanges();
       expect(component.multiSelectLabelText).toEqual('test placeholder');
 
       component.maxSelectionCount = 3;
       fixture.detectChanges();
-      expect(component.multiSelectLabelText).toEqual('test placeholder (0 of 3)');
-
-      component.optionSelected(fieldOptions[1]);
-      fixture.detectChanges();
-      expect(component.multiSelectLabelText).toEqual('test placeholder (1 of 3)');
+      expect(component.multiSelectLabelText).toEqual('test placeholder (select up to 3)');
     });
 
     it('should perform no operation when option selected and already at max selection count', () => {
@@ -317,6 +313,17 @@ describe('OptionsAutocompleteComponent', () => {
       component.removeOptionFromMultiSelect(fieldOptions[1]);
       fixture.detectChanges();
       expect(autoComplete.options.first.disabled).toBeFalsy();
+    });
+
+    it('should announce the selection counts when adding and removing options', () => {
+      component.maxSelectionCount = 1;
+      component.optionSelected(fieldOptions[1]);
+      fixture.detectChanges();
+      expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Selected display2 xy. Selected 1 of 1 options allowed.', 'polite');
+
+      component.removeOptionFromMultiSelect(fieldOptions[1]);
+      fixture.detectChanges();
+      expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Removed display2 xy. Selected 0 of 1 options allowed.', 'polite');
     });
   });
 });

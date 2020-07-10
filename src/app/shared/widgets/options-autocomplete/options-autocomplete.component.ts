@@ -1,18 +1,12 @@
 import { Component, forwardRef, Input, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import {
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR,
-  FormGroup,
-  FormBuilder,
-  FormControl,
-  AbstractControl,
-} from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormGroup, FormBuilder, FormControl, AbstractControl } from '@angular/forms';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Subject, Observable, of, combineLatest, concat } from 'rxjs';
 import { takeUntil, map, switchMap, startWith, first, distinctUntilChanged, debounceTime, skip } from 'rxjs/operators';
 import { FieldOption } from '../../../core/shared/model/field/field-option';
 import { Field } from '../../../core/shared/model/field';
 import { FieldOptionService } from '../../providers/fieldoption.service';
+import { NullTemplateVisitor } from '@angular/compiler';
 
 const INTERNAL_FILTER_CONTROL_NAME = 'internalFilterControl';
 
@@ -85,19 +79,14 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
     if (!this.multiSelect || this.maxSelectionCount === Number.MAX_VALUE) {
       return this.placeholder;
     } else {
-      return `${this.placeholder} (${this.selectedOptions.length} of ${this.maxSelectionCount})`;
+      return `${this.placeholder} (select up to ${this.maxSelectionCount})`;
     }
   }
 
-  constructor(
-    private fb: FormBuilder,
-    private fieldOptionService: FieldOptionService,
-    private liveAnnouncer: LiveAnnouncer
-  ) {}
+  constructor(private fb: FormBuilder, private fieldOptionService: FieldOptionService, private liveAnnouncer: LiveAnnouncer) {}
 
   ngOnInit(): void {
-    const maxCountSetting =
-      this.fieldConfig.filterSelectConfig && this.fieldConfig.filterSelectConfig.maximumSelectionCount;
+    const maxCountSetting = this.fieldConfig.filterSelectConfig && this.fieldConfig.filterSelectConfig.maximumSelectionCount;
     this.maxSelectionCount = typeof maxCountSetting === 'number' ? maxCountSetting : Number.MAX_VALUE;
 
     this._filterInputControl = new FormControl(null, this.multiSelect ? [] : [RequiresFieldOptionObject]);
@@ -162,14 +151,14 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
 
   optionSelected(newOption: FieldOption) {
     if (newOption) {
-      this.liveAnnouncer.announce(`Selected ${newOption.displayValue}`, 'polite');
-
       if (this.multiSelect) {
         this.addOptionToMultiSelect(newOption);
       } else {
         this.latestValidOption = newOption;
         this.onChange(newOption.value);
       }
+
+      this.announceWithSelectionCount(`Selected ${newOption.displayValue}.`);
     }
   }
 
@@ -177,10 +166,20 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
     const index = this.selectedOptions.findIndex((opt) => opt.value === option.value);
 
     if (index >= 0) {
-      this.liveAnnouncer.announce(`Removed ${option.displayValue}`, 'polite');
       this.selectedOptions.splice(index, 1);
       this.selectedOptionsChanged.next();
       this.onChange(this.selectedOptions.map((opt) => opt.value));
+      this.announceWithSelectionCount(`Removed ${option.displayValue}.`);
+    }
+  }
+
+  announceWithSelectionCount(message: string = ''): void {
+    if (this.multiSelect && this.maxSelectionCount !== Number.MAX_VALUE) {
+      message += ` Selected ${this.selectedOptions.length} of ${this.maxSelectionCount} options allowed.`;
+    }
+
+    if (message) {
+      this.liveAnnouncer.announce(message, 'polite');
     }
   }
 
@@ -278,11 +277,7 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
             this.onChange(null);
 
             if (newParentValue) {
-              return this.fieldOptionService.getOptionsFromParent(
-                dynamicSelectConfig,
-                parentFieldConfig,
-                newParentValue
-              );
+              return this.fieldOptionService.getOptionsFromParent(dynamicSelectConfig, parentFieldConfig, newParentValue);
             } else {
               return of([]);
             }
