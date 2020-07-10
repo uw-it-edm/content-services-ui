@@ -1,5 +1,12 @@
 import { Component, forwardRef, Input, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormGroup, FormBuilder, FormControl, AbstractControl } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR,
+  FormGroup,
+  FormBuilder,
+  FormControl,
+  AbstractControl,
+} from '@angular/forms';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Subject, Observable, of, combineLatest, concat } from 'rxjs';
 import { takeUntil, map, switchMap, startWith, first, distinctUntilChanged, debounceTime, skip } from 'rxjs/operators';
@@ -69,7 +76,11 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
     return this._filterInputControl;
   }
 
-  constructor(private fb: FormBuilder, private fieldOptionService: FieldOptionService, private liveAnnouncer: LiveAnnouncer) {}
+  constructor(
+    private fb: FormBuilder,
+    private fieldOptionService: FieldOptionService,
+    private liveAnnouncer: LiveAnnouncer
+  ) {}
 
   ngOnInit(): void {
     this._filterInputControl = new FormControl(null, this.multiSelect ? [] : [RequiresFieldOptionObject]);
@@ -89,9 +100,12 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
       map(([options, filter]) =>
         options.filter((option) => {
           const fieldOption = filter as FieldOption;
+
+          // By default remove the options that are already in the selected options array.
           let keepOption = this.selectedOptions.findIndex((opt) => opt.value === option.value) < 0;
 
           if (typeof filter === 'string' && filter.length > 0) {
+            // Remove options that do not match the filter string.
             keepOption = keepOption && option.displayValue.toLowerCase().indexOf(filter.toLowerCase()) >= 0;
           } else if (!this.multiSelect && fieldOption !== null && fieldOption.displayValue) {
             keepOption = option.displayValue.toLowerCase().indexOf(fieldOption.displayValue.toLowerCase()) >= 0;
@@ -154,16 +168,22 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
     }
   }
 
+  /**
+   * This method is called by the forms API to write to the view when programmatic changes from model to view are requested.
+   */
   writeValue(value: any): void {
     if (value) {
       this.allOptions$.pipe(first()).subscribe((options) => {
-        this.multiSelect ? this.loadMultiValues(value, options) : this.loadSingleValue(value, options);
+        this.multiSelect ? this.loadMultipleValues(value, options) : this.loadSingleValue(value, options);
       });
     } else {
       this.reset();
     }
   }
 
+  /**
+   * When the value changes in the UI, the registered function should be called to allow the forms API to update itself.
+   */
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
@@ -210,7 +230,7 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
     }
   }
 
-  private loadMultiValues(selectedValues: string[], allOptions: FieldOption[]): void {
+  private loadMultipleValues(selectedValues: string[], allOptions: FieldOption[]): void {
     if (!Array.isArray(selectedValues)) {
       throw new Error(
         `OptionsAutocompleteComponent with multiSelect=true expected value from model to be an array. Actual value: ${JSON.stringify(
@@ -240,7 +260,11 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
             this.onChange(null);
 
             if (newParentValue) {
-              return this.fieldOptionService.getOptionsFromParent(dynamicSelectConfig, parentFieldConfig, newParentValue);
+              return this.fieldOptionService.getOptionsFromParent(
+                dynamicSelectConfig,
+                parentFieldConfig,
+                newParentValue
+              );
             } else {
               return of([]);
             }
