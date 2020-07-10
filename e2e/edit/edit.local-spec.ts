@@ -248,6 +248,25 @@ describe('Edit Page for Demo', () => {
 
     expect(page.getSnackBarText()).toEqual('There was an error deleting content item:Forbidden\nDismiss');
   });
+
+  it('should be able to add and remove options from filter select with multi select', () => {
+    // verify filter-select component loads chips from server and save button is disabled
+    const filterSelect = page.fields.getFilterSelectFormField('DataApiOption with filter multi select');
+    filterSelect.waitForSelectionCount(2);
+    expect(filterSelect.getSelectedValues()).toEqual(['val 1 label', 'val 3 label']);
+    expect(page.saveButton.isEnabled()).toBeFalsy();
+
+    // remove an option, verify save button becomes enabled
+    filterSelect.removeOptionAt(0);
+    filterSelect.waitForSelectionCount(1);
+    expect(filterSelect.getSelectedValues()).toEqual(['val 3 label']);
+    expect(page.saveButton.isEnabled()).toBeTruthy();
+
+    // add an option, verify selected options changed
+    filterSelect.addOptionAt(1);
+    filterSelect.waitForSelectionCount(2);
+    expect(filterSelect.getSelectedValues()).toEqual(['val 3 label', 'val 2 label']);
+  });
 });
 
 describe('Edit Page for Demo2', () => {

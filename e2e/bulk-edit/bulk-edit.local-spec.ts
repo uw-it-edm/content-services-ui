@@ -79,4 +79,23 @@ describe('Bulk Update Flow', () => {
     bulkEditPage.resetButton.click();
     expect(childField.optionsInputElement.getAttribute('required')).toBeFalsy();
   });
+
+  it('should be able to add and remove options from filter select with multi select', () => {
+    // verify filter select component loads with no selections and update button is disabled.
+    const filterSelect = bulkEditPage.fields.getFilterSelectFormField('DataApiOption with filter multi select');
+    expect(filterSelect.selectedOptions.count()).toEqual(0);
+    expect(bulkEditPage.updateButton.isEnabled()).toBeFalsy();
+
+    // select an option, verify update button becomes enabled.
+    filterSelect.addOptionAt(1);
+    filterSelect.waitForSelectionCount(1);
+    expect(filterSelect.getSelectedValues()).toEqual(['val 2 label']);
+    expect(bulkEditPage.updateButton.isEnabled()).toBeTruthy();
+
+    // remove option, verify update button becomes disabled again.
+    filterSelect.removeOptionAt(0);
+    filterSelect.waitForSelectionCount(0);
+    expect(filterSelect.selectedOptions.count()).toEqual(0);
+    expect(bulkEditPage.updateButton.isEnabled()).toBeFalsy();
+  });
 });
