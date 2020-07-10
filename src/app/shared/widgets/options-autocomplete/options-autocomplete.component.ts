@@ -1,5 +1,12 @@
 import { Component, forwardRef, Input, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormGroup, FormBuilder, FormControl, AbstractControl } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR,
+  FormGroup,
+  FormBuilder,
+  FormControl,
+  AbstractControl,
+} from '@angular/forms';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Subject, Observable, of, combineLatest, concat } from 'rxjs';
 import { takeUntil, map, switchMap, startWith, first, distinctUntilChanged, debounceTime, skip } from 'rxjs/operators';
@@ -69,7 +76,11 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
     return this._filterInputControl;
   }
 
-  constructor(private fb: FormBuilder, private fieldOptionService: FieldOptionService, private liveAnnouncer: LiveAnnouncer) {}
+  constructor(
+    private fb: FormBuilder,
+    private fieldOptionService: FieldOptionService,
+    private liveAnnouncer: LiveAnnouncer
+  ) {}
 
   ngOnInit(): void {
     this._filterInputControl = new FormControl(null, this.multiSelect ? [] : [RequiresFieldOptionObject]);
@@ -240,7 +251,11 @@ export class OptionsAutocompleteComponent implements ControlValueAccessor, OnIni
             this.onChange(null);
 
             if (newParentValue) {
-              return this.fieldOptionService.getOptionsFromParent(dynamicSelectConfig, parentFieldConfig, newParentValue);
+              return this.fieldOptionService.getOptionsFromParent(
+                dynamicSelectConfig,
+                parentFieldConfig,
+                newParentValue
+              );
             } else {
               return of([]);
             }
