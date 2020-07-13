@@ -1,5 +1,6 @@
 import { ComponentFixture, async, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { MatChipList } from '@angular/material/chips';
+import { MatAutocomplete } from '@angular/material/autocomplete';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { of } from 'rxjs';
 import { first, skip } from 'rxjs/operators';
@@ -146,7 +147,7 @@ describe('OptionsAutocompleteComponent', () => {
 
       expect(currentValue).toBe('val2');
 
-      expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Selected display2 xy', 'polite');
+      expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Selected display2 xy.', 'polite');
     });
 
     // See CAB-4067. For accessibility, the list should filter down to the selected value so that it is announced on focus.
@@ -217,7 +218,7 @@ describe('OptionsAutocompleteComponent', () => {
       expect(component.selectedOptions[0].value).toEqual('val2');
       expect(currentValues).toEqual(['val2']);
       expect(chipList.chips.length).toEqual(1);
-      expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Selected display2 xy', 'polite');
+      expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Selected display2 xy.', 'polite');
     });
 
     it('should set form model to empty array when the last option is removed', () => {
@@ -265,6 +266,64 @@ describe('OptionsAutocompleteComponent', () => {
       expect(component.selectedOptions.length).toEqual(0);
 
       subscription.unsubscribe();
+    });
+
+    it('should default maxSelection count to max value if not specified in config', () => {
+      expect(component.maxSelectionCount).toEqual(Number.MAX_VALUE);
+    });
+
+    it('should update the placeholder of control if maxSelectionCount is set', () => {
+      component.placeholder = 'test placeholder';
+      fixture.detectChanges();
+      expect(component.multiSelectLabelText).toEqual('test placeholder');
+
+      component.maxSelectionCount = 3;
+      fixture.detectChanges();
+      expect(component.multiSelectLabelText).toEqual('test placeholder (select up to 3)');
+    });
+
+    it('should perform no operation when option selected and already at max selection count', () => {
+      let filteredOptions: FieldOption[] = [];
+      const subscription = component.filteredOptions$.subscribe((options) => (filteredOptions = options));
+
+      component.maxSelectionCount = 1;
+
+      component.optionSelected(fieldOptions[1]);
+      expect(component.selectedOptions.length).toEqual(1);
+      expect(filteredOptions.length).toEqual(2);
+
+      component.optionSelected(fieldOptions[2]);
+      expect(component.selectedOptions.length).toEqual(1);
+      expect(filteredOptions.length).toEqual(2);
+
+      subscription.unsubscribe();
+    });
+
+    it('should disable the options list when max selection count is reached', () => {
+      const autoComplete: MatAutocomplete = fixture.debugElement.query(By.directive(MatAutocomplete)).componentInstance;
+
+      component.maxSelectionCount = 1;
+      fixture.detectChanges();
+      expect(autoComplete.options.first.disabled).toBeFalsy();
+
+      component.optionSelected(fieldOptions[1]);
+      fixture.detectChanges();
+      expect(autoComplete.options.first.disabled).toBeTruthy();
+
+      component.removeOptionFromMultiSelect(fieldOptions[1]);
+      fixture.detectChanges();
+      expect(autoComplete.options.first.disabled).toBeFalsy();
+    });
+
+    it('should announce the selection counts when adding and removing options', () => {
+      component.maxSelectionCount = 1;
+      component.optionSelected(fieldOptions[1]);
+      fixture.detectChanges();
+      expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Selected display2 xy. Selected 1 of 1 options allowed.', 'polite');
+
+      component.removeOptionFromMultiSelect(fieldOptions[1]);
+      fixture.detectChanges();
+      expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Removed display2 xy. Selected 0 of 1 options allowed.', 'polite');
     });
   });
 });

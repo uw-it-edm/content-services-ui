@@ -23,7 +23,7 @@
     <input
       #filterInputElement
       formControlName="internalFilterControl"
-      [placeholder]="placeholder"
+      [placeholder]="multiSelectLabelText"
       [attr.aria-label]="placeholder"
       [matAutocomplete]="auto"
       [matChipInputFor]="chipList" />
@@ -32,8 +32,9 @@
   <mat-autocomplete #auto="matAutocomplete"
                     [displayWith]="getOptionDisplayValue"
                     (closed)="optionListClosed()"
+                    (opened)="announceWithSelectionCount()"
                     (optionSelected)="optionSelected($event.option.value)">
-    <mat-option *ngFor="let option of filteredOptions$ | async" [value]="option">
+    <mat-option *ngFor="let option of filteredOptions$ | async" [value]="option" [disabled]="!areMoreSelectionsAllowed">
       {{ option.displayValue }}
     </mat-option>
   </mat-autocomplete>
