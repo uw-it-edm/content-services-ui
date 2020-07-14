@@ -4,9 +4,9 @@ import { BrowserUtils } from '../browserUtils';
 const utils = new BrowserUtils();
 
 /**
- * Page object to interact with a form field that contains a OptionsAutocompleteComponent.
+ * Page object to interact with a form field that contains a OptionsMultiselectComponent.
  */
-export class FilterSelectFieldPageObject {
+export class MultiSelectFieldPageObject {
   /**
    * Creates a new instance of page object.
    */
@@ -25,11 +25,7 @@ export class FilterSelectFieldPageObject {
       .then(() => expect(this.selectedOptions.count()).toBeGreaterThan(index, 'Not enough selected options.'));
 
     const removeButton = this.selectedOptions.get(index).element(by.tagName('mat-icon'));
-    browser.wait(
-      ExpectedConditions.elementToBeClickable(removeButton),
-      5000,
-      `Selected option at index '${index}' is not clickable.`
-    );
+    browser.wait(ExpectedConditions.elementToBeClickable(removeButton), 5000, `Selected option at index '${index}' is not clickable.`);
 
     return removeButton.click();
   }
@@ -62,9 +58,7 @@ export class FilterSelectFieldPageObject {
    */
   getSelectedValues(): promise.Promise<string[]> {
     // ElementArrayFinder.getText() has incorrect return type. See https://github.com/angular/protractor/issues/3818
-    return this.selectedOptions
-      .getText()
-      .then((result: any) => (<string[]>result).map((val) => val.replace('cancel', '').trim()));
+    return this.selectedOptions.getText().then((result: any) => (<string[]>result).map((val) => val.replace('cancel', '').trim()));
   }
 
   /**
