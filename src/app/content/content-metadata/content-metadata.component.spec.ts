@@ -25,6 +25,7 @@ import { TimestampPickerComponent } from '../../shared/widgets/timestamp-picker/
 import { FieldOption } from '../../core/shared/model/field/field-option';
 import { OptionsInputComponent } from '../../shared/widgets/options-input/options-input.component';
 import { OptionsAutocompleteComponent } from '../../shared/widgets/options-autocomplete/options-autocomplete.component';
+import { OptionsMultiselectComponent } from '../../shared/widgets/options-multiselect/options-multiselect.component';
 import { CourseInputComponent } from '../../shared/widgets/course-input/course-input.component';
 import { Field } from '../../core/shared/model/field';
 import { DataApiValueService } from '../../shared/providers/dataapivalue.service';
@@ -117,6 +118,7 @@ describe('ContentMetadataComponent', () => {
         CheckboxInputComponent,
         OptionsInputComponent,
         OptionsAutocompleteComponent,
+        OptionsMultiselectComponent,
         CourseInputComponent,
         StudentAutocompleteComponent,
         PersonAutocompleteComponent,

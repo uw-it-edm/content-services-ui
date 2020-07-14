@@ -22,6 +22,7 @@ import { ProgressService } from './providers/progress.service';
 import { FocusDirective } from './directives/focus/focus.directive';
 import { OptionsInputComponent } from './widgets/options-input/options-input.component';
 import { OptionsAutocompleteComponent } from './widgets/options-autocomplete/options-autocomplete.component';
+import { OptionsMultiselectComponent } from './widgets/options-multiselect/options-multiselect.component';
 import { NotificationComponent } from './widgets/notification/notification.component';
 import { NotificationService } from './providers/notification.service';
 import { ContentViewComponent } from '../content/content-view/content-view.component';
@@ -37,15 +38,7 @@ import { CourseInputComponent } from './widgets/course-input/course-input.compon
 import { A11yModule } from '@angular/cdk/a11y';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MaterialConfigModule,
-    RouterModule,
-    ReactiveFormsModule,
-    FormsModule,
-    PdfViewerModule,
-    A11yModule,
-  ],
+  imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule, FormsModule, PdfViewerModule, A11yModule],
   exports: [
     CommonModule,
     CustomTextDirective,
@@ -58,6 +51,7 @@ import { A11yModule } from '@angular/cdk/a11y';
     CheckboxInputComponent,
     OptionsInputComponent,
     OptionsAutocompleteComponent,
+    OptionsMultiselectComponent,
     StudentAutocompleteComponent,
     StudentDisplayComponent,
     PersonAutocompleteComponent,
@@ -81,6 +75,7 @@ import { A11yModule } from '@angular/cdk/a11y';
     CheckboxInputComponent,
     OptionsInputComponent,
     OptionsAutocompleteComponent,
+    OptionsMultiselectComponent,
     StudentAutocompleteComponent,
     StudentDisplayComponent,
     DataApiValueDisplayComponent,
