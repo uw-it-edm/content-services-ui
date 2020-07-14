@@ -150,8 +150,22 @@ describe('OptionsMultiselectComponent', () => {
     subscription.unsubscribe();
   });
 
-  it('should default maxSelection count to max value if not specified in config', () => {
+  it('should default max selection count to max value if not specified in config', () => {
     expect(component.maxSelectionCount).toEqual(Number.MAX_VALUE);
+  });
+
+  it('should read max selection count from config', () => {
+    fixture = TestBed.createComponent(OptionsMultiselectComponent);
+    component = fixture.componentInstance;
+
+    const fieldConfig = new Field();
+    fieldConfig.options = fieldOptions;
+    fieldConfig.multiSelectConfig = { maximumSelectionCount: 3 };
+    component.fieldConfig = fieldConfig;
+
+    fixture.detectChanges();
+
+    expect(component.maxSelectionCount).toEqual(3);
   });
 
   it('should update the placeholder of control if maxSelectionCount is set', () => {

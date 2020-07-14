@@ -251,7 +251,7 @@ describe('Edit Page for Demo', () => {
 
   it('should be able to add and remove options from filter select with multi select', () => {
     // verify filter-select component loads chips from server and save button is disabled
-    const filterSelect = page.fields.getFilterSelectFormField('DataApiOption with filter multi select');
+    const filterSelect = page.fields.getMultiSelectFormField('DataApiOption with filter multi select');
     filterSelect.waitForSelectionCount(2);
     expect(filterSelect.getSelectedValues()).toEqual(['val 1 label', 'val 3 label']);
     expect(page.saveButton.isEnabled()).toBeFalsy();

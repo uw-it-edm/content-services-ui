@@ -41,6 +41,9 @@ export class OptionsMultiselectComponent extends OptionsAutocompleteComponentBas
 
   ngOnInit(): void {
     super.ngOnInit();
+
+    const maxCountSetting = this.fieldConfig.multiSelectConfig && this.fieldConfig.multiSelectConfig.maximumSelectionCount;
+    this.maxSelectionCount = typeof maxCountSetting === 'number' ? maxCountSetting : Number.MAX_VALUE;
   }
 
   addOptionToMultiSelect(option: FieldOption): void {
