@@ -19,6 +19,7 @@
       value="{{value}}"
       type="{{field.dynamicSelectConfig.type}}"
       labelPath="{{field.dynamicSelectConfig.labelPath}}"
+      [sourceModel]="sourceModel"
     ></app-data-api-display>
   </span>
   <span *ngSwitchCase="'listValue'">

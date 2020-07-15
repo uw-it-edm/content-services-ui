@@ -37,7 +37,7 @@ class MockDataApiValueService extends DataApiValueService {
   }
 }
 
-describe('PersonDisplayComponent', () => {
+describe('DataApiValueDisplayComponent', () => {
   let component: DataApiValueDisplayComponent;
   let fixture: ComponentFixture<DataApiValueDisplayComponent>;
 
@@ -55,13 +55,11 @@ describe('PersonDisplayComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DataApiValueDisplayComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
   it('should look up a dataApiValue', () => {
+    fixture.detectChanges();
+
     component.value = 'ABCD';
     component.type = 'my-type';
     component.labelPath = 'metadata.label';
@@ -73,7 +71,10 @@ describe('PersonDisplayComponent', () => {
     expect(el.nativeElement.innerHTML).toBe('Label of ABCD');
     expect(el.nativeElement.classList).not.toContain('invalid-regid');
   });
+
   it('should display the value, and add the "invalid-valueid" class if it is not a valid valueId', () => {
+    fixture.detectChanges();
+
     component.value = 'AKDSAKD';
     component.ngOnInit();
     fixture.detectChanges();
@@ -83,6 +84,47 @@ describe('PersonDisplayComponent', () => {
       const el = fixture.debugElement.query(By.css('span'));
       expect(el.nativeElement.innerHTML).toBe('AKDSAKD');
       expect(el.nativeElement.classList).toContain('invalid-valueid');
+    });
+  });
+
+  describe('with source model', () => {
+    it('should use display value from source model', () => {
+      component.value = 'val1';
+      component.sourceModel = { valueId: 'val1', type: null, data: { label: 'value 1' } };
+      fixture.detectChanges();
+
+      expect(component.displayValue).toEqual('value 1');
+
+      const el = fixture.debugElement.query(By.css('span'));
+      expect(el.nativeElement.innerHTML).toBe('value 1');
+      expect(el.nativeElement.classList).not.toContain('invalid-regid');
+    });
+
+    it('should use display value from source model with custom label path', () => {
+      component.value = 'val1';
+      component.labelPath = 'prop.label';
+      component.sourceModel = {
+        valueId: 'val1',
+        type: null,
+        data: {
+          prop: {
+            label: 'value 1',
+          },
+        },
+      };
+      fixture.detectChanges();
+
+      expect(component.displayValue).toEqual('value 1');
+      expect(component.invalidValueId).toBeFalse();
+    });
+
+    it('should use raw value in error mode if source model is missing label', () => {
+      component.value = 'val1';
+      component.sourceModel = { valueId: 'val1', type: null, data: { badLabel: 'value 1' } };
+      fixture.detectChanges();
+
+      expect(component.displayValue).toBe('val1');
+      expect(component.invalidValueId).toBeTrue();
     });
   });
 });

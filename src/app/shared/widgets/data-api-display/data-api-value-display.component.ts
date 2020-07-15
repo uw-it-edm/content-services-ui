@@ -6,10 +6,12 @@ import { DataApiValueService } from '../../providers/dataapivalue.service';
 import { DataApiValue } from '../../shared/model/data-api-value';
 import { ObjectUtilities } from '../../../core/util/object-utilities';
 
+const DEFAULT_LABEL_PATH = 'label';
+
 @Component({
   selector: 'app-data-api-display',
   templateUrl: './data-api-value-display.component.html',
-  styleUrls: ['./data-api-value-display.component.css']
+  styleUrls: ['./data-api-value-display.component.css'],
 })
 export class DataApiValueDisplayComponent implements OnInit, OnDestroy {
   private componentDestroyed = new Subject();
@@ -17,14 +19,17 @@ export class DataApiValueDisplayComponent implements OnInit, OnDestroy {
   @Input() value: string;
   @Input() type: string;
   @Input() labelPath: string;
+  @Input() sourceModel: DataApiValue;
 
   displayValue: string;
-  invalidValueId: boolean;
+  invalidValueId = false;
 
   constructor(private dataApiService: DataApiValueService, private notificationService: NotificationService) {}
 
   ngOnInit() {
-    if (this.value && this.type && this.labelPath) {
+    if (this.sourceModel && this.sourceModel.data) {
+      this.loadDisplayValueFromSourceModel(this.sourceModel.data);
+    } else if (this.value && this.type && this.labelPath) {
       this.dataApiService
         .getByTypeAndValueId(this.type, this.value)
         .pipe(takeUntil(this.componentDestroyed))
@@ -33,7 +38,7 @@ export class DataApiValueDisplayComponent implements OnInit, OnDestroy {
             this.displayValue = this.dataApiValueToDisplayValue(dataApiValue);
             this.invalidValueId = false;
           },
-          err => {
+          (err) => {
             this.notificationService.warn(err.message, err);
             this.invalidValue();
           }
@@ -56,5 +61,16 @@ export class DataApiValueDisplayComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.componentDestroyed.next();
     this.componentDestroyed.complete();
+  }
+
+  private loadDisplayValueFromSourceModel(sourceModelData: any) {
+    const labelPath = this.labelPath || DEFAULT_LABEL_PATH;
+    const displayValue = ObjectUtilities.getNestedObjectFromStringPath(sourceModelData, labelPath);
+
+    if (displayValue) {
+      this.displayValue = displayValue;
+    } else {
+      this.invalidValue();
+    }
   }
 }
