@@ -7,6 +7,10 @@ describe('ListFieldDisplayComponent', () => {
   let component: ListFieldDisplayComponent;
   let fixture: ComponentFixture<ListFieldDisplayComponent>;
 
+  const getDisplayValues = (): string[] => {
+    return component.listItems.map((item) => item.displayValue);
+  };
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ListFieldDisplayComponent],
@@ -20,24 +24,24 @@ describe('ListFieldDisplayComponent', () => {
     });
 
     it('should display values directly', () => {
-      component.values = ['test val 1', 'teset val 2'];
+      component.values = ['test val 1', 'test val 2'];
       fixture.detectChanges();
 
-      expect(component.displayValues).toEqual(['test val 1', 'teset val 2']);
+      expect(getDisplayValues()).toEqual(['test val 1', 'test val 2']);
     });
 
     it('should remove empty values', () => {
       component.values = [null, 'test val 1', ''];
       fixture.detectChanges();
 
-      expect(component.displayValues).toEqual(['test val 1']);
+      expect(getDisplayValues()).toEqual(['test val 1']);
     });
 
     it('should limit display values if there are more than 3 items to display', () => {
       component.values = ['val 1', '', 'val 2', 'val 3', 'val 4'];
       fixture.detectChanges();
 
-      expect(component.displayValues).toEqual(['val 1', 'val 2', 'val 3']);
+      expect(getDisplayValues()).toEqual(['val 1', 'val 2', 'val 3']);
     });
 
     it('should not render information text if there are 3 or less items to display', () => {
@@ -68,12 +72,12 @@ describe('ListFieldDisplayComponent', () => {
     it('should display items from source model', () => {
       component.values = ['val1', 'val2'];
       component.sourceModel = [
-        { valueId: 'val1', data: { label: 'value 1' } },
-        { valueId: 'val2', data: { label: 'value 2' } },
+        { valueId: 'val1', type: null, data: { label: 'value 1' } },
+        { valueId: 'val2', type: null, data: { label: 'value 2' } },
       ];
       fixture.detectChanges();
 
-      expect(component.displayValues).toEqual(['value 1', 'value 2']);
+      expect(getDisplayValues()).toEqual(['value 1', 'value 2']);
     });
 
     it('should use the label path to get item text', () => {
@@ -82,6 +86,7 @@ describe('ListFieldDisplayComponent', () => {
       component.sourceModel = [
         {
           valueId: 'val1',
+          type: null,
           data: {
             key: {
               path: 'value 1',
@@ -91,47 +96,47 @@ describe('ListFieldDisplayComponent', () => {
       ];
       fixture.detectChanges();
 
-      expect(component.displayValues).toEqual(['value 1']);
+      expect(getDisplayValues()).toEqual(['value 1']);
     });
 
     it('should limit display values and show information text if there are more than 3 items to display', () => {
       component.values = ['val1', 'val2', 'val3', 'val4'];
       component.sourceModel = [
-        { valueId: 'val1', data: { label: 'value 1' } },
-        { valueId: 'val2', data: { label: 'value 2' } },
-        { valueId: 'val3', data: { label: 'value 3' } },
+        { valueId: 'val1', type: null, data: { label: 'value 1' } },
+        { valueId: 'val2', type: null, data: { label: 'value 2' } },
+        { valueId: 'val3', type: null, data: { label: 'value 3' } },
       ];
       fixture.detectChanges();
 
-      const moreItemsElement = fixture.debugElement.query(By.css('.more-items'));
+      expect(getDisplayValues()).toEqual(['value 1', 'value 2', 'value 3']);
 
-      expect(component.displayValues).toEqual(['value 1', 'value 2', 'value 3']);
+      const moreItemsElement = fixture.debugElement.query(By.css('.more-items'));
       expect(moreItemsElement).not.toBeNull();
       expect(moreItemsElement.nativeElement.textContent).toEqual('... 1 more');
     });
 
-    it('should add invalid item if source model is missing', () => {
+    it('should use raw value and add error class if source model is missing', () => {
       component.values = ['val1', 'val2'];
       component.sourceModel = null;
       fixture.detectChanges();
 
-      const invalidItems = fixture.debugElement.queryAll(By.css('.item-invalid'));
+      expect(getDisplayValues()).toEqual(['val1', 'val2']);
 
-      expect(component.displayValues).toEqual([null, null]);
+      const invalidItems = fixture.debugElement.queryAll(By.css('.item-invalid'));
       expect(invalidItems.length).toEqual(2);
-      expect(invalidItems[0].nativeElement.textContent).toEqual('Invalid value');
+      expect(invalidItems[0].nativeElement.textContent).toEqual('val1');
     });
 
-    it('should add invalid item if source model is missing properties', () => {
+    it('should use raw value if source model is missing properties', () => {
       component.values = ['val1', 'val2'];
-      component.sourceModel = [{ valueId: 'val1', data: { otherLabel: 'value 1' } }];
+      component.sourceModel = [{ valueId: 'val1', type: null, data: { otherLabel: 'value 1' } }];
       fixture.detectChanges();
 
-      const invalidItems = fixture.debugElement.queryAll(By.css('.item-invalid'));
-
       // One of the values is missing from the source model, the other is there but the label path is wrong.
+      expect(getDisplayValues()).toEqual(['val1', 'val2']);
+
+      const invalidItems = fixture.debugElement.queryAll(By.css('.item-invalid'));
       expect(invalidItems.length).toEqual(2);
-      expect(invalidItems[0].nativeElement.textContent).toEqual('Invalid value');
     });
 
     it('should throw error if source model is not an array', () => {

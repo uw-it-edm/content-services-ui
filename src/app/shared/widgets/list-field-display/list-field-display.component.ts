@@ -1,8 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DynamicSelectConfig } from '../../../core/shared/model/field/dynamic-select-config';
 import { ObjectUtilities } from '../../../core/util/object-utilities';
+import { DataApiValue } from '../../shared/model/data-api-value';
 
 const DEFAULT_LABEL_PATH = 'label';
+
+class DisplayValue {
+  constructor(public displayValue: string, public isValid: boolean = true) {}
+}
 
 @Component({
   selector: 'app-list-field-display',
@@ -10,11 +15,11 @@ const DEFAULT_LABEL_PATH = 'label';
   styleUrls: ['./list-field-display.component.css'],
 })
 export class ListFieldDisplayComponent implements OnInit {
-  displayValues: string[] = [];
+  listItems: DisplayValue[] = [];
 
   @Input() selectConfig: DynamicSelectConfig;
   @Input() values: string[] = [];
-  @Input() sourceModel: { valueId: string; data: { [key: string]: any } }[] = [];
+  @Input() sourceModel: DataApiValue[] = [];
 
   constructor() {}
 
@@ -26,24 +31,28 @@ export class ListFieldDisplayComponent implements OnInit {
     this.sourceModel = this.sourceModel || [];
     this.values = this.values || [];
 
-    if (this.selectConfig) {
-      this.displayValues = this.getDisplayValues(this.values.slice(0, 3));
+    if (!this.selectConfig) {
+      this.listItems = this.values
+        .filter((val) => !!val)
+        .slice(0, 3)
+        .map((val) => new DisplayValue(val));
     } else {
-      this.displayValues = this.values.filter((val) => !!val).slice(0, 3);
+      this.listItems = this.getDisplayValues(this.selectConfig.labelPath, this.values.slice(0, 3));
     }
   }
 
-  private getDisplayValues(values: string[]): string[] {
-    const displayPath = (this.selectConfig && this.selectConfig.labelPath) || DEFAULT_LABEL_PATH;
+  private getDisplayValues(labelPath: string, values: string[]): DisplayValue[] {
+    labelPath = labelPath || DEFAULT_LABEL_PATH;
 
     return values.map((value) => {
       const valueSourceModel = this.sourceModel.find((sourceModel) => sourceModel.valueId === value);
+      const sourceModelData = valueSourceModel && valueSourceModel.data;
+      const displayValue = ObjectUtilities.getNestedObjectFromStringPath(sourceModelData, labelPath);
 
-      if (valueSourceModel) {
-        return ObjectUtilities.getNestedObjectFromStringPath(valueSourceModel.data, displayPath);
-      }
-
-      return null;
+      return {
+        displayValue: displayValue || value,
+        isValid: !!displayValue,
+      };
     });
   }
 }
