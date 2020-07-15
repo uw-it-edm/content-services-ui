@@ -33,6 +33,7 @@ import { PersonService } from './providers/person.service';
 import { PersonAutocompleteComponent } from './widgets/person-autocomplete/person-autocomplete.component';
 import { PersonDisplayComponent } from './widgets/person-display/person-display.component';
 import { DataApiValueDisplayComponent } from './widgets/data-api-display/data-api-value-display.component';
+import { ListFieldDisplayComponent } from './widgets/list-field-display/list-field-display.component';
 import { ElasticsearchDateValidatorDirective } from './directives/elasticsearch-date-validator/elasticsearch-date-validator.directive';
 import { CourseInputComponent } from './widgets/course-input/course-input.component';
 import { A11yModule } from '@angular/cdk/a11y';
@@ -57,6 +58,7 @@ import { A11yModule } from '@angular/cdk/a11y';
     PersonAutocompleteComponent,
     PersonDisplayComponent,
     DataApiValueDisplayComponent,
+    ListFieldDisplayComponent,
     TimestampPickerComponent,
     TruncatePipe,
     DisplayFieldComponent,
@@ -79,6 +81,7 @@ import { A11yModule } from '@angular/cdk/a11y';
     StudentAutocompleteComponent,
     StudentDisplayComponent,
     DataApiValueDisplayComponent,
+    ListFieldDisplayComponent,
     PersonAutocompleteComponent,
     PersonDisplayComponent,
     TimestampPickerComponent,

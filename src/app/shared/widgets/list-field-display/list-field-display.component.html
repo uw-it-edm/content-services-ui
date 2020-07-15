@@ -1,0 +1,8 @@
+<div class="list-item" *ngFor="let displayValue of displayValues">
+  <span class="item-label" *ngIf="displayValue">{{displayValue}}</span>
+  <span class="item-label item-invalid" *ngIf="!displayValue">Invalid value</span>
+</div>
+
+<div class="list-item" *ngIf="values.length > 3">
+  <span class="more-items">... {{values.length - 3}} more</span>
+</div>

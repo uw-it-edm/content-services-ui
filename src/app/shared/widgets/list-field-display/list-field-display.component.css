@@ -1,0 +1,19 @@
+.list-item {
+  white-space: nowrap;
+  margin: 10px 0;
+}
+
+.list-item .item-label {
+  padding: 3px 10px;
+  background-color: #e0e0e0;
+  border-radius: 10px;
+}
+
+.list-item .item-label.item-invalid {
+  background-color: rgba(255, 0, 0, 0.3);
+}
+
+.list-item .more-items {
+  padding: 3px 10px;
+  font-style: italic;
+}

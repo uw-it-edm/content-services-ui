@@ -13,12 +13,17 @@
         "LastModifiedDate": 1.537446824E12,
         "InvoiceAmount": "1220.30",
         "childType": "Child2Parent2",
+        "DataApiOptionMultiSelect": ["VAL_1", "VAL_3"],
         "SourceModel": {
           "childType": {
             "data": {
               "label": "Child 2 of parent2"
             }
-          }
+          },
+          "DataApiOptionMultiSelect": [
+            { "valueId": "VAL_1", "data": { "label": "val 1 label" } },
+            { "valueId": "VAL_3", "data": { "label": "val 3 label" } }
+          ]
         }
       },
       "_score": 0.0,
@@ -37,12 +42,16 @@
         "LastModifiedDate": 1.537446824E12,
         "InvoiceAmount": "200",
         "childType": "Child2Parent1",
+        "DataApiOptionMultiSelect": ["VAL_2"],
         "SourceModel": {
           "childType": {
             "data": {
               "label": "Child 2 of parent1"
             }
-          }
+          },
+          "DataApiOptionMultiSelect": [
+            { "valueId": "VAL_2", "data": { "label": "val 2 label" } }
+          ]
         }
       },
       "_score": 0.0,
@@ -61,12 +70,24 @@
         "LastModifiedDate": 1.537246822E12,
         "InvoiceAmount": "0.15",
         "childType": "Child2Parent2",
+        "DataApiWithFilter": "VAL_1",
+        "DataApiOptionMultiSelect": ["VAL_1", "VAL_2", "VAL_3"],
         "SourceModel": {
           "childType": {
             "data": {
               "label": "Child 2 of parent2"
             }
-          }
+          },
+          "DataApiWithFilter": {
+            "data": {
+              "label": "val 1 label"
+            }
+          },
+          "DataApiOptionMultiSelect": [
+            { "valueId": "VAL_1", "data": { "label": "val 1 label" } },
+            { "valueId": "VAL_2", "data": { "label": "val 2 label" } },
+            { "valueId": "VAL_3", "data": { "label": "val 3 label" } }
+          ]
         }
       },
       "_score": 0.0,
