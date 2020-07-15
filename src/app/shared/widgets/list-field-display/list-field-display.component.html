@@ -1,5 +1,5 @@
 <div class="list-item" *ngFor="let item of listItems">
-  <span [ngClass]="{ 'item-label': true, 'item-invalid': !item.isValid } ">{{item.displayValue}}</span>
+  <span [ngClass]="{ 'item-label': true, 'item-invalid': !item.isValid } " [matTooltip]="item.displayValue">{{item.displayValue}}</span>
 </div>
 
 <div class="list-item" *ngIf="values.length > 3">
