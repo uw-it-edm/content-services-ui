@@ -42,6 +42,7 @@ describe('ListFieldDisplayComponent', () => {
       fixture.detectChanges();
 
       expect(getDisplayValues()).toEqual(['val 1', 'val 2', 'val 3']);
+      expect(component.tooltip).toEqual('val 1\nval 2\nval 3\nval 4');
     });
 
     it('should not render information text if there are 3 or less items to display', () => {
@@ -58,7 +59,7 @@ describe('ListFieldDisplayComponent', () => {
 
       const moreItemsElement = fixture.debugElement.query(By.css('.more-items'));
       expect(moreItemsElement).not.toBeNull();
-      expect(moreItemsElement.nativeElement.textContent).toEqual('... 2 more');
+      expect(moreItemsElement.nativeElement.textContent.trim()).toEqual('(2 more)');
     });
   });
 
@@ -105,14 +106,16 @@ describe('ListFieldDisplayComponent', () => {
         { valueId: 'val1', type: null, data: { label: 'value 1' } },
         { valueId: 'val2', type: null, data: { label: 'value 2' } },
         { valueId: 'val3', type: null, data: { label: 'value 3' } },
+        { valueId: 'val4', type: null, data: { label: 'value 4' } },
       ];
       fixture.detectChanges();
 
       expect(getDisplayValues()).toEqual(['value 1', 'value 2', 'value 3']);
+      expect(component.tooltip).toEqual('value 1\nvalue 2\nvalue 3\nvalue 4');
 
       const moreItemsElement = fixture.debugElement.query(By.css('.more-items'));
       expect(moreItemsElement).not.toBeNull();
-      expect(moreItemsElement.nativeElement.textContent).toEqual('... 1 more');
+      expect(moreItemsElement.nativeElement.textContent.trim()).toEqual('(1 more)');
     });
 
     it('should use raw value and add error class if source model is missing', () => {

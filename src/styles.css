@@ -203,3 +203,7 @@
 pdf-viewer {
   flex: 1;
 }
+
+.tooltip-multiline {
+  white-space: pre-line;
+}
