@@ -21,6 +21,13 @@
       labelPath="{{field.dynamicSelectConfig.labelPath}}"
     ></app-data-api-display>
   </span>
+  <span *ngSwitchCase="'listValue'">
+    <app-list-field-display
+      [values]="value"
+      [selectConfig]="field.dynamicSelectConfig"
+      [sourceModel]="sourceModel">
+    </app-list-field-display>
+  </span>
   <span *ngSwitchDefault>
    {{value}}
   </span>

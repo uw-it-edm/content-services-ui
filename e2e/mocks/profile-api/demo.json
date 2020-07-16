@@ -193,7 +193,7 @@
         "ProfileId",
         "Filer",
         "PublishStatus",
-        "DocumentType",
+        "DataApiOptionMultiSelect",
         "LastModifiedDate",
         "childType",
         "SourceModel.childType.data.label"
