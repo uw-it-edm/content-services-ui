@@ -39,7 +39,7 @@
               <button *ngFor="let button of pageConfig?.buttons" mat-raised-button
                       (click)="buttonPress(button)" [color]="button.color"
                       [disabled]="!button.alwaysActive && (form.pristine || submitPending || form.invalid || !contentObjectListComponent.hasContentObjects())" [id]="button.command"
-                      [type]="button.type">{{button.label}}
+                      [type]="button.type || 'button'">{{button.label}}
               </button>
             </div>
           </div>
@@ -51,7 +51,7 @@
                       label="Add Files"
                       (fileSelected)="addFile($event)"
                       [formGroup]="form"
-                      [autoFocus]="true"
+                      [autoFocus]="false"
                       [dropzone]="true"
                       multiple="true">
               </app-file-upload>

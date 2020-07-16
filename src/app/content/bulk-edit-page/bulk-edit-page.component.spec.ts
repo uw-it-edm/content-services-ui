@@ -7,7 +7,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {of, Subject, throwError} from 'rxjs';
+import { of, Subject, throwError } from 'rxjs';
 
 import { BulkEditPageComponent } from './bulk-edit-page.component';
 import { ContentMetadataComponent } from '../content-metadata/content-metadata.component';
@@ -23,20 +23,27 @@ import { ResultRow } from '../../search/shared/model/result-row';
 import { ActivatedRouteStub } from '../../../testing/router-stubs';
 import { MaterialConfigModule } from '../../routing/material-config.module';
 
-const testMetadata: any = { field1: 'value 1.1', field2: 'value 1.2', field3: 'value 1.3', ProfileId: 'test-profile' };
+const testMetadata: any = {
+  field1: 'value 1.1',
+  field2: 'value 1.2',
+  field3: 'value 1.3',
+  field4: 'value 1.4',
+  ProfileId: 'test-profile',
+};
 const testRows: ResultRow[] = [
   { id: '111', label: 'label 1', metadata: Object.assign({ RevisionId: 1 }, testMetadata) },
   { id: '222', label: 'label 2', metadata: Object.assign({ RevisionId: 2 }, testMetadata) },
   { id: '333', label: 'label 3', metadata: Object.assign({ RevisionId: 3 }, testMetadata) },
 ];
 
-function getConfigs(): { config: Config, pageConfig: BulkEditPageConfig } {
+function getConfigs(): { config: Config; pageConfig: BulkEditPageConfig } {
   const pageConfig = new BulkEditPageConfig();
   pageConfig.pageName = 'test-bulk-edit-page';
   pageConfig.fieldsToDisplay = [
     Object.assign(new Field(), { key: 'field1', label: 'label 1' }),
     Object.assign(new Field(), { key: 'field2', label: 'label 2' }),
     Object.assign(new Field(), { key: 'field3', label: 'label 3' }),
+    Object.assign(new Field(), { key: 'field4', label: 'label 4' }),
   ];
   pageConfig.resultsTableFieldsToDisplay = pageConfig.fieldsToDisplay.slice(0);
 
@@ -61,8 +68,8 @@ describe('BulkEditPageComponent', () => {
     snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
 
     TestBed.configureTestingModule({
-      imports: [ HttpClientModule, MaterialConfigModule, NoopAnimationsModule, RouterTestingModule ],
-      declarations: [ BulkEditPageComponent, ContentMetadataComponent, SearchResultsComponent, DisplayFieldComponent ],
+      imports: [HttpClientModule, MaterialConfigModule, NoopAnimationsModule, RouterTestingModule],
+      declarations: [BulkEditPageComponent, ContentMetadataComponent, SearchResultsComponent, DisplayFieldComponent],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },
         { provide: ContentService, useValue: contentServiceSpy },
@@ -117,12 +124,12 @@ describe('BulkEditPageComponent', () => {
 
     it('should display the results table with columns from config', () => {
       const headers = fixture.debugElement.queryAll(By.css('app-search-results mat-header-cell'));
-      expect(headers.length).toBe(4);
+      expect(headers.length).toBe(5);
     });
 
     it('should display the content metadata fields from config', () => {
       const rows = fixture.debugElement.queryAll(By.css('app-content-metadata mat-form-field'));
-      expect(rows.length).toBe(3);
+      expect(rows.length).toBe(4);
     });
 
     it('should remove disabled fields and mark all metadata fields as non-required', () => {
@@ -137,7 +144,7 @@ describe('BulkEditPageComponent', () => {
       fixture.detectChanges();
 
       expect(component.pageConfig.fieldsToDisplay[0].required).toBeFalse();
-      expect(component.pageConfig.fieldsToDisplay.length).toBe(2);
+      expect(component.pageConfig.fieldsToDisplay.length).toBe(3);
     });
 
     it('should fall back to use the fields to display from tab-search page if none are defined', () => {
@@ -176,7 +183,7 @@ describe('BulkEditPageComponent', () => {
       let cancelButton = fixture.debugElement.query(By.css('.cancel-button'));
       expect(cancelButton.nativeElement.textContent).toContain('Cancel Bulk Update');
 
-      component.removeRowsById(testRows.map(row => row.id));
+      component.removeRowsById(testRows.map((row) => row.id));
       fixture.detectChanges();
 
       cancelButton = fixture.debugElement.query(By.css('.cancel-button'));
@@ -224,33 +231,36 @@ describe('BulkEditPageComponent', () => {
       fixture.detectChanges();
       expect(getUpdateButtonDisabledState()).toBeFalsy();
 
-      component.removeRowsById(testRows.map(row => row.id));
+      component.removeRowsById(testRows.map((row) => row.id));
       fixture.detectChanges();
       expect(getUpdateButtonDisabledState()).toBeTruthy();
     });
   });
 
   describe('on update', () => {
-    it('should call update service with the same metadata for all rows and appending the profile and revision id', () => {
+    it('should call update service with the metadata that was set for all rows and appending the profile and revision id', () => {
       component.form.get('metadata').get('field1').setValue('edit value');
+      component.form.get('metadata').get('field2').setValue(['item1']);
+      component.form.get('metadata').get('field3').setValue(null);
+      component.form.get('metadata').get('field4').setValue([]);
       component.update();
 
       expect(contentServiceSpy.bulkUpdate).toHaveBeenCalledWith([
         {
           id: '111',
           label: 'label 1',
-          metadata: { field1: 'edit value', ProfileId: 'test-profile', RevisionId: 1 }
+          metadata: { field1: 'edit value', field2: ['item1'], ProfileId: 'test-profile', RevisionId: 1 },
         },
         {
           id: '222',
           label: 'label 2',
-          metadata: { field1: 'edit value', ProfileId: 'test-profile', RevisionId: 2 }
+          metadata: { field1: 'edit value', field2: ['item1'], ProfileId: 'test-profile', RevisionId: 2 },
         },
         {
           id: '333',
           label: 'label 3',
-          metadata: { field1: 'edit value', ProfileId: 'test-profile', RevisionId: 3 }
-        }
+          metadata: { field1: 'edit value', field2: ['item1'], ProfileId: 'test-profile', RevisionId: 3 },
+        },
       ]);
     });
 
@@ -298,7 +308,10 @@ describe('BulkEditPageComponent', () => {
 
       component.update();
 
-      expect(snackBarSpy.open).toHaveBeenCalledWith('Bulk update operation failed to complete, please try again. Error: test error', 'Dismiss');
+      expect(snackBarSpy.open).toHaveBeenCalledWith(
+        'Bulk update operation failed to complete, please try again. Error: test error',
+        'Dismiss'
+      );
     });
 
     it('should display error if update operation timesout', fakeAsync(() => {
@@ -308,7 +321,10 @@ describe('BulkEditPageComponent', () => {
       tick(95000);
       fixture.detectChanges();
 
-      expect(snackBarSpy.open).toHaveBeenCalledWith('Bulk update operation failed to complete, please try again. Error: Timeout has occurred', 'Dismiss');
+      expect(snackBarSpy.open).toHaveBeenCalledWith(
+        'Bulk update operation failed to complete, please try again. Error: Timeout has occurred',
+        'Dismiss'
+      );
     }));
   });
 });

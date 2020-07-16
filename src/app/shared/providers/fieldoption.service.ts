@@ -15,7 +15,6 @@ import { Field } from '../../core/shared/model/field';
  */
 @Injectable()
 export class FieldOptionService {
-
   constructor(private dataApiValueService: DataApiValueService) {}
 
   public getFieldOptions(fieldConfig: Field, parentValue?: any): Observable<FieldOption[]> {
@@ -50,18 +49,20 @@ export class FieldOptionService {
   public getOptionsFromParent(
     dynamicSelectConfig: DynamicSelectConfig,
     parentFieldConfig: ParentFieldConfig,
-    newParentValue: any
+    newParentValue: string
   ): Observable<FieldOption[]> {
-    return this.dataApiValueService
-      .listByTypeAndParent(dynamicSelectConfig.type, parentFieldConfig.parentType, newParentValue)
-      .pipe(
-        map((results: DataApiValueSearchResults) => results.content),
-        map((values: DataApiValue[]) => {
-          return values.map((value: DataApiValue) => {
-            return this.dataApiValuesToFieldOption(dynamicSelectConfig, value);
-          });
-        })
-      );
+    if (newParentValue && typeof newParentValue !== 'string') {
+      throw new Error(`Expected 'newParentValue' to be a string, actual: ${JSON.stringify(newParentValue)}`);
+    }
+
+    return this.dataApiValueService.listByTypeAndParent(dynamicSelectConfig.type, parentFieldConfig.parentType, newParentValue).pipe(
+      map((results: DataApiValueSearchResults) => results.content),
+      map((values: DataApiValue[]) => {
+        return values.map((value: DataApiValue) => {
+          return this.dataApiValuesToFieldOption(dynamicSelectConfig, value);
+        });
+      })
+    );
   }
 
   private dataApiValuesToFieldOption(dynamicSelectConfig: DynamicSelectConfig, value: DataApiValue): FieldOption {

@@ -1,8 +1,8 @@
-import { browser, by, element, ExpectedConditions, WebElement, protractor } from 'protractor';
+import { browser, by, element, ExpectedConditions, WebElement } from 'protractor';
 import { promise } from 'selenium-webdriver';
 import { EditPage } from '../edit/edit.po';
 import { BrowserUtils } from '../browserUtils';
-import { SearchResultsPageObject } from './search-results.po';
+import { SearchResultsPageObject } from '../page-objects/search-results.po';
 
 export class SearchPage {
   private utils = new BrowserUtils;

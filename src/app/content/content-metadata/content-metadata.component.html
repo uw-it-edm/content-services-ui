@@ -3,23 +3,24 @@
     <ul *ngIf="pageConfig?.fieldsToDisplay" class="fields">
       <li *ngFor="let fieldToDisplay of pageConfig.fieldsToDisplay; index as i">
         <div [ngSwitch]="fieldToDisplay.displayType">
-            <app-options-autocomplete *ngSwitchCase="'filter-select'"
-              [formControlName]="fieldToDisplay.key"
-              [placeholder]="fieldToDisplay.label"
-              [fieldConfig]="fieldToDisplay"
-              [parentControl]="formGroup.get('metadata').get(fieldToDisplay.dynamicSelectConfig?.parentFieldConfig?.key || '')"
-              [errorMessage]="getErrorMessage(fieldToDisplay.key)"
-              [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
-              [id]="'custom-input-'+ i"
-              [attr.id]="'custom-input-'+ i">
-            </app-options-autocomplete>
+          <app-options-autocomplete *ngSwitchCase="'filter-select'"
+            [multiSelect]="fieldToDisplay.filterSelectConfig && fieldToDisplay.filterSelectConfig.enableMultipleSelection"
+            [formControlName]="fieldToDisplay.key"
+            [placeholder]="fieldToDisplay.label"
+            [fieldConfig]="fieldToDisplay"
+            [parentControl]="formGroup.get('metadata').get(fieldToDisplay.dynamicSelectConfig?.parentFieldConfig?.key || '')"
+            [errorMessage]="getErrorMessage(fieldToDisplay.key)"
+            [required]="fieldHasRequiredError(fieldToDisplay)"
+            [id]="'custom-input-'+ i"
+            [attr.id]="'custom-input-'+ i">
+          </app-options-autocomplete>
           <mat-form-field *ngSwitchCase="'select'">
             <app-options-input
               [formControlName]="fieldToDisplay.key"
               [placeholder]="fieldToDisplay.label"
               [fieldConfig]="fieldToDisplay"
               [parentControl]="formGroup.get('metadata').get(fieldToDisplay.dynamicSelectConfig?.parentFieldConfig?.key || '')"
-              [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
+              [required]="fieldHasRequiredError(fieldToDisplay)"
               [id]="'custom-input-'+ i"
               [attr.id]="'custom-input-'+ i"
             >
@@ -32,7 +33,7 @@
           <app-timestamp-picker *ngSwitchCase="'date'"
                                 [formControlName]="fieldToDisplay.key"
                                 [placeholder]="fieldToDisplay.label"
-                                [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
+                                [required]="fieldHasRequiredError(fieldToDisplay)"
                                 [errorMessage]="getErrorMessage(fieldToDisplay.key)"
                                 appElasticSearchDateValidator
           >
@@ -43,7 +44,7 @@
               [fieldConfig]="fieldToDisplay"
               [formControlName]="fieldToDisplay.key"
               [placeholder]="fieldToDisplay.label"
-              [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
+              [required]="fieldHasRequiredError(fieldToDisplay)"
               [id]="'custom-input-'+ i"
               [attr.id]="'custom-input-'+ i"
             ></app-checkbox-input>
@@ -55,7 +56,7 @@
             <app-student-autocomplete
               [formControlName]="fieldToDisplay.key"
               [placeholder]="fieldToDisplay.label"
-              [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
+              [required]="fieldHasRequiredError(fieldToDisplay)"
               [id]="'custom-input-'+ i"
               [attr.id]="'custom-input-'+ i"
             >
@@ -68,7 +69,7 @@
             <app-person-autocomplete
               [formControlName]="fieldToDisplay.key"
               [placeholder]="fieldToDisplay.label"
-              [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
+              [required]="fieldHasRequiredError(fieldToDisplay)"
               [id]="'custom-input-'+ i"
               [attr.id]="'custom-input-'+ i"
             >
@@ -84,7 +85,7 @@
               [fieldConfig]="fieldToDisplay"
               [id]="'custom-input-'+ i"
               [attr.id]="'custom-input-'+ i"
-              [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
+              [required]="fieldHasRequiredError(fieldToDisplay)"
             >
             </app-course-input>
           </div>
@@ -94,7 +95,7 @@
                    [name]="fieldToDisplay.key"
                    [placeholder]="fieldToDisplay.label"
                    [attr.aria-label]="fieldToDisplay.label"
-                   [required]="formGroup.get('metadata').get(fieldToDisplay.key).errors !== null && formGroup.get('metadata').get(fieldToDisplay.key).errors.required"
+                   [required]="fieldHasRequiredError(fieldToDisplay)"
             >
             <mat-icon *ngIf="fieldToDisplay.disabled" matSuffix class="disabled-icon" matTooltip="Read-only">lock</mat-icon>
             <mat-error> {{getErrorMessage(fieldToDisplay.key)}}</mat-error>

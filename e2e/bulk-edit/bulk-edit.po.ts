@@ -1,6 +1,7 @@
-import { browser, element, by, ElementArrayFinder, ElementFinder } from 'protractor';
+import { browser, element, by, ElementFinder } from 'protractor';
 import { BrowserUtils } from '../browserUtils';
-import { SearchResultsPageObject } from '../search/search-results.po';
+import { SearchResultsPageObject } from '../page-objects/search-results.po';
+import { ContentMetadataPageObject } from '../page-objects/content-metadata.po';
 
 /**
  * Page object to interact with the BulkEditPageComponent.
@@ -30,23 +31,30 @@ export class BulkEditPage {
   }
 
   /**
-   * Gets all the input fields of the content metadata component.
+   * Gets a page object to interact with the content metadata component.
    */
-  get inputFields(): ElementArrayFinder {
-    return element.all(by.css('app-content-metadata .mat-input-element'));
+  get fields(): ContentMetadataPageObject {
+    return new ContentMetadataPageObject(element(by.tagName('app-content-metadata')));
   }
 
   /**
    * Gets the update button of the page.
    */
   get updateButton(): ElementFinder {
-    return element(by.css('.update-button'));
+    return element(by.className('update-button'));
   }
 
   /**
    * Gets the cancel/close button of the page.
    */
   get cancelButton(): ElementFinder {
-    return element(by.css('.cancel-button'));
+    return element(by.className('cancel-button'));
+  }
+
+  /**
+   * Get the reset fields button of the page.
+   */
+  get resetButton(): ElementFinder {
+    return element(by.className('reset-button'));
   }
 }

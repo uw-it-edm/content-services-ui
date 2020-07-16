@@ -1,4 +1,5 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { of } from 'rxjs';
 
 import { ContentMetadataComponent } from './content-metadata.component';
 import { ContentItem } from '../shared/model/content-item';
@@ -31,22 +32,69 @@ import { FieldOptionService } from '../../shared/providers/fieldoption.service';
 import { PersonAutocompleteComponent } from '../../shared/widgets/person-autocomplete/person-autocomplete.component';
 import { CustomTextDirective } from '../../shared/directives/custom-text/custom-text.directive';
 
-class UserServiceMock extends UserService {
-  constructor() {
-    super(null, null, null);
+function getContentItem(): ContentItem {
+  const contentItem = new ContentItem();
+  contentItem.id = '1';
+  contentItem.label = 'test label';
+  contentItem.metadata['1'] = 'one';
+  contentItem.metadata['2'] = 'two';
+  contentItem.metadata['3'] = 'three';
+  contentItem.metadata['a'] = 'a';
+  contentItem.metadata['b'] = 'asdf';
+  contentItem.metadata['parentKey'] = 'parent1';
+  contentItem.metadata['d'] = 1509519600000;
+  return contentItem;
+}
+
+function getPageConfig({ addCascadingSelects }: { addCascadingSelects?: boolean } = {}): ContentPageConfig {
+  const editPageConfig = new ContentPageConfig();
+  editPageConfig.pageName = 'test-edit-page';
+  editPageConfig.viewPanel = false;
+  editPageConfig.fieldsToDisplay = [
+    Object.assign(new Field(), { key: '1', label: 'First' }),
+    Object.assign(new Field(), { key: '2', label: 'Second' }),
+    Object.assign(new Field(), { key: '3', label: 'Third' }),
+    Object.assign(new Field(), { key: 'a', label: 'a' }),
+    Object.assign(new Field(), { key: 'd', label: 'd', displayType: 'date' }),
+    Object.assign(new Field(), {
+      key: 'parentKey',
+      label: 'Parent Label',
+      displayType: 'select',
+      options: [new FieldOption('parent1'), new FieldOption('parent2')],
+    }),
+  ];
+
+  if (addCascadingSelects) {
+    const childField = Object.assign(new Field(), {
+      key: 'childKey',
+      label: 'Child Label',
+      displayType: 'select',
+      dynamicSelectConfig: {
+        type: 'child-type',
+        labelPath: 'label',
+        parentFieldConfig: {
+          parentType: 'parent-type',
+          key: 'parentKey',
+        },
+      },
+    });
+
+    editPageConfig.fieldsToDisplay.push(childField);
   }
 
-  getUser(): User {
-    return new User('test');
-  }
+  return editPageConfig;
 }
 
 describe('ContentMetadataComponent', () => {
   let component: ContentMetadataComponent;
   let fixture: ComponentFixture<ContentMetadataComponent>;
-  let defaultContentItem: ContentItem;
+  let dataApiValueServiceSpy: DataApiValueService;
+
   beforeEach(async(() => {
-    const dataApiValueServiceSpy = jasmine.createSpyObj('DataApiValueService', ['listByType']);
+    dataApiValueServiceSpy = jasmine.createSpyObj('DataApiValueService', ['listByType', 'listByTypeAndParent']);
+    const userServiceSpy: UserService = jasmine.createSpyObj('UserService', {
+      getUser: new User('test'),
+    });
 
     TestBed.configureTestingModule({
       imports: [
@@ -78,51 +126,39 @@ describe('ContentMetadataComponent', () => {
       providers: [
         FieldOptionService,
         { provide: DataApiValueService, useValue: dataApiValueServiceSpy },
-        { provide: UserService, useValue: new UserServiceMock() },
+        { provide: UserService, useValue: userServiceSpy },
         { provide: HttpClient, useValue: new HttpClient(null) },
       ],
-    })
-      .compileComponents()
-      .then(() => {
-        fixture = TestBed.createComponent(ContentMetadataComponent);
-        component = fixture.componentInstance;
-      });
+    }).compileComponents();
   }));
 
   beforeEach(() => {
-    const editPageConfig = new ContentPageConfig();
-    editPageConfig.pageName = 'test-edit-page';
-    editPageConfig.fieldsToDisplay = [
-      Object.assign(new Field(), { key: '1', label: 'First' }),
-      Object.assign(new Field(), { key: '2', label: 'Second' }),
-      Object.assign(new Field(), { key: '3', label: 'Third' }),
-      Object.assign(new Field(), { key: 'a', label: 'a' }),
-      Object.assign(new Field(), { key: 'd', label: 'd', displayType: 'date' }),
-      Object.assign(new Field(), {
-        key: 't',
-        label: 't',
-        displayType: 'select',
-        options: [new FieldOption('o1'), new FieldOption('o2'), new FieldOption('o3')],
-      }),
-    ];
-    editPageConfig.viewPanel = false;
-    component.pageConfig = editPageConfig;
+    fixture = TestBed.createComponent(ContentMetadataComponent);
 
-    defaultContentItem = new ContentItem();
-    defaultContentItem.id = '1';
-    defaultContentItem.label = 'test label';
-    defaultContentItem.metadata['1'] = 'one';
-    defaultContentItem.metadata['2'] = 'two';
-    defaultContentItem.metadata['3'] = 'three';
-    defaultContentItem.metadata['a'] = 'a';
-    defaultContentItem.metadata['b'] = 'asdf';
-    defaultContentItem.metadata['t'] = 'o2';
-    defaultContentItem.metadata['d'] = 1509519600000;
-    component.contentItem = defaultContentItem;
+    (<any>dataApiValueServiceSpy.listByTypeAndParent).withArgs('child-type', 'parent-type', 'parent1').and.returnValue(
+      of({
+        content: [
+          { value: 'parent1-child1', displayValue: 'Parent 1 - Child 1' },
+          { value: 'parent1-child2', displayValue: 'Parent 1 - Child 2' },
+        ],
+      })
+    );
+
+    (<any>dataApiValueServiceSpy.listByTypeAndParent).withArgs('child-type', 'parent-type', 'parent2').and.returnValue(
+      of({
+        content: [
+          { value: 'parent2-child1', displayValue: 'Parent 2 - Child 1' },
+          { value: 'parent2-child2', displayValue: 'Parent 2 - Child 2' },
+        ],
+      })
+    );
+
+    component = fixture.componentInstance;
+    component.pageConfig = getPageConfig();
+    component.contentItem = getContentItem();
     component.formGroup = new FormGroup({});
 
     fixture.detectChanges();
-    component.ngOnInit();
   });
 
   it('should be created', () => {
@@ -136,6 +172,7 @@ describe('ContentMetadataComponent', () => {
     expect(input[2].name).toBe('3');
     expect(input[3].name).toBe('a');
   });
+
   it('should contain the defined field label placeholders', () => {
     const input = fixture.debugElement.nativeElement.querySelectorAll('input');
     expect(input[0].placeholder).toBe('First');
@@ -143,6 +180,7 @@ describe('ContentMetadataComponent', () => {
     expect(input[2].placeholder).toBe('Third');
     expect(input[3].placeholder).toBe('a');
   });
+
   it('should contain mat-select', () => {
     const el = fixture.debugElement.nativeElement.querySelectorAll('mat-select');
     expect(el.length).toBe(1);
@@ -160,8 +198,97 @@ describe('ContentMetadataComponent', () => {
       '2': 'two',
       '3': 'three',
       a: 'a',
-      t: 'o2',
+      parentKey: 'parent1',
       d: 1509519600000,
     });
+  });
+
+  describe('built in validators', () => {
+    beforeEach(() => {
+      fixture = TestBed.createComponent(ContentMetadataComponent);
+
+      component = fixture.componentInstance;
+      component.pageConfig = getPageConfig({ addCascadingSelects: true });
+      component.formGroup = new FormGroup({});
+    });
+
+    it('should mark form as invalid when no fields are set if the empty form validator is enabled', () => {
+      component.enableEmptyFormValidator = true;
+      fixture.detectChanges();
+
+      // verify form should be invalid on load
+      expect(component.formGroup.valid).toBeFalse();
+
+      // verify form is valid after setting one field
+      component.formGroup.get('metadata').get('1').setValue('one');
+      fixture.detectChanges();
+      expect(component.formGroup.valid).toBeTrue();
+
+      // verify form goes back to invalid after clearing the field.
+      component.formGroup.get('metadata').get('1').reset();
+      fixture.detectChanges();
+      expect(component.formGroup.valid).toBeFalse();
+    });
+
+    it('should mark form as invalid when field is set to empty array if form validator is enabled', () => {
+      component.enableEmptyFormValidator = true;
+      fixture.detectChanges();
+
+      // verify form should be invalid on load
+      expect(component.formGroup.valid).toBeFalse();
+
+      // verify form is still invalid after setting a field to empty array.
+      component.formGroup.get('metadata').get('1').setValue([]);
+      fixture.detectChanges();
+      expect(component.formGroup.valid).toBeFalse();
+
+      // verify form becomes valid when setting field to array with value.
+      component.formGroup.get('metadata').get('1').setValue(['one']);
+      fixture.detectChanges();
+      expect(component.formGroup.valid).toBeTrue();
+    });
+
+    it('should mark form as invalid if parent select has value and child select does not when validator is enabled', fakeAsync(() => {
+      component.enableCascadingFieldsValidator = true;
+      fixture.detectChanges();
+
+      // verify form should be valid on load
+      expect(component.formGroup.valid).toBeTrue();
+
+      // select parent value, verify form should be invalid
+      component.formGroup.get('metadata').get('parentKey').setValue('parent1');
+      fixture.detectChanges();
+      expect(component.formGroup.valid).toBeFalse();
+
+      // select child value, verify form should be valid
+      component.formGroup.get('metadata').get('childKey').setValue('parent1-child1');
+      fixture.detectChanges();
+      expect(component.formGroup.valid).toBeTrue();
+
+      // select new parent value, verify form should be invalid and child is cleared.
+      component.formGroup.get('metadata').get('parentKey').setValue('parent2');
+      fixture.detectChanges();
+      tick(1000);
+      expect(component.formGroup.valid).toBeFalse();
+      expect(component.formGroup.get('metadata').get('childKey').value).toBeNull();
+    }));
+
+    it('should clear validation errors when component is reset', fakeAsync(() => {
+      component.enableCascadingFieldsValidator = true;
+      fixture.detectChanges();
+
+      // verify form should be valid on load
+      expect(component.formGroup.valid).toBeTrue();
+
+      // select parent value, verify form should be invalid
+      component.formGroup.get('metadata').get('parentKey').setValue('parent1');
+      fixture.detectChanges();
+      expect(component.formGroup.valid).toBeFalse();
+
+      // reset component, verify that form is valid.
+      component.reset();
+      fixture.detectChanges();
+      expect(component.formGroup.valid).toBeTrue();
+    }));
   });
 });

@@ -58,9 +58,22 @@
     },
     {
       "key": "DataApiWithFilter",
-      "label": "DataApiOption show label with filter",
+      "label": "DataApiOption with filter",
       "required": false,
       "displayType": "filter-select",
+      "dynamicSelectConfig": {
+        "type": "test-type",
+        "labelPath": "label"
+      }
+    },
+    {
+      "key": "DataApiOptionMultiSelect",
+      "label": "DataApiOption with filter multi select",
+      "required": false,
+      "displayType": "filter-select",
+      "filterSelectConfig": {
+        "enableMultipleSelection": true
+      },
       "dynamicSelectConfig": {
         "type": "test-type",
         "labelPath": "label"
@@ -274,6 +287,7 @@
         "childType",
         "courses",
         "DataApiWithFilter",
+        "DataApiOptionMultiSelect",
         "parentTypeWithFilter",
         "childTypeWithFilter"
       ],
@@ -301,6 +315,7 @@
       "fieldKeysToDisplay": [
         "DataApiOptionLabel",
         "DataApiOptionCode",
+        "DataApiOptionMultiSelect",
         "Filer",
         "PublishStatus",
         "LastModifiedDate",
@@ -338,7 +353,12 @@
         "LastModifiedDate",
         "StudentId",
         "RegId",
-        "DataApiWithFilter"
+        "parentType",
+        "childType",
+        "DataApiWithFilter",
+        "DataApiOptionMultiSelect",
+        "parentTypeWithFilter",
+        "childTypeWithFilter"
       ],
       "resultsTableFieldKeysToDisplay": [
         "ProfileId",

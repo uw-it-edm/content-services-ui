@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, Navigation, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, ValidatorFn, ValidationErrors } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, BehaviorSubject } from 'rxjs';
@@ -13,21 +13,10 @@ import { SearchResults } from '../../search/shared/model/search-result';
 import { ContentItem, IContentItem } from '../shared/model/content-item';
 import { ContentService } from '../shared/content.service';
 import { DataService } from '../../shared/providers/data.service';
+import { ContentMetadataComponent } from '../content-metadata/content-metadata.component';
 
 const ROWS_LOCAL_STORAGE_KEY = 'bulk-edit-rows';
-const UPDATE_OPERATION_TIMEOUT = (90 * 1000);
-
-/**
- * Custom valitor that triggers if no field has values.
- */
-export const nonEmptyFormValidator: ValidatorFn = (theForm: FormGroup): ValidationErrors | null => {
-  const metadata = theForm && theForm.value && theForm.value.metadata;
-  if (metadata && Object.keys(metadata).every(key => !metadata[key])) {
-    return { incorrect: true };
-  }
-
-  return null;
-};
+const UPDATE_OPERATION_TIMEOUT = 90 * 1000;
 
 @Component({
   selector: 'app-bulk-edit-page',
@@ -46,6 +35,8 @@ export class BulkEditPageComponent implements OnInit, OnDestroy {
   form: FormGroup;
   contentItem: ContentItem;
 
+  @ViewChild(ContentMetadataComponent) contentMetadataComponent: ContentMetadataComponent;
+
   constructor(
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
@@ -60,7 +51,7 @@ export class BulkEditPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.form = this._formBuilder.group({}, { validators: [nonEmptyFormValidator]});
+    this.form = this._formBuilder.group({});
 
     if (this._rows) {
       this._dataService.setToLocalStorage(ROWS_LOCAL_STORAGE_KEY, this._rows);
@@ -89,8 +80,7 @@ export class BulkEditPageComponent implements OnInit, OnDestroy {
   }
 
   resetFields() {
-    this.form.reset();
-    this.form.markAsPristine();
+    this.contentMetadataComponent.reset();
   }
 
   cancel() {
@@ -111,23 +101,26 @@ export class BulkEditPageComponent implements OnInit, OnDestroy {
 
     this.isUpdatePending = true;
 
-    this._contentService.bulkUpdate(updatedRows).pipe(
-      timeout(UPDATE_OPERATION_TIMEOUT),
-      finalize(() => this.isUpdatePending = false),
-    ).subscribe(
-      response => {
-        const successes = (response && response.successes) || [];
-        const failures = (response && response.failures) || [];
-        this.removeRowsById(successes.map(row => row.id));
-        this.showPostUpdateMessage(successes, failures);
-      },
-      err => this._snackBar.open(`Bulk update operation failed to complete, please try again. Error: ${err.message || err}`, 'Dismiss')
-    );
+    this._contentService
+      .bulkUpdate(updatedRows)
+      .pipe(
+        timeout(UPDATE_OPERATION_TIMEOUT),
+        finalize(() => (this.isUpdatePending = false))
+      )
+      .subscribe(
+        (response) => {
+          const successes = (response && response.successes) || [];
+          const failures = (response && response.failures) || [];
+          this.removeRowsById(successes.map((row) => row.id));
+          this.showPostUpdateMessage(successes, failures);
+        },
+        (err) => this._snackBar.open(`Bulk update operation failed to complete, please try again. Error: ${err.message || err}`, 'Dismiss')
+      );
   }
 
   public removeRowsById(ids: string[]) {
     ids = ids || [];
-    this._rows = this._rows.filter(row => !ids.includes(row.id));
+    this._rows = this._rows.filter((row) => !ids.includes(row.id));
 
     const staticResults = new SearchResults();
     staticResults.results = this._rows;
@@ -139,23 +132,24 @@ export class BulkEditPageComponent implements OnInit, OnDestroy {
   private getUpdatedRows(): IContentItem[] {
     const formData = this.form.value && this.form.value.metadata;
     const updatedMetadata: { [key: string]: any } = {};
+    const isValidValue = (val) => (Array.isArray(val) ? val.length > 0 : !!val);
 
     if (!formData) {
       return [];
     }
 
     Object.keys(formData)
-          .filter(key => !!formData[key])
-          .forEach(key => updatedMetadata[key] = formData[key]);
+      .filter((key) => isValidValue(formData[key]))
+      .forEach((key) => (updatedMetadata[key] = formData[key]));
 
-    return this._rows.map(row => {
+    return this._rows.map((row) => {
       return {
         id: row.id,
         label: row.label,
         metadata: Object.assign({}, updatedMetadata, {
           ProfileId: row.metadata['ProfileId'],
-          RevisionId: row.metadata['RevisionId']
-        })
+          RevisionId: row.metadata['RevisionId'],
+        }),
       };
     });
   }
@@ -171,17 +165,17 @@ export class BulkEditPageComponent implements OnInit, OnDestroy {
   }
 
   // tslint:disable-next-line:member-ordering
-  private static extractPageConfigs(config: Config): { editConfig: BulkEditPageConfig, searchConfig: SearchPageConfig } {
+  private static extractPageConfigs(config: Config): { editConfig: BulkEditPageConfig; searchConfig: SearchPageConfig } {
     // Remove any field marked as read-only (they are not bulk-editable) and remove required validators
     const editConfig: BulkEditPageConfig = Object.assign({}, config.pages['bulk-edit']);
-    editConfig.fieldsToDisplay = editConfig.fieldsToDisplay.filter(field => !field.disabled);
-    editConfig.fieldsToDisplay = editConfig.fieldsToDisplay.map(field => Object.assign({}, field, {required: false}));
+    editConfig.fieldsToDisplay = editConfig.fieldsToDisplay.filter((field) => !field.disabled);
+    editConfig.fieldsToDisplay = editConfig.fieldsToDisplay.map((field) => Object.assign({}, field, { required: false }));
 
     const searchConfig: SearchPageConfig = Object.assign({}, config.pages['tab-search'], { defaultSort: null });
     const searchFieldKeys = editConfig.resultsTableFieldKeysToDisplay;
 
     if (searchFieldKeys && searchFieldKeys.length > 0) {
-      searchConfig.fieldsToDisplay = config.availableFields.filter(field => searchFieldKeys.includes(field.key));
+      searchConfig.fieldsToDisplay = config.availableFields.filter((field) => searchFieldKeys.includes(field.key));
     } else if (editConfig.resultsTableFieldsToDisplay) {
       searchConfig.fieldsToDisplay = editConfig.resultsTableFieldsToDisplay;
     }
