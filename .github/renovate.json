@@ -1,7 +1,7 @@
 {
   "extends": [
     ":prHourlyLimit4",
-    "schedule:weekly",
+    "schedule:weekends",
     "group:monorepos",
     "group:recommended",
     "helpers:disableTypesNodeMajor"
@@ -12,14 +12,18 @@
   "packageRules": [
     {
       "depTypeList": ["dependencies"],
+      "updateTypes": ["mayor", "patch"],
       "enabled": false
     },
     {
       "enabled": false,
-      "depTypeList": ["devDependencies"],
       "packagePatterns": [
         "^@angular",
         "^angular",
+        "angulartics2",
+        "directory-encoder",
+        "ng2-pdf-viewer",
+        "pdfjs-dist",
         "axe-webdriverjs",
         "typescript"
       ]
