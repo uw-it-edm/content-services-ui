@@ -12,7 +12,7 @@
   "packageRules": [
     {
       "depTypeList": ["dependencies"],
-      "updateTypes": ["mayor", "patch"],
+      "updateTypes": ["major", "patch"],
       "enabled": false
     },
     {
