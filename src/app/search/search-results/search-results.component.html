@@ -77,6 +77,7 @@
 
       <mat-cell *matCellDef="let element" [ngClass]="{ 'cell-align-right': isFieldRightAligned(col)}">
         <app-display-field [field]="col"
+                           [ngClass]="{ 'cell-content-truncated': isFieldTruncated(col) }"
                            [sourceModel]="getValueFromMetadata(element.metadata && element.metadata.SourceModel, col.key)"
                            [value]="getValueFromMetadata(element.metadata,col.key)"></app-display-field>
       </mat-cell>
