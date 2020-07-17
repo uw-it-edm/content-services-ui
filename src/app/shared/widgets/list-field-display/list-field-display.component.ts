@@ -4,8 +4,9 @@ import { ObjectUtilities } from '../../../core/util/object-utilities';
 import { DataApiValue } from '../../shared/model/data-api-value';
 
 const DEFAULT_LABEL_PATH = 'label';
+const MAX_ITEMS_TO_SHOW = 3;
 
-class DisplayValue {
+class DisplayItem {
   constructor(public displayValue: string, public isValid: boolean = true) {}
 }
 
@@ -15,11 +16,16 @@ class DisplayValue {
   styleUrls: ['./list-field-display.component.css'],
 })
 export class ListFieldDisplayComponent implements OnInit {
-  listItems: DisplayValue[] = [];
+  listItems: DisplayItem[] = [];
+  tooltip: string;
 
   @Input() selectConfig: DynamicSelectConfig;
   @Input() values: string[] = [];
   @Input() sourceModel: DataApiValue[] = [];
+
+  get maxItemsToShow(): number {
+    return MAX_ITEMS_TO_SHOW;
+  }
 
   constructor() {}
 
@@ -31,17 +37,18 @@ export class ListFieldDisplayComponent implements OnInit {
     this.sourceModel = this.sourceModel || [];
     this.values = this.values || [];
 
-    if (!this.selectConfig) {
-      this.listItems = this.values
-        .filter((val) => !!val)
-        .slice(0, 3)
-        .map((val) => new DisplayValue(val));
+    let displayItems: DisplayItem[];
+    if (this.selectConfig) {
+      displayItems = this.getDisplayValues(this.selectConfig.labelPath, this.values);
     } else {
-      this.listItems = this.getDisplayValues(this.selectConfig.labelPath, this.values.slice(0, 3));
+      displayItems = this.values.filter((val) => !!val).map((val) => new DisplayItem(val));
     }
+
+    this.listItems = displayItems.slice(0, MAX_ITEMS_TO_SHOW);
+    this.tooltip = displayItems.map((item) => item.displayValue).join('\n');
   }
 
-  private getDisplayValues(labelPath: string, values: string[]): DisplayValue[] {
+  private getDisplayValues(labelPath: string, values: string[]): DisplayItem[] {
     labelPath = labelPath || DEFAULT_LABEL_PATH;
 
     return values.map((value) => {

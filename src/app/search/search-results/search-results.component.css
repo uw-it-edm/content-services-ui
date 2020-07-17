@@ -7,6 +7,10 @@
   justify-content: flex-end;
 }
 
+.cell-content-truncated {
+  overflow: hidden;
+}
+
 .mat-header-cell .header-cell-content {
   /* Align text to the left by default, this is needed because the sortable header is rendered
      as a button, which by default centers its text. */

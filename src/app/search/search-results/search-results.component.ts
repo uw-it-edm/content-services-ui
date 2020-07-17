@@ -107,8 +107,8 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const searchResultRows$ = this.searchResults$.pipe(
-      map(results => results.results),
-      tap(rows => this._resultRows = rows),
+      map((results) => results.results),
+      tap((rows) => (this._resultRows = rows)),
       takeUntil(this.componentDestroyed)
     );
 
@@ -236,6 +236,10 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     return isFieldRightAligned(field);
   }
 
+  isFieldTruncated(field: Field): boolean {
+    return field && field.displayType === 'multi-select';
+  }
+
   onPageEvent(pageEvent: PageEvent) {
     const searchPagination = new SearchPagination(pageEvent.pageIndex, pageEvent.pageSize);
     this.searchModel.pagination = searchPagination;
@@ -257,7 +261,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     if (this.areAllRowsSelected()) {
       this.selection.clear();
     } else {
-      this._resultRows.forEach(row => this.selection.select(row));
+      this._resultRows.forEach((row) => this.selection.select(row));
     }
   }
 

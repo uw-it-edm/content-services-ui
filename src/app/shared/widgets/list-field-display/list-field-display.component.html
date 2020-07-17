@@ -1,7 +1,11 @@
-<div class="list-item" *ngFor="let item of listItems">
-  <span [ngClass]="{ 'item-label': true, 'item-invalid': !item.isValid } " [matTooltip]="item.displayValue">{{item.displayValue}}</span>
-</div>
+<div [matTooltip]="tooltip" matTooltipClass="tooltip-multiline">
+  <div class="list-item" *ngFor="let item of listItems">
+    <span [ngClass]="{ 'item-invalid': !item.isValid }">{{item.displayValue}}</span>
+  </div>
 
-<div class="list-item" *ngIf="values.length > 3">
-  <span class="more-items">... {{values.length - 3}} more</span>
+  <div class="list-item" *ngIf="values.length > maxItemsToShow">
+    <span class="more-items">
+      ({{values.length - maxItemsToShow}} more)
+    </span>
+  </div>
 </div>
