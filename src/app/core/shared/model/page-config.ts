@@ -9,5 +9,5 @@ export interface PageConfig {
   /**
    * Specifies values to override when using field references.
    */
-  fieldOverrides?: { key: string; overrides: Object }[];
+  fieldOverrides?: { key: string; override: Object }[];
 }

@@ -92,7 +92,7 @@ export class ConfigService {
 
             if (fieldIndex >= 0) {
               const fieldConfig = pageConfig.fieldsToDisplay[fieldIndex];
-              pageConfig.fieldsToDisplay[fieldIndex] = Object.assign({}, fieldConfig, fieldOverride.overrides);
+              pageConfig.fieldsToDisplay[fieldIndex] = Object.assign({}, fieldConfig, fieldOverride.override);
             }
           });
         }

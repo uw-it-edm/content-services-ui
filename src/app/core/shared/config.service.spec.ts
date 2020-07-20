@@ -96,7 +96,7 @@ describe('ConfigService', () => {
       fieldOverrides: [
         {
           key: 'field1',
-          overrides: {
+          override: {
             disabled: true,
           },
         },
