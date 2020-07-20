@@ -5,4 +5,9 @@ export interface PageConfig {
   theme: string;
   fieldsToDisplay: Array<Field>;
   fieldKeysToDisplay: Array<string>;
+
+  /**
+   * Specifies values to override when using field references.
+   */
+  fieldOverrides?: { key: string; overrides: Object }[];
 }

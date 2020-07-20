@@ -9,14 +9,14 @@ import { ProgressService } from '../../shared/providers/progress.service';
 import { UserService } from '../../user/shared/user.service';
 import { TenantConfigInfo } from './model/tenant-config-info';
 import { Field } from './model/field';
+import { PageConfig } from './model/page-config';
 
 @Injectable()
 export class ConfigService {
   private configs: Map<string, Config> = new Map();
   private tenantsConfig = null;
 
-  private appConfigUrl =
-    environment.profile_api.url + environment.profile_api.context + '/app/' + environment.profile_api.app_name;
+  private appConfigUrl = environment.profile_api.url + environment.profile_api.context + '/app/' + environment.profile_api.app_name;
 
   constructor(private http: HttpClient, private progressService: ProgressService, private userService: UserService) {}
 
@@ -25,9 +25,9 @@ export class ConfigService {
     return this.getTenantList()
       .toPromise()
       .then(
-        tenants => {
+        (tenants) => {
           this.progressService.end();
-          const tenantInfo = tenants.find(tenantInList => {
+          const tenantInfo = tenants.find((tenantInList) => {
             return tenantInList.tenantName === requestedTenant;
           });
           if (tenantInfo) {
@@ -36,7 +36,7 @@ export class ConfigService {
             return Promise.reject('No such tenant : ' + requestedTenant);
           }
         },
-        err => {
+        (err) => {
           this.progressService.end();
           return Promise.reject(err);
         }
@@ -57,7 +57,7 @@ export class ConfigService {
       return this.http
         .get<Config>(tenantInfo.downloadUrl, requestOptions)
         .pipe(
-          tap(config => this.configs.set(tenantInfo.tenantName, this.buildConfig(config))),
+          tap((config) => this.configs.set(tenantInfo.tenantName, this.buildConfig(config))),
           publishReplay(1),
           refCount()
         )
@@ -68,20 +68,32 @@ export class ConfigService {
   private buildConfig(config: Config) {
     const availableFieldsMap = new Map<string, Field>();
     if (config.availableFields) {
-      config.availableFields.map(value => availableFieldsMap.set(value.key, value));
+      config.availableFields.map((value) => availableFieldsMap.set(value.key, value));
 
-      Object.keys(config.pages).forEach(pageKey => {
-        const pageConfig = config.pages[pageKey];
+      Object.keys(config.pages).forEach((pageKey) => {
+        const pageConfig: PageConfig = config.pages[pageKey];
 
         if (!pageConfig.fieldsToDisplay) {
           pageConfig.fieldsToDisplay = [];
         }
+
         if (pageConfig.fieldKeysToDisplay) {
-          pageConfig.fieldKeysToDisplay.forEach(field => {
+          pageConfig.fieldKeysToDisplay.forEach((field) => {
             if (!availableFieldsMap.has(field)) {
               throw new Error('No Such field : ' + field);
             }
             pageConfig.fieldsToDisplay.push(availableFieldsMap.get(field));
+          });
+        }
+
+        if (pageConfig.fieldOverrides) {
+          pageConfig.fieldOverrides.forEach((fieldOverride) => {
+            const fieldIndex = pageConfig.fieldsToDisplay.findIndex((field) => field.key === fieldOverride.key);
+
+            if (fieldIndex >= 0) {
+              const fieldConfig = pageConfig.fieldsToDisplay[fieldIndex];
+              pageConfig.fieldsToDisplay[fieldIndex] = Object.assign({}, fieldConfig, fieldOverride.overrides);
+            }
           });
         }
       });
@@ -99,7 +111,7 @@ export class ConfigService {
       console.log('getTenantList');
       const requestOptions = this.buildRequestOptions();
       return this.http.get(this.appConfigUrl, requestOptions).pipe(
-        map(result => {
+        map((result) => {
           const tenants: TenantConfigInfo[] = [];
 
           const tenantsFromAPI = result['_links'];
@@ -117,7 +129,7 @@ export class ConfigService {
             return a.tenantName.localeCompare(b.tenantName);
           });
         }),
-        tap(tenantsConfig => {
+        tap((tenantsConfig) => {
           this.tenantsConfig = tenantsConfig;
         }),
         publishReplay(1),
@@ -130,10 +142,7 @@ export class ConfigService {
     const requestOptionsArgs = {};
     if (environment.profile_api.authenticationHeader) {
       const user = this.userService.getUser();
-      requestOptionsArgs['headers'] = new HttpHeaders().append(
-        environment.profile_api.authenticationHeader,
-        user.actAs
-      );
+      requestOptionsArgs['headers'] = new HttpHeaders().append(environment.profile_api.authenticationHeader, user.actAs);
     }
 
     return requestOptionsArgs;
