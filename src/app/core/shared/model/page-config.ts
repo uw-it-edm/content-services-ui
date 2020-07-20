@@ -1,4 +1,4 @@
-import { Field } from './field';
+import { Field, FieldReference } from './field';
 
 export interface PageConfig {
   pageName: string;
@@ -7,7 +7,7 @@ export interface PageConfig {
   fieldKeysToDisplay: Array<string>;
 
   /**
-   * Specifies values to override when using field references.
+   * A list of field references to display (identified by the 'key' in the availableFields list).
    */
-  fieldOverrides?: { key: string; override: Object }[];
+  fieldReferencesToDisplay?: FieldReference[];
 }

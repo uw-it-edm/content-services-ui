@@ -83,47 +83,71 @@ describe('ConfigService', () => {
     });
   });
 
-  it('should override field properties specified on the fieldOverrides array', (done: DoneFn) => {
-    const field = new Field();
-    field.key = 'field1';
-    field.displayType = 'select';
+  describe('with fieldReferencesToDisplay', () => {
+    let config: Config;
+    let pageConfig: PageConfig;
 
-    const page: PageConfig = {
-      pageName: 'page1',
-      theme: 'theme1',
-      fieldsToDisplay: [],
-      fieldKeysToDisplay: ['field1'],
-      fieldOverrides: [
-        {
-          key: 'field1',
-          override: {
-            disabled: true,
-          },
-        },
-      ],
-    };
+    beforeEach(() => {
+      config = new Config();
+      config.tenant = 'demo';
+      config.availableFields = [
+        Object.assign(new Field(), { key: 'field1', displayType: 'select' }),
+        Object.assign(new Field(), { key: 'field2', displayType: 'multi-select' }),
+        Object.assign(new Field(), { key: 'field3', displayType: 'filter-select' }),
+      ];
 
-    const demo = new Config();
-    demo.tenant = 'demo';
-    demo.availableFields = [field];
-    demo.pages['page1'] = page;
+      pageConfig = {
+        pageName: 'page1',
+        theme: 'theme1',
+        fieldsToDisplay: null,
+        fieldKeysToDisplay: null,
+      };
 
-    const profileLinksResponse$ = of(profileLinks);
-    const tenantResponse$ = of(demo);
-    httpSpy = spyOn(http, 'get').and.returnValues(profileLinksResponse$, tenantResponse$);
+      config.pages['page1'] = pageConfig;
 
-    service.getConfigForTenant('demo').then((demoConfig) => {
-      const demoPage: PageConfig = demoConfig.pages['page1'];
-      expect(demoPage.fieldsToDisplay.length).toEqual(1);
+      spyOn(http, 'get').and.returnValues(of(profileLinks), of(config));
+    });
 
-      // verify 'disabled' property was overriden and 'displayType' was kept
-      expect(demoPage.fieldsToDisplay[0].disabled).toBeTrue();
-      expect(demoPage.fieldsToDisplay[0].displayType).toEqual('select');
+    it('should include fields specified by string key or object in references array', (done: DoneFn) => {
+      pageConfig.fieldReferencesToDisplay = ['field1', { key: 'field2' }, 'field3'];
 
-      // verify 'disabled' property was not modified on the reference field
-      expect(demoConfig.availableFields[0].disabled).toBeFalse();
+      service.getConfigForTenant('demo').then((demoConfig) => {
+        const demoPage: PageConfig = demoConfig.pages['page1'];
+        expect(demoPage.fieldsToDisplay.length).toEqual(3);
 
-      done();
+        expect(demoPage.fieldsToDisplay[0].displayType).toEqual('select');
+        expect(demoPage.fieldsToDisplay[1].displayType).toEqual('multi-select');
+        expect(demoPage.fieldsToDisplay[2].displayType).toEqual('filter-select');
+
+        done();
+      });
+    });
+
+    it('should override field properties specified on references array', (done: DoneFn) => {
+      pageConfig.fieldReferencesToDisplay = [{ key: 'field1', override: { disabled: true } }];
+
+      service.getConfigForTenant('demo').then((demoConfig) => {
+        const demoPage: PageConfig = demoConfig.pages['page1'];
+        expect(demoPage.fieldsToDisplay.length).toEqual(1);
+
+        // verify 'disabled' property was overriden and 'displayType' was kept
+        expect(demoPage.fieldsToDisplay[0].disabled).toBeTrue();
+        expect(demoPage.fieldsToDisplay[0].displayType).toEqual('select');
+
+        // verify 'disabled' property was not modified on the reference field
+        expect(demoConfig.availableFields[0].disabled).toBeFalse();
+
+        done();
+      });
+    });
+
+    it('should throw exception if field reference is not found', (done: DoneFn) => {
+      pageConfig.fieldReferencesToDisplay = ['invalid'];
+
+      service.getConfigForTenant('demo').catch((reason) => {
+        expect(reason.message).toEqual(`Field in page 'page1' referenced by key 'invalid' was not found.`);
+        done();
+      });
     });
   });
 });

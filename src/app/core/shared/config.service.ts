@@ -86,14 +86,17 @@ export class ConfigService {
           });
         }
 
-        if (pageConfig.fieldOverrides) {
-          pageConfig.fieldOverrides.forEach((fieldOverride) => {
-            const fieldIndex = pageConfig.fieldsToDisplay.findIndex((field) => field.key === fieldOverride.key);
+        if (pageConfig.fieldReferencesToDisplay) {
+          const fieldRefs = pageConfig.fieldReferencesToDisplay.map((ref) => (typeof ref === 'string' ? { key: ref } : ref));
 
-            if (fieldIndex >= 0) {
-              const fieldConfig = pageConfig.fieldsToDisplay[fieldIndex];
-              pageConfig.fieldsToDisplay[fieldIndex] = Object.assign({}, fieldConfig, fieldOverride.override);
+          fieldRefs.forEach((fieldRef) => {
+            const fieldConfig = availableFieldsMap.get(fieldRef.key);
+
+            if (!fieldConfig) {
+              throw new Error(`Field in page '${pageConfig.pageName}' referenced by key '${fieldRef.key}' was not found.`);
             }
+
+            pageConfig.fieldsToDisplay.push(Object.assign({}, fieldConfig, fieldRef.override));
           });
         }
       });
