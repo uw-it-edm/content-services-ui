@@ -4,6 +4,11 @@ import { DynamicSelectConfig } from './field/dynamic-select-config';
 import { CourseConfig } from './field/course-config';
 import { MultiSelectConfig } from './multi-select-config';
 
+/**
+ * Used to refer to a field by 'key'.
+ */
+export type FieldReference = string | { key: string; override?: Object };
+
 export type FieldDataType = 'string' | 'number' | 'date';
 export type FieldDisplayType =
   | 'date'
