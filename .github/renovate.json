@@ -11,21 +11,31 @@
   "rangeStrategy": "bump",
   "packageRules": [
     {
-      "depTypeList": ["dependencies"],
-      "updateTypes": ["major", "patch"],
-      "enabled": false
-    },
-    {
       "enabled": false,
       "packagePatterns": [
         "^@angular",
         "^angular",
         "angulartics2",
         "directory-encoder",
+        "moment-timezone",
         "ng2-pdf-viewer",
         "pdfjs-dist",
         "axe-webdriverjs",
         "typescript"
+      ]
+    },
+    {
+      "depTypeList": ["dependencies"],
+      "updateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "depTypeList": ["dependencies"],
+      "automerge": true,
+      "packagePatterns": [
+        "lodash",
+        "rxjs",
+        "tslib"
       ]
     },
     {
