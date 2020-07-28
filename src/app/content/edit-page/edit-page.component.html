@@ -44,9 +44,11 @@
             </div>
 
           </div>
-          <div *ngIf="pageConfig?.viewPanel" fxFlex="auto" class="cs-content-view-wrapper">
-            <div class="cs-content-view-wrapper-insert">
-              <app-content-view [contentObject]="contentObject" [allowPageByPageMode]="pageConfig?.allowPageByPageMode"></app-content-view>
+          <div *ngIf="pageConfig?.viewPanel" fxFlex="auto">
+            <div class="cs-content-view-wrapper">
+              <div class="cs-content-view-wrapper-insert">
+                <app-content-view [contentObject]="contentObject" [allowPageByPageMode]="pageConfig?.allowPageByPageMode"></app-content-view>
+              </div>
             </div>
             <div *ngIf="pageConfig?.enableDelete && hasDeletePermission" class="button-row">
               <mat-spinner *ngIf="deletePending" style="margin:0 auto;" aria-label="deletion in progress"></mat-spinner>
