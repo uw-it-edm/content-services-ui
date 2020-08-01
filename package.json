@@ -55,7 +55,7 @@
     "ng2-pdf-viewer": "6.2.0",
     "ngx-daterangepicker-material": "^2.3.0",
     "pdfjs-dist": "2.3.200",
-    "rxjs": "^6.6.0",
+    "rxjs": "^6.6.2",
     "tslib": "^1.13.0",
     "web-animations-js": "^2.3.2",
     "zone.js": "~0.10.3"
