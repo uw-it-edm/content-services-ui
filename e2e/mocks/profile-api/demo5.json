@@ -1,0 +1,99 @@
+{
+  "account": "demo-account",
+  "tenant": "demo5-legalnames",
+  "appName": "Demo 5 - Legal Names",
+  "customText": {
+    "addContentItemButton": {
+      "label": "Add Item",
+      "description": "Upload a new content item"
+    },
+    "searchBox.search": {
+      "label": "Search Now",
+      "description": "Executes search"
+    }
+  },
+  "availableFields": [
+    {
+      "key": "StudentId",
+      "label": "Student",
+      "displayType": "student-autocomplete",
+      "personResourceConfig": {
+        "displayRegisteredName": true
+      }
+    },
+    {
+      "key": "RegId",
+      "label": "Employee",
+      "displayType": "person-autocomplete",
+      "personResourceConfig": {
+        "displayRegisteredName": true
+      }
+    }
+  ],
+  "pages": {
+    "tab-search": {
+      "pageName": "Demonstration Search",
+      "theme": "uw-default",
+      "searchStateInURL": true,
+      "fieldReferencesToDisplay": [
+        { "key": "StudentId", "override": { "displayType": "student" } },
+        { "key": "RegId", "override": { "displayType": "person" } }
+      ],
+      "searchConfig": {
+        "directions": "Type a student number or other info",
+        "label": "",
+        "placeholder": "Search for documents",
+        "indexName": "documents-demo"
+      },
+      "facetsConfig": {
+        "active": false,
+        "facets": {}
+      },
+      "autocompleteConfig": {
+        "type": "studentAutocomplete",
+        "filterKey": "metadata.StudentId",
+        "filterLabel": "Student Number",
+        "optionDisplayConfig": {
+          "displayRegisteredName": true
+        }
+      }
+    },
+    "edit": {
+      "theme": "uw-default",
+      "pageName": "Edit Content Item",
+      "viewPanel": true,
+      "fieldKeysToDisplay": [
+        "StudentId",
+        "RegId"
+      ],
+      "buttons": [
+        {
+          "label": "Save",
+          "color": "primary",
+          "command": "saveItem"
+        }
+      ]
+    },
+    "create": {
+      "theme": "uw-default",
+      "pageName": "Create Content Item",
+      "viewPanel": true,
+      "fieldKeysToDisplay": [
+        "StudentId",
+        "RegId"
+      ],
+      "buttons": [
+        {
+          "label": "Save",
+          "color": "primary",
+          "command": "saveItem"
+        },
+        {
+          "label": "Cancel",
+          "alwaysActive": true,
+          "command": "cancel"
+        }
+      ]
+    }
+  }
+}

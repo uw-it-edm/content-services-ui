@@ -9,10 +9,10 @@
     {{value | safeCurrency }}
   </span>
   <span *ngSwitchCase="'student'">
-    <app-student-display value="{{value}}"></app-student-display>
+    <app-student-display value="{{value}}" [fieldConfig]="field"></app-student-display>
   </span>
   <span *ngSwitchCase="'person'">
-    <app-person-display value="{{value}}"></app-person-display>
+    <app-person-display value="{{value}}" [fieldConfig]="field"></app-person-display>
   </span>
   <span *ngSwitchCase="'dataApiValue'">
     <app-data-api-display

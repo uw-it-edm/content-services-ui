@@ -4,16 +4,18 @@ import { NotificationService } from '../../providers/notification.service';
 import { takeUntil } from 'rxjs/operators';
 import { PersonService } from '../../providers/person.service';
 import { Person } from '../../shared/model/person';
+import { Field } from '../../../core/shared/model/field';
 
 @Component({
   selector: 'app-person-display',
   templateUrl: './person-display.component.html',
-  styleUrls: ['./person-display.component.css']
+  styleUrls: ['./person-display.component.css'],
 })
 export class PersonDisplayComponent implements OnInit, OnDestroy {
   private componentDestroyed = new Subject();
 
   @Input() value: string;
+  @Input() fieldConfig: Field;
 
   displayName: string;
   invalidRegId: boolean;
@@ -27,10 +29,10 @@ export class PersonDisplayComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.componentDestroyed))
         .subscribe(
           (person: Person) => {
-            this.displayName = Person.convertToDisplayName(person);
+            this.displayName = Person.convertToDisplayName(person, this.fieldConfig && this.fieldConfig.personResourceConfig);
             this.invalidRegId = false;
           },
-          err => {
+          (err) => {
             this.notificationService.warn(err.message, err);
             this.invalidPerson();
           }

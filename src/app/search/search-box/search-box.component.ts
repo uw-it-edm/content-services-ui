@@ -16,6 +16,8 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 })
 export class SearchBoxComponent implements OnDestroy, OnInit {
   private componentDestroyed = new Subject();
+  private _pageConfig: SearchPageConfig;
+
   searchModel: SearchModel = new SearchModel();
 
   internalSearchField: string;
@@ -26,14 +28,26 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
   searchAutocomplete: SearchAutocomplete;
   @Input()
   searchModel$: Observable<SearchModel>;
+
   @Input()
-  pageConfig: SearchPageConfig;
+  set pageConfig(value: SearchPageConfig) {
+    this._pageConfig = value;
+    this.autocompleteDisplayConfig =
+      this.pageConfig && this.pageConfig.autocompleteConfig && this.pageConfig.autocompleteConfig.optionDisplayConfig;
+  }
+
+  get pageConfig(): SearchPageConfig {
+    return this._pageConfig;
+  }
+
   @Output()
   searchEvent = new EventEmitter<SearchModel>();
 
   searchBoxEvent = new EventEmitter<string>();
 
   filteredOptions: SearchFilterableResult[] = [];
+
+  autocompleteDisplayConfig: any = {};
 
   constructor(private liveAnnouncer: LiveAnnouncer) {}
 
@@ -119,7 +133,7 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
     if (!this.filteredOptions || this.filteredOptions.length === 0) {
       announcementMessage = 'No results for autocomplete';
     } else if (this.filteredOptions.length === 1) {
-      announcementMessage = 'Found 1 result : ' + this.filteredOptions[0].getFilterableDisplay();
+      announcementMessage = 'Found 1 result : ' + this.filteredOptions[0].getFilterableDisplay(this.autocompleteDisplayConfig);
     } else if (this.filteredOptions.length > 1) {
       announcementMessage = 'Found ' + this.filteredOptions.length + ' results';
     }
