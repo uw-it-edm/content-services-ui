@@ -36,11 +36,7 @@ export class StudentService {
         }),
         mergeMap((result) => {
           // if the initial search did not have any results and was only the lastName, try again using the term firstName
-          if (
-            result.totalElements === 0 &&
-            isNullOrUndefined(searchModel.firstName) &&
-            isNullOrUndefined(searchModel.studentNumber)
-          ) {
+          if (result.totalElements === 0 && isNullOrUndefined(searchModel.firstName) && isNullOrUndefined(searchModel.studentNumber)) {
             searchModel = this.createAutocompleteSearchModel(term, true);
             return this.searchStudent(searchModel);
           } else {
@@ -137,6 +133,7 @@ export class StudentService {
     student.netId = dataApiStudent.netId;
     student.studentNumber = dataApiStudent.studentNumber;
     student.studentSystemKey = dataApiStudent.studentSystemKey;
+    student.registeredName = dataApiStudent.registeredName;
     return student;
   }
 
@@ -155,13 +152,7 @@ export class StudentService {
   }
 
   @CacheObservableDecorator
-  public getCourses(
-    year: string,
-    quarter: string,
-    curriculum: string,
-    courseNumber?: string,
-    title?: string
-  ): Observable<any> {
+  public getCourses(year: string, quarter: string, curriculum: string, courseNumber?: string, title?: string): Observable<any> {
     let params = new HttpParams();
     if (courseNumber) {
       params = params.set('courseNumber', courseNumber);

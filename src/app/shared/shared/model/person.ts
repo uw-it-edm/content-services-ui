@@ -1,4 +1,5 @@
 import { SearchFilterableResult } from './search-filterable-result';
+import { PersonResourceConfig } from '../../../core/shared/model/person-resource-config';
 
 export class FilterableValue {
   get value(): string {
@@ -26,17 +27,26 @@ export class Person implements SearchFilterableResult {
   public registeredFirstName: string;
   public preferredFirstName: string;
   public registeredLastName: string;
+  public registeredName: string;
   public preferredLastName: string;
   public netId: string;
   public employeeId?: string;
 
   constructor() {}
 
-  static convertToDisplayName(person: Person) {
+  static convertToDisplayName(person: Person, options: PersonResourceConfig = {}) {
+    if (options.displayRegisteredName) {
+      return `${person.registeredName} (${person.employeeId})`;
+    }
+
     return person.getLastName() + ', ' + person.getFirstName() + ' (' + person.employeeId + ')';
   }
 
-  getNameAndEmployeeId(): string {
+  getNameAndEmployeeId(options: PersonResourceConfig = {}): string {
+    if (options.displayRegisteredName) {
+      return `${this.registeredName} (${this.employeeId})`;
+    }
+
     return this.getLastName() + ', ' + this.getFirstName() + ' (' + this.employeeId + ')';
   }
 
@@ -56,14 +66,14 @@ export class Person implements SearchFilterableResult {
     }
   }
 
-  getFilterableValue(): FilterableValue {
+  getFilterableValue(options: PersonResourceConfig = {}): FilterableValue {
     return new FilterableValue(
       this.regId + (this.priorRegIds.length === 0 ? '' : ';' + this.priorRegIds.join(';')),
-      this.getNameAndEmployeeId()
+      this.getNameAndEmployeeId(options)
     );
   }
 
-  getFilterableDisplay(): string {
-    return this.getNameAndEmployeeId();
+  getFilterableDisplay(options: PersonResourceConfig = {}): string {
+    return this.getNameAndEmployeeId(options);
   }
 }

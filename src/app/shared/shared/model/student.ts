@@ -1,9 +1,11 @@
 import { SearchFilterableResult } from './search-filterable-result';
 import { FilterableValue } from './person';
+import { PersonResourceConfig } from '../../../core/shared/model/person-resource-config';
 
 export class Student implements SearchFilterableResult {
   public birthdate?;
   public displayName: string;
+  public registeredName: string;
   public email?: string;
   public firstName: string;
   public lastName: string;
@@ -13,19 +15,27 @@ export class Student implements SearchFilterableResult {
 
   constructor() {}
 
-  static convertToDisplayName(student: Student) {
+  static convertToDisplayName(student: Student, options: PersonResourceConfig = {}) {
+    if (options.displayRegisteredName) {
+      return `${student.registeredName} (${student.studentNumber})`;
+    }
+
     return student.lastName + ', ' + student.firstName + ' (' + student.studentNumber + ')';
   }
 
-  getNameAndStudentId(): string {
+  getNameAndStudentId(options: PersonResourceConfig = {}): string {
+    if (options.displayRegisteredName) {
+      return `${this.registeredName} (${this.studentNumber})`;
+    }
+
     return this.lastName + ', ' + this.firstName + ' (' + this.studentNumber + ')';
   }
 
-  getFilterableValue(): FilterableValue {
-    return new FilterableValue(this.studentNumber, this.getNameAndStudentId());
+  getFilterableValue(options: PersonResourceConfig = {}): FilterableValue {
+    return new FilterableValue(this.studentNumber, this.getNameAndStudentId(options));
   }
 
-  getFilterableDisplay(): string {
-    return this.displayName;
+  getFilterableDisplay(options: PersonResourceConfig = {}): string {
+    return options.displayRegisteredName ? this.registeredName : this.displayName;
   }
 }

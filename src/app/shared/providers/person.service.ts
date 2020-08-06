@@ -32,16 +32,12 @@ export class PersonService {
       let searchModel = this.createAutocompleteSearchModel(term);
 
       return this.searchPerson(searchModel).pipe(
-        catchError(val => {
+        catchError((val) => {
           return of(new PersonSearchResults());
         }),
-        mergeMap(result => {
+        mergeMap((result) => {
           // if the initial search did not have any results and was only the lastName, try again using the term firstName
-          if (
-            result.totalElements === 0 &&
-            isNullOrUndefined(searchModel.firstName) &&
-            isNullOrUndefined(searchModel.employeeId)
-          ) {
+          if (result.totalElements === 0 && isNullOrUndefined(searchModel.firstName) && isNullOrUndefined(searchModel.employeeId)) {
             searchModel = this.createAutocompleteSearchModel(term, true);
             return this.searchPerson(searchModel);
           } else {
@@ -58,7 +54,7 @@ export class PersonService {
     const searchModel = new PersonSearchModel();
 
     if (term.indexOf(',') !== -1) {
-      const names: string[] = term.split(',', 2).map(s => s.trim());
+      const names: string[] = term.split(',', 2).map((s) => s.trim());
       if (names.length > 0) {
         searchModel.lastName = names[0];
       }
@@ -66,7 +62,7 @@ export class PersonService {
         searchModel.firstName = names[1];
       }
     } else if (term.indexOf(' ') !== -1) {
-      const names: string[] = term.split(' ', 2).map(s => s.trim());
+      const names: string[] = term.split(' ', 2).map((s) => s.trim());
       if (names.length > 1) {
         searchModel.lastName = names[1];
       }
@@ -97,9 +93,7 @@ export class PersonService {
     if (!regId) {
       return null;
     }
-    return this.http
-      .get<any>(this.personUrl + '/' + regId, options)
-      .pipe(map(pwsPerson => this.newPersonFromPwsPerson(pwsPerson)));
+    return this.http.get<any>(this.personUrl + '/' + regId, options).pipe(map((pwsPerson) => this.newPersonFromPwsPerson(pwsPerson)));
   }
 
   private searchPerson(searchModel: PersonSearchModel): Observable<PersonSearchResults> {
@@ -147,17 +141,18 @@ export class PersonService {
     person.email = ObjectUtilities.getNestedObjectFromArrayOfPath(pwsPerson, [
       'PersonAffiliations',
       'EmployeePersonAffiliation',
-      'EmailAddresses'
+      'EmailAddresses',
     ]);
     person.employeeId = ObjectUtilities.getNestedObjectFromArrayOfPath(pwsPerson, [
       'PersonAffiliations',
       'EmployeePersonAffiliation',
-      'EmployeeID'
+      'EmployeeID',
     ]);
     person.registeredFirstName = pwsPerson['RegisteredFirstMiddleName'];
     person.registeredLastName = pwsPerson['RegisteredSurname'];
     person.preferredFirstName = pwsPerson['PreferredFirstName'];
     person.preferredLastName = pwsPerson['PreferredSurname'];
+    person.registeredName = pwsPerson['RegisteredName'];
 
     return person;
   }

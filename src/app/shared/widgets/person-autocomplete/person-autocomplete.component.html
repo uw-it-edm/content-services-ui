@@ -11,7 +11,7 @@
     </mat-option>
     <ng-container *ngIf="!isLoading">
       <mat-option *ngFor="let person of filteredOptions " [value]="person">
-        <span>{{ person.getNameAndEmployeeId() }}</span>
+        <span>{{ displayFn(person) }}</span>
       </mat-option>
     </ng-container>
   </mat-autocomplete>
