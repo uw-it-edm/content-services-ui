@@ -462,3 +462,27 @@ describe('Search Page', () => {
     expect(page.toggleFacetsPanelButton.isDisplayed()).toBeTruthy();
   });
 });
+
+describe('Search Page for Demo 5 (use RegisteredNames)', () => {
+  let page: SearchPage;
+
+  beforeEach(() => {
+    page = new SearchPage('demo5-legalnames');
+    page.navigateTo();
+  });
+
+  it('should display registered name for student and person on the results table', () => {
+    page.searchResults.waitForFirstRowValue('StudentId', 'Janeth Smith (3333333)');
+    page.searchResults.waitForFirstRowValue('RegId', 'Janeth ABCDE Smith (44444444)');
+  });
+
+  it('should display registered name in the autocomplete option of search box', () => {
+    page.searchBox.sendKeys('test');
+    expect(page.autoCompletePanel.isDisplayed()).toBeTruthy();
+    expect(page.autoCompletedOption.getText()).toEqual('Janeth Smith');
+
+    page.autoCompletedOption.click();
+    expect(page.selectedFacet.isDisplayed()).toBeTruthy();
+    expect(page.selectedFacet.getText()).toMatch(new RegExp('3333333'));
+  });
+});

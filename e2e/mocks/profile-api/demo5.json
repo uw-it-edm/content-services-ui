@@ -46,7 +46,7 @@
         "indexName": "documents-demo"
       },
       "facetsConfig": {
-        "active": false,
+        "active": true,
         "facets": {}
       },
       "autocompleteConfig": {

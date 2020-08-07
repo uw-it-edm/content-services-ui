@@ -1,6 +1,6 @@
 import { browser, by, element, ExpectedConditions } from 'protractor';
-import { promise } from 'selenium-webdriver';
 import { protractor } from 'protractor/built/ptor';
+import { ContentMetadataPageObject } from '../page-objects/content-metadata.po';
 
 export class CreatePage {
   public pageUrl = `${browser.baseUrl}${this.profile}/create`;
@@ -109,17 +109,16 @@ export class CreatePage {
 
   populateRequiredFields(shouldClearFieldValue: boolean = false) {
     this.requiredFields.each((requiredField) => {
-
       const tagPromise = requiredField.getTagName();
-      const classesPromise: any = requiredField.getAttribute('class').then(classes => classes.split(' '));
+      const classesPromise: any = requiredField.getAttribute('class').then((classes) => classes.split(' '));
 
       protractor.promise.all([tagPromise, classesPromise]).then(([tagName, classes]) => {
         switch (tagName) {
           case 'input': {
             if (classes.indexOf('mat-autocomplete-trigger') >= 0) {
-                requiredField.click();
-                browser.wait(ExpectedConditions.elementToBeClickable(this.dropDownOptions.get(0)));
-                this.dropDownOptions.get(0).click();
+              requiredField.click();
+              browser.wait(ExpectedConditions.elementToBeClickable(this.dropDownOptions.get(0)));
+              this.dropDownOptions.get(0).click();
             } else if (shouldClearFieldValue) {
               requiredField.clear();
               requiredField.sendKeys(protractor.Key.TAB);
@@ -176,5 +175,12 @@ export class CreatePage {
       .then((alert) => {
         alert.accept();
       });
+  }
+
+  /**
+   * Gets a page object to interact with the content metadata component.
+   */
+  get fields(): ContentMetadataPageObject {
+    return new ContentMetadataPageObject(element(by.tagName('app-content-metadata')));
   }
 }
