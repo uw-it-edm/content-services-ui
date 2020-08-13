@@ -1,6 +1,6 @@
 import { by, ElementArrayFinder, browser, ExpectedConditions, ElementFinder } from 'protractor';
 import { SelectFieldPageObject } from './select-field.po';
-import { FilterSelectFieldPageObject } from './filter-select-field.po';
+import { MultiSelectFieldPageObject } from './multi-select-field.po';
 
 /**
  * Page object to interact with the ContentMetadataComponent.
@@ -51,10 +51,10 @@ export class ContentMetadataPageObject {
   }
 
   /**
-   * Gets a page object to interact with a filter select field with the given label.
+   * Gets a page object to interact with a multi select field with the given label.
    * @param label Label of the form field to locate.
    */
-  getFilterSelectFormField(label: string): FilterSelectFieldPageObject {
-    return this.getFormFieldOf<FilterSelectFieldPageObject>(label, FilterSelectFieldPageObject);
+  getMultiSelectFormField(label: string): MultiSelectFieldPageObject {
+    return this.getFormFieldOf<MultiSelectFieldPageObject>(label, MultiSelectFieldPageObject);
   }
 }

@@ -20,7 +20,7 @@ export class CustomTextDirective implements OnChanges, OnDestroy, OnInit {
     this.configResolver
       .getCustomTextSubject()
       .pipe(takeUntil(this.componentDestroyed))
-      .subscribe(customText => {
+      .subscribe((customText) => {
         this.customText = customText;
         this.setCustomText(this.customText, this.appCustomText, this.defaultValue);
       });
@@ -44,7 +44,9 @@ export class CustomTextDirective implements OnChanges, OnDestroy, OnInit {
         if (!this.el.nativeElement.classList.contains('custom-text-rendered')) {
           const text = this.renderer.createText(customizedText.label);
           this.renderer.addClass(this.el.nativeElement, 'custom-text-rendered');
-          this.renderer.setAttribute(this.el.nativeElement, 'title', customizedText.description);
+          if (customizedText.description) {
+            this.renderer.setAttribute(this.el.nativeElement, 'title', customizedText.description);
+          }
           this.renderer.appendChild(this.el.nativeElement, text);
         }
       } else if (!isNullOrUndefined(defaultValue)) {

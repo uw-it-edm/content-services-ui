@@ -72,6 +72,14 @@ describe('Search Page', () => {
     app.runAccessibilityChecks();
   });
 
+  it('should have no accessibility violations after entering bulk edit mode', () => {
+    page.toggleBulkUpdateModeButton.click();
+    utils.waitForElementText('h2', 'Bulk Update Mode');
+
+    const app = new ContentServicesUiPage();
+    app.runAccessibilityChecks();
+  });
+
   it('should display page title', () => {
     expect(page.getPageTitle()).toEqual(demoConfig.pages['tab-search'].pageName);
   });
@@ -145,10 +153,7 @@ describe('Search Page', () => {
       browser.restart().then(() => {
         browser.get(sharableUrl);
         const page2: SearchPage = new SearchPage();
-        expect(page2.selectedFacet.getText()).toMatch(
-          new RegExp(expectedFacetText),
-          'Facet text from shared url is invalid'
-        );
+        expect(page2.selectedFacet.getText()).toMatch(new RegExp(expectedFacetText), 'Facet text from shared url is invalid');
       });
     });
   });
@@ -359,9 +364,7 @@ describe('Search Page', () => {
     app.clickAppMenuItem(2);
 
     page.searchResults.waitForFirstRowValue('ProfileId', 'Demo3');
-    expect(page.tableHeaders.getText()).toEqual(
-      ['Id'].concat(demo3Config.pages['tab-search'].fieldsToDisplay.map((i) => i.label))
-    );
+    expect(page.tableHeaders.getText()).toEqual(['Id'].concat(demo3Config.pages['tab-search'].fieldsToDisplay.map((i) => i.label)));
 
     // Click on facet and paginator.
     page.clickFacetLink(0);
@@ -372,9 +375,7 @@ describe('Search Page', () => {
     app.clickAppMenuItem(1);
 
     page.searchResults.waitForFirstRowValue('ProfileId', 'Demo');
-    expect(page.tableHeaders.getText()).toEqual(
-      ['Id'].concat(demo2Config.pages['tab-search'].fieldsToDisplay.map((i) => i.label))
-    );
+    expect(page.tableHeaders.getText()).toEqual(['Id'].concat(demo2Config.pages['tab-search'].fieldsToDisplay.map((i) => i.label)));
 
     // verify facets and paginator got cleared.
     expect(page.selectedFacet.getText()).toEqual([]);

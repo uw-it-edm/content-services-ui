@@ -22,6 +22,7 @@ import { ProgressService } from './providers/progress.service';
 import { FocusDirective } from './directives/focus/focus.directive';
 import { OptionsInputComponent } from './widgets/options-input/options-input.component';
 import { OptionsAutocompleteComponent } from './widgets/options-autocomplete/options-autocomplete.component';
+import { OptionsMultiselectComponent } from './widgets/options-multiselect/options-multiselect.component';
 import { NotificationComponent } from './widgets/notification/notification.component';
 import { NotificationService } from './providers/notification.service';
 import { ContentViewComponent } from '../content/content-view/content-view.component';
@@ -32,20 +33,13 @@ import { PersonService } from './providers/person.service';
 import { PersonAutocompleteComponent } from './widgets/person-autocomplete/person-autocomplete.component';
 import { PersonDisplayComponent } from './widgets/person-display/person-display.component';
 import { DataApiValueDisplayComponent } from './widgets/data-api-display/data-api-value-display.component';
+import { ListFieldDisplayComponent } from './widgets/list-field-display/list-field-display.component';
 import { ElasticsearchDateValidatorDirective } from './directives/elasticsearch-date-validator/elasticsearch-date-validator.directive';
 import { CourseInputComponent } from './widgets/course-input/course-input.component';
 import { A11yModule } from '@angular/cdk/a11y';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MaterialConfigModule,
-    RouterModule,
-    ReactiveFormsModule,
-    FormsModule,
-    PdfViewerModule,
-    A11yModule,
-  ],
+  imports: [CommonModule, MaterialConfigModule, RouterModule, ReactiveFormsModule, FormsModule, PdfViewerModule, A11yModule],
   exports: [
     CommonModule,
     CustomTextDirective,
@@ -58,11 +52,13 @@ import { A11yModule } from '@angular/cdk/a11y';
     CheckboxInputComponent,
     OptionsInputComponent,
     OptionsAutocompleteComponent,
+    OptionsMultiselectComponent,
     StudentAutocompleteComponent,
     StudentDisplayComponent,
     PersonAutocompleteComponent,
     PersonDisplayComponent,
     DataApiValueDisplayComponent,
+    ListFieldDisplayComponent,
     TimestampPickerComponent,
     TruncatePipe,
     DisplayFieldComponent,
@@ -81,9 +77,11 @@ import { A11yModule } from '@angular/cdk/a11y';
     CheckboxInputComponent,
     OptionsInputComponent,
     OptionsAutocompleteComponent,
+    OptionsMultiselectComponent,
     StudentAutocompleteComponent,
     StudentDisplayComponent,
     DataApiValueDisplayComponent,
+    ListFieldDisplayComponent,
     PersonAutocompleteComponent,
     PersonDisplayComponent,
     TimestampPickerComponent,

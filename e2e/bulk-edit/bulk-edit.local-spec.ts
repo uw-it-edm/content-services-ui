@@ -82,7 +82,7 @@ describe('Bulk Update Flow', () => {
 
   it('should be able to add and remove options from filter select with multi select', () => {
     // verify filter select component loads with no selections and update button is disabled.
-    const filterSelect = bulkEditPage.fields.getFilterSelectFormField('DataApiOption with filter multi select');
+    const filterSelect = bulkEditPage.fields.getMultiSelectFormField('DataApiOption with filter multi select');
     expect(filterSelect.selectedOptions.count()).toEqual(0);
     expect(bulkEditPage.updateButton.isEnabled()).toBeFalsy();
 

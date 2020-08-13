@@ -1,6 +1,5 @@
 import { ComponentFixture, async, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { MatChipList } from '@angular/material/chips';
-import { MatAutocomplete } from '@angular/material/autocomplete';
+import { AbstractControl, FormControl } from '@angular/forms';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { of } from 'rxjs';
 import { first, skip } from 'rxjs/operators';
@@ -12,7 +11,6 @@ import { FieldOptionService } from '../../providers/fieldoption.service';
 import { DataApiValueService } from '../../providers/dataapivalue.service';
 import { Field } from '../../../core/shared/model/field';
 import { FieldOption } from '../../../core/shared/model/field/field-option';
-import { AbstractControl, FormControl } from '@angular/forms';
 import { DynamicSelectConfig } from '../../../core/shared/model/field/dynamic-select-config';
 import { ParentFieldConfig } from '../../../core/shared/model/field/parent-field-config';
 import { MaterialConfigModule } from '../../../routing/material-config.module';
@@ -109,222 +107,68 @@ describe('OptionsAutocompleteComponent', () => {
     expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Found no results.', 'polite');
   }));
 
-  describe('with single select', () => {
-    it('should populate the initial value in the formGroup control', () => {
-      component.writeValue('val1');
+  it('should populate the initial value in the formGroup control', () => {
+    component.writeValue('val1');
 
-      const option: FieldOption = component.filterInputControl.value;
+    const option: FieldOption = component.filterInputControl.value;
 
-      expect(option.value).toBe('val1');
-    });
-
-    it('should disable the filter control when component is disabled', () => {
-      expect(component.filterInputControl.disabled).toBeFalse();
-
-      component.setDisabledState(true);
-
-      expect(component.filterInputControl.disabled).toBeTrue();
-    });
-
-    it('should filter the options after user types in textbox', (done: DoneFn) => {
-      const inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
-
-      component.filteredOptions$.pipe(skip(1), first()).subscribe((options) => {
-        // The observable chain starts with all options available, the second value will be the filtered results.
-        expect(options.length).toBe(2, 'Expect OptionsAutocompleteComponent to have 2 options.');
-        done();
-      });
-
-      inputElement.dispatchEvent(new Event('focusin'));
-      inputElement.value = 'xy';
-      inputElement.dispatchEvent(new Event('input'));
-    });
-
-    it('should update the component value when option is selected', () => {
-      let currentValue: string;
-      component.registerOnChange((val) => (currentValue = val));
-      component.optionSelected(fieldOptions[1]);
-
-      expect(currentValue).toBe('val2');
-
-      expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Selected display2 xy.', 'polite');
-    });
-
-    // See CAB-4067. For accessibility, the list should filter down to the selected value so that it is announced on focus.
-    it('should filter the options list when option is selected', (done: DoneFn) => {
-      component.filteredOptions$.pipe(skip(1), first()).subscribe((options) => {
-        // The observable chain starts with all options available, the second value will be the filtered results.
-        expect(options.length).toBe(1, 'Expect OptionsAutocompleteComponent to have 1 options.');
-        expect(options[0].displayValue).toBe('display2 xy');
-        done();
-      });
-
-      component.filterInputControl.setValue(fieldOptions[1]);
-      fixture.detectChanges();
-    });
-
-    it('should revert to the latest valid option if options list closes while invalid value is on the input', () => {
-      component.optionSelected(fieldOptions[1]);
-
-      component.filterInputControl.setValue('invalid');
-
-      component.optionListClosed();
-      fixture.detectChanges();
-
-      expect(component.filterInputControl.value).toBe(fieldOptions[1]);
-    });
+    expect(option.value).toBe('val1');
   });
 
-  describe('with multi select', () => {
-    beforeEach(() => {
-      component.multiSelect = true;
-      fixture.detectChanges();
+  it('should disable the filter control when component is disabled', () => {
+    expect(component.filterInputControl.disabled).toBeFalse();
+
+    component.setDisabledState(true);
+
+    expect(component.filterInputControl.disabled).toBeTrue();
+  });
+
+  it('should filter the options after user types in textbox', (done: DoneFn) => {
+    const inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
+
+    component.filteredOptions$.pipe(skip(1), first()).subscribe((options) => {
+      // The observable chain starts with all options available, the second value will be the filtered results.
+      expect(options.length).toBe(2, 'Expect OptionsAutocompleteComponent to have 2 options.');
+      done();
     });
 
-    it('should populate the chip list with the initial value from form model', () => {
-      component.writeValue(['val1']);
-      expect(component.selectedOptions[0].value).toBe('val1');
+    inputElement.dispatchEvent(new Event('focusin'));
+    inputElement.value = 'xy';
+    inputElement.dispatchEvent(new Event('input'));
+  });
+
+  it('should update the component value when option is selected', () => {
+    let currentValue: string;
+    component.registerOnChange((val) => (currentValue = val));
+    component.optionSelected(fieldOptions[1]);
+
+    expect(currentValue).toBe('val2');
+
+    expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Selected display2 xy.', 'polite');
+  });
+
+  // See CAB-4067. For accessibility, the list should filter down to the selected value so that it is announced on focus.
+  it('should filter the options list when option is selected', (done: DoneFn) => {
+    component.filteredOptions$.pipe(skip(1), first()).subscribe((options) => {
+      // The observable chain starts with all options available, the second value will be the filtered results.
+      expect(options.length).toBe(1, 'Expect OptionsAutocompleteComponent to have 1 options.');
+      expect(options[0].displayValue).toBe('display2 xy');
+      done();
     });
 
-    it('should clear the chip list when value from model is cleared', () => {
-      component.writeValue(null);
-      expect(component.selectedOptions.length).toBe(0);
-    });
+    component.filterInputControl.setValue(fieldOptions[1]);
+    fixture.detectChanges();
+  });
 
-    it('should disable the chip list when component is disabled', () => {
-      component.writeValue(['val1']);
-      fixture.detectChanges();
+  it('should revert to the latest valid option if options list closes while invalid value is on the input', () => {
+    component.optionSelected(fieldOptions[1]);
 
-      const chipList: MatChipList = fixture.debugElement.query(By.directive(MatChipList)).componentInstance;
+    component.filterInputControl.setValue('invalid');
 
-      expect(component.filterInputControl.disabled).toBeFalse();
-      expect(chipList.disabled).toBeFalse();
+    component.optionListClosed();
+    fixture.detectChanges();
 
-      component.setDisabledState(true);
-      fixture.detectChanges();
-
-      expect(component.filterInputControl.disabled).toBeTrue();
-      expect(chipList.disabled).toBeTrue();
-    });
-
-    it('should update the form model and add a chip when option is selected', () => {
-      let currentValues: string[];
-      component.registerOnChange((val) => (currentValues = val));
-      component.optionSelected(fieldOptions[1]);
-      fixture.detectChanges();
-
-      const chipList: MatChipList = fixture.debugElement.query(By.directive(MatChipList)).componentInstance;
-
-      expect(component.selectedOptions[0].value).toEqual('val2');
-      expect(currentValues).toEqual(['val2']);
-      expect(chipList.chips.length).toEqual(1);
-      expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Selected display2 xy.', 'polite');
-    });
-
-    it('should set form model to empty array when the last option is removed', () => {
-      component.writeValue([fieldOptions[1].value]);
-      expect(component.selectedOptions[0].value).toBe(fieldOptions[1].value);
-
-      let lastValue: any;
-      component.registerOnChange((val) => (lastValue = val));
-      component.removeOptionFromMultiSelect(fieldOptions[1]);
-      fixture.detectChanges();
-
-      expect(component.selectedOptions.length).toBe(0);
-      expect(lastValue).toEqual([]);
-    });
-
-    it('should filter the options list when option is selected', (done: DoneFn) => {
-      component.filteredOptions$.pipe(skip(1), first()).subscribe((options) => {
-        // The observable chain starts with all options available, the second value will be the filtered results.
-        expect(options.length).toBe(2, 'Expect OptionsAutocompleteComponent to have 2 options.');
-        expect(options[0].displayValue).toBe('display1 x');
-        expect(options[1].displayValue).toBe('display3 xyz');
-        done();
-      });
-
-      component.optionSelected(fieldOptions[1]);
-      fixture.detectChanges();
-    });
-
-    it('should update filter options when removing an option', () => {
-      let filteredOptions: FieldOption[] = [];
-      const subscription = component.filteredOptions$.subscribe((options) => (filteredOptions = options));
-
-      expect(filteredOptions.length).toBe(3, 'Expect to have 3 options on init.');
-
-      component.optionSelected(fieldOptions[1]);
-      fixture.detectChanges();
-
-      expect(filteredOptions.length).toBe(2, 'Expect to have 2 options after adding option.');
-      expect(component.selectedOptions.length).toEqual(1);
-
-      component.removeOptionFromMultiSelect(fieldOptions[1]);
-      fixture.detectChanges();
-
-      expect(filteredOptions.length).toBe(3, 'Expect to have 3 options after removing option.');
-      expect(component.selectedOptions.length).toEqual(0);
-
-      subscription.unsubscribe();
-    });
-
-    it('should default maxSelection count to max value if not specified in config', () => {
-      expect(component.maxSelectionCount).toEqual(Number.MAX_VALUE);
-    });
-
-    it('should update the placeholder of control if maxSelectionCount is set', () => {
-      component.placeholder = 'test placeholder';
-      fixture.detectChanges();
-      expect(component.multiSelectLabelText).toEqual('test placeholder');
-
-      component.maxSelectionCount = 3;
-      fixture.detectChanges();
-      expect(component.multiSelectLabelText).toEqual('test placeholder (select up to 3)');
-    });
-
-    it('should perform no operation when option selected and already at max selection count', () => {
-      let filteredOptions: FieldOption[] = [];
-      const subscription = component.filteredOptions$.subscribe((options) => (filteredOptions = options));
-
-      component.maxSelectionCount = 1;
-
-      component.optionSelected(fieldOptions[1]);
-      expect(component.selectedOptions.length).toEqual(1);
-      expect(filteredOptions.length).toEqual(2);
-
-      component.optionSelected(fieldOptions[2]);
-      expect(component.selectedOptions.length).toEqual(1);
-      expect(filteredOptions.length).toEqual(2);
-
-      subscription.unsubscribe();
-    });
-
-    it('should disable the options list when max selection count is reached', () => {
-      const autoComplete: MatAutocomplete = fixture.debugElement.query(By.directive(MatAutocomplete)).componentInstance;
-
-      component.maxSelectionCount = 1;
-      fixture.detectChanges();
-      expect(autoComplete.options.first.disabled).toBeFalsy();
-
-      component.optionSelected(fieldOptions[1]);
-      fixture.detectChanges();
-      expect(autoComplete.options.first.disabled).toBeTruthy();
-
-      component.removeOptionFromMultiSelect(fieldOptions[1]);
-      fixture.detectChanges();
-      expect(autoComplete.options.first.disabled).toBeFalsy();
-    });
-
-    it('should announce the selection counts when adding and removing options', () => {
-      component.maxSelectionCount = 1;
-      component.optionSelected(fieldOptions[1]);
-      fixture.detectChanges();
-      expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Selected display2 xy. Selected 1 of 1 options allowed.', 'polite');
-
-      component.removeOptionFromMultiSelect(fieldOptions[1]);
-      fixture.detectChanges();
-      expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Removed display2 xy. Selected 0 of 1 options allowed.', 'polite');
-    });
+    expect(component.filterInputControl.value).toBe(fieldOptions[1]);
   });
 });
 

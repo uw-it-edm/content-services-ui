@@ -1,0 +1,11 @@
+<div [matTooltip]="tooltip" matTooltipClass="tooltip-multiline">
+  <div class="list-item" *ngFor="let item of listItems">
+    <span [ngClass]="{ 'item-invalid': !item.isValid }">{{item.displayValue}}</span>
+  </div>
+
+  <div class="list-item" *ngIf="values.length > maxItemsToShow">
+    <span class="more-items">
+      ({{values.length - maxItemsToShow}} more)
+    </span>
+  </div>
+</div>
