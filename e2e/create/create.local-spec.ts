@@ -18,8 +18,7 @@ const getCurrentUrl = function () {
 };
 
 const currentUrlMatches = (expectedUrl: string) => {
-  return () =>
-    browser.getCurrentUrl().then((currentUrl) => currentUrl.toLowerCase().startsWith(expectedUrl.toLowerCase()));
+  return () => browser.getCurrentUrl().then((currentUrl) => currentUrl.toLowerCase().startsWith(expectedUrl.toLowerCase()));
 };
 
 const isEmptyFileList = (fileList: ElementArrayFinder) => {
@@ -343,10 +342,7 @@ describe('Create Page for Demo', () => {
     page.clickDropDownOptionValueByText('2015'); // 2015 is mocked to fail
 
     expect(page.errorNotification.isDisplayed()).toBeTruthy();
-    expect(page.dismissButton.getId()).toEqual(
-      browser.driver.switchTo().activeElement().getId(),
-      'Dismiss button is not set to focus.'
-    );
+    expect(page.dismissButton.getId()).toEqual(browser.driver.switchTo().activeElement().getId(), 'Dismiss button is not set to focus.');
   });
 });
 
@@ -406,5 +402,35 @@ describe('Create Page for Demo2', () => {
         'aria-required not set to true for ' + requiredField.getTagName().then((tagName) => tagName)
       );
     });
+  });
+});
+
+describe('Create Page for Demo5 (use RegisteredNames)', () => {
+  let page: CreatePage;
+
+  beforeEach(() => {
+    page = new CreatePage('demo5-legalnames');
+    page.navigateTo();
+  });
+
+  it('should have no accessibility violations', () => {
+    const app = new ContentServicesUiPage();
+    app.runAccessibilityChecks();
+  });
+
+  it('should display registered name on autocomplete option for student', () => {
+    const studentField = page.fields.getPersonAutocompleteFormField('Student');
+
+    studentField.search('student');
+    studentField.waitForOptionCount(1);
+    expect(studentField.options.get(0).getText()).toEqual('Janeth Smith (3333333)');
+  });
+
+  it('should display registered name on autocomplete option for person', () => {
+    const personField = page.fields.getPersonAutocompleteFormField('Employee');
+
+    personField.search('person');
+    personField.waitForOptionCount(1);
+    expect(personField.options.get(0).getText()).toEqual('Janeth Doe Smith (44444444)');
   });
 });

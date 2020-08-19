@@ -5,13 +5,13 @@ import { BrowserUtils } from '../browserUtils';
  * Page object to interact with the SearchResultsComponent.
  */
 export class SearchResultsPageObject {
-  private utils = new BrowserUtils;
+  private utils = new BrowserUtils();
 
   /**
    * Creates a new instance of page object.
    * @param root Root element of component to anchors all internal searches.
    */
-  constructor(public root: ElementFinder) { }
+  constructor(public root: ElementFinder) {}
 
   /**
    * Gets the rows of the results table.
@@ -22,10 +22,10 @@ export class SearchResultsPageObject {
 
   /**
    * Gets the values of each row cell of a given column.
-   * @param column Text of the column to get all its row values for.
+   * @param columnKey Identifier of the column to get all its row values for.
    */
-  getResultsByColumn(column: string): promise.Promise<string[]> {
-    const selector = '.mat-cell.mat-column-' + column;
+  getResultsByColumn(columnKey: string): promise.Promise<string[]> {
+    const selector = '.mat-cell.mat-column-' + columnKey;
 
     // ElementArrayFinder.getText() has incorrect return type. See https://github.com/angular/protractor/issues/3818
     return <any>this.root.all(by.css(selector)).getText();
@@ -33,10 +33,10 @@ export class SearchResultsPageObject {
 
   /**
    * Gets a distinct set of values all row cells of a given column.
-   * @param column Text of the column to get row values for.
+   * @param columnKey Identifier of the column to get row values for.
    */
-  getDistinctResultsByColumn(column: string): promise.Promise<string[]> {
-    return this.getResultsByColumn(column).then((results) => {
+  getDistinctResultsByColumn(columnKey: string): promise.Promise<string[]> {
+    return this.getResultsByColumn(columnKey).then((results) => {
       return Array.from(new Set(results));
     });
   }
@@ -57,9 +57,9 @@ export class SearchResultsPageObject {
   selectRows(...indices: number[]): promise.Promise<any> {
     const checkboxes = this.root.all(by.css('.mat-row .mat-checkbox-inner-container'));
 
-    indices.sort((a,b) => b - a);
+    indices.sort((a, b) => b - a);
 
-    return checkboxes.count().then(count => {
+    return checkboxes.count().then((count) => {
       if (indices[0] > count - 1) {
         throw new Error(`Not enough rows to select all indices. Row count: ${count}, indices: ${indices}`);
       }
@@ -82,11 +82,13 @@ export class SearchResultsPageObject {
    * @param timeoutMilliseconds Time out in milliseconds.
    */
   waitForRowCount(expectedCount: number, timeoutMilliseconds: number = 5000): promise.Promise<any> {
-    return this.utils.waitForFunc(
-      () => this.rows.count(),
-      count => count === expectedCount,
-      timeoutMilliseconds
-    ).then(() => expect(this.rows.count()).toEqual(expectedCount));
+    return this.utils
+      .waitForFunc(
+        () => this.rows.count(),
+        (count) => count === expectedCount,
+        timeoutMilliseconds
+      )
+      .then(() => expect(this.rows.count()).toEqual(expectedCount));
   }
 
   /**
@@ -95,15 +97,13 @@ export class SearchResultsPageObject {
    * @param expectedText The expected text of the first row of column.
    * @param timeoutMilliseconds Timeout in milliseconds to wait for.
    */
-  waitForFirstRowValue(
-    columnId: string,
-    expectedText: string,
-    timeoutMilliseconds: number = 5000
-  ): promise.Promise<any> {
-    return this.utils.waitForFunc(
-      () => this.getResultsByColumn(columnId),
-      (rows) => rows && rows.length > 0 && rows[0].trim() === expectedText,
-      timeoutMilliseconds
-    ).then(() => expect(this.getDistinctResultsByColumn(columnId).then((rows) => rows[0])).toEqual(expectedText));
+  waitForFirstRowValue(columnId: string, expectedText: string, timeoutMilliseconds: number = 5000): promise.Promise<any> {
+    return this.utils
+      .waitForFunc(
+        () => this.getResultsByColumn(columnId),
+        (rows) => rows && rows.length > 0 && rows[0].trim() === expectedText,
+        timeoutMilliseconds
+      )
+      .then(() => expect(this.getDistinctResultsByColumn(columnId).then((rows) => rows[0])).toEqual(expectedText));
   }
 }

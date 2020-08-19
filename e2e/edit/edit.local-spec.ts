@@ -334,3 +334,25 @@ describe('Edit Page for Demo3', () => {
     expect(page.replaceFileElement.isDisplayed()).toBeFalsy();
   });
 });
+
+describe('Edit Page for Demo5 (use RegisteredName)', () => {
+  let page: EditPage;
+
+  beforeEach(() => {
+    page = new EditPage('demo5-legalnames', '123');
+    page.navigateTo();
+  });
+
+  it('should have no accessibility violations', () => {
+    const app = new ContentServicesUiPage();
+    app.runAccessibilityChecks();
+  });
+
+  it('should display the student and person registered name on load', () => {
+    const studentField = page.fields.getPersonAutocompleteFormField('Student');
+    const personField = page.fields.getPersonAutocompleteFormField('Employee');
+
+    expect(studentField.getSelectedValue()).toEqual('Janeth Smith (3333333)');
+    expect(personField.getSelectedValue()).toEqual('Janeth ABCDE Smith (44444444)');
+  });
+});
