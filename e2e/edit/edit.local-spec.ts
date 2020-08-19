@@ -343,6 +343,11 @@ describe('Edit Page for Demo5 (use RegisteredName)', () => {
     page.navigateTo();
   });
 
+  it('should have no accessibility violations', () => {
+    const app = new ContentServicesUiPage();
+    app.runAccessibilityChecks();
+  });
+
   it('should display the student and person registered name on load', () => {
     const studentField = page.fields.getPersonAutocompleteFormField('Student');
     const personField = page.fields.getPersonAutocompleteFormField('Employee');

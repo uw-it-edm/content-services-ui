@@ -471,6 +471,11 @@ describe('Search Page for Demo 5 (use RegisteredNames)', () => {
     page.navigateTo();
   });
 
+  it('should have no accessibility violations', () => {
+    const app = new ContentServicesUiPage();
+    app.runAccessibilityChecks();
+  });
+
   it('should display registered name for student and person on the results table', () => {
     page.searchResults.waitForFirstRowValue('StudentId', 'Janeth Smith (3333333)');
     page.searchResults.waitForFirstRowValue('RegId', 'Janeth ABCDE Smith (44444444)');

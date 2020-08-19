@@ -413,6 +413,11 @@ describe('Create Page for Demo5 (use RegisteredNames)', () => {
     page.navigateTo();
   });
 
+  it('should have no accessibility violations', () => {
+    const app = new ContentServicesUiPage();
+    app.runAccessibilityChecks();
+  });
+
   it('should display registered name on autocomplete option for student', () => {
     const studentField = page.fields.getPersonAutocompleteFormField('Student');
 
