@@ -484,7 +484,7 @@ describe('Search Page for Demo 5 (use RegisteredNames)', () => {
   it('should display registered name in the autocomplete option of search box', () => {
     page.searchBox.sendKeys('test');
     expect(page.autoCompletePanel.isDisplayed()).toBeTruthy();
-    expect(page.autoCompletedOption.getText()).toEqual('Janeth Smith');
+    expect(page.autoCompletedOption.getText()).toEqual('Janeth Smith (3333333)');
 
     page.autoCompletedOption.click();
     expect(page.selectedFacet.isDisplayed()).toBeTruthy();
