@@ -36,6 +36,6 @@ export class Student implements SearchFilterableResult {
   }
 
   getFilterableDisplay(options: PersonResourceConfig = {}): string {
-    return options.displayRegisteredName ? this.registeredName : this.displayName;
+    return this.getNameAndStudentId(options);
   }
 }
