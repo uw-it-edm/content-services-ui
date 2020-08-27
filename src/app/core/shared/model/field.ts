@@ -3,6 +3,7 @@ import { FieldOption } from './field/field-option';
 import { DynamicSelectConfig } from './field/dynamic-select-config';
 import { CourseConfig } from './field/course-config';
 import { MultiSelectConfig } from './multi-select-config';
+import { PersonResourceConfig } from './person-resource-config';
 
 /**
  * Used to refer to a field by 'key'.
@@ -16,7 +17,9 @@ export type FieldDisplayType =
   | 'number'
   | 'currency'
   | 'student'
+  | 'student-autocomplete'
   | 'person'
+  | 'person-autocomplete'
   | 'select'
   | 'filter-select'
   | 'multi-select';
@@ -60,4 +63,9 @@ export class Field {
    * Configuration settings for field of type 'multi-select'.
    */
   public multiSelectConfig?: MultiSelectConfig;
+
+  /**
+   * Configuration settings for field that loads person resources.
+   */
+  public personResourceConfig?: PersonResourceConfig;
 }

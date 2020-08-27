@@ -1,6 +1,7 @@
 import { by, ElementArrayFinder, browser, ExpectedConditions, ElementFinder } from 'protractor';
 import { SelectFieldPageObject } from './select-field.po';
 import { MultiSelectFieldPageObject } from './multi-select-field.po';
+import { PersonAutocompleteFieldPageObject } from './person-autocomplete-field.po';
 
 /**
  * Page object to interact with the ContentMetadataComponent.
@@ -56,5 +57,13 @@ export class ContentMetadataPageObject {
    */
   getMultiSelectFormField(label: string): MultiSelectFieldPageObject {
     return this.getFormFieldOf<MultiSelectFieldPageObject>(label, MultiSelectFieldPageObject);
+  }
+
+  /**
+   * Gets a page object to interact with a person or student autocomplete field with the given label.
+   * @param label Label of the form field to locate.
+   */
+  getPersonAutocompleteFormField(label: string): PersonAutocompleteFieldPageObject {
+    return this.getFormFieldOf<PersonAutocompleteFieldPageObject>(label, PersonAutocompleteFieldPageObject);
   }
 }

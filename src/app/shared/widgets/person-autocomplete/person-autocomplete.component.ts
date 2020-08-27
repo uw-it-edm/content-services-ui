@@ -29,10 +29,11 @@ import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { CanUpdateErrorState, ErrorStateMatcher, mixinErrorState } from '@angular/material/core';
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { FocusMonitor, LiveAnnouncer } from '@angular/cdk/a11y';
-import { isNullOrUndefined } from '../../../core/util/node-utilities';
 import { PersonSearchResults } from '../../shared/model/person-search-results';
 import { Person } from '../../shared/model/person';
 import { PersonService } from '../../providers/person.service';
+import { Field } from '../../../core/shared/model/field';
+import { PersonResourceConfig } from '../../../core/shared/model/person-resource-config';
 
 // Boilerplate for applying mixins to PersonAutocompleteComponent.
 /** @docs-private */
@@ -81,20 +82,19 @@ export function RequirePersonMatch(control: AbstractControl) {
   ],
 })
 export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBase
-  implements
-    ControlValueAccessor,
-    MatFormFieldControl<string>,
-    CanUpdateErrorState,
-    AfterContentInit,
-    DoCheck,
-    OnDestroy {
+  implements ControlValueAccessor, MatFormFieldControl<string>, CanUpdateErrorState, AfterContentInit, DoCheck, OnDestroy {
   // Component logic
+
+  private personConfig: PersonResourceConfig = {};
+
   formGroup: FormGroup;
   isLoading: boolean;
 
   get internalFieldName(): string {
     return INTERNAL_FIELD_NAME;
   }
+
+  @Input() fieldConfig: Field;
 
   private isInternalFieldValid() {
     if (
@@ -127,6 +127,8 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
   @ViewChild(MatAutocompleteTrigger, { static: true }) trigger;
 
   private initComponent() {
+    this.personConfig = this.fieldConfig && this.fieldConfig.personResourceConfig;
+
     this.initInternalForm();
     this.initInternalFormUpdateListener();
     this.initializeValue();
@@ -165,7 +167,7 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
   }
 
   private announcePersonSelection(person: Person) {
-    const announcementMessage = 'selected ' + person.getNameAndEmployeeId();
+    const announcementMessage = 'selected ' + person.getNameAndEmployeeId(this.personConfig);
     console.log('liveAnnouncer : ' + announcementMessage);
 
     this.liveAnnouncer.announce(announcementMessage, 'polite');
@@ -176,7 +178,7 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
     if (!this.filteredOptions || this.filteredOptions.length === 0) {
       announcementMessage = 'No results';
     } else if (this.filteredOptions.length === 1) {
-      announcementMessage = 'Found 1 person : ' + this.filteredOptions[0].getNameAndEmployeeId();
+      announcementMessage = 'Found 1 person : ' + this.filteredOptions[0].getNameAndEmployeeId(this.personConfig);
     } else if (this.filteredOptions.length > 1) {
       announcementMessage = 'Found ' + this.filteredOptions.length + ' persons';
     }
@@ -229,7 +231,7 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
   }
 
   displayFn(person?: Person) {
-    return person && person instanceof Person ? person.getNameAndEmployeeId() : undefined;
+    return person && person instanceof Person ? person.getNameAndEmployeeId(this.personConfig) : undefined;
   }
 
   // End Component logic
@@ -347,6 +349,9 @@ export class PersonAutocompleteComponent extends _PersonAutocompleteComponentBas
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     }
+
+    // Sets the context of 'this' to the component when used inside the function.
+    this.displayFn = this.displayFn.bind(this);
   }
 
   ngAfterContentInit(): void {

@@ -34,7 +34,8 @@ import { CanUpdateErrorState, ErrorStateMatcher, mixinErrorState } from '@angula
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { FocusMonitor, LiveAnnouncer } from '@angular/cdk/a11y';
 import { isNullOrUndefined } from '../../../core/util/node-utilities';
-import { Person } from '../../shared/model/person';
+import { Field } from '../../../core/shared/model/field';
+import { PersonResourceConfig } from '../../../core/shared/model/person-resource-config';
 
 // Boilerplate for applying mixins to StudentAutocompleteComponent.
 /** @docs-private */
@@ -83,20 +84,19 @@ export function RequireStudentMatch(control: AbstractControl) {
   ],
 })
 export class StudentAutocompleteComponent extends _StudentAutocompleteComponentBase
-  implements
-    ControlValueAccessor,
-    MatFormFieldControl<string>,
-    CanUpdateErrorState,
-    AfterContentInit,
-    DoCheck,
-    OnDestroy {
+  implements ControlValueAccessor, MatFormFieldControl<string>, CanUpdateErrorState, AfterContentInit, DoCheck, OnDestroy {
   // Component logic
+
+  private personConfig: PersonResourceConfig = {};
+
   formGroup: FormGroup;
   isLoading: boolean;
 
   get internalFieldName(): string {
     return INTERNAL_FIELD_NAME;
   }
+
+  @Input() fieldConfig: Field;
 
   private isInternalFieldValid() {
     if (
@@ -129,6 +129,8 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
   @ViewChild(MatAutocompleteTrigger, { static: true }) trigger;
 
   private initComponent() {
+    this.personConfig = this.fieldConfig && this.fieldConfig.personResourceConfig;
+
     this.initInternalForm();
     this.initInternalFormUpdateListener();
     this.initializeValue();
@@ -167,7 +169,7 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
   }
 
   private announceStudentSelection(student: Student) {
-    const announcementMessage = 'selected ' + student.getNameAndStudentId();
+    const announcementMessage = 'selected ' + student.getNameAndStudentId(this.personConfig);
     console.log('liveAnnouncer : ' + announcementMessage);
 
     this.liveAnnouncer.announce(announcementMessage, 'polite');
@@ -178,7 +180,7 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
     if (!this.filteredOptions || this.filteredOptions.length === 0) {
       announcementMessage = 'No student for search';
     } else if (this.filteredOptions.length === 1) {
-      announcementMessage = 'Found 1 student : ' + this.filteredOptions[0].getNameAndStudentId();
+      announcementMessage = 'Found 1 student : ' + this.filteredOptions[0].getNameAndStudentId(this.personConfig);
     } else if (this.filteredOptions.length > 1) {
       announcementMessage = 'Found ' + this.filteredOptions.length + ' students';
     }
@@ -220,18 +222,18 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
         this.formGroup.controls[INTERNAL_FIELD_NAME].reset();
       } else {
         this.studentService
-            .read(studentNumber)
-            .pipe(first())
-            .subscribe((result: Student) => {
-              this.filteredOptions = [result];
-              this.formGroup.controls[INTERNAL_FIELD_NAME].patchValue(result);
-            });
+          .read(studentNumber)
+          .pipe(first())
+          .subscribe((result: Student) => {
+            this.filteredOptions = [result];
+            this.formGroup.controls[INTERNAL_FIELD_NAME].patchValue(result);
+          });
       }
     }
   }
 
   displayFn(student?: Student) {
-    return student && student instanceof Student ? student.getNameAndStudentId() : undefined;
+    return student && student instanceof Student ? student.getNameAndStudentId(this.personConfig) : undefined;
   }
 
   // End Component logic
@@ -370,6 +372,9 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     }
+
+    // Sets the context of 'this' to the component when used inside the function.
+    this.displayFn = this.displayFn.bind(this);
   }
 
   ngAfterContentInit(): void {
@@ -379,9 +384,7 @@ export class StudentAutocompleteComponent extends _StudentAutocompleteComponentB
   validate() {
     // check if the existing value is valid
     const studentNumber =
-      this.formGroup &&
-      this.formGroup.controls[INTERNAL_FIELD_NAME] &&
-      this.formGroup.controls[INTERNAL_FIELD_NAME].value;
+      this.formGroup && this.formGroup.controls[INTERNAL_FIELD_NAME] && this.formGroup.controls[INTERNAL_FIELD_NAME].value;
     let student: Student = null;
     if (this.filteredOptions && !isNullOrUndefined(studentNumber)) {
       student = this.filteredOptions.find((s: Student) => s.studentNumber === studentNumber);

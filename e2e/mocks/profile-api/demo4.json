@@ -1,6 +1,6 @@
 {
   "account": "demo-account",
-  "tenant": "Demo4",
+  "tenant": "demo4-nofacets",
   "appName": "Demo 4 - No Facets",
   "customText": {
     "addContentItemButton": {

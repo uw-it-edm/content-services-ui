@@ -5,16 +5,18 @@ import { Subject } from 'rxjs';
 import { NotificationService } from '../../providers/notification.service';
 import { takeUntil } from 'rxjs/operators';
 import { isNumeric } from 'rxjs/internal-compatibility';
+import { Field } from '../../../core/shared/model/field';
 
 @Component({
   selector: 'app-student-display',
   templateUrl: './student-display.component.html',
-  styleUrls: ['./student-display.component.css']
+  styleUrls: ['./student-display.component.css'],
 })
 export class StudentDisplayComponent implements OnInit, OnDestroy {
   private componentDestroyed = new Subject();
 
   @Input() value: string;
+  @Input() fieldConfig: Field;
 
   displayName: string;
   invalidStudentNumber: boolean;
@@ -28,10 +30,10 @@ export class StudentDisplayComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.componentDestroyed))
         .subscribe(
           (student: Student) => {
-            this.displayName = Student.convertToDisplayName(student);
+            this.displayName = Student.convertToDisplayName(student, this.fieldConfig && this.fieldConfig.personResourceConfig);
             this.invalidStudentNumber = false;
           },
-          err => {
+          (err) => {
             this.notificationService.warn(err.message, err);
             this.invalidUser();
           }

@@ -65,6 +65,7 @@
             <app-student-autocomplete
               [formControlName]="fieldToDisplay.key"
               [placeholder]="fieldToDisplay.label"
+              [fieldConfig]="fieldToDisplay"
               [required]="fieldHasRequiredError(fieldToDisplay)"
               [id]="'custom-input-'+ i"
               [attr.id]="'custom-input-'+ i"
@@ -78,6 +79,7 @@
             <app-person-autocomplete
               [formControlName]="fieldToDisplay.key"
               [placeholder]="fieldToDisplay.label"
+              [fieldConfig]="fieldToDisplay"
               [required]="fieldHasRequiredError(fieldToDisplay)"
               [id]="'custom-input-'+ i"
               [attr.id]="'custom-input-'+ i"

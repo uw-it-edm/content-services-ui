@@ -19,8 +19,8 @@
         <mat-hint id="search-hint" *ngIf="pageConfig?.searchConfig?.directions"
                   align="start">{{pageConfig?.searchConfig?.directions}}</mat-hint>
         <mat-autocomplete #autocomplete="matAutocomplete" (optionSelected)="onSelectFilter($event)">
-          <mat-option *ngFor="let option of filteredOptions " [value]="option.getFilterableValue()">
-            <span>{{ option.getFilterableDisplay() }}</span>
+          <mat-option *ngFor="let option of filteredOptions " [value]="option.getFilterableValue(autocompleteDisplayConfig)">
+            <span>{{ option.getFilterableDisplay(autocompleteDisplayConfig) }}</span>
           </mat-option>
         </mat-autocomplete>
 
