@@ -97,13 +97,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, { static: true })
   sort: MatSort = new MatSort();
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private data: DataService,
-    private liveAnnouncer: LiveAnnouncer,
-    private matSortService: MatSortHeaderIntl
-  ) {}
+  constructor(private route: ActivatedRoute, private router: Router, private data: DataService, private liveAnnouncer: LiveAnnouncer) {}
 
   ngOnInit(): void {
     const searchResultRows$ = this.searchResults$.pipe(
@@ -218,12 +212,6 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
       this.displayedColumns.push(field.key);
       fieldLabelMap[field.key] = field.label;
     }
-
-    this.matSortService.sortButtonLabel = (id) => {
-      const label = fieldLabelMap[id] || id;
-
-      return `Change sorting for ${label}`;
-    };
 
     return fieldLabelMap;
   }
