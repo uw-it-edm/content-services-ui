@@ -150,8 +150,8 @@ describe('DisplaySearchPageComponent', () => {
 
     beforeEach(() => {
       component.searchDebounceTime = 1;
-      theSearchService = TestBed.get(SearchService);
-      theNotificationService = TestBed.get(NotificationService);
+      theSearchService = TestBed.inject(SearchService);
+      theNotificationService = TestBed.inject(NotificationService);
 
       searchSpy = spyOn(theSearchService, 'search').and.callThrough();
       notificationErrorSpy = spyOn(theNotificationService, 'error').and.stub();

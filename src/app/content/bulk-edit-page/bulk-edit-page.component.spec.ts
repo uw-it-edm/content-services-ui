@@ -95,8 +95,8 @@ describe('BulkEditPageComponent', () => {
 
   describe('on initial load', () => {
     it('should save to local storage the rows received through navigation', () => {
-      const router = TestBed.get(Router);
-      spyOn(router, 'getCurrentNavigation').and.returnValue({ extras: { state: { selectedRows: testRows } } });
+      const router = TestBed.inject(Router);
+      spyOn(router, 'getCurrentNavigation').and.returnValue({ extras: { state: { selectedRows: testRows } } } as any);
 
       fixture = TestBed.createComponent(BulkEditPageComponent);
       component = fixture.componentInstance;
@@ -191,7 +191,7 @@ describe('BulkEditPageComponent', () => {
     });
 
     it('should navigate to search page when clicking the cancel button', () => {
-      const router = TestBed.get(Router);
+      const router = TestBed.inject(Router);
       spyOn(router, 'navigate').and.stub();
 
       fixture = TestBed.createComponent(BulkEditPageComponent);
