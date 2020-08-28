@@ -1,4 +1,4 @@
-import { Input, OnDestroy, OnInit } from '@angular/core';
+import { Input, OnDestroy, OnInit, Directive } from '@angular/core';
 import { FormBuilder, AbstractControl, FormControl, FormGroup, ControlValueAccessor } from '@angular/forms';
 import { Observable, Subject, concat, of, combineLatest } from 'rxjs';
 import { distinctUntilChanged, switchMap, takeUntil, startWith, map, skip, debounceTime, first } from 'rxjs/operators';
@@ -12,7 +12,8 @@ const INTERNAL_FILTER_CONTROL_NAME = 'internalFilterControl';
 /**
  * Base class for components that have an autocomplete filter.
  */
-export class OptionsAutocompleteComponentBase implements OnInit, OnDestroy, ControlValueAccessor {
+@Directive()
+export class OptionsAutocompleteComponentBaseDirective implements OnInit, OnDestroy, ControlValueAccessor {
   private _disabled = false;
   private _filterInputControl: FormControl;
   private allOptions$: Observable<FieldOption[]>;
