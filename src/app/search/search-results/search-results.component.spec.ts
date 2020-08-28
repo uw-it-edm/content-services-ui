@@ -36,7 +36,7 @@ describe('SearchResultsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MaterialConfigModule, NoopAnimationsModule, RouterTestingModule, SharedModule],
-      declarations: [SearchResultsComponent]
+      declarations: [SearchResultsComponent],
     }).compileComponents();
   }));
 
@@ -112,13 +112,13 @@ describe('SearchResultsComponent', () => {
   });
 
   it('should disable all sorting headers when freezeResults=true', () => {
-    let sortHeaders = fixture.debugElement.queryAll(By.css('.mat-sort-header-button[disabled=true]'));
+    let sortHeaders = fixture.debugElement.queryAll(By.css('.mat-sort-header-disabled'));
     expect(sortHeaders.length).toBe(0);
 
     component.freezeResults = true;
     fixture.detectChanges();
 
-    sortHeaders = fixture.debugElement.queryAll(By.css('.mat-sort-header-button[disabled=true]'));
+    sortHeaders = fixture.debugElement.queryAll(By.css('.mat-sort-header-disabled'));
     expect(sortHeaders.length).toBe(2);
   });
 
@@ -226,7 +226,7 @@ describe('SearchResultsComponent', () => {
     const results = buildSearchResult(2);
     let selectedRows = [];
 
-    component.selectRows.subscribe(rows => selectedRows = rows);
+    component.selectRows.subscribe((rows) => (selectedRows = rows));
 
     component.searchResults$.next(results);
     component.selectionEnabled = true;
