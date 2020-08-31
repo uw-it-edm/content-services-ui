@@ -345,14 +345,14 @@ describe('Search Page', () => {
     // when the page loads, the default sorting will take place.
     page.waitForLiveAnnouncerText('Sort by id, descending.');
 
-    page.searchResults.sortByHeaderText('Publish Status');
+    page.searchResults.sortByColumnKey('PublishStatus');
     page.waitForLiveAnnouncerText('Sort by Publish Status, ascending.');
 
-    page.searchResults.sortByHeaderText('Publish Status');
+    page.searchResults.sortByColumnKey('PublishStatus');
     page.waitForLiveAnnouncerText('Sort by Publish Status, descending.');
 
     // Clicking on the same column for a third time will clear sorting and remove it from announcer.
-    page.searchResults.sortByHeaderText('Publish Status');
+    page.searchResults.sortByColumnKey('PublishStatus');
     page.waitForLiveAnnouncerText('Search results updated. Showing items 1 to 50');
   });
 

@@ -1,4 +1,4 @@
-import { promise, by, ElementFinder, ElementArrayFinder, protractor } from 'protractor';
+import { by, ElementArrayFinder, ElementFinder, promise, protractor } from 'protractor';
 import { BrowserUtils } from '../browserUtils';
 
 /**
@@ -42,11 +42,11 @@ export class SearchResultsPageObject {
   }
 
   /**
-   * Sorts results by the column header with the text specified.
-   * @param headerText The text of the column to sort the results by.
+   * Sorts results by the column header with the 'mat-column-<columnKey>' specified.
+   * @param columnKey The text of the column to sort the results by.
    */
-  sortByHeaderText(headerText: string): promise.Promise<any> {
-    const header = this.root.element(by.buttonText(headerText));
+  sortByColumnKey(columnKey: string): promise.Promise<any> {
+    const header = this.root.element(by.className('mat-column-' + columnKey));
     return header.click();
   }
 
