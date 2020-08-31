@@ -3,7 +3,7 @@ import { NG_VALUE_ACCESSOR, FormBuilder } from '@angular/forms';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { FieldOption } from '../../../core/shared/model/field/field-option';
 import { FieldOptionService } from '../../providers/fieldoption.service';
-import { OptionsAutocompleteComponentBase } from '../options-autocomplete/options-autocomplete.component.base';
+import { OptionsAutocompleteComponentBaseDirective } from '../options-autocomplete/options-autocomplete-component-base.directive';
 
 @Component({
   selector: 'app-options-multiselect',
@@ -17,7 +17,7 @@ import { OptionsAutocompleteComponentBase } from '../options-autocomplete/option
     },
   ],
 })
-export class OptionsMultiselectComponent extends OptionsAutocompleteComponentBase implements OnInit {
+export class OptionsMultiselectComponent extends OptionsAutocompleteComponentBaseDirective implements OnInit {
   selectedOptions: FieldOption[] = [];
   maxSelectionCount = Number.MAX_VALUE;
 

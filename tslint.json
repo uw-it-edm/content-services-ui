@@ -7,6 +7,9 @@
     "tslint-config-prettier"
   ],
   "rules": {
+    "deprecation": {
+      "severity": "warning"
+    },
     "rxjs-no-unsafe-takeuntil": { "severity": "error" },
     "arrow-return-shorthand": true,
     "callable-types": true,
