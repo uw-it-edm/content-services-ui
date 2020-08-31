@@ -7,7 +7,7 @@ import { Observable, Subject } from 'rxjs';
 import { SearchDataSource } from '../shared/model/search-datasource.model';
 import { ResultRow } from '../shared/model/result-row';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSort, MatSortHeaderIntl, Sort, SortDirection } from '@angular/material/sort';
+import { MatSort, Sort, SortDirection } from '@angular/material/sort';
 import { PaginatorConfig } from '../shared/model/paginator-config';
 import { DataService } from '../../shared/providers/data.service';
 import { SearchUtility } from '../shared/search-utility';
