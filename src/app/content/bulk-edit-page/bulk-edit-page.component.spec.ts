@@ -295,12 +295,21 @@ describe('BulkEditPageComponent', () => {
       expect(dataServiceSpy.setToLocalStorage).toHaveBeenCalledWith('bulk-edit-rows', failedRows);
     });
 
-    it('should display snack bar with message after update', () => {
+    it('should display snack bar with success message after update', () => {
+      (<any>contentServiceSpy.bulkUpdate).and.returnValue(of({ successes: testRows.slice(), failures: [] }));
+
+      component.update();
+      expect(snackBarSpy.open).toHaveBeenCalledWith('Updated 3 documents.', 'Dismiss', { duration: 5000, politeness: 'assertive' });
+    });
+
+    it('should display snack bar with error message after update', () => {
       (<any>contentServiceSpy.bulkUpdate).and.returnValue(of({ successes: testRows.slice(0, 2), failures: testRows.slice(2) }));
 
       component.update();
 
-      expect(snackBarSpy.open).toHaveBeenCalledWith('Updated 2 documents. Failed to update 1 documents.', 'Dismiss');
+      expect(snackBarSpy.open).toHaveBeenCalledWith('Updated 2 documents. Failed to update 1 documents.', 'Dismiss', {
+        politeness: 'assertive',
+      });
     });
 
     it('should display error if update operation fails', () => {
