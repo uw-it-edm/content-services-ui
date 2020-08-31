@@ -43,7 +43,7 @@ export class SearchResultsPageObject {
 
   /**
    * Sorts results by the column header with the 'mat-column-<columnKey>' specified.
-   * @param columnKey The text of the column to sort the results by.
+   * @param columnKey The key of the column to sort the results by.
    */
   sortByColumnKey(columnKey: string): promise.Promise<any> {
     const header = this.root.element(by.className('mat-column-' + columnKey));
