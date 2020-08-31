@@ -7,7 +7,7 @@ import { Observable, Subject } from 'rxjs';
 import { SearchDataSource } from '../shared/model/search-datasource.model';
 import { ResultRow } from '../shared/model/result-row';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSort, MatSortHeaderIntl, Sort, SortDirection } from '@angular/material/sort';
+import { MatSort, Sort, SortDirection } from '@angular/material/sort';
 import { PaginatorConfig } from '../shared/model/paginator-config';
 import { DataService } from '../../shared/providers/data.service';
 import { SearchUtility } from '../shared/search-utility';
@@ -97,13 +97,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, { static: true })
   sort: MatSort = new MatSort();
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private data: DataService,
-    private liveAnnouncer: LiveAnnouncer,
-    private matSortService: MatSortHeaderIntl
-  ) {}
+  constructor(private route: ActivatedRoute, private router: Router, private data: DataService, private liveAnnouncer: LiveAnnouncer) {}
 
   ngOnInit(): void {
     const searchResultRows$ = this.searchResults$.pipe(
@@ -218,12 +212,6 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
       this.displayedColumns.push(field.key);
       fieldLabelMap[field.key] = field.label;
     }
-
-    this.matSortService.sortButtonLabel = (id) => {
-      const label = fieldLabelMap[id] || id;
-
-      return `Change sorting for ${label}`;
-    };
 
     return fieldLabelMap;
   }

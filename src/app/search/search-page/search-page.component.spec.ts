@@ -51,7 +51,7 @@ function getFacetsConfig(): FacetsConfig {
     size: 3,
     maxSize: 50,
     dataApiValueType: '',
-    dataApiLabelPath: ''
+    dataApiLabelPath: '',
   });
   return facetsConfig;
 }
@@ -82,9 +82,9 @@ describe('SearchPageComponent', () => {
         { provide: StudentService, useValue: studentService },
         { provide: PersonService, useValue: {} },
         Title,
-        NotificationService
+        NotificationService,
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     })
       .compileComponents()
       .then(() => {
@@ -209,8 +209,8 @@ describe('SearchPageComponent', () => {
 
     beforeEach(() => {
       component.searchDebounceTime = 1;
-      theSearchService = TestBed.get(SearchService);
-      theNotificationService = TestBed.get(NotificationService);
+      theSearchService = TestBed.inject(SearchService);
+      theNotificationService = TestBed.inject(NotificationService);
 
       searchSpy = spyOn(theSearchService, 'search').and.callThrough();
       notificationErrorSpy = spyOn(theNotificationService, 'error').and.stub();

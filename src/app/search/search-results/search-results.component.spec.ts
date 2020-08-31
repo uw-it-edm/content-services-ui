@@ -36,7 +36,7 @@ describe('SearchResultsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MaterialConfigModule, NoopAnimationsModule, RouterTestingModule, SharedModule],
-      declarations: [SearchResultsComponent]
+      declarations: [SearchResultsComponent],
     }).compileComponents();
   }));
 
@@ -92,14 +92,6 @@ describe('SearchResultsComponent', () => {
     expect(component.sort.direction).toBe('desc');
   });
 
-  it('should use the field label for the aria attribute of sorting button', () => {
-    const headerButtons = fixture.debugElement.queryAll(By.css('.mat-sort-header-button'));
-    expect(headerButtons.length).toBe(2);
-
-    const secondHeaderButton: HTMLElement = headerButtons[1].nativeElement;
-    expect(secondHeaderButton.getAttribute('aria-label')).toEqual('Change sorting for Friendly Field Name');
-  });
-
   it('should hide the paginators when freezeResults=true', () => {
     let paginators = fixture.debugElement.queryAll(By.css('mat-paginator'));
     expect(paginators.length).toBe(2);
@@ -112,13 +104,13 @@ describe('SearchResultsComponent', () => {
   });
 
   it('should disable all sorting headers when freezeResults=true', () => {
-    let sortHeaders = fixture.debugElement.queryAll(By.css('.mat-sort-header-button[disabled=true]'));
+    let sortHeaders = fixture.debugElement.queryAll(By.css('.mat-sort-header-disabled'));
     expect(sortHeaders.length).toBe(0);
 
     component.freezeResults = true;
     fixture.detectChanges();
 
-    sortHeaders = fixture.debugElement.queryAll(By.css('.mat-sort-header-button[disabled=true]'));
+    sortHeaders = fixture.debugElement.queryAll(By.css('.mat-sort-header-disabled'));
     expect(sortHeaders.length).toBe(2);
   });
 
@@ -226,7 +218,7 @@ describe('SearchResultsComponent', () => {
     const results = buildSearchResult(2);
     let selectedRows = [];
 
-    component.selectRows.subscribe(rows => selectedRows = rows);
+    component.selectRows.subscribe((rows) => (selectedRows = rows));
 
     component.searchResults$.next(results);
     component.selectionEnabled = true;

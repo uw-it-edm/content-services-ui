@@ -3,7 +3,7 @@ import { NG_VALUE_ACCESSOR, FormBuilder, AbstractControl } from '@angular/forms'
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { FieldOption } from '../../../core/shared/model/field/field-option';
 import { FieldOptionService } from '../../providers/fieldoption.service';
-import { OptionsAutocompleteComponentBase } from './options-autocomplete.component.base';
+import { OptionsAutocompleteComponentBaseDirective } from './options-autocomplete-component-base.directive';
 
 /**
  * Validator that checks if the selected value is an object (instead of a string which is the value used when filtering the list).
@@ -28,7 +28,7 @@ export function RequiresFieldOptionObject(control: AbstractControl) {
     },
   ],
 })
-export class OptionsAutocompleteComponent extends OptionsAutocompleteComponentBase implements OnInit {
+export class OptionsAutocompleteComponent extends OptionsAutocompleteComponentBaseDirective implements OnInit {
   private latestValidOption: FieldOption;
 
   constructor(formBuilder: FormBuilder, fieldOptionService: FieldOptionService, liveAnnouncer: LiveAnnouncer) {
