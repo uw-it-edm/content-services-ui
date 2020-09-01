@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, Navigation, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { takeUntil, finalize, timeout } from 'rxjs/operators';
 import { Config } from '../../core/shared/model/config';
@@ -155,13 +155,17 @@ export class BulkEditPageComponent implements OnInit, OnDestroy {
   }
 
   private showPostUpdateMessage(successes: IContentItem[], failures: IContentItem[]): void {
+    const snackBarConfig: MatSnackBarConfig = {};
+    snackBarConfig.politeness = 'assertive';
     let message = `Updated ${successes.length} documents.`;
 
     if (failures.length > 0) {
       message += ` Failed to update ${failures.length} documents.`;
+    } else {
+      snackBarConfig.duration = 5000;
     }
 
-    this._snackBar.open(message, 'Dismiss');
+    this._snackBar.open(message, 'Dismiss', snackBarConfig);
   }
 
   // tslint:disable-next-line:member-ordering
