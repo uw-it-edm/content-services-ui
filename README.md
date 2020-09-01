@@ -142,3 +142,6 @@ yarn stop-mock-services
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
 
+# Additional Documentation
+
+[Profile Configuration](/docs/CONFIGURATION.md)
