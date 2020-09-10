@@ -102,14 +102,15 @@
           </div>
 
           <mat-form-field *ngSwitchDefault>
-            <input matInput [formControlName]="fieldToDisplay.key"
-                   [name]="fieldToDisplay.key"
-                   [placeholder]="fieldToDisplay.label"
-                   [attr.aria-label]="fieldToDisplay.label"
-                   [required]="fieldHasRequiredError(fieldToDisplay)"
-            >
-            <mat-icon *ngIf="fieldToDisplay.disabled" matSuffix class="disabled-icon" matTooltip="Read-only">lock</mat-icon>
-            <mat-error> {{getErrorMessage(fieldToDisplay.key)}}</mat-error>
+              <mat-label>{{fieldToDisplay.label}}</mat-label>
+              <input matInput [formControlName]="fieldToDisplay.key"
+                     [name]="fieldToDisplay.key"
+                     [placeholder]="fieldToDisplay.label"
+                     [attr.aria-label]="fieldToDisplay.label"
+                     [required]="fieldHasRequiredError(fieldToDisplay)"
+              >
+              <mat-icon *ngIf="fieldToDisplay.disabled" matSuffix class="disabled-icon" matTooltip="Read-only">lock</mat-icon>
+              <mat-error> {{getErrorMessage(fieldToDisplay.key)}}</mat-error>
           </mat-form-field>
         </div>
       </li>

@@ -203,9 +203,13 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
   private createSnackBar(): MatSnackBarRef<SimpleSnackBar> {
     const message = this.createUpdateSnackBarMessage();
     const snackBarConfig = new MatSnackBarConfig();
-    snackBarConfig.duration = 5000;
     snackBarConfig.politeness = 'assertive';
     snackBarConfig.panelClass = 'cs-wrap-lines';
+
+    if (this.failures.length === 0) {
+      snackBarConfig.duration = 5000;
+    }
+
     return this.snackBar.open(message, 'Dismiss', snackBarConfig);
   }
 
@@ -277,14 +281,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
       this.saving.emit(true); // saving item in progressing
 
       for (const contentObject of this.contentObjects) {
-        const contentItem = this.prepareItem(
-          contentObject.item,
-          fields,
-          formModel,
-          this.config,
-          this.user,
-          metadataOverrides
-        );
+        const contentItem = this.prepareItem(contentObject.item, fields, formModel, this.config, this.user, metadataOverrides);
         let contentItem$;
         if (contentObject.item) {
           contentItem$ = this.contentService.update(contentItem, contentObject.getFile());
