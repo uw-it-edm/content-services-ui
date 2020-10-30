@@ -294,6 +294,7 @@ export class ContentObjectListComponent implements OnInit, OnChanges, OnDestroy 
             .pipe(first())
             .toPromise()
             .then((item) => {
+              contentObject.removeFile();
               contentObject.onLoad(item);
               contentObject.failed = false;
               this.updateComponentSavedItemLists(item);
