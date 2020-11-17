@@ -109,7 +109,13 @@ export class OptionsMultiselectComponent extends OptionsAutocompleteComponentBas
       );
     }
 
-    this.selectedOptions = allOptions.filter((opt) => selectedValues.includes(opt.value));
+    // Converts the array of options into a dictionary.
+    const allOptionsMap: { [key: string]: FieldOption } = allOptions.reduce((map, obj) => {
+      map[obj.value] = obj;
+      return map;
+    }, {});
+
+    this.selectedOptions = selectedValues.map((val) => allOptionsMap[val] || new FieldOption());
     this.refilterOptions();
   }
 }

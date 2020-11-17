@@ -63,9 +63,11 @@ describe('OptionsMultiselectComponent', () => {
     });
   });
 
-  it('should populate the chip list with the initial value from form model', () => {
-    component.writeValue(['val1']);
-    expect(component.selectedOptions[0].value).toBe('val1');
+  it('should populate the chip list with the initial values and order from form model', () => {
+    component.writeValue(['val3', 'val1', 'val2']);
+    expect(component.selectedOptions[0].value).toBe('val3');
+    expect(component.selectedOptions[1].value).toBe('val1');
+    expect(component.selectedOptions[2].value).toBe('val2');
   });
 
   it('should clear the chip list when value from model is cleared', () => {
