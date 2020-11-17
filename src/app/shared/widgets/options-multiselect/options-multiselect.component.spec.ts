@@ -103,7 +103,7 @@ describe('OptionsMultiselectComponent', () => {
     expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Selected display2 xy.', 'polite');
   });
 
-  it('should set form model to empty array when the last option is removed', () => {
+  it('should set form model to null when the last option is removed', () => {
     component.writeValue([fieldOptions[1].value]);
     expect(component.selectedOptions[0].value).toBe(fieldOptions[1].value);
 
@@ -113,7 +113,7 @@ describe('OptionsMultiselectComponent', () => {
     fixture.detectChanges();
 
     expect(component.selectedOptions.length).toBe(0);
-    expect(lastValue).toEqual([]);
+    expect(lastValue).toEqual(null);
   });
 
   it('should filter the options list when option is selected', (done: DoneFn) => {
