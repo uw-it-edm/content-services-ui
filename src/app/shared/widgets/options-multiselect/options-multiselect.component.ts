@@ -66,7 +66,10 @@ export class OptionsMultiselectComponent extends OptionsAutocompleteComponentBas
     if (index >= 0) {
       this.selectedOptions.splice(index, 1);
       this.refilterOptions();
-      this.onChange(this.selectedOptions.map((opt) => opt.value));
+
+      const valueToWrite = this.selectedOptions.map((opt) => opt.value);
+      this.onChange(valueToWrite.length > 0 ? valueToWrite : null);
+
       this.announceWithSelectionCount(`Removed ${option.displayValue}.`);
     }
   }
