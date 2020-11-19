@@ -25,6 +25,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { FocusDirective } from '../../shared/directives/focus/focus.directive';
 import { FieldOption } from '../../core/shared/model/field/field-option';
 import { NotificationService } from '../../shared/providers/notification.service';
+import { first } from 'rxjs/operators';
+
+const testFile = new File(['This is a test file'], 'test.pdf', { type: 'application/pdf' });
+const testFormData = {
+  metadata: {
+    1: 'asdf',
+  },
+};
 
 class MockContentService extends ContentService {
   constructor() {
@@ -127,23 +135,28 @@ describe('ContentObjectList', () => {
     component.ngOnInit();
     fixture.detectChanges();
   });
+
   it('should be created', () => {
     expect(component).toBeTruthy();
   });
+
   it('should correctly populate the profileId when preparing to save', () => {
     const contentItem = component.prepareItem(sourceItem, fields, formModel, config, user);
     expect(contentItem.metadata['ProfileId']).toBe('testProfile');
   });
+
   it('should populate the account when preparing to save', () => {
     config.contentConfig.account = 'testAccount';
     const contentItem = component.prepareItem(sourceItem, fields, formModel, config, user);
     expect(contentItem.metadata['Account']).toBe('testAccount');
   });
+
   it('should populate the account replacing user template when preparing to save', () => {
     config.contentConfig.account = 'testAccount/${user}';
     const contentItem = component.prepareItem(sourceItem, fields, formModel, config, user);
     expect(contentItem.metadata['Account']).toBe('testAccount/testUser');
   });
+
   it('should add the specified metadata overrides when preparing to save', () => {
     const metadataOverrides = [
       { name: 'PublishStatus', value: 'Published' },
@@ -153,6 +166,7 @@ describe('ContentObjectList', () => {
     expect(contentItem.metadata['PublishStatus']).toBe('Published');
     expect(contentItem.metadata['AnotherOnSave']).toBe('Value');
   });
+
   it('should create a content object with an initialized contentItemUrl', () => {
     const contentItem = new ContentItem();
     contentItem.id = '123';
@@ -161,6 +175,7 @@ describe('ContentObjectList', () => {
     component.onDisplayType(contentObject, 'anyvalue');
     expect(contentObject.url).toBe('testUrl/123');
   });
+
   it('should add a file to the transaction and select the object', () => {
     const properties = {
       type: 'application/pdf',
@@ -191,12 +206,13 @@ describe('ContentObjectList', () => {
     expect(co.url).toBe('testUrl/123');
     component.removeContentObject(index);
   });
-  it('should save item', () => {
+
+  it('should create item on save', () => {
     const properties = {
       type: 'application/pdf',
     };
     const file = new File(['This is a test file'], 'test.pdf', properties);
-    const index = component.addFile(file);
+    component.addFile(file);
     expect(component.contentObjects.length).toBe(1);
     const formData = {
       metadata: {
@@ -208,6 +224,37 @@ describe('ContentObjectList', () => {
 
     component.saveItem(fields, formData, metadataOverrides);
     expect(mockContentServiceCreate).toHaveBeenCalled();
+  });
+
+  /**
+   * Addresses bug CAB-4036: New revision was created sometimes when only metadata was changed
+   */
+  it('should update item and clear file on save', (done: DoneFn) => {
+    const contentItem = new ContentItem();
+    const metadataOverrides = new Array<any>();
+    const mockContentServiceUpdate = spyOn(mockContentService, 'update').and.returnValue(of(contentItem));
+
+    // Setup a document update by loading the content item and replacing the file.
+    component.addItem(contentItem);
+    component.replace(component.contentObjects[0], testFile);
+
+    // Update the document.
+    component.saveItem(fields, testFormData, metadataOverrides);
+
+    // Subscribe to event when saving is completed (can be done here because 'saveItem' is asynchronous).
+    const subscription = component.saving.pipe(first((val) => !val)).subscribe(() => {
+      subscription.unsubscribe();
+
+      // Verify the replaced file is supplied to service.
+      expect(mockContentServiceUpdate).toHaveBeenCalledWith(jasmine.anything(), testFile);
+
+      // Update document again, verify that file is NOT supplied to service.
+      mockContentServiceUpdate.calls.reset();
+      component.saveItem(fields, testFormData, metadataOverrides);
+      expect(mockContentServiceUpdate).toHaveBeenCalledWith(jasmine.anything(), null);
+
+      done();
+    });
   });
 
   it('should emit saving event on save', () => {
