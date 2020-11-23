@@ -1,12 +1,4 @@
-import {
-  Component,
-  ComponentFactoryResolver,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  ViewChildren,
-  QueryList,
-} from '@angular/core';
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { ContentPageConfig } from '../../core/shared/model/content-page-config';
 import { Config } from '../../core/shared/model/config';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -25,6 +17,7 @@ import { NotificationService } from '../../shared/providers/notification.service
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { takeUntil } from 'rxjs/operators';
 import { ComponentCanDeactivateDirective } from '../../routing/shared/component-can-deactivate.directive';
+import { DefaultAutoFocusNavigationState } from '../../shared/shared/auto-focus-navigation-state';
 
 @Component({
   selector: 'app-create-page',
@@ -47,6 +40,13 @@ export class CreatePageComponent extends ComponentCanDeactivateDirective impleme
   @ViewChild(ContentViewComponent, { static: true }) contentViewComponent: ContentViewComponent;
   @ViewChild(ContentObjectListComponent, { static: true }) contentObjectListComponent: ContentObjectListComponent;
   @ViewChildren(FileUploadComponent) fileUploads: QueryList<FileUploadComponent>;
+
+  /**
+   * Getter so that template can bind to the default navigation state.
+   */
+  get autoFocusNavigationState() {
+    return DefaultAutoFocusNavigationState;
+  }
 
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
@@ -99,7 +99,7 @@ export class CreatePageComponent extends ComponentCanDeactivateDirective impleme
   }
 
   cancel() {
-    this.router.navigate([this.config.tenant]);
+    this.router.navigate([this.config.tenant], { state: DefaultAutoFocusNavigationState });
   }
 
   hasError(contentObject: ContentObject): boolean {
@@ -141,7 +141,7 @@ export class CreatePageComponent extends ComponentCanDeactivateDirective impleme
 
   private saveItem(): void {
     this.saveItemInternal().then(() => {
-      this.router.navigate([this.config.tenant]);
+      this.router.navigate([this.config.tenant], { state: DefaultAutoFocusNavigationState });
     });
   }
 

@@ -23,6 +23,7 @@ import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { ComponentCanDeactivateDirective } from '../../routing/shared/component-can-deactivate.directive';
 import { ContentMetadataComponent } from '../content-metadata/content-metadata.component';
 import { FileUploadComponent } from '../../shared/widgets/file-upload/file-upload.component';
+import { DefaultAutoFocusNavigationState } from '../../shared/shared/auto-focus-navigation-state';
 
 @Component({
   selector: 'app-edit-page',
@@ -45,6 +46,13 @@ export class EditPageComponent extends ComponentCanDeactivateDirective implement
   deletePending: boolean; // deletion takes a few seconds
   hasDeletePermission: boolean;
   disableFileReplace: boolean;
+
+  /**
+   * Getter so that template can bind to the default navigation state.
+   */
+  get autoFocusNavigationState() {
+    return DefaultAutoFocusNavigationState;
+  }
 
   @ViewChild(DynamicComponentDirective) contentViewDirective: DynamicComponentDirective;
   @ViewChild(ContentViewComponent) contentViewComponent: ContentViewComponent;
@@ -180,7 +188,7 @@ export class EditPageComponent extends ComponentCanDeactivateDirective implement
             this.form.markAsPristine(); // mark form as pristine after successful deletion
             const message = 'Deleted item ' + this.id;
             alert(message); // snackBar did not work well just before navigating to another page
-            this.router.navigate([this.config.tenant]);
+            this.router.navigate([this.config.tenant], { state: DefaultAutoFocusNavigationState });
           },
           (err) => {
             const message = 'There was an error deleting content item:' + err.statusText;
