@@ -1,5 +1,5 @@
 import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Config } from '../../core/shared/model/config';
@@ -21,6 +21,8 @@ import { NotificationService } from '../../shared/providers/notification.service
 import { isNullOrUndefined } from '../../core/util/node-utilities';
 import { PersonSearchAutocomplete } from '../shared/search-autocomplete/person-search-autocomplete';
 import { PersonService } from '../../shared/providers/person.service';
+import { AutoFocusNavigationState } from '../../shared/shared/auto-focus-navigation-state';
+import { SearchBoxComponent } from '../search-box/search-box.component';
 
 const LEFT_PANEL_VISIBLE_STATE_KEY = 'isLeftPanelVisible';
 const DEFAULT_BULK_EDIT_MAX_COUNT = 50;
@@ -28,7 +30,7 @@ const DEFAULT_BULK_EDIT_MAX_COUNT = 50;
 @Component({
   selector: 'app-search-page',
   templateUrl: './search-page.component.html',
-  styleUrls: ['./search-page.component.css']
+  styleUrls: ['./search-page.component.css'],
 })
 export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   private componentDestroyed = new Subject();
@@ -49,6 +51,8 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   initialSearchModel: SearchModel;
   isBulkEditMode = false;
   bulkEditMaxCount = DEFAULT_BULK_EDIT_MAX_COUNT;
+
+  @ViewChild(SearchBoxComponent) searchBoxComponent: SearchBoxComponent;
 
   get isLeftPanelVisible(): boolean {
     return this._isLeftPanelVisible && !this.isBulkEditMode;
@@ -102,10 +106,16 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
       // initialSearchModel should set after all components load, so that they will be subscribed to the searchModel$
       this.searchModel$.next(this.initialSearchModel);
     }
+
+    const navigationState: AutoFocusNavigationState = history.state;
+    if (navigationState && navigationState.autoFocusOnNavigate) {
+      this.searchBoxComponent.focusSearchBox();
+      this.changeDetectorRef.detectChanges();
+    }
   }
 
   ngOnInit() {
-    this.activatedRoute.paramMap.pipe(takeUntil(this.componentDestroyed)).subscribe(params => {
+    this.activatedRoute.paramMap.pipe(takeUntil(this.componentDestroyed)).subscribe((params) => {
       this.page = params.get('page');
       this.activatedRoute.data.pipe(takeUntil(this.componentDestroyed)).subscribe((data: { config: Config }) => {
         const pageConfigChanged = !!this.pageConfig;
@@ -175,7 +185,7 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
           */
           this.searchResults$.next(searchResults);
         },
-        err => {
+        (err) => {
           this.notificationService.error('error while executing search', err);
           // The subscription will close when there is an error, so we need to attach a new one.
           this.addSearchSubscription();
@@ -192,11 +202,19 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   toggleBulkEditMode(): void {
     this.isBulkEditMode = !this.isBulkEditMode;
+
+    // Need to call detectChanges so that UI is updated with the latest state. After the UI is
+    //  updated, if the search box is visible, set the focus on it.
+    this.changeDetectorRef.detectChanges();
+
+    if (!this.isBulkEditMode) {
+      this.searchBoxComponent.focusSearchBox();
+    }
   }
 
   navigateToBulkEdit(): void {
     if (this._selectedRows.length > 0) {
-      this.router.navigate([this.config.tenant + '/bulk-edit'], { state: { selectedRows: this._selectedRows }});
+      this.router.navigate([this.config.tenant + '/bulk-edit'], { state: { selectedRows: this._selectedRows } });
     }
   }
 
@@ -228,8 +246,7 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private initializeToggleLeftPanelButton(pageConfig: SearchPageConfig): void {
-    const facetsConfig =
-      pageConfig && pageConfig.facetsConfig && pageConfig.facetsConfig.active && pageConfig.facetsConfig.facets;
+    const facetsConfig = pageConfig && pageConfig.facetsConfig && pageConfig.facetsConfig.active && pageConfig.facetsConfig.facets;
     this._isToggleLeftPanelButtonVisible = facetsConfig && !_.isEmpty(facetsConfig);
 
     if (this._isToggleLeftPanelButtonVisible) {
