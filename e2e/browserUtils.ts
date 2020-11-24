@@ -21,8 +21,24 @@ export class BrowserUtils {
   }
 
   /**
+   * Waits for the browser's active element to be the one with the given id.
+   * @param expectedElementId Expected id of the active element.
+   * @param timeoutMilliseconds Timeout in milliseconds to wait for.
+   */
+  waitForActiveElement(expectedElementId: string, timeoutMilliseconds: number = 5000): promise.Promise<any> {
+    const getActiveElementIdFunc = () => browser.driver.switchTo().activeElement().getAttribute('id');
+
+    return this.waitForFunc(
+      () => getActiveElementIdFunc(),
+      (actualId) => actualId === expectedElementId,
+      timeoutMilliseconds
+    ).then(() => expect(getActiveElementIdFunc()).toBe(expectedElementId));
+  }
+
+  /**
    * Waits for a snack bar to show with the given text.
    * @param expectedText expected text to be contained in snack bar message.
+   * @param timeoutMilliseconds Timeout in milliseconds to wait for.
    * @param timeoutMilliseconds Timeout in milliseconds to wait for.
    */
   waitForSnackBarText(expectedText: string, timeoutMilliseconds: number = 5000): promise.Promise<any> {
@@ -31,12 +47,13 @@ export class BrowserUtils {
     const visiblePromise = browser.wait(
       ExpectedConditions.visibilityOf(supplierFunc()),
       timeoutMilliseconds,
-      `SnackBar was not visible after ${timeoutMilliseconds} ms.`);
+      `SnackBar was not visible after ${timeoutMilliseconds} ms.`
+    );
 
     return visiblePromise.then(() => {
       return this.waitForFunc(
         () => supplierFunc().getText(),
-        text => (text || '').indexOf(expectedText) >= 0,
+        (text) => (text || '').indexOf(expectedText) >= 0,
         timeoutMilliseconds
       ).then(() => expect(supplierFunc().getText()).toContain(expectedText));
     });
@@ -48,8 +65,12 @@ export class BrowserUtils {
    * @param expectedText Expected text.
    * @param timeoutMilliseconds Timeout in milliseconds to wait for.
    */
-  waitForElementText(elementOrSelector: string | ElementFinder, expectedText: string, timeoutMilliseconds: number = 5000): promise.Promise<any>  {
-    const getElementFinder = () => typeof elementOrSelector !== 'string' ? elementOrSelector : element(by.css(elementOrSelector));
+  waitForElementText(
+    elementOrSelector: string | ElementFinder,
+    expectedText: string,
+    timeoutMilliseconds: number = 5000
+  ): promise.Promise<any> {
+    const getElementFinder = () => (typeof elementOrSelector !== 'string' ? elementOrSelector : element(by.css(elementOrSelector)));
     return this.waitForFunc(
       () => getElementFinder().getText(),
       (text) => (text || '').indexOf(expectedText) >= 0,

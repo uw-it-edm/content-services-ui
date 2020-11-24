@@ -72,12 +72,32 @@ describe('Search Page', () => {
     app.runAccessibilityChecks();
   });
 
+  it('should auto-focus search box when navigating from edit page', () => {
+    // go to edit page and click the back to results link.
+    const editPage = new EditPage();
+    editPage.navigateTo();
+    editPage.clickReturnToResultsLink();
+
+    // verify the the search box will receive focus.
+    utils.waitForActiveElement('search-field');
+  });
+
   it('should have no accessibility violations after entering bulk edit mode', () => {
     page.toggleBulkUpdateModeButton.click();
     utils.waitForElementText('h2', 'Bulk Update Mode');
 
     const app = new ContentServicesUiPage();
     app.runAccessibilityChecks();
+  });
+
+  it('should auto-focus search box when exiting bulk edit mode', () => {
+    // enter bulk edit mode.
+    page.toggleBulkUpdateModeButton.click();
+    utils.waitForElementText('h2', 'Bulk Update Mode');
+
+    // exit bulk edit mode and verify the search box will receive focus.
+    page.toggleBulkUpdateModeButton.click();
+    utils.waitForActiveElement('search-field');
   });
 
   it('should display page title', () => {
