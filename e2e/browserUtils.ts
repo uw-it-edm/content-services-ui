@@ -93,11 +93,13 @@ export class BrowserUtils {
 
     const checkFunc = () => {
       return () =>
-        supplierFunc().then((currentVal) => {
-          const currentTime = new Date();
-          const timeDiff = <any>currentTime - <any>startTime;
-          return timeDiff >= timeoutMilliseconds || predicate(currentVal);
-        });
+        supplierFunc()
+          .then((currentVal) => {
+            const currentTime = new Date();
+            const timeDiff = <any>currentTime - <any>startTime;
+            return timeDiff >= timeoutMilliseconds || predicate(currentVal);
+          })
+          .catch(() => false);
     };
 
     return browser.wait(checkFunc());
