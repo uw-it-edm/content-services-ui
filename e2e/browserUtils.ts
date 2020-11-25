@@ -39,7 +39,6 @@ export class BrowserUtils {
    * Waits for a snack bar to show with the given text.
    * @param expectedText expected text to be contained in snack bar message.
    * @param timeoutMilliseconds Timeout in milliseconds to wait for.
-   * @param timeoutMilliseconds Timeout in milliseconds to wait for.
    */
   waitForSnackBarText(expectedText: string, timeoutMilliseconds: number = 5000): promise.Promise<any> {
     const supplierFunc = () => element(by.className('mat-simple-snackbar'));
