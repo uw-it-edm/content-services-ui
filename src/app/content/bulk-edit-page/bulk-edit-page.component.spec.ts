@@ -199,7 +199,7 @@ describe('BulkEditPageComponent', () => {
       fixture.detectChanges();
 
       component.cancel();
-      expect(router.navigate).toHaveBeenCalledWith(['test-tenant']);
+      expect(router.navigate).toHaveBeenCalledWith(['test-tenant'], { state: { autoFocusOnNavigate: true } });
     });
 
     it('should reset all metadata fields when clicking reset fields button', () => {

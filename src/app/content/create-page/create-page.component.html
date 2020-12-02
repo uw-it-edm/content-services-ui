@@ -3,7 +3,7 @@
 
     <mat-toolbar class="secondary-toolbar"  >
       <span class="button-row" role="navigation">
-        <button mat-icon-button routerLink="/{{config.tenant}}" matTooltip="Return to Results" aria-label="return to results">
+        <button mat-icon-button routerLink="/{{config.tenant}}" [state]="autoFocusNavigationState" matTooltip="Return to Results" aria-label="return to results">
           <mat-icon>keyboard_arrow_left</mat-icon>
         </button>
       </span>

@@ -4,7 +4,8 @@
       <label for="search-field"
              *ngIf="pageConfig?.searchConfig?.label">{{pageConfig.searchConfig.label}}</label>
       <mat-form-field>
-        <input id="search-field" matInput
+        <input #searchField
+               id="search-field" matInput
                name="search"
                [(ngModel)]="internalSearchField"
                (search)="executeSearch()"

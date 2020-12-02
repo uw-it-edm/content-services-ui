@@ -2,7 +2,7 @@
   <div class="cs-content-page">
     <mat-toolbar class="secondary-toolbar" role="navigation">
       <span class="button-row">
-        <button mat-icon-button routerLink="/{{config.tenant}}" [disabled]="isUpdatePending">
+        <button mat-icon-button routerLink="/{{config.tenant}}" [state]="autoFocusNavigationState" [disabled]="isUpdatePending">
           <mat-icon>keyboard_arrow_left</mat-icon>&nbsp;{{areRowsAvailable ? 'Cancel Bulk Update': 'Close Bulk Update'}}
         </button>
       </span>

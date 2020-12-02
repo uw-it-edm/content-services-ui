@@ -14,6 +14,7 @@ import { ContentItem, IContentItem } from '../shared/model/content-item';
 import { ContentService } from '../shared/content.service';
 import { DataService } from '../../shared/providers/data.service';
 import { ContentMetadataComponent } from '../content-metadata/content-metadata.component';
+import { DefaultAutoFocusNavigationState } from '../../shared/shared/auto-focus-navigation-state';
 
 const ROWS_LOCAL_STORAGE_KEY = 'bulk-edit-rows';
 const UPDATE_OPERATION_TIMEOUT = 90 * 1000;
@@ -36,6 +37,13 @@ export class BulkEditPageComponent implements OnInit, OnDestroy {
   contentItem: ContentItem;
 
   @ViewChild(ContentMetadataComponent) contentMetadataComponent: ContentMetadataComponent;
+
+  /**
+   * Getter so that template can bind to the default navigation state.
+   */
+  get autoFocusNavigationState() {
+    return DefaultAutoFocusNavigationState;
+  }
 
   constructor(
     private _router: Router,
@@ -84,7 +92,7 @@ export class BulkEditPageComponent implements OnInit, OnDestroy {
   }
 
   cancel() {
-    this._router.navigate([this.config.tenant]);
+    this._router.navigate([this.config.tenant], { state: DefaultAutoFocusNavigationState });
   }
 
   get areRowsAvailable(): boolean {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { SearchModel } from '../shared/model/search-model';
 import { SearchPageConfig } from '../../core/shared/model/search-page-config';
 import { Observable, Subject } from 'rxjs';
@@ -28,6 +28,9 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
   searchAutocomplete: SearchAutocomplete;
   @Input()
   searchModel$: Observable<SearchModel>;
+
+  @ViewChild('searchField')
+  searchInputElement: ElementRef<HTMLInputElement>;
 
   @Input()
   set pageConfig(value: SearchPageConfig) {
@@ -78,6 +81,13 @@ export class SearchBoxComponent implements OnDestroy, OnInit {
 
   private announceFilterSelection(searchFilter: SearchFilter) {
     this.liveAnnouncer.announce('Selected ' + searchFilter.getDisplayValue() + ' filter', 'assertive');
+  }
+
+  /**
+   * Sets the focus on the search box.
+   */
+  focusSearchBox() {
+    this.searchInputElement.nativeElement.focus();
   }
 
   clearSearchBox() {

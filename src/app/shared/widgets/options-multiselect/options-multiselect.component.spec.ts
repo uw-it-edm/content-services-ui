@@ -63,9 +63,11 @@ describe('OptionsMultiselectComponent', () => {
     });
   });
 
-  it('should populate the chip list with the initial value from form model', () => {
-    component.writeValue(['val1']);
-    expect(component.selectedOptions[0].value).toBe('val1');
+  it('should populate the chip list with the initial values and order from form model', () => {
+    component.writeValue(['val3', 'val1', 'val2']);
+    expect(component.selectedOptions[0].value).toBe('val3');
+    expect(component.selectedOptions[1].value).toBe('val1');
+    expect(component.selectedOptions[2].value).toBe('val2');
   });
 
   it('should clear the chip list when value from model is cleared', () => {
@@ -103,7 +105,7 @@ describe('OptionsMultiselectComponent', () => {
     expect(liveAnnouncerSpy.announce).toHaveBeenCalledWith('Selected display2 xy.', 'polite');
   });
 
-  it('should set form model to empty array when the last option is removed', () => {
+  it('should set form model to null when the last option is removed', () => {
     component.writeValue([fieldOptions[1].value]);
     expect(component.selectedOptions[0].value).toBe(fieldOptions[1].value);
 
@@ -113,7 +115,7 @@ describe('OptionsMultiselectComponent', () => {
     fixture.detectChanges();
 
     expect(component.selectedOptions.length).toBe(0);
-    expect(lastValue).toEqual([]);
+    expect(lastValue).toEqual(null);
   });
 
   it('should filter the options list when option is selected', (done: DoneFn) => {
