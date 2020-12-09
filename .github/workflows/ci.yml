@@ -1,0 +1,62 @@
+name: CI Build
+
+on: [push]
+
+jobs:
+  build:
+    name: Build for Prod
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+      - run: yarn install
+      - run: yarn build --prod --configuration=travis
+      - name: Slack Notification
+        if: ${{ failure() }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_COLOR: '#ff0000'
+
+  unit-test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    env:
+      TZ: America/Los_Angeles
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+      - run: yarn install
+      - run: yarn test
+      - name: Slack Notification
+        if: ${{ failure() }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_COLOR: '#ff0000'
+
+  e2e-test:
+    name: E2E tests
+    runs-on: ubuntu-latest
+    env:
+      job: e2e tests
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+      - run: yarn install
+      - run: yarn e2e-local
+      - name: Slack Notification
+        if: ${{ failure() }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_COLOR: '#ff0000'
