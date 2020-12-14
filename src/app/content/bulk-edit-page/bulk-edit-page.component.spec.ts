@@ -318,7 +318,7 @@ describe('BulkEditPageComponent', () => {
       component.update();
 
       expect(snackBarSpy.open).toHaveBeenCalledWith(
-        'Bulk update operation failed to complete, please try again. Error: test error',
+        'Bulk update failed to complete, please check your permissions and try again.',
         'Dismiss'
       );
     });
@@ -331,7 +331,7 @@ describe('BulkEditPageComponent', () => {
       fixture.detectChanges();
 
       expect(snackBarSpy.open).toHaveBeenCalledWith(
-        'Bulk update operation failed to complete, please try again. Error: Timeout has occurred',
+        'Bulk update failed to complete, please check your permissions and try again.',
         'Dismiss'
       );
     }));
