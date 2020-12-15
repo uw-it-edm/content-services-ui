@@ -16,7 +16,7 @@
       </app-search-box>
     </div>
 
-    <div fxFlex="10" class="button-container" *ngIf="!pageConfig.disableUploadNewDocument && !isBulkEditMode">
+    <div fxFlex="10" class="button-container" *ngIf="!pageConfig.disableUploadNewDocument && !isBulkEditMode && hasWritePermission">
       <button class="cs-upload-new-document-button" mat-button (click)="navigateToCreate()" aria-label="Upload new document">
           <span appCustomText="addContentItemButton" defaultValue="Upload"></span>&nbsp;<mat-icon>backup</mat-icon>
       </button>
@@ -26,7 +26,7 @@
           <span appCustomText="displaySearchPageButton" defaultValue="Display All"></span>&nbsp;<mat-icon>file_copy</mat-icon>
       </button>
     </div>
-    <div [fxFlex]="isBulkEditMode ? '90' : '10'" class="button-container" *ngIf="pageConfig?.enableBulkUpdate">
+    <div [fxFlex]="isBulkEditMode ? '90' : '10'" class="button-container" *ngIf="pageConfig?.enableBulkUpdate && hasWritePermission">
       <button class="cs-toggle-bulk-update-button" mat-button (click)="toggleBulkEditMode()">
           {{isBulkEditMode ? 'Cancel Bulk Update' : 'Bulk Update'}}&nbsp;
           <span class="material-icons" *ngIf="!isBulkEditMode">edit</span>
