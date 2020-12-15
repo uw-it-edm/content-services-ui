@@ -255,16 +255,27 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   private doesUserHasWritePermission() {
     const user = this.userService.getUser();
-    const accounts = user && user.accounts;
+
+    // The type of accounts is Map<string,string> but at runtime it may be Object.
+    const accounts = user && user.accounts && this.convertObjectToMap(user.accounts);
 
     if (accounts) {
-      // Test for Map or object dictionary.
-      const permissions = accounts.values ? Array.from(accounts.values()) : Object.keys(accounts).map((k) => accounts[k]);
-
-      return permissions.some((permission) => permission.indexOf('w') >= 0 || permission.indexOf('admin') >= 0);
+      // Content-api automatically adds a 'placeholder' account that should not count for permission checks.
+      return Array.from(accounts.keys())
+        .filter((key) => !key.startsWith('placeholder'))
+        .map((key) => accounts.get(key))
+        .some((permission) => permission.indexOf('w') >= 0 || permission.indexOf('admin') >= 0);
     }
 
     return false;
+  }
+
+  private convertObjectToMap(obj: any): Map<string, string> {
+    if (!(obj instanceof Map)) {
+      return new Map<string, string>(Object.keys(obj).map((k) => [k, obj[k]]));
+    }
+
+    return obj;
   }
 
   private initializeToggleLeftPanelButton(pageConfig: SearchPageConfig): void {

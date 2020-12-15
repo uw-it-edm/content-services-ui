@@ -181,6 +181,15 @@ describe('SearchPageComponent', () => {
     uploadButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-upload-new-document-button');
     expect(uploadButton.length).toEqual(0);
 
+    // Verify button is NOT displayed for permission from 'placeholder' account.
+    testUser.accounts.set('placeholder', 'rw');
+    fixture = TestBed.createComponent(SearchPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    uploadButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-upload-new-document-button');
+    expect(uploadButton.length).toEqual(0);
+
     // Verify button is displayed for write permission as object.
     (<Spy>userServiceSpy.getUser).and.returnValue({ accounts: { TEST_ACCOUNT: 'rwd' } });
     fixture = TestBed.createComponent(SearchPageComponent);
