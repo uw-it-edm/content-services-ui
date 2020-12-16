@@ -260,9 +260,9 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
     const accounts = user && user.accounts && this.convertObjectToMap(user.accounts);
 
     if (accounts) {
-      // Content-api automatically adds a 'placeholder' account that should not count for permission checks.
+      // Only consider WCC accounts for CON, PUB and RES to discover permissions.
       return Array.from(accounts.keys())
-        .filter((key) => !key.startsWith('placeholder'))
+        .filter((key) => key.startsWith('CON-') || key.startsWith('RES-') || key.startsWith('PUB-'))
         .map((key) => accounts.get(key))
         .some((permission) => permission.indexOf('w') >= 0 || permission.indexOf('admin') >= 0);
     }
