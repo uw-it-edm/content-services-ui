@@ -1,6 +1,7 @@
 {
   "userName": "edm-tester",
   "accounts": {
-    "demo-account": "rwd"
+    "demo-account": "rwd",
+    "CON-DEMO-ACCOUNT": "rwd"
   }
 }
