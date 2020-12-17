@@ -106,7 +106,7 @@ describe('SearchPageComponent', () => {
         activatedRoute.testData = { config: config };
 
         const testWriteUser = new User('testWriteUser');
-        testWriteUser.accounts.set('TEST_ACCOUNT', 'rwd');
+        testWriteUser.accounts.set('RES-', 'rwd');
 
         (<Spy>userServiceSpy.getUser).and.returnValue(testWriteUser);
       });
@@ -164,7 +164,7 @@ describe('SearchPageComponent', () => {
     (<Spy>userServiceSpy.getUser).and.returnValue(testUser);
 
     // Verify button is displayed for admin permission.
-    testUser.accounts.set('TEST_ACCOUNT', 'admin');
+    testUser.accounts.set('CON-TEST', 'admin');
     fixture = TestBed.createComponent(SearchPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -173,7 +173,16 @@ describe('SearchPageComponent', () => {
     expect(uploadButton.length).toEqual(1);
 
     // Verify button is NOT displayed for read permission.
-    testUser.accounts.set('TEST_ACCOUNT', 'r');
+    testUser.accounts.set('CON-TEST', 'r');
+    fixture = TestBed.createComponent(SearchPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    uploadButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-upload-new-document-button');
+    expect(uploadButton.length).toEqual(0);
+
+    // Verify button is NOT displayed for permission from other accounts.
+    testUser.accounts.set('placeholder', 'rw');
     fixture = TestBed.createComponent(SearchPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -182,7 +191,7 @@ describe('SearchPageComponent', () => {
     expect(uploadButton.length).toEqual(0);
 
     // Verify button is displayed for write permission as object.
-    (<Spy>userServiceSpy.getUser).and.returnValue({ accounts: { TEST_ACCOUNT: 'rwd' } });
+    (<Spy>userServiceSpy.getUser).and.returnValue({ accounts: { 'CON-': 'rwd' } });
     fixture = TestBed.createComponent(SearchPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
