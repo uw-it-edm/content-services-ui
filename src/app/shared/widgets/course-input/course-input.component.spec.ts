@@ -56,13 +56,7 @@ class MockStudentService extends StudentService {
     super(null, null);
   }
 
-  getCourses(
-    year: string,
-    quarter: string,
-    curriculum: string,
-    courseNumber?: string,
-    title?: string
-  ): Observable<any> {
+  getCourses(year: string, quarter: string, curriculum: string, courseNumber?: string, title?: string): Observable<any> {
     const ret: any = {
       Courses: testCourses,
       TotalCount: 153,
@@ -101,7 +95,7 @@ describe('CourseInputComponent', () => {
       declarations: [],
       providers: [
         { provide: StudentService, useValue: mockStudentService },
-        { provide: NotificationService, useValue: spyNotificationService }
+        { provide: NotificationService, useValue: spyNotificationService },
       ],
     }).compileComponents();
   }));
@@ -174,14 +168,12 @@ describe('CourseInputComponent', () => {
     tick(1000);
     expect(spyNotificationService.error).toHaveBeenCalled();
   }));
-
 });
 
 @Component({
   template: `
     <div [formGroup]="formGroup">
-      <app-course-input [formControlName]="'testFormControlName'" [fieldConfig]="field" [id]="'test-custom-input'">
-      </app-course-input>
+      <app-course-input [formControlName]="'testFormControlName'" [fieldConfig]="field" [id]="'test-custom-input'"> </app-course-input>
     </div>
   `,
 })
@@ -224,7 +216,7 @@ describe('CourseInputComponent with host', () => {
   it('should render aria-label set to placeholder and value for Year dropdown', async(() => {
     fixture.whenStable().then(() => {
       fixture.detectChanges();
-      expect(dropDownElements[0].getAttribute('aria-label')).toEqual('Year 2020');
+      expect(dropDownElements[0].getAttribute('aria-label')).toEqual(`Year ${new Date().getFullYear()}`);
     });
   }));
 

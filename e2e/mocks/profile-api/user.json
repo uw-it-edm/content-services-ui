@@ -2,7 +2,8 @@
   "userName": "edm-tester",
   "userGroups": [
     "demo-account"
-  ]
-
-
+  ],
+  "accounts": {
+    "CON-TEST-ACCOUNT": "rwd"
+  }
 }

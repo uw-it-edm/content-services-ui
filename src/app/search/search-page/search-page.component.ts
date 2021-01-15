@@ -23,6 +23,7 @@ import { PersonSearchAutocomplete } from '../shared/search-autocomplete/person-s
 import { PersonService } from '../../shared/providers/person.service';
 import { AutoFocusNavigationState } from '../../shared/shared/auto-focus-navigation-state';
 import { SearchBoxComponent } from '../search-box/search-box.component';
+import { UserService } from '../../user/shared/user.service';
 
 const LEFT_PANEL_VISIBLE_STATE_KEY = 'isLeftPanelVisible';
 const DEFAULT_BULK_EDIT_MAX_COUNT = 50;
@@ -51,6 +52,7 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   initialSearchModel: SearchModel;
   isBulkEditMode = false;
   bulkEditMaxCount = DEFAULT_BULK_EDIT_MAX_COUNT;
+  hasWritePermission = false;
 
   @ViewChild(SearchBoxComponent) searchBoxComponent: SearchBoxComponent;
 
@@ -80,7 +82,8 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
     private studentService: StudentService,
     private notificationService: NotificationService,
     private liveAnnouncer: LiveAnnouncer,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private userService: UserService
   ) {
     console.log('init generic page component');
     if (this.activatedRoute.snapshot.queryParams != null) {
@@ -115,6 +118,7 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
+    this.hasWritePermission = this.doesUserHasWritePermission();
     this.activatedRoute.paramMap.pipe(takeUntil(this.componentDestroyed)).subscribe((params) => {
       this.page = params.get('page');
       this.activatedRoute.data.pipe(takeUntil(this.componentDestroyed)).subscribe((data: { config: Config }) => {
@@ -243,6 +247,35 @@ export class SearchPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   navigateToCreate() {
     this.router.navigate([this.config.tenant + '/create']);
+  }
+
+  /**
+   * Returns true if user has at least one account with write permission.
+   * Note: possible permissions are "r", "rw", "rwd", and "admin".
+   */
+  private doesUserHasWritePermission() {
+    const user = this.userService.getUser();
+
+    // The type of accounts is Map<string,string> but at runtime it may be Object.
+    const accounts = user && user.accounts && this.convertObjectToMap(user.accounts);
+
+    if (accounts) {
+      // Only consider WCC accounts for CON, PUB and RES to discover permissions.
+      return Array.from(accounts.keys())
+        .filter((key) => key.startsWith('CON-') || key.startsWith('RES-') || key.startsWith('PUB-'))
+        .map((key) => accounts.get(key))
+        .some((permission) => permission.indexOf('w') >= 0 || permission.indexOf('admin') >= 0);
+    }
+
+    return false;
+  }
+
+  private convertObjectToMap(obj: any): Map<string, string> {
+    if (!(obj instanceof Map)) {
+      return new Map<string, string>(Object.keys(obj).map((k) => [k, obj[k]]));
+    }
+
+    return obj;
   }
 
   private initializeToggleLeftPanelButton(pageConfig: SearchPageConfig): void {

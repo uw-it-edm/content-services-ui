@@ -24,6 +24,8 @@ import { PersonService } from '../../shared/providers/person.service';
 import { FacetConfig } from '../../core/shared/model/facet-config';
 import { FacetsConfig } from '../../core/shared/model/facets-config';
 import { ResultRow } from '../shared/model/result-row';
+import { UserService } from '../../user/shared/user.service';
+import { User } from '../../user/shared/user';
 import Spy = jasmine.Spy;
 
 class MockSearchService {
@@ -64,6 +66,7 @@ describe('SearchPageComponent', () => {
   let searchServiceSpy: MockSearchService;
   let component: SearchPageComponent;
   let fixture: ComponentFixture<SearchPageComponent>;
+  let userServiceSpy: UserService;
 
   beforeEach(async(() => {
     activatedRoute = new ActivatedRouteStub();
@@ -71,6 +74,7 @@ describe('SearchPageComponent', () => {
     dataService = new DataService();
     dataService.set('adjacentIds', ['123', '456']);
     studentService = new StudentService(null, null);
+    userServiceSpy = jasmine.createSpyObj('UserService', ['getUser']);
 
     TestBed.configureTestingModule({
       imports: [NoopAnimationsModule, MaterialConfigModule, HttpClientModule, RouterTestingModule],
@@ -80,6 +84,7 @@ describe('SearchPageComponent', () => {
         { provide: SearchService, useValue: searchServiceSpy },
         { provide: DataService, useValue: dataService },
         { provide: StudentService, useValue: studentService },
+        { provide: UserService, useValue: userServiceSpy },
         { provide: PersonService, useValue: {} },
         Title,
         NotificationService,
@@ -99,6 +104,11 @@ describe('SearchPageComponent', () => {
 
         console.log(JSON.stringify(config));
         activatedRoute.testData = { config: config };
+
+        const testWriteUser = new User('testWriteUser');
+        testWriteUser.accounts.set('RES-', 'rwd');
+
+        (<Spy>userServiceSpy.getUser).and.returnValue(testWriteUser);
       });
   }));
 
@@ -143,6 +153,47 @@ describe('SearchPageComponent', () => {
     expect(uploadButton.length).toEqual(0);
 
     component.pageConfig.disableUploadNewDocument = false;
+    fixture.detectChanges();
+
+    uploadButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-upload-new-document-button');
+    expect(uploadButton.length).toEqual(1);
+  });
+
+  it('should display upload button when user has write permission', () => {
+    const testUser = new User('testUser');
+    (<Spy>userServiceSpy.getUser).and.returnValue(testUser);
+
+    // Verify button is displayed for admin permission.
+    testUser.accounts.set('CON-TEST', 'admin');
+    fixture = TestBed.createComponent(SearchPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    let uploadButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-upload-new-document-button');
+    expect(uploadButton.length).toEqual(1);
+
+    // Verify button is NOT displayed for read permission.
+    testUser.accounts.set('CON-TEST', 'r');
+    fixture = TestBed.createComponent(SearchPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    uploadButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-upload-new-document-button');
+    expect(uploadButton.length).toEqual(0);
+
+    // Verify button is NOT displayed for permission from other accounts.
+    testUser.accounts.set('placeholder', 'rw');
+    fixture = TestBed.createComponent(SearchPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    uploadButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-upload-new-document-button');
+    expect(uploadButton.length).toEqual(0);
+
+    // Verify button is displayed for write permission as object.
+    (<Spy>userServiceSpy.getUser).and.returnValue({ accounts: { 'CON-': 'rwd' } });
+    fixture = TestBed.createComponent(SearchPageComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
 
     uploadButton = fixture.debugElement.nativeElement.querySelectorAll('.cs-upload-new-document-button');
