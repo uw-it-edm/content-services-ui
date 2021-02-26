@@ -4,6 +4,7 @@ import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@a
 import { Config, CustomTextItem } from '../../core/shared/model/config';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { NotificationService } from '../../shared/providers/notification.service';
+import { ApplicationStateService } from '../../shared/providers/application-state.service';
 
 @Injectable()
 export class ConfigResolver implements Resolve<Config> {
@@ -13,7 +14,8 @@ export class ConfigResolver implements Resolve<Config> {
   constructor(
     private configService: ConfigService,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private appStateService: ApplicationStateService
   ) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<Config> {
@@ -33,11 +35,12 @@ export class ConfigResolver implements Resolve<Config> {
 
     return this.configService
       .getConfigForTenant(tenant)
-      .then(config => {
+      .then((config) => {
         if (config) {
           console.log('returning ' + config);
           this.customText$.next(config.customText);
           this.appName$.next(this.getAppName(config));
+          this.appStateService.setWarningHeaderMessage(config?.warningHeaderMessage);
           return config;
         } else {
           console.log('no config for ' + tenant);
@@ -46,7 +49,7 @@ export class ConfigResolver implements Resolve<Config> {
           return null;
         }
       })
-      .catch(err => {
+      .catch((err) => {
         this.notificationService.error('Cannot load configuration', err);
         this.redirectToHome();
         return null;

@@ -15,6 +15,7 @@ import { ProgressService } from '../../providers/progress.service';
 import { NotificationService } from '../../providers/notification.service';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { User } from '../../../user/shared/user';
+import { ApplicationStateService } from './../../providers/application-state.service';
 
 class RouterStub {
   navigate(url: string) {
@@ -57,11 +58,12 @@ describe('HeaderComponent', () => {
         { provide: ConfigService, useValue: configServiceStub },
         { provide: UserService, useValue: new MockUserService() },
         ConfigResolver,
+        ApplicationStateService,
         GlobalEventsManagerService,
         ProgressService,
-        NotificationService
+        NotificationService,
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));
 
@@ -80,7 +82,7 @@ describe('HeaderComponent', () => {
     const routeParams = { tenant: 'test-tenant' };
     route.params = routeParams;
     inject([ConfigResolver], (service: ConfigResolver) => {
-      service.resolve(route, null).then(config => {
+      service.resolve(route, null).then((config) => {
         expect(component.accountMenu.items.length).toBeGreaterThanOrEqual(4);
       });
     });

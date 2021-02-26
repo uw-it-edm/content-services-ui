@@ -1,6 +1,9 @@
 <app-header>
   <mat-progress-bar [color]="color" [mode]="mode" [value]="value"></mat-progress-bar>
 </app-header>
+<div class="header-warning-message" *ngIf="warningHeaderMessage">
+  {{warningHeaderMessage}}
+</div>
 <section class="mat-typography">
   <router-outlet></router-outlet>
 </section>
