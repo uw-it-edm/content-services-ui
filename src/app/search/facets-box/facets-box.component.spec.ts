@@ -22,7 +22,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 class MockConfigResolver extends ConfigResolver {
   constructor() {
-    super(null, null, null);
+    super(null, null, null, null);
   }
 
   getCustomTextSubject(): Observable<Map<string, CustomTextItem>> {
@@ -53,9 +53,9 @@ describe('FacetsBoxComponent', () => {
       providers: [
         { provide: ConfigResolver, useValue: new MockConfigResolver() },
         { provide: DataApiValueService, useValue: new MockDataApiValueService() },
-        { provide: NotificationService, useValue: new MockNotificationService() }
+        { provide: NotificationService, useValue: new MockNotificationService() },
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));
 
