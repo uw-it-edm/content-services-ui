@@ -52,6 +52,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '12'
+      - run: |
+          sudo apt-get update
+          sudo apt-get --only-upgrade install google-chrome-stable
+          google-chrome --version
       - run: yarn install
       - run: yarn e2e-local
       - name: Slack Notification
