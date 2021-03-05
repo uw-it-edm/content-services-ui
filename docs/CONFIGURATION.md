@@ -209,6 +209,12 @@ Either **showCalendar**, **showRelativeRange**, or both are required to be true.
 | checkedValue | string | The value that will be stored in the backend when the checkbox is selected | |
 | uncheckedValue | string |The value that will be stored in the backend when the checkbox is not selected. Can be omitted to not store an unchecked value in the backend   | |
 
+# Warning Header Message
+| Key        | Type           | Description  | Default Value | 
+| :------------- |:-------------| :-----| :-----| 
+| warningHeaderMessage | string | Optional plain text to be displayed as sub header | |
+
+
 # Full Configuration Example
 
 
