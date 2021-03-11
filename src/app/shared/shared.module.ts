@@ -19,6 +19,7 @@ import { TimestampPickerComponent } from './widgets/timestamp-picker/timestamp-p
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { DisplayFieldComponent } from './widgets/display-field/display-field.component';
 import { ProgressService } from './providers/progress.service';
+import { ApplicationStateService } from './providers/application-state.service';
 import { FocusDirective } from './directives/focus/focus.directive';
 import { OptionsInputComponent } from './widgets/options-input/options-input.component';
 import { OptionsAutocompleteComponent } from './widgets/options-autocomplete/options-autocomplete.component';
@@ -94,7 +95,16 @@ import { A11yModule } from '@angular/cdk/a11y';
     CourseInputComponent,
     ElasticsearchDateValidatorDirective,
   ],
-  providers: [DataService, FieldOptionService, ProgressService, StudentService, PersonService, DataApiValueService, NotificationService],
+  providers: [
+    DataService,
+    FieldOptionService,
+    ProgressService,
+    ApplicationStateService,
+    StudentService,
+    PersonService,
+    DataApiValueService,
+    NotificationService,
+  ],
   entryComponents: [NotificationComponent],
 })
 export class SharedModule {}
