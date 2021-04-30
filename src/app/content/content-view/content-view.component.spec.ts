@@ -147,29 +147,28 @@ describe('ContentViewComponent', () => {
   });
 
   it('should use wcc url', () => {
-    // get expectedUrl object (which is not a simple string type) by calling
-    // component.getIframeUrlForPDF with component.getFileFromWcc = false
-    // (tried to use local sanitizer.bypassSecurityTrustResourceUrl without success)
-    const expectedUrl = component.getIframeUrlForPDF(
-      '/wccurl/cs/idcplg?IdcService=GET_FILE&RevisionSelectionMethod=LatestReleased&allowInterrupt=1&dDocName=1&Rendition=Web&noSaveAs=1'
-    );
-
-    // when getFileFromWcc is true, component.getIframeUrlForPDF should build
     // and return wcc url regardless the url passed in.
     component.getFileFromWcc = true;
-    const url = component.getIframeUrlForPDF('testUrl/456');
+    const url = component.useWccUrlIfNecessary('testUrl/456');
 
-    expect(url).toEqual(expectedUrl);
+    const expectedUrl =
+      '/wccurl/cs/idcplg?IdcService=GET_FILE&RevisionSelectionMethod=LatestReleased&allowInterrupt=1&dDocName=1&Rendition=Web&noSaveAs=1';
+
+    // when getFileFromWcc is true, component.useWccUrlIfNecessary should build
+    expect(url).toBe(expectedUrl);
+  });
+
+  it('should not use wcc url by default', () => {
+    const url = component.useWccUrlIfNecessary('testUrl/456');
+    expect(url).toBe('testUrl/456');
   });
 
   it('should not use wcc url for non persisted item', () => {
-    const expectedUrl = component.getIframeUrlForPDF('testUrl/456');
-
     component.getFileFromWcc = true;
     component.contentObject.persisted = false;
-    const url = component.getIframeUrlForPDF('testUrl/456');
+    const url = component.useWccUrlIfNecessary('testUrl/456');
 
-    expect(url).toEqual(expectedUrl);
+    expect(url).toBe('testUrl/456');
   });
 
   it('should stop the progress service when there is a display error', () => {

@@ -157,11 +157,16 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  getIframeUrlForPDF(url: any) {
+  useWccUrlIfNecessary(url: any) {
     // can get file from wcc only it is already persisted to WCC
     if (this.getFileFromWcc && this.contentObject && this.contentObject.persisted && this.contentObject.itemId) {
       url = environment.wccUrl + this.wccGetFilePath + '&dDocName=' + this.contentObject.itemId + '&Rendition=Web&noSaveAs=1';
     }
+
+    return url;
+  }
+
+  getIframeUrlForPDF(url: any) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url + '#view=FitH');
   }
 

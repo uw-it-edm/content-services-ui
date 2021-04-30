@@ -57,7 +57,7 @@
         ></pdf-viewer>
 
         <div class="iframe-container" *ngIf="showPdfInIframe || (getFileFromWcc && contentObject.persisted)"  >
-          <iframe [src]="getIframeUrlForPDF(contentObject.url)" height="100%" name="iframe-content-display" scrolling="yes">Loading...</iframe>
+          <iframe [src]="getIframeUrlForPDF(useWccUrlIfNecessary(contentObject.url))" height="100%" name="iframe-content-display" scrolling="yes">Loading...</iframe>
         </div>
 
       </div>
