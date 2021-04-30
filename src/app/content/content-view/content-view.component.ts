@@ -7,6 +7,7 @@ import { ContentObject } from '../shared/model/content-object';
 import { ContentToolbarComponent } from '../content-toolbar/content-toolbar.component';
 import { PdfViewerComponent } from 'ng2-pdf-viewer';
 import { DomSanitizer } from '@angular/platform-browser';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-content-view',
@@ -26,6 +27,8 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   showPdfInIframe = false;
   @Input()
   allowFullScreen = true;
+  @Input()
+  getFileFromWcc = false;
 
   autoResize = false;
   fitToPage = true;
@@ -39,12 +42,9 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   zoom = 1.0;
   zoomFactor = 'automatic-zoom';
   downloadUrl: string;
+  readonly wccGetFilePath = '/cs/idcplg?IdcService=GET_FILE&RevisionSelectionMethod=LatestReleased&allowInterrupt=1';
 
-  constructor(
-    private contentService: ContentService,
-    public progressService: ProgressService,
-    private sanitizer: DomSanitizer
-  ) {}
+  constructor(private contentService: ContentService, public progressService: ProgressService, private sanitizer: DomSanitizer) {}
 
   @ViewChild(ContentToolbarComponent)
   contentToolbarComponent;
@@ -57,6 +57,11 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
     this.pageNumber = 1;
     if (this.contentObject) {
       this.onContentObjectChanged(this.contentObject);
+    }
+
+    // can't get file from WCC without wccUrl
+    if (!environment.wccUrl) {
+      this.getFileFromWcc = false;
     }
   }
 
@@ -153,10 +158,20 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getIframeUrlForPDF(url: any) {
+    // can get file from wcc only it is already persisted to WCC
+    if (this.getFileFromWcc && this.contentObject && this.contentObject.persisted && this.contentObject.itemId) {
+      url = environment.wccUrl + this.wccGetFilePath + '&dDocName=' + this.contentObject.itemId + '&Rendition=Web&noSaveAs=1';
+    }
     return this.sanitizer.bypassSecurityTrustResourceUrl(url + '#view=FitH');
   }
 
   buildUrl({ itemId, webViewable = true, useOriginalFilename = true, disposition }: FileUrlParameters): string {
+    if (this.getFileFromWcc && this.contentObject && this.contentObject.persisted && itemId) {
+      let url = environment.wccUrl + this.wccGetFilePath + '&dDocName=' + itemId;
+      url += '&Rendition=' + (webViewable ? 'Web' : 'Primary');
+      return url;
+    }
+
     return this.contentService.getFileUrl({
       itemId: itemId,
       webViewable: webViewable,
@@ -171,9 +186,6 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   download(id: string) {
-    window.open(
-      this.buildUrl({ itemId: id, webViewable: false, useOriginalFilename: true, disposition: 'attachment' }),
-      '_blank'
-    );
+    window.open(this.buildUrl({ itemId: id, webViewable: false, useOriginalFilename: true, disposition: 'attachment' }), '_blank');
   }
 }

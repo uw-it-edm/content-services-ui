@@ -16,30 +16,32 @@ export const environment = {
 
   testUser: null,
 
+  wccUrl: null,
+
   search_api: {
     url: 'search-api.dev',
     context: '/search',
     method: 'POST',
-    authenticationHeader: 'auth'
+    authenticationHeader: 'auth',
   },
   content_api: {
     url: 'http://content-api.dev',
     contextV3: '/content/v3',
     contextV4: '/content/v4',
     authenticationHeader: 'auth',
-    headers: {}
+    headers: {},
   },
   profile_api: {
     url: 'http://profile-api.dev',
     context: '/profile/v1',
     app_name: 'content-services-ui',
-    authenticationHeader: 'auth'
+    authenticationHeader: 'auth',
   },
   data_api: {
     url: 'http://data-api.dev',
     studentContext: '/students/v1',
     personContext: '/person/v1',
     valueContext: '/v1/value',
-    authenticationHeader: 'auth'
-  }
+    authenticationHeader: 'auth',
+  },
 };
