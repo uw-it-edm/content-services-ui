@@ -22,6 +22,8 @@ const nonEmptyFormValidator: ValidatorFn = (theForm: FormGroup): ValidationError
   return null;
 };
 
+const NUMBER_REGEX_PATTERN = '^[0-9]+(\\.[0-9]+)?$';
+
 @Component({
   selector: 'app-content-metadata',
   templateUrl: './content-metadata.component.html',
@@ -64,8 +66,18 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy, A
 
   private addValidation(field: Field, formControl: FormControl) {
     // this is where we should handle different type of validation
+
+    const validators: ValidatorFn[] = [];
     if (field.required) {
-      formControl.setValidators(Validators.required);
+      validators.push(Validators.required);
+    }
+
+    if (field.dataType === 'number') {
+      validators.push(Validators.pattern(NUMBER_REGEX_PATTERN));
+    }
+
+    if (validators.length > 0) {
+      formControl.setValidators(validators);
     }
   }
 
@@ -89,9 +101,14 @@ export class ContentMetadataComponent implements OnInit, OnChanges, OnDestroy, A
     this.componentDestroyed.complete();
   }
 
-  getErrorMessage(formControlName: string) {
+  getErrorMessage(field: Field) {
     // this should probably be improved to handle different error type
     // return this.formGroup.controls['metadata'].controls[formControlName].hasError('required') ? 'You must enter a value' : '';
+
+    if (field.dataType === 'number') {
+      return 'You must enter a valid number (only digits and optional decimal point).';
+    }
+
     return 'You must enter a value';
   }
 

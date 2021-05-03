@@ -8,7 +8,7 @@
             [placeholder]="fieldToDisplay.label"
             [fieldConfig]="fieldToDisplay"
             [parentControl]="formGroup.get('metadata').get(fieldToDisplay.dynamicSelectConfig?.parentFieldConfig?.key || '')"
-            [errorMessage]="getErrorMessage(fieldToDisplay.key)"
+            [errorMessage]="getErrorMessage(fieldToDisplay)"
             [required]="fieldHasRequiredError(fieldToDisplay)"
             [id]="'custom-input-'+ i"
             [attr.id]="'custom-input-'+ i">
@@ -18,7 +18,7 @@
             [placeholder]="fieldToDisplay.label"
             [fieldConfig]="fieldToDisplay"
             [parentControl]="formGroup.get('metadata').get(fieldToDisplay.dynamicSelectConfig?.parentFieldConfig?.key || '')"
-            [errorMessage]="getErrorMessage(fieldToDisplay.key)"
+            [errorMessage]="getErrorMessage(fieldToDisplay)"
             [required]="fieldHasRequiredError(fieldToDisplay)"
             [id]="'custom-input-'+ i"
             [attr.id]="'custom-input-'+ i">
@@ -36,14 +36,14 @@
             </app-options-input>
             <mat-icon *ngIf="fieldToDisplay.disabled" matSuffix class="disabled-icon" matTooltip="Read-only">lock</mat-icon>
             <mat-error>
-              {{getErrorMessage(fieldToDisplay.key)}}
+              {{getErrorMessage(fieldToDisplay)}}
             </mat-error>
           </mat-form-field>
           <app-timestamp-picker *ngSwitchCase="'date'"
                                 [formControlName]="fieldToDisplay.key"
                                 [placeholder]="fieldToDisplay.label"
                                 [required]="fieldHasRequiredError(fieldToDisplay)"
-                                [errorMessage]="getErrorMessage(fieldToDisplay.key)"
+                                [errorMessage]="getErrorMessage(fieldToDisplay)"
                                 appElasticSearchDateValidator
           >
           </app-timestamp-picker>
@@ -58,7 +58,7 @@
               [attr.id]="'custom-input-'+ i"
             ></app-checkbox-input>
             <mat-icon *ngIf="fieldToDisplay.disabled" matSuffix class="disabled-icon" matTooltip="Read-only">lock</mat-icon>
-            <mat-error> {{getErrorMessage(fieldToDisplay.key)}}</mat-error>
+            <mat-error> {{getErrorMessage(fieldToDisplay)}}</mat-error>
           </mat-form-field>
 
           <mat-form-field *ngSwitchCase="'student-autocomplete'">
@@ -108,11 +108,10 @@
                      [placeholder]="fieldToDisplay.label"
                      [attr.aria-label]="fieldToDisplay.label"
                      [required]="fieldHasRequiredError(fieldToDisplay)"
-                     [type]="fieldToDisplay.displayType === 'currency' ? 'number': 'text'"
               >
               <span matPrefix *ngIf="fieldToDisplay.displayType === 'currency'">$&nbsp;</span>
               <mat-icon *ngIf="fieldToDisplay.disabled" matSuffix class="disabled-icon" matTooltip="Read-only">lock</mat-icon>
-              <mat-error> {{getErrorMessage(fieldToDisplay.key)}}</mat-error>
+              <mat-error> {{getErrorMessage(fieldToDisplay)}}</mat-error>
           </mat-form-field>
         </div>
       </li>
