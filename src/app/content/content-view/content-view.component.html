@@ -38,7 +38,8 @@
 
       <div *ngSwitchCase="'pdfUrl'">
 
-        <pdf-viewer *ngIf="!showPdfInIframe"
+        <!-- iframe is required to get file directly from WCC -->
+        <pdf-viewer *ngIf="!shouldShowInIframe()"
                     [src]="contentObject.url"
                     [(page)]="pageNumber"
                     [external-link-target]="'blank'"
@@ -55,8 +56,8 @@
                     class="cs-preview-max-height"
         ></pdf-viewer>
 
-        <div class="iframe-container" *ngIf="showPdfInIframe"  >
-          <iframe [src]="getIframeUrlForPDF(contentObject.url)" height="100%" name="iframe-content-display" scrolling="yes">Loading...</iframe>
+        <div class="iframe-container" *ngIf="shouldShowInIframe()"  >
+          <iframe [src]="getIframeUrlForPDF(useWccUrlIfNecessary(contentObject.url))" height="100%" name="iframe-content-display" scrolling="yes">Loading...</iframe>
         </div>
 
       </div>

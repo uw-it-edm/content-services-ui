@@ -19,6 +19,8 @@ export class ContentPageConfig implements PageConfig {
 
   enableDelete: boolean; // show delete button for users with delete permission
 
+  getFileFromWcc: boolean; // get persisted file from WCC directly for better performance
+
   onSave: Array<any> = [];
   buttons: Array<ButtonConfig> = [];
 }
