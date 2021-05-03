@@ -166,6 +166,11 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
     return url;
   }
 
+  // Iframe is required to get file from WCC
+  showInIframe() {
+    return this.showPdfInIframe || (this.getFileFromWcc && this.contentObject && this.contentObject.persisted);
+  }
+
   getIframeUrlForPDF(url: any) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url + '#view=FitH');
   }
