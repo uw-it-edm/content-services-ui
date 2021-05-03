@@ -32,6 +32,7 @@ import { DataApiValueService } from '../../shared/providers/dataapivalue.service
 import { FieldOptionService } from '../../shared/providers/fieldoption.service';
 import { PersonAutocompleteComponent } from '../../shared/widgets/person-autocomplete/person-autocomplete.component';
 import { CustomTextDirective } from '../../shared/directives/custom-text/custom-text.directive';
+import { By } from '@angular/platform-browser';
 
 function getContentItem(): ContentItem {
   const contentItem = new ContentItem();
@@ -44,6 +45,7 @@ function getContentItem(): ContentItem {
   contentItem.metadata['b'] = 'asdf';
   contentItem.metadata['parentKey'] = 'parent1';
   contentItem.metadata['d'] = 1509519600000;
+  contentItem.metadata['n'] = 1220.3;
   return contentItem;
 }
 
@@ -63,6 +65,7 @@ function getPageConfig({ addCascadingSelects }: { addCascadingSelects?: boolean 
       displayType: 'select',
       options: [new FieldOption('parent1'), new FieldOption('parent2')],
     }),
+    Object.assign(new Field(), { key: 'n', label: 'number', displayType: 'currency' }),
   ];
 
   if (addCascadingSelects) {
@@ -202,7 +205,16 @@ describe('ContentMetadataComponent', () => {
       a: 'a',
       parentKey: 'parent1',
       d: 1509519600000,
+      n: 1220.3,
     });
+  });
+
+  it('should set input type to number and add $ prefix if displayType=currency', () => {
+    const inputElement = fixture.debugElement.query(By.css('input[name=n]'));
+    expect(inputElement.nativeElement.type).toBe('number');
+
+    const prefixElement = fixture.debugElement.query(By.css('.mat-form-field-prefix'));
+    expect(prefixElement.nativeElement.textContent).toContain('$');
   });
 
   describe('built in validators', () => {
