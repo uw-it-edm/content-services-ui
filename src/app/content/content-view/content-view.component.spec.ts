@@ -171,17 +171,17 @@ describe('ContentViewComponent', () => {
     expect(url).toBe('testUrl/456');
   });
 
-  it('showInIframe() should be true', () => {
+  it('shouldShowInIframe() should be true', () => {
     component.getFileFromWcc = true;
-    expect(component.showInIframe()).toBeTruthy();
+    expect(component.shouldShowInIframe()).toBeTruthy();
   });
 
-  it('showInIframe() should be false', () => {
-    expect(component.showInIframe()).toBeFalsy();
+  it('shouldShowInIframe() should be false', () => {
+    expect(component.shouldShowInIframe()).toBeFalsy();
 
     component.getFileFromWcc = true;
     component.contentObject.persisted = false;
-    expect(component.showInIframe()).toBeFalsy();
+    expect(component.shouldShowInIframe()).toBeFalsy();
   });
 
   it('should stop the progress service when there is a display error', () => {

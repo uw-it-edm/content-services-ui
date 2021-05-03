@@ -167,7 +167,7 @@ export class ContentViewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   // Iframe is required to get file from WCC
-  showInIframe() {
+  shouldShowInIframe() {
     return this.showPdfInIframe || (this.getFileFromWcc && this.contentObject && this.contentObject.persisted);
   }
 
