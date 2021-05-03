@@ -108,7 +108,9 @@
                      [placeholder]="fieldToDisplay.label"
                      [attr.aria-label]="fieldToDisplay.label"
                      [required]="fieldHasRequiredError(fieldToDisplay)"
+                     [type]="fieldToDisplay.displayType === 'currency' ? 'number': 'text'"
               >
+              <span matPrefix *ngIf="fieldToDisplay.displayType === 'currency'">$&nbsp;</span>
               <mat-icon *ngIf="fieldToDisplay.disabled" matSuffix class="disabled-icon" matTooltip="Read-only">lock</mat-icon>
               <mat-error> {{getErrorMessage(fieldToDisplay.key)}}</mat-error>
           </mat-form-field>
