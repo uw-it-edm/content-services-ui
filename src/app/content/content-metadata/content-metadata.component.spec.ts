@@ -252,6 +252,11 @@ describe('ContentMetadataComponent', () => {
       fixture.detectChanges();
       expect(control.valid).toBeFalse();
 
+      // test invalid multiple decimal separators
+      control.setValue('12.34.22');
+      fixture.detectChanges();
+      expect(control.valid).toBeFalse();
+
       // test invalid decimal remainder
       control.setValue('12.');
       control.markAllAsTouched(); // Mark as touched for the error message to show.
