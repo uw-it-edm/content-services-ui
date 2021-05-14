@@ -144,6 +144,7 @@ Either **showCalendar**, **showRelativeRange**, or both are required to be true.
 | viewPanel | boolean | Show the Document| |
 | disableFileReplace | boolean | Whether to disable the ability to replace an uploaded file of the document.| false |
 | allowPageByPageMode | boolean | Enable button to toggle between page-by-page and scrolling mode in the document preview panel | false |
+| getFileFromWcc | boolean | Enable document preview panel to view and download files directly from WebCenter | false |
 
 ## Bulk Edit Page
 
