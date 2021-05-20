@@ -3,7 +3,7 @@ import { of } from 'rxjs';
 
 import { ContentMetadataComponent } from './content-metadata.component';
 import { ContentItem } from '../shared/model/content-item';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -32,6 +32,7 @@ import { DataApiValueService } from '../../shared/providers/dataapivalue.service
 import { FieldOptionService } from '../../shared/providers/fieldoption.service';
 import { PersonAutocompleteComponent } from '../../shared/widgets/person-autocomplete/person-autocomplete.component';
 import { CustomTextDirective } from '../../shared/directives/custom-text/custom-text.directive';
+import { By } from '@angular/platform-browser';
 
 function getContentItem(): ContentItem {
   const contentItem = new ContentItem();
@@ -44,6 +45,7 @@ function getContentItem(): ContentItem {
   contentItem.metadata['b'] = 'asdf';
   contentItem.metadata['parentKey'] = 'parent1';
   contentItem.metadata['d'] = 1509519600000;
+  contentItem.metadata['n'] = 1220.3;
   return contentItem;
 }
 
@@ -63,6 +65,7 @@ function getPageConfig({ addCascadingSelects }: { addCascadingSelects?: boolean 
       displayType: 'select',
       options: [new FieldOption('parent1'), new FieldOption('parent2')],
     }),
+    Object.assign(new Field(), { key: 'n', label: 'number', displayType: 'currency', dataType: 'number' }),
   ];
 
   if (addCascadingSelects) {
@@ -202,7 +205,13 @@ describe('ContentMetadataComponent', () => {
       a: 'a',
       parentKey: 'parent1',
       d: 1509519600000,
+      n: 1220.3,
     });
+  });
+
+  it('should add $ prefix if displayType=currency', () => {
+    const prefixElement = fixture.debugElement.query(By.css('.mat-form-field-prefix'));
+    expect(prefixElement.nativeElement.textContent).toContain('$');
   });
 
   describe('built in validators', () => {
@@ -212,6 +221,50 @@ describe('ContentMetadataComponent', () => {
       component = fixture.componentInstance;
       component.pageConfig = getPageConfig({ addCascadingSelects: true });
       component.formGroup = new FormGroup({});
+    });
+
+    it('should mark number field as invalid if it fails number validation', () => {
+      fixture.detectChanges();
+      const control: FormControl = component.formGroup.get('metadata').get('n') as FormControl;
+
+      // test valid number
+      control.setValue('1234');
+      fixture.detectChanges();
+      expect(control.valid).toBeTrue();
+
+      // test invalid number
+      control.setValue('words');
+      fixture.detectChanges();
+      expect(control.valid).toBeFalse();
+
+      // test valid large decimal
+      control.setValue('12.34324');
+      fixture.detectChanges();
+      expect(control.valid).toBeTrue();
+
+      // test valid short decimal
+      control.setValue('12.1');
+      fixture.detectChanges();
+      expect(control.valid).toBeTrue();
+
+      // test invalid decimal separator
+      control.setValue('12a34');
+      fixture.detectChanges();
+      expect(control.valid).toBeFalse();
+
+      // test invalid multiple decimal separators
+      control.setValue('12.34.22');
+      fixture.detectChanges();
+      expect(control.valid).toBeFalse();
+
+      // test invalid decimal remainder
+      control.setValue('12.');
+      control.markAllAsTouched(); // Mark as touched for the error message to show.
+      fixture.detectChanges();
+      expect(control.valid).toBeFalse();
+
+      const errorElement = fixture.debugElement.query(By.css('.mat-error'));
+      expect(errorElement.nativeElement.textContent).toContain('You must enter a valid number (only digits and optional decimal point).');
     });
 
     it('should mark form as invalid when no fields are set if the empty form validator is enabled', () => {

@@ -18,6 +18,8 @@ export const environment = {
 
   testUser: netId,
 
+  wccUrl: null,
+
   search_api: {
     url: '/search-api',
     context: '/search/v1/',

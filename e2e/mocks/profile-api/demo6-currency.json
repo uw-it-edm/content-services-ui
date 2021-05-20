@@ -1,0 +1,71 @@
+{
+  "account": "demo-account",
+  "tenant": "demo6-currency",
+  "appName": "Demo 6: Currency",
+  "availableFields": [
+    {
+      "key": "InvoiceAmount",
+      "label": "Invoice Amount",
+      "dataType": "number",
+      "displayType": "currency"
+    },
+    {
+      "key": "Filer",
+      "label": "Filer"
+    }
+  ],
+  "pages": {
+    "tab-search": {
+      "pageName": "Demonstration Search",
+      "theme": "uw-default",
+      "searchConfig": {
+        "directions": "Type a Employee ID or other info",
+        "label": "",
+        "placeholder": "Search for documents",
+        "indexName": "documents-demo3"
+      },
+      "fieldReferencesToDisplay": [
+        "Filer",
+        "InvoiceAmount"
+      ]
+    },
+    "edit": {
+      "theme": "uw-default",
+      "pageName": "Edit Content Item",
+      "fieldKeysToDisplay": [
+        "Filer",
+        "InvoiceAmount"
+      ],
+      "buttons": [
+        {
+          "label": "Save",
+          "color": "primary",
+          "command": "saveItem"
+        }
+      ],
+      "viewPanel": true,
+      "disableFileReplace": true
+    },
+    "create": {
+      "theme": "uw-default",
+      "pageName": "Create Content Item",
+      "fieldReferencesToDisplay": [
+        "Filer",
+        "InvoiceAmount"
+      ],
+      "buttons": [
+        {
+          "label": "Save",
+          "color": "primary",
+          "command": "saveItem"
+        },
+        {
+          "label": "Cancel",
+          "alwaysActive": true,
+          "command": "cancel"
+        }
+      ],
+      "viewPanel": true
+    }
+  }
+}

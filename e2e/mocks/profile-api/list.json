@@ -14,6 +14,9 @@
     },
     "demo5-legalnames": {
       "href": "http://__current_host__:12345/profile/v1/app/my-app/demo5"
+    },
+    "demo6-currency": {
+      "href": "http://__current_host__:12345/profile/v1/app/my-app/demo6-currency"
     }
   }
 }

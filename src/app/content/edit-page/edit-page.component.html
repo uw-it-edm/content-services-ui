@@ -47,7 +47,11 @@
           <div *ngIf="pageConfig?.viewPanel" fxFlex="auto">
             <div class="cs-content-view-wrapper">
               <div class="cs-content-view-wrapper-insert">
-                <app-content-view [contentObject]="contentObject" [allowPageByPageMode]="pageConfig?.allowPageByPageMode"></app-content-view>
+                <app-content-view
+                    [contentObject]="contentObject"
+                    [getFileFromWcc]="pageConfig?.getFileFromWcc"
+                    [allowPageByPageMode]="pageConfig?.allowPageByPageMode">
+                </app-content-view>
               </div>
             </div>
             <div *ngIf="pageConfig?.enableDelete && hasDeletePermission" class="button-row">
