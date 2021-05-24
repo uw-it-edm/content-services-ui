@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 import { SafeUrlPipe } from '../../shared/pipes/safe-url.pipe';
 import { ContentToolbarComponent } from '../content-toolbar/content-toolbar.component';
@@ -14,7 +15,7 @@ describe('ContentToolbarComponent', () => {
     TestBed.configureTestingModule({
       imports: [FormsModule, MaterialConfigModule, NoopAnimationsModule],
       providers: [],
-      declarations: [ContentToolbarComponent, SafeUrlPipe]
+      declarations: [ContentToolbarComponent, SafeUrlPipe],
     }).compileComponents();
   });
 
@@ -74,5 +75,18 @@ describe('ContentToolbarComponent', () => {
     const zoomChangeSpy = spyOn(component.zoom, 'emit');
     component.changeZoomFactor('0.25');
     expect(zoomChangeSpy).toHaveBeenCalled();
+  });
+
+  it('should display zoom control when input field is true', () => {
+    // by default zoom control is displayed.
+    let zoomElement = fixture.debugElement.query(By.css('.cs-zoom-factor-select'));
+    expect(zoomElement.nativeElement).toBeTruthy();
+
+    // turn off zoom control and verify it is no longer displayed.
+    component.allowZoom = false;
+    fixture.detectChanges();
+
+    zoomElement = fixture.debugElement.query(By.css('.cs-zoom-factor-select'));
+    expect(zoomElement).toBeNull();
   });
 });
