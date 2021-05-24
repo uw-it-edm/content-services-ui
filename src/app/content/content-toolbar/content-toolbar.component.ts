@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 @Component({
   selector: 'app-content-toolbar',
   templateUrl: './content-toolbar.component.html',
-  styleUrls: ['./content-toolbar.component.css']
+  styleUrls: ['./content-toolbar.component.css'],
 })
 export class ContentToolbarComponent {
   @Input()
@@ -16,6 +16,8 @@ export class ContentToolbarComponent {
   allowPageByPageMode: boolean;
   @Input()
   allowFullScreen: boolean;
+  @Input()
+  allowZoom = true;
   @Input()
   fixedPage: false;
   @Input()

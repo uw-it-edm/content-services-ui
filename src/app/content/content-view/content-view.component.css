@@ -59,6 +59,7 @@ pdf-viewer {
   overflow: hidden;
   padding-top: 56.25%;
   position: relative;
+  height: calc(100vh - 265px);
 }
 
 .iframe-container iframe {
