@@ -10,6 +10,7 @@
     [downloadUrl]="downloadUrl"
     [allowPageByPageMode]="allowPageByPageMode"
     [allowFullScreen]="allowFullScreen"
+    [allowZoom]="!shouldShowInIframe()"
     [zoomFactor]="zoomFactor"
     (zoom)="onZoomFactorChanged($event)">
   </app-content-toolbar>
